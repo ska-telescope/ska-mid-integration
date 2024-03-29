@@ -35,7 +35,6 @@ LOGGER = logging.getLogger(__name__)
 TIMEOUT = 20
 EB_PB_ID_LENGTH = 15
 
-
 SDP_SIMULATION_ENABLED = os.getenv("SDP_SIMULATION_ENABLED")
 CSP_SIMULATION_ENABLED = os.getenv("CSP_SIMULATION_ENABLED")
 DISH_SIMULATION_ENABLED = os.getenv("DISH_SIMULATION_ENABLED")
@@ -180,7 +179,7 @@ def get_device_simulator_with_given_name(simulator_factory, devices):
 
 
 def prepare_json_args_for_commands(
-    args_for_command: str, command_input_factory: JsonFactory
+        args_for_command: str, command_input_factory: JsonFactory
 ) -> str:
     """This method return input json based on command args"""
     if args_for_command is not None:
@@ -193,7 +192,7 @@ def prepare_json_args_for_commands(
 
 
 def prepare_json_args_for_centralnode_commands(
-    args_for_command: str, command_input_factory: JsonFactory
+        args_for_command: str, command_input_factory: JsonFactory
 ) -> str:
     """This method return input json based on command args"""
     if args_for_command is not None:
@@ -206,7 +205,7 @@ def prepare_json_args_for_centralnode_commands(
 
 
 def prepare_schema_for_attribute_or_command(
-    args_for_command: str, command_input_factory: JsonFactory
+        args_for_command: str, command_input_factory: JsonFactory
 ):
     """This method return schema for requested command or attribute json."""
     if args_for_command is not None:
@@ -267,7 +266,7 @@ def get_command_call_info(device: Any, command_name: str):
 
 
 def device_received_this_command(
-    device: Any, expected_command_name: str, expected_input: str | bool
+        device: Any, expected_command_name: str, expected_input: str | bool
 ) -> bool:
     """Method to verify received command and command argument
 
@@ -283,9 +282,9 @@ def device_received_this_command(
     LOGGER.debug("expected_input - %s", expected_input)
 
     if (
-        expected_input == "True"
-        or expected_input == "False"
-        or expected_input == ""
+            expected_input == "True"
+            or expected_input == "False"
+            or expected_input == ""
     ):
         received_command_call_data = get_boolean_command_call_info(
             device, expected_command_name
@@ -329,7 +328,7 @@ def get_recorded_commands(device: Any):
 
 
 def set_desired_health_state(
-    sim_devices_list: list, health_state_value: HealthState
+        sim_devices_list: list, health_state_value: HealthState
 ):
     """A method to set simulator devices healthState attribute
 
@@ -358,10 +357,10 @@ def check_assigned_resources(device: Any, receiptor_ids: tuple):
 
 
 def device_attribute_changed(
-    device: Any,
-    attribute_name_list: list,
-    attribute_value_list: list,
-    timeout: int,
+        device: Any,
+        attribute_name_list: list,
+        attribute_value_list: list,
+        timeout: int,
 ):
     """
     Method to verify device attribute changed to speicified attribute value
@@ -373,7 +372,7 @@ def device_attribute_changed(
 
     waiter = Waiter()
     for attribute_name, attribute_value in zip(
-        attribute_name_list, attribute_value_list
+            attribute_name_list, attribute_value_list
     ):
         waiter.waits.append(
             watch(Resource(device.dev_name())).to_become(
@@ -388,7 +387,7 @@ def device_attribute_changed(
 
 
 def wait_for_attribute_update(
-    device, attribute_name: str, expected_id: str, expected_result: ResultCode
+        device, attribute_name: str, expected_id: str, expected_result: ResultCode
 ):
     """Wait for the attribute to reflect necessary changes."""
     start_time = time.time()
@@ -404,11 +403,11 @@ def wait_for_attribute_update(
 
 
 def check_lrcr_events(
-    event_recorder,
-    device,
-    command_name: str,
-    result_code: ResultCode = ResultCode.OK,
-    retries: int = 10,
+        event_recorder,
+        device,
+        command_name: str,
+        result_code: ResultCode = ResultCode.OK,
+        retries: int = 10,
 ):
     """Used to assert command name and result code in
        longRunningCommandResult event callbacks.
@@ -441,14 +440,14 @@ def wait_till_delay_values_are_populated(csp_subarray_leaf_node) -> None:
     start_time = time.time()
     time_elapsed = 0
     while (
-        csp_subarray_leaf_node.delayModel == "no_value"
-        and time_elapsed <= TIMEOUT
+            csp_subarray_leaf_node.delayModel == "no_value"
+            and time_elapsed <= TIMEOUT
     ):
         time.sleep(1)
         time_elapsed = time.time() - start_time
     if (
-        csp_subarray_leaf_node.delayModel == "no_value"
-        and time_elapsed > TIMEOUT
+            csp_subarray_leaf_node.delayModel == "no_value"
+            and time_elapsed > TIMEOUT
     ):
         raise Exception(
             "Timeout while waiting for CspSubarrayLeafNode to generate \
@@ -553,11 +552,11 @@ def check_subarray_instance(device, subarray_id):
 
 
 def wait_and_validate_device_attribute_value(
-    device: DeviceProxy,
-    attribute_name: str,
-    expected_value: str,
-    is_json: str = False,
-    timeout: int = 300,
+        device: DeviceProxy,
+        attribute_name: str,
+        expected_value: str,
+        is_json: str = False,
+        timeout: int = 300,
 ):
     """This method wait and validate if attribute value is equal to provided
     expected value
@@ -574,7 +573,7 @@ def wait_and_validate_device_attribute_value(
                 attribute_value,
             )
             if is_json and json.loads(attribute_value) == json.loads(
-                expected_value
+                    expected_value
             ):
                 return True
             elif attribute_value == expected_value:
@@ -612,8 +611,25 @@ def update_eb_pb_ids(input_json: str) -> str:
     return input_json
 
 
+def update_json(input_json: str, json_key: str, json_value: str) -> str:
+    """
+    Method to update json with different data.
+    :param input_json: json to utilised to update values.
+    :param json_key: json_key to be updated in json
+    :param json_value: new json value to be updated in json
+    """
+    input_json = json.loads(input_json)
+
+    input_json[json_key] = json_value
+    # input_json["sdp"]["execution_block"]["eb_id"] = generate_id("eb-test")
+    # for pb in input_json["sdp"]["processing_blocks"]:
+    #     pb["pb_id"] = generate_id("pb-test")
+    input_json = json.dumps(input_json)
+    return input_json
+
+
 def check_long_running_command_status(
-    device, lrcr_command, command_name, status
+        device, lrcr_command, command_name, status
 ):
     """This function will validate the longRunningCommandStatus"""
     event_recorder = EventRecorder()

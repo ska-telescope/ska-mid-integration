@@ -1,5 +1,5 @@
 # This BDD test performs TMC-SDP pairwise testing to verify Standby command flow.
-@XTP-29232 @XTP-29381 @Team_SAHYADRI @tmc_sdp
+@XTP-29232 @XTP-29381 @Team_SAHYADRI @tmc_sd
 Scenario: Standby the telescope having TMC and SDP subsystems
 	Given a Telescope consisting of TMC and SDP that is in ON State
 	And  simulated CSP and Dish in ON States
