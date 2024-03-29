@@ -1,23 +1,24 @@
 """Test TMC-SDP Long Sequence  functionality"""
 
 import json
+import logging
 
 import pytest
-from pytest_bdd import given, parsers, scenario, then, when
+from pytest_bdd import given, parsers, scenario, when  # then
 from ska_control_model import ObsState
+from ska_ser_logging import configure_logging
 from tango import DevState
 
 from tests.resources.test_harness.helpers import (
     check_subarray_instance,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
-    update_json
+    update_json,
 )
 
-import logging
-from ska_ser_logging import configure_logging
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
+
 
 @pytest.mark.trupti
 @pytest.mark.tmc_sdp
@@ -99,9 +100,19 @@ def telescope_is_in_idle_state(
     LOGGER.info("Assign resources  completed")
 
 
-@when(parsers.parse("configure and scan TMC SubarrayNode {subarray_id} for each {scan_types} and {scan_ids}"))
+@when(
+    parsers.parse(
+        "configure and scan TMC SubarrayNode {subarray_id} "
+        "for each {scan_types} and {scan_ids}"
+    )
+)
 def execute_initial_configure_command(
-    subarray_node, command_input_factory, input_json1, event_recorder,subarray_id ,scan_types
+    subarray_node,
+    command_input_factory,
+    input_json1,
+    event_recorder,
+    subarray_id,
+    scan_types,
 ):
     """ "A method to invoke configure command"""
 
@@ -111,11 +122,13 @@ def execute_initial_configure_command(
     )
 
     LOGGER.info(f"working on scan types {scan_types}")
-    scan_type_key_path='["sdp"]["scan_type"]'
+    scan_type_key_path = '["sdp"]["scan_type"]'
 
     for scan_type in scan_types:
 
-        configure_json=update_json(configure_json,scan_type_key_path,scan_type)
+        configure_json = update_json(
+            configure_json, scan_type_key_path, scan_type
+        )
         subarray_node.store_configuration_data(configure_json)
         # assert event_recorder.has_change_event_occurred(
         #     subarray_node.subarray_devices["sdp_subarray"],
