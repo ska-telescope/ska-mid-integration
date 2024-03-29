@@ -611,17 +611,17 @@ def update_eb_pb_ids(input_json: str) -> str:
     return input_json
 
 
-def update_json(input_json: str, json_key: str, json_value: str) -> str:
+def update_json(input_json: str, json_value: str) -> str:
     """
     Method to update json with different data.
     :param input_json: json to utilised to update values.
-    :param json_key: json_key to be updated in json
+
     :param json_value: new json value to be updated in json
     """
     input_json = json.loads(input_json)
 
-    input_json[json_key] = json_value
-    # input_json["sdp"]["execution_block"]["eb_id"] = generate_id("eb-test")
+    # input_json[json_key] = json_value
+    input_json["sdp"]["scan_type"] = json_value
     # for pb in input_json["sdp"]["processing_blocks"]:
     #     pb["pb_id"] = generate_id("pb-test")
     input_json = json.dumps(input_json)

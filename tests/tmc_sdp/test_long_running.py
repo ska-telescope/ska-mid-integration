@@ -121,14 +121,13 @@ def execute_initial_configure_command(
         "sdp_mid_configure1", command_input_factory
     )
 
-    LOGGER.info(f"working on scan types {scan_types} {scan_ids}")
-    scan_type_key_path = '["sdp"]["scan_type"]'
+    my_list = eval(scan_types)
+    LOGGER.info(f"working on scan types {my_list} {scan_ids}")
+    # scan_type_key_path = '["sdp"]["scan_type"]'
 
-    for scan_type in scan_types:
-
-        configure_json = update_json(
-            configure_json, scan_type_key_path, scan_type
-        )
+    for scan_type in my_list:
+        LOGGER.info(f" scan_type is {scan_type}")
+        configure_json = update_json(configure_json, scan_type)
         subarray_node.store_configuration_data(configure_json)
         # assert event_recorder.has_change_event_occurred(
         #     subarray_node.subarray_devices["sdp_subarray"],
