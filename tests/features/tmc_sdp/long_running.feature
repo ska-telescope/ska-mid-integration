@@ -10,3 +10,4 @@ Feature:  TMC executes long running sequences with real sdp devices
     Examples:
             |subarray_id  | scan_ids | scan_types |
             |1            |  1        | ["science_A"]  |
+            |1             |1      |["science_A" , ""target:a""] |
