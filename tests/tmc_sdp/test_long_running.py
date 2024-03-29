@@ -59,7 +59,7 @@ def given_a_tmc(central_node_mid, event_recorder, subarray_node):
     LOGGER.info("On step completed")
 
 
-@given(parsers.parse("I assign resources to TMC SubarrayNode {subarray_id}"))
+@when(parsers.parse("I assign resources to TMC SubarrayNode {subarray_id}"))
 def telescope_is_in_idle_state(
     central_node_mid,
     event_recorder,
