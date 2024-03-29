@@ -109,7 +109,7 @@ def telescope_is_in_idle_state(
 def execute_initial_configure_command(
     subarray_node,
     command_input_factory,
-    input_json1,
+    scan_ids,
     event_recorder,
     subarray_id,
     scan_types,
@@ -121,7 +121,7 @@ def execute_initial_configure_command(
         "sdp_mid_configure1", command_input_factory
     )
 
-    LOGGER.info(f"working on scan types {scan_types}")
+    LOGGER.info(f"working on scan types {scan_types} {scan_ids}")
     scan_type_key_path = '["sdp"]["scan_type"]'
 
     for scan_type in scan_types:
