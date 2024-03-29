@@ -8,5 +8,5 @@ Feature:  TMC executes long running sequences with real sdp devices
 
 
     Examples:
-            |subarray_id  | scan_id | scan_types |
+            |subarray_id  | scan_ids | scan_types |
             |1            |  1        | science_A  |
