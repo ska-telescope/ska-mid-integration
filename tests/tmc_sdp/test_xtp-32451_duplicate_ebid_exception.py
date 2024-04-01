@@ -17,7 +17,7 @@ from tests.resources.test_support.constant import (
 
 
 @pytest.mark.tmc_sdp
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 @scenario(
     "../features/tmc_sdp/xtp-32451_sdp_exception.feature",
     "TMC Subarray handles the exception duplicate"

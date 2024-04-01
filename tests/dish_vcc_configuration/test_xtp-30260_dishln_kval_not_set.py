@@ -12,7 +12,7 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 @scenario(
     "../features/dish_vcc_initialization/"
     "xtp_30260_dishln_kvalue_not_set.feature",

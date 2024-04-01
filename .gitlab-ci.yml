@@ -160,45 +160,45 @@ mid-on-demand-deploy-mini-skampi:
   when: manual
   allow_failure: true # need to keep this to unlock the pipeline
 
-#k8s-test-csp-dish:
-#  stage: test
-#  tags:
-#    - k8srunner-large
-#  variables:
-#    DISH_SIMULATION_ENABLED: "false"
-#    CSP_SIMULATION_ENABLED: "false"
-#    SUBARRAY_COUNT: 2
-#    DISH_TANGO_HOST: "tango-databaseds"
-#    CLUSTER_DOMAIN: "svc.cluster.local"
-#    PORT: "10000"
-#    DISH_INDEX_1: "001"
-#    DISH_INDEX_36: "036"
-#    DISH_INDEX_63: "063"
-#    DISH_INDEX_100: "100"
-#    DISH_NAMESPACE_1: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX_1"
-#    DISH_NAMESPACE_2: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX_36"
-#    DISH_NAMESPACE_3: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX_63"
-#    DISH_NAMESPACE_4: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX_100"
-#    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-test-mid-csp-dish"
-#    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-test-mid-csp-dish"
-#  script:
-#    - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
-#    - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
-#    - make k8s-install-chart
-#    - make k8s-wait
-#    - make k8s-test MARK=tmc_csp_dish
-#  needs:
-#    - dish-lmc-dish001
-#    - dish-lmc-dish036
-#    - dish-lmc-dish063
-#    - dish-lmc-dish100
-#  environment:
-#    name: $CI_PROJECT_NAME/$CI_COMMIT_REF_SLUG
-#    kubernetes:
-#      # This repetition is needed for gitlab to parse the namespace correctly
-#      namespace: $KUBE_NAMESPACE
-#    on_stop: stop-k8s-test-csp-dish
-#  allow_failure: false # need to keep this to unlock the pipeline
+k8s-test-csp-dish:
+  stage: test
+  tags:
+    - k8srunner-large
+  variables:
+    DISH_SIMULATION_ENABLED: "false"
+    CSP_SIMULATION_ENABLED: "false"
+    SUBARRAY_COUNT: 2
+    DISH_TANGO_HOST: "tango-databaseds"
+    CLUSTER_DOMAIN: "svc.cluster.local"
+    PORT: "10000"
+    DISH_INDEX_1: "001"
+    DISH_INDEX_36: "036"
+    DISH_INDEX_63: "063"
+    DISH_INDEX_100: "100"
+    DISH_NAMESPACE_1: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX_1"
+    DISH_NAMESPACE_2: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX_36"
+    DISH_NAMESPACE_3: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX_63"
+    DISH_NAMESPACE_4: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX_100"
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-test-mid-csp-dish"
+    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-test-mid-csp-dish"
+  script:
+    - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
+    - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
+    - make k8s-install-chart
+    - make k8s-wait
+    - make k8s-test MARK=tmc_csp_dish
+  needs:
+    - dish-lmc-dish001
+    - dish-lmc-dish036
+    - dish-lmc-dish063
+    - dish-lmc-dish100
+  environment:
+    name: $CI_PROJECT_NAME/$CI_COMMIT_REF_SLUG
+    kubernetes:
+      # This repetition is needed for gitlab to parse the namespace correctly
+      namespace: $KUBE_NAMESPACE
+    on_stop: stop-k8s-test-csp-dish
+  allow_failure: false # need to keep this to unlock the pipeline
 
 on-demand-dish-lmc-dish001:
   extends:
@@ -331,133 +331,133 @@ stop-k8s-test-csp-dish:
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-test-mid-csp-dish"
     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-test-mid-csp-dish"
 
-#k8s-test:
-#  tags:
-#    - k8srunner
-#  variables:
-#    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA"
-#    DISH_SIMULATION_ENABLED: "true"
-#    SUBARRAY_COUNT: 2
-#    COUNT: 1
-#    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA'
-#  before_script:
-#    - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
-#    - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
-#    - 'make help | grep k8s-test'
-#    - make k8s-install-chart
-#    - make k8s-wait
-#  after_script:
-#    - ls -al
-#    - ls -al build
-#    - ls -al tests
-#    - pip3 install -U ska-ser-xray
-#    - XRAY_TEST_RESULT_FILE="build/cucumber.json" make xray-publish
-#
-#dish-lmc-dish001:
-#  stage: test
-#  tags:
-#    - k8srunner
-#  variables:
-#    DISH_INDEX: "001"
-#    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
-#    DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
-#    DISH_HELM_RELEASE: "2.6.3"
-#    K8S_DISH_LMC_CHART: "ska-dish-lmc"
-#  before_script:
-#    - make cred SERVICE_ACCOUNT=$DISH_LMC_SERVICE_ACCOUNT
-#  script:
-#    - make k8s-install-chart-car KUBE_NAMESPACE=$KUBE_NAMESPACE K8S_CHART_PARAMS='-f charts/dish_lmc_values.yml
-#      --set "global.dishes={$(DISH_INDEX)}" --version=2.6.3'
-#      HELM_RELEASE=$DISH_HELM_RELEASE K8S_CHART=$K8S_DISH_LMC_CHART
-#    - make k8s-wait
-#  environment:
-#    name: test/$CI_COMMIT_REF_SLUG
-#    on_stop: stop-k8s-dish-lmc-001
-#    action: stop
-#  allow_failure: true
-#
-#
-#dish-lmc-dish036:
-#  extends:
-#    - dish-lmc-dish001
-#  variables:
-#    DISH_INDEX: "036"
-#    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
-#    DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
-#    DISH_HELM_RELEASE: "2.6.3"
-#    K8S_DISH_LMC_CHART: "ska-dish-lmc"
-#  environment:
-#    name: test/$CI_COMMIT_REF_SLUG
-#    on_stop: stop-k8s-dish-lmc-036
-#    action: stop
-#
-#dish-lmc-dish063:
-#  extends:
-#    - dish-lmc-dish001
-#  variables:
-#    DISH_INDEX: "063"
-#    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
-#    DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
-#    DISH_HELM_RELEASE: "2.6.3"
-#    K8S_DISH_LMC_CHART: "ska-dish-lmc"
-#  environment:
-#    name: test/$CI_COMMIT_REF_SLUG
-#    on_stop: stop-k8s-dish-lmc-063
-#    action: stop
+k8s-test:
+  tags:
+    - k8srunner
+  variables:
+    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA"
+    DISH_SIMULATION_ENABLED: "true"
+    SUBARRAY_COUNT: 2
+    COUNT: 1
+    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA'
+  before_script:
+    - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
+    - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
+    - 'make help | grep k8s-test'
+    - make k8s-install-chart
+    - make k8s-wait
+  after_script:
+    - ls -al
+    - ls -al build
+    - ls -al tests
+    - pip3 install -U ska-ser-xray
+    - XRAY_TEST_RESULT_FILE="build/cucumber.json" make xray-publish
 
-#dish-lmc-dish100:
-#  extends:
-#    - dish-lmc-dish001
-#  variables:
-#    DISH_INDEX: "100"
-#    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
-#    DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
-#    DISH_HELM_RELEASE: "2.6.3"
-#    K8S_DISH_LMC_CHART: "ska-dish-lmc"
-#    TARANTA_ENABLED: "true"
-#  environment:
-#    name: test/$CI_COMMIT_REF_SLUG
-#    on_stop: stop-k8s-dish-lmc-100
-#    action: stop
-#
-#k8s-test-dish-lmc:
-#  stage: test
-#  tags:
-#    - k8srunner
-#  variables:
-#    DISH_SIMULATION_ENABLED: "false"
-#    SUBARRAY_COUNT: 2
-#    DISH_TANGO_HOST: "tango-databaseds"
-#    CLUSTER_DOMAIN: "svc.cluster.local"
-#    PORT: "10000"
-#    DISH_INDEX_1: "001"
-#    DISH_INDEX_36: "036"
-#    DISH_INDEX_63: "063"
-#    DISH_INDEX_100: "100"
-#    DISH_NAMESPACE_1: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX_1"
-#    DISH_NAMESPACE_2: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX_36"
-#    DISH_NAMESPACE_3: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX_63"
-#    DISH_NAMESPACE_4: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX_100"
-#    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-test"
-#    DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-test"
-#  script:
-#    - make cred SERVICE_ACCOUNT=$DISH_LMC_SERVICE_ACCOUNT
-#    - make k8s-install-chart
-#    - make k8s-wait
-#    - make k8s-test MARK=tmc_dish
-#  needs:
-#    - dish-lmc-dish001
-#    - dish-lmc-dish036
-#    - dish-lmc-dish063
-#    - dish-lmc-dish100
-#    - k8s-test-csp-dish
-#  after_script:
-#    - ls -al
-#    - ls -al build
-#    - ls -al tests
-#    - pip3 install -U ska-ser-xray
-#    - XRAY_TEST_RESULT_FILE="build/cucumber.json" make xray-publish
-#    - make k8s-uninstall-chart
+dish-lmc-dish001:
+  stage: test
+  tags:
+    - k8srunner
+  variables:
+    DISH_INDEX: "001"
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
+    DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
+    DISH_HELM_RELEASE: "2.6.3"
+    K8S_DISH_LMC_CHART: "ska-dish-lmc"
+  before_script:
+    - make cred SERVICE_ACCOUNT=$DISH_LMC_SERVICE_ACCOUNT
+  script:
+    - make k8s-install-chart-car KUBE_NAMESPACE=$KUBE_NAMESPACE K8S_CHART_PARAMS='-f charts/dish_lmc_values.yml
+      --set "global.dishes={$(DISH_INDEX)}" --version=2.6.3'
+      HELM_RELEASE=$DISH_HELM_RELEASE K8S_CHART=$K8S_DISH_LMC_CHART
+    - make k8s-wait
+  environment:
+    name: test/$CI_COMMIT_REF_SLUG
+    on_stop: stop-k8s-dish-lmc-001
+    action: stop
+  allow_failure: true
+
+
+dish-lmc-dish036:
+  extends:
+    - dish-lmc-dish001
+  variables:
+    DISH_INDEX: "036"
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
+    DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
+    DISH_HELM_RELEASE: "2.6.3"
+    K8S_DISH_LMC_CHART: "ska-dish-lmc"
+  environment:
+    name: test/$CI_COMMIT_REF_SLUG
+    on_stop: stop-k8s-dish-lmc-036
+    action: stop
+
+dish-lmc-dish063:
+  extends:
+    - dish-lmc-dish001
+  variables:
+    DISH_INDEX: "063"
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
+    DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
+    DISH_HELM_RELEASE: "2.6.3"
+    K8S_DISH_LMC_CHART: "ska-dish-lmc"
+  environment:
+    name: test/$CI_COMMIT_REF_SLUG
+    on_stop: stop-k8s-dish-lmc-063
+    action: stop
+
+dish-lmc-dish100:
+  extends:
+    - dish-lmc-dish001
+  variables:
+    DISH_INDEX: "100"
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
+    DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
+    DISH_HELM_RELEASE: "2.6.3"
+    K8S_DISH_LMC_CHART: "ska-dish-lmc"
+    TARANTA_ENABLED: "true"
+  environment:
+    name: test/$CI_COMMIT_REF_SLUG
+    on_stop: stop-k8s-dish-lmc-100
+    action: stop
+
+k8s-test-dish-lmc:
+  stage: test
+  tags:
+    - k8srunner
+  variables:
+    DISH_SIMULATION_ENABLED: "false"
+    SUBARRAY_COUNT: 2
+    DISH_TANGO_HOST: "tango-databaseds"
+    CLUSTER_DOMAIN: "svc.cluster.local"
+    PORT: "10000"
+    DISH_INDEX_1: "001"
+    DISH_INDEX_36: "036"
+    DISH_INDEX_63: "063"
+    DISH_INDEX_100: "100"
+    DISH_NAMESPACE_1: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX_1"
+    DISH_NAMESPACE_2: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX_36"
+    DISH_NAMESPACE_3: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX_63"
+    DISH_NAMESPACE_4: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX_100"
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-test"
+    DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-test"
+  script:
+    - make cred SERVICE_ACCOUNT=$DISH_LMC_SERVICE_ACCOUNT
+    - make k8s-install-chart
+    - make k8s-wait
+    - make k8s-test MARK=tmc_dish
+  needs:
+    - dish-lmc-dish001
+    - dish-lmc-dish036
+    - dish-lmc-dish063
+    - dish-lmc-dish100
+    - k8s-test-csp-dish
+  after_script:
+    - ls -al
+    - ls -al build
+    - ls -al tests
+    - pip3 install -U ska-ser-xray
+    - XRAY_TEST_RESULT_FILE="build/cucumber.json" make xray-publish
+    - make k8s-uninstall-chart
 
 stop-k8s-test-dish-lmc:
   extends:
@@ -539,19 +539,19 @@ stop-k8s-dish-lmc-100:
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
 
 
-#k8s-test-mid-with-csp:
-#  extends:
-#    - k8s-test
-#  variables:
-#    TELESCOPE: 'SKA-mid'
-#    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-csp-mid'
-#    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-csp-mid"
-#    MARK: 'tmc_csp'
-#    CSP_SIMULATION_ENABLED: 'false'
-#  environment:
-#    name: test/$CI_COMMIT_REF_SLUG
-#    on_stop: stop-k8s-test-mid-with-csp
-#    auto_stop_in: 1 minute
+k8s-test-mid-with-csp:
+  extends:
+    - k8s-test
+  variables:
+    TELESCOPE: 'SKA-mid'
+    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-csp-mid'
+    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-csp-mid"
+    MARK: 'tmc_csp'
+    CSP_SIMULATION_ENABLED: 'false'
+  environment:
+    name: test/$CI_COMMIT_REF_SLUG
+    on_stop: stop-k8s-test-mid-with-csp
+    auto_stop_in: 1 minute
 
 
 stop-k8s-test-mid-with-csp:

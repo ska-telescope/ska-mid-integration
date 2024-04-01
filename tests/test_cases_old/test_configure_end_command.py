@@ -36,7 +36,7 @@ tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 telescope_control = BaseTelescopeControl()
 
 
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 def test_configure_timeout_and_error_propagation_csp(
     json_factory, change_event_callbacks
 ):
@@ -119,7 +119,7 @@ def test_configure_timeout_and_error_propagation_csp(
         )
 
 
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 def test_configure_timeout_sdp(json_factory, change_event_callbacks):
     """Verify timeout exception raised when csp set to defective."""
     assign_json = json_factory("command_AssignResources")
@@ -205,7 +205,7 @@ def test_configure_timeout_sdp(json_factory, change_event_callbacks):
         )
 
 
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 def test_configure_error_propagation_sdp(json_factory, change_event_callbacks):
     """Verify timeout exception raised when csp set to defective."""
     assign_json = json_factory("command_AssignResources")

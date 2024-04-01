@@ -29,7 +29,7 @@ tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 telescope_control = BaseTelescopeControl()
 
 
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 @scenario(
     "../features/check_invalid_json_not_allowed.feature",
     "Invalid json rejected by TMC for Configure command",

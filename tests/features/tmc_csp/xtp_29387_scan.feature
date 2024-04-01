@@ -1,5 +1,5 @@
 # This BDD test performs TMC-CSP pairwise testing to verify Scan command flow.
-@XTP-29583 @XTP-29387 @tmc_csp
+@XTP-29583 @XTP-29387 @tmc_csp12
 Scenario: TMC executes a Scan command on CSP subarray.
     Given the telescope is in ON state
     And TMC subarray <subarray_id> is in READY ObsState

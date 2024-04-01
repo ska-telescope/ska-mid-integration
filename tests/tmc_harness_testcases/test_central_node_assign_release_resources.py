@@ -9,7 +9,7 @@ from tests.resources.test_harness.helpers import (
 
 
 class TestMidCentralNodeAssignResources(object):
-    @pytest.mark.SKA_mid
+    @pytest.mark.SKA_mid12
     def test_mid_centralnode_assign_resources(
         self,
         central_node_mid,

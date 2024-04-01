@@ -14,7 +14,7 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 
 @pytest.mark.skip(reason="Fails in READY transition")
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 @scenario(
     "../features/test_harness/science_scan_after_calibration_scan.feature",
     "TMC behaviour during a science scan after a five point calibration scan.",

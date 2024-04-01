@@ -24,7 +24,7 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
     reason="Test fails because of TRANSIENT CORBA EXCEPTION with command"
     + " exceeding the timeout of 3 seconds"
 )
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 @scenario(
     "../features/load_dish_cfg_command_negative_scenario.feature",
     "TMC returns error message when non existent file is provided "
@@ -48,7 +48,7 @@ def test_central_node_return_error_for_invalid_file():
     reason="Test fails because of TRANSIENT CORBA EXCEPTION with command"
     + " exceeding the timeout of 3 seconds"
 )
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 @scenario(
     "../features/load_dish_cfg_command_negative_scenario.feature",
     "TMC returns error when invalid dish id is provided in configuration",
@@ -63,7 +63,7 @@ def test_central_node_return_error_for_invalid_dish_id():
     reason="Test fails because of TRANSIENT CORBA EXCEPTION with command"
     + " exceeding the timeout of 3 seconds"
 )
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 @scenario(
     "../features/load_dish_cfg_command_negative_scenario.feature",
     "TMC returns error when duplicate vcc id is provided in configuration",
@@ -78,7 +78,7 @@ def test_central_node_return_error_for_duplicate_vcc_id():
     reason="Test fails because of TRANSIENT CORBA EXCEPTION with command"
     + " exceeding the timeout of 3 seconds"
 )
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 @pytest.mark.skip(
     reason="This will be enable once Dish Vcc feature is integrate."
 )

@@ -9,7 +9,7 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 @scenario(
     "../features/test_harness/telescope_health_state_aggregation.feature",
     "Verify CentralNode TelescopeHealthState",

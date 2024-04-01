@@ -37,7 +37,7 @@ telescope_control = BaseTelescopeControl()
 tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 
 
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 def test_abort_in_empty(json_factory):
     """Test Abort in EMPTY"""
     release_json = json_factory("command_ReleaseResources")
@@ -81,7 +81,7 @@ def test_abort_in_empty(json_factory):
 @pytest.mark.skip(
     reason="Test fails when Abort is invoked for subsystem Subarray in EMPTY."
 )
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 def test_abort_in_resourcing_different_resources(json_factory):
     """Abort and Restart is executed."""
     assign_json = json_factory("command_AssignResources")
@@ -196,7 +196,7 @@ def test_abort_in_resourcing_different_resources(json_factory):
 @pytest.mark.skip(
     reason="Test fails when Abort is invoked for subsystem Subarray in EMPTY."
 )
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 def test_abort_in_resourcing_with_second_abort(json_factory):
     """Abort and Restart is executed."""
     assign_json = json_factory("command_AssignResources")

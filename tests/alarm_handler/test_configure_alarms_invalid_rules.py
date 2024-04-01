@@ -39,7 +39,7 @@ def alarm_rule_validation(filename, missing_attribute):
     ],
 )
 @pytest.mark.post_deployment
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 def test_validate_attribute_properties(alarm_rule_file, missing_attribute):
     """test case to validate alarm attribute properties for mid"""
     alarm_rule_validation(alarm_rule_file, missing_attribute)

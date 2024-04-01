@@ -40,7 +40,7 @@ telescope_control = BaseTelescopeControl()
 tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 
 
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 def test_assign_release_timeout_csp(json_factory, change_event_callbacks):
     """Verify timeout exception raised when csp set to defective."""
     assign_json = json_factory("command_AssignResources")
@@ -108,7 +108,7 @@ def test_assign_release_timeout_csp(json_factory, change_event_callbacks):
         tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
 
 
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 def test_assign_release_timeout_sdp(
     command_input_factory, json_factory, change_event_callbacks
 ):
@@ -184,7 +184,7 @@ def test_assign_release_timeout_sdp(
         tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
 
 
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 def test_health_check_mid():
     """Test case to check health check for mid"""
     assert telescope_control.is_in_valid_state(
@@ -192,7 +192,7 @@ def test_health_check_mid():
     )
 
 
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 def test_release_resources_error_propagation(
     json_factory, change_event_callbacks
 ):

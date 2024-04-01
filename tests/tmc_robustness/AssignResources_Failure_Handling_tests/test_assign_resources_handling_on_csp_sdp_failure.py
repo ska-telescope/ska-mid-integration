@@ -15,7 +15,7 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 @scenario(
     "../features/xtp-28340.feature",
     "TMC behavior when CSP and SDP Subarrays AssignResources raise exception",

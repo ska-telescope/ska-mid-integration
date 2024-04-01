@@ -1,5 +1,5 @@
 # This BDD test performs TMC-CSP pairwise testing to verify End command flow.
-@XTP-29583 @XTP-29374 @tmc_csp
+@XTP-29583 @XTP-29374 @tmc_csp12
 Scenario: End configure from CSP Subarray using TMC
     Given the telescope is in ON state
     And TMC subarray <subarray_id> is in READY ObsState

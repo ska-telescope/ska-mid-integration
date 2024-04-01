@@ -26,7 +26,7 @@ telescope_control = BaseTelescopeControl()
 tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 
 
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 def test_assign_invalid_json(json_factory):
     """Test assign resources command with
     with invalid json"""
@@ -71,7 +71,7 @@ def test_assign_invalid_json(json_factory):
         tear_down(**ON_OFF_DEVICE_COMMAND_DICT)
 
 
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 def test_release_invalid_json(json_factory):
     """Test release with invalid json"""
     assign_json = json_factory("command_AssignResources")
@@ -131,7 +131,7 @@ def test_release_invalid_json(json_factory):
         tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
 
 
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 def test_invalid_receptor_ids(json_factory):
     """AssignResources and ReleaseResources is executed."""
     assign_json = json_factory("command_assign_resources_invalid_receptor_id")

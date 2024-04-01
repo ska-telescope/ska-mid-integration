@@ -20,7 +20,7 @@ from tests.resources.test_support.constant import (
     reason="Manual deletion of pods is required, will xfail \
                   them once abort command will be in place"
 )
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 def test_assign_sn_entrypoint(json_factory):
     """AssignResources is executed while pods are deleted."""
     assign_json = json_factory("command_AssignResources")
@@ -36,7 +36,7 @@ def test_assign_sn_entrypoint(json_factory):
     reason="Manual deletion of pods is required, will xfail \
                   them once abort command will be in place"
 )
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 def test_release_sn_entrypoint(json_factory):
     """ReleaseResources is executed while pods are deleted."""
 
@@ -55,7 +55,7 @@ def test_release_sn_entrypoint(json_factory):
     reason="Manual deletion of pods is required, will xfail \
                   them once abort command will be in place"
 )
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 def test_assign_mid(json_factory):
     """AssignResources is executed while pods are deleted."""
     assign_json = json_factory("command_AssignResources")
@@ -72,7 +72,7 @@ def test_assign_mid(json_factory):
     reason="Manual deletion of pods is required, will xfail \
                   them once abort command will be in place"
 )
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 def test_release_mid(json_factory):
     """ReleaseResources is executed while pods are deleted."""
     release_json = json_factory("command_ReleaseResources")
