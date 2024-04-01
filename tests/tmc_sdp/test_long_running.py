@@ -155,12 +155,14 @@ def execute_initial_configure_command(
             scan_type,
         )
 
-        scan_json = prepare_json_args_for_commands(
+        scan_json1 = prepare_json_args_for_commands(
             "scan_mid", command_input_factory
         )
 
-        scan_json = update_scan_id(scan_json, scan_ids)
-        subarray_node.execute_transition("Scan", argin=json.dumps(scan_json))
+        scan_json = update_scan_id(scan_json1, scan_ids)
+
+        LOGGER.info(f"updated scan {scan_json}")
+        subarray_node.execute_transition("Scan", argin=json.dumps(scan_json1))
 
         assert event_recorder.has_change_event_occurred(
             subarray_node.subarray_node,
