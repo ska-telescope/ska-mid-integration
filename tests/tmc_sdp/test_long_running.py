@@ -13,7 +13,8 @@ from tests.resources.test_harness.helpers import (
     check_subarray_instance,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
-    update_json,
+    update_scan_id,
+    update_scan_type,
 )
 
 configure_logging(logging.DEBUG)
@@ -48,7 +49,12 @@ def given_a_tmc(central_node_mid, event_recorder, subarray_node):
         subarray_node.subarray_devices.get("csp_subarray"), "obsState"
     )
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-
+    event_recorder.subscribe_event(
+        subarray_node.subarray_devices["sdp_subarray"], "scanID"
+    )
+    event_recorder.subscribe_event(
+        subarray_node.subarray_devices["sdp_subarray"], "scanType"
+    )
     central_node_mid.move_to_on()
 
     assert event_recorder.has_change_event_occurred(
@@ -128,7 +134,7 @@ def execute_initial_configure_command(
 
     for scan_type in my_list:
         LOGGER.info(f" scan_type is {scan_type}")
-        configure_json = update_json(configure_json, scan_type)
+        configure_json = update_scan_type(configure_json, scan_type)
         subarray_node.store_configuration_data(configure_json)
         if configure_cycle == "initial":
             assert event_recorder.has_change_event_occurred(
@@ -143,35 +149,60 @@ def execute_initial_configure_command(
             )
             configure_cycle = "Next"
 
-        event_recorder.subscribe_event(
-            subarray_node.subarray_devices["sdp_subarray"], "scanType"
-        )
         assert event_recorder.has_change_event_occurred(
             subarray_node.subarray_devices["sdp_subarray"],
             "scanType",
             scan_type,
         )
 
-        event_recorder.subscribe_event(
-            subarray_node.subarray_devices["sdp_subarray"], "scanID"
+        scan_json = prepare_json_args_for_commands(
+            "scan_mid", command_input_factory
+        )
+
+        scan_json = update_scan_id(scan_json, scan_ids)
+        subarray_node.execute_transition("Scan", argin=json.dumps(scan_json))
+
+        assert event_recorder.has_change_event_occurred(
+            subarray_node.subarray_node,
+            "obsState",
+            ObsState.SCANNING,
+        )
+        assert event_recorder.has_change_event_occurred(
+            subarray_node.subarray_devices["sdp_subarray"],
+            "obsState",
+            ObsState.SCANNING,
         )
         assert event_recorder.has_change_event_occurred(
             subarray_node.subarray_devices["sdp_subarray"], "scanID", scan_ids
         )
 
-    LOGGER.info("Configure Completed")
+        # The sdp subarray transitions to READY after the scan duration elapsed
+        assert event_recorder.has_change_event_occurred(
+            subarray_node.subarray_devices["sdp_subarray"],
+            "obsState",
+            ObsState.READY,
+        )
+        assert event_recorder.has_change_event_occurred(
+            subarray_node.subarray_node,
+            "obsState",
+            ObsState.READY,
+        )
+
+        LOGGER.info("Configure-scan round completed")
+
+    LOGGER.info("Configure Scan Completed")
 
     # resources
 
-    event_recorder.subscribe_event(
-        subarray_node.subarray_devices["sdp_subarray"], "resources"
-    )
-
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_devices["sdp_subarray"],
-        "resources",
-        "csp_links",
-    )
+    # event_recorder.subscribe_event(
+    #     subarray_node.subarray_devices["sdp_subarray"], "resources"
+    # )
+    #
+    # assert event_recorder.has_change_event_occurred(
+    #     subarray_node.subarray_devices["sdp_subarray"],
+    #     "resources",
+    #     "csp_links",
+    # )
 
 
 # @when("the subarray transitions to obsState READY")

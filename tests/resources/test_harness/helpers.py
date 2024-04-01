@@ -611,7 +611,7 @@ def update_eb_pb_ids(input_json: str) -> str:
     return input_json
 
 
-def update_json(input_json: str, json_value: str) -> str:
+def update_scan_type(input_json: str, json_value: str) -> str:
     """
     Method to update json with different data.
     :param input_json: json to utilised to update values.
@@ -624,6 +624,21 @@ def update_json(input_json: str, json_value: str) -> str:
     input_json["sdp"]["scan_type"] = json_value
     # for pb in input_json["sdp"]["processing_blocks"]:
     #     pb["pb_id"] = generate_id("pb-test")
+    input_json = json.dumps(input_json)
+    return input_json
+
+
+def update_scan_id(input_json: str, new_scan_id: int) -> str:
+    """
+    Method to update json with different data.
+    :param input_json: json to utilised to update values.
+
+    :param json_value: new json value to be updated in json
+    """
+    input_json = json.loads(input_json)
+
+    input_json["scan_id"] = new_scan_id
+
     input_json = json.dumps(input_json)
     return input_json
 
