@@ -124,23 +124,54 @@ def execute_initial_configure_command(
     my_list = eval(scan_types)
     LOGGER.info(f"working on scan types {my_list} {scan_ids}")
     # scan_type_key_path = '["sdp"]["scan_type"]'
+    configure_cycle = "initial"
 
     for scan_type in my_list:
         LOGGER.info(f" scan_type is {scan_type}")
         configure_json = update_json(configure_json, scan_type)
         subarray_node.store_configuration_data(configure_json)
-        # assert event_recorder.has_change_event_occurred(
-        #     subarray_node.subarray_devices["sdp_subarray"],
-        #     "obsState",
-        #     ObsState.CONFIGURING,
-        # )
+        if configure_cycle == "initial":
+            assert event_recorder.has_change_event_occurred(
+                subarray_node.subarray_devices["sdp_subarray"],
+                "obsState",
+                ObsState.CONFIGURING,
+            )
+            assert event_recorder.has_change_event_occurred(
+                subarray_node.subarray_devices["sdp_subarray"],
+                "obsState",
+                ObsState.READY,
+            )
+            configure_cycle = "Next"
+
+        event_recorder.subscribe_event(
+            subarray_node.subarray_devices["sdp_subarray"], "scanType"
+        )
         assert event_recorder.has_change_event_occurred(
             subarray_node.subarray_devices["sdp_subarray"],
-            "obsState",
-            ObsState.READY,
+            "scanType",
+            scan_type,
+        )
+
+        event_recorder.subscribe_event(
+            subarray_node.subarray_devices["sdp_subarray"], "scanID"
+        )
+        assert event_recorder.has_change_event_occurred(
+            subarray_node.subarray_devices["sdp_subarray"], "scanID", scan_ids
         )
 
     LOGGER.info("Configure Completed")
+
+    # resources
+
+    event_recorder.subscribe_event(
+        subarray_node.subarray_devices["sdp_subarray"], "resources"
+    )
+
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices["sdp_subarray"],
+        "resources",
+        "csp_links",
+    )
 
 
 # @when("the subarray transitions to obsState READY")
