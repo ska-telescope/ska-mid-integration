@@ -76,7 +76,7 @@ include:
 mid-on-demand-deploy:
   stage: on-demand
   tags:
-    - k8srunner
+    - k8srunner-cicd
   variables:
     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA"
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-mid-on-demand"
@@ -100,7 +100,7 @@ mid-on-demand-deploy:
 mid-on-demand-destroy:
   stage: on-demand
   tags:
-    - k8srunner
+    - k8srunner-cicd
   variables:
     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA"
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-mid-on-demand"
@@ -120,14 +120,13 @@ mid-on-demand-destroy:
 mid-on-demand-deploy-mini-skampi:
   stage: on-demand
   tags:
-    - k8srunner
+    - k8srunner-cicd
   variables:
     DISH_SIMULATION_ENABLED: "false"
     SDP_SIMULATION_ENABLED: "false"
     CSP_SIMULATION_ENABLED: "false"
     SUBARRAY_COUNT: 2
     DISH_TANGO_HOST: "tango-databaseds"
-    CLUSTER_DOMAIN: "svc.cluster.local"
     PORT: "10000"
     DISH_INDEX_1: "001"
     DISH_INDEX_36: "036"
@@ -163,13 +162,12 @@ mid-on-demand-deploy-mini-skampi:
 k8s-test-csp-dish:
   stage: test
   tags:
-    - k8srunner-large
+    - k8srunner-large-cicd
   variables:
     DISH_SIMULATION_ENABLED: "false"
     CSP_SIMULATION_ENABLED: "false"
     SUBARRAY_COUNT: 2
     DISH_TANGO_HOST: "tango-databaseds"
-    CLUSTER_DOMAIN: "svc.cluster.local"
     PORT: "10000"
     DISH_INDEX_1: "001"
     DISH_INDEX_36: "036"
@@ -304,7 +302,7 @@ stop-on-demand-dish-lmc-100:
 mid-on-demand-destroy-mini-skampi:
   stage: on-demand
   tags:
-    - k8srunner
+    - k8srunner-cicd
   variables:
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-on-demand-tmc-test"
     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-on-demand-tmc-test"
@@ -333,7 +331,7 @@ stop-k8s-test-csp-dish:
 
 k8s-test:
   tags:
-    - k8srunner
+    - k8srunner-cicd
   variables:
     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA"
     DISH_SIMULATION_ENABLED: "true"
@@ -356,7 +354,7 @@ k8s-test:
 dish-lmc-dish001:
   stage: test
   tags:
-    - k8srunner
+    - k8srunner-cicd
   variables:
     DISH_INDEX: "001"
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
@@ -367,7 +365,7 @@ dish-lmc-dish001:
     - make cred SERVICE_ACCOUNT=$DISH_LMC_SERVICE_ACCOUNT
   script:
     - make k8s-install-chart-car KUBE_NAMESPACE=$KUBE_NAMESPACE K8S_CHART_PARAMS='-f charts/dish_lmc_values.yml
-      --set "global.dishes={$(DISH_INDEX)}" --version=2.6.3'
+      --set "global.dishes={$(DISH_INDEX)}" --set "global.cluster_domain=$(CLUSTER_DOMAIN)" --version=2.6.3'
       HELM_RELEASE=$DISH_HELM_RELEASE K8S_CHART=$K8S_DISH_LMC_CHART
     - make k8s-wait
   environment:
@@ -375,7 +373,6 @@ dish-lmc-dish001:
     on_stop: stop-k8s-dish-lmc-001
     action: stop
   allow_failure: true
-
 
 dish-lmc-dish036:
   extends:
@@ -423,12 +420,11 @@ dish-lmc-dish100:
 k8s-test-dish-lmc:
   stage: test
   tags:
-    - k8srunner
+    - k8srunner-cicd
   variables:
     DISH_SIMULATION_ENABLED: "false"
     SUBARRAY_COUNT: 2
     DISH_TANGO_HOST: "tango-databaseds"
-    CLUSTER_DOMAIN: "svc.cluster.local"
     PORT: "10000"
     DISH_INDEX_1: "001"
     DISH_INDEX_36: "036"
@@ -469,14 +465,11 @@ stop-k8s-test-dish-lmc:
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
     - make k8s-delete-namespace
 
-
-
 k8s-test-tmc-with-sdp:
   extends:
     - k8s-test
   variables:
     TELESCOPE: 'SKA-mid'
-    CLUSTER_DOMAIN: "svc.cluster.local"
     PORT: "10000"
     KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-sdp'
     KUBE_NAMESPACE_SDP: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-sdp'
@@ -489,7 +482,6 @@ k8s-test-tmc-with-sdp:
     on_stop: stop-k8s-test-tmc-with-sdp
     auto_stop_in: 1 minute
 
-
 stop-k8s-test-tmc-with-sdp:
   extends:
     - stop-k8s-test
@@ -499,8 +491,6 @@ stop-k8s-test-tmc-with-sdp:
     - make k8s-uninstall-chart
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
     - make k8s-delete-namespace
-
-
 
 stop-k8s-dish-lmc-001:
   stage: test
@@ -513,6 +503,7 @@ stop-k8s-dish-lmc-001:
   script:
     - make k8s-do-uninstall-chart KUBE_NAMESPACE=$KUBE_NAMESPACE HELM_RELEASE=$DISH_HELM_RELEASE K8S_CHART=$K8S_DISH_LMC_CHART
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,sa,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
+    - kubectl delete namespace $KUBE_NAMESPACE
 
 stop-k8s-dish-lmc-036:
   extends:
@@ -538,7 +529,6 @@ stop-k8s-dish-lmc-100:
     DISH_HELM_RELEASE: "2.6.3"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
 
-
 k8s-test-mid-with-csp:
   extends:
     - k8s-test
@@ -553,7 +543,6 @@ k8s-test-mid-with-csp:
     on_stop: stop-k8s-test-mid-with-csp
     auto_stop_in: 1 minute
 
-
 stop-k8s-test-mid-with-csp:
   extends:
     - stop-k8s-test
@@ -563,7 +552,6 @@ stop-k8s-test-mid-with-csp:
     - make k8s-uninstall-chart
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
     - make k8s-delete-namespace
-
 
 deploy-integration:
   rules:
@@ -594,7 +582,6 @@ redeploy-staging:
   rules:
     - if: $CI_COMMIT_TAG
 
-
 info-staging:
   stage: staging
   when: manual
@@ -606,3 +593,44 @@ stop-staging:
   when: manual
   rules:
     - if: $CI_COMMIT_TAG
+
+# Overrides
+default:
+  tags:
+    - k8srunner-cicd
+
+docs-build:
+  tags:
+    - k8srunner-cicd
+
+docs-pages:
+  tags:
+    - k8srunner-cicd
+
+build-changelog:
+  tags:
+    - k8srunner-cicd
+
+python-lint:
+  tags:
+    - k8srunner-cicd
+
+helm-chart-lint:
+  tags:
+    - k8srunner-cicd
+
+helm-chart-build:
+  tags:
+    - k8srunner-cicd
+
+helm-chart-publish:
+  tags:
+    - k8srunner-cicd
+
+stop-k8s-test:
+  tags:
+    - k8srunner-cicd
+
+create-ci-metrics:
+  tags:
+    - k8srunner-cicd

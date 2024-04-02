@@ -43,17 +43,17 @@ K8S_CHART ?= $(HELM_CHART)
 
 DISH_TANGO_HOST ?= tango-databaseds
 COUNT ?= 1
-CLUSTER_DOMAIN ?= svc.cluster.local
+CLUSTER_DOMAIN ?= cluster.local
 PORT ?= 10000
 SUBARRAY_COUNT ?= 2
-DISH_NAME_1 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_1).$(CLUSTER_DOMAIN):$(PORT)/ska001/elt/master
-DISH_NAME_36 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_2).$(CLUSTER_DOMAIN):$(PORT)/ska036/elt/master
-DISH_NAME_63 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_3).$(CLUSTER_DOMAIN):$(PORT)/ska063/elt/master
-DISH_NAME_100 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_4).$(CLUSTER_DOMAIN):$(PORT)/ska100/elt/master
-CSP_MASTER ?= tango://$(TANGO_HOST).$(KUBE_NAMESPACE).$(CLUSTER_DOMAIN):$(PORT)/mid-csp/control/0
-CSP_SUBARRAY_PREFIX ?= tango://$(TANGO_HOST).$(KUBE_NAMESPACE).$(CLUSTER_DOMAIN):$(PORT)/mid-csp/subarray
-SDP_MASTER ?= tango://$(TANGO_HOST).$(KUBE_NAMESPACE).$(CLUSTER_DOMAIN):$(PORT)/mid-sdp/control/0
-SDP_SUBARRAY_PREFIX ?= tango://$(TANGO_HOST).$(KUBE_NAMESPACE).$(CLUSTER_DOMAIN):$(PORT)/mid-sdp/subarray
+DISH_NAME_1 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_1).svc.$(CLUSTER_DOMAIN):$(PORT)/ska001/elt/master
+DISH_NAME_36 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_2).svc.$(CLUSTER_DOMAIN):$(PORT)/ska036/elt/master
+DISH_NAME_63 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_3).svc.$(CLUSTER_DOMAIN):$(PORT)/ska063/elt/master
+DISH_NAME_100 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_4).svc.$(CLUSTER_DOMAIN):$(PORT)/ska100/elt/master
+CSP_MASTER ?= tango://$(TANGO_HOST).$(KUBE_NAMESPACE).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-csp/control/0
+CSP_SUBARRAY_PREFIX ?= tango://$(TANGO_HOST).$(KUBE_NAMESPACE).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-csp/subarray
+SDP_MASTER ?= tango://$(TANGO_HOST).$(KUBE_NAMESPACE).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-sdp/control/0
+SDP_SUBARRAY_PREFIX ?= tango://$(TANGO_HOST).$(KUBE_NAMESPACE).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-sdp/subarray
 
 CI_REGISTRY ?= gitlab.com
 
@@ -113,7 +113,8 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set ska-tango-base.xauthority=$(XAUTHORITY) \
 	--set ska-tango-base.jive.enabled=$(JIVE) \
 	--set global.exposeAllDS=false \
-	--set global.operator=false \
+	--set global.cluster_domain=$(CLUSTER_DOMAIN) \
+	--set global.operator=true \
 	--set ska-taranta.enabled=$(TARANTA_ENABLED)\
 	--set global.namespace_dish.dish_names[0]="$(DISH_NAME_1)"\
 	--set global.namespace_dish.dish_names[1]="$(DISH_NAME_36)"\
@@ -127,6 +128,7 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 PYTHON_VARS_BEFORE_PYTEST ?= PYTHONPATH=.:./src \
 							 TANGO_HOST=$(TANGO_HOST) \
 							 TELESCOPE=$(TELESCOPE) \
+							 CLUSTER_DOMAIN=$(CLUSTER_DOMAIN) \
 							 CSP_SIMULATION_ENABLED=$(CSP_SIMULATION_ENABLED) \
 							 SDP_SIMULATION_ENABLED=$(SDP_SIMULATION_ENABLED) \
 							 DISH_SIMULATION_ENABLED=$(DISH_SIMULATION_ENABLED) \
