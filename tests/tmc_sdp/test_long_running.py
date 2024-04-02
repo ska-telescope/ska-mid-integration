@@ -16,6 +16,7 @@ from tests.resources.test_harness.helpers import (
     update_scan_id,
     update_scan_type,
 )
+from tests.resources.test_support.common_utils.common_helpers import Waiter
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -31,6 +32,15 @@ def test_tmc_sdp_long_sequences():
     """
     Test case to verify TMC-SDP  functionality with long sequences of commands
     """
+
+
+def check_device_status_ready(device_name):
+    """
+    Checks if given device is in READY obs-state
+    """
+    the_waiter = Waiter()
+    the_waiter.set_wait_for_specific_obsstate("READY", [device_name])
+    the_waiter.wait(100)
 
 
 @given("Telescope is ON state")
@@ -181,11 +191,17 @@ def execute_initial_configure_command(
         )
 
         # The sdp subarray transitions to READY after the scan duration elapsed
+
+        check_device_status_ready(
+            subarray_node.subarray_devices["sdp_subarray"]
+        )
         assert event_recorder.has_change_event_occurred(
             subarray_node.subarray_devices["sdp_subarray"],
             "obsState",
             ObsState.READY,
         )
+
+        check_device_status_ready(subarray_node.subarray_node)
         assert event_recorder.has_change_event_occurred(
             subarray_node.subarray_node,
             "obsState",
