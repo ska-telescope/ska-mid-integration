@@ -1,5 +1,5 @@
 Feature:  TMC executes long running sequences with real sdp devices
-    @tmc_sdp1 @Team_SAHYADRI
+    @tmc_sdp @Team_SAHYADRI
     Scenario Outline: TMC executes long sequence of commands successfully
 
     Given Telescope is ON state

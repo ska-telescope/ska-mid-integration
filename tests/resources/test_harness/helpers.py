@@ -637,7 +637,7 @@ def update_scan_id(input_json: str, new_scan_id: int) -> str:
     """
     input_json = json.loads(input_json)
 
-    input_json["scan_id"] = new_scan_id
+    input_json["scan_id"] = int(new_scan_id)
 
     input_json = json.dumps(input_json)
     return input_json

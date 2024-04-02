@@ -22,7 +22,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 @pytest.mark.trupti
-@pytest.mark.tmc_sdp1
+@pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/long_running.feature",
     "TMC executes long sequence of commands successfully",
@@ -162,7 +162,7 @@ def execute_initial_configure_command(
         scan_json = update_scan_id(scan_json1, scan_ids)
 
         LOGGER.info(f"updated scan {scan_json}")
-        subarray_node.execute_transition("Scan", argin=json.dumps(scan_json1))
+        subarray_node.execute_transition("Scan", argin=json.dumps(scan_json))
 
         assert event_recorder.has_change_event_occurred(
             subarray_node.subarray_node,
