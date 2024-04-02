@@ -22,7 +22,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 @pytest.mark.trupti
-@pytest.mark.tmc_sdp
+@pytest.mark.tmc_sdp1
 @scenario(
     "../features/tmc_sdp/long_running.feature",
     "TMC executes long sequence of commands successfully",
