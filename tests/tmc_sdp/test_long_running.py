@@ -17,6 +17,7 @@ from tests.resources.test_harness.helpers import (
     update_scan_type,
 )
 from tests.resources.test_support.common_utils.common_helpers import Waiter
+from tests.resources.test_support.common_utils.result_code import ResultCode
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -64,6 +65,10 @@ def given_a_tmc(central_node_mid, event_recorder, subarray_node):
     )
     event_recorder.subscribe_event(
         subarray_node.subarray_devices["sdp_subarray"], "scanType"
+    )
+
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
     )
     central_node_mid.move_to_on()
 
@@ -138,77 +143,100 @@ def execute_initial_configure_command(
     )
 
     my_list = eval(scan_types)
-    LOGGER.info(f"working on scan types {my_list} {scan_ids}")
-    # scan_type_key_path = '["sdp"]["scan_type"]'
+    LOGGER.info(f"working on scan types {my_list} ")
+
+    scan_id_list = eval(scan_ids)
+
+    LOGGER.info(f"working with scan ids {scan_id_list}")
     configure_cycle = "initial"
 
-    for scan_type in my_list:
-        LOGGER.info(f" scan_type is {scan_type}")
-        configure_json = update_scan_type(configure_json, scan_type)
-        subarray_node.store_configuration_data(configure_json)
-        if configure_cycle == "initial":
+    for scan_id in scan_id_list:
+
+        for scan_type in my_list:
+            LOGGER.info(f" scan_type is {scan_type}")
+            configure_json = update_scan_type(configure_json, scan_type)
+            _, unique_id = subarray_node.store_configuration_data(
+                configure_json
+            )
+            if configure_cycle == "initial":
+                assert event_recorder.has_change_event_occurred(
+                    subarray_node.subarray_devices["sdp_subarray"],
+                    "obsState",
+                    ObsState.CONFIGURING,
+                )
+                assert event_recorder.has_change_event_occurred(
+                    subarray_node.subarray_devices["sdp_subarray"],
+                    "obsState",
+                    ObsState.READY,
+                )
+                configure_cycle = "Next"
+
+            assert event_recorder.has_change_event_occurred(
+                subarray_node.subarray_devices["sdp_subarray"],
+                "scanType",
+                scan_type,
+            )
+
+            assert event_recorder.has_change_event_occurred(
+                subarray_node.subarray_node,
+                "longRunningCommandResult",
+                (unique_id[0], str(int(ResultCode.OK))),
+                lookahead=5,
+            )
+
+            scan_json1 = prepare_json_args_for_commands(
+                "scan_mid", command_input_factory
+            )
+
+            scan_json = update_scan_id(scan_json1, scan_id)
+
+            LOGGER.info(f"updated scan {scan_json}")
+            _, unique_id = subarray_node.execute_transition(
+                "Scan", argin=scan_json
+            )
+
+            assert event_recorder.has_change_event_occurred(
+                subarray_node.subarray_node,
+                "obsState",
+                ObsState.SCANNING,
+            )
             assert event_recorder.has_change_event_occurred(
                 subarray_node.subarray_devices["sdp_subarray"],
                 "obsState",
-                ObsState.CONFIGURING,
+                ObsState.SCANNING,
+            )
+            assert event_recorder.has_change_event_occurred(
+                subarray_node.subarray_devices["sdp_subarray"],
+                "scanID",
+                int(scan_ids),
+            )
+
+            # The sdp subarray transitions to READY after the scan duration
+            # elapsed
+
+            check_device_status_ready(
+                subarray_node.subarray_devices["sdp_subarray"]
             )
             assert event_recorder.has_change_event_occurred(
                 subarray_node.subarray_devices["sdp_subarray"],
                 "obsState",
                 ObsState.READY,
             )
-            configure_cycle = "Next"
 
-        assert event_recorder.has_change_event_occurred(
-            subarray_node.subarray_devices["sdp_subarray"],
-            "scanType",
-            scan_type,
-        )
+            check_device_status_ready(subarray_node.subarray_node)
+            assert event_recorder.has_change_event_occurred(
+                subarray_node.subarray_node,
+                "obsState",
+                ObsState.READY,
+            )
+            assert event_recorder.has_change_event_occurred(
+                subarray_node.subarray_node,
+                "longRunningCommandResult",
+                (unique_id[0], str(int(ResultCode.OK))),
+                lookahead=5,
+            )
 
-        scan_json1 = prepare_json_args_for_commands(
-            "scan_mid", command_input_factory
-        )
-
-        scan_json = update_scan_id(scan_json1, scan_ids)
-
-        LOGGER.info(f"updated scan {scan_json}")
-        subarray_node.execute_transition("Scan", argin=scan_json)
-
-        assert event_recorder.has_change_event_occurred(
-            subarray_node.subarray_node,
-            "obsState",
-            ObsState.SCANNING,
-        )
-        assert event_recorder.has_change_event_occurred(
-            subarray_node.subarray_devices["sdp_subarray"],
-            "obsState",
-            ObsState.SCANNING,
-        )
-        assert event_recorder.has_change_event_occurred(
-            subarray_node.subarray_devices["sdp_subarray"],
-            "scanID",
-            int(scan_ids),
-        )
-
-        # The sdp subarray transitions to READY after the scan duration elapsed
-
-        check_device_status_ready(
-            subarray_node.subarray_devices["sdp_subarray"]
-        )
-        assert event_recorder.has_change_event_occurred(
-            subarray_node.subarray_devices["sdp_subarray"],
-            "obsState",
-            ObsState.READY,
-        )
-
-        check_device_status_ready(subarray_node.subarray_node)
-        assert event_recorder.has_change_event_occurred(
-            subarray_node.subarray_node,
-            "obsState",
-            ObsState.READY,
-        )
-
-        LOGGER.info("Configure-scan round completed")
+            LOGGER.info("Configure-scan round completed")
 
     LOGGER.info("Configure Scan Completed")
 
