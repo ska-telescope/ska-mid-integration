@@ -50,7 +50,7 @@ def check_device_status_scanning(device_name):
     """
     the_waiter = Waiter()
     the_waiter.set_wait_for_specific_obsstate("READY", [device_name])
-    the_waiter.wait(100)
+    the_waiter.wait(200)
 
 
 @given("Telescope is ON state")
