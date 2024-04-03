@@ -181,17 +181,27 @@ def execute_initial_configure_command(
                     "obsState",
                     ObsState.CONFIGURING,
                 )
+                check_device_status_ready(
+                    subarray_node.subarray_devices["sdp_subarray"]
+                )
+                assert event_recorder.has_change_event_occurred(
+                    subarray_node.subarray_devices["sdp_subarray"],
+                    "obsState",
+                    ObsState.READY,
+                )
 
                 configure_cycle = "Next"
 
             check_device_status_ready(
                 subarray_node.subarray_devices["sdp_subarray"]
             )
-            assert event_recorder.has_change_event_occurred(
-                subarray_node.subarray_devices["sdp_subarray"],
-                "obsState",
-                ObsState.READY,
-            )
+
+            # READY Event will not come ,since SDP was already in Ready
+            # assert event_recorder.has_change_event_occurred(
+            #     subarray_node.subarray_devices["sdp_subarray"],
+            #     "obsState",
+            #     ObsState.READY,
+            # )
 
             check_device_status_ready(subarray_node.subarray_node)
             assert event_recorder.has_change_event_occurred(
