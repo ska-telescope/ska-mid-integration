@@ -424,7 +424,9 @@ def execute_release_resources_command(
 
 
 @then(
-    parsers.parse("TMC subarray {subarray_id} obsState transitions to EMPTY")
+    parsers.parse(
+        "TMC SubarrayNode {subarray_id} transitions to EMPTY ObsState"
+    )
 )
 def check_tmc_is_in_empty_obsstate(
     central_node_mid, event_recorder, subarray_id
