@@ -44,6 +44,15 @@ def check_device_status_ready(device_name):
     the_waiter.wait(100)
 
 
+def check_device_status_scanning(device_name):
+    """
+    Checks if given device is in READY obs-state
+    """
+    the_waiter = Waiter()
+    the_waiter.set_wait_for_specific_obsstate("READY", [device_name])
+    the_waiter.wait(100)
+
+
 @given("Telescope is ON state")
 def given_a_tmc(central_node_mid, event_recorder, subarray_node):
     """A method to define TMC and SDP and subscribe ."""
@@ -163,18 +172,33 @@ def execute_initial_configure_command(
                 configure_json
             )
             if configure_cycle == "initial":
+                # TODO - Once SKB-309 is resolved , we can check and remove
+                # this logic of configure_cycle
+                # Currently SDP goes in configuring only in first configure
+                # Command.
                 assert event_recorder.has_change_event_occurred(
                     subarray_node.subarray_devices["sdp_subarray"],
                     "obsState",
                     ObsState.CONFIGURING,
                 )
-                assert event_recorder.has_change_event_occurred(
-                    subarray_node.subarray_devices["sdp_subarray"],
-                    "obsState",
-                    ObsState.READY,
-                )
+
                 configure_cycle = "Next"
 
+            check_device_status_ready(
+                subarray_node.subarray_devices["sdp_subarray"]
+            )
+            assert event_recorder.has_change_event_occurred(
+                subarray_node.subarray_devices["sdp_subarray"],
+                "obsState",
+                ObsState.READY,
+            )
+
+            check_device_status_ready(subarray_node.subarray_node)
+            assert event_recorder.has_change_event_occurred(
+                subarray_node.subarray_node,
+                "obsState",
+                ObsState.READY,
+            )
             assert event_recorder.has_change_event_occurred(
                 subarray_node.subarray_devices["sdp_subarray"],
                 "scanType",
@@ -198,6 +222,10 @@ def execute_initial_configure_command(
             _, unique_id = subarray_node.execute_transition(
                 "Scan", argin=scan_json
             )
+
+            # Faced a delay while testing , hence adding waiter here.
+
+            check_device_status_scanning(subarray_node.subarray_node)
 
             assert event_recorder.has_change_event_occurred(
                 subarray_node.subarray_node,
@@ -331,3 +359,29 @@ def execute_initial_configure_command(
 #         "obsState",
 #         ObsState.READY,
 #     )
+
+
+@when(parsers.parse("end the configuration on TMC SubarrayNode {subarray_id}"))
+def execute_end_command(
+    subarray_node,
+    command_input_factory,
+    central_node_mid,
+    event_recorder,
+    subarray_id,
+    scan_types,
+):
+    """ "A method to invoke end command"""
+
+    central_node_mid.set_subarray_id(subarray_id)
+    subarray_node.execute_transition("End")
+    the_waiter = Waiter()
+    the_waiter.set_wait_for_specific_obsstate(
+        "IDLE", [subarray_node.subarray_node]
+    )
+    the_waiter.wait(100)
+
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices["sdp_subarray"],
+        "obsState",
+        ObsState.IDLE,
+    )

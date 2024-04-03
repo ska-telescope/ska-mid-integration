@@ -5,7 +5,7 @@ Feature:  TMC executes long running sequences with real sdp devices
     Given Telescope is ON state
     When I assign resources to TMC SubarrayNode <subarray_id>
     And configure and scan TMC SubarrayNode <subarray_id> for each <scan_types> and <scan_ids>
-
+    And end the configuration on TMC SubarrayNode <subarray_id>
 
     Examples:
             |subarray_id  | scan_ids | scan_types |
