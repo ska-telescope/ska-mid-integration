@@ -278,7 +278,7 @@ def execute_initial_configure_command(
                 lookahead=5,
             )
 
-            LOGGER.info("Configure-scan round completed")
+            LOGGER.info("Configure-scan round completed   ")
 
     LOGGER.info("Configure Scan Completed")
 
