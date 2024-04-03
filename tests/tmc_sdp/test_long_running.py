@@ -145,12 +145,12 @@ def execute_initial_configure_command(
     my_list = eval(scan_types)
     LOGGER.info(f"working on scan types {my_list} ")
 
-    scan_id_list = eval(scan_ids)
+    # scan_id_list = eval(scan_ids)
 
-    LOGGER.info(f"working with scan ids {scan_id_list}")
+    LOGGER.info(f"working with scan ids {scan_ids}")
     configure_cycle = "initial"
 
-    for scan_id in scan_id_list:
+    for scan_id in scan_ids:
 
         for scan_type in my_list:
             LOGGER.info(f" scan_type is {scan_type}")
