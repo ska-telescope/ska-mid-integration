@@ -212,7 +212,7 @@ def execute_initial_configure_command(
             assert event_recorder.has_change_event_occurred(
                 subarray_node.subarray_devices["sdp_subarray"],
                 "scanID",
-                int(scan_ids),
+                int(scan_id),
             )
 
             # The sdp subarray transitions to READY after the scan duration
