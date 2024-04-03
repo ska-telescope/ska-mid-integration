@@ -2,6 +2,7 @@
 
 import json
 import logging
+import time
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -209,6 +210,10 @@ def execute_initial_configure_command(
                 "obsState",
                 ObsState.READY,
             )
+
+            # Faced failure since scan type is set after SDP moves to READY
+            # And some time that event is delayed.
+            time.sleep(0.1)
             assert event_recorder.has_change_event_occurred(
                 subarray_node.subarray_devices["sdp_subarray"],
                 "scanType",
