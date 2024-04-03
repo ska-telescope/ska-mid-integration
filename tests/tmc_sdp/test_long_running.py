@@ -152,7 +152,7 @@ def execute_initial_configure_command(
     LOGGER.info(f"type {type(scan_id_list)}")
     configure_cycle = "initial"
 
-    for scan_id in scan_ids:
+    for scan_id in scan_id_list:
         LOGGER.info(f" scan_id is {scan_id}")
         LOGGER.info(f"type is {type(scan_id)}")
 
