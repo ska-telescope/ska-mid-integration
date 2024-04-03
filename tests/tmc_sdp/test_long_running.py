@@ -4,7 +4,7 @@ import json
 import logging
 
 import pytest
-from pytest_bdd import given, parsers, scenario, when  # then
+from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
 from tango import DevState
@@ -394,4 +394,45 @@ def execute_end_command(
         subarray_node.subarray_devices["sdp_subarray"],
         "obsState",
         ObsState.IDLE,
+    )
+
+
+@when(parsers.parse("release the resources on TMC SubarrayNode {subarray_id}"))
+def execute_release_resources_command(
+    command_input_factory,
+    central_node_mid,
+    event_recorder,
+    subarray_id,
+):
+    """ "A method to invoke Release Resources command"""
+
+    release_input_json = prepare_json_args_for_centralnode_commands(
+        "release_resources_mid", command_input_factory
+    )
+    check_subarray_instance(central_node_mid.subarray_node, subarray_id)
+    central_node_mid.invoke_release_resources(release_input_json)
+
+    """Method to check SDP is in EMPTY obsstate"""
+    check_subarray_instance(
+        central_node_mid.subarray_devices.get("sdp_subarray"), subarray_id
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.subarray_devices.get("sdp_subarray"),
+        "obsState",
+        ObsState.EMPTY,
+    )
+
+
+@then(
+    parsers.parse("TMC subarray {subarray_id} obsState transitions to EMPTY")
+)
+def check_tmc_is_in_empty_obsstate(
+    central_node_mid, event_recorder, subarray_id
+):
+    """Method to check TMC is in EMPTY obsstate."""
+    check_subarray_instance(central_node_mid.subarray_node, subarray_id)
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.subarray_node,
+        "obsState",
+        ObsState.EMPTY,
     )
