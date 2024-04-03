@@ -2,7 +2,6 @@
 
 import json
 import logging
-import time
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -161,6 +160,7 @@ def execute_initial_configure_command(
     LOGGER.info(f"scan_id_list {scan_id_list}")
     LOGGER.info(f"type {type(scan_id_list)}")
     configure_cycle = "initial"
+    processed_scan_type = "None"
 
     for scan_id in scan_id_list:
         LOGGER.info(f" scan_id is {scan_id}")
@@ -168,6 +168,7 @@ def execute_initial_configure_command(
 
         for scan_type in my_list:
             LOGGER.info(f" scan_type is {scan_type}")
+
             configure_json = update_scan_type(configure_json, scan_type)
             _, unique_id = subarray_node.store_configuration_data(
                 configure_json
@@ -213,12 +214,16 @@ def execute_initial_configure_command(
 
             # Faced failure since scan type is set after SDP moves to READY
             # And some time that event is delayed.
-            time.sleep(0.1)
-            assert event_recorder.has_change_event_occurred(
-                subarray_node.subarray_devices["sdp_subarray"],
-                "scanType",
-                scan_type,
-            )
+            #  |1             |["1","2"]      |["science_A" , "science_A"] |
+            # For same configuration scantype no event is pushed
+            # https://gitlab.com/ska-telescope/sdp/ska-sdp-lmc/-/blob/master/src/ska_sdp_lmc/subarray/device.py#L548
+            # Do we want to adjust test case to accommodate this ?
+            if scan_type != processed_scan_type:
+                assert event_recorder.has_change_event_occurred(
+                    subarray_node.subarray_devices["sdp_subarray"],
+                    "scanType",
+                    scan_type,
+                )
 
             assert event_recorder.has_change_event_occurred(
                 subarray_node.subarray_node,
@@ -227,11 +232,11 @@ def execute_initial_configure_command(
                 lookahead=5,
             )
 
-            scan_json1 = prepare_json_args_for_commands(
+            scan_json = prepare_json_args_for_commands(
                 "scan_mid", command_input_factory
             )
 
-            scan_json = update_scan_id(scan_json1, scan_id)
+            scan_json = update_scan_id(scan_json, scan_id)
 
             LOGGER.info(f"updated scan {scan_json}")
             _, unique_id = subarray_node.execute_transition(
@@ -282,6 +287,8 @@ def execute_initial_configure_command(
                 (unique_id[0], str(int(ResultCode.OK))),
                 lookahead=5,
             )
+
+            processed_scan_type = scan_type
 
             LOGGER.info("Configure-scan round completed   ")
 
