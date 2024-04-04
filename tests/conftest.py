@@ -7,7 +7,7 @@ from os.path import dirname, join
 
 import pytest
 import tango
-from pytest_bdd import given, parsers, then, when  # scenario, ,
+from pytest_bdd import given, parsers, then, when
 from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
 from ska_tango_testing.mock.tango.event_callback import (

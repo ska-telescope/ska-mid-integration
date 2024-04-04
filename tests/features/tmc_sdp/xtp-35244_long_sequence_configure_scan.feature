@@ -1,5 +1,5 @@
 Feature:  TMC executes long running sequences with real sdp devices
-    @tmc_sdpp @Team_SAHYADRI @XTP-35244 @XTP-29381
+    @tmc_sdp @Team_SAHYADRI @XTP-35244 @XTP-29381
 
     Scenario Outline: TMC executes configure-scan sequence of commands successfully
 
