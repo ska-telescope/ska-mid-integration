@@ -377,7 +377,7 @@ def execute_end_command(
     """ "A method to invoke end command"""
 
     central_node_mid.set_subarray_id(subarray_id)
-    subarray_node.execute_transition("End")
+    _, unique_id = subarray_node.execute_transition("End")
     the_waiter = Waiter()
     the_waiter.set_wait_for_specific_obsstate(
         "IDLE", [subarray_node.subarray_node]
@@ -388,6 +388,13 @@ def execute_end_command(
         subarray_node.subarray_devices["sdp_subarray"],
         "obsState",
         ObsState.IDLE,
+    )
+
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (unique_id[0], str(int(ResultCode.OK))),
+        lookahead=5,
     )
 
 
@@ -404,7 +411,9 @@ def execute_release_resources_command(
         "release_resources_mid", command_input_factory
     )
     check_subarray_instance(central_node_mid.subarray_node, subarray_id)
-    central_node_mid.invoke_release_resources(release_input_json)
+    _, unique_id = central_node_mid.invoke_release_resources(
+        release_input_json
+    )
 
     """Method to check SDP is in EMPTY obsstate"""
     check_subarray_instance(
@@ -414,6 +423,12 @@ def execute_release_resources_command(
         central_node_mid.subarray_devices.get("sdp_subarray"),
         "obsState",
         ObsState.EMPTY,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (unique_id[0], str(int(ResultCode.OK))),
+        lookahead=5,
     )
 
 
