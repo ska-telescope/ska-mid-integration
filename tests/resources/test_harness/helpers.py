@@ -671,3 +671,27 @@ def check_long_running_command_status(
         time.sleep(0.1)
         elapsed_time = time.time() - start_time
     return False
+
+
+def check_device_status_ready(device_name: str) -> None:
+    """
+    Checks if given device is in READY obs-state
+
+     :param device_name: device name
+     :type device_name: str
+    """
+    the_waiter = Waiter()
+    the_waiter.set_wait_for_specific_obsstate("READY", [device_name])
+    the_waiter.wait(100)
+
+
+def check_device_status_scanning(device_name: str) -> None:
+    """
+    Checks if given device is in READY obs-state
+
+    :param device_name: device name
+    :type device_name: str
+    """
+    the_waiter = Waiter()
+    the_waiter.set_wait_for_specific_obsstate("READY", [device_name])
+    the_waiter.wait(200)
