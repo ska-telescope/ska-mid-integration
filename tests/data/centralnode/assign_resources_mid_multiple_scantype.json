@@ -111,9 +111,16 @@
               "field_id": "field_a"
             }
           }
+        },
+        {
+          "scan_type_id": ".default",
+          "derive_from": ".default",
+          "beams": {
+            "vis0": {
+              "field_id": "field_a"
+            }
+          }
         }
-
-
       ],
       "channels": [
         {
