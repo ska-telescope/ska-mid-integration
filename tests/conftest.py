@@ -22,6 +22,8 @@ from tests.resources.test_harness.helpers import (
     CSP_SIMULATION_ENABLED,
     check_subarray_instance,
     prepare_json_args_for_centralnode_commands,
+    prepare_json_args_for_commands,
+    update_scan_id,
     wait_and_validate_device_attribute_value,
 )
 from tests.resources.test_harness.simulator_factory import SimulatorFactory
@@ -32,6 +34,7 @@ from tests.resources.test_harness.utils.common_utils import (
     SharedContext,
 )
 from tests.resources.test_support.common_utils.common_helpers import Waiter
+from tests.resources.test_support.common_utils.result_code import ResultCode
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -428,4 +431,67 @@ def check_tmc_is_in_empty_obsstate(
         central_node_mid.subarray_node,
         "obsState",
         ObsState.EMPTY,
+    )
+
+
+@when(
+    parsers.parse(
+        "reperform scan for different duration and same configuration"
+    )
+)
+def reexecute_scan_command(
+    command_input_factory,
+    central_node_mid,
+    event_recorder,
+    subarray_id,
+    subarray_node,
+):
+    """ "A method to invoke scan command followed by end scan
+    with lesser duration"""
+
+    scan_id = 10
+    scan_json = prepare_json_args_for_commands(
+        "scan_mid", command_input_factory
+    )
+
+    scan_json = update_scan_id(scan_json, scan_id)
+    _, unique_id = subarray_node.execute_transition("Scan", argin=scan_json)
+
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.SCANNING,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices["sdp_subarray"],
+        "obsState",
+        ObsState.SCANNING,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices["sdp_subarray"],
+        "scanID",
+        int(scan_id),
+    )
+
+    # Execute End Scan
+    _, unique_id = subarray_node.remove_scan_data()
+    #
+    # check_device_status_ready(subarray_node.subarray_devices["sdp_subarray"])
+    # assert event_recorder.has_change_event_occurred(
+    #     subarray_node.subarray_devices["sdp_subarray"],
+    #     "obsState",
+    #     ObsState.READY,
+    # )
+    #
+    # check_device_status_ready(subarray_node.subarray_node)
+    # assert event_recorder.has_change_event_occurred(
+    #     subarray_node.subarray_node,
+    #     "obsState",
+    #     ObsState.READY,
+    # )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (unique_id[0], str(int(ResultCode.OK))),
+        lookahead=5,
     )
