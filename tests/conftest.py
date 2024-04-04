@@ -7,7 +7,8 @@ from os.path import dirname, join
 
 import pytest
 import tango
-from pytest_bdd import given  # , parsers, scenario, then, when
+from pytest_bdd import given, parsers, when  # scenario, then,
+from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
 from ska_tango_testing.mock.tango.event_callback import (
     MockTangoEventCallbackGroup,
@@ -19,6 +20,8 @@ from tests.resources.test_harness.constant import centralnode, csp_master
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     CSP_SIMULATION_ENABLED,
+    check_subarray_instance,
+    prepare_json_args_for_centralnode_commands,
     wait_and_validate_device_attribute_value,
 )
 from tests.resources.test_harness.simulator_factory import SimulatorFactory
@@ -315,3 +318,44 @@ def given_a_tmc(central_node_mid, event_recorder, subarray_node):
         DevState.ON,
     )
     LOGGER.info("On step completed")
+
+
+@when(parsers.parse("I assign resources to TMC SubarrayNode {subarray_id}"))
+def telescope_is_in_idle_state(
+    central_node_mid,
+    event_recorder,
+    command_input_factory,
+    subarray_id,
+    subarray_node,
+):
+    """A method to move subarray into the IDLE ObsState."""
+
+    assign_input_json = prepare_json_args_for_centralnode_commands(
+        "assign_resources_mid_multiple_scantype", command_input_factory
+    )
+
+    assign_str = json.loads(assign_input_json)
+    # Here we are adding this to get an event of ObsState CONFIGURING from SDP
+    # Subarray
+    assign_str["sdp"]["processing_blocks"][0]["parameters"][
+        "time-to-ready"
+    ] = 2
+
+    central_node_mid.store_resources(json.dumps(assign_str))
+
+    check_subarray_instance(
+        subarray_node.subarray_devices.get("sdp_subarray"), subarray_id
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices.get("sdp_subarray"),
+        "obsState",
+        ObsState.IDLE,
+    )
+
+    check_subarray_instance(subarray_node.subarray_node, subarray_id)
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.IDLE,
+    )
+    LOGGER.info("Assign resources  completed")
