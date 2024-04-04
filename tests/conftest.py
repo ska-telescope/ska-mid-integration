@@ -314,6 +314,11 @@ def given_a_tmc(central_node_mid, event_recorder, subarray_node):
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
+
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+
     central_node_mid.move_to_on()
 
     assert event_recorder.has_change_event_occurred(
@@ -345,7 +350,7 @@ def telescope_is_in_idle_state(
         "time-to-ready"
     ] = 2
 
-    central_node_mid.store_resources(json.dumps(assign_str))
+    _, unique_id = central_node_mid.store_resources(json.dumps(assign_str))
 
     check_subarray_instance(
         subarray_node.subarray_devices.get("sdp_subarray"), subarray_id
@@ -361,6 +366,13 @@ def telescope_is_in_idle_state(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
+    )
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (unique_id[0], str(int(ResultCode.OK))),
+        lookahead=5,
     )
     LOGGER.info("Assign resources  completed")
 
@@ -404,6 +416,7 @@ def execute_release_resources_command(
     central_node_mid,
     event_recorder,
     subarray_id,
+    subarray_node,
 ):
     """ "A method to invoke Release Resources command"""
 
