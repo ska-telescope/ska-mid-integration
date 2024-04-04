@@ -21,7 +21,7 @@ class TestSubarrayNodeObsStateTransitions(object):
             # ("READY", "End", "IDLE"),
         ],
     )
-    @pytest.mark.SKA_mid12
+    @pytest.mark.SKA_mid
     def test_subarray_obs_transitions_valid_data(
         self,
         subarray_node,
@@ -83,7 +83,7 @@ class TestSubarrayNodeObsStateTransitions(object):
             obs_state=destination_obs_state, timeout=expected_timeout_sec
         )
 
-    @pytest.mark.SKA_mid12
+    @pytest.mark.SKA_mid
     @pytest.mark.parametrize(
         "source_obs_state, trigger, args_for_command,\
             intermediate_obs_state, destination_obs_state,\

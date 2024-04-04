@@ -1,5 +1,5 @@
 Feature:  TMC executes long running sequences with real sdp devices
-    @tmc_sdp @Team_SAHYADRI @XTP-35244 @XTP-29381
+    @tmc_sdpp @Team_SAHYADRI @XTP-35244 @XTP-29381
 
     Scenario Outline: TMC executes configure-scan sequence of commands successfully
 
@@ -13,5 +13,10 @@ Feature:  TMC executes long running sequences with real sdp devices
     Examples:
             |subarray_id  | scan_ids | scan_types |
             |1            |  ["1"]        | ["science_A"]  |
+            |1             |["1","2"]      |["science_A" , "target:a"] |
+            |1             |["1","2"]      |["science_A" , "science_A"] |
+            |1             |["1","1"]      |["science_A" , "science_A"] |
+            |1             | ["1","2","3"]        | ["science_A"  , "target:a","callibration_B" ]|
+
 
 

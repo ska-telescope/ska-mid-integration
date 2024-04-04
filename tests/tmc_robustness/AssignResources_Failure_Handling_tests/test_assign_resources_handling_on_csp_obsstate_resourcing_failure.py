@@ -16,7 +16,7 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-@pytest.mark.SKA_mid12
+@pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-28282.feature",
     "TMC behavior when Csp Subarray is stuck in obsState RESOURCING",

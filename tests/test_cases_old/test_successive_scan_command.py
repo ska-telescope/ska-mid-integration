@@ -26,7 +26,7 @@ from tests.resources.test_support.constant import (
     reason="2nd configure fails in READY aggregation.This test is older one "
     + "so it maybe removed."
 )
-@pytest.mark.SKA_mid12
+@pytest.mark.SKA_mid
 def test_successive_scan_with_different_configurations(json_factory):
     """Successive Scan command with different configurations."""
     telescope_control = BaseTelescopeControl()
@@ -175,7 +175,7 @@ def test_successive_scan_with_different_configurations(json_factory):
         tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
 
 
-@pytest.mark.SKA_mid12
+@pytest.mark.SKA_mid
 def test_successive_scan_with_same_configurations(json_factory):
     """Successive Scan command with same configurations."""
     telescope_control = BaseTelescopeControl()

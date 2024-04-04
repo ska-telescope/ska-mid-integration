@@ -30,7 +30,7 @@ tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 telescope_control = BaseTelescopeControl()
 
 
-@pytest.mark.SKA_mid12
+@pytest.mark.SKA_mid
 def test_scan_endscan(json_factory):
     """Scan and EndScan is executed."""
     release_json = json_factory("command_ReleaseResources")

@@ -16,7 +16,7 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
     reason="Test fails because of TRANSIENT CORBA EXCEPTION with command"
     + " exceeding the timeout of 3 seconds"
 )
-@pytest.mark.SKA_mid12
+@pytest.mark.SKA_mid
 @scenario(
     "../features/load_dish_cfg_command.feature",
     "TMC is able to load Dish and VCC configuration file",

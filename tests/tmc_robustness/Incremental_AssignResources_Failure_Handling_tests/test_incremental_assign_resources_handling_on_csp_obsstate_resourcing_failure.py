@@ -14,7 +14,7 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-@pytest.mark.SKA_mid12
+@pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-29013.feature",
     "TMC behavior when Csp Subarray is stuck"

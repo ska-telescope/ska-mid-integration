@@ -31,7 +31,7 @@ tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 telescope_control = BaseTelescopeControl()
 
 
-@pytest.mark.SKA_mid12
+@pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_failed_configure.feature",
     "Successfully execute a scan after a failed attempt to configure",
@@ -199,7 +199,7 @@ def teardown_the_tmc(json_factory):
     )
 
 
-@pytest.mark.SKA_mid12
+@pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_failed_configure.feature",
     "Invoke Configure command by passing a JSON script that uses resources which are not assigned to the subarray",  # noqa: E501

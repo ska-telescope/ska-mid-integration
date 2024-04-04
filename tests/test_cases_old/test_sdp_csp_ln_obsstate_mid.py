@@ -23,7 +23,7 @@ from tests.resources.test_support.constant import (
 )
 
 
-@pytest.mark.SKA_mid12
+@pytest.mark.SKA_mid
 def test_csp_sdp_ln_obstate_mid(json_factory, change_event_callbacks):
     """Verify timeout exception raised when csp set to defective."""
     assign_json = json_factory("command_AssignResources")

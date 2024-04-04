@@ -1,5 +1,5 @@
 # This BDD test performs TMC-Dish pairwise testing to verify End command flow.
-@XTP-29417 @XTP-29778 @Team_SAHYADRI @tmc_dish12
+@XTP-29417 @XTP-29778 @Team_SAHYADRI @tmc_dish
 Scenario: TMC executes End command on DISH.LMC
     Given a Telescope consisting of TMC, DISH <dish_ids>, simulated CSP and simulated SDP
     And the Telescope is in ON state

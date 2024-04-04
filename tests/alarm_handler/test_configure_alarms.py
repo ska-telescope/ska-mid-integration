@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 @pytest.mark.post_deployment
-@pytest.mark.SKA_mid12
+@pytest.mark.SKA_mid
 def test_load_alarm():
     """A method to load tmc alarm for Alarm handler instance"""
     alarm_handler = DeviceProxy(alarm_handler1)

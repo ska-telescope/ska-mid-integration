@@ -18,7 +18,7 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 
 class TestSubarrayNodeNegative(object):
-    @pytest.mark.SKA_mid12
+    @pytest.mark.SKA_mid
     def test_subarray_assign_csp_unresponsive(
         self,
         subarray_node,
@@ -68,7 +68,7 @@ class TestSubarrayNodeNegative(object):
 
         csp_sim.SetDefective(RESET_DEFECT)
 
-    @pytest.mark.SKA_mid12
+    @pytest.mark.SKA_mid
     def test_subarray_configure_when_csp_stuck_in_configuring(
         self,
         subarray_node,
@@ -111,7 +111,7 @@ class TestSubarrayNodeNegative(object):
             csp_sim, "Configure", csp_input_json
         )
 
-    @pytest.mark.SKA_mid12
+    @pytest.mark.SKA_mid
     def test_subarray_configure_when_sdp_stuck_in_configuring(
         self,
         subarray_node,
@@ -152,7 +152,7 @@ class TestSubarrayNodeNegative(object):
         )
         assert len(get_recorded_commands(sdp_sim)) == 1
 
-    @pytest.mark.SKA_mid12
+    @pytest.mark.SKA_mid
     def test_subarray_configure_when_dish_stuck_in_slew(
         self,
         subarray_node,
@@ -188,7 +188,7 @@ class TestSubarrayNodeNegative(object):
         assert device_received_this_command(dish_sim, "ConfigureBand2", "True")
 
     @pytest.mark.skip(reason="Fails in assertions after Fault")
-    @pytest.mark.SKA_mid12
+    @pytest.mark.SKA_mid
     def test_subarray_configure_when_csp_goes_to_fault_then_ready(
         self,
         subarray_node,

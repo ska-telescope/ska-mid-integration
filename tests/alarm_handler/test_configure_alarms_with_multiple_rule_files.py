@@ -14,7 +14,7 @@ namespace = os.getenv("KUBE_NAMESPACE")
     reason="Alarm summary key error to be resolved under SAH-1510"
 )
 @pytest.mark.post_deployment
-@pytest.mark.SKA_mid12
+@pytest.mark.SKA_mid
 def test_configure_alarms_with_multiple_files():
     """Test method to configure alarm rules using
     multiple alarm rules files

@@ -20,7 +20,7 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 #     reason="Test passes independently, fails when executed with all tests"
 # )
 @pytest.mark.bdd_configure
-@pytest.mark.SKA_mid12
+@pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-28834.feature",
     "TMC behavior when Csp Subarray is stuck in obsState CONFIGURING",

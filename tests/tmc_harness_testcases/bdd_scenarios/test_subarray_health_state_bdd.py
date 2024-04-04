@@ -12,7 +12,7 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-@pytest.mark.SKA_mid12
+@pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/subarray_health_state.feature",
     "Subarray Health State should be Failed or Degraded when one or more "
@@ -25,7 +25,7 @@ def test_subarray_health_state_with_csp_and_sdp():
     """
 
 
-@pytest.mark.SKA_mid12
+@pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/subarray_health_state.feature",
     "Subarray Health State Changes based on Simulator Device Health State",

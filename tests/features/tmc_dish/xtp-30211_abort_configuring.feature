@@ -1,5 +1,5 @@
 # This BDD test performs TMC-Dish pairwise testing to verify Abort command flow in obsState CONFIGURING.
-@XTP-30211 @XTP-29778 @Team_SAHYADRI @tmc_dish12
+@XTP-30211 @XTP-29778 @Team_SAHYADRI @tmc_dish
 Scenario: Abort configuring DISH.LMC using TMC
     Given a Telescope consisting of TMC, DISH <dish_ids>, simulated CSP and simulated SDP
     And the Telescope is in ON state

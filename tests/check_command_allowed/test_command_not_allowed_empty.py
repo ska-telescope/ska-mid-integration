@@ -29,7 +29,7 @@ telescope_control = BaseTelescopeControl()
 result, message = "", ""
 
 
-@pytest.mark.SKA_mid12
+@pytest.mark.SKA_mid
 @scenario(
     "../features/check_command_not_allowed.feature",
     "Unexpected commands not allowed when TMC subarray is empty",

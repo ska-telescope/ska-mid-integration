@@ -11,7 +11,7 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 
-@pytest.mark.SKA_mid12
+@pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-28835.feature",
     "TMC behavior when SDP Subarray Configure raises exception",
