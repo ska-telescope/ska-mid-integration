@@ -7,7 +7,7 @@ from os.path import dirname, join
 
 import pytest
 import tango
-from pytest_bdd import given, parsers, when  # scenario, then,
+from pytest_bdd import given, parsers, then, when  # scenario, ,
 from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
 from ska_tango_testing.mock.tango.event_callback import (
@@ -31,6 +31,7 @@ from tests.resources.test_harness.utils.common_utils import (
     JsonFactory,
     SharedContext,
 )
+from tests.resources.test_support.common_utils.common_helpers import Waiter
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -335,8 +336,8 @@ def telescope_is_in_idle_state(
     )
 
     assign_str = json.loads(assign_input_json)
-    # Here we are adding this to get an event of ObsState CONFIGURING from SDP
-    # Subarray
+    # Here we are adding this to get an event of ObsState CONFIGURING from
+    # SDP Subarray
     assign_str["sdp"]["processing_blocks"][0]["parameters"][
         "time-to-ready"
     ] = 2
@@ -359,3 +360,72 @@ def telescope_is_in_idle_state(
         ObsState.IDLE,
     )
     LOGGER.info("Assign resources  completed")
+
+
+@when(parsers.parse("end the configuration on TMC SubarrayNode {subarray_id}"))
+def execute_end_command(
+    subarray_node,
+    command_input_factory,
+    central_node_mid,
+    event_recorder,
+    subarray_id,
+    scan_types,
+):
+    """ "A method to invoke end command"""
+
+    central_node_mid.set_subarray_id(subarray_id)
+    subarray_node.execute_transition("End")
+    the_waiter = Waiter()
+    the_waiter.set_wait_for_specific_obsstate(
+        "IDLE", [subarray_node.subarray_node]
+    )
+    the_waiter.wait(100)
+
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices["sdp_subarray"],
+        "obsState",
+        ObsState.IDLE,
+    )
+
+
+@when(parsers.parse("release the resources on TMC SubarrayNode {subarray_id}"))
+def execute_release_resources_command(
+    command_input_factory,
+    central_node_mid,
+    event_recorder,
+    subarray_id,
+):
+    """ "A method to invoke Release Resources command"""
+
+    release_input_json = prepare_json_args_for_centralnode_commands(
+        "release_resources_mid", command_input_factory
+    )
+    check_subarray_instance(central_node_mid.subarray_node, subarray_id)
+    central_node_mid.invoke_release_resources(release_input_json)
+
+    """Method to check SDP is in EMPTY obsstate"""
+    check_subarray_instance(
+        central_node_mid.subarray_devices.get("sdp_subarray"), subarray_id
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.subarray_devices.get("sdp_subarray"),
+        "obsState",
+        ObsState.EMPTY,
+    )
+
+
+@then(
+    parsers.parse(
+        "TMC SubarrayNode {subarray_id} transitions to EMPTY ObsState"
+    )
+)
+def check_tmc_is_in_empty_obsstate(
+    central_node_mid, event_recorder, subarray_id
+):
+    """Method to check TMC is in EMPTY obsstate."""
+    check_subarray_instance(central_node_mid.subarray_node, subarray_id)
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.subarray_node,
+        "obsState",
+        ObsState.EMPTY,
+    )
