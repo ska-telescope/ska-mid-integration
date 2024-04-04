@@ -151,121 +151,42 @@ def execute_initial_configure_command(
         "sdp_mid_configure1", command_input_factory
     )
 
-    my_list = eval(scan_types)
-    LOGGER.info(f"working on scan types {my_list} ")
-
-    scan_id_list = eval(scan_ids)
-
-    LOGGER.info(f"working with scan ids {scan_ids}")
-    LOGGER.info(f"scan_id_list {scan_id_list}")
-    LOGGER.info(f"type {type(scan_id_list)}")
+    # my_list = eval(scan_types)
+    # LOGGER.info(f"working on scan types {my_list} ")
+    #
+    # scan_id_list = eval(scan_ids)
+    #
+    # LOGGER.info(f"working with scan ids {scan_ids}")
+    # LOGGER.info(f"scan_id_list {scan_id_list}")
+    # LOGGER.info(f"type {type(scan_id_list)}")
     configure_cycle = "initial"
     processed_scan_type = "None"
 
-    for scan_id in scan_id_list:
+    combined_dict = dict(zip(eval(scan_ids), eval(scan_types)))
+    LOGGER.info(f"combined_dict {combined_dict}")
+
+    for scan_id, scan_type in combined_dict.items():
         LOGGER.info(f" scan_id is {scan_id}")
         LOGGER.info(f"type is {type(scan_id)}")
+        LOGGER.info(f" scan_type is {scan_type}")
 
-        for scan_type in my_list:
-            LOGGER.info(f" scan_type is {scan_type}")
+        # for scan_id in scan_id_list:
+        #
+        #
+        #     for scan_type in my_list:
 
-            configure_json = update_scan_type(configure_json, scan_type)
-            _, unique_id = subarray_node.store_configuration_data(
-                configure_json
-            )
-            if configure_cycle == "initial":
-                # TODO - Once SKB-309 is resolved , we can check and remove
-                # this logic of configure_cycle
-                # Currently SDP goes in configuring only in first configure
-                # Command.
-                assert event_recorder.has_change_event_occurred(
-                    subarray_node.subarray_devices["sdp_subarray"],
-                    "obsState",
-                    ObsState.CONFIGURING,
-                )
-                check_device_status_ready(
-                    subarray_node.subarray_devices["sdp_subarray"]
-                )
-                assert event_recorder.has_change_event_occurred(
-                    subarray_node.subarray_devices["sdp_subarray"],
-                    "obsState",
-                    ObsState.READY,
-                )
-
-                configure_cycle = "Next"
-
-            check_device_status_ready(
-                subarray_node.subarray_devices["sdp_subarray"]
-            )
-
-            # READY Event will not come ,since SDP was already in Ready
-            # assert event_recorder.has_change_event_occurred(
-            #     subarray_node.subarray_devices["sdp_subarray"],
-            #     "obsState",
-            #     ObsState.READY,
-            # )
-
-            check_device_status_ready(subarray_node.subarray_node)
-            assert event_recorder.has_change_event_occurred(
-                subarray_node.subarray_node,
-                "obsState",
-                ObsState.READY,
-            )
-
-            # Faced failure since scan type is set after SDP moves to READY
-            # And some time that event is delayed.
-            #  |1             |["1","2"]      |["science_A" , "science_A"] |
-            # For same configuration scantype no event is pushed
-            # https://gitlab.com/ska-telescope/sdp/ska-sdp-lmc/-/blob/master/src/ska_sdp_lmc/subarray/device.py#L548
-            # Do we want to adjust test case to accommodate this ?
-            if scan_type != processed_scan_type:
-                assert event_recorder.has_change_event_occurred(
-                    subarray_node.subarray_devices["sdp_subarray"],
-                    "scanType",
-                    scan_type,
-                )
-
-            assert event_recorder.has_change_event_occurred(
-                subarray_node.subarray_node,
-                "longRunningCommandResult",
-                (unique_id[0], str(int(ResultCode.OK))),
-                lookahead=5,
-            )
-
-            scan_json = prepare_json_args_for_commands(
-                "scan_mid", command_input_factory
-            )
-
-            scan_json = update_scan_id(scan_json, scan_id)
-
-            LOGGER.info(f"updated scan {scan_json}")
-            _, unique_id = subarray_node.execute_transition(
-                "Scan", argin=scan_json
-            )
-
-            # Faced a delay while testing , hence adding waiter here.
-
-            check_device_status_scanning(subarray_node.subarray_node)
-
-            assert event_recorder.has_change_event_occurred(
-                subarray_node.subarray_node,
-                "obsState",
-                ObsState.SCANNING,
-            )
+        configure_json = update_scan_type(configure_json, scan_type)
+        _, unique_id = subarray_node.store_configuration_data(configure_json)
+        if configure_cycle == "initial":
+            # TODO - Once SKB-309 is resolved , we can check and remove
+            # this logic of configure_cycle
+            # Currently SDP goes in configuring only in first configure
+            # Command.
             assert event_recorder.has_change_event_occurred(
                 subarray_node.subarray_devices["sdp_subarray"],
                 "obsState",
-                ObsState.SCANNING,
+                ObsState.CONFIGURING,
             )
-            assert event_recorder.has_change_event_occurred(
-                subarray_node.subarray_devices["sdp_subarray"],
-                "scanID",
-                int(scan_id),
-            )
-
-            # The sdp subarray transitions to READY after the scan duration
-            # elapsed
-
             check_device_status_ready(
                 subarray_node.subarray_devices["sdp_subarray"]
             )
@@ -275,22 +196,105 @@ def execute_initial_configure_command(
                 ObsState.READY,
             )
 
-            check_device_status_ready(subarray_node.subarray_node)
+            configure_cycle = "Next"
+
+        check_device_status_ready(
+            subarray_node.subarray_devices["sdp_subarray"]
+        )
+
+        # READY Event will not come ,since SDP was already in Ready
+        # assert event_recorder.has_change_event_occurred(
+        #     subarray_node.subarray_devices["sdp_subarray"],
+        #     "obsState",
+        #     ObsState.READY,
+        # )
+
+        check_device_status_ready(subarray_node.subarray_node)
+        assert event_recorder.has_change_event_occurred(
+            subarray_node.subarray_node,
+            "obsState",
+            ObsState.READY,
+        )
+
+        # Faced failure since scan type is set after SDP moves to READY
+        # And some time that event is delayed.
+        #  |1             |["1","2"]      |["science_A" , "science_A"] |
+        # For same configuration scantype no event is pushed
+        # https://gitlab.com/ska-telescope/sdp/ska-sdp-lmc/-/blob/master/src/ska_sdp_lmc/subarray/device.py#L548
+        # Do we want to adjust test case to accommodate this ?
+        if scan_type != processed_scan_type:
             assert event_recorder.has_change_event_occurred(
-                subarray_node.subarray_node,
-                "obsState",
-                ObsState.READY,
-            )
-            assert event_recorder.has_change_event_occurred(
-                subarray_node.subarray_node,
-                "longRunningCommandResult",
-                (unique_id[0], str(int(ResultCode.OK))),
-                lookahead=5,
+                subarray_node.subarray_devices["sdp_subarray"],
+                "scanType",
+                scan_type,
             )
 
-            processed_scan_type = scan_type
+        assert event_recorder.has_change_event_occurred(
+            subarray_node.subarray_node,
+            "longRunningCommandResult",
+            (unique_id[0], str(int(ResultCode.OK))),
+            lookahead=5,
+        )
 
-            LOGGER.info("Configure-scan round completed   ")
+        scan_json = prepare_json_args_for_commands(
+            "scan_mid", command_input_factory
+        )
+
+        scan_json = update_scan_id(scan_json, scan_id)
+
+        LOGGER.info(f"updated scan {scan_json}")
+        _, unique_id = subarray_node.execute_transition(
+            "Scan", argin=scan_json
+        )
+
+        # Faced a delay while testing , hence adding waiter here.
+
+        check_device_status_scanning(subarray_node.subarray_node)
+
+        assert event_recorder.has_change_event_occurred(
+            subarray_node.subarray_node,
+            "obsState",
+            ObsState.SCANNING,
+        )
+        assert event_recorder.has_change_event_occurred(
+            subarray_node.subarray_devices["sdp_subarray"],
+            "obsState",
+            ObsState.SCANNING,
+        )
+        assert event_recorder.has_change_event_occurred(
+            subarray_node.subarray_devices["sdp_subarray"],
+            "scanID",
+            int(scan_id),
+        )
+
+        # The sdp subarray transitions to READY after the scan duration
+        # elapsed
+
+        check_device_status_ready(
+            subarray_node.subarray_devices["sdp_subarray"]
+        )
+        assert event_recorder.has_change_event_occurred(
+            subarray_node.subarray_devices["sdp_subarray"],
+            "obsState",
+            ObsState.READY,
+        )
+
+        check_device_status_ready(subarray_node.subarray_node)
+        assert event_recorder.has_change_event_occurred(
+            subarray_node.subarray_node,
+            "obsState",
+            ObsState.READY,
+        )
+        assert event_recorder.has_change_event_occurred(
+            subarray_node.subarray_node,
+            "longRunningCommandResult",
+            (unique_id[0], str(int(ResultCode.OK))),
+            lookahead=5,
+        )
+
+        processed_scan_type = scan_type
+
+        LOGGER.info("Configure-scan round completed   ")
 
     LOGGER.info("Configure Scan Completed")
 
