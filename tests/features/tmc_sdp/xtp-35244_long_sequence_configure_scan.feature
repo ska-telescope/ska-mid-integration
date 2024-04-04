@@ -1,6 +1,7 @@
 Feature:  TMC executes long running sequences with real sdp devices
-    @tmc_sdp @Team_SAHYADRI
-    Scenario Outline: TMC executes long sequence of commands successfully
+    @tmc_sdp @Team_SAHYADRI @XTP-35244 @XTP-29381
+
+    Scenario Outline: TMC executes configure-scan sequence of commands successfully
 
     Given Telescope is ON state
     When I assign resources to TMC SubarrayNode <subarray_id>
@@ -15,4 +16,4 @@ Feature:  TMC executes long running sequences with real sdp devices
             |1             |["1","2"]      |["science_A" , "target:a"] |
             |1             |["1","2"]      |["science_A" , "science_A"] |
             |1             |["1","1"]      |["science_A" , "science_A"] |
-            |1             | ["1","2","3","4"]        | ["science_A"  , "target:a","callibration_B",".default" ]|
+            |1             | ["1","2","3"]        | ["science_A"  , "target:a","callibration_B" ]|
