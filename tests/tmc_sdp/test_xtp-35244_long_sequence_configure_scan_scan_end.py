@@ -110,10 +110,10 @@ def execute_configure_scan_sequence(
 def execute_new_configure_scan_sequence(
     subarray_node,
     command_input_factory,
-    scan_ids,
+    new_scan_ids,
     event_recorder,
     subarray_id,
-    scan_types,
+    new_scan_types,
 ):
     """A method to invoke configure and scan command"""
 
@@ -125,7 +125,7 @@ def execute_new_configure_scan_sequence(
     configure_cycle = "initial"
     processed_scan_type = ""
 
-    combined_dict = dict(zip(eval(scan_ids), eval(scan_types)))
+    combined_dict = dict(zip(eval(new_scan_ids), eval(new_scan_types)))
 
     for scan_id, scan_type in combined_dict.items():
 
