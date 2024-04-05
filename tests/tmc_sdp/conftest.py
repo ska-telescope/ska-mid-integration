@@ -166,7 +166,7 @@ def execute_release_resources_command(
         ObsState.EMPTY,
     )
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
+        central_node_mid.central_node,
         "longRunningCommandResult",
         (unique_id[0], str(int(ResultCode.OK))),
         lookahead=5,
