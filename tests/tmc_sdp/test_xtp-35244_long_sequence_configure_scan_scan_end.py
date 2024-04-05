@@ -22,10 +22,11 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
-@pytest.mark.tmc_sdpskip
+@pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp-35244_long_sequence_configure_scan.feature",
-    "TMC Mid executes configure-scan-scan sequence of commands successfully",
+    "TMC Mid executes configure-scan-end-configure-scan sequence of"
+    " commands successfully",
 )
 def test_tmc_sdp_successive_scan_sequences():
     """

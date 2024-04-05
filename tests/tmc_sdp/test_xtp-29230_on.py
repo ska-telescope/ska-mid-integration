@@ -7,7 +7,7 @@ from tests.resources.test_harness.helpers import get_master_device_simulators
 from tests.resources.test_harness.utils.enums import DishMode
 
 
-@pytest.mark.tmc_sdpskip
+@pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp-29230_on.feature",
     "Start up the telescope having TMC and SDP subsystems",

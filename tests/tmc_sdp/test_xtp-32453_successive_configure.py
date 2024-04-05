@@ -14,7 +14,7 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-@pytest.mark.tmc_sdpskip
+@pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp-32453_successive_configure_with_real_sdp.feature",
     "TMC validates reconfigure functionality with real sdp devices",

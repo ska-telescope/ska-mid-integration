@@ -12,7 +12,7 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-@pytest.mark.tmc_sdpskip
+@pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp-29293_assign_resources.feature",
     "Assign resources to SDP subarray using TMC",
