@@ -14,7 +14,8 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_commands,
     update_scan_id,
 )
-from tests.resources.test_support.common_utils.common_helpers import Waiter
+
+# from tests.resources.test_support.common_utils.common_helpers import Waiter
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
@@ -118,11 +119,17 @@ def execute_end_command(
 
     central_node_mid.set_subarray_id(subarray_id)
     _, unique_id = subarray_node.execute_transition("End")
-    the_waiter = Waiter()
-    the_waiter.set_wait_for_specific_obsstate(
-        "IDLE", [subarray_node.subarray_node]
+    # the_waiter = Waiter()
+    # the_waiter.set_wait_for_specific_obsstate(
+    #     "IDLE", [subarray_node.subarray_node]
+    # )
+    # the_waiter.wait(100)
+
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.IDLE,
     )
-    the_waiter.wait(100)
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["sdp_subarray"],
