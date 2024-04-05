@@ -28,7 +28,7 @@ LOGGER = logging.getLogger(__name__)
     "TMC Mid executes configure-scan-end-configure-scan sequence of"
     " commands successfully",
 )
-def test_tmc_sdp_successive_scan_sequences():
+def test_tmc_sdp_long_sequences():
     """
     Test case to verify TMC-SDP functionality with long successive_scan
     sequences of commands
@@ -37,8 +37,8 @@ def test_tmc_sdp_successive_scan_sequences():
 
 @when(
     parsers.parse(
-        "configure and scan TMC SubarrayNode {subarray_id} "
-        "for each {scan_types} and {scan_ids}"
+        "configure and scan TMC SubarrayNode {subarray_id} for"
+        " {new_scan_types} and {new_scan_ids}"
     )
 )
 def execute_configure_scan_sequence(
