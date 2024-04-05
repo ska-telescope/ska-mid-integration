@@ -16,7 +16,7 @@ from tests.resources.test_support.constant import (
 )
 
 
-@pytest.mark.tmc_sdp
+@pytest.mark.tmc_sdpskip
 @pytest.mark.SKA_mid
 @scenario(
     "../features/tmc_sdp/xtp-32451_sdp_exception.feature",

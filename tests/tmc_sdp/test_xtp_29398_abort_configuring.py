@@ -12,7 +12,7 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-@pytest.mark.tmc_sdp
+@pytest.mark.tmc_sdpskip
 @scenario(
     "../features/tmc_sdp/xtp_29398_abort_configuring.feature",
     "Abort configuring SDP using TMC",

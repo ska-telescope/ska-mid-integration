@@ -13,7 +13,7 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-@pytest.mark.tmc_sdp
+@pytest.mark.tmc_sdpskip
 @scenario(
     "../features/tmc_sdp/xtp_29396_abort_resourcing.feature",
     "Abort assigning using TMC",

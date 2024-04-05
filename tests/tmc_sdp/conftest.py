@@ -1,9 +1,11 @@
+"""Pytest BDD step implementations specific to tmc integration
+tests."""
+
+
 import json
-import logging
 
 from pytest_bdd import given, parsers, then, when
 from ska_control_model import ObsState
-from ska_ser_logging import configure_logging
 from tango import DevState
 
 from tests.resources.test_harness.helpers import (
@@ -14,9 +16,6 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_support.common_utils.common_helpers import Waiter
 from tests.resources.test_support.common_utils.result_code import ResultCode
-
-configure_logging(logging.DEBUG)
-LOGGER = logging.getLogger(__name__)
 
 
 @given("Telescope is ON state")
@@ -57,7 +56,6 @@ def given_a_tmc(central_node_mid, event_recorder, subarray_node):
         "telescopeState",
         DevState.ON,
     )
-    LOGGER.info("On step completed")
 
 
 @when(parsers.parse("I assign resources to TMC SubarrayNode {subarray_id}"))
@@ -105,7 +103,6 @@ def telescope_is_in_idle_state(
         (unique_id[0], str(int(ResultCode.OK))),
         lookahead=5,
     )
-    LOGGER.info("Assign resources  completed")
 
 
 @when(parsers.parse("end the configuration on TMC SubarrayNode {subarray_id}"))

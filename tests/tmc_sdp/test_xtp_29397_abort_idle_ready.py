@@ -10,7 +10,7 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-@pytest.mark.tmc_sdp
+@pytest.mark.tmc_sdpskip
 @scenario(
     "../features/tmc_sdp/xtp_29397_abort_idle_ready.feature",
     "TMC executes an Abort on SDP subarray",
