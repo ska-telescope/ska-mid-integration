@@ -1,7 +1,6 @@
-Feature:  TMC executes long running sequences with real sdp devices
+Feature:  TMC Mid executes long running sequences with real sdp devices
     @tmc_sdp @Team_SAHYADRI @XTP-35244 @XTP-29381
-
-    Scenario Outline: TMC executes configure-scan sequence of commands successfully
+    Scenario Outline: TMC Mid executes configure-scan sequence of commands successfully
 
     Given Telescope is ON state
     When I assign resources to TMC SubarrayNode <subarray_id>
@@ -11,17 +10,17 @@ Feature:  TMC executes long running sequences with real sdp devices
     Then TMC SubarrayNode <subarray_id> transitions to EMPTY ObsState
 
     Examples:
-            |subarray_id  | scan_ids | scan_types |
-            |1            |  ["1"]        | ["science_A"]  |
-            |1             |["1","2"]      |["science_A" , "target:a"] |
-            |1             |["1","2"]      |["science_A" , "science_A"] |
-            |1             |["1","1"]      |["science_A" , "science_A"] |
-            |1             | ["1","2","3"]        | ["science_A"  , "target:a","callibration_B" ]|
+            |subarray_id   | scan_ids      | scan_types |
+            |1             |["1"]          |["science_A"]  |
+            |1             |["1","2"]      |["science_A" , "target:a"] |   #Test Configure-scan pair with different configuration with different scan id with same resources
+            |1             |["1","2"]      |["science_A" , "science_A"] |  #Test Configure-scan pair with same configuration with different scan id with same resources
+            |1             |["1","1"]      |["science_A" , "science_A"] |  ##Test Configure-scan pair with same configuration with same scan id with same resources
+            |1             |["1","2","3"]  |["science_A"  , "target:a","callibration_B" ]|  #Test Configure-scan pair with different configuration with different scan id for multiple scan types with same resources
 
 
 
     @tmc_sdp @Team_SAHYADRI @XTP-35244 @XTP-29381
-    Scenario Outline: TMC executes configure-scan-scan sequence of commands successfully
+    Scenario Outline: TMC Mid executes configure-scan-scan sequence of commands successfully
 
     Given Telescope is ON state
     When I assign resources to TMC SubarrayNode <subarray_id>
@@ -32,12 +31,12 @@ Feature:  TMC executes long running sequences with real sdp devices
     Then TMC SubarrayNode <subarray_id> transitions to EMPTY ObsState
 
     Examples:
-            |subarray_id  | scan_ids | scan_types |
-            |1            |  ["1"]        | ["science_A"]  |
+            |subarray_id  |scan_ids | scan_types |
+            |1            |["1"]    |["science_A"]  |
 
 
     @tmc_sdp @Team_SAHYADRI @XTP-35244 @XTP-29381
-    Scenario Outline: TMC executes configure-scan-end-configure-scan sequence of commands successfully
+    Scenario Outline: TMC Mid executes configure-scan-end-configure-scan sequence of commands successfully
 
     Given Telescope is ON state
     When I assign resources to TMC SubarrayNode <subarray_id>
@@ -50,6 +49,6 @@ Feature:  TMC executes long running sequences with real sdp devices
 
     Examples:
 
-     |subarray_id  | scan_ids | scan_types |new_scan_types | new_scan_ids
-            |1            |  ["1"]        | ["science_A"]  | ["2"]        | ["target:a"]
+     |subarray_id  | scan_ids | scan_types     |new_scan_types | new_scan_ids
+     |1            |  ["1"]   | ["science_A"]  | ["2"]         | ["target:a"]
 

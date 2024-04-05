@@ -611,30 +611,30 @@ def update_eb_pb_ids(input_json: str) -> str:
     return input_json
 
 
-def update_scan_type(input_json: str, json_value: str) -> str:
+def update_scan_type(configure_json: str, json_value: str) -> str:
     """
     Method to update json with different scan type
     :param input_json: json to utilised to update values.
 
     :param json_value: new json value to be updated in json
     """
-    input_json = json.loads(input_json)
+    input_json = json.loads(configure_json)
     input_json["sdp"]["scan_type"] = json_value
     input_json = json.dumps(input_json)
     return input_json
 
 
-def update_scan_id(input_json: str, new_scan_id: int) -> str:
+def update_scan_id(input_json: str, scan_id: int) -> str:
     """
-    Method to update json with different data.
+    Method to update scan_id in input json..
     :param input_json: json to utilised to update values.
 
     :param json_value: new json value to be updated in json
     """
     input_json = json.loads(input_json)
-    input_json["scan_id"] = int(new_scan_id)
-    input_json = json.dumps(input_json)
-    return input_json
+    input_json["scan_id"] = int(scan_id)
+    updated_json = json.dumps(input_json)
+    return updated_json
 
 
 def check_long_running_command_status(
@@ -665,27 +665,3 @@ def check_long_running_command_status(
         time.sleep(0.1)
         elapsed_time = time.time() - start_time
     return False
-
-
-def check_device_status_ready(device_name: str) -> None:
-    """
-    Checks if given device is in READY obs-state
-
-     :param device_name: device name
-     :type device_name: str
-    """
-    the_waiter = Waiter()
-    the_waiter.set_wait_for_specific_obsstate("READY", [device_name])
-    the_waiter.wait(100)
-
-
-def check_device_status_scanning(device_name: str) -> None:
-    """
-    Checks if given device is in READY obs-state
-
-    :param device_name: device name
-    :type device_name: str
-    """
-    the_waiter = Waiter()
-    the_waiter.set_wait_for_specific_obsstate("READY", [device_name])
-    the_waiter.wait(200)
