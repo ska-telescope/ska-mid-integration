@@ -103,8 +103,8 @@ def execute_configure_scan_sequence(
 
 @when(
     parsers.parse(
-        "configure and scan TMC SubarrayNode {subarray_id} for"
-        " {new_scan_types} and {new_scan_ids}"
+        "configure and scan TMC SubarrayNode {subarray_id} "
+        "for {new_scan_types} and {new_scan_ids}"
     )
 )
 def execute_new_configure_scan_sequence(
