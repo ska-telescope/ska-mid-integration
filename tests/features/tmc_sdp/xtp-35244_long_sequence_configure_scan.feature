@@ -20,7 +20,7 @@ Feature:  TMC Mid executes long running sequences with real sdp devices
 
 
     @tmc_sdp @Team_SAHYADRI @XTP-35244 @XTP-29381
-    Scenario Outline: TMC Mid executes configure-scan-scan sequence of commands successfully
+    Scenario Outline: TMC Mid executes multiple scan with same configuration successfully
 
     Given Telescope is ON state
     When I assign resources to TMC SubarrayNode <subarray_id>
@@ -49,6 +49,6 @@ Feature:  TMC Mid executes long running sequences with real sdp devices
 
     Examples:
 
-     |subarray_id  | scan_ids | scan_types     |new_scan_types | new_scan_ids |
+     |subarray_id  | scan_ids | scan_types     | new_scan_ids  | new_scan_types|
      |1            |  ["1"]   | ["science_A"]  | ["2"]         | ["target:a"] |
 

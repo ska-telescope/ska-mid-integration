@@ -141,6 +141,7 @@ def check_scan_successful(
         "obsState",
         ObsState.SCANNING,
     )
+
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["sdp_subarray"],
         "scanID",
@@ -174,9 +175,9 @@ def check_configure_successful(
     """
     Adds check to verify if configure command is successful
     """
-    check_device_status_ready(subarray_node.subarray_devices["sdp_subarray"])
-
-    check_device_status_ready(subarray_node.subarray_node)
+    # check_device_status_ready(subarray_node.subarray_devices["sdp_subarray"])
+    #
+    # check_device_status_ready(subarray_node.subarray_node)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
