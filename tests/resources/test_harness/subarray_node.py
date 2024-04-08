@@ -282,7 +282,6 @@ class SubarrayNodeWrapper(object):
         LOGGER.info("Invoked Release Resource on SubarrayNode")
         return result, message
 
-    @sync_end(device_dict)
     def execute_transition(self, command_name: str, argin=None):
         """Execute provided command on subarray
         Args:
