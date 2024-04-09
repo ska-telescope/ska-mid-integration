@@ -3,9 +3,11 @@ tests."""
 
 
 import json
+import logging
 
 from pytest_bdd import given, parsers, then, when
 from ska_control_model import ObsState
+from ska_ser_logging import configure_logging
 from tango import DevState
 
 from tests.resources.test_harness.helpers import (
@@ -17,6 +19,9 @@ from tests.resources.test_harness.helpers import (
 
 # from tests.resources.test_support.common_utils.common_helpers import Waiter
 from tests.resources.test_support.common_utils.result_code import ResultCode
+
+configure_logging(logging.DEBUG)
+LOGGER = logging.getLogger(__name__)
 
 
 @given("Telescope is ON state")
@@ -48,6 +53,10 @@ def given_a_tmc(central_node_mid, event_recorder, subarray_node):
 
     event_recorder.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
+    )
+
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "lastDeviceInfoChanged"
     )
 
     central_node_mid.move_to_on()
@@ -117,6 +126,9 @@ def execute_end_command(
 ):
     """ "A method to invoke end command"""
 
+    value = subarray_node.subarray_node("lastDeviceInfoChanged").value
+
+    LOGGER.info(f" lastDeviceInfoChanged - {value}")
     central_node_mid.set_subarray_id(subarray_id)
     _, unique_id = subarray_node.execute_transition("End")
     # the_waiter = Waiter()
@@ -143,6 +155,10 @@ def execute_end_command(
         (unique_id[0], str(int(ResultCode.OK))),
         lookahead=5,
     )
+
+    value = subarray_node.subarray_node("lastDeviceInfoChanged").value
+
+    LOGGER.info(f" lastDeviceInfoChanged - {value}")
 
 
 @when(parsers.parse("release the resources on TMC SubarrayNode {subarray_id}"))
