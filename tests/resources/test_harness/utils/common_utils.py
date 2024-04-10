@@ -97,16 +97,20 @@ def check_obsstate_sdp_in_first_configure(
     except very first CONFIGURE command after Assign .
 
     """
-    # TODO - Once SKB-309 is resolved , we can check and remove
-    # this logic of configure_cycle
+    # TODO
     # Currently SDP goes in configuring only in first configure
-    # Command.
+    # Command.SKB-309 has been raised for same.
+    # Once SKB-309 is resolved , we can check and remove
+    # this logic of configure_cycle and perform check for
+    # configuring after each of the configure command
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["sdp_subarray"],
         "obsState",
         ObsState.CONFIGURING,
     )
-    check_device_status_ready(subarray_node.subarray_devices["sdp_subarray"])
+    wait_for_device_status_ready(
+        subarray_node.subarray_devices["sdp_subarray"]
+    )
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["sdp_subarray"],
@@ -129,7 +133,7 @@ def check_scan_successful(
     """
     # Faced a delay while testing , hence adding waiter here.
 
-    check_device_status_scanning(subarray_node.subarray_node)
+    wait_for_device_status_scanning(subarray_node.subarray_node)
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
@@ -148,14 +152,16 @@ def check_scan_successful(
         int(scan_id),
     )
 
-    check_device_status_ready(subarray_node.subarray_devices["sdp_subarray"])
+    wait_for_device_status_ready(
+        subarray_node.subarray_devices["sdp_subarray"]
+    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["sdp_subarray"],
         "obsState",
         ObsState.READY,
     )
 
-    check_device_status_ready(subarray_node.subarray_node)
+    wait_for_device_status_ready(subarray_node.subarray_node)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
@@ -175,9 +181,11 @@ def check_configure_successful(
     """
     Adds check to verify if configure command is successful
     """
-    # check_device_status_ready(subarray_node.subarray_devices["sdp_subarray"])
-    #
-    # check_device_status_ready(subarray_node.subarray_node)
+    wait_for_device_status_ready(
+        subarray_node.subarray_devices["sdp_subarray"]
+    )
+
+    wait_for_device_status_ready(subarray_node.subarray_node)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
@@ -202,7 +210,7 @@ def check_configure_successful(
     )
 
 
-def check_device_status_ready(device_name: str) -> None:
+def wait_for_device_status_ready(device_name: str) -> None:
     """
     Checks if given device is in READY obs-state
 
@@ -214,7 +222,7 @@ def check_device_status_ready(device_name: str) -> None:
     the_waiter.wait(100)
 
 
-def check_device_status_scanning(device_name: str) -> None:
+def wait_for_device_status_scanning(device_name: str) -> None:
     """
     Checks if given device is in SCANNING obs-state
 

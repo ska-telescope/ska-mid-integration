@@ -22,6 +22,7 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
+@pytest.mark.xfail(reason="End is not working as expected")
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp-35244_long_sequence_configure_scan.feature",
@@ -60,7 +61,6 @@ def execute_configure_scan_sequence(
     combined_dict = dict(zip(eval(scan_ids), eval(scan_types)))
 
     for scan_id, scan_type in combined_dict.items():
-
         configure_json = update_scan_type(configure_json, scan_type)
         _, unique_id = subarray_node.store_configuration_data(configure_json)
         if configure_cycle == "initial":

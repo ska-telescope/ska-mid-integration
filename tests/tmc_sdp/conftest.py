@@ -16,8 +16,6 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_commands,
     update_scan_id,
 )
-
-# from tests.resources.test_support.common_utils.common_helpers import Waiter
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 configure_logging(logging.DEBUG)
@@ -126,16 +124,8 @@ def execute_end_command(
 ):
     """ "A method to invoke end command"""
 
-    value = subarray_node.subarray_node("lastDeviceInfoChanged").value
-
-    LOGGER.info(f" lastDeviceInfoChanged - {value}")
     central_node_mid.set_subarray_id(subarray_id)
     _, unique_id = subarray_node.execute_transition("End")
-    # the_waiter = Waiter()
-    # the_waiter.set_wait_for_specific_obsstate(
-    #     "IDLE", [subarray_node.subarray_node]
-    # )
-    # the_waiter.wait(100)
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
@@ -156,10 +146,6 @@ def execute_end_command(
         lookahead=5,
     )
 
-    value = subarray_node.subarray_node("lastDeviceInfoChanged").value
-
-    LOGGER.info(f" lastDeviceInfoChanged - {value}")
-
 
 @when(parsers.parse("release the resources on TMC SubarrayNode {subarray_id}"))
 def execute_release_resources_command(
@@ -167,7 +153,6 @@ def execute_release_resources_command(
     central_node_mid,
     event_recorder,
     subarray_id,
-    subarray_node,
 ):
     """ "A method to invoke Release Resources command"""
 
@@ -179,7 +164,6 @@ def execute_release_resources_command(
         release_input_json
     )
 
-    """Method to check SDP is in EMPTY obsstate"""
     check_subarray_instance(
         central_node_mid.subarray_devices.get("sdp_subarray"), subarray_id
     )
@@ -220,9 +204,7 @@ def check_tmc_is_in_empty_obsstate(
 )
 def reexecute_scan_command(
     command_input_factory,
-    central_node_mid,
     event_recorder,
-    subarray_id,
     subarray_node,
 ):
     """ "A method to invoke scan command followed by end scan
@@ -254,20 +236,7 @@ def reexecute_scan_command(
 
     # Execute End Scan
     _, unique_id = subarray_node.remove_scan_data()
-    #
-    # check_device_status_ready(subarray_node.subarray_devices["sdp_subarray"])
-    # assert event_recorder.has_change_event_occurred(
-    #     subarray_node.subarray_devices["sdp_subarray"],
-    #     "obsState",
-    #     ObsState.READY,
-    # )
-    #
-    # check_device_status_ready(subarray_node.subarray_node)
-    # assert event_recorder.has_change_event_occurred(
-    #     subarray_node.subarray_node,
-    #     "obsState",
-    #     ObsState.READY,
-    # )
+
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",

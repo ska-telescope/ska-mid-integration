@@ -25,8 +25,8 @@ LOGGER = logging.getLogger(__name__)
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp-35244_long_sequence_configure_scan.feature",
-    "TMC Mid executes configure-scan-end-configure-scan sequence of"
-    " commands successfully",
+    "TMC Mid executes multiple scans with different configurations, "
+    "intermittently ending configurations",
 )
 def test_tmc_sdp_long_sequences():
     """
@@ -94,7 +94,6 @@ def execute_configure_scan_sequence(
         )
 
         processed_scan_type = scan_type
-
         LOGGER.debug(
             f"Configure-scan sequence completed for {scan_id} "
             f"and scan_type {scan_type}"
@@ -128,7 +127,6 @@ def execute_new_configure_scan_sequence(
     combined_dict = dict(zip(eval(new_scan_ids), eval(new_scan_types)))
 
     for scan_id, scan_type in combined_dict.items():
-
         configure_json = update_scan_type(configure_json, scan_type)
         _, unique_id = subarray_node.store_configuration_data(configure_json)
         if configure_cycle == "initial":
