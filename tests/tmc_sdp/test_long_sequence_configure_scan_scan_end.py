@@ -22,11 +22,12 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
+# @pytest.mark.xfail(reason="End is not working as expected")
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp-35244_long_sequence_configure_scan.feature",
-    "TMC Mid executes multiple scans with different configurations, "
-    "intermittently ending configurations",
+    "TMC Mid executes multiple scans with different resources "
+    "and configurations",
 )
 def test_tmc_sdp_long_sequences():
     """
