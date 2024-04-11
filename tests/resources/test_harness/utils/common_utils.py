@@ -187,9 +187,7 @@ def check_configure_successful(
 
     wait_for_device_status_ready(subarray_node.subarray_node)
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "obsState",
-        ObsState.READY,
+        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
     )
 
     # For same configuration scantype no event is pushed
