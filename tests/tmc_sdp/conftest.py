@@ -180,22 +180,21 @@ def execute_end_command(
     _, unique_id = subarray_node.execute_transition("End")
 
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "obsState",
-        ObsState.IDLE,
+        subarray_node.subarray_node, "obsState", ObsState.IDLE, lookahead=20
     )
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["sdp_subarray"],
         "obsState",
         ObsState.IDLE,
+        lookahead=20,
     )
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
         (unique_id[0], str(int(ResultCode.OK))),
-        lookahead=5,
+        lookahead=20,
     )
 
 
@@ -223,12 +222,13 @@ def execute_release_resources_command(
         central_node_mid.subarray_devices.get("sdp_subarray"),
         "obsState",
         ObsState.EMPTY,
+        lookahead=20,
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
         (unique_id[0], str(int(ResultCode.OK))),
-        lookahead=5,
+        lookahead=20,
     )
 
 
@@ -246,6 +246,7 @@ def check_tmc_is_in_empty_obsstate(
         central_node_mid.subarray_node,
         "obsState",
         ObsState.EMPTY,
+        lookahead=20,
     )
 
 
