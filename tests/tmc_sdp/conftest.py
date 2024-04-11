@@ -137,7 +137,7 @@ def reassign_resources(
         "time-to-ready"
     ] = 2
 
-    del assign_str["dish"]["receptor_ids"][0]
+    # del assign_str["dish"]["receptor_ids"][0]
 
     _, unique_id = central_node_mid.store_resources(json.dumps(assign_str))
 
