@@ -259,6 +259,6 @@ DEFAULT_DISH_VCC_CONFIG = {
         "car://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata"
     ],
     "tm_data_filepath": (
-        "instrument/ska1_mid_itf/" "ska-mid-cbf-system-parameters.json"
+        "instrument/ska1_mid_psi/" "ska-mid-cbf-system-parameters.json"
     ),
 }

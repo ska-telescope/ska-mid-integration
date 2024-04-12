@@ -1,9 +1,10 @@
 """Test TMC-CSP Long Sequence of configure-scan functionality"""
 
-import logging
 import json
+import logging
+
 import pytest
-from pytest_bdd import given, parsers, scenario, when, then
+from pytest_bdd import given, parsers, scenario, then, when
 from ska_ser_logging import configure_logging
 
 from tests.resources.test_harness.helpers import (
@@ -31,6 +32,7 @@ def test_tmc_csp_long_sequences():
     """
     Test case to verify TMC-CSP functionality with long sequences of commands
     """
+
 
 @given("Telescope is ON state")
 def given_a_tmc(central_node_mid, event_recorder, subarray_node):

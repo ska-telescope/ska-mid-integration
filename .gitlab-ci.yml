@@ -127,7 +127,6 @@ mid-on-demand-deploy-mini-skampi:
     CSP_SIMULATION_ENABLED: "false"
     SUBARRAY_COUNT: 2
     DISH_TANGO_HOST: "tango-databaseds"
-    CLUSTER_DOMAIN: "svc.cluster.local"
     PORT: "10000"
     DISH_INDEX_1: "001"
     DISH_INDEX_36: "036"
@@ -169,7 +168,6 @@ k8s-test-csp-dish:
     CSP_SIMULATION_ENABLED: "false"
     SUBARRAY_COUNT: 2
     DISH_TANGO_HOST: "tango-databaseds"
-    CLUSTER_DOMAIN: "svc.cluster.local"
     PORT: "10000"
     DISH_INDEX_1: "001"
     DISH_INDEX_36: "036"
@@ -367,7 +365,7 @@ dish-lmc-dish001:
     - make cred SERVICE_ACCOUNT=$DISH_LMC_SERVICE_ACCOUNT
   script:
     - make k8s-install-chart-car KUBE_NAMESPACE=$KUBE_NAMESPACE K8S_CHART_PARAMS='-f charts/dish_lmc_values.yml
-      --set "global.dishes={$(DISH_INDEX)}" --version=2.6.3'
+      --set "global.dishes={$(DISH_INDEX)}" --set "global.cluster_domain=$(CLUSTER_DOMAIN)" --version=2.6.3'
       HELM_RELEASE=$DISH_HELM_RELEASE K8S_CHART=$K8S_DISH_LMC_CHART
     - make k8s-wait
   environment:
@@ -428,7 +426,6 @@ k8s-test-dish-lmc:
     DISH_SIMULATION_ENABLED: "false"
     SUBARRAY_COUNT: 2
     DISH_TANGO_HOST: "tango-databaseds"
-    CLUSTER_DOMAIN: "svc.cluster.local"
     PORT: "10000"
     DISH_INDEX_1: "001"
     DISH_INDEX_36: "036"
@@ -476,7 +473,6 @@ k8s-test-tmc-with-sdp:
     - k8s-test
   variables:
     TELESCOPE: 'SKA-mid'
-    CLUSTER_DOMAIN: "svc.cluster.local"
     PORT: "10000"
     KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-sdp'
     KUBE_NAMESPACE_SDP: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-sdp'
@@ -513,6 +509,7 @@ stop-k8s-dish-lmc-001:
   script:
     - make k8s-do-uninstall-chart KUBE_NAMESPACE=$KUBE_NAMESPACE HELM_RELEASE=$DISH_HELM_RELEASE K8S_CHART=$K8S_DISH_LMC_CHART
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,sa,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
+    - kubectl delete namespace $KUBE_NAMESPACE
 
 stop-k8s-dish-lmc-036:
   extends:
@@ -606,3 +603,45 @@ stop-staging:
   when: manual
   rules:
     - if: $CI_COMMIT_TAG
+
+
+# Overrides
+default:
+  tags:
+    - k8srunner
+
+docs-build:
+  tags:
+    - k8srunner
+
+docs-pages:
+  tags:
+    - k8srunner
+
+build-changelog:
+  tags:
+    - k8srunner
+
+python-lint:
+  tags:
+    - k8srunner
+
+helm-chart-lint:
+  tags:
+    - k8srunner
+
+helm-chart-build:
+  tags:
+    - k8srunner
+
+helm-chart-publish:
+  tags:
+    - k8srunner
+
+stop-k8s-test:
+  tags:
+    - k8srunner
+
+create-ci-metrics:
+  tags:
+    - k8srunner

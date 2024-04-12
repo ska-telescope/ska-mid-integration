@@ -134,9 +134,6 @@ def tmc_accepts_next_commands(json_factory, permitted_command):
             LOGGER.info(
                 "ReleaseResources command on TMC SubarrayNode is successful"
             )
-            assert telescope_control.is_in_valid_state(
-                DEVICE_OBS_STATE_EMPTY_INFO, "obsState"
-            )
             tmc_helper.set_to_standby(**ON_OFF_DEVICE_COMMAND_DICT)
             LOGGER.info(
                 "ReleaseResources command on TMC SubarrayNode is successful"

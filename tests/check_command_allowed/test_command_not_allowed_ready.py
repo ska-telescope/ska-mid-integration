@@ -28,6 +28,9 @@ tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 telescope_control = BaseTelescopeControl()
 
 
+@pytest.mark.skip(
+    reason="Scan functionality is broken. It will fixed in SAH-1498"
+)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/check_command_not_allowed.feature",

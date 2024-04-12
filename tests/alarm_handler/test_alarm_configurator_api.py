@@ -7,6 +7,7 @@ import httpx
 import pytest
 
 namespace = os.getenv("KUBE_NAMESPACE")
+cluster_domain = os.getenv("CLUSTER_DOMAIN", "cluster.local")
 
 
 def add_alarms_api(filename: str):
@@ -15,8 +16,8 @@ def add_alarms_api(filename: str):
         f"/app/tests/data/alarm_rules/valid_rules/{filename}", "rb"
     ) as file:
         response = httpx.post(
-            f"http://alarm-handler-configurator.{namespace}.svc.cluster."
-            + "local:8004/add-alarms?trl=alarm%2Fhandler%2F01",
+            f"http://alarm-handler-configurator.{namespace}.svc."
+            + f"{cluster_domain}:8004/add-alarms?trl=alarm%2Fhandler%2F01",
             files={"file": (filename, file, "text/plain")},
             data={"trl": "alarm/handler/01"},
         )
@@ -40,8 +41,8 @@ def remove_alarm_api():
     ]
     for tag in tags_to_remove:
         response = httpx.post(
-            f"http://alarm-handler-configurator.{namespace}.svc.cluster."
-            + f"local:8004/remove-alarm?tag={tag}&"
+            f"http://alarm-handler-configurator.{namespace}.svc."
+            + f"{cluster_domain}:8004/remove-alarm?tag={tag}&"
             + "alarm_handler_trl=alarm%2Fhandler%2F01",
             data={
                 "tag": tag,

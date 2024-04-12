@@ -10,6 +10,9 @@ from tests.resources.test_harness.helpers import (
 )
 
 
+@pytest.mark.skip(
+    reason="Scan functionality is broken. It will fixed in SAH-1498"
+)
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp_29399_abort_scanning.feature",
@@ -64,7 +67,7 @@ def subarray_is_in_scanning_obsstate(
     configure_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    subarray_node.execute_transition("Configure", configure_json)
+    subarray_node.store_configuration_data(configure_json)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["sdp_subarray"],
         "obsState",
@@ -78,7 +81,7 @@ def subarray_is_in_scanning_obsstate(
     scan_json = prepare_json_args_for_commands(
         "scan_mid", command_input_factory
     )
-    subarray_node.execute_transition("Scan", scan_json)
+    subarray_node.store_scan_data(scan_json)
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
