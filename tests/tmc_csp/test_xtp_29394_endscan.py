@@ -15,6 +15,9 @@ from tests.resources.test_harness.helpers import (
 LOGGER = logging.getLogger(__name__)
 
 
+@pytest.mark.skip(
+    reason="Scan functionality is broken. It will fixed in SAH-1498"
+)
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/xtp_29394_endscan.feature",

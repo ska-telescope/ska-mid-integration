@@ -112,7 +112,7 @@ dishleafnode:
   image: 
     registry: artefact.skao.int
     image: ska-tmc-dishleafnode
-    tag: 0.9.4
+    tag: 0.12.1
     pullPolicy: IfNotPresent
 
 resources:
@@ -136,7 +136,7 @@ deviceServers:
     DishMasterPostfix: "master"
     DishVccConfig:
       DishVccUri: "car://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata"
-      DishVccFilePath: "instrument/ska1_mid_itf/ska-mid-cbf-system-parameters.json"
+      DishVccFilePath: "instrument/ska1_mid_psi/ska-mid-cbf-system-parameters.json"
       Enabled: "true"
       DishKvalueAggregationAllowedPercent: "100.0"
 

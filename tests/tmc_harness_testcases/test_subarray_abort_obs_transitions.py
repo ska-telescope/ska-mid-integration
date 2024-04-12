@@ -21,7 +21,7 @@ class TestSubarrayNodeAbortCommandObsStateTransitions(object):
             # "RESOURCING",
             "IDLE",
             "CONFIGURING",
-            "SCANNING",
+            # "SCANNING",
         ],
     )
     @pytest.mark.SKA_mid

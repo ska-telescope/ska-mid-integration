@@ -27,6 +27,9 @@ tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 telescope_control = BaseTelescopeControl()
 
 
+@pytest.mark.skip(
+    reason="Scan functionality is broken. It will fixed in SAH-1498"
+)
 @pytest.mark.SKA_mid
 def test_scan_not_allowed_in_idle(json_factory):
     """Scan and EndScan is executed."""

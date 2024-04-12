@@ -20,7 +20,7 @@ def test_configure_handling_on_sdp_subarray_obsstate_idle_failure():
     """
     Test to verify TMC failure handling when Configure command fails on
     SDP Subarray. Configure completes on CSP Subarray and
-    it transtions to obsState READY.
+    it transitions to obsState READY.
     Whereas SDP Subarray raises exception and transitions
     to obsState IDLE. As a handling End is invoked on CSP Subarray.
     CSP Subarray then moves to obsState IDLE.
