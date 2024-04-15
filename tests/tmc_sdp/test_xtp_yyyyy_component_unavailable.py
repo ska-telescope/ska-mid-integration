@@ -16,7 +16,7 @@ from tests.resources.test_harness.helpers import (
 @pytest.mark.skip(reason="SDP not reporting unavailable device to TMC.")
 @pytest.mark.tmc_sdp
 @scenario(
-    "../features/tmc_sdp/xtp-34890_sdp_component_unavailable.feature",
+    "../features/tmc_sdp/xtp_yyyyy_component_unavailable.feature",
     "SDP Subarray report the error when one of the SDP's component is"
     + " unavailable",
 )
