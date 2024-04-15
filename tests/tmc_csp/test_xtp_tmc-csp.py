@@ -1,4 +1,4 @@
-"""Test TMC-SDP Long Sequence of configure-scan functionality"""
+"""Test TMC-CSP Long Sequence of configure-scan functionality"""
 
 import logging
 
