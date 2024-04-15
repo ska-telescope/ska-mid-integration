@@ -684,3 +684,29 @@ def check_long_running_command_status(
         time.sleep(0.1)
         elapsed_time = time.time() - start_time
     return False
+
+
+def update_scan_type(configure_json: str, json_value: str) -> str:
+    """
+    Method to update json with different scan type
+
+    :param input_json: json to utilised to update values.
+    :param json_value: new json value to be updated in json
+    """
+    input_json = json.loads(configure_json)
+    input_json["csp"]["scan_type"] = json_value
+    input_json = json.dumps(input_json)
+    return input_json
+
+
+def update_scan_id(input_json: str, scan_id: int) -> str:
+    """
+    Method to update scan_id in input json..
+    :param input_json: json to utilised to update values.
+
+    :param json_value: new json value to be updated in json
+    """
+    input_json = json.loads(input_json)
+    input_json["scan_id"] = int(scan_id)
+    updated_json = json.dumps(input_json)
+    return updated_json
