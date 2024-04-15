@@ -71,11 +71,12 @@ def invoke_first_assign_Resources(
     """Execute second assign resource"""
 
     check_subarray_instance(central_node_mid.subarray_node, subarray_id)
-    input_json = prepare_json_args_for_centralnode_commands(
+    assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
     resources = ast.literal_eval(receptors1)
-    assign_input_json = input_json["dish"]["receptor_ids"] = resources
+
+    assign_input_json["dish"]["receptor_ids"] = resources
 
     LOGGER.info(f"assignresources: {assign_input_json}")
     central_node_mid.store_resources(assign_input_json)
