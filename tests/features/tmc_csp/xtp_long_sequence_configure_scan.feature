@@ -1,5 +1,5 @@
 Feature:  TMC Mid executes long running sequences with real csp devices
-    @tmc_csp @Team_SAHYADRI @XTP-35244 @XTP-29381
+    @tmc_csp @Team_SAHYADRI @XTP-29381
     Scenario Outline: TMC Mid executes configure-scan sequence of commands successfully
 
     Given Telescope is ON state
