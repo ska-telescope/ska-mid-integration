@@ -7,7 +7,7 @@ Scenario Outline: Verify TMC TelescopeHealthState transition based on SDP Contro
     Examples:
     | devices                       | health_state               | telescope_health_state |
     | sdp controller                | DEGRADED                   |   DEGRADED             |
-    | dish master,sdp controller    | OK,DEGRADED                |   DEGRADED             |
+    | dish master1,sdp controller   | OK,DEGRADED                |   DEGRADED             |
     | csp master,sdp controller     | OK,DEGRADED                |   DEGRADED             |
-    | dish master,sdp controller    | DEGRADED,DEGRADED          |   DEGRADED             |
+    | dish master1,sdp controller   | DEGRADED,DEGRADED          |   DEGRADED             |
     | csp master,sdp controller     | DEGRADED,DEGRADED          |   DEGRADED             |

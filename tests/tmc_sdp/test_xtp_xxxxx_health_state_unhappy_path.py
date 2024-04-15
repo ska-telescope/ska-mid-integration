@@ -40,7 +40,7 @@ def given_telescope_setup_with_simulators(
         which provides simulated subarray and master devices
     """
     simulated_devices = get_device_simulator_with_given_name(
-        simulator_factory, ["csp master", "dish master"]
+        simulator_factory, ["csp master", "dish master1"]
     )
     csp_master_sim, dish_master_sim = simulated_devices
 
