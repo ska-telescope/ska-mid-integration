@@ -12,9 +12,9 @@ Scenario: Validate succesive AssignResources command
     Given TMC subarray <subarray_id> is in EMPTY ObsState
     When I invoke First AssignResources on TMC subarray <subarray_id> with <receptors1> on TMC subarray <subarray_id>
     Then TMC and CSP subarray <subarray_id> must be in IDLE obsState
-    When I invoke second AssignResources on TMC subarray <subarray_id> with <input_json1> having <receptors> on TMC subarray <subarray_id>
+    When I invoke Second AssignResources on TMC subarray <subarray_id> with <receptors2> on TMC subarray <subarray_id>
     Then CSP subarray <subarray_id> must be in IDLE ObsState
     and TMC subarray <subarray_id> must be in IDLE obsState
     Examples:
-    | subarray_id | receptors1 |
-    | 1           | ["SKA001","SKA036"] |
+    | subarray_id | receptors1          | receptors2          |
+    | 1           | ["SKA001","SKA036"] | ["SKA063","SKA100"] |
