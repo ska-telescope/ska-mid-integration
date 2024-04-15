@@ -1,4 +1,4 @@
-"""Test TMC-SDP Long Sequence of configure-scan functionality"""
+"""Test TMC-CSP Long Sequence of configure-scan functionality"""
 
 import logging
 
@@ -22,7 +22,6 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
-@pytest.mark.skip
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/xtp_long_sequence_configure_scan.feature",

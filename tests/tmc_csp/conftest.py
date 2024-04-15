@@ -267,28 +267,3 @@ def reexecute_scan_command(
     _, unique_id = subarray_node.execute_transition("Scan", argin=scan_json)
 
     check_scan_successful(subarray_node, event_recorder, scan_id, unique_id)
-    # assert event_recorder.has_change_event_occurred(
-    #     subarray_node.subarray_node,
-    #     "obsState",
-    #     ObsState.SCANNING,
-    # )
-    # assert event_recorder.has_change_event_occurred(
-    #     subarray_node.subarray_devices["sdp_subarray"],
-    #     "obsState",
-    #     ObsState.SCANNING,
-    # )
-    # assert event_recorder.has_change_event_occurred(
-    #     subarray_node.subarray_devices["sdp_subarray"],
-    #     "scanID",
-    #     int(scan_id),
-    # )
-    #
-    # # Execute End Scan
-    # _, unique_id = subarray_node.remove_scan_data()
-    #
-    # assert event_recorder.has_change_event_occurred(
-    #     subarray_node.subarray_node,
-    #     "longRunningCommandResult",
-    #     (unique_id[0], str(int(ResultCode.OK))),
-    #     lookahead=5,
-    # )
