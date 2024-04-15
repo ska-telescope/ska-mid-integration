@@ -160,6 +160,7 @@ def get_device_simulator_with_given_name(simulator_factory, devices):
         "sdp subarray": SimulatorDeviceType.MID_SDP_DEVICE,
         "csp master": SimulatorDeviceType.MID_CSP_MASTER_DEVICE,
         "sdp master": SimulatorDeviceType.MID_SDP_MASTER_DEVICE,
+        "dish master": SimulatorDeviceType.DISH_DEVICE,
     }
     sim_device_proxy_list = []
     for device_name in devices:

@@ -34,3 +34,10 @@ To test with tmc_sdp pair execute the command `make k8s-test MARK=tmc_sdp SDP_SI
 * ``Abort``            -  Testing Abort command on TMC with real SDP controller and SDP Subarrays and mocked/simulated CSP and Dish subsystems.
 
 * ``Restart``          -  Testing Restart command on TMC with real SDP controller and SDP Subarrays and mocked/simulated CSP and Dish subsystems.
+
+Negative Scenario implemented
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* ``HealthState.DEGRADED Scenario`` - Testing TMC-SDP for the verification of the TelescopeHealthState transition in the Telescope Monitoring and 
+Control system based on the health state changes of the SDP Controller. 
+- The scenario simulates a telescope setup consisting of Real SDP, and simulated devices for the CSP and the Dish.

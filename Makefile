@@ -83,6 +83,7 @@ CI_ENVIRONMENT_SLUG ?= ska-tmc-integration
 CSP_SIMULATION_ENABLED ?= true
 SDP_SIMULATION_ENABLED ?= true
 DISH_SIMULATION_ENABLED ?= true
+SDP_PROCCONTROL_REPLICAS ?= 1
 
 ifeq ($(MAKECMDGOALS),k8s-test)
 ADD_ARGS +=  --true-context -x
@@ -103,6 +104,7 @@ ifeq ($(SDP_SIMULATION_ENABLED),false)
 CUSTOM_VALUES2=	--set tmc-mid.deviceServers.mocks.sdp=$(SDP_SIMULATION_ENABLED)\
 	--set global.sdp_master="$(SDP_MASTER)"\
 	--set global.sdp_subarray_prefix="$(SDP_SUBARRAY_PREFIX)"\
+	--set ska-sdp.proccontrol.replicas=$(SDP_PROCCONTROL_REPLICAS)\
 	--set global.sdp.processingNamespace=$(KUBE_NAMESPACE_SDP)\
 	--set ska-sdp.enabled=true
 endif
