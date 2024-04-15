@@ -12,8 +12,8 @@ from tests.resources.test_harness.helpers import (
 
 @pytest.mark.tmc_csp
 @scenario(
-    "../features/tmc_csp/incremental_assign.feature",
-    "Validate second AssignResources command  after "
+    "../features/tmc_csp/incremental_assignresources.feature",
+    "Validate second AssignResources command after "
     "first successful AssignResources and ReleaseResources are executed",
 )
 def test_tmc_csp_reassign_resources():

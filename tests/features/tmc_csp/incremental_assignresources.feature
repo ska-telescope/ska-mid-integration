@@ -1,4 +1,4 @@
-Scenario: Validate second AssignResources command  after first successful AssignResources and ReleaseResources are executed
+Scenario: Validate second AssignResources command after first successful AssignResources and ReleaseResources are executed
     Given the TMC and CSP subarray <subarray_id> in the IDLE obsState
     When I release all resources assigned to TMC subarray <subarray_id>
     Then TMC and CSP subarray <subarray_id> must be in EMPTY obsState
