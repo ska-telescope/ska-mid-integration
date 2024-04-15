@@ -115,7 +115,7 @@ def check_components_in_empty_obsstate(
     )
 
 
-@then(
+@when(
     parsers.parse(
         "I invoked second AssignResources on TMC subarray {subarray_id}"
     )
