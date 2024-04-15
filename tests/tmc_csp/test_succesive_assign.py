@@ -74,7 +74,11 @@ def invoke_first_assign_Resources(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
+    LOGGER.info(f"input resources:{receptors1}")
+    LOGGER.info(f"type input resources:{type(receptors1)}")
     resources = ast.literal_eval(receptors1)
+    LOGGER.info(f"input resources>>>>:{resources}")
+    LOGGER.info(f"type input resources>>>>:{type(resources)}")
 
     assign_input_json["dish"]["receptor_ids"] = resources
 
