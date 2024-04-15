@@ -142,7 +142,7 @@ def check_obsstate_on_subarray(
     central_node_mid, event_recorder, subarray_id, subarray_node
 ):
     """
-    Check if TMC Subarray and SDP subarray has transitioned
+    Check if TMC Subarray and CSP subarray has transitioned
     to required ObsState
     """
     check_subarray_instance(
