@@ -22,7 +22,6 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
-# @pytest.mark.xfail(reason="End is not working as expected")
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp-35244_long_sequence_configure_scan.feature",
@@ -50,7 +49,7 @@ def execute_configure_scan_sequence(
     subarray_id,
     scan_types,
 ):
-    """ "A method to invoke configure and scan  command"""
+    """Method to invoke configure and scan  command"""
 
     check_subarray_instance(subarray_node.subarray_node, subarray_id)
     configure_json = prepare_json_args_for_commands(
@@ -83,17 +82,13 @@ def execute_configure_scan_sequence(
         scan_json = prepare_json_args_for_commands(
             "scan_mid", command_input_factory
         )
-
         scan_json = update_scan_id(scan_json, scan_id)
-
         _, unique_id = subarray_node.execute_transition(
             "Scan", argin=scan_json
         )
-
         check_scan_successful(
             subarray_node, event_recorder, scan_id, unique_id
         )
-
         processed_scan_type = scan_type
         LOGGER.debug(
             f"Configure-scan sequence completed for {scan_id} "
@@ -147,32 +142,15 @@ def execute_new_configure_scan_sequence(
         scan_json = prepare_json_args_for_commands(
             "scan_mid", command_input_factory
         )
-
         scan_json = update_scan_id(scan_json, scan_id)
-
         _, unique_id = subarray_node.execute_transition(
             "Scan", argin=scan_json
         )
-
         check_scan_successful(
             subarray_node, event_recorder, scan_id, unique_id
         )
-
         processed_scan_type = scan_type
-
         LOGGER.debug(
             f"Configure-scan sequence completed for {scan_id} "
             f"and scan_type {scan_type}"
         )
-
-    # resources - TODO Validation to be added
-
-    # event_recorder.subscribe_event(
-    #     subarray_node.subarray_devices["sdp_subarray"], "resources"
-    # )
-    #
-    # assert event_recorder.has_change_event_occurred(
-    #     subarray_node.subarray_devices["sdp_subarray"],
-    #     "resources",
-    #     "csp_links",
-    # )
