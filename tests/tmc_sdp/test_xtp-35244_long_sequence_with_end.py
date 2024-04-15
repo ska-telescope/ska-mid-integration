@@ -1,5 +1,5 @@
-"""Test TMC-SDP multiple scans with different resources and configurations
- functionality"""
+"""TMC Mid executes multiple scans with different
+configurations, intermittently ending configurations"""
 
 import logging
 
@@ -23,16 +23,17 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
+@pytest.mark.xfail(reason="Need to raise bug on SDP")
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp-35244_long_sequence_configure_scan.feature",
-    "TMC Mid executes multiple scans with different resources "
-    "and configurations",
+    "TMC Mid executes multiple scans with different configurations,"
+    " intermittently ending configurations",
 )
 def test_tmc_sdp_long_sequences():
     """
-    Test case to verify TMC-SDP functionality  multiple scans with different
-    resources and configurations functionality
+    Test case to verify TMC Mid executes multiple scans with different
+    configurations, intermittently ending configurations
     """
 
 

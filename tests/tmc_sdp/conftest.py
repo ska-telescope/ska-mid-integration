@@ -27,7 +27,8 @@ LOGGER = logging.getLogger(__name__)
 
 @given("Telescope is ON state")
 def given_a_tmc(central_node_mid, event_recorder, subarray_node):
-    """A method to define TMC and SDP and subscribe ."""
+    """A method to define TMC and SDP ,move to ON state
+    and subscribe events"""
     assert central_node_mid.central_node.ping() > 0
     assert central_node_mid.subarray_devices["sdp_subarray"].ping() > 0
     event_recorder.subscribe_event(
@@ -124,7 +125,7 @@ def reassign_resources(
     subarray_id,
     subarray_node,
 ):
-    """A method to move subarray into the IDLE ObsState."""
+    """A method to move subarray into the IDLE ObsState"""
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid_multiple_scantype", command_input_factory
@@ -136,8 +137,6 @@ def reassign_resources(
     assign_str["sdp"]["processing_blocks"][0]["parameters"][
         "time-to-ready"
     ] = 2
-
-    # del assign_str["dish"]["receptor_ids"][0]
 
     _, unique_id = central_node_mid.store_resources(json.dumps(assign_str))
 
@@ -174,7 +173,7 @@ def execute_end_command(
     subarray_id,
     scan_types,
 ):
-    """ "A method to invoke end command"""
+    """A method to invoke end command"""
 
     central_node_mid.set_subarray_id(subarray_id)
     _, unique_id = subarray_node.execute_transition("End")
@@ -205,7 +204,7 @@ def execute_release_resources_command(
     event_recorder,
     subarray_id,
 ):
-    """ "A method to invoke Release Resources command"""
+    """A method to invoke Release Resources command"""
 
     release_input_json = prepare_json_args_for_centralnode_commands(
         "release_resources_mid", command_input_factory
@@ -256,8 +255,7 @@ def reexecute_scan_command(
     event_recorder,
     subarray_node,
 ):
-    """ "A method to invoke scan command followed by end scan
-    with lesser duration"""
+    """A method to invoke scan command with new scan_id"""
 
     scan_id = 10
     scan_json = prepare_json_args_for_commands(
@@ -268,28 +266,3 @@ def reexecute_scan_command(
     _, unique_id = subarray_node.execute_transition("Scan", argin=scan_json)
 
     check_scan_successful(subarray_node, event_recorder, scan_id, unique_id)
-    # assert event_recorder.has_change_event_occurred(
-    #     subarray_node.subarray_node,
-    #     "obsState",
-    #     ObsState.SCANNING,
-    # )
-    # assert event_recorder.has_change_event_occurred(
-    #     subarray_node.subarray_devices["sdp_subarray"],
-    #     "obsState",
-    #     ObsState.SCANNING,
-    # )
-    # assert event_recorder.has_change_event_occurred(
-    #     subarray_node.subarray_devices["sdp_subarray"],
-    #     "scanID",
-    #     int(scan_id),
-    # )
-    #
-    # # Execute End Scan
-    # _, unique_id = subarray_node.remove_scan_data()
-    #
-    # assert event_recorder.has_change_event_occurred(
-    #     subarray_node.subarray_node,
-    #     "longRunningCommandResult",
-    #     (unique_id[0], str(int(ResultCode.OK))),
-    #     lookahead=5,
-    # )

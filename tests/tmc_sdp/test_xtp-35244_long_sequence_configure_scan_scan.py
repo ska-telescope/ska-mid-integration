@@ -1,4 +1,4 @@
-"""Test TMC-SDP Long Sequence of configure-scan functionality"""
+"""Test TMC Mid executes multiple scan with same configuration successfully"""
 
 import logging
 
@@ -29,8 +29,8 @@ LOGGER = logging.getLogger(__name__)
 )
 def test_tmc_sdp_successive_scan_sequences():
     """
-    Test case to verify TMC-SDP  functionality with long successive_scan
-    sequences of commands
+    Test case to verify TMC-SDP  functionality TMC Mid executes multiple scan
+    with same configuration successfully
     """
 
 
@@ -48,7 +48,7 @@ def execute_configure_scan_sequence(
     subarray_id,
     scan_types,
 ):
-    """ "A method to invoke configure and scan  command"""
+    """A method to invoke configure and scan command"""
 
     check_subarray_instance(subarray_node.subarray_node, subarray_id)
     configure_json = prepare_json_args_for_commands(
