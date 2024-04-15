@@ -1,5 +1,6 @@
 """Test TMC-CSP Sucessive AssignResources functionality"""
 import ast
+import json
 import logging
 
 import pytest
@@ -71,9 +72,10 @@ def invoke_first_assign_Resources(
     """Execute second assign resource"""
 
     check_subarray_instance(central_node_mid.subarray_node, subarray_id)
-    assign_input_json = prepare_json_args_for_centralnode_commands(
+    input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
+    assign_input_json = json.loads(input_json)
     LOGGER.info(f"input resources:{receptors1}")
     LOGGER.info(f"type input resources:{type(receptors1)}")
     resources = ast.literal_eval(receptors1)
