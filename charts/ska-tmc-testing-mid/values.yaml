@@ -76,7 +76,7 @@ tmc-mid:
 
 ska-sdp:
   legacy_compatibility: true
-  enabled: true
+  enabled: false
   lmc:
     prefix: mid
     nsubarray: 2
@@ -84,20 +84,20 @@ ska-sdp:
     enabled: true
   data-pvc:
     create:
-      # enabled: true
-      # size: 20Gi
-  #     storageClassName: nfss1
-  # ska-sdp-qa:
-  #   enabled: true
-  #   kafka:
-  #     enabled: false
-  #   config:
-  #     kafka:
-  #       overrideUrl: "ska-sdp-kafka:9092"
+      enabled: true
+      size: 20Gi
+      storageClassName: nfss1
+  ska-sdp-qa:
+    enabled: true
+    kafka:
+      enabled: false
+    config:
+      kafka:
+        overrideUrl: "ska-sdp-kafka:9092"
   ska-tango-base:
     enabled: false
   kafka:
-    enabled: false
+    enabled: true
 
  
 # SKUID
