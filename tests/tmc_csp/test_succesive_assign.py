@@ -12,6 +12,7 @@ from tests.resources.test_harness.helpers import (
     check_subarray_instance,
     prepare_json_args_for_centralnode_commands,
 )
+from tests.resources.test_support.common_utils.result_code import ResultCode
 
 LOGGER = logging.getLogger(__name__)
 
@@ -148,8 +149,16 @@ def invoke_second_assign_Resources(
     assign_input_json["dish"]["receptor_ids"] = resources
 
     LOGGER.info(f"assignresources: {assign_input_json}")
-    central_node_mid.perform_action(
+    _, unique_id = central_node_mid.perform_action(
         "AssignResources", json.dumps(assign_input_json)
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (unique_id[0], str(ResultCode.OK.value)),
     )
 
     event_recorder.subscribe_event(
