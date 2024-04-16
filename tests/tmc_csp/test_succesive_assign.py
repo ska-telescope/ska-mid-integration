@@ -85,7 +85,17 @@ def invoke_first_assign_Resources(
     assign_input_json["dish"]["receptor_ids"] = resources
 
     LOGGER.info(f"assignresources: {assign_input_json}")
-    central_node_mid.store_resources(json.dumps(assign_input_json))
+    _, unique_id = central_node_mid.store_resources(
+        json.dumps(assign_input_json)
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (unique_id[0], str(ResultCode.OK.value)),
+    )
 
     event_recorder.subscribe_event(
         central_node_mid.subarray_node, "assignedResources"
@@ -163,6 +173,9 @@ def invoke_second_assign_Resources(
 
     event_recorder.subscribe_event(
         central_node_mid.subarray_node, "assignedResources"
+    )
+    LOGGER.info(
+        f"Assigned >>> {central_node_mid.subarray_node.assignedResources}"
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_node,
