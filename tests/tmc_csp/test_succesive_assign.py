@@ -4,7 +4,7 @@ import json
 import logging
 
 import pytest
-from pytest_bdd import given, parsers, scenario, when
+from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from tango import DevState
 
@@ -67,7 +67,11 @@ def subarray_is_in_empty_obsstate(
     )
 )
 def invoke_first_assign_Resources(
-    central_node_mid, subarray_id, command_input_factory, receptors1
+    central_node_mid,
+    subarray_id,
+    command_input_factory,
+    receptors1,
+    event_recorder,
 ):
     """Execute second assign resource"""
 
@@ -76,14 +80,81 @@ def invoke_first_assign_Resources(
         "assign_resources_mid", command_input_factory
     )
     assign_input_json = json.loads(input_json)
-    LOGGER.info(f"input resources:{receptors1}")
-    LOGGER.info(f"type input resources:{type(receptors1)}")
     resources = ast.literal_eval(receptors1)
-    LOGGER.info(f"input resources>>>>:{resources}")
-    LOGGER.info(f"type input resources>>>>:{type(resources)}")
-
     assign_input_json["dish"]["receptor_ids"] = resources
 
     LOGGER.info(f"assignresources: {assign_input_json}")
-    central_node_mid.store_resources(assign_input_json)
-    assert 0
+    central_node_mid.store_resources(json.dumps(assign_input_json))
+
+    event_recorder.subscribe_event(
+        central_node_mid.subarray_node, "assignedResources"
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.subarray_node,
+        "assignedResources",
+        ("SKA001", "SKA036"),
+    )
+
+
+@then(parsers.parse("CSP subarray {subarray_id} must be in IDLE ObsState"))
+def check_csp_subarray_is_in_idle_obsstate(
+    central_node_mid, event_recorder, subarray_id, subarray_node
+):
+    """Method to check CSP Subarray  is in IDLE obsstate"""
+    check_subarray_instance(
+        central_node_mid.subarray_devices.get("csp_subarray"), subarray_id
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices.get("csp_subarray"),
+        "obsState",
+        ObsState.IDLE,
+    )
+
+
+@then(parsers.parse("TMC subarray {subarray_id} must be in IDLE obsState"))
+def check_subarray_is_in_idle_obsstate(
+    central_node_mid, event_recorder, subarray_id, subarray_node
+):
+    """Method to check TMC Subarray  is in IDLE obsstate"""
+    check_subarray_instance(central_node_mid.subarray_node, subarray_id)
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.IDLE,
+    )
+
+
+@when(
+    parsers.parse(
+        "I invoke Second AssignResources on TMC subarray {subarray_id} with "
+        + "{receptors1} on TMC subarray {subarray_id}"
+    )
+)
+def invoke_second_assign_Resources(
+    central_node_mid,
+    subarray_id,
+    command_input_factory,
+    receptors1,
+    event_recorder,
+):
+    """Execute second assign resource"""
+
+    check_subarray_instance(central_node_mid.subarray_node, subarray_id)
+    input_json = prepare_json_args_for_centralnode_commands(
+        "assign_resources_mid", command_input_factory
+    )
+    assign_input_json = json.loads(input_json)
+    resources = ast.literal_eval(receptors1)
+    assign_input_json["dish"]["receptor_ids"] = resources
+
+    LOGGER.info(f"assignresources: {assign_input_json}")
+    central_node_mid.store_resources(json.dumps(assign_input_json))
+
+    event_recorder.subscribe_event(
+        central_node_mid.subarray_node, "assignedResources"
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.subarray_node,
+        "assignedResources",
+        ("SKA001", "SKA036", "SKA063", "SKA100"),
+    )
