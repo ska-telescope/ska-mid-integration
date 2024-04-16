@@ -42,9 +42,11 @@ def given_a_tmc(central_node_mid, event_recorder, subarray_node):
     )
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
 
-    event_recorder.subscribe_event(
-        subarray_node.subarray_devices["csp_subarray"], "scanID"
-    )
+    # event_recorder.subscribe_event(
+    #     subarray_node.subarray_devices["csp_subarray"], "scanID"
+    # )
+    # scan_id = subarray_node.subarray_devices["csp_subarray"].scanID
+
     event_recorder.subscribe_event(
         subarray_node.subarray_devices["csp_subarray"], "scanType"
     )

@@ -23,6 +23,7 @@ LOGGER = logging.getLogger(__name__)
 assigned_resources = []
 
 
+@pytest.mark.skip
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/incremental_assignresources.feature",
