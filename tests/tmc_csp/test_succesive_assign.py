@@ -8,10 +8,14 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from tango import DevState
 
+from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
+from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     check_subarray_instance,
     prepare_json_args_for_centralnode_commands,
 )
+from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
+from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 LOGGER = logging.getLogger(__name__)
@@ -22,7 +26,7 @@ LOGGER = logging.getLogger(__name__)
     "../features/tmc_csp/incremental_assignresources.feature",
     "Validate succesive AssignResources command",
 )
-def test_tmc_csp_reassign_resources():
+def test_tmc_csp_sucessive_assignresources_functionality():
     """
     Test case to verify sucessive AssignResources on TMC-CSP
     """
@@ -30,12 +34,11 @@ def test_tmc_csp_reassign_resources():
 
 @given(parsers.parse("TMC subarray {subarray_id} is in EMPTY ObsState"))
 def subarray_is_in_empty_obsstate(
-    central_node_mid,
-    event_recorder,
-    subarray_id,
-    subarray_node,
-):
-    """Method to move subarray into the IDLE ObsState."""
+    central_node_mid: CentralNodeWrapperMid,
+    event_recorder: EventRecorder,
+    subarray_id: str,
+) -> None:
+    """Checks whether subarray is in empty obsstae or not."""
     assert central_node_mid.central_node.ping() > 0
     assert central_node_mid.subarray_devices["csp_subarray"].ping() > 0
     event_recorder.subscribe_event(
@@ -44,7 +47,7 @@ def subarray_is_in_empty_obsstate(
     event_recorder.subscribe_event(
         central_node_mid.subarray_devices["csp_subarray"], "obsState"
     )
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
+    event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
 
     central_node_mid.move_to_on()
 
@@ -55,7 +58,7 @@ def subarray_is_in_empty_obsstate(
         DevState.ON,
     )
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
+        central_node_mid.subarray_node,
         "obsState",
         ObsState.EMPTY,
     )
@@ -63,18 +66,20 @@ def subarray_is_in_empty_obsstate(
 
 @when(
     parsers.parse(
-        "I invoke First AssignResources on TMC subarray {subarray_id} with "
+        "I invoked First AssignResources on TMC subarray {subarray_id} with "
         + "{receptors1} on TMC subarray {subarray_id}"
     )
 )
-def invoke_first_assign_Resources(
-    central_node_mid,
-    subarray_id,
-    command_input_factory,
-    receptors1,
-    event_recorder,
-):
-    """Execute second assign resource"""
+def invoke_first_assign_resources(
+    central_node_mid: CentralNodeWrapperMid,
+    subarray_id: str,
+    command_input_factory: JsonFactory,
+    receptors1: list,
+    event_recorder: EventRecorder,
+) -> None:
+    """
+    Invokes first AssignResources command on TMC and check assigned resources
+    """
 
     check_subarray_instance(central_node_mid.subarray_node, subarray_id)
     input_json = prepare_json_args_for_centralnode_commands(
@@ -109,14 +114,16 @@ def invoke_first_assign_Resources(
 
 @then(parsers.parse("CSP subarray {subarray_id} must be in IDLE ObsState"))
 def check_csp_subarray_is_in_idle_obsstate(
-    central_node_mid, event_recorder, subarray_id, subarray_node
-):
-    """Method to check CSP Subarray  is in IDLE obsstate"""
+    central_node_mid: CentralNodeWrapperMid,
+    event_recorder: EventRecorder,
+    subarray_id: str,
+) -> None:
+    """Method to check CSP Subarray is in IDLE obsstate"""
     check_subarray_instance(
         central_node_mid.subarray_devices.get("csp_subarray"), subarray_id
     )
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_devices.get("csp_subarray"),
+        central_node_mid.subarray_devices.get("csp_subarray"),
         "obsState",
         ObsState.IDLE,
     )
@@ -124,9 +131,12 @@ def check_csp_subarray_is_in_idle_obsstate(
 
 @then(parsers.parse("TMC subarray {subarray_id} must be in IDLE obsState"))
 def check_subarray_is_in_idle_obsstate(
-    central_node_mid, event_recorder, subarray_id, subarray_node
-):
-    """Method to check TMC Subarray  is in IDLE obsstate"""
+    central_node_mid: CentralNodeWrapperMid,
+    event_recorder: EventRecorder,
+    subarray_id: str,
+    subarray_node: SubarrayNodeWrapper,
+) -> None:
+    """Method to check TMC Subarray is in IDLE obsstate"""
     check_subarray_instance(central_node_mid.subarray_node, subarray_id)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
@@ -137,18 +147,20 @@ def check_subarray_is_in_idle_obsstate(
 
 @when(
     parsers.parse(
-        "I invoke Second AssignResources on TMC subarray {subarray_id} with "
+        "I invoked Second AssignResources on TMC subarray {subarray_id} with "
         + "{receptors1} on TMC subarray {subarray_id}"
     )
 )
 def invoke_second_assign_Resources(
-    central_node_mid,
-    subarray_id,
-    command_input_factory,
-    receptors1,
-    event_recorder,
-):
-    """Execute second assign resource"""
+    central_node_mid: CentralNodeWrapperMid,
+    subarray_id: str,
+    command_input_factory: JsonFactory,
+    receptors1: list,
+    event_recorder: EventRecorder,
+) -> None:
+    """
+    Invokes second AssignResources command on TMC and check assigned resources
+    """
 
     check_subarray_instance(central_node_mid.subarray_node, subarray_id)
     input_json = prepare_json_args_for_centralnode_commands(

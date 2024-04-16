@@ -6,10 +6,14 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from tango import DevState
 
+from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
+from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     check_subarray_instance,
     prepare_json_args_for_centralnode_commands,
 )
+from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
+from tests.resources.test_harness.utils.common_utils import JsonFactory
 
 
 @pytest.mark.skip
@@ -32,12 +36,11 @@ def test_tmc_csp_reassign_resources():
     )
 )
 def telescope_is_in_idle_state(
-    central_node_mid,
-    event_recorder,
-    command_input_factory,
-    subarray_id,
-    subarray_node,
-):
+    central_node_mid: CentralNodeWrapperMid,
+    event_recorder: EventRecorder,
+    command_input_factory: JsonFactory,
+    subarray_id: str,
+) -> None:
     """Method to move subarray into the IDLE ObsState."""
     assert central_node_mid.central_node.ping() > 0
     assert central_node_mid.subarray_devices["csp_subarray"].ping() > 0
@@ -47,7 +50,7 @@ def telescope_is_in_idle_state(
     event_recorder.subscribe_event(
         central_node_mid.subarray_devices["csp_subarray"], "obsState"
     )
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
+    event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
 
     central_node_mid.move_to_on()
 
@@ -63,12 +66,12 @@ def telescope_is_in_idle_state(
     central_node_mid.store_resources(assign_input_json)
 
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_devices.get("csp_subarray"),
+        central_node_mid.subarray_devices.get("csp_subarray"),
         "obsState",
         ObsState.IDLE,
     )
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
+        central_node_mid.subarray_node,
         "obsState",
         ObsState.IDLE,
     )
@@ -80,8 +83,10 @@ def telescope_is_in_idle_state(
     )
 )
 def release_resources_of_subarray(
-    central_node_mid, command_input_factory, subarray_id
-):
+    central_node_mid: CentralNodeWrapperMid,
+    command_input_factory: JsonFactory,
+    subarray_id: str,
+) -> None:
     """Method to release resources from subarray."""
     release_input_json = prepare_json_args_for_centralnode_commands(
         "release_resources_mid", command_input_factory
@@ -95,10 +100,13 @@ def release_resources_of_subarray(
         "TMC and CSP subarray {subarray_id} must be in EMPTY obsState"
     )
 )
-def check_components_in_empty_obsstate(
-    central_node_mid, event_recorder, subarray_id, subarray_node
-):
-    """Method to check TMC Subarray CSP is in EMPTY obsstate"""
+def check_subarray_is_in_empty_obsstate(
+    central_node_mid: CentralNodeWrapperMid,
+    event_recorder: EventRecorder,
+    subarray_id: str,
+    subarray_node: SubarrayNodeWrapper,
+) -> None:
+    """Method to check TMC Subarray abd CSP Subarray is in EMPTY obsstate"""
     check_subarray_instance(
         central_node_mid.subarray_devices.get("csp_subarray"), subarray_id
     )
@@ -121,9 +129,11 @@ def check_components_in_empty_obsstate(
     )
 )
 def reassign_resources_on_subarray(
-    central_node_mid, subarray_id, command_input_factory
-):
-    """Execute second assign resource"""
+    central_node_mid: CentralNodeWrapperMid,
+    subarray_id: str,
+    command_input_factory: JsonFactory,
+) -> None:
+    """Execute second AssignResources command on TMC"""
 
     check_subarray_instance(central_node_mid.subarray_node, subarray_id)
     assign_input_json = prepare_json_args_for_centralnode_commands(
@@ -138,12 +148,15 @@ def reassign_resources_on_subarray(
         "TMC and CSP subarray {subarray_id} transitions to IDLE obsState"
     )
 )
-def check_obsstate_on_subarray(
-    central_node_mid, event_recorder, subarray_id, subarray_node
-):
+def check_subarray_is_in_idle_obsstate(
+    central_node_mid: CentralNodeWrapperMid,
+    event_recorder: EventRecorder,
+    subarray_id: str,
+    subarray_node: SubarrayNodeWrapper,
+) -> None:
     """
     Check if TMC Subarray and CSP subarray has transitioned
-    to required ObsState
+    to ObsState IDLE
     """
     check_subarray_instance(
         subarray_node.subarray_devices.get("csp_subarray"), subarray_id
