@@ -148,7 +148,9 @@ def invoke_second_assign_Resources(
     assign_input_json["dish"]["receptor_ids"] = resources
 
     LOGGER.info(f"assignresources: {assign_input_json}")
-    central_node_mid.store_resources(json.dumps(assign_input_json))
+    central_node_mid.perform_action(
+        "AssignResources", json.dumps(assign_input_json)
+    )
 
     event_recorder.subscribe_event(
         central_node_mid.subarray_node, "assignedResources"
