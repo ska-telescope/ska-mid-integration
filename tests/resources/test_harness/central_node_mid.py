@@ -95,7 +95,9 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             self.dish1_db = Database(dish1_host, dish1_port)
 
             # Get the Dish1 device class and server
-            dish1_info = self.dish1_db.get_device_info("ska001/elt/master")
+            dish1_info = self.dish1_db.get_device_info(
+                "mid-dish/dish-manager/SKA001"
+            )
             self.dish1_dev_class = dish1_info.class_name
             self.dish1_dev_server = dish1_info.ds_full_name
 

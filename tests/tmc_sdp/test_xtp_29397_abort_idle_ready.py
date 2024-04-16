@@ -76,7 +76,7 @@ def subarray_is_in_given_obsstate(
         input_json = prepare_json_args_for_commands(
             "configure_mid", command_input_factory
         )
-        subarray_node.execute_transition("Configure", input_json)
+        subarray_node.store_configuration_data(input_json)
         assert event_recorder.has_change_event_occurred(
             subarray_node.subarray_devices["sdp_subarray"],
             "obsState",

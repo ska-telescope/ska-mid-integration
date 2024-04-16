@@ -4,6 +4,8 @@ domain: general-monitoring
 instances: ["01"]
 {{- $DishMasterPrefix := .Values.deviceServers.centralnode.DishMasterPrefix }}
 {{- $DishMasterPostfix := .Values.deviceServers.centralnode.DishMasterPostfix }}
+{{- $RealDishMasterTag := .Values.deviceServers.centralnode.RealDishMasterTag }}
+{{- $SimulatorDishMasterTag := .Values.deviceServers.centralnode.SimulatorDishMasterTag }}
 entrypoints:
   - name: "ska_tmc_centralnode.central_node_mid.CentralNodeMid"
 server:
@@ -16,6 +18,8 @@ server:
   {{- $real_dish_name := .Values.global.namespace_dish.dish_names }}
   {{- $DishMasterPrefix := .Values.deviceServers.centralnode.DishMasterPrefix }}
   {{- $DishMasterPostfix := .Values.deviceServers.centralnode.DishMasterPostfix }}
+  {{- $RealDishMasterTag := .Values.deviceServers.centralnode.RealDishMasterTag }}
+  {{- $SimulatorDishMasterTag := .Values.deviceServers.centralnode.SimulatorDishMasterTag }}
   {{- $isSimulatedCsp := .Values.deviceServers.mocks.csp }}
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
   - name: "01"
@@ -39,6 +43,13 @@ server:
         - name: "DishLeafNodePrefix"
           values:
           - "ska_mid/tm_leaf_node/d0"
+        - name: "DishMasterTag"
+          values:
+          {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
+          - "{{ $SimulatorDishMasterTag }}"
+          {{- else }}
+          - "{{ $RealDishMasterTag }}" # Real dish
+          {{- end }}
         - name: "DishVccUri"
           values:
           - "{{.Values.deviceServers.centralnode.DishVccConfig.DishVccUri}}"
@@ -60,7 +71,7 @@ server:
           values:
           {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
           {{- range  (.Values.deviceServers.centralnode.DishIDs)  }}
-          - "{{ . | lower }}/{{ $DishMasterPrefix }}/{{ $DishMasterPostfix }}"
+          - "{{ . | lower }}/{{ $SimulatorDishMasterTag }}"
           {{- end }}
           {{- else }}
           {{- range  (.Values.global.namespace_dish.dish_names)  }}

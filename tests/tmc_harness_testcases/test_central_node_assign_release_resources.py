@@ -1,5 +1,6 @@
 import pytest
 from ska_control_model import ObsState
+from ska_tango_testing.mock.placeholders import Anything
 
 from tests.resources.test_harness.helpers import (
     check_assigned_resources,
@@ -44,8 +45,13 @@ class TestMidCentralNodeAssignResources(object):
         event_recorder.subscribe_event(
             central_node_mid.subarray_node, "assignedResources"
         )
+        event_recorder.subscribe_event(
+            central_node_mid.central_node, "longRunningCommandResult"
+        )
         central_node_mid.move_to_on()
-        central_node_mid.perform_action("AssignResources", assign_input_json)
+        _, unique_id = central_node_mid.perform_action(
+            "AssignResources", assign_input_json
+        )
         assert event_recorder.has_change_event_occurred(
             sdp_sim,
             "obsState",
@@ -64,4 +70,9 @@ class TestMidCentralNodeAssignResources(object):
         assert check_assigned_resources(
             central_node_mid.subarray_node,
             ("SKA001", "SKA036", "SKA063", "SKA100"),
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.central_node,
+            "longRunningCommandResult",
+            (unique_id[0], Anything),
         )

@@ -15,6 +15,8 @@ server:
   {{- $real_dish_name := .Values.global.namespace_dish.dish_names }}
   {{- $DishMasterPrefix := .Values.deviceServers.subarraynode.DishMasterPrefix }}
   {{- $DishMasterPostfix := .Values.deviceServers.subarraynode.DishMasterPostfix }}
+  {{- $RealDishMasterTag := .Values.deviceServers.centralnode.RealDishMasterTag }}
+  {{- $SimulatorDishMasterTag := .Values.deviceServers.centralnode.SimulatorDishMasterTag }}
   {{- $dish_id := .Values.deviceServers.subarraynode.DishIDs }}
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
   {{- range  ( regexSplit " " ((.Values.subarray_count | int) | seq ) -1 ) }}
@@ -30,6 +32,13 @@ server:
           - name: "DishMasterPrefix"
             values:
             - "{{ $DishMasterPrefix }}"
+          - name: "DishMasterTag"
+            values:
+            {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
+            - "{{ $SimulatorDishMasterTag }}"
+            {{- else }}
+            - "{{ $RealDishMasterTag }}" # Real dish
+            {{- end }}
           - name: "DishMasterPostfix"
             values:
             - "{{ $DishMasterPostfix }}"
@@ -54,7 +63,7 @@ server:
             values:
             {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
             {{- range  $dish_id }}
-            - "{{ . | lower }}/{{ $DishMasterPrefix }}/{{ $DishMasterPostfix }}"
+            - "{{ . | lower }}/{{ $SimulatorDishMasterTag }}"
             {{- end }}
             {{- else }}
             {{- range  $real_dish_name }}
@@ -72,9 +81,7 @@ server:
               - "5"
           - name: "CommandTimeOut"
             values:
-              {{- if or (eq $mocks_enabled false) (eq $isSimulatedDish false) }}
               - "60"
-              {{- end }}
           - name: "AbortCommandTimeout"
             values:
               - "100"

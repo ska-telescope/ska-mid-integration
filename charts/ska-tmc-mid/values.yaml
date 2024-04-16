@@ -75,16 +75,16 @@ itango:
 
 centralnode:
   image:
-    registry: artefact.skao.int
+    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-centralnode
     image: ska-tmc-centralnode
-    tag: 0.14.3
+    tag: 0.14.3-dev.cc357ac2f
     pullPolicy: IfNotPresent
 
 subarraynode:
   image:
-    registry: artefact.skao.int
+    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-subarraynode
     image: ska-tmc-subarraynode
-    tag: 0.16.0
+    tag: 0.15.0-dev.cca88c8ec
     pullPolicy: IfNotPresent
 
 sdpleafnodes:
@@ -98,14 +98,14 @@ cspmasterleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.13.4
+    tag: 0.15.3
     pullPolicy: IfNotPresent
 
 cspsubarrayleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.13.4
+    tag: 0.15.3
     pullPolicy: IfNotPresent
 
 dishleafnode:
@@ -117,11 +117,11 @@ dishleafnode:
 
 resources:
   limits:
-    cpu: 500m
-    memory: 500Mi
+    cpu: 3500m
+    memory: 2000Mi
   requests:
     cpu: 500m
-    memory: 500Mi
+    memory: 1000Mi
 
 
 deviceServers:
@@ -134,6 +134,8 @@ deviceServers:
     DishIDs: ["SKA001", "SKA036", "SKA063", "SKA100"]
     DishMasterPrefix: "elt"
     DishMasterPostfix: "master"
+    RealDishMasterTag: "mid-dish/dish-manager"
+    SimulatorDishMasterTag: "elt/master"
     DishVccConfig:
       DishVccUri: "car://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata"
       DishVccFilePath: "instrument/ska1_mid_psi/ska-mid-cbf-system-parameters.json"
@@ -147,6 +149,8 @@ deviceServers:
     DishIDs: ["SKA001", "SKA036", "SKA063", "SKA100"]
     DishMasterPrefix: "elt"
     DishMasterPostfix: "master"
+    RealDishMasterTag: "mid-dish/dish-manager"
+    SimulatorDishMasterTag: "elt/master"
 
   sdpsubarrayleafnode:
     enabled: true 
@@ -165,6 +169,9 @@ deviceServers:
   cspsubarrayleafnode:
     enabled: true
     file: "data/cspsubarrayleafnode.yaml"
+    DelayCadence: 10.0
+    DelayValidityPeriod: 20.0
+    DelayModelTimeInAdvance: 30
 
   dishleafnode:
     enabled: true

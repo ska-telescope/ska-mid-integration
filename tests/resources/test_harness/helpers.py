@@ -7,6 +7,7 @@ from datetime import datetime
 from typing import Any
 
 import pytest
+from astropy.time import Time
 from ska_ser_logging import configure_logging
 from ska_tango_base.commands import ResultCode
 from ska_tango_base.control_model import HealthState
@@ -439,20 +440,63 @@ def check_lrcr_events(
 def wait_till_delay_values_are_populated(csp_subarray_leaf_node) -> None:
     start_time = time.time()
     time_elapsed = 0
-    while (
-        csp_subarray_leaf_node.delayModel == "no_value"
-        and time_elapsed <= TIMEOUT
-    ):
+    while csp_subarray_leaf_node.delayModel == "" or time_elapsed <= TIMEOUT:
         time.sleep(1)
         time_elapsed = time.time() - start_time
-    if (
-        csp_subarray_leaf_node.delayModel == "no_value"
-        and time_elapsed > TIMEOUT
-    ):
+    delay_generated_time = datetime.now()
+    delay_json = csp_subarray_leaf_node.delayModel
+    delay_json_dict = json.loads(delay_json)
+    if csp_subarray_leaf_node.delayModel == "" and time_elapsed > TIMEOUT:
         raise Exception(
             "Timeout while waiting for CspSubarrayLeafNode to generate \
                 delay values."
         )
+    return delay_json_dict, delay_generated_time
+
+
+def wait_for_delay_updates_stop_on_delay_model(csp_subarray_leaf_node) -> None:
+    start_time = time.time()
+    time_elapsed = 0
+    while csp_subarray_leaf_node.delayModel != "" and time_elapsed <= TIMEOUT:
+        time.sleep(1)
+        time_elapsed = time.time() - start_time
+    LOGGER.info(f"time_elapsed: {time_elapsed}")
+    if time_elapsed > TIMEOUT:
+        raise Exception(
+            "Timeout while waiting for CspSubarrayLeafNode to generate \
+                delay values."
+        )
+
+
+def generate_ska_epoch_tai_value() -> Time:
+    """
+    Generating SKA Epoch in TAI format
+
+    :return: ska_epoch_tai
+    :rtype: Time
+    """
+    SKA_EPOCH = "1999-12-31T23:59:28Z"
+    ska_epoch_utc = Time(SKA_EPOCH, scale="utc")
+    ska_epoch_tai = ska_epoch_utc.unix_tai
+    return ska_epoch_tai
+
+
+def calculate_epoch_difference(
+    delay_generated_time: Time, ska_epoch_tai: Time, delay_json_dict: dict
+) -> int:
+    """
+    Calculate Difference between epoch in delay model json and
+    epoch calculated through delay generated timestamp
+
+    :return: epoch_difference
+    :rtype: int
+    """
+    delay_generated_time_utc = Time(delay_generated_time, scale="utc")
+    delay_generated_time_tai = delay_generated_time_utc.unix_tai
+    epoch = delay_generated_time_tai - ska_epoch_tai
+    epoch_in_json = delay_json_dict["start_validity_sec"]
+    epoch_difference = epoch_in_json - epoch
+    return epoch_difference
 
 
 def get_simulated_devices_info() -> dict:
@@ -665,3 +709,39 @@ def check_long_running_command_status(
         time.sleep(0.1)
         elapsed_time = time.time() - start_time
     return False
+
+
+def check_for_device_command_event(
+    device: DeviceProxy,
+    attr_name: str,
+    event_data: str,
+    event_recorder: EventRecorder,
+    command_name: str,
+) -> bool:
+    """Method to check event from the device.
+
+    Args:
+        device (DeviceProxy): device proxy
+        attr_name (str): attribute name
+        event_data (str): event data to be searched
+        event_recorder(EventRecorder): event recorder instance
+        to check for events.
+    """
+    event_found: bool = False
+    timeout: int = 100
+    elapsed_time: float = 0
+    start_time: float = time.time()
+    while not event_found and elapsed_time < timeout:
+        assertion_data = event_recorder.has_change_event_occurred(
+            device,
+            attribute_name=attr_name,
+            attribute_value=(Anything, Anything),
+        )
+        if assertion_data["attribute_value"][0].endswith(command_name):
+            if event_data in assertion_data["attribute_value"][1]:
+                event_found = True
+                return event_found
+
+        elapsed_time = time.time() - start_time
+
+    return event_found

@@ -11,7 +11,7 @@ namespace = os.getenv("KUBE_NAMESPACE")
 cluster_domain = os.getenv("CLUSTER_DOMAIN", "cluster.local")
 
 
-@pytest.mark.xfail(
+@pytest.mark.skip(
     reason="Alarm summary key error to be resolved under SAH-1510"
 )
 @pytest.mark.post_deployment

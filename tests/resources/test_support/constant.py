@@ -1,5 +1,5 @@
 """This module have all required constants for ska-tmc-integration"""
-import os
+# import os
 
 from ska_control_model import ObsState
 
@@ -8,30 +8,30 @@ from tests.resources.test_support.common_utils.result_code import (
     ResultCode,
 )
 
-dish_name_1 = os.getenv("DISH_NAMESPACE_1")
-dish_name_36 = os.getenv("DISH_NAMESPACE_2")
-dish_name_63 = os.getenv("DISH_NAMESPACE_3")
-dish_name_100 = os.getenv("DISH_NAMESPACE_4")
+# dish_name_1 = os.getenv("DISH_NAMESPACE_1")
+# dish_name_36 = os.getenv("DISH_NAMESPACE_2")
+# dish_name_63 = os.getenv("DISH_NAMESPACE_3")
+# dish_name_100 = os.getenv("DISH_NAMESPACE_4")
 
-dish_fqdn_1 = (
-    f"tango://tango-databaseds.{dish_name_1}.svc.cluster"
-    ".local:10000/ska001/elt/master"
-)
+# dish_fqdn_1 = (
+#     f"tango://tango-databaseds.{dish_name_1}.svc.cluster"
+#     ".local:10000/ska001/elt/master"
+# )
 
-dish_fqdn_36 = (
-    f"tango://tango-databaseds.{dish_name_36}.svc.cluster"
-    ".local:10000/ska036/elt/master"
-)
+# dish_fqdn_36 = (
+#     f"tango://tango-databaseds.{dish_name_36}.svc.cluster"
+#     ".local:10000/ska036/elt/master"
+# )
 
-dish_fqdn_63 = (
-    f"tango://tango-databaseds.{dish_name_63}.svc.cluster"
-    ".local:10000/ska063/elt/master"
-)
+# dish_fqdn_63 = (
+#     f"tango://tango-databaseds.{dish_name_63}.svc.cluster"
+#     ".local:10000/ska063/elt/master"
+# )
 
-dish_fqdn_100 = (
-    f"tango://tango-databaseds.{dish_name_100}.svc.cluster"
-    ".local:10000/ska100/elt/master"
-)
+# dish_fqdn_100 = (
+#     f"tango://tango-databaseds.{dish_name_100}.svc.cluster"
+#     ".local:10000/ska100/elt/master"
+# )
 
 centralnode = "ska_mid/tm_central/central_node"
 tmc_subarraynode1 = "ska_mid/tm_subarray_node/1"

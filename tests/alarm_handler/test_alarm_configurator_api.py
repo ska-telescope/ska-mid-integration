@@ -53,7 +53,7 @@ def remove_alarm_api():
     assert response_data["alarm_summary"] is None
 
 
-@pytest.mark.xfail(
+@pytest.mark.skip(
     reason="Alarm summary key error to be resolved under SAH-1510"
 )
 @pytest.mark.post_deployment
@@ -63,7 +63,7 @@ def test_configure_alarms():
     add_alarms_api("alarm_file1.txt")
 
 
-@pytest.mark.xfail(
+@pytest.mark.skip(
     reason="Alarm summary key error to be resolved under SAH-1510"
 )
 @pytest.mark.post_deployment
