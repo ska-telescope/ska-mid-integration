@@ -189,6 +189,12 @@ def invoke_second_assign_Resources(
     LOGGER.info(
         f"Assigned >>> {central_node_mid.subarray_node.assignedResources}"
     )
+    assert central_node_mid.subarray_node.assignedResources == (
+        "SKA001",
+        "SKA036",
+        "SKA063",
+        "SKA100",
+    )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_node,
         "assignedResources",
