@@ -174,7 +174,12 @@ def check_resultcode_and_assifned_resources(
     LOGGER.info(f"assertion_data:: {assertion_data}")
     LOGGER.info(f"assertion_data value:: {value}")
     LOGGER.info(f"type:: {type(value)}")
-    assert tuple(assigned_resources) in assertion_data["attribute_value"]
+    LOGGER.info(f"assigned_resources:: {assigned_resources}")
+    LOGGER.info(f"assigned_resources:: {type(assigned_resources)}")
+    value1 = tuple(assigned_resources)
+    LOGGER.info(f"tuple assign:: {value1}")
+    LOGGER.info(f"type tuple assign:: {type(value1)}")
+    assert value1 in assertion_data["attribute_value"]
     # assert event_recorder.has_change_event_occurred(
     #     subarray_node.subarray_node,
     #     "assignedResources",
