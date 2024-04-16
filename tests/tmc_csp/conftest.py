@@ -43,6 +43,9 @@ def given_a_tmc(central_node_mid, event_recorder, subarray_node):
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
 
     event_recorder.subscribe_event(
+        subarray_node.subarray_devices["csp_subarray"], "scanID"
+    )
+    event_recorder.subscribe_event(
         subarray_node.subarray_devices["csp_subarray"], "scanType"
     )
 
@@ -53,10 +56,6 @@ def given_a_tmc(central_node_mid, event_recorder, subarray_node):
     event_recorder.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
     )
-
-    # event_recorder.subscribe_event(
-    #     subarray_node.subarray_devices["csp_subarray"], "scanID"
-    # )
 
     central_node_mid.move_to_on()
 
