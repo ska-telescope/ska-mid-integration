@@ -82,7 +82,7 @@ def check_telescope_state_standby(central_node_mid, event_recorder):
     )
 
     assert (
-        central_node_mid.centralnode.telescopeState == DevState.STANDBY
+        central_node_mid.central_node.telescopeState == DevState.STANDBY
         or DevState.OFF
     )
 
