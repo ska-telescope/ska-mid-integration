@@ -15,7 +15,7 @@ from tests.resources.test_harness.simulator_factory import SimulatorFactory
 
 @pytest.mark.tmc_sdp_unhappy_path
 @scenario(
-    "../features/tmc_sdp/xtp_xxxxx_health_state_unhappy_path.feature",
+    "../features/tmc_sdp/xtp_39503_health_state_unhappy_path.feature",
     "Verify TMC TelescopeHealthState transition based on SDP Controller"
     + " HealthState",
 )

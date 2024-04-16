@@ -1,5 +1,5 @@
 # This BDD test performs TMC-SDP pairwise testing to verify healthState behaviour
-@XTP-29381 @Team_SAHYADRI @tmc_sdp_unhappy
+@XTP-39503 @XTP-29381 @Team_SAHYADRI @tmc_sdp_unhappy
 Scenario Outline: Verify TMC TelescopeHealthState transition based on SDP Controller HealthState
     Given a Telescope consisting of TMC, SDP, simulated CSP and simulated Dish 
     When The <devices> health state changes to <health_state> 
