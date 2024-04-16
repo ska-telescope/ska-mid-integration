@@ -19,6 +19,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 LOGGER = logging.getLogger(__name__)
+assigned_resources = []
 
 
 @pytest.mark.tmc_csp
@@ -37,6 +38,7 @@ def subarray_is_in_empty_obsstate(
     central_node_mid: CentralNodeWrapperMid,
     event_recorder: EventRecorder,
     subarray_id: str,
+    subarray_node: SubarrayNodeWrapper,
 ) -> None:
     """Checks whether subarray is in empty obsstae or not."""
     assert central_node_mid.central_node.ping() > 0
@@ -58,7 +60,7 @@ def subarray_is_in_empty_obsstate(
         DevState.ON,
     )
     assert event_recorder.has_change_event_occurred(
-        central_node_mid.subarray_node,
+        subarray_node.subarray_node,
         "obsState",
         ObsState.EMPTY,
     )
@@ -66,64 +68,50 @@ def subarray_is_in_empty_obsstate(
 
 @when(
     parsers.parse(
-        "I invoked First AssignResources on TMC subarray {subarray_id} with "
+        "I invoke First AssignResources on TMC subarray {subarray_id} with "
         + "{receptors1} on TMC subarray {subarray_id}"
     )
 )
 def invoke_first_assign_resources(
     central_node_mid: CentralNodeWrapperMid,
+    subarray_node: SubarrayNodeWrapper,
     subarray_id: str,
     command_input_factory: JsonFactory,
     receptors1: list,
-    event_recorder: EventRecorder,
 ) -> None:
     """
     Invokes first AssignResources command on TMC and check assigned resources
     """
 
-    check_subarray_instance(central_node_mid.subarray_node, subarray_id)
+    check_subarray_instance(subarray_node.subarray_node, subarray_id)
     input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
     assign_input_json = json.loads(input_json)
     resources = ast.literal_eval(receptors1)
     assign_input_json["dish"]["receptor_ids"] = resources
+    assigned_resources.extend(resources)
+    LOGGER.info(f"assigned resources::: {assigned_resources}")
 
     LOGGER.info(f"assignresources: {assign_input_json}")
-    _, unique_id = central_node_mid.store_resources(
+    pytest.command_result = central_node_mid.store_resources(
         json.dumps(assign_input_json)
     )
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "longRunningCommandResult"
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "longRunningCommandResult",
-        (unique_id[0], str(ResultCode.OK.value)),
-    )
-
-    event_recorder.subscribe_event(
-        central_node_mid.subarray_node, "assignedResources"
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.subarray_node,
-        "assignedResources",
-        ("SKA001", "SKA036"),
-    )
+    LOGGER.info(f"Pytest result:{pytest.command_result}")
 
 
 @then(parsers.parse("CSP subarray {subarray_id} must be in IDLE ObsState"))
 def check_csp_subarray_is_in_idle_obsstate(
-    central_node_mid: CentralNodeWrapperMid,
+    subarray_node: SubarrayNodeWrapper,
     event_recorder: EventRecorder,
     subarray_id: str,
 ) -> None:
     """Method to check CSP Subarray is in IDLE obsstate"""
     check_subarray_instance(
-        central_node_mid.subarray_devices.get("csp_subarray"), subarray_id
+        subarray_node.subarray_devices.get("csp_subarray"), subarray_id
     )
     assert event_recorder.has_change_event_occurred(
-        central_node_mid.subarray_devices.get("csp_subarray"),
+        subarray_node.subarray_devices.get("csp_subarray"),
         "obsState",
         ObsState.IDLE,
     )
@@ -131,13 +119,12 @@ def check_csp_subarray_is_in_idle_obsstate(
 
 @then(parsers.parse("TMC subarray {subarray_id} must be in IDLE obsState"))
 def check_subarray_is_in_idle_obsstate(
-    central_node_mid: CentralNodeWrapperMid,
     event_recorder: EventRecorder,
     subarray_id: str,
     subarray_node: SubarrayNodeWrapper,
 ) -> None:
     """Method to check TMC Subarray is in IDLE obsstate"""
-    check_subarray_instance(central_node_mid.subarray_node, subarray_id)
+    check_subarray_instance(subarray_node.subarray_node, subarray_id)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
@@ -145,9 +132,48 @@ def check_subarray_is_in_idle_obsstate(
     )
 
 
+@then(
+    parsers.parse(
+        "TMC subarray generated Resultcode Ok and resources are "
+        + "assigned to TMC subarray {subarray_id}"
+    )
+)
+def check_resultcode_and_assifned_resources(
+    central_node_mid: CentralNodeWrapperMid,
+    event_recorder: EventRecorder,
+    subarray_id: str,
+    subarray_node: SubarrayNodeWrapper,
+):
+    """
+    Method to check Resultcode of AssignResources is Ok and
+    check resouurces assigned to TMC subarray
+    """
+    check_subarray_instance(subarray_node.subarray_node, subarray_id)
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+    )
+
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "assignedResources"
+    )
+    LOGGER.info(f"assigned resources: {assigned_resources}")
+    LOGGER.info(f"type assigned resources: {type(assigned_resources)}")
+    LOGGER.info(f"tuple>> {tuple(assigned_resources)}")
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "assignedResources",
+        tuple(assigned_resources),
+    )
+
+
 @when(
     parsers.parse(
-        "I invoked Second AssignResources on TMC subarray {subarray_id} with "
+        "I invoke Second AssignResources on TMC subarray {subarray_id} with "
         + "{receptors1} on TMC subarray {subarray_id}"
     )
 )
@@ -157,46 +183,22 @@ def invoke_second_assign_Resources(
     command_input_factory: JsonFactory,
     receptors1: list,
     event_recorder: EventRecorder,
+    subarray_node: SubarrayNodeWrapper,
 ) -> None:
     """
     Invokes second AssignResources command on TMC and check assigned resources
     """
 
-    check_subarray_instance(central_node_mid.subarray_node, subarray_id)
+    check_subarray_instance(subarray_node.subarray_node, subarray_id)
     input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
     assign_input_json = json.loads(input_json)
     resources = ast.literal_eval(receptors1)
     assign_input_json["dish"]["receptor_ids"] = resources
+    assigned_resources.extend(resources)
 
     LOGGER.info(f"assignresources: {assign_input_json}")
-    _, unique_id = central_node_mid.perform_action(
+    pytest.command_result = central_node_mid.perform_action(
         "AssignResources", json.dumps(assign_input_json)
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "longRunningCommandResult"
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "longRunningCommandResult",
-        (unique_id[0], str(ResultCode.OK.value)),
-    )
-
-    event_recorder.subscribe_event(
-        central_node_mid.subarray_node, "assignedResources"
-    )
-    LOGGER.info(
-        f"Assigned >>> {central_node_mid.subarray_node.assignedResources}"
-    )
-    assert central_node_mid.subarray_node.assignedResources == (
-        "SKA001",
-        "SKA036",
-        "SKA063",
-        "SKA100",
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.subarray_node,
-        "assignedResources",
-        ("SKA001", "SKA036", "SKA063", "SKA100"),
     )

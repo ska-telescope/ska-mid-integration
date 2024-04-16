@@ -10,12 +10,14 @@ Scenario: Validate second AssignResources command after first successful AssignR
 
 Scenario: Validate succesive AssignResources command
     Given TMC subarray <subarray_id> is in EMPTY ObsState
-    When I invoked First AssignResources on TMC subarray <subarray_id> with <receptors1> on TMC subarray <subarray_id>
+    When I invoke First AssignResources on TMC subarray <subarray_id> with <receptors1> on TMC subarray <subarray_id>
     Then CSP subarray <subarray_id> must be in IDLE ObsState
     And TMC subarray <subarray_id> must be in IDLE obsState
-    When I invoked Second AssignResources on TMC subarray <subarray_id> with <receptors2> on TMC subarray <subarray_id>
+    And TMC subarray generated Resultcode Ok and resources are assigned to TMC subarray <subarray_id>
+    When I invoke Second AssignResources on TMC subarray <subarray_id> with <receptors2> on TMC subarray <subarray_id>
     Then CSP subarray <subarray_id> must be in IDLE ObsState
     And TMC subarray <subarray_id> must be in IDLE obsState
+    And TMC subarray generated Resultcode Ok and resources are assigned to TMC subarray <subarray_id>
     Examples:
     | subarray_id | receptors1          | receptors2          |
     | 1           | ["SKA001","SKA036"] | ["SKA063","SKA100"] |
