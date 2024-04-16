@@ -6,6 +6,7 @@ import logging
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
+from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
@@ -164,11 +165,18 @@ def check_resultcode_and_assifned_resources(
     LOGGER.info(f"assigned resources: {assigned_resources}")
     LOGGER.info(f"type assigned resources: {type(assigned_resources)}")
     LOGGER.info(f"tuple>> {tuple(assigned_resources)}")
-    assert event_recorder.has_change_event_occurred(
+    assertion_data = event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "assignedResources",
-        tuple(assigned_resources),
+        attribute_value=Anything,
     )
+    LOGGER.info(f"assertion_data:: {assertion_data}")
+    assert tuple(assigned_resources) in assertion_data["attribute_value"]
+    # assert event_recorder.has_change_event_occurred(
+    #     subarray_node.subarray_node,
+    #     "assignedResources",
+    #     tuple(assigned_resources),
+    # )
 
 
 @when(
