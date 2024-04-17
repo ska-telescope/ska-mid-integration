@@ -694,7 +694,7 @@ def update_scan_type(configure_json: str, json_value: str) -> str:
     :param json_value: new json value to be updated in json
     """
     input_json = json.loads(configure_json)
-    input_json["csp"]["scan_type"] = json_value
+    input_json["sdp"]["scan_type"] = json_value
     input_json = json.dumps(input_json)
     return input_json
 
