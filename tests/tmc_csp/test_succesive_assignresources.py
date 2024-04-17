@@ -14,9 +14,9 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
+from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
-@pytest.mark.skip
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/incremental_assignresources.feature",
@@ -63,7 +63,7 @@ def telescope_is_in_idle_state(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-    central_node_mid.store_resources(assign_input_json)
+    pytest.command_result = central_node_mid.store_resources(assign_input_json)
 
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_devices.get("csp_subarray"),
@@ -74,6 +74,14 @@ def telescope_is_in_idle_state(
         central_node_mid.subarray_node,
         "obsState",
         ObsState.IDLE,
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
 
 
@@ -92,7 +100,9 @@ def release_resources_of_subarray(
         "release_resources_mid", command_input_factory
     )
     check_subarray_instance(central_node_mid.subarray_node, subarray_id)
-    central_node_mid.invoke_release_resources(release_input_json)
+    pytest.command_result = central_node_mid.invoke_release_resources(
+        release_input_json
+    )
 
 
 @then(
@@ -121,6 +131,14 @@ def check_subarray_is_in_empty_obsstate(
         "obsState",
         ObsState.EMPTY,
     )
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+    )
 
 
 @when(
@@ -140,7 +158,7 @@ def reassign_resources_on_subarray(
         "assign_resources_mid", command_input_factory
     )
 
-    central_node_mid.store_resources(assign_input_json)
+    pytest.command_result = central_node_mid.store_resources(assign_input_json)
 
 
 @then(
@@ -173,4 +191,12 @@ def check_subarray_is_in_idle_obsstate(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
