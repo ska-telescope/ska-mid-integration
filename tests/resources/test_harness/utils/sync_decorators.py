@@ -84,7 +84,7 @@ def sync_assign_resources(device_dict):
                 device_dict.get("tmc_subarraynode"),
             ]
             for device_name in obs_state_device_names:
-                assert Resource(device_name) in ["EMPTY", "IDLE"]
+                assert Resource(device_name).obsState in ["EMPTY", "IDLE"]
             set_wait_for_obsstate = kwargs.get("set_wait_for_obsstate", True)
             result = func(*args, **kwargs)
             if set_wait_for_obsstate:
