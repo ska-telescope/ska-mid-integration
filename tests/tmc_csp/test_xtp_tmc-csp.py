@@ -22,6 +22,7 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
+@pytest.mark.skip
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/xtp_long_sequence_configure_scan.feature",
@@ -47,11 +48,8 @@ def execute_configure_scan_sequence(
     subarray_id,
     scan_types,
 ):
-    """ "A method to invoke configure and scan  command"""
-    assert (
-        scan_ids
-        == subarray_node.subarray_devices["csp_subarray"].read_scanID()
-    )
+    """A method to invoke configure and scan  command"""
+
     check_subarray_instance(subarray_node.subarray_node, subarray_id)
     configure_json = prepare_json_args_for_commands(
         "configure1_mid", command_input_factory

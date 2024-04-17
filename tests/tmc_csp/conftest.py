@@ -5,8 +5,7 @@ tests."""
 import json
 import logging
 
-import pytest
-from pytest_bdd import given, parsers, scenario, then, when
+from pytest_bdd import given, parsers, then, when
 from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
 from tango import DevState
@@ -23,17 +22,6 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
-
-
-@pytest.mark.tmc_csp
-@scenario(
-    "../features/tmc_csp/xtp_long_sequence_configure_scan.feature",
-    "TMC Mid executes configure-scan sequence of commands successfully",
-)
-def test_tmc_csp_long_sequences():
-    """
-    Test case to verify TMC-CSP functionality with long sequences of commands
-    """
 
 
 @given("Telescope is ON state")
@@ -58,9 +46,9 @@ def given_a_tmc(central_node_mid, event_recorder, subarray_node):
     # )
     # scan_id = subarray_node.subarray_devices["csp_subarray"].scanID
 
-    event_recorder.subscribe_event(
-        subarray_node.subarray_devices["csp_subarray"], "scanType"
-    )
+    # event_recorder.subscribe_event(
+    #     subarray_node.subarray_devices["csp_subarray"], "scanType"
+    # )
 
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
@@ -126,57 +114,105 @@ def telescope_is_in_idle_state(
     )
 
 
-@when(
-    parsers.parse(
-        "I reassign with new resources to TMC SubarrayNode {subarray_id}"
-    )
-)
-def reassign_resources(
-    central_node_mid,
-    event_recorder,
-    command_input_factory,
-    subarray_id,
-    subarray_node,
-):
-    """A method to move subarray into the IDLE ObsState."""
+# @when(
+#     parsers.parse(
+#         "I reassign with new resources to TMC SubarrayNode {subarray_id}"
+#     )
+# )
+# def reassign_resources(
+#     central_node_mid,
+#     event_recorder,
+#     command_input_factory,
+#     subarray_id,
+#     subarray_node,
+# ):
+#     """A method to move subarray into the IDLE ObsState."""
 
-    assign_input_json = prepare_json_args_for_centralnode_commands(
-        "assign_resources_mid_multiple_scantype", command_input_factory
-    )
+#     assign_input_json = prepare_json_args_for_centralnode_commands(
+#         "assign_resources_mid_multiple_scantype", command_input_factory
+#     )
 
-    assign_str = json.loads(assign_input_json)
-    # Here we are adding this to get an event of ObsState CONFIGURING from
-    # SDP Subarray
-    # assign_str["sdp"]["processing_blocks"][0]["parameters"][
-    #     "time-to-ready"
-    # ] = 2
+#     assign_str = json.loads(assign_input_json)
+#     # Here we are adding this to get an event of ObsState CONFIGURING from
+#     # SDP Subarray
+#     # assign_str["sdp"]["processing_blocks"][0]["parameters"][
+#     #     "time-to-ready"
+#     # ] = 2
 
-    del assign_str["dish"]["receptor_ids"][0]
+#     del assign_str["dish"]["receptor_ids"][0]
 
-    _, unique_id = central_node_mid.store_resources(json.dumps(assign_str))
+#     _, unique_id = central_node_mid.store_resources(json.dumps(assign_str))
 
-    check_subarray_instance(
-        subarray_node.subarray_devices.get("csp_subarray"), subarray_id
-    )
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_devices.get("csp_subarray"),
-        "obsState",
-        ObsState.IDLE,
-    )
+#     check_subarray_instance(
+#         subarray_node.subarray_devices.get("csp_subarray"), subarray_id
+#     )
+#     assert event_recorder.has_change_event_occurred(
+#         subarray_node.subarray_devices.get("csp_subarray"),
+#         "obsState",
+#         ObsState.IDLE,
+#     )
 
-    check_subarray_instance(subarray_node.subarray_node, subarray_id)
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "obsState",
-        ObsState.IDLE,
-    )
+#     check_subarray_instance(subarray_node.subarray_node, subarray_id)
+#     assert event_recorder.has_change_event_occurred(
+#         subarray_node.subarray_node,
+#         "obsState",
+#         ObsState.IDLE,
+#     )
 
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "longRunningCommandResult",
-        (unique_id[0], str(int(ResultCode.OK))),
-        lookahead=5,
-    )
+#     assert event_recorder.has_change_event_occurred(
+#         central_node_mid.central_node,
+#         "longRunningCommandResult",
+#         (unique_id[0], str(int(ResultCode.OK))),
+#         lookahead=5,
+#     )
+
+
+# @when(
+#     parsers.parse(
+#         "configure and scan TMC SubarrayNode {subarray_id} "
+#         "for each {scan_types} and {scan_ids}"
+#     )
+# )
+# def execute_configure_scan_sequence(
+#     subarray_node,
+#     command_input_factory,
+#     scan_ids,
+#     event_recorder,
+#     subarray_id,
+#     scan_types,
+# ):
+#     """A method to invoke configure and scan  command"""
+#     subarray_node.set_subarray_id(subarray_id)
+#     configure_input_json = prepare_json_args_for_commands(
+#         "configure_mid", command_input_factory
+#     )
+#     configure_input_json = json.loads(configure_input_json)
+#     configure_input_json["sdp"]["scan_type"] = scan_types
+#     configure_input_json = json.dumps(configure_input_json)
+#     subarray_node.execute_transition("Configure", argin=configure_input_json)
+#     event_recorder.subscribe_event(
+#         subarray_node.subarray_devices["csp_subarray"], "obsState"
+#     )
+#     assert event_recorder.has_change_event_occurred(
+#         subarray_node.subarray_devices["csp_subarray"],
+#         "obsState",
+#         ObsState.READY,
+#     )
+#     scan_input_json = prepare_json_args_for_commands(
+#         "scan_mid", command_input_factory
+#     )
+#     scan_input_json = json.loads(scan_input_json)
+#     scan_input_json["scan_id"] = scan_ids
+#     scan_input_json = json.dumps(scan_input_json)
+#     subarray_node.store_scan_data(scan_input_json)
+#     event_recorder.subscribe_event(
+#         subarray_node.subarray_devices["csp_subarray"], "obsState"
+#     )
+#     assert event_recorder.has_change_event_occurred(
+#         subarray_node.subarray_devices["csp_subarray"],
+#         "obsState",
+#         ObsState.SCANNING,
+#     )
 
 
 @when(parsers.parse("end the configuration on TMC SubarrayNode {subarray_id}"))
@@ -261,24 +297,3 @@ def check_tmc_is_in_empty_obsstate(
         "obsState",
         ObsState.EMPTY,
     )
-
-
-# @when(parsers.parse("reperform scan with same configuration and
-# new scan id"))
-# def reexecute_scan_command(
-#     command_input_factory,
-#     event_recorder,
-#     subarray_node,
-# ):
-#     """ "A method to invoke scan command followed by end scan
-#     with lesser duration"""
-
-#     scan_id = 10
-#     scan_json = prepare_json_args_for_commands(
-#         "scan_mid", command_input_factory
-#     )
-
-#     scan_json = update_scan_id(scan_json, scan_id)
-#     _, unique_id = subarray_node.execute_transition("Scan", argin=scan_json)
-
-#     check_scan_successful(subarray_node, event_recorder, scan_id, unique_id)
