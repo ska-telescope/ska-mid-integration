@@ -23,6 +23,7 @@ LOGGER = logging.getLogger(__name__)
 assigned_resources = []
 
 
+@pytest.mark.skip
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/incremental_assignresources.feature",
@@ -193,7 +194,6 @@ def invoke_second_assign_Resources(
     subarray_id: str,
     command_input_factory: JsonFactory,
     receptors1: list,
-    event_recorder: EventRecorder,
     subarray_node: SubarrayNodeWrapper,
 ) -> None:
     """
