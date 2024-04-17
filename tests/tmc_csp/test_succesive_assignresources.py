@@ -23,7 +23,7 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
     "Validate second AssignResources command after "
     "first successful AssignResources and ReleaseResources are executed",
 )
-def test_tmc_csp_reassign_resources():
+def test_tmc_csp_assign_release_assign_resources():
     """
     Test case to verify below sequence of events on TMC-CSP
      AssignResources,ReleaseResources,AssignResources
