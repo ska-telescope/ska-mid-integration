@@ -2,7 +2,6 @@ import functools
 from contextlib import contextmanager
 
 from tests.resources.test_harness.utils.wait_helpers import Waiter
-from tests.resources.test_support.common_utils.base_utils import DeviceUtils
 from tests.resources.test_support.common_utils.common_helpers import Resource
 
 TIMEOUT = 500
@@ -79,15 +78,13 @@ def sync_assign_resources(device_dict):
     def decorator_sync_assign_resources(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            device = DeviceUtils(
-                obs_state_device_names=[
-                    device_dict.get("csp_subarray"),
-                    device_dict.get("sdp_subarray"),
-                    device_dict.get("tmc_subarraynode"),
-                ]
-            )
-            for device_name in device:
-                assert device_name.obsState in ["EMPTY", "IDLE"]
+            obs_state_device_names = [
+                device_dict.get("csp_subarray"),
+                device_dict.get("sdp_subarray"),
+                device_dict.get("tmc_subarraynode"),
+            ]
+            for device_name in obs_state_device_names:
+                assert Resource(device_name) in ["EMPTY", "IDLE"]
             set_wait_for_obsstate = kwargs.get("set_wait_for_obsstate", True)
             result = func(*args, **kwargs)
             if set_wait_for_obsstate:
