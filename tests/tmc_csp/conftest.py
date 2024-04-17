@@ -14,12 +14,11 @@ from tango import DevState
 from tests.resources.test_harness.helpers import (
     check_subarray_instance,
     prepare_json_args_for_centralnode_commands,
-    prepare_json_args_for_commands,
-    update_scan_id,
 )
-from tests.resources.test_harness.utils.common_utils import (
-    check_scan_successful,
-)
+
+# from tests.resources.test_harness.utils.common_utils import (
+#     check_scan_successful,
+# )
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 configure_logging(logging.DEBUG)
@@ -264,7 +263,8 @@ def check_tmc_is_in_empty_obsstate(
     )
 
 
-# @when(parsers.parse("reperform scan with same configuration and new scan id"))
+# @when(parsers.parse("reperform scan with same configuration and
+# new scan id"))
 # def reexecute_scan_command(
 #     command_input_factory,
 #     event_recorder,
