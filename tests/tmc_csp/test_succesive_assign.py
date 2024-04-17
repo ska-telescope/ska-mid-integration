@@ -23,7 +23,6 @@ LOGGER = logging.getLogger(__name__)
 assigned_resources = []
 
 
-@pytest.mark.skip
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/incremental_assignresources.feature",
@@ -216,6 +215,6 @@ def invoke_second_assign_Resources(
     assigned_resources.extend(resources)
 
     LOGGER.info(f"assignresources: {assign_input_json}")
-    pytest.command_result = central_node_mid.perform_action(
-        "AssignResources", json.dumps(assign_input_json)
+    pytest.command_result = central_node_mid.store_resources(
+        json.dumps(assign_input_json)
     )
