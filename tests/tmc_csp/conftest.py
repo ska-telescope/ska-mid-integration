@@ -5,7 +5,8 @@ tests."""
 import json
 import logging
 
-from pytest_bdd import given, parsers, then, when
+import pytest
+from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
 from tango import DevState
@@ -23,6 +24,17 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
+
+
+@pytest.mark.tmc_csp
+@scenario(
+    "../features/tmc_csp/xtp_long_sequence_configure_scan.feature",
+    "TMC Mid executes configure-scan sequence of commands successfully",
+)
+def test_tmc_csp_long_sequences():
+    """
+    Test case to verify TMC-CSP functionality with long sequences of commands
+    """
 
 
 @given("Telescope is ON state")
