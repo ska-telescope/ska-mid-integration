@@ -133,13 +133,8 @@ def check_subarray_is_in_idle_obsstate(
     )
 
 
-@then(
-    parsers.parse(
-        "TMC subarray generated Resultcode Ok and resources are "
-        + "assigned to TMC subarray {subarray_id}"
-    )
-)
-def check_resultcode_and_assifned_resources(
+@then(parsers.parse("Resources are assigned to TMC subarray {subarray_id}"))
+def check_assigned_resources(
     central_node_mid: CentralNodeWrapperMid,
     event_recorder: EventRecorder,
     subarray_id: str,
