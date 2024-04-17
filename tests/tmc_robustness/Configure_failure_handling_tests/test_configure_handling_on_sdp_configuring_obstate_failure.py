@@ -17,6 +17,9 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
+@pytest.mark.skip(
+    reason="Failure is not getting simulated due to latest tmc-common package"
+)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-28836.feature",

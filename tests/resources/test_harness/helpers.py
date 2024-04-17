@@ -726,6 +726,7 @@ def check_for_device_command_event(
         event_data (str): event data to be searched
         event_recorder(EventRecorder): event recorder instance
         to check for events.
+        command_name(str): executed command name
     """
     event_found: bool = False
     timeout: int = 100

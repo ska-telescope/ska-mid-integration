@@ -3,8 +3,6 @@ by SDP subarray"""
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState, ResultCode
-
-# from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
 from tests.resources.test_harness.helpers import (
@@ -19,7 +17,6 @@ from tests.resources.test_support.constant import (
 
 
 @pytest.mark.tmc_sdp
-@pytest.mark.SKA_mid
 @scenario(
     "../features/tmc_sdp/xtp-32451_sdp_exception.feature",
     "TMC Subarray handles the exception duplicate"

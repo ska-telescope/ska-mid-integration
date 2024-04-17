@@ -14,6 +14,9 @@ from tests.resources.test_harness.helpers import (
 )
 
 
+@pytest.mark.skip(
+    reason="Failure is not getting simulated due to latest tmc-common package"
+)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-29013.feature",

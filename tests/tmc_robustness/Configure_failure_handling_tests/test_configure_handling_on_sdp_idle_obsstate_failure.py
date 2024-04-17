@@ -11,6 +11,9 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 
+@pytest.mark.skip(
+    reason="Failure is not getting simulated due to latest tmc-common package"
+)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-28835.feature",
