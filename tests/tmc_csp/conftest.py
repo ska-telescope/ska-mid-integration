@@ -167,54 +167,6 @@ def telescope_is_in_idle_state(
 #     )
 
 
-# @when(
-#     parsers.parse(
-#         "configure and scan TMC SubarrayNode {subarray_id} "
-#         "for each {scan_types} and {scan_ids}"
-#     )
-# )
-# def execute_configure_scan_sequence(
-#     subarray_node,
-#     command_input_factory,
-#     scan_ids,
-#     event_recorder,
-#     subarray_id,
-#     scan_types,
-# ):
-#     """A method to invoke configure and scan  command"""
-#     subarray_node.set_subarray_id(subarray_id)
-#     configure_input_json = prepare_json_args_for_commands(
-#         "configure_mid", command_input_factory
-#     )
-#     configure_input_json = json.loads(configure_input_json)
-#     configure_input_json["sdp"]["scan_type"] = scan_types
-#     configure_input_json = json.dumps(configure_input_json)
-#     subarray_node.execute_transition("Configure", argin=configure_input_json)
-#     event_recorder.subscribe_event(
-#         subarray_node.subarray_devices["csp_subarray"], "obsState"
-#     )
-#     assert event_recorder.has_change_event_occurred(
-#         subarray_node.subarray_devices["csp_subarray"],
-#         "obsState",
-#         ObsState.READY,
-#     )
-#     scan_input_json = prepare_json_args_for_commands(
-#         "scan_mid", command_input_factory
-#     )
-#     scan_input_json = json.loads(scan_input_json)
-#     scan_input_json["scan_id"] = scan_ids
-#     scan_input_json = json.dumps(scan_input_json)
-#     subarray_node.store_scan_data(scan_input_json)
-#     event_recorder.subscribe_event(
-#         subarray_node.subarray_devices["csp_subarray"], "obsState"
-#     )
-#     assert event_recorder.has_change_event_occurred(
-#         subarray_node.subarray_devices["csp_subarray"],
-#         "obsState",
-#         ObsState.SCANNING,
-#     )
-
-
 @when(parsers.parse("end the configuration on TMC SubarrayNode {subarray_id}"))
 def execute_end_command(
     subarray_node,
