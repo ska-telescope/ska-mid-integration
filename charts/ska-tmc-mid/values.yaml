@@ -17,8 +17,8 @@ annotations:
   app.gitlab.com/env: CI_ENVIRONMENT_SLUG
 
 ##  Order of instances resolution ##
-# .Values.subarray_count 
-# subarray_count, this will be expanded (1 to N inclusive) 
+# .Values.subarray_count
+# subarray_count, this will be expanded (1 to N inclusive)
 subarray_count: 2
 
 global:
@@ -44,7 +44,7 @@ global:
     - "cspsubarrayleafnode"
     - "sdpsubarrayleafnode"
     - "subarraynode"
-  
+
 
   # fqdn for mid devices
   tmc_subarray_prefix: "ska_mid/tm_subarray_node"
@@ -109,10 +109,10 @@ cspsubarrayleafnode:
     pullPolicy: IfNotPresent
 
 dishleafnode:
-  image: 
+  image:
     registry: artefact.skao.int
     image: ska-tmc-dishleafnode
-    tag: 0.9.4
+    tag: 0.12.1
     pullPolicy: IfNotPresent
 
 resources:
@@ -153,7 +153,7 @@ deviceServers:
     SimulatorDishMasterTag: "elt/master"
 
   sdpsubarrayleafnode:
-    enabled: true 
+    enabled: true
     file: "data/sdpsubarrayleafnode.yaml"
 
   sdpmasterleafnode:
