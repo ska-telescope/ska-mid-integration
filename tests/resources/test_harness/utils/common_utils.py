@@ -202,6 +202,9 @@ def check_configure_successful(
             scan_type,
             lookahead=20,
         )
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
