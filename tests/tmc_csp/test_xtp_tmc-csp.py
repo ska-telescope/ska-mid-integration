@@ -51,7 +51,7 @@ def execute_configure_scan_sequence(
 
     check_subarray_instance(subarray_node.subarray_node, subarray_id)
     configure_json = prepare_json_args_for_commands(
-        "configure1_mid", command_input_factory
+        "configure_mid", command_input_factory
     )
 
     configure_cycle = "initial"
