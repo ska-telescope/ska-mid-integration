@@ -22,6 +22,7 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 LOGGER = logging.getLogger(__name__)
 assigned_resources = []
 
+
 @pytest.mark.skip
 @pytest.mark.tmc_csp
 @scenario(
