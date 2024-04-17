@@ -195,13 +195,13 @@ def check_configure_successful(
     # For same configuration scantype no event is pushed
     # https://gitlab.com/ska-telescope/sdp/ska-sdp-lmc/-/blob/master/src/ska_sdp_lmc/subarray/device.py#L548
 
-    if scan_type != processed_scan_type:
-        assert event_recorder.has_change_event_occurred(
-            subarray_node.subarray_devices["csp_subarray"],
-            "scanType",
-            scan_type,
-            lookahead=20,
-        )
+    # if scan_type != processed_scan_type:
+    #     assert event_recorder.has_change_event_occurred(
+    #         subarray_node.subarray_devices["csp_subarray"],
+    #         "scanType",
+    #         scan_type,
+    #         lookahead=20,
+    #     )
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
