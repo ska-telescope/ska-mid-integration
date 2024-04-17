@@ -17,7 +17,6 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
-@pytest.mark.skip
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/incremental_assignresources.feature",

@@ -6,7 +6,6 @@ import logging
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
-from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
@@ -23,7 +22,6 @@ LOGGER = logging.getLogger(__name__)
 assigned_resources = []
 
 
-@pytest.mark.skip
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/incremental_assignresources.feature",
@@ -161,26 +159,17 @@ def check_assigned_resources(
     LOGGER.info(f"assigned resources: {assigned_resources}")
     LOGGER.info(f"type assigned resources: {type(assigned_resources)}")
     LOGGER.info(f"tuple>> {tuple(assigned_resources)}")
-    assertion_data = event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "assignedResources",
-        attribute_value=Anything,
+
+    LOGGER.info(
+        f"assignedResources:: {subarray_node.subarray_node.assignedResources}"
     )
-    value = assertion_data["attribute_value"]
-    LOGGER.info(f"assertion_data:: {assertion_data}")
-    LOGGER.info(f"assertion_data value:: {value}")
-    LOGGER.info(f"type:: {type(value)}")
-    LOGGER.info(f"assigned_resources:: {assigned_resources}")
-    LOGGER.info(f"assigned_resources:: {type(assigned_resources)}")
-    value1 = tuple(assigned_resources)
-    LOGGER.info(f"tuple assign:: {value1}")
-    LOGGER.info(f"type tuple assign:: {type(value1)}")
-    assert value1 == assertion_data["attribute_value"]
-    # assert event_recorder.has_change_event_occurred(
-    #     subarray_node.subarray_node,
-    #     "assignedResources",
-    #     tuple(assigned_resources),
-    # )
+    LOGGER.info(
+        f"type:: {type(subarray_node.subarray_node.assignedResources)}"
+    )
+
+    assert subarray_node.subarray_node.assignedResources == tuple(
+        assigned_resources
+    )
 
 
 @when(
