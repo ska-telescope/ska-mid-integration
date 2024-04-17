@@ -82,15 +82,13 @@ def execute_configure_scan_sequence(
 
         scan_json = update_scan_id(scan_json, scan_id)
 
-        _, unique_id = subarray_node.execute_transition(
-            "Scan", argin=scan_json
-        )
+        _, unique_id = subarray_node.store_scan_data(scan_json)
 
         check_scan_successful(
             subarray_node, event_recorder, scan_id, unique_id
         )
 
-        processed_scan_type = scan_type
+        # processed_scan_type = scan_type
 
         LOGGER.debug(
             f"Configure-scan sequence completed for {scan_id} "

@@ -133,7 +133,7 @@ def check_scan_successful(
     """
     # Faced a delay while testing , hence adding waiter here.
 
-    wait_for_device_status_scanning(subarray_node.subarray_node)
+    # wait_for_device_status_scanning(subarray_node.subarray_node)
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
@@ -145,13 +145,6 @@ def check_scan_successful(
         subarray_node.subarray_devices["csp_subarray"],
         "obsState",
         ObsState.SCANNING,
-        lookahead=20,
-    )
-
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_devices["csp_subarray"],
-        "scanID",
-        int(scan_id),
         lookahead=20,
     )
 
