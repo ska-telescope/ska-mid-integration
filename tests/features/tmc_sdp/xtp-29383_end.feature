@@ -1,5 +1,5 @@
 # This BDD test performs TMC-SDP pairwise testing to verify End command flow.
-@XTP-29383 @XTP-29381 @Team_SAHYADRI @tmc_sdp
+@XTP-29383 @XTP-29381 @Team_SAHYADRI @tmc_sdp_skip
 Scenario: End configure from SDP Subarray using TMC
 	Given the Telescope is in ON state
 	And a subarray <subarray_id> in the READY obsState

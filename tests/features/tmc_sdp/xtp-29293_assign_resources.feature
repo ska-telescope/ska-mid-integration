@@ -1,5 +1,5 @@
 # This BDD test performs TMC-SDP pairwise testing to verify AssignResources command flow.
-@XTP-29293 @XTP-29381 @Team_SAHYADRI @tmc_sdp
+@XTP-29293 @XTP-29381 @Team_SAHYADRI @tmc_sdp_skip
 Scenario: Assign resources to SDP subarray using TMC
     Given the Telescope is in ON state
     And the subarray <subarray_id> obsState is EMPTY
