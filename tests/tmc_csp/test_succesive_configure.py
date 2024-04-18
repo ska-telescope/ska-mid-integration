@@ -7,11 +7,16 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from tango import DevState
 
+from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
+from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     check_subarray_instance,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
+from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
+from tests.resources.test_harness.utils.common_utils import JsonFactory
+from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
 @pytest.mark.tmc_csp
@@ -26,7 +31,11 @@ def test_tmc_csp_succesive_configure_functionality():
 
 
 @given("a TMC and CSP")
-def given_a_tmc(central_node_mid, event_recorder, subarray_node):
+def given_a_tmc(
+    central_node_mid: CentralNodeWrapperMid,
+    event_recorder: EventRecorder,
+    subarray_node: SubarrayNodeWrapper,
+):
     """A method to define TMC and CSP and subscribe ."""
     assert central_node_mid.central_node.ping() > 0
     assert central_node_mid.subarray_devices["csp_subarray"].ping() > 0
@@ -41,11 +50,11 @@ def given_a_tmc(central_node_mid, event_recorder, subarray_node):
 
 @given(parsers.parse("a subarray {subarray_id} in the IDLE obsState"))
 def telescope_is_in_idle_state(
-    central_node_mid,
-    event_recorder,
-    command_input_factory,
-    subarray_id,
-    subarray_node,
+    central_node_mid: CentralNodeWrapperMid,
+    event_recorder: EventRecorder,
+    command_input_factory: JsonFactory,
+    subarray_id: str,
+    subarray_node: SubarrayNodeWrapper,
 ):
     """A method to move subarray into the IDLE ObsState."""
     central_node_mid.move_to_on()
@@ -60,11 +69,6 @@ def telescope_is_in_idle_state(
     )
 
     assign_str = json.loads(assign_input_json)
-    # Here we are adding this to get an event of ObsState CONFIGURING from SDP
-    # Subarray
-    assign_str["sdp"]["processing_blocks"][0]["parameters"][
-        "time-to-ready"
-    ] = 2
 
     central_node_mid.store_resources(json.dumps(assign_str))
 
@@ -92,11 +96,11 @@ def telescope_is_in_idle_state(
     )
 )
 def execute_first_configure_command(
-    subarray_node,
-    command_input_factory,
-    input_json1,
-    event_recorder,
-    subarray_id,
+    subarray_node: SubarrayNodeWrapper,
+    command_input_factory: JsonFactory,
+    input_json1: dict,
+    event_recorder: EventRecorder,
+    subarray_id: str,
 ):
     """ "A method to invoke first configure command"""
 
@@ -112,22 +116,44 @@ def execute_first_configure_command(
     )
 
 
-@when(
-    parsers.parse("the subarray {subarray_id} transitions to obsState READY")
-)
-def check_subarray_in_ready(subarray_node, event_recorder, subarray_id):
-    """A method to check SDP subarray obsstate"""
-
-    check_subarray_instance(subarray_node.subarray_node, subarray_id)
+@then(parsers.parse("CSP subarray {subarray_id} must be in READY ObsState"))
+def check_csp_subarray_is_in_ready_obsstate(
+    subarray_node: SubarrayNodeWrapper,
+    event_recorder: EventRecorder,
+    subarray_id: str,
+) -> None:
+    """Method to check CSP Subarray is in READY obsstate"""
+    check_subarray_instance(
+        subarray_node.subarray_devices.get("csp_subarray"), subarray_id
+    )
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_devices["csp_subarray"],
+        subarray_node.subarray_devices.get("csp_subarray"),
         "obsState",
         ObsState.READY,
     )
+
+
+@then(parsers.parse("TMC subarray {subarray_id} must be in READY obsState"))
+def check_subarray_is_in_idle_obsstate(
+    central_node_mid: CentralNodeWrapperMid,
+    event_recorder: EventRecorder,
+    subarray_id: str,
+    subarray_node: SubarrayNodeWrapper,
+) -> None:
+    """Method to check TMC Subarray is in READY obsstate"""
+    check_subarray_instance(subarray_node.subarray_node, subarray_id)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
 
 
@@ -138,11 +164,11 @@ def check_subarray_in_ready(subarray_node, event_recorder, subarray_id):
     )
 )
 def execute_second_configure_command(
-    subarray_node,
-    command_input_factory,
-    input_json2,
-    event_recorder,
-    subarray_id,
+    subarray_node: SubarrayNodeWrapper,
+    command_input_factory: JsonFactory,
+    input_json2: dict,
+    event_recorder: EventRecorder,
+    subarray_id: str,
 ):
     """ "A method to invoke second configure command"""
 
@@ -156,31 +182,4 @@ def execute_second_configure_command(
         subarray_node.subarray_devices["csp_subarray"],
         "obsState",
         ObsState.CONFIGURING,
-    )
-
-
-@then(
-    parsers.parse(
-        "the subarray {subarray_id} reconfigures changing its "
-        + "obsState to READY"
-    )
-)
-def check_subarray_in_ready_in_reconfigure(
-    central_node_mid, subarray_node, event_recorder, subarray_id
-):
-    """A method to check SDP subarray obsstate"""
-
-    check_subarray_instance(subarray_node.subarray_node, subarray_id)
-
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_devices["csp_subarray"],
-        "obsState",
-        ObsState.READY,
-    )
-
-    check_subarray_instance(central_node_mid.subarray_node, subarray_id)
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "obsState",
-        ObsState.READY,
     )
