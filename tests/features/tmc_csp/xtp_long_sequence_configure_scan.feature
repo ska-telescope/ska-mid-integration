@@ -10,5 +10,5 @@ Feature:  TMC Mid executes long running sequences with real csp devices
     Then TMC SubarrayNode <subarray_id> transitions to EMPTY ObsState
 
     Examples:
-            |subarray_id   | scan_ids      | scan_types     |
-            |1             |["1"]          |["target:a"]    |
+            |subarray_id   | scan_ids      | scan_types   |
+            |1             |["1"]          |["science_A"] |
