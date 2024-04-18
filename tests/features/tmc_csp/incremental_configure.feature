@@ -1,3 +1,5 @@
+# This BDD test performs TMC-CSP pairwise testing to verify Succesive AssignResources command flow.
+@XTP-40073 @XTP-29259 @tmc_csp
 Scenario: TMC-CSP succesive configure functionality
     Given a TMC and CSP
     And a subarray <subarray_id> in the IDLE obsState
