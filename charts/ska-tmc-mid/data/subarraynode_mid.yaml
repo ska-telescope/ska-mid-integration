@@ -13,8 +13,6 @@ server:
   {{- $sdp_sa_fqdn_prefix:= .Values.global.sdp_subarray_prefix}}
   {{- $isSimulatedDish := .Values.deviceServers.mocks.dish }}
   {{- $real_dish_name := .Values.global.namespace_dish.dish_names }}
-  {{- $DishMasterPrefix := .Values.deviceServers.subarraynode.DishMasterPrefix }}
-  {{- $DishMasterPostfix := .Values.deviceServers.subarraynode.DishMasterPostfix }}
   {{- $RealDishMasterTag := .Values.deviceServers.centralnode.RealDishMasterTag }}
   {{- $SimulatorDishMasterTag := .Values.deviceServers.centralnode.SimulatorDishMasterTag }}
   {{- $dish_id := .Values.deviceServers.subarraynode.DishIDs }}
@@ -29,9 +27,6 @@ server:
           - name: "DishLeafNodePrefix"
             values:
             - "ska_mid/tm_leaf_node/d0"
-          - name: "DishMasterPrefix"
-            values:
-            - "{{ $DishMasterPrefix }}"
           - name: "DishMasterTag"
             values:
             {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
@@ -39,9 +34,6 @@ server:
             {{- else }}
             - "{{ $RealDishMasterTag }}" # Real dish
             {{- end }}
-          - name: "DishMasterPostfix"
-            values:
-            - "{{ $DishMasterPostfix }}"
           - name: "CspSubarrayLNFQDN"
             values:
             - "{{ $csp_sa_ln_fqdn_prefix}}{{ printf "%02s" . }}"
