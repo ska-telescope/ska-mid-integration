@@ -13,3 +13,4 @@ Scenario: TMC-CSP succesive configure functionality
     Examples:
         | subarray_id  | input_json1          |   input_json2      |
         | 1            | configure1_mid       |   configure1_mid   |
+        | 1            | configure1_mid       |   configure2_mid   |
