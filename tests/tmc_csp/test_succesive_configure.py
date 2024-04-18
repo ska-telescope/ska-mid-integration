@@ -16,7 +16,7 @@ from tests.resources.test_harness.helpers import (
 
 @pytest.mark.tmc_csp
 @scenario(
-    "../features/tmc_sdp/incremental_configure.feature",
+    "../features/tmc_csp/incremental_configure.feature",
     "TMC-CSP succesive configure functionality",
 )
 def test_tmc_csp_succesive_configure_functionality():
