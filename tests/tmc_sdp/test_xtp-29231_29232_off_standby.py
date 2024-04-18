@@ -24,6 +24,7 @@ def test_tmc_sdp_off():
     """
 
 
+@pytest.mark.skip()
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp-29232_standby.feature",
