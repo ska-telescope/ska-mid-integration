@@ -57,6 +57,10 @@ def telescope_is_in_idle_state(
     subarray_node: SubarrayNodeWrapper,
 ):
     """A method to move subarray into the IDLE ObsState."""
+
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
     central_node_mid.move_to_on()
 
     assert event_recorder.has_change_event_occurred(
@@ -70,7 +74,9 @@ def telescope_is_in_idle_state(
 
     assign_str = json.loads(assign_input_json)
 
-    central_node_mid.store_resources(json.dumps(assign_str))
+    pytest.command_result = central_node_mid.store_resources(
+        json.dumps(assign_str)
+    )
 
     check_subarray_instance(
         subarray_node.subarray_devices.get("csp_subarray"), subarray_id
@@ -86,6 +92,11 @@ def telescope_is_in_idle_state(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
 
 
@@ -143,14 +154,15 @@ def check_subarray_is_in_idle_obsstate(
     subarray_node: SubarrayNodeWrapper,
 ) -> None:
     """Method to check TMC Subarray is in READY obsstate"""
+
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
     check_subarray_instance(subarray_node.subarray_node, subarray_id)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "longRunningCommandResult"
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
