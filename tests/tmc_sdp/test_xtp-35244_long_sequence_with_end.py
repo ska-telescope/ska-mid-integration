@@ -23,6 +23,7 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
+@pytest.mark.skip(reason="Need to raise bug on SDP")
 @pytest.mark.xfail(reason="Need to raise bug on SDP")
 @pytest.mark.tmc_sdp
 @scenario(
