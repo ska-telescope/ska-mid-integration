@@ -7,5 +7,5 @@ Scenario: TMC-CSP succesive configure functionality
     Then the subarray <subarray_id> reconfigures changing its obsState to READY
 
     Examples:
-        | subarray_id  | input_json1          |      input_json2      |
-        | 1            | sdp_mid_configure1   |   sdp_mid_configure1  |
+        | subarray_id  | input_json1          |   input_json2      |
+        | 1            | configure1           |   configure1       |
