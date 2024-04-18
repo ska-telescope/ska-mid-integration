@@ -132,6 +132,8 @@ def reassign_resources(
     )
 
     assign_str = json.loads(assign_input_json)
+    assign_str["dish"]["receptor_ids"][3] = "SKA100"
+
     # Here we are adding this to get an event of ObsState CONFIGURING from
     # SDP Subarray
     assign_str["sdp"]["processing_blocks"][0]["parameters"][

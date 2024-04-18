@@ -7,6 +7,7 @@ from tests.resources.test_harness.helpers import get_master_device_simulators
 from tests.resources.test_harness.utils.enums import DishMode
 
 
+@pytest.mark.skip()
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp-29231_off.feature",

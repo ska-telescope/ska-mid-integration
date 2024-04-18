@@ -19,7 +19,7 @@ Feature:  TMC Mid executes long running sequences with real sdp devices
 
 
 
-    @tmc_sdp_skip @Team_SAHYADRI @XTP-39931 @XTP-29381
+    @tmc_sdp @Team_SAHYADRI @XTP-39931 @XTP-29381
     Scenario Outline: TMC Mid executes multiple scan with same configuration successfully
 
     Given Telescope is ON state
@@ -35,7 +35,7 @@ Feature:  TMC Mid executes long running sequences with real sdp devices
             |1            |["1"]    |["science_A"]  |
 
 
-    @tmc_sdp_skip @Team_SAHYADRI @XTP-39938 @XTP-29381
+    @tmc_sdp @Team_SAHYADRI @XTP-39938 @XTP-29381
     Scenario Outline: TMC Mid executes multiple scans with different resources and configurations
 
     Given Telescope is ON state
@@ -55,7 +55,7 @@ Feature:  TMC Mid executes long running sequences with real sdp devices
      |1            |  ["1"]   | ["science_A"]  | ["2"]         | ["target:a"] |
 
 
-    @tmc_sdp_skip_skip @Team_SAHYADRI @XTP-39939 @XTP-29381
+    @tmc_sdp_skip @Team_SAHYADRI @XTP-39939 @XTP-29381
     Scenario Outline: TMC Mid executes multiple scans with different configurations, intermittently ending configurations
 
     Given Telescope is ON state

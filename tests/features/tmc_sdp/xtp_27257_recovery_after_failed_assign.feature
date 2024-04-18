@@ -1,5 +1,5 @@
 #Testing of SKB-185
-@XTP-27257 @XTP-3325 @Team_HIMALAYA @tmc_sdp_skip
+@XTP-27257 @XTP-3325 @Team_HIMALAYA @tmc_sdp
 Scenario Outline: Fix bug SKB-185 in TMC
     Given an TMC
     And the resources are re-assigned to tmc with duplicate eb-id
