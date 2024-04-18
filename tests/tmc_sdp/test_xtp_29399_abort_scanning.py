@@ -10,9 +10,6 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-@pytest.mark.skip(
-    reason="Scan functionality is broken. It will fixed in SAH-1498"
-)
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp_29399_abort_scanning.feature",
