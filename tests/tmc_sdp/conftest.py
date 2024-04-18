@@ -128,11 +128,11 @@ def reassign_resources(
     """A method to move subarray into the IDLE ObsState"""
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
-        "assign_resources_mid_multiple_scantype", command_input_factory
+        "assign_resources_mid_multiple_scantype_new_resources",
+        command_input_factory,
     )
 
     assign_str = json.loads(assign_input_json)
-    assign_str["dish"]["receptor_ids"][3] = "SKA100"
 
     # Here we are adding this to get an event of ObsState CONFIGURING from
     # SDP Subarray
