@@ -108,7 +108,9 @@ def execute_first_configure_command(
     configure_json = prepare_json_args_for_commands(
         input_json1, command_input_factory
     )
-    subarray_node.store_configuration_data(configure_json)
+    pytest.command_result = subarray_node.store_configuration_data(
+        configure_json
+    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["csp_subarray"],
         "obsState",
@@ -176,7 +178,9 @@ def execute_second_configure_command(
     configure_json = prepare_json_args_for_commands(
         input_json2, command_input_factory
     )
-    subarray_node.store_configuration_data(configure_json)
+    pytest.command_result = subarray_node.store_configuration_data(
+        configure_json
+    )
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["csp_subarray"],
