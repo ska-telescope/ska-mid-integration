@@ -1,7 +1,5 @@
 """Test TMC-CSP succesive functionality"""
 
-import json
-
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
@@ -21,7 +19,7 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 
 @pytest.mark.tmc_csp
 @scenario(
-    "../features/tmc_csp/incremental_configure.feature",
+    "../features/tmc_csp/xtp_40073_succesive_configure.feature",
     "TMC-CSP succesive configure functionality",
 )
 def test_tmc_csp_succesive_configure_functionality():
@@ -72,11 +70,7 @@ def telescope_is_in_idle_state(
         "assign_resources_mid_multiple_scantype", command_input_factory
     )
 
-    assign_str = json.loads(assign_input_json)
-
-    pytest.command_result = central_node_mid.store_resources(
-        json.dumps(assign_str)
-    )
+    pytest.command_result = central_node_mid.store_resources(assign_input_json)
 
     check_subarray_instance(
         subarray_node.subarray_devices.get("csp_subarray"), subarray_id
@@ -156,7 +150,7 @@ def check_subarray_is_in_idle_obsstate(
     """Method to check TMC Subarray is in READY obsstate"""
 
     event_recorder.subscribe_event(
-        central_node_mid.central_node, "longRunningCommandResult"
+        subarray_node.subarray_node, "longRunningCommandResult"
     )
     check_subarray_instance(subarray_node.subarray_node, subarray_id)
     assert event_recorder.has_change_event_occurred(
@@ -165,10 +159,9 @@ def check_subarray_is_in_idle_obsstate(
         ObsState.READY,
     )
     assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
+        subarray_node.subarray_node,
         "longRunningCommandResult",
         (pytest.command_result[1][0], str(ResultCode.OK.value)),
-        lookahead=15,
     )
 
 

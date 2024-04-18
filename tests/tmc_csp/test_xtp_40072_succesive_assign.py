@@ -22,10 +22,9 @@ LOGGER = logging.getLogger(__name__)
 assigned_resources = []
 
 
-@pytest.mark.skip
 @pytest.mark.tmc_csp
 @scenario(
-    "../features/tmc_csp/incremental_assignresources.feature",
+    "../features/tmc_csp/xtp_40072_succesive_assignresources.feature",
     "Validate succesive AssignResources command",
 )
 def test_tmc_csp_sucessive_assignresources_functionality():
