@@ -276,7 +276,7 @@ def check_dish_mode_and_pointing_state_after_scan(
         #     "COMPLETED",
         # )
         LOGGER.info(
-            "The scanID value is:",
+            "The scanID value is: %s",
             central_node_mid.dish_master_dict[dish_id].scanID,
         )
         assert central_node_mid.dish_master_dict[dish_id].scanID == "1"
