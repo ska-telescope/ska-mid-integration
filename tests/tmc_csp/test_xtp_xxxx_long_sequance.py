@@ -125,8 +125,8 @@ def execute_new_configure_scan_sequence(
 
     for scan_id, scan_type in combined_dict.items():
         configure_json = update_scan_type(configure_json, scan_type)
-        # _, unique_id = subarray_node.store_configuration_data(configure_json)
-        _, unique_id = subarray_node.subarray_node.Configure(configure_json)
+        _, unique_id = subarray_node.store_configuration_data(configure_json)
+        # _, unique_id = subarray_node.subarray_node.Configure(configure_json)
         if configure_cycle == "initial":
             check_obsstate_csp_in_first_configure(
                 event_recorder, subarray_node
