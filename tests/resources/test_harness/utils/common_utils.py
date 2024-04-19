@@ -133,7 +133,7 @@ def check_scan_successful(
     """
     # Faced a delay while testing , hence adding waiter here.
 
-    wait_for_device_status_scanning(subarray_node.subarray_node)
+    # wait_for_device_status_scanning(subarray_node.subarray_node)
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
