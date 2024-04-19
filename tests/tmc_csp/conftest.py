@@ -42,15 +42,6 @@ def given_a_tmc(central_node_mid, event_recorder, subarray_node):
     )
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
 
-    # event_recorder.subscribe_event(
-    #     subarray_node.subarray_devices["csp_subarray"], "scanID"
-    # )
-    # scan_id = subarray_node.subarray_devices["csp_subarray"].scanID
-
-    # event_recorder.subscribe_event(
-    #     subarray_node.subarray_devices["csp_subarray"], "scanType"
-    # )
-
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
@@ -83,12 +74,6 @@ def telescope_is_in_idle_state(
     )
 
     assign_str = json.loads(assign_input_json)
-    # Here we are adding this to get an event of ObsState CONFIGURING from
-    # CSP Subarray
-    # assign_str["csp"]["processing_blocks"][0]["parameters"][
-    #     "time-to-ready"
-    # ] = 2
-
     _, unique_id = central_node_mid.store_resources(json.dumps(assign_str))
 
     check_subarray_instance(
