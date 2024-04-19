@@ -70,8 +70,7 @@ def telescope_is_in_idle_state(
     """A method to move subarray into the IDLE ObsState."""
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
-        "assign_resources_mid_multiple_scantype_new_resources",
-        command_input_factory,
+        "assign_resources_mid_multiple_scantype", command_input_factory
     )
 
     assign_str = json.loads(assign_input_json)
