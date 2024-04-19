@@ -207,7 +207,7 @@ def wait_for_device_status_ready(device_name: str) -> None:
     """
     the_waiter = Waiter()
     the_waiter.set_wait_for_specific_obsstate("READY", [device_name])
-    the_waiter.wait(100)
+    the_waiter.wait(400)
 
 
 def wait_for_device_status_scanning(device_name: str) -> None:
