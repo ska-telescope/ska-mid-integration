@@ -100,6 +100,59 @@ def telescope_is_in_idle_state(
     )
 
 
+@when(
+    parsers.parse(
+        "I reassign with new resources to TMC SubarrayNode {subarray_id}"
+    )
+)
+def reassign_resources(
+    central_node_mid,
+    event_recorder,
+    command_input_factory,
+    subarray_id,
+    subarray_node,
+):
+    """A method to move subarray into the IDLE ObsState"""
+
+    assign_input_json = prepare_json_args_for_centralnode_commands(
+        "assign_resources_mid_multiple_scantype_new_resources",
+        command_input_factory,
+    )
+
+    assign_str = json.loads(assign_input_json)
+
+    # Here we are adding this to get an event of ObsState CONFIGURING from
+    # SDP Subarray
+    # assign_str["sdp"]["processing_blocks"][0]["parameters"][
+    #     "time-to-ready"
+    # ] = 2
+
+    _, unique_id = central_node_mid.store_resources(json.dumps(assign_str))
+
+    check_subarray_instance(
+        subarray_node.subarray_devices.get("csp_subarray"), subarray_id
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices.get("csp_subarray"),
+        "obsState",
+        ObsState.IDLE,
+    )
+
+    check_subarray_instance(subarray_node.subarray_node, subarray_id)
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.IDLE,
+    )
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (unique_id[0], str(int(ResultCode.OK))),
+        lookahead=10,
+    )
+
+
 @when(parsers.parse("end the configuration on TMC SubarrayNode {subarray_id}"))
 def execute_end_command(
     subarray_node,
