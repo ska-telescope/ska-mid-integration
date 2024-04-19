@@ -2,10 +2,12 @@
 """
 
 
+import logging
 import time
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
+from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import ObsState
 from tango import DevState
 
@@ -15,6 +17,9 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.enum import DishMode, PointingState
+
+configure_logging(logging.DEBUG)
+LOGGER = logging.getLogger(__name__)
 
 
 @pytest.mark.tmc_dish
@@ -263,13 +268,17 @@ def check_dish_mode_and_pointing_state_after_scan(
             central_node_mid.dish_master_dict[dish_id].pointingState
             == PointingState.TRACK
         )
-        time.sleep(4)
+        time.sleep(10)
         # assert check_long_running_command_status(
         #     central_node_mid.dish_master_dict[dish_id],
         #     "longRunningCommandStatus",
         #     "_Scan",
         #     "COMPLETED",
         # )
+        LOGGER.info(
+            "The scanID value is:",
+            central_node_mid.dish_master_dict[dish_id].scanID,
+        )
         assert central_node_mid.dish_master_dict[dish_id].scanID == "1"
 
 
