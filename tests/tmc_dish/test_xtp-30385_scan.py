@@ -260,6 +260,14 @@ def check_dish_mode_and_pointing_state_after_scan(
     Method to check dishMode and pointingState of DISH
     """
     for dish_id in dish_ids.split(","):
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "scanID"
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "scanID",
+            "1",
+        )
         assert (
             central_node_mid.dish_master_dict[dish_id].dishMode
             == DishMode.OPERATE
@@ -268,7 +276,6 @@ def check_dish_mode_and_pointing_state_after_scan(
             central_node_mid.dish_master_dict[dish_id].pointingState
             == PointingState.TRACK
         )
-        time.sleep(2)
         # assert check_long_running_command_status(
         #     central_node_mid.dish_master_dict[dish_id],
         #     "longRunningCommandStatus",
@@ -279,14 +286,7 @@ def check_dish_mode_and_pointing_state_after_scan(
             "The scanID value is: %s",
             central_node_mid.dish_master_dict[dish_id].scanID,
         )
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "scanID"
-        )
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "scanID",
-            "1",
-        )
+
         # assert central_node_mid.dish_master_dict[dish_id].scanID == "1"
 
 
