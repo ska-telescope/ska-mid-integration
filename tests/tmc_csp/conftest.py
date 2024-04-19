@@ -115,7 +115,7 @@ def reassign_resources(
     """A method to move subarray into the IDLE ObsState"""
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
-        "assign_resources_mid_multiple_scantype_new_resources",
+        "assign_resources_mid_multiple_scantype",
         command_input_factory,
     )
 
