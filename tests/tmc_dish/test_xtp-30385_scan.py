@@ -198,7 +198,7 @@ def check_subarray_obsState_ready(
         ObsState.IDLE,
     )
 
-    subarray_node.execute_transition("Configure", configure_input_json)
+    subarray_node.store_configuration_data(configure_input_json)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
@@ -279,7 +279,15 @@ def check_dish_mode_and_pointing_state_after_scan(
             "The scanID value is: %s",
             central_node_mid.dish_master_dict[dish_id].scanID,
         )
-        assert central_node_mid.dish_master_dict[dish_id].scanID == "1"
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "scanID"
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "scanID",
+            "1",
+        )
+        # assert central_node_mid.dish_master_dict[dish_id].scanID == "1"
 
 
 @then("TMC SubarrayNode transitions to obsState SCANNING")
