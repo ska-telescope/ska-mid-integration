@@ -98,6 +98,7 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
         central_node_mid.central_node,
         "telescopeState",
         DevState.OFF,
+        lookahead=4,
     )
     central_node_mid.move_to_on()
 
