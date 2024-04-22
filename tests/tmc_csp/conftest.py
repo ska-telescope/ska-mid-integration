@@ -112,16 +112,16 @@ def execute_end_command(
     """ "A method to invoke end command"""
 
     central_node_mid.set_subarray_id(subarray_id)
-    _, unique_id = subarray_node.execute_transition("End")
+    _, unique_id = subarray_node.end_observation()
 
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
+        subarray_node.subarray_devices["csp_subarray"],
         "obsState",
         ObsState.IDLE,
     )
 
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_devices["csp_subarray"],
+        subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
     )
