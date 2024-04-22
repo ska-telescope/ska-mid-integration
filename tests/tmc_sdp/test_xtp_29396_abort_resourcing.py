@@ -13,7 +13,6 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-@pytest.mark.skip()
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp_29396_abort_resourcing.feature",

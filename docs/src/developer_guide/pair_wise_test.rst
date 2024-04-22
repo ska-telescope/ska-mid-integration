@@ -35,7 +35,7 @@ To test with tmc_csp execute the command `make k8s-test MARK=tmc-csp CSP_SIMULAT
 
 * ``Restart``   -  Testing Restart command on TMC with Real-CSP in place.
 
-* Testing of Long sequences scenario for different combinations
+
 
 
 

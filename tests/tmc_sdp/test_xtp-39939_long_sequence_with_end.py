@@ -23,7 +23,7 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
-@pytest.mark.skip(reason="Need to raise bug on SDP")
+@pytest.mark.skip(reason="SKB-332 has been raised for this issue")
 @pytest.mark.xfail(reason="Need to raise bug on SDP")
 @pytest.mark.tmc_sdp
 @scenario(

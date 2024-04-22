@@ -123,7 +123,7 @@ def check_scan_successful(
     subarray_node, event_recorder, scan_id, unique_id
 ) -> None:
     """
-    1)SDP , TMC subarray  go to scanning
+    1)SDP , TMC sub-array  go to scanning
     2)scan_id attribute from SDP sub-array reflects exact scan_id
     sent by TMC .This makes sure we are checking some more attributes
     from SDP .In future this can be extended to include other attribute
@@ -131,7 +131,6 @@ def check_scan_successful(
     3)After scan duration is completed , end scan will be triggered
     taking system to READY state. Related Obs-state checks are  added.
     """
-    # Faced a delay while testing , hence adding waiter here.
 
     wait_for_device_status_scanning(subarray_node.subarray_node)
 
