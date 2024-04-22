@@ -27,7 +27,7 @@ LOGGER = logging.getLogger(__name__)
 @pytest.mark.xfail(reason="Need to raise bug on SDP")
 @pytest.mark.tmc_sdp
 @scenario(
-    "../features/tmc_sdp/xtp-35244_long_sequence_configure_scan.feature",
+    "../features/tmc_sdp/xtp-39939_long_sequence_with_end.feature",
     "TMC Mid executes multiple scans with different configurations,"
     " intermittently ending configurations",
 )

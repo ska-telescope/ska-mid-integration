@@ -1,5 +1,5 @@
 Feature:  TMC Mid executes long running sequences with real sdp devices
-@tmc_sdp_skip @Team_SAHYADRI @XTP-39939 @XTP-29381
+    @tmc_sdp_skip @Team_SAHYADRI @XTP-39939 @XTP-29381
     Scenario Outline: TMC Mid executes multiple scans with different configurations, intermittently ending configurations
 
     Given Telescope is ON state

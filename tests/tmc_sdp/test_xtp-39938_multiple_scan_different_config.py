@@ -25,7 +25,7 @@ LOGGER = logging.getLogger(__name__)
 
 @pytest.mark.tmc_sdp
 @scenario(
-    "../features/tmc_sdp/xtp-35244_long_sequence_configure_scan.feature",
+    "../features/tmc_sdp/xtp-39938_multiple_scan_different_config.feature",
     "TMC Mid executes multiple scans with different resources "
     "and configurations",
 )
