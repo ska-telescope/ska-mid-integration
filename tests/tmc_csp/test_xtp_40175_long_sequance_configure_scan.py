@@ -94,15 +94,3 @@ def execute_configure_scan_sequence(
             f"Configure-scan sequence completed for {scan_id} "
             f"and scan_type {scan_type}"
         )
-
-    # resources - TODO Validation to be added
-
-    # event_recorder.subscribe_event(
-    #     subarray_node.subarray_devices["sdp_subarray"], "resources"
-    # )
-    #
-    # assert event_recorder.has_change_event_occurred(
-    #     subarray_node.subarray_devices["sdp_subarray"],
-    #     "resources",
-    #     "csp_links",
-    # )
