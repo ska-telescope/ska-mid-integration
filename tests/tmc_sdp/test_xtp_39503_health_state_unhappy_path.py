@@ -47,6 +47,7 @@ def given_telescope_setup_with_simulators(
     assert central_node_mid.central_node.ping() > 0
     assert central_node_mid.sdp_master.ping() > 0
     assert central_node_mid.subarray_devices["sdp_subarray"].ping() > 0
+    assert central_node_mid.subarray_devices["csp_subarray"].ping() > 0
     assert csp_master_sim.ping() > 0
     assert dish_master_sim.ping() > 0
 
