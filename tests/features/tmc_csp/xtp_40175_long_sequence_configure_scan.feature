@@ -15,7 +15,7 @@ Feature:  TMC Mid executes long running sequences with real csp devices
             |1             |["1","2"]      |["science_A" , "target:a"]                   |
             |1             |["1","2"]      |["science_A" , "science_A"]                  |
             |1             |["1","1"]      |["science_A" , "science_A"]                  |
-            |1             |["1","2","3"]  |["science_A" , "target:a", "callibration_B" ]|
+            |1             |["1","2","3"]  |["science_A" , "target:a", "cal_a" ]|
 
 
 
