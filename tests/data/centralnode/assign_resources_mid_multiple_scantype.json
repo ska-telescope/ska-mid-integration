@@ -104,7 +104,7 @@
         },
 
         {
-          "scan_type_id": "callibration_B",
+          "scan_type_id": "cal_a",
           "derive_from": ".default",
           "beams": {
             "vis0": {
