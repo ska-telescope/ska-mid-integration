@@ -11,10 +11,15 @@ from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import ObsState
 from tango import DevState
 
+from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
+from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
+from tests.resources.test_harness.simulator_factory import SimulatorFactory
+from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
+from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.enum import DishMode, PointingState
 
@@ -45,7 +50,11 @@ def test_tmc_dish_scan():
         + " simulated CSP and simulated SDP"
     )
 )
-def given_a_telescope(central_node_mid, simulator_factory, dish_ids):
+def given_a_telescope(
+    central_node_mid: CentralNodeWrapperMid,
+    simulator_factory: SimulatorFactory,
+    dish_ids: str,
+) -> None:
     """
     Given a TMC
     """
@@ -63,7 +72,11 @@ def given_a_telescope(central_node_mid, simulator_factory, dish_ids):
 
 
 @given("the Telescope is in ON state")
-def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
+def turn_on_telescope(
+    central_node_mid: CentralNodeWrapperMid,
+    event_recorder: EventRecorder,
+    simulator_factory: SimulatorFactory,
+):
     """A method to put Telescope ON"""
     event_recorder.subscribe_event(
         central_node_mid.dish_master_dict["SKA001"], "dishMode"
@@ -174,11 +187,11 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
 
 @given(parsers.parse("TMC subarray {subarray_id} is in READY obsState"))
 def check_subarray_obsState_ready(
-    subarray_node,
-    command_input_factory,
-    event_recorder,
-    central_node_mid,
-    subarray_id,
+    subarray_node: SubarrayNodeWrapper,
+    command_input_factory: JsonFactory,
+    event_recorder: EventRecorder,
+    central_node_mid: CentralNodeWrapperMid,
+    subarray_id: str,
 ):
     """Method to check subarray is in READY obsState"""
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
@@ -213,7 +226,9 @@ def check_subarray_obsState_ready(
     )
 )
 def check_dish_mode_and_pointing_state(
-    central_node_mid, event_recorder, dish_ids
+    central_node_mid: CentralNodeWrapperMid,
+    event_recorder: EventRecorder,
+    dish_ids: str,
 ):
     for dish_id in dish_ids.split(","):
         event_recorder.subscribe_event(
@@ -235,7 +250,10 @@ def check_dish_mode_and_pointing_state(
     parsers.parse("I issue the Scan command to the TMC subarray {subarray_id}")
 )
 def invoke_scan(
-    central_node_mid, subarray_node, command_input_factory, subarray_id
+    central_node_mid: CentralNodeWrapperMid,
+    subarray_node: SubarrayNodeWrapper,
+    command_input_factory: JsonFactory,
+    subarray_id: str,
 ):
     """
     A method to invoke Scan command
@@ -254,7 +272,9 @@ def invoke_scan(
     )
 )
 def check_dish_mode_and_pointing_state_after_scan(
-    central_node_mid, event_recorder, dish_ids
+    central_node_mid: CentralNodeWrapperMid,
+    event_recorder: EventRecorder,
+    dish_ids: str,
 ):
     """
     Method to check dishMode and pointingState of DISH
@@ -282,17 +302,14 @@ def check_dish_mode_and_pointing_state_after_scan(
         #     "_Scan",
         #     "COMPLETED",
         # )
-        LOGGER.info(
-            "The scanID value is: %s",
-            central_node_mid.dish_master_dict[dish_id].scanID,
-        )
-
-        # assert central_node_mid.dish_master_dict[dish_id].scanID == "1"
 
 
 @then("TMC SubarrayNode transitions to obsState SCANNING")
 def tmc_subarray_scanning(
-    central_node_mid, subarray_node, event_recorder, subarray_id
+    central_node_mid: CentralNodeWrapperMid,
+    subarray_node: SubarrayNodeWrapper,
+    event_recorder: EventRecorder,
+    subarray_id: str,
 ):
     """Checks if SubarrayNode's obsState attribute value is SCANNING"""
     central_node_mid.set_subarray_id(int(subarray_id))
@@ -308,7 +325,10 @@ def tmc_subarray_scanning(
     + " once the scan duration is elapsed"
 )
 def check_subarray_obsstate_ready(
-    central_node_mid, subarray_node, event_recorder, subarray_id
+    central_node_mid: CentralNodeWrapperMid,
+    subarray_node: SubarrayNodeWrapper,
+    event_recorder: EventRecorder,
+    subarray_id: str,
 ):
     """Checks if SubarrayNode's obsState attribute value is READY"""
     central_node_mid.set_subarray_id(int(subarray_id))
