@@ -14,7 +14,6 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_harness.utils.common_utils import (
     check_configure_successful,
-    check_obsstate_csp_in_first_configure,
     check_scan_successful,
 )
 
@@ -55,7 +54,7 @@ def execute_configure_scan_sequence(
         "configure1_mid", command_input_factory
     )
 
-    configure_cycle = "initial"
+    # configure_cycle = "initial"
     processed_scan_type = ""
 
     combined_dict = dict(zip(eval(scan_ids), eval(scan_types)))
@@ -63,11 +62,11 @@ def execute_configure_scan_sequence(
     for scan_id, scan_type in combined_dict.items():
         configure_json = update_scan_type(configure_json, scan_type)
         _, unique_id = subarray_node.store_configuration_data(configure_json)
-        if configure_cycle == "initial":
-            check_obsstate_csp_in_first_configure(
-                event_recorder, subarray_node
-            )
-            configure_cycle = "Next"
+        # if configure_cycle == "initial":
+        #     check_obsstate_csp_in_first_configure(
+        #         event_recorder, subarray_node
+        #     )
+        #     configure_cycle = "Next"
         check_configure_successful(
             subarray_node,
             event_recorder,

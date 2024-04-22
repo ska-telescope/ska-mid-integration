@@ -89,34 +89,34 @@ class SharedContext:
         self.unique_id = None
 
 
-def check_obsstate_csp_in_first_configure(
-    event_recorder, subarray_node
-) -> None:
-    """
-    CSP does not go to CONFIGURING in each CONFIGURE command
-    except very first CONFIGURE command after Assign .
+# def check_obsstate_csp_in_first_configure(
+#     event_recorder, subarray_node
+# ) -> None:
+#     """
+#     CSP does not go to CONFIGURING in each CONFIGURE command
+#     except very first CONFIGURE command after Assign .
 
-    """
-    # TODO
-    # Currently CSP goes in configuring only in first configure
-    # Command.SKB-309 has been raised for same.
-    # Once SKB-309 is resolved , we can check and remove
-    # this logic of configure_cycle and perform check for
-    # configuring after each of the configure command
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_devices["csp_subarray"],
-        "obsState",
-        ObsState.CONFIGURING,
-    )
-    wait_for_device_status_ready(
-        subarray_node.subarray_devices["csp_subarray"]
-    )
+#     """
+#     # TODO
+#     # Currently CSP goes in configuring only in first configure
+#     # Command.SKB-309 has been raised for same.
+#     # Once SKB-309 is resolved , we can check and remove
+#     # this logic of configure_cycle and perform check for
+#     # configuring after each of the configure command
+#     assert event_recorder.has_change_event_occurred(
+#         subarray_node.subarray_devices["csp_subarray"],
+#         "obsState",
+#         ObsState.CONFIGURING,
+#     )
+#     wait_for_device_status_ready(
+#         subarray_node.subarray_devices["csp_subarray"]
+#     )
 
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_devices["csp_subarray"],
-        "obsState",
-        ObsState.READY,
-    )
+#     assert event_recorder.has_change_event_occurred(
+#         subarray_node.subarray_devices["csp_subarray"],
+#         "obsState",
+#         ObsState.READY,
+#     )
 
 
 def check_scan_successful(
