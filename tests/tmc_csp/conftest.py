@@ -118,6 +118,7 @@ def execute_end_command(
         subarray_node.subarray_devices["csp_subarray"],
         "obsState",
         ObsState.IDLE,
+        lookahead=20,
     )
 
     assert event_recorder.has_change_event_occurred(
