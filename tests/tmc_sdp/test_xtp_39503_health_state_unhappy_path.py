@@ -13,7 +13,6 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_harness.simulator_factory import SimulatorFactory
 
 
-@pytest.mark.skip
 @pytest.mark.tmc_sdp_unhappy
 @scenario(
     "../features/tmc_sdp/xtp_39503_health_state_unhappy_path.feature",

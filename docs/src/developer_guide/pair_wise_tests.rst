@@ -37,7 +37,9 @@ To test with tmc_sdp pair execute the command `make k8s-test MARK=tmc_sdp SDP_SI
 
 Negative Scenario implemented
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
 * ``HealthState.DEGRADED Scenario`` - Testing TMC-SDP for the verification of the TelescopeHealthState transition in the Telescope Monitoring and 
 Control system based on the health state changes of the SDP Controller. 
 - The scenario simulates a telescope setup consisting of Real SDP, and simulated devices for the CSP and the Dish.
+
+* ``SDP Component Unavailable`` - Testing TMC-SDP for the verification of whether the SDP component is available or not and it successfully reports the
+availability of the component to TMC.
