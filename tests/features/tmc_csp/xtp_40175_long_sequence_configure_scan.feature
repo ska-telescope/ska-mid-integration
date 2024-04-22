@@ -11,7 +11,7 @@ Feature:  TMC Mid executes long running sequences with real csp devices
 
     Examples:
             |subarray_id   | scan_ids      | scan_types                                  |
-            |1             |["1"]          |["science_A"] |
+            |1             |["1"]          |["science_A"]                                |
             |1             |["1","2"]      |["science_A" , "target:a"]                   |
             |1             |["1","2"]      |["science_A" , "science_A"]                  |
             |1             |["1","1"]      |["science_A" , "science_A"]                  |
