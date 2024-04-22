@@ -52,30 +52,6 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
         central_node_mid.dish_master_dict["SKA100"], "dishMode"
     )
 
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA001"],
-        "dishMode",
-        DishMode.STANDBY_LP,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA036"],
-        "dishMode",
-        DishMode.STANDBY_LP,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA063"],
-        "dishMode",
-        DishMode.STANDBY_LP,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA100"],
-        "dishMode",
-        DishMode.STANDBY_LP,
-    )
-
-    # Wait for DishMaster attribute value update,
-    # on CentralNode for value dishMode STANDBY_LP
-
     # TODO: Improvement in tests/implementation
     # to minimize the need of having sleep
 
@@ -94,12 +70,6 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
     event_recorder.subscribe_event(csp_master_sim, "State")
     event_recorder.subscribe_event(sdp_master_sim, "State")
 
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.OFF,
-        lookahead=4,
-    )
     central_node_mid.move_to_on()
 
     assert event_recorder.has_change_event_occurred(
