@@ -104,11 +104,11 @@
         },
 
         {
-          "scan_type_id": "cal_a",
+          "scan_type_id": "calibration:b",
           "derive_from": ".default",
           "beams": {
             "vis0": {
-              "field_id": "field_a"
+              "field_id": "field_b"
             }
           }
         }
