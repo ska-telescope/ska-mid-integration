@@ -75,16 +75,16 @@ itango:
 
 centralnode:
   image:
-    registry: artefact.skao.int
+    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-centralnode
     image: ska-tmc-centralnode
-    tag: 0.14.5
+    tag: 0.14.5-dev.cc99a4413
     pullPolicy: IfNotPresent
 
 subarraynode:
   image:
     registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-subarraynode
     image: ska-tmc-subarraynode
-    tag: 0.16.2-dev.c92f5daf4
+    tag: 0.17.0-dev.cb1079703
     pullPolicy: IfNotPresent
 
 sdpleafnodes:
@@ -132,8 +132,6 @@ deviceServers:
     file: "data/centralnode_mid.yaml"
     DishLeafNodePrefix: "ska_mid/tm_leaf_node/d0"
     DishIDs: ["SKA001", "SKA036", "SKA063", "SKA100"]
-    DishMasterPrefix: "elt"
-    DishMasterPostfix: "master"
     RealDishMasterTag: "mid-dish/dish-manager"
     SimulatorDishMasterTag: "elt/master"
     DishVccConfig:

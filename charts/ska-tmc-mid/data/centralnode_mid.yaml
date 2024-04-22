@@ -2,8 +2,6 @@ name: "centralnode-test"
 function: telescope-monitoring
 domain: general-monitoring
 instances: ["01"]
-{{- $DishMasterPrefix := .Values.deviceServers.centralnode.DishMasterPrefix }}
-{{- $DishMasterPostfix := .Values.deviceServers.centralnode.DishMasterPostfix }}
 {{- $RealDishMasterTag := .Values.deviceServers.centralnode.RealDishMasterTag }}
 {{- $SimulatorDishMasterTag := .Values.deviceServers.centralnode.SimulatorDishMasterTag }}
 entrypoints:
@@ -16,8 +14,6 @@ server:
   {{- $sdp_sa_ln_fqdn_prefix:= .Values.global.sdp_subarray_ln_prefix}}
   {{- $isSimulatedDish := .Values.deviceServers.mocks.dish }}
   {{- $real_dish_name := .Values.global.namespace_dish.dish_names }}
-  {{- $DishMasterPrefix := .Values.deviceServers.centralnode.DishMasterPrefix }}
-  {{- $DishMasterPostfix := .Values.deviceServers.centralnode.DishMasterPostfix }}
   {{- $RealDishMasterTag := .Values.deviceServers.centralnode.RealDishMasterTag }}
   {{- $SimulatorDishMasterTag := .Values.deviceServers.centralnode.SimulatorDishMasterTag }}
   {{- $isSimulatedCsp := .Values.deviceServers.mocks.csp }}
