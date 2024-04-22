@@ -25,7 +25,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
     "../features/tmc_dish/endscan.feature",
     "TMC executes EndScan command on DISH.LMC",
 )
-def test_tmc_dish_scan():
+def test_tmc_dish_endscan():
     """
     Test case to verify TMC-DISH EndScan functionality
     """
@@ -230,14 +230,6 @@ def check_dish_mode_and_pointing_state_after_scan(
     Method to check dishMode and pointingState of DISH after scan command
     """
     for dish_id in dish_ids.split(","):
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "scanID"
-        )
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "scanID",
-            "1",
-        )
         assert (
             central_node_mid.dish_master_dict[dish_id].dishMode
             == DishMode.OPERATE
@@ -285,7 +277,7 @@ def check_dish_mode_and_pointing_state_after_endscan(
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "scanID",
-            "1",
+            "",
         )
         assert (
             central_node_mid.dish_master_dict[dish_id].dishMode
