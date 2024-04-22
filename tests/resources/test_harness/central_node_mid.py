@@ -419,7 +419,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         LOGGER.info("Invoked AssignResources on CentralNode")
         return result, message
 
-    @sync_release_resources(device_dict=device_dict)
+    @sync_release_resources(device_dict=device_dict, timeout=500)
     def invoke_release_resources(
         self, input_string: str
     ) -> Tuple[ResultCode, str]:

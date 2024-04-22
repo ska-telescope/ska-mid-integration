@@ -1,8 +1,11 @@
 """Test module for TMC-SDP On functionality"""
+import time
+
 import pytest
 from pytest_bdd import given, scenario, then, when
 from tango import DevState
 
+from tests.conftest import LOGGER
 from tests.resources.test_harness.helpers import get_master_device_simulators
 from tests.resources.test_harness.utils.enums import DishMode
 
@@ -71,6 +74,13 @@ def given_a_tmc(central_node_mid, simulator_factory, event_recorder):
         dish_master_sim_4,
         "dishMode",
         DishMode.STANDBY_LP,
+    )
+    LOGGER.info(
+        "TelescopeState is: %s", central_node_mid.central_node.telescopeState
+    )
+    time.sleep(20)
+    LOGGER.info(
+        "TelescopeState is: %s", central_node_mid.central_node.telescopeState
     )
 
 
