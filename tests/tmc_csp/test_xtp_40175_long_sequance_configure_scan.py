@@ -53,7 +53,6 @@ def execute_configure_scan_sequence(
         "configure1_mid", command_input_factory
     )
 
-    # configure_cycle = "initial"
     processed_scan_type = ""
 
     combined_dict = dict(zip(eval(scan_ids), eval(scan_types)))
