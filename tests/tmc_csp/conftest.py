@@ -176,7 +176,7 @@ def execute_end_command(
         subarray_node.subarray_node,
         "longRunningCommandResult",
         (unique_id[0], str(int(ResultCode.OK))),
-        lookahead=5,
+        lookahead=10,
     )
 
 
