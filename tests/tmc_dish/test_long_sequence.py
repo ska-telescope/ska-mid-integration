@@ -8,6 +8,7 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
 from tango import DevState
 
+from tests.conftest import LOGGER
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
@@ -161,6 +162,7 @@ def invoke_configure(
     )
     configure_input = json.loads(configure_input_json)
     configure_input["dish"]["receiver_band"] = str(receiver_band)
+    LOGGER.info(f"Input JSON: {json.dumps(configure_input)}")
     subarray_node.execute_transition("Configure", json.dumps(configure_input))
 
 
