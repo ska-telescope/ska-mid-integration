@@ -11,7 +11,7 @@ Scenario: Validate second AssignResources command after first successful AssignR
         | 1            |
 
 # This BDD test performs TMC-CSP pairwise testing to verify Succesive AssignResources command flow.
-@ XTP-40072 @XTP-29259 @tmc_csp
+@XTP-40072 @XTP-29259 @tmc_csp
 Scenario: Validate succesive AssignResources command
     Given TMC subarray <subarray_id> is in EMPTY ObsState
     When I invoke First AssignResources on TMC subarray <subarray_id> with <receptors1> on TMC subarray <subarray_id>
