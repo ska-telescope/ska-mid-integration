@@ -185,7 +185,7 @@ class TestSubarrayNodeNegative(object):
             assert event_recorder.has_change_event_occurred(
                 subarray_node.subarray_node, "obsState", ObsState.READY
             )
-        assert device_received_this_command(dish_sim, "ConfigureBand2", "True")
+        assert device_received_this_command(dish_sim, "ConfigureBand1", "True")
 
     @pytest.mark.skip(reason="Fails in assertions after Fault")
     @pytest.mark.SKA_mid
