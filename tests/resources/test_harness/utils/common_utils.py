@@ -104,7 +104,11 @@ def check_scan_successful(
     # Faced a delay while testing , hence adding waiter here.
 
     # wait_for_device_status_scanning(subarray_node.subarray_node)
-
+    the_waiter = Waiter()
+    the_waiter.set_wait_for_specific_obsstate(
+        "SCANNING", [subarray_node.subarray_node]
+    )
+    the_waiter.wait(200)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
@@ -119,9 +123,10 @@ def check_scan_successful(
         lookahead=10,
     )
 
-    wait_for_device_status_ready(
-        subarray_node.subarray_devices["csp_subarray"]
+    the_waiter.set_wait_for_specific_obsstate(
+        "READY", [subarray_node.subarray_node]
     )
+    the_waiter.wait(100)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["csp_subarray"],
         "obsState",
@@ -129,7 +134,10 @@ def check_scan_successful(
         lookahead=10,
     )
 
-    wait_for_device_status_ready(subarray_node.subarray_node)
+    the_waiter.set_wait_for_specific_obsstate(
+        "READY", [subarray_node.subarray_node]
+    )
+    the_waiter.wait(100)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=20
     )
@@ -147,11 +155,15 @@ def check_configure_successful(
     """
     Adds check to verify if configure command is successful
     """
-    wait_for_device_status_ready(
-        subarray_node.subarray_devices["csp_subarray"]
+    the_waiter = Waiter()
+    the_waiter.set_wait_for_specific_obsstate(
+        "READY", [subarray_node.subarray_devices["csp_subarray"]]
     )
-
-    wait_for_device_status_ready(subarray_node.subarray_node)
+    the_waiter.wait(100)
+    the_waiter.set_wait_for_specific_obsstate(
+        "READY", [subarray_node.subarray_node]
+    )
+    the_waiter.wait(100)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
     )
@@ -168,25 +180,25 @@ def check_configure_successful(
     )
 
 
-def wait_for_device_status_ready(device_name: str) -> None:
-    """
-    Checks if given device is in READY obs-state
+# def wait_for_device_status_ready(device_name: str) -> None:
+#     """
+#     Checks if given device is in READY obs-state
 
-     :param device_name: device name
-     :type device_name: str
-    """
-    the_waiter = Waiter()
-    the_waiter.set_wait_for_specific_obsstate("READY", [device_name])
-    the_waiter.wait(400)
+#      :param device_name: device name
+#      :type device_name: str
+#     """
+#     the_waiter = Waiter()
+#     the_waiter.set_wait_for_specific_obsstate("READY", [device_name])
+#     the_waiter.wait(400)
 
 
-def wait_for_device_status_scanning(device_name: str) -> None:
-    """
-    Checks if given device is in SCANNING obs-state
+# def wait_for_device_status_scanning(device_name: str) -> None:
+#     """
+#     Checks if given device is in SCANNING obs-state
 
-    :param device_name: device name
-    :type device_name: str
-    """
-    the_waiter = Waiter()
-    the_waiter.set_wait_for_specific_obsstate("SCANNING", [device_name])
-    the_waiter.wait(400)
+#     :param device_name: device name
+#     :type device_name: str
+#     """
+#     the_waiter = Waiter()
+#     the_waiter.set_wait_for_specific_obsstate("SCANNING", [device_name])
+#     the_waiter.wait(400)
