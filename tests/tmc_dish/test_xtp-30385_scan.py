@@ -10,6 +10,7 @@ from ska_tango_base.control_model import ObsState
 from tango import DevState
 
 from tests.resources.test_harness.helpers import (
+    check_long_running_command_status,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
@@ -17,7 +18,10 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
-@pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
+@pytest.mark.skip(
+    reason="TMC-Dish Scan-EndSCan interface is yet to be "
+    + "tested in integration repository."
+)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-30385_scan.feature",
@@ -265,13 +269,12 @@ def check_dish_mode_and_pointing_state_after_scan(
             == PointingState.TRACK
         )
 
-        time.sleep(4)
-        # assert check_long_running_command_status(
-        #     central_node_mid.dish_master_dict[dish_id],
-        #     "longRunningCommandStatus",
-        #     "_Scan",
-        #     "COMPLETED",
-        # )
+        assert check_long_running_command_status(
+            central_node_mid.dish_master_dict[dish_id],
+            "longRunningCommandStatus",
+            "_Scan",
+            "COMPLETED",
+        )
 
 
 @then("TMC SubarrayNode transitions to obsState SCANNING")
