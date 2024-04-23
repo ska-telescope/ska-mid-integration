@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 @pytest.mark.post_deployment
 @pytest.mark.SKA_mid
 @pytest.mark.xfail(
-    reason="larm summary key error to be resolved under SAH-1510"
+    reason="alarm summary key error to be resolved under SAH-1510"
 )
 def test_load_alarm():
     """A method to load tmc alarm for Alarm handler instance"""

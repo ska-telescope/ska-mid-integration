@@ -18,7 +18,7 @@ from tests.resources.test_support.constant import alarm_handler1
 
 
 @pytest.mark.xfail(
-    reason="larm summary key error to be resolved under SAH-1510"
+    reason="alarm summary key error to be resolved under SAH-1510"
 )
 @pytest.mark.SKA_mid
 @scenario(
