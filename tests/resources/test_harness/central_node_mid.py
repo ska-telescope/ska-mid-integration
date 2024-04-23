@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import time
 from typing import Tuple
 
 from ska_control_model import ObsState, ResultCode
@@ -431,6 +432,8 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         Args:
             input_string (str): Release resource input json
         """
+        time.sleep(3)
+
         result, message = self.central_node.ReleaseResources(input_string)
         return result, message
 
