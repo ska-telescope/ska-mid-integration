@@ -142,7 +142,7 @@ def check_subarray_obsState_idle(
 
 @given(
     parsers.parse(
-        "the command configure is issued to the TMC subarray"
+        "the command configure is issued to the TMC subarray "
         + "with {receiver_band}"
     )
 )
@@ -194,7 +194,7 @@ def check_dish_mode_and_pointing_state(
 
 @when(
     parsers.parse(
-        "the next successive configure command is issued to the TMC"
+        "the next successive configure command is issued to the TMC "
         + "subarray with {receiver_band}"
     )
 )
