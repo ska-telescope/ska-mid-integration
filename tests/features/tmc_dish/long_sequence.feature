@@ -9,4 +9,4 @@ Scenario Outline: Testing of successive configure functionality with same receiv
 
         Examples:
         | receiver_band |
-        |      "2"      |
+        |      "1"      |
