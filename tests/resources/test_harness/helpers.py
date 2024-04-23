@@ -686,15 +686,15 @@ def check_long_running_command_status(
     return False
 
 
-def update_scan_type(configure_json: str, json_value: str) -> str:
+def update_scan_type(configure_json: str, new_scan_type: str) -> str:
     """
     Method to update json with different scan type
 
     :param configure_json: json to utilised to update values.
-    :param json_value: new json value to be updated in json
+    :param new_scan_type: new json value to be updated in json
     """
     input_json = json.loads(configure_json)
-    input_json["sdp"]["scan_type"] = json_value
+    input_json["sdp"]["scan_type"] = new_scan_type
     input_json = json.dumps(input_json)
     return input_json
 
