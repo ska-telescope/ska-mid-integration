@@ -13,8 +13,8 @@ server:
   {{- $sdp_sa_fqdn_prefix:= .Values.global.sdp_subarray_prefix}}
   {{- $isSimulatedDish := .Values.deviceServers.mocks.dish }}
   {{- $real_dish_name := .Values.global.namespace_dish.dish_names }}
-  {{- $RealDishMasterTag := .Values.deviceServers.centralnode.RealDishMasterTag }}
-  {{- $SimulatorDishMasterTag := .Values.deviceServers.centralnode.SimulatorDishMasterTag }}
+  {{- $RealDishMasterIdentifier := .Values.deviceServers.centralnode.RealDishMasterIdentifier }}
+  {{- $SimulatorDishMasterIdentifier := .Values.deviceServers.centralnode.SimulatorDishMasterIdentifier }}
   {{- $dish_id := .Values.deviceServers.subarraynode.DishIDs }}
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
   {{- range  ( regexSplit " " ((.Values.subarray_count | int) | seq ) -1 ) }}
@@ -27,12 +27,12 @@ server:
           - name: "DishLeafNodePrefix"
             values:
             - "ska_mid/tm_leaf_node/d0"
-          - name: "DishMasterTag"
+          - name: "DishMasterIdentifier"
             values:
             {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
-            - "{{ $SimulatorDishMasterTag }}"
+            - "{{ $SimulatorDishMasterIdentifier }}"
             {{- else }}
-            - "{{ $RealDishMasterTag }}" # Real dish
+            - "{{ $RealDishMasterIdentifier }}" # Real dish
             {{- end }}
           - name: "CspSubarrayLNFQDN"
             values:
@@ -55,7 +55,7 @@ server:
             values:
             {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
             {{- range  $dish_id }}
-            - "{{ . | lower }}/{{ $SimulatorDishMasterTag }}"
+            - "{{ . | lower }}/{{ $SimulatorDishMasterIdentifier }}"
             {{- end }}
             {{- else }}
             {{- range  $real_dish_name }}
