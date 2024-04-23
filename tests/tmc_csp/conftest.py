@@ -169,9 +169,7 @@ def execute_end_command(
     )
 
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "obsState",
-        ObsState.IDLE,
+        subarray_node.subarray_node, "obsState", ObsState.IDLE, lookahead=20
     )
 
     assert event_recorder.has_change_event_occurred(
