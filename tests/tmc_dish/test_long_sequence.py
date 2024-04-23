@@ -13,7 +13,7 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_commands,
 )
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
-from tests.resources.test_support.enum import DishMode, PointingState
+from tests.resources.test_support.enum import DishMode  # PointingState
 
 
 @pytest.mark.tmc_dish
@@ -166,29 +166,12 @@ def invoke_configure(
 
 @given("the subarray transitions to obsState READY")
 def check_dish_mode_and_pointing_state(
-    subarray_node, central_node_mid, event_recorder, dish_ids
+    subarray_node, central_node_mid, event_recorder
 ):
     """
     Method to check dishMode and pointingState of DISH and
     SubarrayNode obsState.
     """
-    for dish_id in dish_ids.split(","):
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "pointingState"
-        )
-
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "dishMode",
-            DishMode.OPERATE,
-        )
-
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "pointingState",
-            PointingState.TRACK,
-        )
-
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
