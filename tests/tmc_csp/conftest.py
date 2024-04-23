@@ -100,6 +100,53 @@ def telescope_is_in_idle_state(
     )
 
 
+@when(
+    parsers.parse(
+        "I reassign with new resources to TMC SubarrayNode {subarray_id}"
+    )
+)
+def reassign_resources(
+    central_node_mid,
+    event_recorder,
+    command_input_factory,
+    subarray_id,
+    subarray_node,
+):
+    """A method to move subarray into the IDLE ObsState"""
+
+    assign_input_json = prepare_json_args_for_centralnode_commands(
+        "assign_resources_mid_multiple_scantype",
+        command_input_factory,
+    )
+
+    assign_str = json.loads(assign_input_json)
+
+    _, unique_id = central_node_mid.store_resources(json.dumps(assign_str))
+
+    check_subarray_instance(
+        subarray_node.subarray_devices.get("csp_subarray"), subarray_id
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices.get("csp_subarray"),
+        "obsState",
+        ObsState.IDLE,
+    )
+
+    check_subarray_instance(subarray_node.subarray_node, subarray_id)
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.IDLE,
+    )
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (unique_id[0], str(int(ResultCode.OK))),
+        lookahead=10,
+    )
+
+
 @when(parsers.parse("end the configuration on TMC SubarrayNode {subarray_id}"))
 def execute_end_command(
     subarray_node,
@@ -185,20 +232,23 @@ def check_tmc_is_in_empty_obsstate(
     )
 
 
-@when(parsers.parse("reperform scan with same configuration and new scan id"))
+@when(
+    parsers.parse(
+        "reperform scan with same configuration and new scan id {new_scan_id}"
+    )
+)
 def reexecute_scan_command(
-    command_input_factory,
-    event_recorder,
-    subarray_node,
+    command_input_factory, event_recorder, subarray_node, new_scan_id
 ):
     """A method to invoke scan command with new scan_id"""
 
-    scan_id = 10
     scan_json = prepare_json_args_for_commands(
         "scan_mid", command_input_factory
     )
 
-    scan_json = update_scan_id(scan_json, scan_id)
+    scan_json = update_scan_id(scan_json, new_scan_id)
     _, unique_id = subarray_node.execute_transition("Scan", argin=scan_json)
 
-    check_scan_successful(subarray_node, event_recorder, scan_id, unique_id)
+    check_scan_successful(
+        subarray_node, event_recorder, new_scan_id, unique_id
+    )
