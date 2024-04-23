@@ -109,14 +109,14 @@ def check_scan_successful(
         subarray_node.subarray_node,
         "obsState",
         ObsState.SCANNING,
-        lookahead=20,
+        lookahead=10,
     )
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["csp_subarray"],
         "obsState",
         ObsState.SCANNING,
-        lookahead=20,
+        lookahead=10,
     )
 
     wait_for_device_status_ready(
@@ -126,7 +126,7 @@ def check_scan_successful(
         subarray_node.subarray_devices["csp_subarray"],
         "obsState",
         ObsState.READY,
-        lookahead=20,
+        lookahead=10,
     )
 
     wait_for_device_status_ready(subarray_node.subarray_node)
@@ -137,7 +137,7 @@ def check_scan_successful(
         subarray_node.subarray_node,
         "longRunningCommandResult",
         (unique_id[0], str(int(ResultCode.OK))),
-        lookahead=20,
+        lookahead=10,
     )
 
 
@@ -164,7 +164,7 @@ def check_configure_successful(
         subarray_node.subarray_node,
         "longRunningCommandResult",
         (unique_id[0], str(int(ResultCode.OK))),
-        lookahead=20,
+        lookahead=10,
     )
 
 
