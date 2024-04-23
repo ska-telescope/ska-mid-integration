@@ -76,21 +76,25 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
         central_node_mid.dish_master_dict["SKA001"],
         "dishMode",
         DishMode.STANDBY_FP,
+        lookahead=15,
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.dish_master_dict["SKA036"],
         "dishMode",
         DishMode.STANDBY_FP,
+        lookahead=15,
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.dish_master_dict["SKA063"],
         "dishMode",
         DishMode.STANDBY_FP,
+        lookahead=15,
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.dish_master_dict["SKA100"],
         "dishMode",
         DishMode.STANDBY_FP,
+        lookahead=15,
     )
 
     # Wait for DishMaster attribute value update,
