@@ -15,7 +15,7 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
-# @pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
+@pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
 @pytest.mark.tmc_csp_dish
 @pytest.mark.SKA_mid
 @scenario(

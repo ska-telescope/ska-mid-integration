@@ -1,19 +1,19 @@
-release=0.19.2
-tag=0.19.2
+release=0.19.1
+tag=0.19.1
 tag_description=
 **Charts:**
-**1. ska-tmc-integration 0.19.0 - 0.19.2*
+**1. ska-tmc-integration 0.19.0 - 0.19.1*
 
-    **1.1 ska-tmc-mid - 0.19.0 - 0.19.2:
+    **1.1 ska-tmc-mid - 0.19.0 - 0.19.1:
         a. Intermediate chart with TMC updates to work with dish-lmc chart 3.0.0
         b. Fixed issues in the tests
 
 
 release_notes=
 **Charts:**
-**1. ska-tmc-integration 0.19.0 - 0.19.2:**
+**1. ska-tmc-integration 0.19.0 - 0.19.1:**
 
-    **1.1 ska-tmc-mid - 0.19.0 - 0.19.2:
+    **1.1 ska-tmc-mid - 0.19.0 - 0.19.1:
         a. Intermediate chart with TMC updates to work with dish-lmc chart 3.0.0
         b. Fixed issues in the tests
 

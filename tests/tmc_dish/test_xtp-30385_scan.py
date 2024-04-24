@@ -18,7 +18,7 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
-@pytest.mark.skip(
+@pytest.mark.xfail(
     reason="TMC-Dish Scan-EndSCan interface is yet to be "
     + "tested in integration repository."
 )

@@ -90,13 +90,9 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             self.db = Database()
 
             # Create database object for Dish1 TANGO DB
-            LOGGER.info("dish_fqdn001: %s", dish_fqdn001)
             dish1_tango_host = dish_fqdn001.split("/")[2]
-            LOGGER.info("dish1_tango_host: %s", dish1_tango_host)
             dish1_host = dish1_tango_host.split(":")[0]
-            LOGGER.info("dish1_host: %s", dish1_host)
             dish1_port = dish1_tango_host.split(":")[1]
-            LOGGER.info("dish1_port: %s", dish1_port)
             self.dish1_db = Database(dish1_host, dish1_port)
 
             # Get the Dish1 device class and server
