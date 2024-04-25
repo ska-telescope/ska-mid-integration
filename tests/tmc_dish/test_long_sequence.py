@@ -162,6 +162,7 @@ def invoke_configure(
     )
     configure_input = json.loads(configure_input_json)
     configure_input["dish"]["receiver_band"] = receiver_band
+    LOGGER.info(f"Input JSON: {configure_input}")
     LOGGER.info(f"Input JSON: {json.dumps(configure_input)}")
     subarray_node.execute_transition("Configure", json.dumps(configure_input))
 
