@@ -8,7 +8,7 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
 from tango import DevState
 
-from tests.conftest import LOGGER
+# from tests.conftest import LOGGER
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
@@ -151,9 +151,7 @@ def check_subarray_obsState_idle(
         + "with {receiver_band}"
     )
 )
-def invoke_configure(
-    central_node_mid, subarray_node, command_input_factory, receiver_band
-):
+def invoke_configure(subarray_node, command_input_factory, receiver_band):
     """
     A method to invoke Configure command
     """
@@ -162,15 +160,11 @@ def invoke_configure(
     )
     configure_input = json.loads(configure_input_json)
     configure_input["dish"]["receiver_band"] = receiver_band
-    LOGGER.info(f"Input JSON: {configure_input}")
-    LOGGER.info(f"Input JSON: {json.dumps(configure_input)}")
     subarray_node.execute_transition("Configure", json.dumps(configure_input))
 
 
 @given("the subarray transitions to obsState READY")
-def check_dish_mode_and_pointing_state(
-    subarray_node, central_node_mid, event_recorder
-):
+def check_dish_mode_and_pointing_state(subarray_node, event_recorder):
     """
     Method to check dishMode and pointingState of DISH and
     SubarrayNode obsState.
@@ -189,7 +183,7 @@ def check_dish_mode_and_pointing_state(
     )
 )
 def invoke_successive_configure(
-    central_node_mid, subarray_node, command_input_factory, receiver_band
+    subarray_node, command_input_factory, receiver_band
 ):
     """
     A method to invoke Configure command
@@ -203,7 +197,7 @@ def invoke_successive_configure(
 
 
 @then(
-    "the dish rejects the command with message receiver band is"
+    "the dish rejects the command with message receiver band is "
     + "already band B{receiver_band}"
 )
 def command_rejection():
