@@ -197,10 +197,12 @@ def invoke_successive_configure(
 
 
 @then(
-    "the dish rejects the command with message receiver band is "
-    + "already band B{receiver_band}"
+    parsers.parse(
+        "the dish rejects the command with message receiver band is "
+        + "already band B{receiver_band}"
+    )
 )
-def command_rejection():
+def command_rejection(receiver_band):
     pass
 
 
