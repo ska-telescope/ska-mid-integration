@@ -14,6 +14,7 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_commands,
 )
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
+from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode  # PointingState
 
 
@@ -151,19 +152,10 @@ def check_subarray_obsState_idle(
         + "with {receiver_band}"
     )
 )
-def invoke_configure(
-    subarray_node,
-    command_input_factory,
-    receiver_band,
-    event_recorder,
-    central_node_mid,
-):
+def invoke_configure(subarray_node, command_input_factory, receiver_band):
     """
     A method to invoke Configure command
     """
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA001"], "longRunningCommandResult"
-    )
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
@@ -202,7 +194,9 @@ def invoke_successive_configure(
     )
     configure_input = json.loads(configure_input_json)
     configure_input["dish"]["receiver_band"] = str(receiver_band)
-    subarray_node.execute_transition("Configure", json.dumps(configure_input))
+    pytest.command_result = subarray_node.execute_transition(
+        "Configure", json.dumps(configure_input)
+    )
 
 
 @then(
@@ -212,7 +206,9 @@ def invoke_successive_configure(
     )
 )
 def command_rejection(receiver_band):
-    pass
+    rejection_message = f"Already in band B{receiver_band}"
+    assert rejection_message in pytest.command_result[1][0]
+    assert pytest.command_result[0][0] == ResultCode.REJECTED
 
 
 @then("TMC subarray remains in obsState READY")
