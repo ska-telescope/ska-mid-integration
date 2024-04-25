@@ -151,10 +151,19 @@ def check_subarray_obsState_idle(
         + "with {receiver_band}"
     )
 )
-def invoke_configure(subarray_node, command_input_factory, receiver_band):
+def invoke_configure(
+    subarray_node,
+    command_input_factory,
+    receiver_band,
+    event_recorder,
+    central_node_mid,
+):
     """
     A method to invoke Configure command
     """
+    event_recorder.subscribe_event(
+        central_node_mid.dish_master_dict["SKA001"], "longRunningCommandResult"
+    )
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
@@ -213,5 +222,5 @@ def check_dish_mode_and_pointing_state_again(subarray_node):
     """
     subarray_obsstate = subarray_node.subarray_node.read_attribute(
         "obsState"
-    ).val
+    ).value
     assert subarray_obsstate == ObsState.READY
