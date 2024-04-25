@@ -76,7 +76,7 @@ include:
 mid-on-demand-deploy:
   stage: on-demand
   tags:
-    - k8srunner
+    - ska-k8s
   variables:
     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA"
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-mid-on-demand"
@@ -100,7 +100,7 @@ mid-on-demand-deploy:
 mid-on-demand-destroy:
   stage: on-demand
   tags:
-    - k8srunner
+    - ska-k8s
   variables:
     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA"
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-mid-on-demand"
@@ -120,7 +120,7 @@ mid-on-demand-destroy:
 mid-on-demand-deploy-mini-skampi:
   stage: on-demand
   tags:
-    - k8srunner
+    - ska-k8s
   variables:
     DISH_SIMULATION_ENABLED: "false"
     SDP_SIMULATION_ENABLED: "false"
@@ -162,7 +162,7 @@ mid-on-demand-deploy-mini-skampi:
 k8s-test-csp-dish:
   stage: test
   tags:
-    - k8srunner-large
+    - ska-k8s
   variables:
     DISH_SIMULATION_ENABLED: "false"
     CSP_SIMULATION_ENABLED: "false"
@@ -302,7 +302,7 @@ stop-on-demand-dish-lmc-100:
 mid-on-demand-destroy-mini-skampi:
   stage: on-demand
   tags:
-    - k8srunner
+    - ska-k8s
   variables:
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-on-demand-tmc-test"
     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-on-demand-tmc-test"
@@ -331,7 +331,7 @@ stop-k8s-test-csp-dish:
 
 k8s-test:
   tags:
-    - k8srunner
+    - ska-k8s
   variables:
     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA"
     DISH_SIMULATION_ENABLED: "true"
@@ -354,7 +354,7 @@ k8s-test:
 dish-lmc-dish001:
   stage: test
   tags:
-    - k8srunner
+    - ska-k8s
   variables:
     DISH_INDEX: "001"
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
@@ -422,7 +422,7 @@ dish-lmc-dish100:
 k8s-test-dish-lmc:
   stage: test
   tags:
-    - k8srunner
+    - ska-k8s
   variables:
     DISH_SIMULATION_ENABLED: "false"
     SUBARRAY_COUNT: 2
@@ -609,40 +609,40 @@ stop-staging:
 # Overrides
 default:
   tags:
-    - k8srunner
+    - ska-k8s
 
 docs-build:
   tags:
-    - k8srunner
+    - ska-k8s
 
 docs-pages:
   tags:
-    - k8srunner
+    - ska-k8s
 
 build-changelog:
   tags:
-    - k8srunner
+    - ska-k8s
 
 python-lint:
   tags:
-    - k8srunner
+    - ska-k8s
 
 helm-chart-lint:
   tags:
-    - k8srunner
+    - ska-k8s
 
 helm-chart-build:
   tags:
-    - k8srunner
+    - ska-k8s
 
 helm-chart-publish:
   tags:
-    - k8srunner
+    - ska-k8s
 
 stop-k8s-test:
   tags:
-    - k8srunner
+    - ska-k8s
 
 create-ci-metrics:
   tags:
-    - k8srunner
+    - ska-k8s
