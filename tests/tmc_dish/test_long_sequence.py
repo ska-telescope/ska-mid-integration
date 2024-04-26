@@ -26,9 +26,7 @@ def test_tmc_dish_long_sequence_functionality():
 
 
 @given("a telescope in OFF or STANDBY state")
-def check_telescope_in_initial_state(
-    central_node_mid, simulator_factory, event_recorder, dish_ids
-):
+def check_telescope_in_initial_state(central_node_mid, event_recorder):
     """
     Given a TMC
     """
@@ -121,7 +119,6 @@ def configure_subarray(
     central_node_mid,
     event_recorder,
     command_input_factory,
-    resources,
     subarray_id,
 ):
     """
@@ -163,8 +160,6 @@ def end_configuration_on_subarray(
     subarray_node,
     central_node_mid,
     event_recorder,
-    command_input_factory,
-    resources,
     subarray_id,
 ):
     """
