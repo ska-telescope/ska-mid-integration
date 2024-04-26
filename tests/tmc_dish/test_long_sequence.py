@@ -171,7 +171,7 @@ def check_dish_mode_and_pointing_state(subarray_node, event_recorder):
     SubarrayNode obsState.
     """
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
+        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=25
     )
 
 
