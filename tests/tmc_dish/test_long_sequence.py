@@ -8,7 +8,7 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
 from tango import DevState
 
-# from tests.conftest import LOGGER
+from tests.conftest import LOGGER
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
@@ -171,9 +171,7 @@ def check_dish_mode_and_pointing_state(subarray_node, event_recorder):
     SubarrayNode obsState.
     """
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "obsState",
-        ObsState.READY,
+        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
     )
 
 
@@ -193,10 +191,11 @@ def invoke_successive_configure(
         "configure_mid", command_input_factory
     )
     configure_input = json.loads(configure_input_json)
-    configure_input["dish"]["receiver_band"] = str(receiver_band)
+    configure_input["dish"]["receiver_band"] = receiver_band
     pytest.command_result = subarray_node.execute_transition(
         "Configure", json.dumps(configure_input)
     )
+    LOGGER.info(f"Configure command result: {pytest.command_result}")
 
 
 @then(
