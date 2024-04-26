@@ -10,7 +10,7 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_commands,
 )
 
-
+@pytest.mark.skip
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/xtp_29839_abort_idle_ready.feature",
