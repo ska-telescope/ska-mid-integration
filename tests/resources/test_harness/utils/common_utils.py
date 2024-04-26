@@ -115,12 +115,10 @@ def check_scan_successful(
         ObsState.SCANNING,
         lookahead=10,
     )
-    the_waiter.wait(100)
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_devices["csp_subarray"],
-        "obsState",
-        ObsState.SCANNING,
-        lookahead=50,
+
+    the_waiter = Waiter()
+    the_waiter.set_wait_for_specific_obsstate(
+        "SCANNING", [subarray_node.subarray_devices["csp_subarray"]]
     )
 
     the_waiter.set_wait_for_specific_obsstate(
