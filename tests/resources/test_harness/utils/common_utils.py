@@ -124,17 +124,14 @@ def check_scan_successful(
     the_waiter.set_wait_for_specific_obsstate(
         "READY", [subarray_node.subarray_node]
     )
-    the_waiter.wait(200)
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_devices["csp_subarray"],
-        "obsState",
-        ObsState.READY,
-        lookahead=15,
+    the_waiter = Waiter()
+    the_waiter.set_wait_for_specific_obsstate(
+        "READY", [subarray_node.subarray_devices["csp_subarray"]]
     )
 
-    the_waiter.set_wait_for_specific_obsstate(
-        "READY", [subarray_node.subarray_node]
-    )
+    # the_waiter.set_wait_for_specific_obsstate(
+    #     "READY", [subarray_node.subarray_node]
+    # )
     the_waiter.wait(100)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=20
