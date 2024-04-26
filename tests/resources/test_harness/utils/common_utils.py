@@ -120,7 +120,7 @@ def check_scan_successful(
         subarray_node.subarray_devices["csp_subarray"],
         "obsState",
         ObsState.SCANNING,
-        lookahead=10,
+        lookahead=20,
     )
 
     the_waiter.set_wait_for_specific_obsstate(
@@ -131,7 +131,7 @@ def check_scan_successful(
         subarray_node.subarray_devices["csp_subarray"],
         "obsState",
         ObsState.READY,
-        lookahead=10,
+        lookahead=15,
     )
 
     the_waiter.set_wait_for_specific_obsstate(
