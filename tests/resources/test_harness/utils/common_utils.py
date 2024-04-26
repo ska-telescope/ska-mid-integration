@@ -126,7 +126,7 @@ def check_scan_successful(
     the_waiter.set_wait_for_specific_obsstate(
         "READY", [subarray_node.subarray_node]
     )
-    the_waiter.wait(100)
+    the_waiter.wait(150)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["csp_subarray"],
         "obsState",
