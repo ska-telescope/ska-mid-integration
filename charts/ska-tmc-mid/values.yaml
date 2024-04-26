@@ -75,13 +75,17 @@ itango:
 
 centralnode:
   image:
-    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-centralnode
+    registry: artefact.skao.int
     image: ska-tmc-centralnode
+<<<<<<< HEAD
 <<<<<<< HEAD
     tag: 0.16.2
 =======
     tag: 0.14.6-dev.cb98e0d11
 >>>>>>> b369aaf0 (SAH-1536: Updated centralnode image)
+=======
+    tag: 0.14.5
+>>>>>>> 8e57e0bb (SAH-1536: Revert centralnode change)
     pullPolicy: IfNotPresent
 
 subarraynode:
