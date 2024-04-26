@@ -4,15 +4,17 @@ import ast
 import time
 
 import pytest
+import tango
 from pytest_bdd import given, parsers, scenario, when
 from ska_tango_base.control_model import ObsState
-from tango import DevState
 
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
 from tests.resources.test_support.enum import DishMode, PointingState
+
+# from tango import DevState
 
 
 @pytest.mark.tmc_dish
@@ -80,7 +82,7 @@ def check_telescope_in_initial_state(central_node_mid, event_recorder):
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
-        DevState.OFF,
+        tango._tango.DevState.OFF,
         lookahead=15,
     )
 
