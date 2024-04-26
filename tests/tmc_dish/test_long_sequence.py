@@ -25,7 +25,7 @@ def test_tmc_dish_long_sequence_functionality():
     """
 
 
-@given("Given a telescope in OFF or STANDBY state")
+@given("a telescope in OFF or STANDBY state")
 def check_telescope_in_initial_state(
     central_node_mid, simulator_factory, event_recorder, dish_ids
 ):
