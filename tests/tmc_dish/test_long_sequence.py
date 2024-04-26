@@ -81,6 +81,7 @@ def check_telescope_in_initial_state(central_node_mid, event_recorder):
         central_node_mid.central_node,
         "telescopeState",
         DevState.OFF,
+        lookahead=15,
     )
 
 
