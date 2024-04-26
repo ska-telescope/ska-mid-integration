@@ -103,7 +103,6 @@ def check_scan_successful(
     """
     # Faced a delay while testing , hence adding waiter here.
 
-    # wait_for_device_status_scanning(subarray_node.subarray_node)
     the_waiter = Waiter()
     the_waiter.set_wait_for_specific_obsstate(
         "SCANNING", [subarray_node.subarray_node]
