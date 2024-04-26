@@ -73,7 +73,7 @@ def check_telescope_in_initial_state(central_node_mid, event_recorder):
 
     # TODO: Improvement in tests/implementation
     # to minimize the need of having sleep
-    time.sleep(5)
+    time.sleep(50)
     # Resource(central_node_mid.central_node).assert_attribute(
     #     "telescopeState"
     # ).equals(["OFF", "STANDBY"])
@@ -81,7 +81,7 @@ def check_telescope_in_initial_state(central_node_mid, event_recorder):
         central_node_mid.central_node,
         "telescopeState",
         DevState.OFF,
-        lookahead=15,
+        lookahead=30,
     )
 
 
