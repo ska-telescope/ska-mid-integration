@@ -9,7 +9,7 @@ from ska_tango_base.control_model import ObsState
 from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
-from tests.conftest import LOGGER
+# from tests.conftest import LOGGER
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
@@ -232,7 +232,6 @@ def invoke_successive_configure(
     configure_input = json.loads(configure_input_json)
     configure_input["dish"]["receiver_band"] = receiver_band
     subarray_node.execute_transition("Configure", json.dumps(configure_input))
-    LOGGER.info(f"Configure command result: {pytest.command_result}")
 
 
 @then(
