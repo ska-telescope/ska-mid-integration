@@ -192,7 +192,9 @@ def configure_subarray(
     configure_input_json = json.loads(input_json)
     configure_input_json["dish"]["receiver_band"] = 1
     central_node_mid.set_subarray_id(subarray_id)
-    subarray_node.execute_transition("Configure", configure_input_json)
+    subarray_node.execute_transition(
+        "Configure", json.dumps(configure_input_json)
+    )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.dish_master_dict["SKA001"],
         "dishMode",
