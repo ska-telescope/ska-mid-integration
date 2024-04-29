@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 """Test module for long sequence functionality
 
 This module tests the TMC-DISH long sequence functionality, ensuring that
@@ -22,6 +23,21 @@ from ska_tango_base.control_model import ObsState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.constant import COMMAND_COMPLETED
+=======
+"""Test module for long sequence functionality"""
+
+import ast
+import json
+import logging
+import time
+
+import pytest
+from pytest_bdd import given, parsers, scenario, then, when
+from ska_ser_logging import configure_logging
+from ska_tango_base.control_model import ObsState
+
+from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
+>>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
 <<<<<<< HEAD
@@ -36,6 +52,7 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
+<<<<<<< HEAD
 from tests.resources.test_support.enum import DishMode, PointingState
 
 <<<<<<< HEAD
@@ -101,6 +118,20 @@ LOGGER = logging.getLogger(__name__)
 >>>>>>> c87169cc (SAH-1564: check test case)
 =======
 >>>>>>> 8a66e584 (SAH-1564: Updat test case)
+=======
+from tests.resources.test_support.common_utils.common_helpers import Resource
+from tests.resources.test_support.enum import DishMode, PointingState
+
+# import time
+
+# from tango import DevState
+
+
+configure_logging(logging.DEBUG)
+LOGGER = logging.getLogger(__name__)
+
+
+>>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42658_long_sequence.feature",
@@ -112,6 +143,7 @@ def test_tmc_dish_long_sequence_functionality():
     """
 
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 @given(
     parsers.parse(
@@ -230,6 +262,8 @@ def turn_on_telescope(central_node_mid, event_recorder):
 
 =======
 >>>>>>> aca410a8 (SAH-1536: Resolve review comments)
+=======
+>>>>>>> 3381f5c3 (SAH-1536: Add XTP numbers)
 @given("TMC subarray is in IDLE obsState")
 def check_subarray_obsState_idle(
     subarray_node, central_node_mid, event_recorder, command_input_factory
@@ -250,6 +284,7 @@ def check_subarray_obsState_idle(
     """
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
 <<<<<<< HEAD
+<<<<<<< HEAD
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "assignedResources"
     )
@@ -269,30 +304,130 @@ def check_subarray_obsState_idle(
     )
 =======
 >>>>>>> 7ceda8b8 (SAH-1536: Update test case for xtp-42658)
+=======
+=======
+@given("a telescope in OFF or STANDBY state")
+def check_telescope_in_initial_state(
+    central_node_mid: CentralNodeWrapperMid, event_recorder: EventRecorder
+):
+    """
+    Given a TMC
+    """
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "telescopeState"
+    )
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
+
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_LP,
+        )
+    # Wait for DishMaster attribute value update,
+    # on CentralNode for value dishMode STANDBY_FP
+
+    # TODO: Improvement in tests/implementation
+    # to minimize the need of having sleep
+    time.sleep(5)
+    Resource(central_node_mid.central_node).assert_attribute(
+        "telescopeState"
+    ).equals(["OFF", "STANDBY"])
+    # assert event_recorder.has_change_event_occurred(
+    #     central_node_mid.central_node,
+    #     "telescopeState",
+    #     DevState.OFF,
+    #     lookahead=30,
+    # )
+
+
+@when(parsers.parse("I assign {resources} to TMC subarray {subarray_id}"))
+def move_subarray_to_obsState_idle(
+    subarray_node: SubarrayNodeWrapper,
+    central_node_mid: CentralNodeWrapperMid,
+    event_recorder: EventRecorder,
+    command_input_factory: JsonFactory,
+    resources: list,
+    subarray_id: str,
+):
+    """
+    Method to move subarray in IDLE obsState
+    """
+    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "assignedResources"
+    )
+    central_node_mid.set_subarray_id(subarray_id)
+
+    central_node_mid.move_to_on()
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
+
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+        )
+>>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
+>>>>>>> 3381f5c3 (SAH-1536: Add XTP numbers)
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
+<<<<<<< HEAD
     pytest.command_result = central_node_mid.store_resources(assign_input_json)
+=======
+    central_node_mid.store_resources(assign_input_json)
+>>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
     )
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+>>>>>>> 3381f5c3 (SAH-1536: Add XTP numbers)
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
         (pytest.command_result[1][0], COMMAND_COMPLETED),
     )
+<<<<<<< HEAD
     assert subarray_node.subarray_node.assignedResources == ast.literal_eval(
         resources
     )
+=======
+=======
+    LOGGER.info(
+        f"Assigned Resources: {subarray_node.subarray_node.assignedResources}"
+    )
+    LOGGER.info(f"Resources:{resources}")
+    LOGGER.info(f"Resources convert:{ast.literal_eval(resources)}")
+    # assert event_recorder.has_change_event_occurred(
+    #     subarray_node.subarray_node,
+    #     "assignedResources",
+    #     ast.literal_eval(resources),  # casts string coded tuple to tuple
+    # )
+>>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
+>>>>>>> 3381f5c3 (SAH-1536: Add XTP numbers)
 
 
 @when(
     parsers.parse(
+<<<<<<< HEAD
         "I configure the subarray {subarray_id} with {receiver_band_1}"
+=======
+        "I configure the subarray {subarray_id} with receiver_band_1"
+>>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
     )
 )
 def configure_subarray(
@@ -301,6 +436,7 @@ def configure_subarray(
     event_recorder: EventRecorder,
     command_input_factory: JsonFactory,
     subarray_id: str,
+<<<<<<< HEAD
     receiver_band_1: str,
 ):
     """
@@ -318,10 +454,17 @@ def configure_subarray(
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
+=======
+):
+    """
+    A method to invoke first Configure command
+    """
+>>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
     input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
     configure_input_json = json.loads(input_json)
+<<<<<<< HEAD
     configure_input_json["dish"]["receiver_band"] = receiver_band_1
     configure_input_json["csp"]["common"]["frequency_band"] = "1"
     central_node_mid.set_subarray_id(subarray_id)
@@ -349,21 +492,69 @@ def configure_subarray(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "longRunningCommandResult",
         )
+<<<<<<< HEAD
 >>>>>>> d6082288 (SAH-1536: Update tmc-dish long sequence test)
+=======
+=======
+    configure_input_json["dish"]["receiver_band"] = "1"
+    central_node_mid.set_subarray_id(subarray_id)
+    subarray_node.execute_transition(
+        "Configure", json.dumps(configure_input_json)
+    )
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "pointingState"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
+
+>>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
+>>>>>>> 3381f5c3 (SAH-1536: Add XTP numbers)
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.OPERATE,
+<<<<<<< HEAD
         )
 
+=======
+<<<<<<< HEAD
+            lookahead=10,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "dishMode",
+            DishMode.OPERATE,
+            lookahead=10,
+        )
+=======
+        )
+
+>>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
+>>>>>>> 3381f5c3 (SAH-1536: Add XTP numbers)
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+            lookahead=10,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "pointingState",
+            PointingState.TRACK,
+            lookahead=10,
+=======
+>>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
+>>>>>>> 3381f5c3 (SAH-1536: Add XTP numbers)
         )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
+<<<<<<< HEAD
         ObsState.READY,
         lookahead=15,
     )
@@ -371,6 +562,14 @@ def configure_subarray(
         subarray_node.subarray_node,
         "longRunningCommandResult",
         (pytest.command_result[1][0], COMMAND_COMPLETED),
+=======
+        ObsState.CONFIGURING,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.READY,
+>>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
     )
 
 
@@ -383,6 +582,7 @@ def end_configuration_on_subarray(
 ):
     """
     A method to invoke end command
+<<<<<<< HEAD
 
     Args:
         subarray_node: Fixture for a Subarray Node wrapper class
@@ -454,18 +654,36 @@ def end_configuration_on_subarray(
 >>>>>>> 1a8aefae (SAH-1536: Test tmc-dish long sequence tests)
         )
 
+<<<<<<< HEAD
+=======
+=======
+    """
+    central_node_mid.set_subarray_id(subarray_id)
+    subarray_node.execute_transition("End")
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
+
+>>>>>>> 3381f5c3 (SAH-1536: Add XTP numbers)
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.STANDBY_FP,
+<<<<<<< HEAD
             lookahead=12,
         )
+=======
+        )
+>>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
+>>>>>>> 3381f5c3 (SAH-1536: Add XTP numbers)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
     )
 
+<<<<<<< HEAD
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
@@ -477,6 +695,11 @@ def end_configuration_on_subarray(
     parsers.parse(
         "I reconfigure subarray {subarray_id} with {receiver_band_2}"
     )
+=======
+
+@when(
+    parsers.parse("I reconfigure subarray {subarray_id} with receiver_band 2")
+>>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
 )
 def reconfigure_subarray(
     subarray_node: SubarrayNodeWrapper,
@@ -484,6 +707,7 @@ def reconfigure_subarray(
     event_recorder: EventRecorder,
     command_input_factory: JsonFactory,
     subarray_id: str,
+<<<<<<< HEAD
     receiver_band_2: str,
 ):
     """
@@ -499,10 +723,17 @@ def reconfigure_subarray(
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
+=======
+):
+    """
+    A method to invoke second Configure command
+    """
+>>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
     input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
     configure_input_json = json.loads(input_json)
+<<<<<<< HEAD
     configure_input_json["dish"]["receiver_band"] = receiver_band_2
     configure_input_json["csp"]["common"]["frequency_band"] = "2"
     central_node_mid.set_subarray_id(subarray_id)
@@ -545,6 +776,7 @@ def reconfigure_subarray(
         )
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> d6082288 (SAH-1536: Update tmc-dish long sequence test)
         assert (
             central_node_mid.dish_master_dict[dish_id].dishMode
@@ -560,10 +792,28 @@ def reconfigure_subarray(
         # )
 =======
 >>>>>>> 5f723990 (SAH-1564: Test pipline)
+=======
+=======
+    configure_input_json["dish"]["receiver_band"] = "2"
+    central_node_mid.set_subarray_id(subarray_id)
+    subarray_node.execute_transition(
+        "Configure", json.dumps(configure_input_json)
+    )
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "pointingState"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
+
+>>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
+>>>>>>> 3381f5c3 (SAH-1536: Add XTP numbers)
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.OPERATE,
+<<<<<<< HEAD
             lookahead=10,
 >>>>>>> 54f35f81 (SAH-1564: Update test case)
         )
@@ -573,6 +823,7 @@ def reconfigure_subarray(
             DishMode.OPERATE,
             lookahead=10,
         )
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
         # assert event_recorder.has_change_event_occurred(
@@ -593,12 +844,22 @@ def reconfigure_subarray(
 >>>>>>> 2ee3ddf7 (SAH-1536: Enable skipped tmc-dish tests)
 =======
 >>>>>>> 54f35f81 (SAH-1564: Update test case)
+=======
+=======
+            lookahead=16,
+        )
+
+>>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
+>>>>>>> 3381f5c3 (SAH-1536: Add XTP numbers)
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 3381f5c3 (SAH-1536: Add XTP numbers)
             lookahead=15,
         )
         assert event_recorder.has_change_event_occurred(
@@ -610,11 +871,17 @@ def reconfigure_subarray(
 >>>>>>> a1513bbc (SAH-1564: code cleanup)
 =======
             lookahead=15,
+<<<<<<< HEAD
 >>>>>>> c8da6868 (SAH-1564: increase lookahead)
+=======
+=======
+>>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
+>>>>>>> 3381f5c3 (SAH-1536: Add XTP numbers)
         )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
+<<<<<<< HEAD
         ObsState.READY,
         lookahead=15,
     )
@@ -622,6 +889,14 @@ def reconfigure_subarray(
         subarray_node.subarray_node,
         "longRunningCommandResult",
         (pytest.command_result[1][0], COMMAND_COMPLETED),
+=======
+        ObsState.CONFIGURING,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.READY,
+>>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
     )
 
 
@@ -635,6 +910,7 @@ def invoke_scan(
 ):
     """
     A method to invoke Scan command
+<<<<<<< HEAD
 
     Args:
         central_node_mid: Fixture for a TMC CentralNode wrapper class
@@ -643,18 +919,29 @@ def invoke_scan(
         for command
         event_recorder: Fixture for EventRecorder class
         scan_id (str): scan id for DISH components
+=======
+>>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
     """
     scan_input_json = prepare_json_args_for_commands(
         "scan_mid", command_input_factory
     )
 <<<<<<< HEAD
+<<<<<<< HEAD
     subarray_node.store_scan_data(scan_input_json)
 =======
+=======
+>>>>>>> 3381f5c3 (SAH-1536: Add XTP numbers)
 
     pytest.command_result = subarray_node.execute_transition(
         "Scan", scan_input_json
     )
+<<<<<<< HEAD
 >>>>>>> 9e9e3c92 (SAH-1536: Resolve review comments)
+=======
+=======
+    subarray_node.execute_transition("Scan", scan_input_json)
+>>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
+>>>>>>> 3381f5c3 (SAH-1536: Add XTP numbers)
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
@@ -662,18 +949,30 @@ def invoke_scan(
         )
         event_recorder.subscribe_event(
 <<<<<<< HEAD
+<<<<<<< HEAD
             central_node_mid.dish_master_dict[dish_id], "pointingState"
         )
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "dishMode"
 =======
+=======
+>>>>>>> 3381f5c3 (SAH-1536: Add XTP numbers)
             central_node_mid.dish_master_dict[dish_id],
             "longRunningCommandResult",
         )
         event_recorder.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "longRunningCommandResult",
+<<<<<<< HEAD
 >>>>>>> e299607f (SAH-1536: Resolve review comments)
+=======
+=======
+            central_node_mid.dish_master_dict[dish_id], "pointingState"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+>>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
+>>>>>>> 3381f5c3 (SAH-1536: Add XTP numbers)
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
@@ -685,17 +984,31 @@ def invoke_scan(
             central_node_mid.dish_master_dict[dish_id].dishMode
             == DishMode.OPERATE
         )
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+        assert (
+            central_node_mid.dish_leaf_node_dict[dish_id].dishMode
+            == DishMode.OPERATE
+        )
+=======
+>>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
+>>>>>>> 3381f5c3 (SAH-1536: Add XTP numbers)
 
         assert (
             central_node_mid.dish_master_dict[dish_id].pointingState
             == PointingState.TRACK
         )
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 3381f5c3 (SAH-1536: Add XTP numbers)
         assert (
             central_node_mid.dish_leaf_node_dict[dish_id].pointingState
             == PointingState.TRACK
         )
+<<<<<<< HEAD
 <<<<<<< HEAD
         logging.info(
             "longRunningCommandResult for DishLN after scan %s",
@@ -761,6 +1074,10 @@ def invoke_scan(
 >>>>>>> 98a5a250 (SAH-1536: Debug test failure)
 =======
 >>>>>>> 0031d69e (SAH-1536: Test pipeline)
+=======
+=======
+>>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
+>>>>>>> 3381f5c3 (SAH-1536: Add XTP numbers)
 
 
 @then("tmc subarraynode reports SCANNING obsState")
@@ -768,20 +1085,27 @@ def check_tmc_subarray_scanning(
     subarray_node: SubarrayNodeWrapper,
     event_recorder: EventRecorder,
 ):
+<<<<<<< HEAD
     """Checks if SubarrayNode's obsState attribute value is SCANNING
 
     Args:
         subarray_node: Fixture for a Subarray Node wrapper class
         event_recorder: Fixture for EventRecorder class
     """
+=======
+    """Checks if SubarrayNode's obsState attribute value is SCANNING"""
+>>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.SCANNING,
     )
+<<<<<<< HEAD
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
         lookahead=10,
     )
+=======
+>>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
