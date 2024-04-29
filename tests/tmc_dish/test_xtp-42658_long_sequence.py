@@ -186,6 +186,7 @@ def configure_subarray(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
+        lookahead=12,
     )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
@@ -286,6 +287,7 @@ def reconfigure_subarray(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
+        lookahead=12,
     )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
