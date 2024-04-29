@@ -3,6 +3,7 @@
 import ast
 import json
 import logging
+import time
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -17,6 +18,7 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
+from tests.resources.test_support.common_utils.common_helpers import Resource
 from tests.resources.test_support.enum import DishMode, PointingState
 
 # import time
@@ -30,7 +32,7 @@ LOGGER = logging.getLogger(__name__)
 
 @pytest.mark.tmc_dish
 @scenario(
-    "../features/tmc_dish/long_sequence.feature",
+    "../features/tmc_dish/xtp-42658_long_sequence.feature",
     "TMC executes long sequence of commands successfully",
 )
 def test_tmc_dish_long_sequence_functionality():
@@ -64,10 +66,10 @@ def check_telescope_in_initial_state(
 
     # TODO: Improvement in tests/implementation
     # to minimize the need of having sleep
-    # time.sleep(50)
-    # Resource(central_node_mid.central_node).assert_attribute(
-    #     "telescopeState"
-    # ).equals(["OFF", "STANDBY"])
+    time.sleep(5)
+    Resource(central_node_mid.central_node).assert_attribute(
+        "telescopeState"
+    ).equals(["OFF", "STANDBY"])
     # assert event_recorder.has_change_event_occurred(
     #     central_node_mid.central_node,
     #     "telescopeState",
