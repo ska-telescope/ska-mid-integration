@@ -35,7 +35,7 @@ Feature:  TMC Mid executes long running sequences with real csp devices
             |1            |["1"]    |["science_A"]  |   10       |
 
 
-    @tmc_csp @Team_SAHYADRI @XTP-29381
+    @tmc_csp @Team_SAHYADRI @XTP-29381 @XTP-42550
     Scenario Outline: TMC Mid executes multiple scans with different resources and configurations
 
     Given Telescope is ON state
@@ -56,7 +56,7 @@ Feature:  TMC Mid executes long running sequences with real csp devices
 
 
 
-    @ttmc_csp @Team_SAHYADRI @XTP-29381
+    @ttmc_csp @Team_SAHYADRI @XTP-29381 @XTP-42551
     Scenario Outline: TMC Mid executes multiple scans with different configurations, intermittently ending configurations
 
     Given Telescope is ON state

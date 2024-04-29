@@ -22,7 +22,6 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
-@pytest.mark.skip
 # @pytest.mark.skip(reason="SKB-332 has been raised for this issue")
 # @pytest.mark.xfail(reason="Need to raise bug on CSP")
 @pytest.mark.tmc_csp
