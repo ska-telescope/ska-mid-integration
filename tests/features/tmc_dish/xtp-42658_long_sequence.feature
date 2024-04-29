@@ -9,5 +9,5 @@ Scenario: TMC executes long sequence of commands successfully
     And I issue scan command with <scan_id> on subarray
     Then tmc subarraynode reports SCANNING obsState
     Examples:
-        | subarray_id | resources                             | scan_id |
-        | 1           | 'SKA001', 'SKA036', 'SKA063', 'SKA100' | 1      |
+        | subarray_id | resources                                | scan_id |
+        | 1           | ('SKA001', 'SKA036', 'SKA063', 'SKA100') | 1      |
