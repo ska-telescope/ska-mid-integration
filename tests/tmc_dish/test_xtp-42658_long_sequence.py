@@ -147,7 +147,11 @@ def configure_subarray(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
+<<<<<<< HEAD
         lookahead=10,
+=======
+        lookahead=12,
+>>>>>>> b34bdecd (SAH-1536: Update test case.)
     )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
