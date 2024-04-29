@@ -190,7 +190,7 @@ def configure_subarray(
         "configure_mid", command_input_factory
     )
     configure_input_json = json.loads(input_json)
-    configure_input_json["dish"]["receiver_band"] = 1
+    configure_input_json["dish"]["receiver_band"] = "1"
     central_node_mid.set_subarray_id(subarray_id)
     subarray_node.execute_transition(
         "Configure", json.dumps(configure_input_json)
@@ -335,7 +335,7 @@ def reconfigure_subarray(
         "configure_mid", command_input_factory
     )
     configure_input_json = json.loads(input_json)
-    configure_input_json["dish"]["receiver_band"] = 2
+    configure_input_json["dish"]["receiver_band"] = "2"
     central_node_mid.set_subarray_id(subarray_id)
     subarray_node.execute_transition(
         "Configure", json.dumps(configure_input_json)
