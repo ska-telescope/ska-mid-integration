@@ -1,10 +1,11 @@
 """Test module for long sequence functionality"""
 
 import ast
+import json
 import logging
 
 import pytest
-from pytest_bdd import given, parsers, scenario, when
+from pytest_bdd import given, parsers, scenario, then, when
 from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import ObsState
 
@@ -185,9 +186,11 @@ def configure_subarray(
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
-    configure_input_json = prepare_json_args_for_commands(
+    input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
+    configure_input_json = json.loads(input_json)
+    configure_input_json["dish"]["receiver_band"] = 1
     central_node_mid.set_subarray_id(subarray_id)
     subarray_node.execute_transition("Configure", configure_input_json)
     assert event_recorder.has_change_event_occurred(
@@ -295,4 +298,199 @@ def end_configuration_on_subarray(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
+    )
+
+
+@when(
+    parsers.parse("I reconfigure subarray {subarray_id} with receiver_band 2")
+)
+def reconfigure_subarray(
+    subarray_node,
+    central_node_mid,
+    event_recorder,
+    command_input_factory,
+    subarray_id,
+):
+    """
+    A method to invoke second Configure command
+    """
+    event_recorder.subscribe_event(
+        central_node_mid.dish_master_dict["SKA001"], "pointingState"
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.dish_master_dict["SKA036"], "pointingState"
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.dish_master_dict["SKA063"], "pointingState"
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.dish_master_dict["SKA100"], "pointingState"
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "telescopeState"
+    )
+    input_json = prepare_json_args_for_commands(
+        "configure_mid", command_input_factory
+    )
+    configure_input_json = json.loads(input_json)
+    configure_input_json["dish"]["receiver_band"] = 2
+    central_node_mid.set_subarray_id(subarray_id)
+    subarray_node.execute_transition(
+        "Configure", json.dumps(configure_input_json)
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA001"],
+        "dishMode",
+        DishMode.OPERATE,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA036"],
+        "dishMode",
+        DishMode.OPERATE,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA063"],
+        "dishMode",
+        DishMode.OPERATE,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA100"],
+        "dishMode",
+        DishMode.OPERATE,
+    )
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA001"],
+        "pointingState",
+        PointingState.TRACK,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA036"],
+        "pointingState",
+        PointingState.TRACK,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA063"],
+        "pointingState",
+        PointingState.TRACK,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA100"],
+        "pointingState",
+        PointingState.TRACK,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.READY,
+    )
+
+
+@when(parsers.parse("I issue scan command with {scan_id} on subarray"))
+def invoke_scan(
+    central_node_mid,
+    subarray_node,
+    command_input_factory,
+    subarray_id: str,
+    event_recorder,
+    scan_id,
+):
+    """
+    A method to invoke Scan command
+    """
+    scan_input_json = prepare_json_args_for_commands(
+        "scan_mid", command_input_factory
+    )
+    central_node_mid.set_subarray_id(subarray_id)
+    subarray_node.execute_transition("Scan", scan_input_json)
+
+    event_recorder.subscribe_event(
+        central_node_mid.dish_master_dict["SKA001"], "scanID"
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.dish_master_dict["SKA036"], "scanID"
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.dish_master_dict["SKA063"], "scanID"
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.dish_master_dict["SKA100"], "scanID"
+    )
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA001"],
+        "scanID",
+        scan_id,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA036"],
+        "scanID",
+        scan_id,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA063"],
+        "scanID",
+        scan_id,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA100"],
+        "scanID",
+        scan_id,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA001"],
+        "dishMode",
+        DishMode.OPERATE,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA036"],
+        "dishMode",
+        DishMode.OPERATE,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA063"],
+        "dishMode",
+        DishMode.OPERATE,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA100"],
+        "dishMode",
+        DishMode.OPERATE,
+    )
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA001"],
+        "pointingState",
+        PointingState.TRACK,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA036"],
+        "pointingState",
+        PointingState.TRACK,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA063"],
+        "pointingState",
+        PointingState.TRACK,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA100"],
+        "pointingState",
+        PointingState.TRACK,
+    )
+
+
+@then("tmc subarraynode reports SCANNING obsState")
+def check_tmc_subarray_scanning(
+    central_node_mid,
+    subarray_node,
+    event_recorder,
+    subarray_id,
+):
+    """Checks if SubarrayNode's obsState attribute value is SCANNING"""
+    central_node_mid.set_subarray_id(int(subarray_id))
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.SCANNING,
     )
