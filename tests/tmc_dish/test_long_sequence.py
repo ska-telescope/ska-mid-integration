@@ -101,6 +101,9 @@ def move_subarray_to_obsState_idle(
     Method to check subarray is in IDLE obsState
     """
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "assignedResources"
+    )
     central_node_mid.set_subarray_id(subarray_id)
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
@@ -114,7 +117,7 @@ def move_subarray_to_obsState_idle(
         ObsState.IDLE,
     )
     assert event_recorder.has_change_event_occurred(
-        central_node_mid.subarray_node,
+        subarray_node.subarray_node,
         "assignedResources",
         ast.literal_eval(resources),  # casts string coded tuple to tuple
     )
