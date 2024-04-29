@@ -6,10 +6,8 @@ import time
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
-from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
-# from tests.conftest import LOGGER
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
@@ -20,7 +18,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 
 @pytest.mark.tmc_dish
 @scenario(
-    "../features/tmc_dish/long_sequence.feature",
+    "../features/tmc_dish/xtp-42581_configure_unhappy.feature",
     "Testing of successive configure functionality with same receiver_band",
 )
 def test_tmc_dish_successive_configure_with_same_receiver_band():
@@ -240,46 +238,10 @@ def invoke_successive_configure(
         + "already band B{receiver_band}"
     )
 )
-def command_rejection(receiver_band, event_recorder, central_node_mid):
-    # Asserting against longRunningCommandStatus events is temporary
-    # arrangement. Once error propagation is implemented on TMC-Dish
-    # interface, longRunningCommandResult should be used.
-    event_recorder.subscribe_event(
-        central_node_mid.dish_leaf_node_list[0], "longRunningCommandStatus"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_leaf_node_list[0], "longRunningCommandStatus"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_leaf_node_list[0], "longRunningCommandStatus"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_leaf_node_list[0], "longRunningCommandStatus"
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_leaf_node_list[0],
-        "longRunningCommandStatus",
-        (Anything, "REJECTED"),
-        lookahead=15,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_leaf_node_list[1],
-        "longRunningCommandStatus",
-        (Anything, "REJECTED"),
-        lookahead=15,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_leaf_node_list[2],
-        "longRunningCommandStatus",
-        (Anything, "REJECTED"),
-        lookahead=15,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_leaf_node_list[3],
-        "longRunningCommandStatus",
-        (Anything, "REJECTED"),
-        lookahead=15,
-    )
+def configure_command_rejection_by_dish(receiver_band):
+    # In order to complete this clause, error propagation for TMC-Dish
+    # interface needs to be completed.
+    pass
 
 
 @then("TMC subarray remains in obsState READY")

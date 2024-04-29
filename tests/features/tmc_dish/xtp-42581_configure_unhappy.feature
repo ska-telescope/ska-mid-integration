@@ -1,3 +1,4 @@
+@XTP-42581 @Team_SAHYADRI
 Scenario Outline: Testing of successive configure functionality with same receiver_band
     Given a Telescope in ON state
     And the subarray is in IDLE obsState
