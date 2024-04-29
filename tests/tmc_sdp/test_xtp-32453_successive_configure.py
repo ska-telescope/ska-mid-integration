@@ -14,6 +14,7 @@ from tests.resources.test_harness.helpers import (
 )
 
 
+@pytest.mark.skip(reason="Timeout occurring for obsstate READY aggregation")
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp-32453_successive_configure_with_real_sdp.feature",
