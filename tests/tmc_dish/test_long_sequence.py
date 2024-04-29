@@ -15,7 +15,7 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_commands,
 )
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
-from tests.resources.test_support.enum import DishMode  # PointingState
+from tests.resources.test_support.enum import DishMode, PointingState
 
 
 @pytest.mark.tmc_dish
@@ -52,6 +52,18 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
     )
     event_recorder.subscribe_event(
         central_node_mid.dish_master_dict["SKA100"], "dishMode"
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.dish_master_dict["SKA001"], "PointingState"
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.dish_master_dict["SKA036"], "PointingState"
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.dish_master_dict["SKA063"], "PointingState"
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.dish_master_dict["SKA100"], "PointingState"
     )
 
     # TODO: Improvement in tests/implementation
@@ -165,11 +177,38 @@ def invoke_configure(subarray_node, command_input_factory, receiver_band):
 
 
 @given("the subarray transitions to obsState READY")
-def check_dish_mode_and_pointing_state(subarray_node, event_recorder):
+def check_dish_mode_and_pointing_state(
+    subarray_node, event_recorder, central_node_mid
+):
     """
     Method to check dishMode and pointingState of DISH and
     SubarrayNode obsState.
     """
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA001"],
+        "PointingState",
+        PointingState.TRACK,
+        lookahead=5,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA036"],
+        "PointingState",
+        PointingState.TRACK,
+        lookahead=5,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA063"],
+        "PointingState",
+        PointingState.TRACK,
+        lookahead=5,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA100"],
+        "PointingState",
+        PointingState.TRACK,
+        lookahead=5,
+    )
+
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
     )
