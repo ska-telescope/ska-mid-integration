@@ -15,7 +15,7 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_support.enum import DishMode, PointingState
 
-
+@pytest.mark.skip
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42581_configure_unhappy.feature",

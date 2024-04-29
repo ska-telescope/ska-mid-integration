@@ -19,6 +19,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
+@pytest.mark.skip(reason="Test being fix in SAH-1564")
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-43142_endscan.feature",

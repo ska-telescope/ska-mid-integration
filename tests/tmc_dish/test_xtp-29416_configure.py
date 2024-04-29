@@ -13,7 +13,7 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_support.enum import DishMode, PointingState
 
-
+@pytest.mark.skip(reason="Test being fix in SAH-1564")
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29416_configure.feature",

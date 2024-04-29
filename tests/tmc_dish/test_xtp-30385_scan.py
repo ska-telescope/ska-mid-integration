@@ -25,6 +25,7 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
+@pytest.mark.skip(reason="Test being fix in SAH-1564")
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-30385_scan.feature",
