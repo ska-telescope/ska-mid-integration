@@ -19,6 +19,7 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.common_utils.common_helpers import Resource
+from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
 # import time
@@ -62,7 +63,7 @@ def check_telescope_in_initial_state(
             DishMode.STANDBY_LP,
         )
     # Wait for DishMaster attribute value update,
-    # on CentralNode for value dishMode STANDBY_FP
+    # on CentralNode for value dishMode STANDBY_LP
 
     # TODO: Improvement in tests/implementation
     # to minimize the need of having sleep
@@ -70,12 +71,6 @@ def check_telescope_in_initial_state(
     Resource(central_node_mid.central_node).assert_attribute(
         "telescopeState"
     ).equals(["OFF", "STANDBY"])
-    # assert event_recorder.has_change_event_occurred(
-    #     central_node_mid.central_node,
-    #     "telescopeState",
-    #     DevState.OFF,
-    #     lookahead=30,
-    # )
 
 
 @when(parsers.parse("I assign {resources} to TMC subarray {subarray_id}"))
@@ -94,6 +89,9 @@ def move_subarray_to_obsState_idle(
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "assignedResources"
     )
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     central_node_mid.set_subarray_id(subarray_id)
 
     central_node_mid.move_to_on()
@@ -111,12 +109,17 @@ def move_subarray_to_obsState_idle(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-    central_node_mid.store_resources(assign_input_json)
+    pytest.command_result = central_node_mid.store_resources(assign_input_json)
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
     LOGGER.info(
         f"Assigned Resources: {subarray_node.subarray_node.assignedResources}"
@@ -145,13 +148,16 @@ def configure_subarray(
     """
     A method to invoke first Configure command
     """
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
     configure_input_json = json.loads(input_json)
     configure_input_json["dish"]["receiver_band"] = "1"
     central_node_mid.set_subarray_id(subarray_id)
-    subarray_node.execute_transition(
+    pytest.command_result = subarray_node.execute_transition(
         "Configure", json.dumps(configure_input_json)
     )
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
@@ -183,6 +189,11 @@ def configure_subarray(
         "obsState",
         ObsState.READY,
     )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+    )
 
 
 @when(parsers.parse("I issue End command to the subarray {subarray_id}"))
@@ -195,8 +206,11 @@ def end_configuration_on_subarray(
     """
     A method to invoke end command
     """
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     central_node_mid.set_subarray_id(subarray_id)
-    subarray_node.execute_transition("End")
+    pytest.command_result = subarray_node.execute_transition("End")
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "dishMode"
@@ -206,11 +220,17 @@ def end_configuration_on_subarray(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.STANDBY_FP,
+            lookahead=12,
         )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
 
 
@@ -227,13 +247,16 @@ def reconfigure_subarray(
     """
     A method to invoke second Configure command
     """
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
     configure_input_json = json.loads(input_json)
     configure_input_json["dish"]["receiver_band"] = "2"
     central_node_mid.set_subarray_id(subarray_id)
-    subarray_node.execute_transition(
+    pytest.command_result = subarray_node.execute_transition(
         "Configure", json.dumps(configure_input_json)
     )
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
@@ -265,6 +288,11 @@ def reconfigure_subarray(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
 
 
