@@ -344,25 +344,21 @@ def reconfigure_subarray(
         central_node_mid.dish_master_dict["SKA001"],
         "dishMode",
         DishMode.OPERATE,
-        lookahead=16,
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.dish_master_dict["SKA036"],
         "dishMode",
         DishMode.OPERATE,
-        lookahead=16,
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.dish_master_dict["SKA063"],
         "dishMode",
         DishMode.OPERATE,
-        lookahead=16,
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.dish_master_dict["SKA100"],
         "dishMode",
         DishMode.OPERATE,
-        lookahead=16,
     )
 
     assert event_recorder.has_change_event_occurred(
@@ -447,21 +443,25 @@ def invoke_scan(
         central_node_mid.dish_master_dict["SKA001"],
         "dishMode",
         DishMode.OPERATE,
+        lookahead=16,
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.dish_master_dict["SKA036"],
         "dishMode",
         DishMode.OPERATE,
+        lookahead=16,
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.dish_master_dict["SKA063"],
         "dishMode",
         DishMode.OPERATE,
+        lookahead=16,
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.dish_master_dict["SKA100"],
         "dishMode",
         DishMode.OPERATE,
+        lookahead=16,
     )
 
     assert event_recorder.has_change_event_occurred(
