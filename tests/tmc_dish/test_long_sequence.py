@@ -1,9 +1,11 @@
 """Test module for long sequence functionality"""
 
 import ast
+import logging
 
 import pytest
 from pytest_bdd import given, parsers, scenario, when
+from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import ObsState
 
 from tests.resources.test_harness.helpers import (
@@ -16,6 +18,8 @@ from tests.resources.test_support.enum import DishMode, PointingState
 
 
 # import time
+configure_logging(logging.DEBUG)
+LOGGER = logging.getLogger(__name__)
 
 
 @pytest.mark.tmc_dish
@@ -116,6 +120,11 @@ def move_subarray_to_obsState_idle(
         "obsState",
         ObsState.IDLE,
     )
+    LOGGER.info(
+        f"Assigned Resources: {subarray_node.subarray_node.assignedResources}"
+    )
+    LOGGER.info(f"Resources:{resources}")
+    LOGGER.info(f"Resources convert:{ast.literal_eval(resources)}")
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "assignedResources",
