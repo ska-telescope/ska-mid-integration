@@ -25,6 +25,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 @pytest.mark.skip(reason="Dish pointingstate issue")
 =======
 @pytest.mark.MM
@@ -43,6 +44,9 @@ from tests.resources.test_support.enum import DishMode, PointingState
 >>>>>>> f5038392 (SAH-1567: Disable test cases)
 =======
 >>>>>>> 53d94e03 (SAH-1564: Enable tmc-dish bdd tests)
+=======
+@pytest.mark.skip(reason="Test being fix in SAH-1564")
+>>>>>>> 00483018 (SAH-1536: Update test case)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-43142_endscan.feature",

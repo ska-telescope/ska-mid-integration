@@ -11,6 +11,7 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_support.enum import DishMode, PointingState
 
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -54,7 +55,13 @@ from tests.resources.test_support.enum import DishMode, PointingState
 @pytest.mark.skip(reason="Dish pointingstate issue")
 =======
 >>>>>>> ef579ec3 (SAH-1564: Enable TMC - Dish Abort tests)
+<<<<<<< HEAD
 >>>>>>> 0ad6c34c (SAH-1564: Enable TMC - Dish Abort tests)
+=======
+=======
+@pytest.mark.skip(reason="Test being fix in SAH-1564")
+>>>>>>> 00483018 (SAH-1536: Update test case)
+>>>>>>> 438706f0 (SAH-1536: Update test case)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-30211_abort_configuring.feature",

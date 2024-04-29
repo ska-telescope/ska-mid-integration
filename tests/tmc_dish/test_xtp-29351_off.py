@@ -8,6 +8,7 @@ from tests.resources.test_support.enum import DishMode
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -43,6 +44,9 @@ from tests.resources.test_support.enum import DishMode
 >>>>>>> efe6d5dd (SAH-1564: Run only long sequence test for tmc-dish interface)
 =======
 >>>>>>> bb18efd6 (SAH-1567: Code cleanup)
+=======
+@pytest.mark.skip(reason="Test being fix in SAH-1564")
+>>>>>>> 438706f0 (SAH-1536: Update test case)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29351_off.feature",

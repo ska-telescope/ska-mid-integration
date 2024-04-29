@@ -13,6 +13,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -90,7 +91,13 @@ from tests.resources.test_support.enum import DishMode, PointingState
 =======
 =======
 >>>>>>> cd970d8c (SAH-1564: Enable tmc-dish end test case)
+<<<<<<< HEAD
 >>>>>>> e08fc9e9 (SAH-1564: Enable tmc-dish end test case)
+=======
+=======
+@pytest.mark.skip
+>>>>>>> 00483018 (SAH-1536: Update test case)
+>>>>>>> 438706f0 (SAH-1536: Update test case)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29417_end.feature",

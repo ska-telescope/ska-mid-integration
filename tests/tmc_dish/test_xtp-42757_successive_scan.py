@@ -14,6 +14,7 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_support.enum import DishMode, PointingState
 
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -37,6 +38,9 @@ from tests.resources.test_support.enum import DishMode, PointingState
 >>>>>>> 22caffec (SAH-1564: Run only long sequence test for tmc-dish interface)
 =======
 >>>>>>> 53d94e03 (SAH-1564: Enable tmc-dish bdd tests)
+=======
+@pytest.mark.skip(reason="Test being fix in SAH-1564")
+>>>>>>> 00483018 (SAH-1536: Update test case)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42757_successive_scan.feature",

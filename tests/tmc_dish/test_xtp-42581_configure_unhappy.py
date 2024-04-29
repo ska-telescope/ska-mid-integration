@@ -14,6 +14,7 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_support.enum import DishMode, PointingState
 
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -35,6 +36,9 @@ from tests.resources.test_support.enum import DishMode, PointingState
 =======
 @pytest.mark.skip
 >>>>>>> d9ba66d7 (SAH-1564: Test pipeline)
+=======
+@pytest.mark.skip
+>>>>>>> 00483018 (SAH-1536: Update test case)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42581_configure_unhappy.feature",
