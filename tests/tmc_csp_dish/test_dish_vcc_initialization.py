@@ -3,7 +3,6 @@ Test case to validate negative scenario for
    Dish Vcc map configuration feature
 """
 import json
-import time
 
 import pytest
 from pytest_bdd import given, scenario, then, when
@@ -300,13 +299,13 @@ def tmc_set_dish_vcc_config_set_to_false(tmc_mid):
 def tmc_report_dish_vcc_mismatch(tmc_mid):
     """Validate isDishVccConfigSet to False"""
     expected_dish_vcc_mismatch_message = (
-        "TMC and CSP Master Dish VCC version is Different"
+        '{"dish": "ALL DISH OK", '
+        '"ska_mid/tm_leaf_node/csp_master"'
+        ': "TMC and CSP Master Dish VCC'
+        ' version is Different"}'
     )
-    dish_vcc_validation_status = json.loads(tmc_mid.DishVccValidationStatus)
-    assert (
-        dish_vcc_validation_status["ska_mid/tm_leaf_node/csp_master"]
-        == expected_dish_vcc_mismatch_message
+    assert wait_and_validate_device_attribute_value(
+        tmc_mid.central_node.central_node,
+        "DishVccValidationStatus",
+        expected_dish_vcc_mismatch_message,
     )
-    # Wait for CSP Master Leaf Node to be restarted. Normally
-    # it takes around 10-15 seconds
-    time.sleep(15)
