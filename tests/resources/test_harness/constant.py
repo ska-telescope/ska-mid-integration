@@ -29,7 +29,6 @@ dish_master1 = "ska001/elt/master"
 dish_master2 = "ska036/elt/master"
 dish_master3 = "ska063/elt/master"
 dish_master4 = "ska100/elt/master"
-dish_master_list = [dish_master1, dish_master2, dish_master3, dish_master4]
 sdp_queue_connector = "mid-sdp/queueconnector/01"
 
 COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE = {
