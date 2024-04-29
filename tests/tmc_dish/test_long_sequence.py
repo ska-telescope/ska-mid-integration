@@ -260,21 +260,25 @@ def command_rejection(receiver_band, event_recorder, central_node_mid):
         central_node_mid.dish_leaf_node_list[0],
         "longRunningCommandStatus",
         (Anything, "REJECTED"),
+        lookahead=15,
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.dish_leaf_node_list[1],
         "longRunningCommandStatus",
         (Anything, "REJECTED"),
+        lookahead=15,
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.dish_leaf_node_list[2],
         "longRunningCommandStatus",
         (Anything, "REJECTED"),
+        lookahead=15,
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.dish_leaf_node_list[3],
         "longRunningCommandStatus",
         (Anything, "REJECTED"),
+        lookahead=15,
     )
 
 
