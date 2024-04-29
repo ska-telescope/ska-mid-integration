@@ -6,6 +6,7 @@ import time
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
+from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
 from tests.conftest import LOGGER
@@ -14,7 +15,6 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_commands,
 )
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
-from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode  # PointingState
 
 
@@ -171,7 +171,7 @@ def check_dish_mode_and_pointing_state(subarray_node, event_recorder):
     SubarrayNode obsState.
     """
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=25
+        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
     )
 
 
@@ -192,9 +192,7 @@ def invoke_successive_configure(
     )
     configure_input = json.loads(configure_input_json)
     configure_input["dish"]["receiver_band"] = receiver_band
-    pytest.command_result = subarray_node.execute_transition(
-        "Configure", json.dumps(configure_input)
-    )
+    subarray_node.execute_transition("Configure", json.dumps(configure_input))
     LOGGER.info(f"Configure command result: {pytest.command_result}")
 
 
@@ -204,18 +202,49 @@ def invoke_successive_configure(
         + "already band B{receiver_band}"
     )
 )
-def command_rejection(receiver_band):
-    rejection_message = f"Already in band B{receiver_band}"
-    assert rejection_message in pytest.command_result[1][0]
-    assert pytest.command_result[0][0] == ResultCode.REJECTED
+def command_rejection(receiver_band, event_recorder, central_node_mid):
+    # Asserting against longRunningCommandStatus events is temporary
+    # arrangement. Once error propagation is implemented on TMC-Dish
+    # interface, longRunningCommandResult should be used.
+    event_recorder.subscribe_event(
+        central_node_mid.dish_leaf_node_list[0], "longRunningCommandStatus"
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.dish_leaf_node_list[0], "longRunningCommandStatus"
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.dish_leaf_node_list[0], "longRunningCommandStatus"
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.dish_leaf_node_list[0], "longRunningCommandStatus"
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_leaf_node_list[0],
+        "longRunningCommandStatus",
+        (Anything, "REJECTED"),
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_leaf_node_list[1],
+        "longRunningCommandStatus",
+        (Anything, "REJECTED"),
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_leaf_node_list[2],
+        "longRunningCommandStatus",
+        (Anything, "REJECTED"),
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_leaf_node_list[3],
+        "longRunningCommandStatus",
+        (Anything, "REJECTED"),
+    )
 
 
 @then("TMC subarray remains in obsState READY")
-def check_dish_mode_and_pointing_state_again(subarray_node):
+def check_dish_mode_and_pointing_state_again(subarray_node, event_recorder):
     """
     Method to check SubarrayNode obsState.
     """
-    subarray_obsstate = subarray_node.subarray_node.read_attribute(
-        "obsState"
-    ).value
-    assert subarray_obsstate == ObsState.READY
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
+    )
