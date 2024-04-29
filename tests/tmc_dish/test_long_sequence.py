@@ -195,68 +195,66 @@ def configure_subarray(
     subarray_node.execute_transition(
         "Configure", json.dumps(configure_input_json)
     )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA001"],
-        "dishMode",
-        DishMode.OPERATE,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA036"],
-        "dishMode",
-        DishMode.OPERATE,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA063"],
-        "dishMode",
-        DishMode.OPERATE,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA100"],
-        "dishMode",
-        DishMode.OPERATE,
-    )
+    # assert event_recorder.has_change_event_occurred(
+    #     central_node_mid.dish_master_dict["SKA001"],
+    #     "dishMode",
+    #     DishMode.OPERATE,
+    # )
+    # assert event_recorder.has_change_event_occurred(
+    #     central_node_mid.dish_master_dict["SKA036"],
+    #     "dishMode",
+    #     DishMode.OPERATE,
+    # )
+    # assert event_recorder.has_change_event_occurred(
+    #     central_node_mid.dish_master_dict["SKA063"],
+    #     "dishMode",
+    #     DishMode.OPERATE,
+    # )
+    # assert event_recorder.has_change_event_occurred(
+    #     central_node_mid.dish_master_dict["SKA100"],
+    #     "dishMode",
+    #     DishMode.OPERATE,
+    # )
 
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA001"],
-        "pointingState",
-        PointingState.TRACK,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA036"],
-        "pointingState",
-        PointingState.TRACK,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA063"],
-        "pointingState",
-        PointingState.TRACK,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA100"],
-        "pointingState",
-        PointingState.TRACK,
-    )
-    # for dish_id in [SKA001, SKA036, SKA063, "SKA100"]:
-    #     event_recorder.subscribe_event(
-    #         central_node_mid.dish_master_dict[dish_id], "pointingState"
-    #     )
-    #     event_recorder.subscribe_event(
-    #         central_node_mid.dish_master_dict[dish_id], "dishMode"
-    #     )
+    # assert event_recorder.has_change_event_occurred(
+    #     central_node_mid.dish_master_dict["SKA001"],
+    #     "pointingState",
+    #     PointingState.TRACK,
+    # )
+    # assert event_recorder.has_change_event_occurred(
+    #     central_node_mid.dish_master_dict["SKA036"],
+    #     "pointingState",
+    #     PointingState.TRACK,
+    # )
+    # assert event_recorder.has_change_event_occurred(
+    #     central_node_mid.dish_master_dict["SKA063"],
+    #     "pointingState",
+    #     PointingState.TRACK,
+    # )
+    # assert event_recorder.has_change_event_occurred(
+    #     central_node_mid.dish_master_dict["SKA100"],
+    #     "pointingState",
+    #     PointingState.TRACK,
+    # )
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "pointingState"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
 
-    #     assert event_recorder.has_change_event_occurred(
-    #         central_node_mid.dish_master_dict[dish_id],
-    #         "dishMode",
-    #         DishMode.OPERATE,
-    #         lookahead=15,
-    #     )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.OPERATE,
+        )
 
-    #     assert event_recorder.has_change_event_occurred(
-    #         central_node_mid.dish_master_dict[dish_id],
-    #         "pointingState",
-    #         PointingState.TRACK,
-    #         lookahead=15,
-    #     )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "pointingState",
+            PointingState.TRACK,
+        )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
