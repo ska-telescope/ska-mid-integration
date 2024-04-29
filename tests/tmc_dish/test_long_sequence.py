@@ -110,6 +110,28 @@ def move_subarray_to_obsState_idle(
         subarray_node.subarray_node, "assignedResources"
     )
     central_node_mid.set_subarray_id(subarray_id)
+
+    central_node_mid.move_to_on()
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA001"],
+        "dishMode",
+        DishMode.STANDBY_FP,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA036"],
+        "dishMode",
+        DishMode.STANDBY_FP,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA063"],
+        "dishMode",
+        DishMode.STANDBY_FP,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA100"],
+        "dishMode",
+        DishMode.STANDBY_FP,
+    )
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
