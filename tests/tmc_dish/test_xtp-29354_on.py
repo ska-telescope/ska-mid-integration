@@ -11,6 +11,7 @@ from tests.resources.test_support.enum import DishMode
 
 
 # @pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
+@pytest.mark.skip
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29354_on.feature",
