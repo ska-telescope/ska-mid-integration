@@ -34,6 +34,9 @@ def check_telescope_is_on(
     central_node_mid: CentralNodeWrapperMid, event_recorder: EventRecorder
 ):
     "check telescope is in On state"
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "telescopeState"
+    )
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "dishMode"
