@@ -36,6 +36,8 @@ def check_telescope_is_on(
     central_node_mid: CentralNodeWrapperMid, event_recorder: EventRecorder
 ):
     "check telescope is in On state"
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        assert central_node_mid.dish_master_dict[dish_id].ping() > 0
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
@@ -51,26 +53,16 @@ def check_telescope_is_on(
         )
     central_node_mid.move_to_on()
 
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA001"],
-        "dishMode",
-        DishMode.STANDBY_FP,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA036"],
-        "dishMode",
-        DishMode.STANDBY_FP,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA063"],
-        "dishMode",
-        DishMode.STANDBY_FP,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA100"],
-        "dishMode",
-        DishMode.STANDBY_FP,
-    )
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
+
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+        )
 
     # Wait for DishMaster attribute value update,
     # on CentralNode for value dishMode STANDBY_FP
@@ -80,7 +72,9 @@ def check_telescope_is_on(
     time.sleep(5)
 
     assert event_recorder.has_change_event_occurred(
-        central_node_mid.sdp_master, "State", DevState.ON, lookahead=15
+        central_node_mid.central_node,
+        "telescopeState",
+        DevState.ON,
     )
 
 
