@@ -48,6 +48,7 @@ def check_telescope_is_on(
     if central_node_mid.telescope_state != "ON":
         central_node_mid.move_to_on()
 
+    time.sleep(2)
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "dishMode"
@@ -57,6 +58,7 @@ def check_telescope_is_on(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.STANDBY_FP,
+            lookahead=12,
         )
     # Wait for DishMaster attribute value update,
     # on CentralNode for value dishMode STANDBY_LP
