@@ -160,7 +160,10 @@ class SubarrayNodeWrapper(object):
         self.csp_subarray1 = csp_subarray1
         self.sdp_subarray1 = sdp_subarray1
         device_dict["dish_master_list"] = self.dish_master_list
+<<<<<<< HEAD
         device_dict["dish_leaf_node_list"] = self.dish_leaf_node_list
+=======
+>>>>>>> 3dd8aee0 (SAH-1536: Update test case.)
 
     def _setup(self):
         """ """
