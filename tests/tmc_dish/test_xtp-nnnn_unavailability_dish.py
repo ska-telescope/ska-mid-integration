@@ -119,7 +119,11 @@ def turn_on_telescope(central_node_mid, event_recorder):
     if central_node_mid.telescope_state != "ON":
         central_node_mid.move_to_on()
 
+<<<<<<< HEAD
 >>>>>>> 05994d75 (SAH-1536: Implemented test case for unavailaity scenario)
+=======
+    time.sleep(2)
+>>>>>>> 927fa5a7 (SAH-1536: Updated test case)
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "dishMode"
@@ -129,6 +133,7 @@ def turn_on_telescope(central_node_mid, event_recorder):
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.STANDBY_FP,
+            lookahead=12,
         )
 <<<<<<< HEAD
 <<<<<<< HEAD
