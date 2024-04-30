@@ -1,8 +1,11 @@
 """Test module for TMC-SDP On functionality"""
+import time
+
 import pytest
 from pytest_bdd import given, scenario, then, when
 from tango import DevState
 
+from tests.conftest import LOGGER
 from tests.resources.test_harness.helpers import (
     get_master_device_simulators,
     wait_and_validate_device_attribute_value,
@@ -80,6 +83,16 @@ def given_a_tmc(central_node_mid, simulator_factory, event_recorder):
 @given("telescope state is STANDBY")
 def check_telescope_state_standby(central_node_mid, event_recorder):
     """A method to check CentralNode telescopeState STANDBY"""
+    # Added wait as telescopeState STANDBY aggregation takes more than
+    # 2 minutes sometimes
+    LOGGER.info(
+        "TelescopeState is: %s", central_node_mid.central_node.telescopeState
+    )
+    time.sleep(180)
+    LOGGER.info(
+        "TelescopeState is: %s", central_node_mid.central_node.telescopeState
+    )
+
     assert wait_and_validate_device_attribute_value(
         central_node_mid.central_node, "telescopeState", DevState.STANDBY
     )
