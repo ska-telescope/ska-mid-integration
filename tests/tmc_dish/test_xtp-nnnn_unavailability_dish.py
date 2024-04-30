@@ -62,7 +62,6 @@ def move_subarray_to_obsState_idle(
     central_node_mid: CentralNodeWrapperMid,
     event_recorder: EventRecorder,
     command_input_factory: JsonFactory,
-    resources: list,
 ):
     """
     Method to move subarray in IDLE obsState
