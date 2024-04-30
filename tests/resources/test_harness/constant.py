@@ -30,7 +30,7 @@ dish_master2 = "ska036/elt/master"
 dish_master3 = "ska063/elt/master"
 dish_master4 = "ska100/elt/master"
 sdp_queue_connector = "mid-sdp/queueconnector/01"
-spfrx = "mid-dish/simulator-spfrx/SKA001"
+spfrx = "mid-dish/simulator-spfrx/ska001"
 
 COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE = {
     "enabled": True,
