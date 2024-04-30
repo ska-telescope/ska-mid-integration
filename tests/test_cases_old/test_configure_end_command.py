@@ -36,6 +36,10 @@ tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 telescope_control = BaseTelescopeControl()
 
 
+@pytest.mark.xfail(
+    reason="Fails intermittently due to dish unavailability"
+    + " error. Will be resolved under story SAH-1531."
+)
 @pytest.mark.SKA_mid
 def test_configure_timeout_and_error_propagation_csp(
     json_factory, change_event_callbacks

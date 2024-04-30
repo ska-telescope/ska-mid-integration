@@ -256,7 +256,7 @@ def validate_dish_vcc_config_after_central_node_and_csp_mln_restart(
     assert tmc_mid.dish_leaf_node_list[3].kValue == 101
 
 
-# @pytest.mark.skip(reason="Enable when SKB-292, SKB-293 are resolved")
+@pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
 @pytest.mark.tmc_csp_dish
 @pytest.mark.SKA_mid
 @scenario(
