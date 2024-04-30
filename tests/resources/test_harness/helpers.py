@@ -710,3 +710,40 @@ def update_scan_id(input_json: str, scan_id: int) -> str:
     input_json["scan_id"] = int(scan_id)
     updated_json = json.dumps(input_json)
     return updated_json
+
+
+def check_for_device_command_event(
+    device: DeviceProxy,
+    attr_name: str,
+    event_data: str,
+    event_recorder: EventRecorder,
+    command_name: str,
+) -> bool:
+    """Method to check event from the device.
+
+    Args:
+        device (DeviceProxy): device proxy
+        attr_name (str): attribute name
+        event_data (str): event data to be searched
+        event_recorder(EventRecorder): event recorder instance
+        to check for events.
+        command_name(str): executed command name
+    """
+    event_found: bool = False
+    timeout: int = 100
+    elapsed_time: float = 0
+    start_time: float = time.time()
+    while not event_found and elapsed_time < timeout:
+        assertion_data = event_recorder.has_change_event_occurred(
+            device,
+            attribute_name=attr_name,
+            attribute_value=(Anything, Anything),
+        )
+        if assertion_data["attribute_value"][0].endswith(command_name):
+            if event_data in assertion_data["attribute_value"][1]:
+                event_found = True
+                return event_found
+
+        elapsed_time = time.time() - start_time
+
+    return event_found

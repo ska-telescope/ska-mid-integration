@@ -256,7 +256,7 @@ def validate_dish_vcc_config_after_central_node_and_csp_mln_restart(
     assert tmc_mid.dish_leaf_node_list[3].kValue == 101
 
 
-@pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
+# @pytest.mark.skip(reason="Enable when SKB-292, SKB-293 are resolved")
 @pytest.mark.tmc_csp_dish
 @pytest.mark.SKA_mid
 @scenario(
@@ -299,10 +299,13 @@ def tmc_set_dish_vcc_config_set_to_false(tmc_mid):
 def tmc_report_dish_vcc_mismatch(tmc_mid):
     """Validate isDishVccConfigSet to False"""
     expected_dish_vcc_mismatch_message = (
-        "TMC and CSP Master Dish VCC version is Different"
+        '{"dish": "ALL DISH OK", '
+        '"ska_mid/tm_leaf_node/csp_master"'
+        ': "TMC and CSP Master Dish VCC'
+        ' version is Different"}'
     )
-    dish_vcc_validation_status = json.loads(tmc_mid.DishVccValidationStatus)
-    assert (
-        dish_vcc_validation_status["ska_mid/tm_leaf_node/csp_master"]
-        == expected_dish_vcc_mismatch_message
+    assert wait_and_validate_device_attribute_value(
+        tmc_mid.central_node.central_node,
+        "DishVccValidationStatus",
+        expected_dish_vcc_mismatch_message,
     )

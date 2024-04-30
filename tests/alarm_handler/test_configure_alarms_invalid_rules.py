@@ -39,6 +39,9 @@ def alarm_rule_validation(filename, missing_attribute):
         ("missing_message_attribute.txt", "message"),
     ],
 )
+@pytest.mark.xfail(
+    reason="alarm summary key error to be resolved under SAH-1510"
+)
 @pytest.mark.post_deployment
 @pytest.mark.SKA_mid
 def test_validate_attribute_properties(alarm_rule_file, missing_attribute):

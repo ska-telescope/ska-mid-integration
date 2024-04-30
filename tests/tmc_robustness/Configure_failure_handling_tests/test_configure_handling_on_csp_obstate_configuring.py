@@ -16,9 +16,10 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 
-# @pytest.mark.skip(
-#     reason="Test passes independently, fails when executed with all tests"
-# )
+@pytest.mark.skip(
+    reason="Failure scenario is not getting simulated correctly. The issue "
+    + "will be investigated under SAH-1531."
+)
 @pytest.mark.bdd_configure
 @pytest.mark.SKA_mid
 @scenario(

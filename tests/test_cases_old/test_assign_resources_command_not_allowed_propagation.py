@@ -30,6 +30,7 @@ from tests.resources.test_support.constant import (
 )
 
 
+# pylint: disable=too-many-locals
 @pytest.mark.SKA_mid
 def test_assign_release_command_not_allowed_propagation_csp_ln(
     json_factory, change_event_callbacks
@@ -151,6 +152,7 @@ def test_assign_release_command_not_allowed_propagation_sdp_ln(
         )
 
         sdp_subarray = DeviceProxy(sdp_subarray1)
+        csp_subarray = DeviceProxy(csp_subarray1)
         # Setting SDP Subarray ObsState to RESOURCING to imulate failure.
         sdp_subarray.SetDirectObsState(1)
 
@@ -175,6 +177,20 @@ def test_assign_release_command_not_allowed_propagation_sdp_ln(
         assert (
             "ska_tmc_common.exceptions.InvalidObsStateError"
             in assertion_data["attribute_value"][1]
+        )
+        sdp_subarray.SetDirectObsState(ObsState.EMPTY)
+        csp_subarray.SetDirectObsState(ObsState.EMPTY)
+
+        # csp empty
+        the_waiter = Waiter()
+        the_waiter.set_wait_for_specific_obsstate(
+            "EMPTY", [sdp_subarray1, csp_subarray1, tmc_subarraynode1]
+        )
+        the_waiter.wait(TIMEOUT)
+        tmc_subarray = DeviceProxy(tmc_subarraynode1)
+        assert tmc_subarray.obsState == ObsState.EMPTY
+        assert telescope_control.is_in_valid_state(
+            DEVICE_OBS_STATE_EMPTY_INFO, "obsState"
         )
 
         # Do not raise exception
