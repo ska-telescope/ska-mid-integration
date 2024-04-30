@@ -1,6 +1,8 @@
 """Test module for check unavailability of dish functionality"""
 
 
+import time
+
 import pytest
 from pytest_bdd import given, scenario, when
 from ska_tango_base.control_model import ObsState
@@ -49,6 +51,13 @@ def check_telescope_is_on(
         )
     central_node_mid.move_to_on()
 
+    # Wait for DishMaster attribute value update,
+    # on CentralNode for value dishMode STANDBY_LP
+
+    # TODO: Improvement in tests/implementation
+    # to minimize the need of having sleep
+
+    time.sleep(5)
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
