@@ -45,8 +45,7 @@ def check_telescope_is_on(
             "dishMode",
             DishMode.STANDBY_LP,
         )
-    if central_node_mid.telescope_state != "ON":
-        central_node_mid.move_to_on()
+    central_node_mid.move_to_on()
 
     time.sleep(2)
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
