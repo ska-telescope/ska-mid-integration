@@ -36,7 +36,7 @@ tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 telescope_control = BaseTelescopeControl()
 
 
-@pytest.mark.xfail(
+@pytest.mark.skip(
     reason="Fails intermittently due to dish unavailability"
     + " error. Will be resolved under story SAH-1531."
 )
