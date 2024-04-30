@@ -11,6 +11,8 @@ import time
 =======
 >>>>>>> 0da5aa4b (SAH-1536: Updated test case)
 
+import time
+
 import pytest
 from pytest_bdd import given, scenario, when
 from ska_tango_base.control_model import ObsState
@@ -101,6 +103,7 @@ def check_telescope_is_on(
     # on CentralNode for value dishMode STANDBY_LP
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     # TODO: Improvement in tests/implementation
     # to minimize the need of having sleep
     time.sleep(5)
@@ -163,6 +166,8 @@ def turn_on_telescope(central_node_mid, event_recorder):
     )
 
 =======
+=======
+>>>>>>> 16a56ef7 (SAH-1536: Updated test case)
     # Wait for DishMaster attribute value update,
     # on CentralNode for value dishMode STANDBY_LP
 
@@ -170,9 +175,12 @@ def turn_on_telescope(central_node_mid, event_recorder):
     # to minimize the need of having sleep
 
     time.sleep(5)
+<<<<<<< HEAD
 >>>>>>> 05994d75 (SAH-1536: Implemented test case for unavailaity scenario)
 =======
 >>>>>>> 0da5aa4b (SAH-1536: Updated test case)
+=======
+>>>>>>> 16a56ef7 (SAH-1536: Updated test case)
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
