@@ -262,6 +262,24 @@ def configure_command_rejection_by_dish(
     # In order to complete this clause, error propagation for TMC-Dish
     # interface needs to be completed.
     assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA001"],
+        "longRunningCommandStatus",
+        (Anything, "REJECTED"),
+        lookahead=5,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA036"],
+        "longRunningCommandStatus",
+        (Anything, "REJECTED"),
+        lookahead=5,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA063"],
+        "longRunningCommandStatus",
+        (Anything, "REJECTED"),
+        lookahead=5,
+    )
+    assert event_recorder.has_change_event_occurred(
         central_node_mid.dish_master_dict["SKA100"],
         "longRunningCommandStatus",
         (Anything, "REJECTED"),

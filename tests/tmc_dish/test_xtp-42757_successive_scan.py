@@ -157,7 +157,7 @@ def turn_on_telescope(
 @given(
     parsers.parse(
         "the command Configure is issued to the TMC"
-        + " subarray with {receiver_band} and {scan_duration} sec"
+        + " subarray with {receiver_band1} and {scan_duration1} sec"
     )
 )
 def invoke_configure(
@@ -234,11 +234,11 @@ def invoke_scan(subarray_node, command_input_factory, event_recorder):
 
 @then(
     "the TMC subarray transitions to obsState READY when scan"
-    + " duration {scan_duration} is over"
+    + " duration {scan_duration2} is over"
 )
 @given(
     "the TMC subarray transitions to obsState READY when scan"
-    + " duration {scan_duration} is over"
+    + " duration {scan_duration1} is over"
 )
 def check_automatic_endscan(subarray_node, event_recorder, scan_duration):
     """
@@ -264,7 +264,7 @@ def invoke_end_command(subarray_node, event_recorder):
 @when(
     parsers.parse(
         "the next configure command is issued to the TMC"
-        + " subarray with {receiver_band} and {scan_duration} sec"
+        + " subarray with {receiver_band2} and {scan_duration2} sec"
     )
 )
 def invoke_next_configure(
