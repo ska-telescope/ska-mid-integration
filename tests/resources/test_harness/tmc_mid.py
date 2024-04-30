@@ -4,7 +4,10 @@ import time
 
 from tango import DeviceProxy
 
-from tests.resources.test_harness.constant import tmc_csp_master_leaf_node
+from tests.resources.test_harness.constant import (
+    spfrx,
+    tmc_csp_master_leaf_node,
+)
 
 from .central_node_mid import CentralNodeWrapperMid
 
@@ -21,6 +24,10 @@ class TMCMid:
             f"dserver/{self.central_node.central_node.info().server_id}"
         )
         self.dish_leaf_node_server = ""
+        self.spfrx_device = DeviceProxy(spfrx)
+        self.spfrx_server = DeviceProxy(
+            f"dserver/{self.spfrx_device.info().server_id}"
+        )
 
     @property
     def IsDishVccConfigSet(self):
@@ -54,6 +61,9 @@ class TMCMid:
             self.dish_leaf_node_server.RestartServer()
             # Give some time to other device restart
             # to keep the kube-system stable
+            time.sleep(3)
+        elif server_type == "SPFRX":
+            self.spfrx_server.RestartServer()
             time.sleep(3)
 
     def load_dish_vcc_configuration(self, dish_vcc_config):

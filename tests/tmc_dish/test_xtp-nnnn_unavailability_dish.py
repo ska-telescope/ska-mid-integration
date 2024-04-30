@@ -108,7 +108,7 @@ def move_subarray_to_obsState_idle(
 @when("one of the dish subsystems CommunicationStatus is made NOT_ESTABLISHED")
 def restart_the_dish_leaf_nodes(tmc_mid):
     """Restart the dish leaf nodes"""
-    tmc_mid.RestartServer("DISHLN_0")
+    tmc_mid.RestartServer("SPFRX")
 
 
 @when("I configure the subarray {subarray_id}")
