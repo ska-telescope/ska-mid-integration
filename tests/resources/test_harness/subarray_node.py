@@ -56,6 +56,7 @@ from tests.resources.test_harness.utils.sync_decorators import (
     sync_release_resources,
     sync_restart,
 )
+from tests.resources.test_harness.utils.wait_helpers import Waiter
 from tests.resources.test_support.common_utils.common_helpers import Resource
 
 configure_logging(logging.DEBUG)
@@ -347,7 +348,10 @@ class SubarrayNodeWrapper(object):
             sim_device_fqdn_list = [self.sdp_subarray1, self.csp_subarray1]
         elif SIMULATED_DEVICES_DICT["csp_and_dish"]:
             sim_device_fqdn_list = [self.csp_subarray1]
-        elif SIMULATED_DEVICES_DICT["sdp_and_dish"]:
+        elif (
+            SIMULATED_DEVICES_DICT["sdp_and_dish"]
+            or SIMULATED_DEVICES_DICT["sdp"]
+        ):
             sim_device_fqdn_list = [self.sdp_subarray1]
         for sim_device_fqdn in sim_device_fqdn_list:
             device = DeviceProxy(sim_device_fqdn)
@@ -360,11 +364,10 @@ class SubarrayNodeWrapper(object):
         if (
             SIMULATED_DEVICES_DICT["csp_and_dish"]
             or SIMULATED_DEVICES_DICT["all_mocks"]
+            or SIMULATED_DEVICES_DICT["sdp_and_dish"]
         ):
             for dish_master in self.dish_master_list:
-                dish_master.SetDirectDishMode(DishMode.STANDBY_LP)
-                dish_master.SetDirectState(DevState.STANDBY)
-                dish_master.ResetDelayInfo()
+                dish_master.SetDelay(2)
                 dish_master.SetDirectHealthState(HealthState.UNKNOWN)
 
     def _clear_command_call_and_transition_data(self, clear_transition=False):
@@ -425,6 +428,12 @@ class SubarrayNodeWrapper(object):
         if self.obs_state in ("RESOURCING", "CONFIGURING", "SCANNING"):
             """Invoke Abort and Restart"""
             LOGGER.info("Invoking Abort on Subarray")
+            # Waiting for few seconds as the SubarrayNode End command
+            # completion does not consider Dishes pointingState transition
+            # to READY
+            the_waiter = Waiter()
+            the_waiter.wait(5)
+
             self.abort_subarray()
             self.restart_subarray()
         elif self.obs_state == "ABORTED":
