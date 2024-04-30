@@ -81,8 +81,13 @@ def check_telescope_is_on(
 ):
     "check telescope is in On state"
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> 05994d75 (SAH-1536: Implemented test case for unavailaity scenario)
 =======
+=======
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        assert central_node_mid.dish_master_dict[dish_id].ping() > 0
+>>>>>>> 9a8a6eea (SAH-1536: Update test case)
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
@@ -102,6 +107,7 @@ def check_telescope_is_on(
     # Wait for DishMaster attribute value update,
     # on CentralNode for value dishMode STANDBY_LP
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -142,6 +148,8 @@ def turn_on_telescope(central_node_mid, event_recorder):
 =======
     time.sleep(2)
 >>>>>>> 927fa5a7 (SAH-1536: Updated test case)
+=======
+>>>>>>> 9a8a6eea (SAH-1536: Update test case)
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "dishMode"
@@ -151,6 +159,7 @@ def turn_on_telescope(central_node_mid, event_recorder):
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.STANDBY_FP,
+<<<<<<< HEAD
             lookahead=12,
         )
 <<<<<<< HEAD
@@ -190,6 +199,9 @@ def turn_on_telescope(central_node_mid, event_recorder):
         "dishMode",
         DishMode.STANDBY_FP,
     )
+=======
+        )
+>>>>>>> 9a8a6eea (SAH-1536: Update test case)
 
 >>>>>>> 0af5cb2f (SAH-1536: Update test case)
     # Wait for DishMaster attribute value update,
@@ -209,7 +221,9 @@ def turn_on_telescope(central_node_mid, event_recorder):
 
 >>>>>>> 0af5cb2f (SAH-1536: Update test case)
     assert event_recorder.has_change_event_occurred(
-        central_node_mid.sdp_master, "State", DevState.ON, lookahead=15
+        central_node_mid.central_node,
+        "telescopeState",
+        DevState.ON,
     )
 
 
