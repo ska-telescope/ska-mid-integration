@@ -233,8 +233,10 @@ def invoke_scan(subarray_node, command_input_factory, event_recorder):
 
 
 @given(
-    "the TMC subarray transitions to obsState READY when scan"
-    + " duration {scan_duration1} is over"
+    parsers.parse(
+        "the TMC subarray transitions to obsState READY when scan"
+        + " duration {scan_duration1} is over"
+    )
 )
 def check_automatic_endscan_with_scan_duration1(
     subarray_node, event_recorder, scan_duration1
@@ -249,8 +251,10 @@ def check_automatic_endscan_with_scan_duration1(
 
 
 @then(
-    "the TMC subarray transitions to obsState READY when scan"
-    + " duration {scan_duration2} is over"
+    parsers.parse(
+        "the TMC subarray transitions to obsState READY when scan"
+        + " duration {scan_duration2} is over"
+    )
 )
 def check_automatic_endscan_with_scan_duration2(
     subarray_node, event_recorder, scan_duration2
