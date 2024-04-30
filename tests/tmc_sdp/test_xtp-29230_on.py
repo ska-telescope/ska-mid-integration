@@ -131,8 +131,11 @@ def check_sdp_is_on(central_node_mid, event_recorder):
 @then("telescope state is ON")
 def check_telescope_state(central_node_mid, event_recorder):
     """A method to check CentralNode.telescopeState"""
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.ON,
+    # assert event_recorder.has_change_event_occurred(
+    #     central_node_mid.central_node,
+    #     "telescopeState",
+    #     DevState.ON,
+    # )
+    assert wait_and_validate_device_attribute_value(
+        central_node_mid.central_node, "telescopeState", DevState.ON
     )
