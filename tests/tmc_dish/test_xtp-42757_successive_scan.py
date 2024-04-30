@@ -161,7 +161,7 @@ def turn_on_telescope(
     )
 )
 def invoke_configure(
-    subarray_node, command_input_factory, receiver_band, scan_duration
+    subarray_node, command_input_factory, receiver_band1, scan_duration1
 ):
     """
     A method to invoke Configure command
@@ -170,8 +170,8 @@ def invoke_configure(
         "configure_mid", command_input_factory
     )
     configure_input = json.loads(configure_input_json)
-    configure_input["dish"]["receiver_band"] = receiver_band
-    configure_input["tmc"]["scan_duration"] = float(scan_duration)
+    configure_input["dish"]["receiver_band"] = receiver_band1
+    configure_input["tmc"]["scan_duration"] = float(scan_duration1)
     subarray_node.execute_transition("Configure", json.dumps(configure_input))
 
 
@@ -232,19 +232,33 @@ def invoke_scan(subarray_node, command_input_factory, event_recorder):
     )
 
 
-@then(
-    "the TMC subarray transitions to obsState READY when scan"
-    + " duration {scan_duration2} is over"
-)
 @given(
     "the TMC subarray transitions to obsState READY when scan"
     + " duration {scan_duration1} is over"
 )
-def check_automatic_endscan(subarray_node, event_recorder, scan_duration):
+def check_automatic_endscan_with_scan_duration1(
+    subarray_node, event_recorder, scan_duration1
+):
     """
     A method to check if EndScan is successful.
     """
-    time.sleep(scan_duration)
+    time.sleep(scan_duration1)
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
+    )
+
+
+@then(
+    "the TMC subarray transitions to obsState READY when scan"
+    + " duration {scan_duration2} is over"
+)
+def check_automatic_endscan_with_scan_duration2(
+    subarray_node, event_recorder, scan_duration2
+):
+    """
+    A method to check if EndScan is successful.
+    """
+    time.sleep(scan_duration2)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
     )
@@ -268,7 +282,7 @@ def invoke_end_command(subarray_node, event_recorder):
     )
 )
 def invoke_next_configure(
-    subarray_node, command_input_factory, receiver_band, scan_duration
+    subarray_node, command_input_factory, receiver_band2, scan_duration2
 ):
     """
     A method to invoke Configure command
@@ -277,6 +291,6 @@ def invoke_next_configure(
         "configure_mid", command_input_factory
     )
     configure_input = json.loads(configure_input_json)
-    configure_input["dish"]["receiver_band"] = receiver_band
-    configure_input["tmc"]["scan_duration"] = float(scan_duration)
+    configure_input["dish"]["receiver_band"] = receiver_band2
+    configure_input["tmc"]["scan_duration"] = float(scan_duration2)
     subarray_node.execute_transition("Configure", json.dumps(configure_input))
