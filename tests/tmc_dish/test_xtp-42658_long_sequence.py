@@ -72,7 +72,14 @@ def check_subarray_obsState_idle(
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
+<<<<<<< HEAD
         (pytest.command_result[1][0], COMMAND_COMPLETED),
+=======
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+    )
+    assert subarray_node.subarray_node.assignedResources == ast.literal_eval(
+        resources
+>>>>>>> a2ee3172 (SAH-1536: Implemented test case for unavailaity scenario)
     )
 
 
