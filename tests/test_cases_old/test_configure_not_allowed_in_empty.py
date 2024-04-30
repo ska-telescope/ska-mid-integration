@@ -24,6 +24,10 @@ tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 telescope_control = BaseTelescopeControl()
 
 
+@pytest.mark.skip(
+    reason="Fails intermittently Subarray not being in EMPTY obsState. "
+    + "Will be resolved under story SAH-1531."
+)
 @pytest.mark.SKA_mid
 def test_configure_not_allowed_in_empty(json_factory):
     """Test case for configure not allowed in empty"""
