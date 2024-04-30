@@ -204,7 +204,7 @@ def end_configuration_on_subarray(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
     central_node_mid.set_subarray_id(subarray_id)
-    pytest.command_result = subarray_node.execute_transition("End")
+    pytest.command_result = subarray_node.end_observation()
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "dishMode"
@@ -250,8 +250,8 @@ def reconfigure_subarray(
     configure_input_json = json.loads(input_json)
     configure_input_json["dish"]["receiver_band"] = "2"
     central_node_mid.set_subarray_id(subarray_id)
-    pytest.command_result = subarray_node.execute_transition(
-        "Configure", json.dumps(configure_input_json)
+    pytest.command_result = subarray_node.store_configuration_data(
+        json.dumps(configure_input_json)
     )
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
@@ -300,7 +300,7 @@ def invoke_scan(
     scan_input_json = prepare_json_args_for_commands(
         "scan_mid", command_input_factory
     )
-    subarray_node.execute_transition("Scan", scan_input_json)
+    subarray_node.store_scan_data(scan_input_json)
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
