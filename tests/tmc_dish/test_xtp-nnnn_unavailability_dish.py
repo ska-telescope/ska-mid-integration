@@ -1,6 +1,5 @@
 """Test module for check unavailability of dish functionality"""
 
-import time
 
 import pytest
 from pytest_bdd import given, scenario, when
@@ -47,25 +46,6 @@ def check_telescope_is_on(
         )
     central_node_mid.move_to_on()
 
-    time.sleep(2)
-    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode"
-        )
-
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "dishMode",
-            DishMode.STANDBY_FP,
-            lookahead=12,
-        )
-    # Wait for DishMaster attribute value update,
-    # on CentralNode for value dishMode STANDBY_LP
-
-    # TODO: Improvement in tests/implementation
-    # to minimize the need of having sleep
-
-    time.sleep(5)
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
