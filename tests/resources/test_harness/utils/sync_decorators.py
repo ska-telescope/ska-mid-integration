@@ -92,7 +92,7 @@ def sync_assign_resources(device_dict):
             if set_wait_for_obsstate:
                 the_waiter = Waiter(**device_dict)
                 the_waiter.set_wait_for_assign_resources()
-                the_waiter.wait(500)
+                the_waiter.wait(800)
             return result
 
         return wrapper
