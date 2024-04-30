@@ -155,8 +155,8 @@ def configure_subarray(
     configure_input_json = json.loads(input_json)
     configure_input_json["dish"]["receiver_band"] = "1"
     central_node_mid.set_subarray_id(subarray_id)
-    pytest.command_result = subarray_node.execute_transition(
-        "Configure", json.dumps(configure_input_json)
+    pytest.command_result = subarray_node.store_configuration_data(
+        json.dumps(configure_input_json)
     )
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
