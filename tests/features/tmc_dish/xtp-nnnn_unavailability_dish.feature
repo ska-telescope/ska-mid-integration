@@ -1,4 +1,5 @@
 Scenario: Dish manager reports the error when one of the subsystem is unavailable
+<<<<<<< HEAD
     Given a Telescope consisting of TMC, DISH <dish_ids>, simulated CSP and simulated SDP
     And the Telescope is in ON state
     And TMC subarray is in IDLE obsState
@@ -17,3 +18,12 @@ Scenario: Dish manager reports the error when one of the subsystem is unavailabl
         | subarray_id  | dish_ids                       |
         | 1            | SKA001,SKA036,SKA063,SKA100    |
 >>>>>>> 3b52eb24 (SAH-1536: Add test case for tmc-dish unavailability)
+=======
+    Given a telescope in ON state
+    And the TMC subarray is in IDLE obsState
+    When one of the dish subsystems CommunicationStatus is made NOT_ESTABLISHED
+    And I configure the subarray <subarray_id>
+    Examples:
+        | subarray_id |
+        | 1           |
+>>>>>>> 05994d75 (SAH-1536: Implemented test case for unavailaity scenario)
