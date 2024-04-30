@@ -64,18 +64,6 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
     event_recorder.subscribe_event(
         central_node_mid.dish_master_dict["SKA100"], "PointingState"
     )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA001"], "longRunningCommandStatus"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA036"], "longRunningCommandStatus"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA063"], "longRunningCommandStatus"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA100"], "longRunningCommandStatus"
-    )
 
     # TODO: Improvement in tests/implementation
     # to minimize the need of having sleep
@@ -232,11 +220,28 @@ def check_dish_mode_and_pointing_state(
     )
 )
 def invoke_successive_configure(
-    subarray_node, command_input_factory, receiver_band
+    subarray_node,
+    command_input_factory,
+    receiver_band,
+    event_recorder,
+    central_node_mid,
 ):
     """
     A method to invoke Configure command
     """
+    event_recorder.subscribe_event(
+        central_node_mid.dish_master_dict["SKA001"], "longRunningCommandStatus"
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.dish_master_dict["SKA036"], "longRunningCommandStatus"
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.dish_master_dict["SKA063"], "longRunningCommandStatus"
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.dish_master_dict["SKA100"], "longRunningCommandStatus"
+    )
+
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
