@@ -245,8 +245,12 @@ def restart_the_dish_leaf_nodes(central_node_mid):
 =======
 def restart_the_dish_leaf_nodes(tmc_mid):
     """Restart the dish leaf nodes"""
+<<<<<<< HEAD
     tmc_mid.RestartServer("DISHLN_0")
 >>>>>>> 05994d75 (SAH-1536: Implemented test case for unavailaity scenario)
+=======
+    tmc_mid.RestartServer("SPFRX")
+>>>>>>> ea5fdb4a (SAH-1536: Updated test case)
 
 
 @when("I configure the subarray {subarray_id}")
