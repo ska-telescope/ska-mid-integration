@@ -6,7 +6,6 @@ import time
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
-from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
 from tests.resources.test_harness.helpers import (
@@ -19,13 +18,13 @@ from tests.resources.test_support.enum import DishMode, PointingState
 
 @pytest.mark.tmc_dish
 @scenario(
-    "../features/tmc_dish/xtp-42581_configure_unhappy.feature",
-    "Testing of successive configure functionality with same receiver_band",
+    "../features/tmc_dish/xtp-42757_successive_scan.feature",
+    "Testing of successive Scan functionality for tmc-dish interface",
 )
-def test_tmc_dish_successive_configure_with_same_receiver_band():
+def test_tmc_dish_successive_scan_with_different_scan_duration():
     """
-    Test case to verify TMC-DISH successive Configure functionality
-    with same receiver band.
+    Test case to verify TMC-DISH successive Scab functionality
+    with different receiver band and scan duration.
 
     Glossary:
         - "central_node_mid": fixture for a TMC CentralNode under test
@@ -35,8 +34,14 @@ def test_tmc_dish_successive_configure_with_same_receiver_band():
     """
 
 
-@given("a Telescope in ON state")
-def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
+@given("a Telescope in ON state and TMC subarray in IDLE obsState")
+def turn_on_telescope(
+    central_node_mid,
+    event_recorder,
+    simulator_factory,
+    subarray_node,
+    command_input_factory,
+):
     """
     A method to put Telescope ON
     """
@@ -63,18 +68,6 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
     )
     event_recorder.subscribe_event(
         central_node_mid.dish_master_dict["SKA100"], "PointingState"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA001"], "longRunningCommandStatus"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA036"], "longRunningCommandStatus"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA063"], "longRunningCommandStatus"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA100"], "longRunningCommandStatus"
     )
 
     # TODO: Improvement in tests/implementation
@@ -146,14 +139,6 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
         DevState.ON,
     )
 
-
-@given("the subarray is in IDLE obsState")
-def check_subarray_obsState_idle(
-    subarray_node, central_node_mid, event_recorder, command_input_factory
-):
-    """
-    Method to check subarray is in IDLE obsState
-    """
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
@@ -171,11 +156,13 @@ def check_subarray_obsState_idle(
 
 @given(
     parsers.parse(
-        "the command configure is issued to the TMC subarray "
-        + "with {receiver_band}"
+        "the command Configure is issued to the TMC"
+        + " subarray with {receiver_band} and {scan_duration} sec"
     )
 )
-def invoke_configure(subarray_node, command_input_factory, receiver_band):
+def invoke_configure(
+    subarray_node, command_input_factory, receiver_band, scan_duration
+):
     """
     A method to invoke Configure command
     """
@@ -184,10 +171,12 @@ def invoke_configure(subarray_node, command_input_factory, receiver_band):
     )
     configure_input = json.loads(configure_input_json)
     configure_input["dish"]["receiver_band"] = receiver_band
+    configure_input["tmc"]["scan_duration"] = float(scan_duration)
     subarray_node.execute_transition("Configure", json.dumps(configure_input))
 
 
-@given("the subarray transitions to obsState READY")
+@then("the TMC subarray transitions to obsState READY")
+@given("the TMC subarray transitions to obsState READY")
 def check_dish_mode_and_pointing_state(
     subarray_node, event_recorder, central_node_mid
 ):
@@ -225,14 +214,61 @@ def check_dish_mode_and_pointing_state(
     )
 
 
+@then("with command Scan TMC subarray transitions to obsState SCANNING")
+@given("with command Scan TMC subarray transitions to obsState SCANNING")
+def invoke_scan(subarray_node, command_input_factory, event_recorder):
+    """
+    A method to invoke Scan command
+    """
+    scan_input_json = prepare_json_args_for_commands(
+        "scan_mid", command_input_factory
+    )
+    subarray_node.execute_transition("Scan", scan_input_json)
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.SCANNING,
+        lookahead=10,
+    )
+
+
+@then(
+    "the TMC subarray transitions to obsState READY when scan"
+    + " duration {scan_duration} is over"
+)
+@given(
+    "the TMC subarray transitions to obsState READY when scan"
+    + " duration {scan_duration} is over"
+)
+def check_automatic_endscan(subarray_node, event_recorder, scan_duration):
+    """
+    A method to check if EndScan is successful.
+    """
+    time.sleep(scan_duration)
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
+    )
+
+
+@given("with command End TMC subarray transitions to obsState IDLE")
+def invoke_end_command(subarray_node, event_recorder):
+    """
+    This method invokes End command
+    """
+    subarray_node.execute_transition("End")
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node, "obsState", ObsState.IDLE, lookahead=10
+    )
+
+
 @when(
     parsers.parse(
-        "the next successive configure command is issued to the TMC "
-        + "subarray with {receiver_band}"
+        "the next configure command is issued to the TMC"
+        + " subarray with {receiver_band} and {scan_duration} sec"
     )
 )
-def invoke_successive_configure(
-    subarray_node, command_input_factory, receiver_band
+def invoke_next_configure(
+    subarray_node, command_input_factory, receiver_band, scan_duration
 ):
     """
     A method to invoke Configure command
@@ -242,33 +278,5 @@ def invoke_successive_configure(
     )
     configure_input = json.loads(configure_input_json)
     configure_input["dish"]["receiver_band"] = receiver_band
+    configure_input["tmc"]["scan_duration"] = float(scan_duration)
     subarray_node.execute_transition("Configure", json.dumps(configure_input))
-
-
-@then(
-    parsers.parse(
-        "the dish rejects the command with message receiver band is "
-        + "already band B{receiver_band}"
-    )
-)
-def configure_command_rejection_by_dish(
-    receiver_band, event_recorder, central_node_mid
-):
-    # In order to complete this clause, error propagation for TMC-Dish
-    # interface needs to be completed.
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA100"],
-        "longRunningCommandStatus",
-        (Anything, "REJECTED"),
-        lookahead=5,
-    )
-
-
-@then("TMC subarray remains in obsState READY")
-def check_dish_mode_and_pointing_state_again(subarray_node, event_recorder):
-    """
-    Method to check SubarrayNode obsState.
-    """
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
-    )
