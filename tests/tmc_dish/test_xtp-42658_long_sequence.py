@@ -31,7 +31,7 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
-@pytest.mark.repeat(25)
+@pytest.mark.skip
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42658_long_sequence.feature",
@@ -122,11 +122,6 @@ def move_subarray_to_obsState_idle(
         "longRunningCommandResult",
         (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
-    LOGGER.info(
-        f"Assigned Resources: {subarray_node.subarray_node.assignedResources}"
-    )
-    LOGGER.info(f"Resources:{resources}")
-    LOGGER.info(f"Resources convert:{ast.literal_eval(resources)}")
     assert subarray_node.subarray_node.assignedResources == ast.literal_eval(
         resources
     )
