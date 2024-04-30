@@ -297,4 +297,5 @@ def invoke_next_configure(
     configure_input = json.loads(configure_input_json)
     configure_input["dish"]["receiver_band"] = receiver_band2
     configure_input["tmc"]["scan_duration"] = float(scan_duration2)
+    configure_input["csp"]["common"]["frequency_band"] = receiver_band2
     subarray_node.execute_transition("Configure", json.dumps(configure_input))
