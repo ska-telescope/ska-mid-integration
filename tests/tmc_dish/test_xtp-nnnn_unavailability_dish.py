@@ -1,12 +1,15 @@
 """Test module for check unavailability of dish functionality"""
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 import logging
 import os
 =======
 >>>>>>> 05994d75 (SAH-1536: Implemented test case for unavailaity scenario)
 import time
+=======
+>>>>>>> 0da5aa4b (SAH-1536: Updated test case)
 
 import pytest
 from pytest_bdd import given, scenario, when
@@ -91,6 +94,7 @@ def check_telescope_is_on(
     # Wait for DishMaster attribute value update,
     # on CentralNode for value dishMode STANDBY_LP
 
+<<<<<<< HEAD
     # TODO: Improvement in tests/implementation
     # to minimize the need of having sleep
     time.sleep(5)
@@ -161,6 +165,8 @@ def turn_on_telescope(central_node_mid, event_recorder):
 
     time.sleep(5)
 >>>>>>> 05994d75 (SAH-1536: Implemented test case for unavailaity scenario)
+=======
+>>>>>>> 0da5aa4b (SAH-1536: Updated test case)
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
