@@ -87,6 +87,7 @@ def check_telescope_is_on(
             DishMode.STANDBY_LP,
         )
 <<<<<<< HEAD
+<<<<<<< HEAD
     # Wait for DishMaster attribute value update,
     # on CentralNode for value dishMode STANDBY_LP
 
@@ -118,6 +119,9 @@ def turn_on_telescope(central_node_mid, event_recorder):
 =======
     if central_node_mid.telescope_state != "ON":
         central_node_mid.move_to_on()
+=======
+    central_node_mid.move_to_on()
+>>>>>>> 9dd50191 (SAH-1536: Updated test case)
 
 <<<<<<< HEAD
 >>>>>>> 05994d75 (SAH-1536: Implemented test case for unavailaity scenario)
