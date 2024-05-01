@@ -1,15 +1,15 @@
 """TMC Class which contain method specific to TMC
 """
+import os
 import time
 
 from tango import DeviceProxy
 
-from tests.resources.test_harness.constant import (
-    spfrx,
-    tmc_csp_master_leaf_node,
-)
+from tests.resources.test_harness.constant import tmc_csp_master_leaf_node
 
 from .central_node_mid import CentralNodeWrapperMid
+
+SPFRX = os.getenv("SPFRX")
 
 
 class TMCMid:
@@ -24,7 +24,7 @@ class TMCMid:
             f"dserver/{self.central_node.central_node.info().server_id}"
         )
         self.dish_leaf_node_server = ""
-        self.spfrx_device = DeviceProxy(spfrx)
+        self.spfrx_device = DeviceProxy(SPFRX)
         self.spfrx_server = DeviceProxy(
             f"dserver/{self.spfrx_device.info().server_id}"
         )
