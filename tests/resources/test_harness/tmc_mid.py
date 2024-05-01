@@ -9,7 +9,11 @@ from tests.resources.test_harness.constant import tmc_csp_master_leaf_node
 
 from .central_node_mid import CentralNodeWrapperMid
 
-SPFRX = os.getenv("SPFRX")
+dish_name_1 = os.getenv("DISH_NAMESPACE_1")
+spfrx_fqdn = (
+    f"tango://tango-databaseds.{dish_name_1}.svc.cluster"
+    ".local:10000/mid-dish/simulator-spfrx/SKA001"
+)
 
 
 class TMCMid:
@@ -24,7 +28,7 @@ class TMCMid:
             f"dserver/{self.central_node.central_node.info().server_id}"
         )
         self.dish_leaf_node_server = ""
-        self.spfrx_device = DeviceProxy(SPFRX)
+        self.spfrx_device = DeviceProxy(spfrx_fqdn)
         self.spfrx_server = DeviceProxy(
             f"dserver/{self.spfrx_device.info().server_id}"
         )

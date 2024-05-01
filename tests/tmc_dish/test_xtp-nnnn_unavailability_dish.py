@@ -34,6 +34,7 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_commands,
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
+from tests.resources.test_harness.tmc_mid import TMCMid
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode
@@ -273,6 +274,7 @@ def move_subarray_to_obsState_idle(
 
 @when("one of the dish subsystems CommunicationStatus is made NOT_ESTABLISHED")
 <<<<<<< HEAD
+<<<<<<< HEAD
 def restart_the_dish_leaf_nodes(central_node_mid):
     """Restart the dish leaf nodes"""
 
@@ -302,6 +304,9 @@ def restart_the_dish_leaf_nodes(central_node_mid):
     time.sleep(5)
 =======
 def restart_the_dish_leaf_nodes(tmc_mid):
+=======
+def restart_the_dish_leaf_nodes(tmc_mid: TMCMid):
+>>>>>>> 0f512d50 (SAH-1536: Revert change)
     """Restart the dish leaf nodes"""
 <<<<<<< HEAD
     tmc_mid.RestartServer("DISHLN_0")
