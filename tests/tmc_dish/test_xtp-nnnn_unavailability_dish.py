@@ -18,6 +18,7 @@ from pytest_bdd import given, scenario, when
 from ska_tango_base.control_model import ObsState
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 from tango import DeviceProxy
 from tango.db import Database
 =======
@@ -26,6 +27,8 @@ from tango import DevState
 =======
 from tango import DevState
 >>>>>>> 05994d75 (SAH-1536: Implemented test case for unavailaity scenario)
+=======
+>>>>>>> 1de465a4 (SAH-1536: Update test case)
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
@@ -36,14 +39,20 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.tmc_mid import TMCMid
 from tests.resources.test_harness.utils.common_utils import JsonFactory
+from tests.resources.test_support.common_utils.common_helpers import Resource
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 LOGGER = logging.getLogger(__name__)
 
 =======
 >>>>>>> 05994d75 (SAH-1536: Implemented test case for unavailaity scenario)
+=======
+# from tango import DevState
+
+>>>>>>> 1de465a4 (SAH-1536: Update test case)
 
 @pytest.mark.tmc_dish
 @scenario(
@@ -56,6 +65,7 @@ def test_tmc_dish_unavailability_functionality():
     """
 
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 spfrx_dev_name = os.getenv("SPFRX_NAME_1")
 dish_name1 = os.getenv("DISH_NAME_1")
@@ -89,6 +99,15 @@ def check_telescope_is_on(
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         assert central_node_mid.dish_master_dict[dish_id].ping() > 0
 >>>>>>> 9a8a6eea (SAH-1536: Update test case)
+=======
+@given("a telescope in OFF or STANDBY state")
+def check_telescope_in_initial_state(
+    central_node_mid: CentralNodeWrapperMid, event_recorder: EventRecorder
+):
+    """
+    Given a TMC
+    """
+>>>>>>> 1de465a4 (SAH-1536: Update test case)
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
@@ -103,6 +122,7 @@ def check_telescope_is_on(
             "dishMode",
             DishMode.STANDBY_LP,
         )
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     # Wait for DishMaster attribute value update,
@@ -205,12 +225,15 @@ def turn_on_telescope(central_node_mid, event_recorder):
 >>>>>>> 9a8a6eea (SAH-1536: Update test case)
 
 >>>>>>> 0af5cb2f (SAH-1536: Update test case)
+=======
+>>>>>>> 1de465a4 (SAH-1536: Update test case)
     # Wait for DishMaster attribute value update,
-    # on CentralNode for value dishMode STANDBY_FP
+    # on CentralNode for value dishMode STANDBY_LP
 
     # TODO: Improvement in tests/implementation
     # to minimize the need of having sleep
     time.sleep(5)
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> 05994d75 (SAH-1536: Implemented test case for unavailaity scenario)
@@ -226,6 +249,11 @@ def turn_on_telescope(central_node_mid, event_recorder):
         "telescopeState",
         DevState.ON,
     )
+=======
+    Resource(central_node_mid.central_node).assert_attribute(
+        "telescopeState"
+    ).equals(["OFF", "STANDBY"])
+>>>>>>> 1de465a4 (SAH-1536: Update test case)
 
 
 <<<<<<< HEAD
@@ -254,7 +282,22 @@ def move_subarray_to_obsState_idle(
     event_recorder.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
     )
+<<<<<<< HEAD
 >>>>>>> 05994d75 (SAH-1536: Implemented test case for unavailaity scenario)
+=======
+    central_node_mid.move_to_on()
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
+
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+        )
+
+>>>>>>> 1de465a4 (SAH-1536: Update test case)
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
