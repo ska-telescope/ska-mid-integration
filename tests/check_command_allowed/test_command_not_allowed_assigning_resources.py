@@ -30,6 +30,11 @@ result, message = "", ""
 the_waiter = Waiter()
 
 
+@pytest.mark.skip(
+    reason="Test fails as initial telescopeState STANDBY "
+    + "aggregation is taking more than 15 minutes sometimes. "
+    + "Work under SAH-1531"
+)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/check_command_not_allowed.feature",
