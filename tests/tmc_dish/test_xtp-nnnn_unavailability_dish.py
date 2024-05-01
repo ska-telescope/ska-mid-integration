@@ -6,7 +6,6 @@ import time
 import pytest
 from pytest_bdd import given, scenario, when
 from ska_tango_base.control_model import ObsState
-from tango import DevState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
@@ -17,8 +16,11 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.tmc_mid import TMCMid
 from tests.resources.test_harness.utils.common_utils import JsonFactory
+from tests.resources.test_support.common_utils.common_helpers import Resource
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode
+
+# from tango import DevState
 
 
 @pytest.mark.tmc_dish
@@ -32,13 +34,13 @@ def test_tmc_dish_unavailability_functionality():
     """
 
 
-@given("a telescope in ON state")
-def check_telescope_is_on(
+@given("a telescope in OFF or STANDBY state")
+def check_telescope_in_initial_state(
     central_node_mid: CentralNodeWrapperMid, event_recorder: EventRecorder
 ):
-    "check telescope is in On state"
-    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        assert central_node_mid.dish_master_dict[dish_id].ping() > 0
+    """
+    Given a TMC
+    """
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
@@ -52,31 +54,15 @@ def check_telescope_is_on(
             "dishMode",
             DishMode.STANDBY_LP,
         )
-    central_node_mid.move_to_on()
-
-    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode"
-        )
-
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "dishMode",
-            DishMode.STANDBY_FP,
-        )
-
     # Wait for DishMaster attribute value update,
-    # on CentralNode for value dishMode STANDBY_FP
+    # on CentralNode for value dishMode STANDBY_LP
 
     # TODO: Improvement in tests/implementation
     # to minimize the need of having sleep
     time.sleep(5)
-
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.ON,
-    )
+    Resource(central_node_mid.central_node).assert_attribute(
+        "telescopeState"
+    ).equals(["OFF", "STANDBY"])
 
 
 @given("the TMC subarray is in IDLE obsState")
@@ -93,6 +79,18 @@ def move_subarray_to_obsState_idle(
     event_recorder.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
     )
+    central_node_mid.move_to_on()
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
+
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+        )
+
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
