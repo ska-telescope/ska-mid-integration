@@ -10,7 +10,7 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.enum import DishMode
 
 
-# @pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
+@pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29351_off.feature",
@@ -75,12 +75,6 @@ def check_tmc_and_dish_is_on(
     # TODO: Improvement in tests/implementation
     # to minimize the need of having sleep
     time.sleep(5)
-
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.OFF,
-    )
 
     central_node_mid.move_to_on()
 

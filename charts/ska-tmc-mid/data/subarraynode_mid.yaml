@@ -13,10 +13,8 @@ server:
   {{- $sdp_sa_fqdn_prefix:= .Values.global.sdp_subarray_prefix}}
   {{- $isSimulatedDish := .Values.deviceServers.mocks.dish }}
   {{- $real_dish_name := .Values.global.namespace_dish.dish_names }}
-  {{- $DishMasterPrefix := .Values.deviceServers.subarraynode.DishMasterPrefix }}
-  {{- $DishMasterPostfix := .Values.deviceServers.subarraynode.DishMasterPostfix }}
-  {{- $RealDishMasterTag := .Values.deviceServers.centralnode.RealDishMasterTag }}
-  {{- $SimulatorDishMasterTag := .Values.deviceServers.centralnode.SimulatorDishMasterTag }}
+  {{- $RealDishMasterIdentifier := .Values.deviceServers.subarraynode.RealDishMasterIdentifier }}
+  {{- $SimulatorDishMasterIdentifier := .Values.deviceServers.subarraynode.SimulatorDishMasterIdentifier }}
   {{- $dish_id := .Values.deviceServers.subarraynode.DishIDs }}
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
   {{- range  ( regexSplit " " ((.Values.subarray_count | int) | seq ) -1 ) }}
@@ -29,19 +27,13 @@ server:
           - name: "DishLeafNodePrefix"
             values:
             - "ska_mid/tm_leaf_node/d0"
-          - name: "DishMasterPrefix"
-            values:
-            - "{{ $DishMasterPrefix }}"
-          - name: "DishMasterTag"
+          - name: "DishMasterIdentifier"
             values:
             {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
-            - "{{ $SimulatorDishMasterTag }}"
+            - "{{ $SimulatorDishMasterIdentifier }}"
             {{- else }}
-            - "{{ $RealDishMasterTag }}" # Real dish
+            - "{{ $RealDishMasterIdentifier }}" # Real dish
             {{- end }}
-          - name: "DishMasterPostfix"
-            values:
-            - "{{ $DishMasterPostfix }}"
           - name: "CspSubarrayLNFQDN"
             values:
             - "{{ $csp_sa_ln_fqdn_prefix}}{{ printf "%02s" . }}"
@@ -63,7 +55,7 @@ server:
             values:
             {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
             {{- range  $dish_id }}
-            - "{{ . | lower }}/{{ $SimulatorDishMasterTag }}"
+            - "{{ . | lower }}/{{ $SimulatorDishMasterIdentifier }}"
             {{- end }}
             {{- else }}
             {{- range  $real_dish_name }}
