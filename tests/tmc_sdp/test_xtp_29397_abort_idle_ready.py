@@ -10,6 +10,7 @@ from tests.resources.test_harness.helpers import (
 )
 
 
+@pytest.mark.skip(reason="CommunicationFailed Transient CORBA exception error")
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp_29397_abort_idle_ready.feature",

@@ -40,7 +40,7 @@ def alarm_rule_validation(filename, missing_attribute):
     ],
 )
 @pytest.mark.xfail(
-    reason="larm summary key error to be resolved under SAH-1510"
+    reason="alarm summary key error to be resolved under SAH-1510"
 )
 @pytest.mark.post_deployment
 @pytest.mark.SKA_mid

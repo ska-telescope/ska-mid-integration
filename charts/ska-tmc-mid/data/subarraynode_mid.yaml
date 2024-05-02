@@ -13,8 +13,8 @@ server:
   {{- $sdp_sa_fqdn_prefix:= .Values.global.sdp_subarray_prefix}}
   {{- $isSimulatedDish := .Values.deviceServers.mocks.dish }}
   {{- $real_dish_name := .Values.global.namespace_dish.dish_names }}
-  {{- $RealDishMasterIdentifier := .Values.deviceServers.centralnode.RealDishMasterIdentifier }}
-  {{- $SimulatorDishMasterIdentifier := .Values.deviceServers.centralnode.SimulatorDishMasterIdentifier }}
+  {{- $RealDishMasterIdentifier := .Values.deviceServers.subarraynode.RealDishMasterIdentifier }}
+  {{- $SimulatorDishMasterIdentifier := .Values.deviceServers.subarraynode.SimulatorDishMasterIdentifier }}
   {{- $dish_id := .Values.deviceServers.subarraynode.DishIDs }}
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
   {{- range  ( regexSplit " " ((.Values.subarray_count | int) | seq ) -1 ) }}

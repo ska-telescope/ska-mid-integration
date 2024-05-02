@@ -1,6 +1,5 @@
 import pytest
-from ska_control_model import ObsState
-from ska_tango_testing.mock.placeholders import Anything
+from ska_control_model import ObsState, ResultCode
 
 from tests.resources.test_harness.helpers import (
     check_assigned_resources,
@@ -74,5 +73,5 @@ class TestMidCentralNodeAssignResources(object):
         assert event_recorder.has_change_event_occurred(
             central_node_mid.central_node,
             "longRunningCommandResult",
-            (unique_id[0], Anything),
+            (unique_id[0], str(ResultCode.OK.value)),
         )
