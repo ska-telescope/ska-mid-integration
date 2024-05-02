@@ -31,10 +31,6 @@ from tests.resources.test_support.constant import (
 
 
 # pylint: disable=too-many-locals
-@pytest.mark.skip(
-    reason="Test needs significant refactoring to use test harness"
-    + "Will be resolved under story SAH-1531."
-)
 @pytest.mark.SKA_mid
 def test_assign_release_command_not_allowed_propagation_csp_ln(
     json_factory, change_event_callbacks
@@ -120,10 +116,6 @@ def test_assign_release_command_not_allowed_propagation_csp_ln(
         tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
 
 
-@pytest.mark.skip(
-    reason="Test needs significant refactoring to use test harness"
-    + "Will be resolved under story SAH-1531."
-)
 @pytest.mark.SKA_mid
 def test_assign_release_command_not_allowed_propagation_sdp_ln(
     json_factory, change_event_callbacks
@@ -195,10 +187,6 @@ def test_assign_release_command_not_allowed_propagation_sdp_ln(
             "EMPTY", [sdp_subarray1, csp_subarray1, tmc_subarraynode1]
         )
         the_waiter.wait(TIMEOUT)
-        sdp_subarray = DeviceProxy(sdp_subarray1)
-        assert sdp_subarray.obsState == ObsState.EMPTY
-        csp_subarray = DeviceProxy(csp_subarray1)
-        assert csp_subarray.obsState == ObsState.EMPTY
         tmc_subarray = DeviceProxy(tmc_subarraynode1)
         assert tmc_subarray.obsState == ObsState.EMPTY
         assert telescope_control.is_in_valid_state(

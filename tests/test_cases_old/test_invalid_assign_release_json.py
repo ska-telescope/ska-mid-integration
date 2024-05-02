@@ -19,8 +19,6 @@ from tests.resources.test_support.constant import (
     DEVICE_STATE_STANDBY_INFO,
     ON_OFF_DEVICE_COMMAND_DICT,
     centralnode,
-    csp_subarray1,
-    sdp_subarray1,
     tmc_subarraynode1,
 )
 
@@ -45,13 +43,6 @@ def test_assign_invalid_json(json_factory):
         assert telescope_control.is_in_valid_state(
             DEVICE_STATE_ON_INFO, "State"
         )
-        sdp_subarray = DeviceProxy(sdp_subarray1)
-        LOGGER.info("sdp_subarray.obsState: %s", sdp_subarray.obsState)
-        csp_subarray = DeviceProxy(csp_subarray1)
-        LOGGER.info("csp_subarray.obsState: %s", csp_subarray.obsState)
-        tmc_subarray = DeviceProxy(tmc_subarraynode1)
-        LOGGER.info("tmc_subarray.obsState: %s", tmc_subarray.obsState)
-
         assert telescope_control.is_in_valid_state(
             DEVICE_OBS_STATE_EMPTY_INFO, "obsState"
         )
