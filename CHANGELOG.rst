@@ -7,6 +7,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+[0.19.2]
+* Integrate TMC-Dish Scan functionality implementation
+* Verified SKB-292 and SKB-293
+
 [0.19.1]
 ************
 * Intermediate chart with TMC updates to work with dish-lmc chart 3.0.0

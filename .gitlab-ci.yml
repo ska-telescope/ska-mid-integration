@@ -483,8 +483,8 @@ k8s-test-tmc-with-sdp:
     TARANTA_ENABLED: 'true'
   environment:
     name: test/$CI_COMMIT_REF_SLUG
-    on_stop: stop-k8s-test-tmc-with-sdp
-    auto_stop_in: 1 minute
+    #on_stop: stop-k8s-test-tmc-with-sdp
+    #auto_stop_in: 1 minute
 
 
 stop-k8s-test-tmc-with-sdp:

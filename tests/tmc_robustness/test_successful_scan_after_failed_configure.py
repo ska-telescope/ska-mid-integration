@@ -239,7 +239,7 @@ def invoke_configure_with_unassigned_resources(
 def invalid_command_rejection_with_unassigned_resources():
     # asserting error message and result code received from subarray
     assert (
-        "{'dish': {'receiver_band': ['Must be one of: 1, 2, 5a, 5b.']}}"  # noqa: E501
+        "Invalid input for receiver_band! Currently allowed [1,2]"  # noqa: E501
         in pytest.command_result[1][0]
     )
     assert pytest.command_result[0][0] == ResultCode.REJECTED
