@@ -1,13 +1,18 @@
 """TMC Class which contain method specific to TMC
 """
+import logging
 import os
 import time
 
+from ska_ser_logging import configure_logging
 from tango import DeviceProxy
 
 from tests.resources.test_harness.constant import tmc_csp_master_leaf_node
 
 from .central_node_mid import CentralNodeWrapperMid
+
+configure_logging(logging.DEBUG)
+LOGGER = logging.getLogger(__name__)
 
 dish_name_1 = os.getenv("DISH_NAMESPACE_1")
 spfrx_fqdn = (
@@ -29,9 +34,11 @@ class TMCMid:
         )
         self.dish_leaf_node_server = ""
         self.spfrx_device = DeviceProxy(spfrx_fqdn)
+        LOGGER.info(f"spfrx_device:{self.spfrx_device}")
         self.spfrx_server = DeviceProxy(
             f"dserver/{self.spfrx_device.info().server_id}"
         )
+        LOGGER.info(f"spfrx_server:{self.spfrx_server}")
 
     @property
     def IsDishVccConfigSet(self):
@@ -50,6 +57,7 @@ class TMCMid:
 
     def RestartServer(self, server_type: str):
         """Restart server based on provided server type"""
+        LOGGER.info(f"server type:{server_type}")
         if server_type == "CSP_MLN":
             self.csp_master_ln_server.RestartServer()
         elif server_type == "CENTRAL_NODE":
@@ -67,6 +75,7 @@ class TMCMid:
             # to keep the kube-system stable
             time.sleep(3)
         elif server_type == "SPFRX":
+            LOGGER.info(f"inside SPRF elif:{self.spfrx_server}")
             self.spfrx_server.RestartServer()
             time.sleep(3)
 
