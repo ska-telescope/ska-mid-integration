@@ -2,8 +2,8 @@ name: "centralnode-test"
 function: telescope-monitoring
 domain: general-monitoring
 instances: ["01"]
-{{- $DishMasterPrefix := .Values.deviceServers.centralnode.DishMasterPrefix }}
-{{- $DishMasterPostfix := .Values.deviceServers.centralnode.DishMasterPostfix }}
+{{- $RealDishMasterIdentifier := .Values.deviceServers.centralnode.RealDishMasterIdentifier }}
+{{- $SimulatorDishMasterIdentifier := .Values.deviceServers.centralnode.SimulatorDishMasterIdentifier }}
 entrypoints:
   - name: "ska_tmc_centralnode.central_node_mid.CentralNodeMid"
 server:
@@ -14,8 +14,8 @@ server:
   {{- $sdp_sa_ln_fqdn_prefix:= .Values.global.sdp_subarray_ln_prefix}}
   {{- $isSimulatedDish := .Values.deviceServers.mocks.dish }}
   {{- $real_dish_name := .Values.global.namespace_dish.dish_names }}
-  {{- $DishMasterPrefix := .Values.deviceServers.centralnode.DishMasterPrefix }}
-  {{- $DishMasterPostfix := .Values.deviceServers.centralnode.DishMasterPostfix }}
+  {{- $RealDishMasterIdentifier := .Values.deviceServers.centralnode.RealDishMasterIdentifier }}
+  {{- $SimulatorDishMasterIdentifier := .Values.deviceServers.centralnode.SimulatorDishMasterIdentifier }}
   {{- $isSimulatedCsp := .Values.deviceServers.mocks.csp }}
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
   - name: "01"
@@ -39,6 +39,13 @@ server:
         - name: "DishLeafNodePrefix"
           values:
           - "ska_mid/tm_leaf_node/d0"
+        - name: "DishMasterIdentifier"
+          values:
+          {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
+          - "{{ $SimulatorDishMasterIdentifier }}"
+          {{- else }}
+          - "{{ $RealDishMasterIdentifier }}" # Real dish
+          {{- end }}
         - name: "DishVccUri"
           values:
           - "{{.Values.deviceServers.centralnode.DishVccConfig.DishVccUri}}"
@@ -60,7 +67,7 @@ server:
           values:
           {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
           {{- range  (.Values.deviceServers.centralnode.DishIDs)  }}
-          - "{{ . | lower }}/{{ $DishMasterPrefix }}/{{ $DishMasterPostfix }}"
+          - "{{ . | lower }}/{{ $SimulatorDishMasterIdentifier }}"
           {{- end }}
           {{- else }}
           {{- range  (.Values.global.namespace_dish.dish_names)  }}

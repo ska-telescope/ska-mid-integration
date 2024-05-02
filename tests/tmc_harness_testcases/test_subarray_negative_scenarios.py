@@ -50,8 +50,8 @@ class TestSubarrayNodeNegative(object):
         )
 
         exception_message = (
-            "Exception occurred on the following devices:"
-            "\nska_mid/tm_leaf_node/csp_subarray01: "
+            "Exception occurred on the following devices: "
+            "ska_mid/tm_leaf_node/csp_subarray01: "
             "Timeout has occurred, command failed\n"
         )
 
@@ -185,7 +185,7 @@ class TestSubarrayNodeNegative(object):
             assert event_recorder.has_change_event_occurred(
                 subarray_node.subarray_node, "obsState", ObsState.READY
             )
-        assert device_received_this_command(dish_sim, "ConfigureBand2", "True")
+        assert device_received_this_command(dish_sim, "ConfigureBand1", "True")
 
     @pytest.mark.skip(reason="Fails in assertions after Fault")
     @pytest.mark.SKA_mid

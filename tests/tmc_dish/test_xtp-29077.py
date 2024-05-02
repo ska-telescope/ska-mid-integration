@@ -16,7 +16,10 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.enum import DishMode
 
 
-@pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
+@pytest.mark.skip(
+    reason="The test needs to be updated as part of "
+    + "integration testing of story SAH-1509"
+)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29077.feature",
@@ -60,17 +63,24 @@ def given_the_dishes_registered_in_tango_db(central_node_mid):
     """
     Given the dishes are registered in the TANGO Database
     """
+    # proxy.dev_name() provides TANGO device name in small letters. Therefore
+    # asserted to "mid-dish/dish-manager/ska001" instead of
+    # "mid-dish/dish-manager/SKA001"
     assert (
-        central_node_mid.dish_master_list[0].dev_name() == "ska001/elt/master"
+        central_node_mid.dish_master_list[0].dev_name()
+        == "mid-dish/dish-manager/ska001"
     )
     assert (
-        central_node_mid.dish_master_list[1].dev_name() == "ska036/elt/master"
+        central_node_mid.dish_master_list[1].dev_name()
+        == "mid-dish/dish-manager/ska036"
     )
     assert (
-        central_node_mid.dish_master_list[2].dev_name() == "ska063/elt/master"
+        central_node_mid.dish_master_list[2].dev_name()
+        == "mid-dish/dish-manager/ska063"
     )
     assert (
-        central_node_mid.dish_master_list[3].dev_name() == "ska100/elt/master"
+        central_node_mid.dish_master_list[3].dev_name()
+        == "mid-dish/dish-manager/ska100"
     )
 
 
@@ -169,7 +179,7 @@ def fail_to_connect_dish(central_node_mid):
     LOGGER.info("dish1 device name is: %s", dish1_dev_name)
 
     check_dish1_info = central_node_mid.dish1_db.get_device_info(
-        "ska001/elt/master"
+        "mid-dish/dish-manager/SKA001"
     )
     LOGGER.info("dish1 device info is: %s", check_dish1_info)
 
@@ -234,7 +244,7 @@ def connect_to_dish(central_node_mid, event_recorder):
     time.sleep(15)
 
     check_dish1_info = central_node_mid.dish1_db.get_device_info(
-        "ska001/elt/master"
+        "mid-dish/dish-manager/SKA001"
     )
     LOGGER.info("dish1 device info is: %s", check_dish1_info)
     check_dish1_leaf_info = central_node_mid.db.get_device_info(

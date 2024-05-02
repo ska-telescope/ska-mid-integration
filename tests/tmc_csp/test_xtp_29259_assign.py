@@ -4,7 +4,7 @@ import json
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
-from ska_control_model import ObsState
+from ska_control_model import ObsState, ResultCode
 from tango import DevState
 
 from tests.resources.test_harness.helpers import (
@@ -29,6 +29,9 @@ def given_a_telescope_in_on_state(central_node_mid, event_recorder):
 
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
     )
     central_node_mid.move_to_on()
     event_recorder.subscribe_event(central_node_mid.csp_master, "State")
@@ -79,7 +82,7 @@ def invoke_assignresources(
     )
     assign_input = json.loads(assign_input_json)
     assign_input["subarray_id"] = int(subarray_id)
-    central_node_mid.perform_action(
+    pytest.command_result = central_node_mid.perform_action(
         "AssignResources", json.dumps(assign_input)
     )
 
@@ -108,6 +111,12 @@ def tmc_subarray_idle(central_node_mid, event_recorder, subarray_id):
     central_node_mid.set_subarray_id(subarray_id)
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_node, "obsState", ObsState.IDLE
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+        lookahead=5,
     )
 
 

@@ -17,8 +17,8 @@ server:
   {{- end }}
   {{- else }}
   {{- range $instance_real := $real_dish_name }}
-  {{- $match := (regexFind "ska(\\d{3})" $instance_real) -}}
-  {{- $instance_list = append $instance_list (trimPrefix "ska" $match) }}
+  {{- $match := (regexFind "SKA(\\d{3})" $instance_real) -}}
+  {{- $instance_list = append $instance_list (trimPrefix "SKA" $match) }}
   {{- end }}
   {{- end }}
   {{- range $index, $number := $instance_list }}
