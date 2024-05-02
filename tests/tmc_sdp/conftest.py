@@ -85,7 +85,7 @@ def telescope_is_in_idle_state(
     # SDP Subarray
     assign_str["sdp"]["processing_blocks"][0]["parameters"][
         "time-to-ready"
-    ] = 2
+    ] = 10
 
     _, unique_id = central_node_mid.store_resources(json.dumps(assign_str))
 
@@ -138,7 +138,7 @@ def reassign_resources(
     # SDP Subarray
     assign_str["sdp"]["processing_blocks"][0]["parameters"][
         "time-to-ready"
-    ] = 2
+    ] = 10
 
     _, unique_id = central_node_mid.store_resources(json.dumps(assign_str))
 

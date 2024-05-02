@@ -103,11 +103,11 @@ def check_obsstate_sdp_in_first_configure(
     # Once SKB-309 is resolved , we can check and remove
     # this logic of configure_cycle and perform check for
     # configuring after each of the configure command
-    # assert event_recorder.has_change_event_occurred(
-    #     subarray_node.subarray_devices["sdp_subarray"],
-    #     "obsState",
-    #     ObsState.CONFIGURING,
-    # )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices["sdp_subarray"],
+        "obsState",
+        ObsState.CONFIGURING,
+    )
     wait_for_device_status_ready(
         subarray_node.subarray_devices["sdp_subarray"]
     )
