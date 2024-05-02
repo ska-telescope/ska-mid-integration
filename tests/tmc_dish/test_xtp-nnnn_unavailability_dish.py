@@ -43,7 +43,8 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_commands,
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
-from tests.resources.test_harness.tmc_mid import TMCMid
+
+# from tests.resources.test_harness.tmc_mid import TMCMid
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.common_utils.common_helpers import Resource
 from tests.resources.test_support.common_utils.result_code import ResultCode
@@ -324,7 +325,11 @@ def move_subarray_to_obsState_idle(
 @when("one of the dish subsystems CommunicationStatus is made NOT_ESTABLISHED")
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 def restart_the_dish_leaf_nodes(central_node_mid):
+=======
+def restart_the_dish_leaf_nodes():
+>>>>>>> 1fb32fad (SAH-1536: Update test case)
     """Restart the dish leaf nodes"""
 <<<<<<< HEAD
 
