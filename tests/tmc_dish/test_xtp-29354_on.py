@@ -93,7 +93,6 @@ def move_dish_to_on(central_node_mid, event_recorder):
         "dishMode",
         DishMode.STANDBY_LP,
     )
-
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",

@@ -1,6 +1,5 @@
 """Test TMC-DISH Abort functionality in Resourcing obsState"""
 
-
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState

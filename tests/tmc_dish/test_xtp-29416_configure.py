@@ -1,6 +1,5 @@
 """Test module for TMC-DISH Configure functionality"""
 
-
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
