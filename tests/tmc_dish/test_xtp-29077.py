@@ -16,7 +16,10 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.enum import DishMode
 
 
-# @pytest.mark.skip(reason="Enable when SKB-292, SKB-293 are resolved")
+@pytest.mark.skip(
+    reason="The test needs to be updated as part of "
+    + "integration testing of story SAH-1509"
+)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29077.feature",

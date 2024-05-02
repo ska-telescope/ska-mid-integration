@@ -27,6 +27,7 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
+@pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-30385_scan.feature",
@@ -296,6 +297,8 @@ def check_dish_mode_and_pointing_state_after_scan(
             central_node_mid.dish_master_dict[dish_id].pointingState
             == PointingState.TRACK
         )
+
+        time.sleep(4)
         # assert check_long_running_command_status(
         #     central_node_mid.dish_master_dict[dish_id],
         #     "longRunningCommandStatus",

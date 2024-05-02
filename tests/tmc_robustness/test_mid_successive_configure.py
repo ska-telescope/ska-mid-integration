@@ -30,7 +30,10 @@ tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 telescope_control = BaseTelescopeControl()
 
 
-@pytest.mark.skip(reason="Failing due to event timeout")
+@pytest.mark.skip(
+    reason="test fails intermittenlty due to dish"
+    + "unavailability. Work under SAH-1531"
+)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successive_configure.feature",

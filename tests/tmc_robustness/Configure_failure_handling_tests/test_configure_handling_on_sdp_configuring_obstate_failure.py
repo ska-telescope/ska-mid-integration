@@ -18,7 +18,8 @@ LOGGER = logging.getLogger(__name__)
 
 
 @pytest.mark.skip(
-    reason="Failure is not getting simulated due to latest tmc-common package"
+    reason="Failure scenario is not getting simulated correctly. The issue "
+    + "will be investigated under SAH-1531."
 )
 @pytest.mark.SKA_mid
 @scenario(

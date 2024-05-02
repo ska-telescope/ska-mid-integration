@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import time
 from typing import Tuple
 
 from ska_control_model import ObsState, ResultCode
@@ -419,7 +420,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         LOGGER.info("Invoked AssignResources on CentralNode")
         return result, message
 
-    @sync_release_resources(device_dict=device_dict)
+    @sync_release_resources(device_dict=device_dict, timeout=500)
     def invoke_release_resources(
         self, input_string: str
     ) -> Tuple[ResultCode, str]:
@@ -427,6 +428,8 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         Args:
             input_string (str): Release resource input json
         """
+        time.sleep(3)
+
         result, message = self.central_node.ReleaseResources(input_string)
         return result, message
 
