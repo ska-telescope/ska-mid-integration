@@ -11,11 +11,13 @@ import time
 =======
 >>>>>>> 0da5aa4b (SAH-1536: Updated test case)
 
+import os
 import time
 
 import pytest
 from pytest_bdd import given, scenario, when
 from ska_tango_base.control_model import ObsState
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -29,6 +31,10 @@ from tango import DevState
 >>>>>>> 05994d75 (SAH-1536: Implemented test case for unavailaity scenario)
 =======
 >>>>>>> 1de465a4 (SAH-1536: Update test case)
+=======
+from tango import DeviceProxy
+from tango.db import Database
+>>>>>>> 8ee2d95e (SAH-1536: Update test case)
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
@@ -320,6 +326,7 @@ def move_subarray_to_obsState_idle(
 <<<<<<< HEAD
 def restart_the_dish_leaf_nodes(central_node_mid):
     """Restart the dish leaf nodes"""
+<<<<<<< HEAD
 
     LOGGER.info("dish1 device name is: %s", dish_name1)
     LOGGER.info("spfrx device name is : %s", spfrx_dev_name)
@@ -357,6 +364,24 @@ def restart_the_dish_leaf_nodes(tmc_mid: TMCMid):
 =======
     tmc_mid.RestartServer("SPFRX")
 >>>>>>> ea5fdb4a (SAH-1536: Updated test case)
+=======
+    # tmc_mid.RestartServer("SPFRX")
+    dish_name_1 = os.getenv("DISH_NAMESPACE_1")
+    spfrx_fqdn = (
+        f"tango://tango-databaseds.{dish_name_1}.svc.cluster"
+        ".local:10000/mid-dish/simulator-spfrx/SKA001"
+    )
+    spfrx_deviceproxy = DeviceProxy(spfrx_fqdn)
+    spfrx_tango_host = spfrx_fqdn.split("/")[2]
+    spfrx_host = spfrx_tango_host.split(":")[0]
+    spfrx_port = spfrx_tango_host.split(":")[1]
+    spfrx_db = Database(spfrx_host, spfrx_port)
+    spfrx_db.delete_device(spfrx_fqdn)
+    spfrx_admin_dev_name = spfrx_deviceproxy.adm_name()
+    spfrx_admin_dev_proxy = DeviceProxy(spfrx_admin_dev_name)
+    spfrx_admin_dev_proxy.RestartServer()
+    time.sleep(3)
+>>>>>>> 8ee2d95e (SAH-1536: Update test case)
 
 
 @when("I configure the subarray {subarray_id}")
