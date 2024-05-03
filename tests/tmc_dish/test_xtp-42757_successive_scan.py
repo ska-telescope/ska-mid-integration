@@ -13,6 +13,7 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_commands,
 )
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
+from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
@@ -69,6 +70,7 @@ def turn_on_telescope(
     event_recorder.subscribe_event(
         central_node_mid.dish_master_dict["SKA100"], "PointingState"
     )
+    event_recorder.subscribe_event(subarray_node, "longRunningCommandResult")
 
     # TODO: Improvement in tests/implementation
     # to minimize the need of having sleep
@@ -145,12 +147,17 @@ def turn_on_telescope(
         "assign_resources_mid", command_input_factory
     )
 
-    central_node_mid.store_resources(assign_input_json)
+    pytest.command_result = central_node_mid.store_resources(assign_input_json)
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
 
 
@@ -172,7 +179,9 @@ def invoke_configure(
     configure_input = json.loads(configure_input_json)
     configure_input["dish"]["receiver_band"] = receiver_band1
     configure_input["tmc"]["scan_duration"] = float(scan_duration1)
-    subarray_node.store_configuration_data(json.dumps(configure_input))
+    pytest.command_result = subarray_node.store_configuration_data(
+        json.dumps(configure_input)
+    )
 
 
 @then("the TMC subarray transitions to obsState READY")
@@ -184,6 +193,30 @@ def check_dish_mode_and_pointing_state(
     Method to check dishMode and pointingState of DISH and
     SubarrayNode obsState.
     """
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA001"],
+        "DishMode.",
+        DishMode.OPERATE,
+        lookahead=5,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA036"],
+        "DishMode.",
+        DishMode.OPERATE,
+        lookahead=5,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA063"],
+        "DishMode.",
+        DishMode.OPERATE,
+        lookahead=5,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA100"],
+        "DishMode.",
+        DishMode.OPERATE,
+        lookahead=5,
+    )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.dish_master_dict["SKA001"],
         "PointingState",
@@ -210,7 +243,13 @@ def check_dish_mode_and_pointing_state(
     )
 
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
+        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=15
+    )
+
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
 
 
@@ -273,9 +312,14 @@ def invoke_end_command(subarray_node, event_recorder):
     """
     This method invokes End command
     """
-    subarray_node.execute_transition("End")
+    pytest.command_result = subarray_node.execute_transition("End")
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node, "obsState", ObsState.IDLE, lookahead=10
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
 
 
