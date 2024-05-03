@@ -128,6 +128,13 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             DeviceProxy(tmc_dish_leaf_node4),
         ]
 
+        self.dish_leaf_node_dict = {
+            "SKA001": DeviceProxy(tmc_dish_leaf_node1),
+            "SKA036": DeviceProxy(tmc_dish_leaf_node2),
+            "SKA063": DeviceProxy(tmc_dish_leaf_node3),
+            "SKA100": DeviceProxy(tmc_dish_leaf_node4),
+        }
+
         # Create Dish1 admin device proxy
         self.dish1_admin_dev_name = self.dish_master_list[0].adm_name()
         self.dish1_admin_dev_proxy = DeviceProxy(self.dish1_admin_dev_name)

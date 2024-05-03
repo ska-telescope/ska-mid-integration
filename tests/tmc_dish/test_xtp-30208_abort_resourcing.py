@@ -51,7 +51,7 @@ def given_a_telescope(
     assert csp_master_sim.ping() > 0
     assert sdp_master_sim.ping() > 0
     for dish_id in dish_ids.split(","):
-        assert central_node_mid.dish_master_dict[dish_id].ping() > 0
+        assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
 
 
 @given("the Telescope is in ON state")
@@ -60,35 +60,35 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
     A method to put Telescope ON
     """
     event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA001"], "dishMode"
+        central_node_mid.dish_leaf_node_dict["SKA001"], "dishMode"
     )
     event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA036"], "dishMode"
+        central_node_mid.dish_leaf_node_dict["SKA036"], "dishMode"
     )
     event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA063"], "dishMode"
+        central_node_mid.dish_leaf_node_dict["SKA063"], "dishMode"
     )
     event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA100"], "dishMode"
+        central_node_mid.dish_leaf_node_dict["SKA100"], "dishMode"
     )
 
     assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA001"],
+        central_node_mid.dish_leaf_node_dict["SKA001"],
         "dishMode",
         DishMode.STANDBY_LP,
     )
     assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA036"],
+        central_node_mid.dish_leaf_node_dict["SKA036"],
         "dishMode",
         DishMode.STANDBY_LP,
     )
     assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA063"],
+        central_node_mid.dish_leaf_node_dict["SKA063"],
         "dishMode",
         DishMode.STANDBY_LP,
     )
     assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA100"],
+        central_node_mid.dish_leaf_node_dict["SKA100"],
         "dishMode",
         DishMode.STANDBY_LP,
     )
@@ -115,22 +115,22 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
     central_node_mid.move_to_on()
 
     assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA001"],
+        central_node_mid.dish_leaf_node_dict["SKA001"],
         "dishMode",
         DishMode.STANDBY_FP,
     )
     assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA036"],
+        central_node_mid.dish_leaf_node_dict["SKA036"],
         "dishMode",
         DishMode.STANDBY_FP,
     )
     assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA063"],
+        central_node_mid.dish_leaf_node_dict["SKA063"],
         "dishMode",
         DishMode.STANDBY_FP,
     )
     assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA100"],
+        central_node_mid.dish_leaf_node_dict["SKA100"],
         "dishMode",
         DishMode.STANDBY_FP,
     )
@@ -211,7 +211,7 @@ def check_dish_mode(central_node_mid, event_recorder, dish_ids):
     """
     for dish_id in dish_ids.split(","):
         assert (
-            central_node_mid.dish_master_dict[dish_id].dishMode
+            central_node_mid.dish_leaf_node_dict[dish_id].dishMode
             == DishMode.STANDBY_FP
         )
 
