@@ -99,8 +99,8 @@ def check_obsstate_sdp_in_first_configure(
     """
     # TODO
     # Currently SDP goes in configuring only in first configure
-    # Command.SKB-309 has been raised for same.
-    # Once SKB-309 is resolved , we can check and remove
+    # Command.This is however resolved in SDP 0.20.0.
+    # When testing with same version is done ,we can check and remove
     # this logic of configure_cycle and perform check for
     # configuring after each of the configure command
     assert event_recorder.has_change_event_occurred(

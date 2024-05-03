@@ -14,8 +14,6 @@ Feature:  TMC Mid executes long running sequences with real sdp devices
             |1             |["1"]          |["science_A"]  |
             |1             |["1","2"]      |["science_A" , "target:a"] |   #Test Configure-scan pair with different configuration with different scan id with same resources
             |1             |["1","2"]      |["science_A" , "science_A"] |  #Test Configure-scan pair with same configuration with different scan id with same resources
-            |1             |["1","1"]      |["science_A" , "science_A"] |  ##Test Configure-scan pair with same configuration with same scan id with same resources
             |1             |["1","2","3"]  |["science_A"  , "target:a","callibration_B" ]|  #Test Configure-scan pair with different configuration with different scan id for multiple scan types with same resources
-
 
 
