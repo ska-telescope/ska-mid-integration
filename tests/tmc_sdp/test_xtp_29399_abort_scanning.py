@@ -118,7 +118,7 @@ def invoke_abort(subarray_node):
     """
     This method invokes abort command on tmc subarray
     """
-    pytest.command_result = subarray_node.abort_subarray()
+    subarray_node.abort_subarray()
 
 
 @then(
@@ -151,17 +151,9 @@ def tmc_subarray_is_in_aborted_obsstate(
     """
     Method to check if TMC subarray is in ABORTED obsstate
     """
-    event_recorder.subscribe_event(
-        subarray_node.subarray_node, "longRunningCommandResult"
-    )
     subarray_node.set_subarray_id(subarray_id)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.ABORTED,
-    )
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )

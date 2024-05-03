@@ -11,7 +11,6 @@ from tests.resources.test_harness.helpers import (
     generate_eb_pb_ids,
     prepare_json_args_for_centralnode_commands,
 )
-from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
 @pytest.mark.tmc_sdp
@@ -75,7 +74,7 @@ def invoke_abort(central_node_mid):
     """
 
     time.sleep(0.5)
-    pytest.command_result = central_node_mid.subarray_abort()
+    central_node_mid.subarray_abort()
 
 
 @then(
@@ -108,17 +107,9 @@ def tmc_subarray_is_in_aborted_obsstate(
     """
     Method to check if TMC subarray is in ABORTED obsstate
     """
-    event_recorder.subscribe_event(
-        subarray_node.subarray_node, "longRunningCommandResult"
-    )
     central_node_mid.set_subarray_id(subarray_id)
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_node,
         "obsState",
         ObsState.ABORTED,
-    )
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )

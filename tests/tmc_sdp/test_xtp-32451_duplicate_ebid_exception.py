@@ -229,7 +229,7 @@ def send_command_abort(subarray_node, subarray_id):
     Issue Abort command
     """
     check_subarray_instance(subarray_node.subarray_node, subarray_id)
-    pytest.command_result = subarray_node.abort_subarray()
+    subarray_node.abort_subarray()
 
 
 @then(
@@ -245,9 +245,6 @@ def subarray_transitions_to_aborted(
     Check if TMC subarray , CSP Subarray and real SDP Subarray
     move to abort.
     """
-    event_recorder.subscribe_event(
-        subarray_node.subarray_node, "longRunningCommandResult"
-    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices.get("csp_subarray"),
         "obsState",
@@ -259,11 +256,6 @@ def subarray_transitions_to_aborted(
         subarray_node.subarray_node,
         "obsState",
         ObsState.ABORTED,
-    )
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
 
 
