@@ -283,9 +283,6 @@ class Waiter:
                 "obsState", changed_to="IDLE"
             )
         )
-        if self.dish_master_list:
-            self.set_wait_for_dish("dishMode", "STANDBY_FP")
-            self.set_wait_for_dish("pointingState", "NONE")
         self.waits.append(
             watch(Resource(self.tmc_subarraynode1)).to_become(
                 "obsState", changed_to="IDLE"
