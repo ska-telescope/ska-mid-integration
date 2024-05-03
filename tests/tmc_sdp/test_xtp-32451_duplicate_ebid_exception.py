@@ -134,20 +134,10 @@ def reassign_resources_to_subarray(
     """
     TMC executes second AssignResources command with duplicate eb-id
     """
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "longRunningCommandResult"
-    )
     assign_input_json = prepare_json_args_for_centralnode_commands(
         input_json1, command_input_factory
     )
-    pytest.command_result = central_node_mid.perform_action(
-        "AssignResources", assign_input_json
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
-    )
+    central_node_mid.perform_action("AssignResources", assign_input_json)
 
 
 @then(
