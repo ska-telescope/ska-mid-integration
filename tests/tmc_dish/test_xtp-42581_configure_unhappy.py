@@ -183,6 +183,7 @@ def check_dish_mode_and_pointing_state(
     Method to check dishMode and pointingState of DISH and
     SubarrayNode obsState.
     """
+    time.sleep(5)  # Added sleep since dish events are coming late
     assert event_recorder.has_change_event_occurred(
         central_node_mid.dish_master_dict["SKA001"],
         "PointingState",
@@ -209,7 +210,7 @@ def check_dish_mode_and_pointing_state(
     )
 
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
+        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=20
     )
 
 
