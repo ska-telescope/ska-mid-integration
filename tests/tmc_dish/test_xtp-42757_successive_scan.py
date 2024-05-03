@@ -71,6 +71,9 @@ def turn_on_telescope(
         central_node_mid.dish_master_dict["SKA100"], "PointingState"
     )
     event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+    event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
 
@@ -157,7 +160,7 @@ def turn_on_telescope(
         ObsState.IDLE,
     )
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
+        central_node_mid.central_node,
         "longRunningCommandResult",
         (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
