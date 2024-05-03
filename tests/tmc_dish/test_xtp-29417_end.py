@@ -1,7 +1,5 @@
 """Test module for TMC-DISH End functionality"""
 
-import time
-
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
@@ -15,7 +13,6 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
-@pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29417_end.feature",
@@ -95,9 +92,6 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
         DishMode.STANDBY_LP,
     )
 
-    # Wait for the DishLeafNode to get StandbyLP event form DishMaster before
-    # invoking TelescopeOn command
-    time.sleep(5)
     csp_master_sim = simulator_factory.get_or_create_simulator_device(
         SimulatorDeviceType.MID_CSP_MASTER_DEVICE
     )
@@ -139,10 +133,6 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
         "dishMode",
         DishMode.STANDBY_FP,
     )
-
-    # Wait for the DishLeafNode to get StandbyFP event form DishMaster before
-    # invoking TelescopeOn command
-    time.sleep(5)
 
     assert event_recorder.has_change_event_occurred(
         central_node_mid.sdp_master,

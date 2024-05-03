@@ -1,7 +1,5 @@
 """Test module for TMC-DISH Configure functionality"""
 
-import time
-
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
@@ -15,7 +13,6 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
-@pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29416_configure.feature",
@@ -95,13 +92,6 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
         DishMode.STANDBY_LP,
     )
 
-    # Wait for DishMaster attribute value update,
-    # on CentralNode for value dishMode STANDBY_LP
-
-    # TODO: Improvement in tests/implementation
-    # to minimize the need of having sleep
-
-    time.sleep(5)
     csp_master_sim = simulator_factory.get_or_create_simulator_device(
         SimulatorDeviceType.MID_CSP_MASTER_DEVICE
     )
@@ -143,13 +133,6 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
         "dishMode",
         DishMode.STANDBY_FP,
     )
-
-    # Wait for DishMaster attribute value update,
-    # on CentralNode for value dishMode STANDBY_FP
-
-    # TODO: Improvement in tests/implementation
-    # to minimize the need of having sleep
-    time.sleep(5)
 
     assert event_recorder.has_change_event_occurred(
         central_node_mid.sdp_master,
@@ -206,7 +189,7 @@ def invoke_configure(
         "configure_mid", command_input_factory
     )
     central_node_mid.set_subarray_id(subarray_id)
-    subarray_node.execute_transition("Configure", configure_input_json)
+    subarray_node.store_configuration_data(configure_input_json)
 
 
 @then(

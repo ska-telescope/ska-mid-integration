@@ -1,7 +1,5 @@
 """Test module for TMC-DISH Off functionality"""
 
-import time
-
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from tango import DevState
@@ -10,7 +8,6 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.enum import DishMode
 
 
-@pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29351_off.feature",
@@ -69,13 +66,6 @@ def check_tmc_and_dish_is_on(
             == DishMode.STANDBY_LP
         )
 
-    # Wait for DishMaster attribute value update,
-    # on CentralNode for value dishMode STANDBY_LP
-
-    # TODO: Improvement in tests/implementation
-    # to minimize the need of having sleep
-    time.sleep(5)
-
     central_node_mid.move_to_on()
 
     for dish_id in dish_ids.split(","):
@@ -84,12 +74,6 @@ def check_tmc_and_dish_is_on(
             "dishMode",
             DishMode.STANDBY_FP,
         )
-    # Wait for DishMaster attribute value update,
-    # on CentralNode for value dishMode STANDBY_FP
-
-    # TODO: Improvement in tests/implementation
-    # to minimize the need of having sleep
-    time.sleep(5)
 
     assert event_recorder.has_change_event_occurred(
         central_node_mid.sdp_master,
