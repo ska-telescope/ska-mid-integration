@@ -274,13 +274,13 @@ def check_dish_mode_and_pointing_state(
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
-            DishMode.OPERATE,
+            DishMode.STANDBY_FP,
         )
 
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
-            PointingState.READY,
+            PointingState.NONE,
         )
 
 
