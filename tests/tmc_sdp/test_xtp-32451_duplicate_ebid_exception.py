@@ -2,7 +2,7 @@
 by SDP subarray"""
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
-from ska_control_model import ObsState, ResultCode
+from ska_control_model import ObsState
 from tango import DevState
 
 from tests.resources.test_harness.helpers import (
@@ -10,6 +10,7 @@ from tests.resources.test_harness.helpers import (
     check_subarray_instance,
     prepare_json_args_for_centralnode_commands,
 )
+from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.constant import (
     tmc_sdp_subarray_leaf_node,
     tmc_subarraynode1,
@@ -139,11 +140,14 @@ def reassign_resources_to_subarray(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         input_json1, command_input_factory
     )
-    pytest.result, pytest.unique_id = central_node_mid.perform_action(
+    pytest.command_result = central_node_mid.perform_action(
         "AssignResources", assign_input_json
     )
-    assert pytest.unique_id[0].endswith("AssignResources")
-    assert pytest.result[0] == ResultCode.QUEUED
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+    )
 
 
 @then(
@@ -225,7 +229,7 @@ def send_command_abort(subarray_node, subarray_id):
     Issue Abort command
     """
     check_subarray_instance(subarray_node.subarray_node, subarray_id)
-    subarray_node.subarray_node.Abort()
+    pytest.command_result = subarray_node.abort_subarray()
 
 
 @then(
@@ -241,7 +245,9 @@ def subarray_transitions_to_aborted(
     Check if TMC subarray , CSP Subarray and real SDP Subarray
     move to abort.
     """
-
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices.get("csp_subarray"),
         "obsState",
@@ -254,17 +260,22 @@ def subarray_transitions_to_aborted(
         "obsState",
         ObsState.ABORTED,
     )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+    )
 
 
 @then(
     parsers.parse("I issue the Restart command on TMC Subarray {subarray_id}")
 )
-def send_command_restart(central_node_mid, subarray_id, subarray_node):
+def send_command_restart(subarray_id, subarray_node):
     """
     Issue restart command.
     """
     check_subarray_instance(subarray_node.subarray_node, subarray_id)
-    subarray_node.restart_subarray()
+    pytest.command_result = subarray_node.restart_subarray()
 
 
 @then(
@@ -277,7 +288,9 @@ def subarray_transitions_to_empty(subarray_node, subarray_id, event_recorder):
     """
     Check if CSP, SDP and TMC subarray  transitions to obsState EMPTY
     """
-
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices.get("csp_subarray"),
         "obsState",
@@ -290,6 +303,11 @@ def subarray_transitions_to_empty(subarray_node, subarray_id, event_recorder):
         "obsState",
         ObsState.EMPTY,
     )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+    )
 
 
 @then(
@@ -299,17 +317,23 @@ def subarray_transitions_to_empty(subarray_node, subarray_id, event_recorder):
     )
 )
 def assign_resources_executed_on_subarray(
-    subarray_node, event_recorder, command_input_factory, subarray_id
+    subarray_node,
+    event_recorder,
+    command_input_factory,
+    subarray_id,
+    central_node_mid,
 ):
     """
     Check assignResources command is executed successfully
     """
-
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
 
-    subarray_node.store_resources(assign_input_json)
+    pytest.command_result = central_node_mid.store_resources(assign_input_json)
 
     check_subarray_instance(
         subarray_node.subarray_devices.get("sdp_subarray"), subarray_id
@@ -325,4 +349,9 @@ def assign_resources_executed_on_subarray(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )

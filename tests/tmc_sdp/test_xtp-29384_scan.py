@@ -10,6 +10,7 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
+from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
 @pytest.mark.tmc_sdp
@@ -118,7 +119,9 @@ def invoke_scan(
     scan_json["scan_id"] = scan_id
 
     central_node_mid.set_subarray_id(subarray_id)
-    subarray_node.execute_transition("Scan", argin=json.dumps(scan_json))
+    pytest.command_result = subarray_node.store_scan_data(
+        json.dumps(scan_json)
+    )
 
 
 @then(
@@ -170,9 +173,17 @@ def check_tmc_subarray_obs_state(
     central_node_mid, subarray_node, event_recorder, subarray_id
 ):
     """A method to check TMC subarray obsstate"""
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     central_node_mid.set_subarray_id(subarray_id)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )

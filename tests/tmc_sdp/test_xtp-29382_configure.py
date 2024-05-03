@@ -10,6 +10,7 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
+from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
 @pytest.mark.tmc_sdp
@@ -57,10 +58,13 @@ def check_subarray_obs_state(
     event_recorder.subscribe_event(
         subarray_node.subarray_devices.get("sdp_subarray"), "obsState"
     )
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-    central_node_mid.store_resources(assign_input_json)
+    pytest.command_result = central_node_mid.store_resources(assign_input_json)
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices.get("sdp_subarray"),
@@ -71,6 +75,11 @@ def check_subarray_obs_state(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
 
 
@@ -91,7 +100,9 @@ def invoke_configure(
     input_json = json.loads(input_json)
     input_json["sdp"]["scan_type"] = scan_type
     central_node_mid.set_subarray_id(subarray_id)
-    subarray_node.store_configuration_data(json.dumps(input_json))
+    pytest.command_result = subarray_node.store_configuration_data(
+        json.dumps(input_json)
+    )
 
 
 @then(parsers.parse("the SDP subarray {subarray_id} obsState is READY"))
@@ -131,9 +142,17 @@ def check_tmc_subarray_obs_state(
     central_node_mid, subarray_node, event_recorder, subarray_id
 ):
     """A method to check TMC subarray obsstate"""
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     central_node_mid.set_subarray_id(subarray_id)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )

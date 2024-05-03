@@ -8,6 +8,7 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
+from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
 @pytest.mark.tmc_sdp
@@ -38,6 +39,13 @@ def subarray_is_in_scanning_obsstate(
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
+
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
@@ -46,7 +54,7 @@ def subarray_is_in_scanning_obsstate(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-    central_node_mid.store_resources(assign_input_json)
+    pytest.command_result = central_node_mid.store_resources(assign_input_json)
     event_recorder.subscribe_event(
         subarray_node.subarray_devices.get("sdp_subarray"), "obsState"
     )
@@ -61,10 +69,18 @@ def subarray_is_in_scanning_obsstate(
         "obsState",
         ObsState.IDLE,
     )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+    )
+
     configure_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    subarray_node.store_configuration_data(configure_json)
+    pytest.command_result = subarray_node.store_configuration_data(
+        configure_json
+    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["sdp_subarray"],
         "obsState",
@@ -74,6 +90,11 @@ def subarray_is_in_scanning_obsstate(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
     scan_json = prepare_json_args_for_commands(
         "scan_mid", command_input_factory
@@ -97,7 +118,7 @@ def invoke_abort(subarray_node):
     """
     This method invokes abort command on tmc subarray
     """
-    subarray_node.abort_subarray()
+    pytest.command_result = subarray_node.abort_subarray()
 
 
 @then(
@@ -130,9 +151,17 @@ def tmc_subarray_is_in_aborted_obsstate(
     """
     Method to check if TMC subarray is in ABORTED obsstate
     """
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     subarray_node.set_subarray_id(subarray_id)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.ABORTED,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )

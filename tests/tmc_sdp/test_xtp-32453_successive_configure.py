@@ -12,6 +12,7 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
+from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
 @pytest.mark.tmc_sdp
@@ -59,6 +60,9 @@ def telescope_is_in_idle_state(
         "telescopeState",
         DevState.ON,
     )
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid_multiple_scantype", command_input_factory
     )
@@ -70,7 +74,9 @@ def telescope_is_in_idle_state(
         "time-to-ready"
     ] = 2
 
-    central_node_mid.store_resources(json.dumps(assign_str))
+    pytest.command_result = central_node_mid.store_resources(
+        json.dumps(assign_str)
+    )
 
     check_subarray_instance(
         subarray_node.subarray_devices.get("sdp_subarray"), subarray_id
@@ -87,6 +93,11 @@ def telescope_is_in_idle_state(
         "obsState",
         ObsState.IDLE,
     )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+    )
 
 
 @when(parsers.parse("the command configure is issued with {input_json1}"))
@@ -98,13 +109,17 @@ def execute_initial_configure_command(
     configure_json = prepare_json_args_for_commands(
         input_json1, command_input_factory
     )
-    subarray_node.store_configuration_data(configure_json)
+    pytest.command_result = subarray_node.store_configuration_data(
+        configure_json
+    )
 
 
 @when("the subarray transitions to obsState READY")
 def check_subarray_in_ready(subarray_node, event_recorder):
     """A method to check SDP subarray obsstate"""
-
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["sdp_subarray"],
         "obsState",
@@ -119,6 +134,11 @@ def check_subarray_in_ready(subarray_node, event_recorder):
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
 
 
@@ -135,7 +155,9 @@ def execute_next_configure_command(
     configure_json = prepare_json_args_for_commands(
         input_json2, command_input_factory
     )
-    subarray_node.store_configuration_data(configure_json)
+    pytest.command_result = subarray_node.store_configuration_data(
+        configure_json
+    )
 
     # TODO :: Issue is raised with SDP team , awating for
     #  confirmation to raise it as bug
@@ -168,10 +190,17 @@ def check_subarray_in_ready_in_reconfigure(
     #     "obsState",
     #     ObsState.READY,
     # )
-
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     check_subarray_instance(central_node_mid.subarray_node, subarray_id)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
