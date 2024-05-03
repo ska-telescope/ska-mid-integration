@@ -172,7 +172,7 @@ def invoke_configure(subarray_node, command_input_factory, receiver_band):
     )
     configure_input = json.loads(configure_input_json)
     configure_input["dish"]["receiver_band"] = receiver_band
-    subarray_node.execute_transition("Configure", json.dumps(configure_input))
+    subarray_node.store_configuration_data(json.dumps(configure_input))
 
 
 @given("the subarray transitions to obsState READY")
@@ -183,7 +183,6 @@ def check_dish_mode_and_pointing_state(
     Method to check dishMode and pointingState of DISH and
     SubarrayNode obsState.
     """
-    time.sleep(5)  # Added sleep since dish events are coming late
     assert event_recorder.has_change_event_occurred(
         central_node_mid.dish_master_dict["SKA001"],
         "PointingState",
