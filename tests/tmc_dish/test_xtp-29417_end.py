@@ -1,5 +1,6 @@
 """Test module for TMC-DISH End functionality"""
 
+import logging
 import time
 
 import pytest
@@ -13,6 +14,8 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.enum import DishMode, PointingState
+
+LOGGER = logging.getLogger(__name__)
 
 
 @pytest.mark.tmc_dish
@@ -276,12 +279,16 @@ def check_dish_mode_and_pointing_state(
             "dishMode",
             DishMode.OPERATE,
         )
-        # assert event_recorder.has_change_event_occurred(
-        #     central_node_mid.dish_master_dict[dish_id],
-        #     "pointingState",
-        #     PointingState.READY,
-        #     lookahead=12,
-        # )
+        LOGGER.info(
+            "PointingState %s",
+            central_node_mid.dish_master_dict[dish_id].pointingState,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "pointingState",
+            PointingState.READY,
+            lookahead=12,
+        )
 
 
 @then(

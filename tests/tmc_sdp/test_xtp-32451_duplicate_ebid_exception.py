@@ -1,5 +1,7 @@
 """TMC Subarray handles the exception duplicate eb-id raised
 by SDP subarray"""
+import logging
+
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
@@ -15,6 +17,8 @@ from tests.resources.test_support.constant import (
     tmc_sdp_subarray_leaf_node,
     tmc_subarraynode1,
 )
+
+LOGGER = logging.getLogger(__name__)
 
 
 @pytest.mark.tmc_sdp
@@ -137,7 +141,13 @@ def reassign_resources_to_subarray(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         input_json1, command_input_factory
     )
-    central_node_mid.perform_action("AssignResources", assign_input_json)
+    pytest.result, pytest.unique_id = central_node_mid.perform_action(
+        "AssignResources", assign_input_json
+    )
+    LOGGER.info(f"pytest.result:{pytest.result}")
+    LOGGER.info(f"pytest.unique_id:{pytest.unique_id}")
+    assert pytest.unique_id[0].endswith("AssignResources")
+    assert pytest.result[0] == ResultCode.QUEUED
 
 
 @then(
