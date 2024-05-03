@@ -200,25 +200,25 @@ def check_dish_mode_and_pointing_state(
     """
     assert event_recorder.has_change_event_occurred(
         central_node_mid.dish_master_dict["SKA001"],
-        "DishMode",
+        "dishMode",
         DishMode.OPERATE,
         lookahead=5,
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.dish_master_dict["SKA036"],
-        "DishMode",
+        "dishMode",
         DishMode.OPERATE,
         lookahead=5,
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.dish_master_dict["SKA063"],
-        "DishMode",
+        "dishMode",
         DishMode.OPERATE,
         lookahead=5,
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.dish_master_dict["SKA100"],
-        "DishMode",
+        "dishMode",
         DishMode.OPERATE,
         lookahead=5,
     )
