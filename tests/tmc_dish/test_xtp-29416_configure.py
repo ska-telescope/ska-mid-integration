@@ -189,7 +189,7 @@ def invoke_configure(
         "configure_mid", command_input_factory
     )
     central_node_mid.set_subarray_id(subarray_id)
-    subarray_node.execute_transition("Configure", configure_input_json)
+    subarray_node.store_configuration_data(configure_input_json)
 
 
 @then(
