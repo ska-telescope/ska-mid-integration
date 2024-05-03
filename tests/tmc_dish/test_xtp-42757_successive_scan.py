@@ -172,7 +172,7 @@ def invoke_configure(
     configure_input = json.loads(configure_input_json)
     configure_input["dish"]["receiver_band"] = receiver_band1
     configure_input["tmc"]["scan_duration"] = float(scan_duration1)
-    subarray_node.execute_transition("Configure", json.dumps(configure_input))
+    subarray_node.store_configuration_data(json.dumps(configure_input))
 
 
 @then("the TMC subarray transitions to obsState READY")
@@ -298,4 +298,4 @@ def invoke_next_configure(
     configure_input["dish"]["receiver_band"] = receiver_band2
     configure_input["tmc"]["scan_duration"] = float(scan_duration2)
     configure_input["csp"]["common"]["frequency_band"] = receiver_band2
-    subarray_node.execute_transition("Configure", json.dumps(configure_input))
+    subarray_node.store_configuration_data(json.dumps(configure_input))
