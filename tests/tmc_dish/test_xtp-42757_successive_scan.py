@@ -70,7 +70,9 @@ def turn_on_telescope(
     event_recorder.subscribe_event(
         central_node_mid.dish_master_dict["SKA100"], "PointingState"
     )
-    event_recorder.subscribe_event(subarray_node, "longRunningCommandResult")
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
 
     # TODO: Improvement in tests/implementation
     # to minimize the need of having sleep
