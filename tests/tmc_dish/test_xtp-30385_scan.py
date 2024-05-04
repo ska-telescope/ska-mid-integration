@@ -22,12 +22,14 @@ from tests.resources.test_harness.simulator_factory import SimulatorFactory
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
+from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
+@pytest.mark.repeat(25)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-30385_scan.feature",
@@ -196,6 +198,12 @@ def check_subarray_obsState_ready(
 ):
     """Method to check subarray is in READY obsState"""
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
@@ -204,19 +212,31 @@ def check_subarray_obsState_ready(
         "configure_mid", command_input_factory
     )
     central_node_mid.set_subarray_id(subarray_id)
-    central_node_mid.store_resources(assign_input_json)
+    pytest.command_result = central_node_mid.store_resources(assign_input_json)
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
     )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+    )
 
-    subarray_node.store_configuration_data(configure_input_json)
+    pytest.command_result = subarray_node.store_configuration_data(
+        configure_input_json
+    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
 
 
@@ -333,8 +353,16 @@ def check_subarray_obsstate_ready(
 ):
     """Checks if SubarrayNode's obsState attribute value is READY"""
     central_node_mid.set_subarray_id(int(subarray_id))
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )

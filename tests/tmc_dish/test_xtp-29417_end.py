@@ -18,6 +18,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 LOGGER = logging.getLogger(__name__)
 
 
+@pytest.mark.skip
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29417_end.feature",

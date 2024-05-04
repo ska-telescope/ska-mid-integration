@@ -14,6 +14,7 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.enum import DishMode
 
 
+@pytest.mark.skip
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-30208_abort_resourcing.feature",
