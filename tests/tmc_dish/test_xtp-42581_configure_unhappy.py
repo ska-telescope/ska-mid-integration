@@ -48,7 +48,7 @@ def turn_on_telescope(central_node_mid, event_recorder):
             central_node_mid.dish_master_dict[dish_id], "dishMode", 500.0
         )
         event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "PointingState", 500.0
+            central_node_mid.dish_master_dict[dish_id], "pointingState", 500.0
         )
 
     # TODO: Improvement in tests/implementation
@@ -140,7 +140,7 @@ def check_dish_mode_and_pointing_state(
             central_node_mid.dish_master_dict[dish_id], "dishMode", 500.0
         )
         event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "PointingState", 500.0
+            central_node_mid.dish_master_dict[dish_id], "pointingState", 500.0
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
