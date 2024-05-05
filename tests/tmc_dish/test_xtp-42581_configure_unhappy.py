@@ -136,6 +136,12 @@ def check_dish_mode_and_pointing_state(
     SubarrayNode obsState.
     """
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode", 500.0
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "PointingState", 500.0
+        )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
