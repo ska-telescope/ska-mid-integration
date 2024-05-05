@@ -45,10 +45,10 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
     )
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode"
+            central_node_mid.dish_master_dict[dish_id], "dishMode", 300.0
         )
         event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "PointingState"
+            central_node_mid.dish_master_dict[dish_id], "PointingState", 300.0
         )
 
     # TODO: Improvement in tests/implementation
@@ -139,14 +139,12 @@ def check_dish_mode_and_pointing_state(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.OPERATE,
-            lookahead=5,
         )
 
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
-            lookahead=5,
         )
     time.sleep(5)
     assert event_recorder.has_change_event_occurred(
