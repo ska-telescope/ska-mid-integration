@@ -283,7 +283,9 @@ def invoke_scan(
         "scan_mid", command_input_factory
     )
     central_node_mid.set_subarray_id(subarray_id)
-    subarray_node.execute_transition("Scan", scan_input_json)
+    pytest.command_result = subarray_node.execute_transition(
+        "Scan", scan_input_json
+    )
 
 
 @then(

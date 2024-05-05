@@ -273,7 +273,7 @@ def invoke_endscan(
     A method to invoke EndScan command
     """
     subarray_node.set_subarray_id(subarray_id)
-    subarray_node.remove_scan_data()
+    pytest.command_result = subarray_node.remove_scan_data()
 
 
 @then(
