@@ -90,6 +90,9 @@ def check_subarray_obsState_idle(
         "obsState",
         ObsState.IDLE,
     )
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
