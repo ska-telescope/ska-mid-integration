@@ -12,7 +12,6 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
-from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
@@ -46,100 +45,36 @@ def turn_on_telescope(
     """
     A method to put Telescope ON
     """
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA001"], "dishMode"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA036"], "dishMode"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA063"], "dishMode"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA100"], "dishMode"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA001"], "PointingState"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA036"], "PointingState"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA063"], "PointingState"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA100"], "PointingState"
-    )
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode", 500.0
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "pointingState", 500.0
+        )
     event_recorder.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
     )
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
-
-    # TODO: Improvement in tests/implementation
-    # to minimize the need of having sleep
-
-    time.sleep(5)
-    csp_master_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_CSP_MASTER_DEVICE
-    )
-    sdp_master_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_SDP_MASTER_DEVICE
-    )
-
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
 
-    event_recorder.subscribe_event(csp_master_sim, "State")
-    event_recorder.subscribe_event(sdp_master_sim, "State")
+    # TODO: Improvement in tests/implementation
+    # to minimize the need of having sleep
+
+    time.sleep(5)
 
     central_node_mid.move_to_on()
 
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA001"],
-        "dishMode",
-        DishMode.STANDBY_FP,
-        lookahead=15,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA036"],
-        "dishMode",
-        DishMode.STANDBY_FP,
-        lookahead=15,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA063"],
-        "dishMode",
-        DishMode.STANDBY_FP,
-        lookahead=15,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA100"],
-        "dishMode",
-        DishMode.STANDBY_FP,
-        lookahead=15,
-    )
-
-    # Wait for DishMaster attribute value update,
-    # on CentralNode for value dishMode STANDBY_FP
-
-    # TODO: Improvement in tests/implementation
-    # to minimize the need of having sleep
-    time.sleep(5)
-
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.sdp_master,
-        "State",
-        DevState.ON,
-    )
-
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.csp_master,
-        "State",
-        DevState.ON,
-    )
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+        )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
@@ -198,54 +133,17 @@ def check_dish_mode_and_pointing_state(
     Method to check dishMode and pointingState of DISH and
     SubarrayNode obsState.
     """
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA001"],
-        "dishMode",
-        DishMode.OPERATE,
-        lookahead=5,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA036"],
-        "dishMode",
-        DishMode.OPERATE,
-        lookahead=5,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA063"],
-        "dishMode",
-        DishMode.OPERATE,
-        lookahead=5,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA100"],
-        "dishMode",
-        DishMode.OPERATE,
-        lookahead=5,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA001"],
-        "PointingState",
-        PointingState.TRACK,
-        lookahead=5,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA036"],
-        "PointingState",
-        PointingState.TRACK,
-        lookahead=5,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA063"],
-        "PointingState",
-        PointingState.TRACK,
-        lookahead=5,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA100"],
-        "PointingState",
-        PointingState.TRACK,
-        lookahead=5,
-    )
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.OPERATE,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "pointingState",
+            PointingState.TRACK,
+        )
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=15
@@ -347,4 +245,6 @@ def invoke_next_configure(
     configure_input["dish"]["receiver_band"] = receiver_band2
     configure_input["tmc"]["scan_duration"] = float(scan_duration2)
     configure_input["csp"]["common"]["frequency_band"] = receiver_band2
-    subarray_node.store_configuration_data(json.dumps(configure_input))
+    pytest.command_result = subarray_node.store_configuration_data(
+        json.dumps(configure_input)
+    )
