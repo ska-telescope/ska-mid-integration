@@ -36,7 +36,7 @@ def test_tmc_dish_successive_configure_with_same_receiver_band():
 
 
 @given("a Telescope in ON state")
-def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
+def turn_on_telescope(central_node_mid, event_recorder):
     """
     A method to put Telescope ON
     """
@@ -45,10 +45,10 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
     )
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode", 300.0
+            central_node_mid.dish_master_dict[dish_id], "dishMode", 500.0
         )
         event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "PointingState", 300.0
+            central_node_mid.dish_master_dict[dish_id], "PointingState", 500.0
         )
 
     # TODO: Improvement in tests/implementation
@@ -77,7 +77,9 @@ def check_subarray_obsState_idle(
     """
     Method to check subarray is in IDLE obsState
     """
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "obsState", 500
+    )
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
@@ -115,7 +117,6 @@ def invoke_configure(
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
-
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
@@ -139,12 +140,14 @@ def check_dish_mode_and_pointing_state(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.OPERATE,
+            lookahead=15,
         )
 
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
+            lookahead=15,
         )
     time.sleep(5)
     assert event_recorder.has_change_event_occurred(
