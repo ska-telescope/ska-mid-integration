@@ -1,4 +1,5 @@
 """Test module for TMC-DISH Configure functionality"""
+import logging
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -208,7 +209,10 @@ def check_dish_mode_and_pointing_state(
         event_recorder.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
         )
-
+        logging.info(
+            "dishmode is 02 %s",
+            central_node_mid.dish_leaf_node_dict["SKA001"].dishMode,
+        )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "dishMode",
