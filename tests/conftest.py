@@ -29,6 +29,7 @@ from tests.resources.test_harness.utils.common_utils import (
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
+MID_DELAYMODEL_VERSION = "https://schema.skao.int/ska-mid-csp-delaymodel/3.0"
 
 
 def pytest_sessionstart(session):
@@ -277,3 +278,17 @@ def is_dish_vcc_set():
         "isDishVccConfigSet",
         True,
     ), "Timeout while waiting for isDishVccConfigSet to true"
+
+
+MID_DELAY_JSON = {
+    "interface": "",
+    "start_validity_sec": 0.1,
+    "cadence_sec": 0.1,
+    "validity_period_sec": 0.1,
+    "config_id": "",
+    "subarray": 1,
+    "receptor_delays": [
+        {"receptor": "", "xypol_coeffs_ns": [], "ypol_offset_ns": 0.0},
+        {"receptor": "", "xypol_coeffs_ns": [], "ypol_offset_ns": 0.0},
+    ],
+}
