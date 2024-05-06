@@ -62,7 +62,8 @@ def check_tmc_and_dish_is_on(
     assert sdp_master_sim.ping() > 0
 
     logging.info(
-        "dishmode is", central_node_mid.dish_leaf_node_dict["SKA001"].dishMode
+        "dishmode is %s",
+        central_node_mid.dish_leaf_node_dict["SKA001"].dishMode,
     )
     for dish_id in dish_ids.split(","):
         assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
