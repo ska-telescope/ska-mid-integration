@@ -279,7 +279,7 @@ def check_dish_mode_and_pointing_state(
             "dishMode",
             DishMode.OPERATE,
         )
-        time.sleep(5)
+        time.sleep(20)
         LOGGER.info(
             "PointingState %s",
             central_node_mid.dish_master_dict[dish_id].pointingState,
