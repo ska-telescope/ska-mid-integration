@@ -258,7 +258,7 @@ def check_subarray_obsstate(
 def invoke_end(central_node_mid, subarray_node, subarray_id):
     """A method to invoke End command"""
     central_node_mid.set_subarray_id(subarray_id)
-    subarray_node.end_observation()
+    subarray_node.execute_transition("End")
 
 
 @then(
@@ -279,7 +279,6 @@ def check_dish_mode_and_pointing_state(
             "dishMode",
             DishMode.OPERATE,
         )
-        time.sleep(40)
         LOGGER.info(
             "PointingState %s",
             central_node_mid.dish_master_dict[dish_id].pointingState,
