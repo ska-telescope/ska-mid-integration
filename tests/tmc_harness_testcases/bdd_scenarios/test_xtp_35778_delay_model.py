@@ -22,6 +22,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 
 LOGGER = logging.getLogger(__name__)
 
+
 @pytest.mark.skip
 @pytest.mark.SKA_mid
 @scenario(
