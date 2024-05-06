@@ -1,5 +1,7 @@
 """Test module for TMC-DISH Off functionality"""
 
+import logging
+
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from tango import DevState
@@ -59,6 +61,9 @@ def check_tmc_and_dish_is_on(
     assert csp_master_sim.ping() > 0
     assert sdp_master_sim.ping() > 0
 
+    logging.info(
+        "dishmode is", central_node_mid.dish_leaf_node_dict["SKA001"].dishMode
+    )
     for dish_id in dish_ids.split(","):
         assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
         assert (
