@@ -1,7 +1,6 @@
 """Test module to test delay functionality."""
 import json
 import logging
-from test.conftest import MID_DELAY_JSON, MID_DELAYMODEL_VERSION
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -9,6 +8,7 @@ from ska_control_model import ObsState
 from ska_telmodel.schema import validate as telmodel_validate
 from tango import DevState
 
+from tests.conftest import MID_DELAY_JSON, MID_DELAYMODEL_VERSION
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
