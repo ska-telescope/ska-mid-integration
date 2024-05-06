@@ -4,8 +4,8 @@ domain: general-monitoring
 instances: ["01"]
 {{- $RealDishMasterIdentifier := .Values.deviceServers.centralnode.RealDishMasterIdentifier }}
 {{- $SimulatorDishMasterIdentifier := .Values.deviceServers.centralnode.SimulatorDishMasterIdentifier }}
-{{- $KValueValidRangeUpperLimit := .Values.deviceServers.centralnode.mid.KValueValidRange.max | int }}
-{{- $KValueValidRangeLowerLimit := .Values.deviceServers.centralnode.mid.KValueValidRange.min | int }}
+{{- $KValueValidRangeUpperLimit := .Values.deviceServers.centralnode.KValueValidRange.max | int }}
+{{- $KValueValidRangeLowerLimit := .Values.deviceServers.centralnode.KValueValidRange.min | int }}
 entrypoints:
   - name: "ska_tmc_centralnode.central_node_mid.CentralNodeMid"
 server:
