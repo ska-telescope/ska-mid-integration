@@ -211,11 +211,18 @@ def check_automatic_endscan_with_scan_duration2(
 
 
 @given("with command End TMC subarray transitions to obsState IDLE")
-def invoke_end_command(subarray_node, event_recorder):
+def invoke_end_command(subarray_node, event_recorder, central_node_mid):
     """
     This method invokes End command
     """
     pytest.command_result = subarray_node.execute_transition("End")
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "pointingState",
+            PointingState.READY,
+            lookahead=10,
+        )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node, "obsState", ObsState.IDLE, lookahead=10
     )
