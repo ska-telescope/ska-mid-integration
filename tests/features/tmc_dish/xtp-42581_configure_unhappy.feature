@@ -1,7 +1,7 @@
 @XTP-42581 @XTP-29778 @Team_SAHYADRI @tmc_dish
 Scenario Outline: Testing of successive configure functionality with same receiver_band
     Given a Telescope in ON state
-    And the subarray is in IDLE obsState
+    And the TMC subarray is in IDLE obsState
     And the command configure is issued to the TMC subarray with <receiver_band>
     And the subarray transitions to obsState READY
     When the next successive configure command is issued to the TMC subarray with <receiver_band>

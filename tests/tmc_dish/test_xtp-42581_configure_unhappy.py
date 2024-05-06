@@ -45,10 +45,10 @@ def turn_on_telescope(central_node_mid, event_recorder):
     )
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode", 500.0
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
         )
         event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "pointingState", 500.0
+            central_node_mid.dish_master_dict[dish_id], "pointingState"
         )
 
     # TODO: Improvement in tests/implementation
@@ -70,16 +70,14 @@ def turn_on_telescope(central_node_mid, event_recorder):
     )
 
 
-@given("the subarray is in IDLE obsState")
+@given("the TMC subarray is in IDLE obsState")
 def check_subarray_obsState_idle(
     subarray_node, central_node_mid, event_recorder, command_input_factory
 ):
     """
     Method to check subarray is in IDLE obsState
     """
-    event_recorder.subscribe_event(
-        subarray_node.subarray_node, "obsState", 500
-    )
+    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
@@ -137,10 +135,10 @@ def check_dish_mode_and_pointing_state(
     """
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode", 500.0
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
         )
         event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "pointingState", 500.0
+            central_node_mid.dish_master_dict[dish_id], "pointingState"
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
