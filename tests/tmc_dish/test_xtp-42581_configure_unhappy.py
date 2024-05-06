@@ -212,7 +212,7 @@ def configure_command_rejection_by_dish(
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "longRunningCommandStatus",
-            (Anything, "REJECTED"),
+            (Anything, str(ResultCode.REJECTED.value)),
             lookahead=5,
         )
 
