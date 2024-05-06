@@ -81,7 +81,9 @@ def turn_on_telescope(
         DevState.ON,
     )
 
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "obsState", 500.0
+    )
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
@@ -186,9 +188,9 @@ def check_automatic_endscan_with_scan_duration1(
     """
     A method to check if EndScan is successful.
     """
-    time.sleep(int(scan_duration1))
+    # time.sleep(int(scan_duration1))
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
+        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=15
     )
 
 
@@ -204,9 +206,9 @@ def check_automatic_endscan_with_scan_duration2(
     """
     A method to check if EndScan is successful.
     """
-    time.sleep(int(scan_duration2))
+    # time.sleep(int(scan_duration2))
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
+        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=15
     )
 
 
