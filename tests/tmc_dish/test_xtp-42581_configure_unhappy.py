@@ -185,18 +185,11 @@ def invoke_successive_configure(
     """
     A method to invoke Configure command
     """
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA001"], "longRunningCommandStatus"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA036"], "longRunningCommandStatus"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA063"], "longRunningCommandStatus"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA100"], "longRunningCommandStatus"
-    )
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id],
+            "longRunningCommandStatus",
+        )
 
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
@@ -217,30 +210,13 @@ def configure_command_rejection_by_dish(
 ):
     # In order to complete this clause, error propagation for TMC-Dish
     # interface needs to be completed.
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA001"],
-        "longRunningCommandStatus",
-        (Anything, "REJECTED"),
-        lookahead=5,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA036"],
-        "longRunningCommandStatus",
-        (Anything, "REJECTED"),
-        lookahead=5,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA063"],
-        "longRunningCommandStatus",
-        (Anything, "REJECTED"),
-        lookahead=5,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA100"],
-        "longRunningCommandStatus",
-        (Anything, "REJECTED"),
-        lookahead=5,
-    )
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "longRunningCommandStatus",
+            (Anything, "REJECTED"),
+            lookahead=5,
+        )
 
 
 @then("TMC subarray remains in obsState READY")
