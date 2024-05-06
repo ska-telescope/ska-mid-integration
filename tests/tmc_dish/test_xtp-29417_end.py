@@ -214,7 +214,7 @@ def check_subarray_obsstate(
     )
 
     event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA001"], "pointingState"
+        central_node_mid.dish_master_dict["SKA001"], "pointingState", 100.0
     )
     event_recorder.subscribe_event(
         central_node_mid.dish_master_dict["SKA036"], "pointingState"
@@ -279,16 +279,17 @@ def check_dish_mode_and_pointing_state(
             "dishMode",
             DishMode.OPERATE,
         )
-        # LOGGER.info(
-        #     "PointingState %s",
-        #     central_node_mid.dish_master_dict[dish_id].pointingState,
-        # )
-        # assert event_recorder.has_change_event_occurred(
-        #     central_node_mid.dish_master_dict[dish_id],
-        #     "pointingState",
-        #     PointingState.READY,
-        #     lookahead=12,
-        # )
+        time.sleep(5)
+        LOGGER.info(
+            "PointingState %s",
+            central_node_mid.dish_master_dict[dish_id].pointingState,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "pointingState",
+            PointingState.READY,
+            lookahead=20,
+        )
 
 
 @then(
