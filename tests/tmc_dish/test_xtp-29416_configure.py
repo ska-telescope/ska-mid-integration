@@ -1,6 +1,5 @@
 """Test module for TMC-DISH Configure functionality"""
 import logging
-import time
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -175,14 +174,12 @@ def check_dish_mode_and_pointing_state(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "dishMode",
             DishMode.OPERATE,
-            lookahead=15,
         )
 
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
-            lookahead=15,
         )
 
 
@@ -209,7 +206,6 @@ def check_subarray_obsState_ready(
         "sdp_master obsstate is %s",
         subarray_node.subarray_devices["sdp_subarray"],
     )
-    time.sleep(5)
     central_node_mid.set_subarray_id(subarray_id)
     event_recorder.subscribe_event(
         subarray_node.subarray_devices["sdp_subarray"], "obsState"
@@ -218,7 +214,6 @@ def check_subarray_obsState_ready(
         subarray_node.subarray_devices["sdp_subarray"],
         "obsState",
         ObsState.READY,
-        lookahead=15,
     )
     event_recorder.subscribe_event(
         subarray_node.subarray_devices["csp_subarray"], "obsState"
@@ -227,8 +222,9 @@ def check_subarray_obsState_ready(
         subarray_node.subarray_devices["csp_subarray"],
         "obsState",
         ObsState.READY,
-        lookahead=15,
     )
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=15
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.READY,
     )
