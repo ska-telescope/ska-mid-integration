@@ -246,19 +246,31 @@ def check_subarray_obsState_ready(
     )
     logging.info(
         "csp_master obsstate is %s",
-        subarray_node.csp_master.obsstate,
+        subarray_node.subarray_devices["csp_subarray"],
     )
     logging.info(
         "sdp_master obsstate is %s",
-        subarray_node.sdp_master.obsstate,
+        subarray_node.subarray_devices["sdp_subarray"],
     )
     time.sleep(5)
     central_node_mid.set_subarray_id(subarray_id)
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.sdp_master, "obsState", ObsState.READY, lookahead=15
+    event_recorder.subscribe_event(
+        subarray_node.subarray_devices["sdp_subarray"], "obsState"
     )
     assert event_recorder.has_change_event_occurred(
-        subarray_node.csp_master, "obsState", ObsState.READY, lookahead=15
+        subarray_node.subarray_devices["sdp_subarray"],
+        "obsState",
+        ObsState.READY,
+        lookahead=15,
+    )
+    event_recorder.subscribe_event(
+        subarray_node.subarray_devices["csp_subarray"], "obsState"
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices["csp_subarray"],
+        "obsState",
+        ObsState.READY,
+        lookahead=15,
     )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=15
