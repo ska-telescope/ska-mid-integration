@@ -56,8 +56,6 @@ def execute_configure_scan_sequence(
         "configure1_mid", command_input_factory
     )
 
-    processed_scan_type = ""
-
     combined_dict = dict(zip(eval(scan_ids), eval(scan_types)))
 
     for scan_id, scan_type in combined_dict.items():
@@ -69,8 +67,6 @@ def execute_configure_scan_sequence(
             subarray_node,
             event_recorder,
             unique_id,
-            scan_type,
-            processed_scan_type,
         )
 
         scan_json = prepare_json_args_for_commands(
@@ -83,7 +79,7 @@ def execute_configure_scan_sequence(
         check_scan_successful(
             subarray_node, event_recorder, scan_id, unique_id
         )
-        processed_scan_type = scan_type
+
         LOGGER.debug(
             f"Configure-scan sequence completed for {scan_id} "
             f"and scan_type {scan_type}"
@@ -111,8 +107,6 @@ def execute_new_configure_scan_sequence(
         "configure1_mid", command_input_factory
     )
 
-    processed_scan_type = ""
-
     combined_dict = dict(zip(eval(new_scan_ids), eval(new_scan_types)))
 
     for scan_id, scan_type in combined_dict.items():
@@ -124,8 +118,6 @@ def execute_new_configure_scan_sequence(
             subarray_node,
             event_recorder,
             unique_id,
-            scan_type,
-            processed_scan_type,
         )
 
         scan_json = prepare_json_args_for_commands(
@@ -138,7 +130,7 @@ def execute_new_configure_scan_sequence(
         check_scan_successful(
             subarray_node, event_recorder, scan_id, unique_id
         )
-        processed_scan_type = scan_type
+
         LOGGER.debug(
             f"Configure-scan sequence completed for {scan_id} "
             f"and scan_type {scan_type}"

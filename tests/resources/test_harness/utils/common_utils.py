@@ -155,7 +155,9 @@ def check_scan_successful(
 
 
 def check_configure_successful(
-    subarray_node, event_recorder, unique_id, scan_type, processed_scan_type
+    subarray_node,
+    event_recorder,
+    unique_id,
 ) -> None:
     """
     Adds check to verify if configure command is successful
