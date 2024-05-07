@@ -64,9 +64,7 @@ def execute_configure_scan_sequence(
         _, unique_id = subarray_node.store_configuration_data(configure_json)
 
         check_configure_successful(
-            subarray_node,
-            event_recorder,
-            unique_id,
+            subarray_node, event_recorder, unique_id, scan_type
         )
 
         scan_json = prepare_json_args_for_commands(
@@ -113,9 +111,7 @@ def execute_new_configure_scan_sequence(
         _, unique_id = subarray_node.store_configuration_data(configure_json)
 
         check_configure_successful(
-            subarray_node,
-            event_recorder,
-            unique_id,
+            subarray_node, event_recorder, unique_id, scan_type
         )
 
         scan_json = prepare_json_args_for_commands(
