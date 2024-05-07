@@ -71,9 +71,7 @@ def telescope_is_in_idle_state(
         ObsState.IDLE,
     )
     assert event_recorder.has_change_event_occurred(
-        central_node_mid.subarray_node,
-        "obsState",
-        ObsState.IDLE,
+        central_node_mid.subarray_node, "obsState", ObsState.IDLE, lookahead=10
     )
     event_recorder.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
