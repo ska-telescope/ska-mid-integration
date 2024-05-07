@@ -256,7 +256,7 @@ SIMULATOR_DEVICE_FQDN_DICT = {
 DEFAULT_DISH_VCC_CONFIG = {
     "interface": "https://schema.skao.int/ska-mid-cbf-initsysparam/1.0",
     "tm_data_sources": [
-        "car://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata"
+        "car://gitlab.com/ska-telescope/ska-telmodel-data?ska-sdp-tmlite-repository-1.0.0#tmdata"
     ],
     "tm_data_filepath": (
         "instrument/ska1_mid_psi/" "ska-mid-cbf-system-parameters.json"
