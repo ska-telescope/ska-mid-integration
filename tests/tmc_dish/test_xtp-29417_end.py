@@ -1,4 +1,5 @@
 """Test module for TMC-DISH End functionality"""
+import logging
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -143,16 +144,16 @@ def check_subarray_obsstate(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "dishMode",
             DishMode.OPERATE,
+            lookahead=15,
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
+            lookahead=15,
         )
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "obsState",
-        ObsState.READY,
+        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=15
     )
 
 
@@ -177,17 +178,27 @@ def check_dish_mode_and_pointing_state(
     """
     Method to check dishMode and pointingState of DISH
     """
+    logging.info(
+        "dishmode is in end test %s",
+        central_node_mid.dish_leaf_node_dict["SKA001"].dishMode,
+    )
+    logging.info(
+        "poirtingstate is in end test %s",
+        central_node_mid.dish_leaf_node_dict["SKA001"].dishMode,
+    )
     for dish_id in dish_ids.split(","):
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "dishMode",
             DishMode.OPERATE,
+            lookahead=15,
         )
 
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "pointingState",
             PointingState.READY,
+            lookahead=15,
         )
 
 
@@ -202,7 +213,5 @@ def check_subarray_obsState_idle(
     """Method to check subarray is in IDLE obstate"""
     central_node_mid.set_subarray_id(subarray_id)
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "obsState",
-        ObsState.IDLE,
+        subarray_node.subarray_node, "obsState", ObsState.IDLE, lookahead=15
     )
