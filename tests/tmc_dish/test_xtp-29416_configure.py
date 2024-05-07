@@ -239,6 +239,10 @@ def check_subarray_obsState_ready(
     """
     Method to check subarray is in READY obsState
     """
+    logging.info(
+        "subarraynode obsstate is %s",
+        subarray_node.obsState,
+    )
     central_node_mid.set_subarray_id(subarray_id)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=15
