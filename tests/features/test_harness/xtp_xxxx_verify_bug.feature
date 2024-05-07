@@ -1,7 +1,7 @@
  @XTP-28347
-Scenario: Verify generated delay epoch values are less than delay advance time
+Scenario: Verify SKB-329
     Given the telescope is in ON state
-    And TMC subarray <subarray_id> in ObsState IDLE
+    And TMC subarray <subarray_id> is moved to ObsState IDLE
     When I configure the TMC subarray
     Then Once configured is invoked delay starting generatig without wait
     When I end the observation

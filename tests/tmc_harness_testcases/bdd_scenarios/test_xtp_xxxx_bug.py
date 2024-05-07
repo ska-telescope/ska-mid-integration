@@ -25,7 +25,7 @@ LOGGER = logging.getLogger(__name__)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp_xxxx_verify_bug.feature",
-    "Verify generated delay epoch values are less than delay advance time",
+    "Verify SKB-329",
 )
 def test_tmc_csp_delay_functionality() -> None:
     """
@@ -49,7 +49,7 @@ def check_telescope_is_in_on_state(
     )
 
 
-@given(parsers.parse("TMC subarray {subarray_id} in ObsState IDLE"))
+@given(parsers.parse("TMC subarray {subarray_id} is moved to ObsState IDLE"))
 def move_subarray_node_to_idle_obsstate(
     central_node_mid: CentralNodeWrapperMid,
     event_recorder: EventRecorder,
