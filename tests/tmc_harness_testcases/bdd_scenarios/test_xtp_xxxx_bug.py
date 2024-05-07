@@ -140,6 +140,9 @@ def invoke_end_command(
         "obsState",
         ObsState.IDLE,
     )
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
