@@ -95,7 +95,10 @@ def invoke_configure_command(
     )
 
 
-@then("Once configured is invoked delay starting generatig without wait")
+@then(
+    "Once the TMC Subarray is configured, CspSubarrayLeafNode immediately "
+    + "starts generating delay polynomials"
+)
 def check_if_delay_values_are_generating(
     subarray_node: SubarrayNodeWrapper,
 ) -> None:
@@ -114,7 +117,8 @@ def check_if_delay_values_are_generating(
 def invoke_end_command(
     subarray_node: SubarrayNodeWrapper, event_recorder: EventRecorder
 ) -> None:
-    """Invoke End command and checks whether subarray is in ObsState READY"""
+    """Invoke End command and checks whether subarray has changed to
+    obsState IDLE"""
     subarray_node.end_observation()
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     assert event_recorder.has_change_event_occurred(
