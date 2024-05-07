@@ -144,7 +144,7 @@ def invoke_end_command(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
     assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
+        subarray_node.subarray_node,
         "longRunningCommandResult",
         (unique_id[0], str(ResultCode.OK.value)),
     )
