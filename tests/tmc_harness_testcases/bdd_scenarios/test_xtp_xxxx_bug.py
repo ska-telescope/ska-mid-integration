@@ -4,7 +4,7 @@ import logging
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
-from ska_control_model import ObsState
+from ska_control_model import ObsState, ResultCode
 from ska_telmodel.schema import validate as telmodel_validate
 from tango import DevState
 
@@ -127,16 +127,23 @@ def check_if_tmc_subarray_moved_to_ready_obsstate(
 
 @when("I end the observation")
 def invoke_end_command(
-    subarray_node: SubarrayNodeWrapper, event_recorder: EventRecorder
+    subarray_node: SubarrayNodeWrapper,
+    event_recorder: EventRecorder,
+    central_node_mid: CentralNodeWrapperMid,
 ) -> None:
     """Invoke End command and checks whether subarray has changed to
     obsState IDLE"""
-    subarray_node.end_observation()
+    unique_id, _ = subarray_node.end_observation()
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (unique_id[0], str(ResultCode.OK.value)),
     )
 
 
