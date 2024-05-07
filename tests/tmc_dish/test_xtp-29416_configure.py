@@ -241,7 +241,7 @@ def check_subarray_obsState_ready(
     """
     logging.info(
         "subarraynode obsstate is %s",
-        subarray_node.obsState,
+        subarray_node.subarray_node.obsstate,
     )
     central_node_mid.set_subarray_id(subarray_id)
     assert event_recorder.has_change_event_occurred(
