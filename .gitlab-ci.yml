@@ -342,8 +342,10 @@ k8s-test:
     - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
     - 'make help | grep k8s-test'
-    - make k8s-install-chart MARK=aki
+    - make k8s-install-chart
     - make k8s-wait
+  script:
+    - make k8s-test MARK=aki
   after_script:
     - pip3 install -q -U ska-ser-xray
     - XRAY_TEST_RESULT_FILE="build/cucumber.json" make xray-publish
