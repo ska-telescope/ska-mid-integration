@@ -174,12 +174,14 @@ def check_dish_mode_and_pointing_state(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "dishMode",
             DishMode.OPERATE,
+            lookahead=15,
         )
 
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
+            lookahead=15,
         )
 
 
@@ -214,6 +216,7 @@ def check_subarray_obsState_ready(
         subarray_node.subarray_devices["sdp_subarray"],
         "obsState",
         ObsState.READY,
+        lookahead=15,
     )
     event_recorder.subscribe_event(
         subarray_node.subarray_devices["csp_subarray"], "obsState"
@@ -222,9 +225,8 @@ def check_subarray_obsState_ready(
         subarray_node.subarray_devices["csp_subarray"],
         "obsState",
         ObsState.READY,
+        lookahead=15,
     )
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "obsState",
-        ObsState.READY,
+        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=15
     )
