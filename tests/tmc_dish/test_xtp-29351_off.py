@@ -65,12 +65,6 @@ def check_tmc_and_dish_is_on(
         "dishmode is %s",
         central_node_mid.dish_leaf_node_dict["SKA001"].dishMode,
     )
-    # for dish_id in dish_ids.split(","):
-    #     assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
-    #     assert (
-    #         central_node_mid.dish_leaf_node_dict[dish_id].dishMode
-    #         == DishMode.STANDBY_LP
-    #     )
 
     central_node_mid.move_to_on()
 

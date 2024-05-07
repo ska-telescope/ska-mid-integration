@@ -57,42 +57,11 @@ def move_dish_to_on(central_node_mid, event_recorder):
     """
     A method to put Telescope ON
     """
-    event_recorder.subscribe_event(
-        central_node_mid.dish_leaf_node_dict["SKA001"], "dishMode"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_leaf_node_dict["SKA036"], "dishMode"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_leaf_node_dict["SKA063"], "dishMode"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_leaf_node_dict["SKA100"], "dishMode"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
+        )
 
-    # assert event_recorder.has_change_event_occurred(
-    #     central_node_mid.dish_leaf_node_dict["SKA001"],
-    #     "dishMode",
-    #     DishMode.STANDBY_LP,
-    # )
-    # assert event_recorder.has_change_event_occurred(
-    #     central_node_mid.dish_leaf_node_dict["SKA036"],
-    #     "dishMode",
-    #     DishMode.STANDBY_LP,
-    # )
-    # assert event_recorder.has_change_event_occurred(
-    #     central_node_mid.dish_leaf_node_dict["SKA063"],
-    #     "dishMode",
-    #     DishMode.STANDBY_LP,
-    # )
-    # assert event_recorder.has_change_event_occurred(
-    #     central_node_mid.dish_leaf_node_dict["SKA100"],
-    #     "dishMode",
-    #     DishMode.STANDBY_LP,
-    # )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
