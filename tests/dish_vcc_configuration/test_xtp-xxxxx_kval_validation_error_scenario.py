@@ -1,7 +1,7 @@
 import json
 
 import pytest
-from pytest_bdd import given, parsers, scenario, then, when
+from pytest_bdd import given, scenario, then, when
 from ska_control_model import ObsState
 from ska_tango_base.control_model import HealthState
 from tango import DevState
@@ -22,7 +22,7 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
     "../features/dish_vcc_initialization/xtp_kval_validation_scenario.feature",
     "TMC Validates the kValue when multiple kvalues are same",
 )
-def test_dish_id_vcc_configuration():
+def test_kvalue_validation():
     """This test validate that TMC is able to load the dish vcc
     configuration file provided to LoadDishCfg command.
     Validate that k-numbers set on dish masters
@@ -95,7 +95,6 @@ def move_subarray_node_to_idle_obsstate(
     central_node_mid: CentralNodeWrapperMid,
     event_recorder: EventRecorder,
     command_input_factory: JsonFactory,
-    subarray_id: str,
 ) -> None:
     """Move TMC Subarray to IDLE obsstate."""
     assign_input_json = prepare_json_args_for_centralnode_commands(
@@ -103,7 +102,6 @@ def move_subarray_node_to_idle_obsstate(
     )
     # Create json for AssignResources commands with requested subarray_id
     assign_input = json.loads(assign_input_json)
-    assign_input["subarray_id"] = int(subarray_id)
     central_node_mid.perform_action(
         "AssignResources", json.dumps(assign_input)
     )
@@ -119,9 +117,7 @@ def move_subarray_node_to_idle_obsstate(
 
 @when("I invoke Configure command on TMC")
 def invoke_configure(
-    central_node_mid,
     subarray_node,
-    subarray_id,
     command_input_factory,
 ):
     """A method to invoke Configure command"""
@@ -129,7 +125,6 @@ def invoke_configure(
         "configure_mid", command_input_factory
     )
     input_json = json.loads(input_json)
-    central_node_mid.set_subarray_id(subarray_id)
     result_code, message = subarray_node.store_configuration_data(
         json.dumps(input_json)
     )
@@ -137,11 +132,13 @@ def invoke_configure(
     pytest.command_result_message = message
 
 
-@then(parsers.parse("the command is failed and {exception} is raised"))
+@then("the command is failed and error is raised")
 def test_tmc_rejects_command_with_error(error_message):
     """Test validate that command failed with error message"""
     assert pytest.command_result_code == ResultCode.FAILED
-    assert error_message in pytest.command_result_message[0]
+    assert (
+        "K-values must be either all same" in pytest.command_result_message[0]
+    )
 
 
 @then("the health state is DEGRADED")
