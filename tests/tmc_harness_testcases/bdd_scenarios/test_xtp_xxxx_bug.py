@@ -108,6 +108,23 @@ def check_if_delay_values_are_generating(
     )
 
 
+@then(
+    parsers.parse(
+        "the TMC subarray {subarray_id} transitions to ObsState READY"
+    )
+)
+def check_if_tmc_subarray_moved_to_ready_obsstate(
+    subarray_node: SubarrayNodeWrapper, event_recorder: EventRecorder
+) -> None:
+    """Ensure TMC Subarray is moved to READY obsstate"""
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.READY,
+        lookahead=20,
+    )
+
+
 @when("I end the observation")
 def invoke_end_command(
     subarray_node: SubarrayNodeWrapper, event_recorder: EventRecorder

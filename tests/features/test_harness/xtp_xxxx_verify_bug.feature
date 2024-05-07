@@ -5,6 +5,7 @@ Scenario: Verify SKB-329
     When I configure the TMC subarray
     Then Once the TMC Subarray is configured, CspSubarrayLeafNode immediately starts generating delay polynomials
     When I end the observation
+    Then the TMC subarray {subarray_id} transitions to ObsState READY
     Then CSP Subarray Leaf Node stops generating delay values without waiting
     Examples:
         | subarray_id |
