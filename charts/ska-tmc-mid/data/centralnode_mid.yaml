@@ -4,6 +4,10 @@ domain: general-monitoring
 instances: ["01"]
 {{- $RealDishMasterIdentifier := .Values.deviceServers.centralnode.RealDishMasterIdentifier }}
 {{- $SimulatorDishMasterIdentifier := .Values.deviceServers.centralnode.SimulatorDishMasterIdentifier }}
+{{- $KValueValidRangeUpperLimit := .Values.deviceServers.centralnode.KValueValidRange.max | int }}
+{{- $KValueValidRangeLowerLimit := .Values.deviceServers.centralnode.KValueValidRange.min | int }}
+
+{{- if ge $KValueValidRangeUpperLimit $KValueValidRangeLowerLimit }}
 entrypoints:
   - name: "ska_tmc_centralnode.central_node_mid.CentralNodeMid"
 server:
@@ -89,6 +93,12 @@ server:
           {{- range  ( regexSplit " " ((.Values.subarray_count | int) | seq ) -1 )  }}
           - "{{ $sdp_sa_ln_fqdn_prefix }}{{ printf "%02s" . }}"
           {{- end }}
+        - name: "KValueValidRangeUpperLimit"
+          values:
+          - "{{ $KValueValidRangeUpperLimit }}"
+        - name: "KValueValidRangeLowerLimit"
+          values:
+          - "{{ $KValueValidRangeLowerLimit }}"
         - name: "SkaLevel"
           values:
             - "1"
@@ -107,6 +117,10 @@ server:
             - "3000"
             - "DishVccValidationStatus"
             - "3000"
+{{- else }}
+{{- fail "KValueValidRangeUpperLimit should be greater than KValueValidRangeLowerLimit" }}
+{{- end }}
+
 depends_on:
   - device: sys/database/2
 image:
