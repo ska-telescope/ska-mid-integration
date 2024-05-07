@@ -135,7 +135,7 @@ deviceServers:
     RealDishMasterIdentifier: "mid-dish/dish-manager"
     SimulatorDishMasterIdentifier: "elt/master"
     DishVccConfig:
-      DishVccUri: "car://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata"
+      DishVccUri: "car://gitlab.com/ska-telescope/ska-telmodel-data?ska-sdp-tmlite-repository-1.0.0#tmdata"
       DishVccFilePath: "instrument/ska1_mid_psi/ska-mid-cbf-system-parameters.json"
       Enabled: "true"
       DishKvalueAggregationAllowedPercent: "100.0"
