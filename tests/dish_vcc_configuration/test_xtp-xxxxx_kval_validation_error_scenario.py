@@ -19,7 +19,7 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 @pytest.mark.aki
 @pytest.mark.SKA_mid
 @scenario(
-    "../features/xtp_xxxxxx_kvalue_validation_scenario.feature",
+    "../features/dish_vcc_initialization/xtp_kval_validation_scenario.feature",
     "TMC Validates the kValue when multiple kvalues are same",
 )
 def test_dish_id_vcc_configuration():
