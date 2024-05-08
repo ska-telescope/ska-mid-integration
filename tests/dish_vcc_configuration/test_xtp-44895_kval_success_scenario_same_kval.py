@@ -18,7 +18,7 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 @pytest.mark.SKA_mid
 @scenario(
     "../features/dish_vcc_initialization/"
-    "xtp_44895_kval_validation_valid.feature",
+    "xtp_44895_kval_validation_success.feature",
     "TMC Validates the kValue when all kvalues are same",
 )
 def test_kvalue_validation_all_kvalues_same():
