@@ -281,7 +281,7 @@ def check_dish_mode_and_pointing_state(
             central_node_mid.dish_master_dict[dish_id], "pointingState", 500.0
         )
 
-    for dish_id in dish_ids.split(","):
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
