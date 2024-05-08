@@ -4,13 +4,11 @@ import time
 import pytest
 from pytest_bdd import given, scenario, then, when
 from ska_control_model import ObsState
-from ska_tango_base.control_model import HealthState
 from tango import DevState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
-    check_for_device_command_event,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
@@ -21,8 +19,8 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 @pytest.mark.aki
 @pytest.mark.SKA_mid
 @scenario(
-    "../features/dish_vcc_initialization/xtp_kval_validation_scenario.feature",
-    "TMC Validates the kValue when multiple kvalues are same",
+    "../features/dish_vcc_initialization/xtp_kval_validation_success.feature",
+    "TMC Validates the kValue when all kvalues are different",
 )
 def test_kvalue_validation():
     """This test validate that TMC is able to load the dish vcc
@@ -57,7 +55,7 @@ def telescope_in_on_state(central_node_mid, event_recorder):
     )
 
 
-@when("I issue the command LoadDishCfg on TMC with multiple same kValue")
+@when("I issue the command LoadDishCfg on TMC with all different kValue")
 def invoke_load_dish_cfg(
     central_node_mid, event_recorder, command_input_factory
 ):
@@ -77,7 +75,7 @@ def invoke_load_dish_cfg(
     )
     # Prepare input for load dish configuration
     load_dish_cfg_json = prepare_json_args_for_centralnode_commands(
-        "multiple_same_kval", command_input_factory
+        "same_kvalue", command_input_factory
     )
 
     _, unique_id = central_node_mid.load_dish_vcc_configuration(
@@ -125,39 +123,33 @@ def move_subarray_node_to_idle_obsstate(
     time.sleep(5)
 
 
-@when("I invoke Configure command on TMC")
+@then("I successfully invoke Configure command on TMC")
 def invoke_configure(
     subarray_node,
     command_input_factory,
+    event_recorder,
 ):
     """A method to invoke Configure command"""
     input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    pytest.result, pytest.unique_id = subarray_node.execute_transition(
-        "Configure", argin=input_json
-    )
-    assert pytest.unique_id[0].endswith("Configure")
-    assert pytest.result[0] == ResultCode.QUEUED
-
-
-@then("the command is failed and the health state of the subarray is DEGRADED")
-def test_tmc_rejects_command_with_error(subarray_node, event_recorder):
-    """Test validate that command failed with error message"""
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
-    exception_message = "K-values must be either all same or all different"
-    assert check_for_device_command_event(
-        subarray_node.subarray_node,
-        "longRunningCommandResult",
-        exception_message,
-        event_recorder,
-        "Configure",
+    input_json = json.loads(input_json)
+    _, unique_id = subarray_node.store_configuration_data(
+        json.dumps(input_json)
     )
-    event_recorder.subscribe_event(subarray_node.subarray_node, "healthState")
+
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
-        "healthState",
-        HealthState.DEGRADED,
+        "obsState",
+        ObsState.READY,
+    )
+
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (unique_id[0], str(int(ResultCode.OK))),
+        lookahead=5,
     )
