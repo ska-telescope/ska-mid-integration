@@ -19,10 +19,10 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 
 @pytest.mark.SKA_mid
 @scenario(
-    "../features/dish_vcc_initialization/xtp_kval_validation_scenario.feature",
+    "../features/dish_vcc_initialization/xtp_44894_kvalue_validation.feature",
     "TMC Validates the kValue when multiple kvalues are same",
 )
-def test_kvalue_validation():
+def test_kvalue_validation_error_scenario():
     """This test validate that TMC is able to load the dish vcc
     configuration file provided to LoadDishCfg command.
     Validate that k-numbers set on dish masters

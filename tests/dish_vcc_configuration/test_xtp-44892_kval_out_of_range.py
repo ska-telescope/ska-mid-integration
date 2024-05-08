@@ -10,7 +10,7 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 
 @pytest.mark.SKA_mid
 @scenario(
-    "../features/dish_vcc_initialization/xtp_xxxxxx_kval_out_of_range.feature",
+    "../features/dish_vcc_initialization/xtp_44892_kval_out_of_range.feature",
     "TMC is able to reject command when kValue is out of range",
 )
 def test_dish_id_vcc_configuration_kvalue_out_of_range():
