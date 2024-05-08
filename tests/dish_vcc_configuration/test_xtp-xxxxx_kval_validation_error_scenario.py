@@ -131,9 +131,8 @@ def invoke_configure(
     input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    input_json = json.loads(input_json)
-    result_code, message = subarray_node.store_configuration_data(
-        json.dumps(input_json)
+    result_code, message = subarray_node.execute_transition(
+        "Configure", argin=input_json
     )
     pytest.command_result_code = result_code
     pytest.command_result_message = message
