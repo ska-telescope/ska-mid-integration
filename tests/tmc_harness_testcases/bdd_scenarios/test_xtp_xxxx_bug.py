@@ -21,7 +21,6 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 LOGGER = logging.getLogger(__name__)
 
 
-@pytest.mark.m1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp_xxxx_verify_bug.feature",
