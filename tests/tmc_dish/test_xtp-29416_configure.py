@@ -60,39 +60,16 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
     """
     A method to put Telescope ON
     """
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA001"], "dishMode"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA036"], "dishMode"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA063"], "dishMode"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA100"], "dishMode"
-    )
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
 
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA001"],
-        "dishMode",
-        DishMode.STANDBY_LP,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA036"],
-        "dishMode",
-        DishMode.STANDBY_LP,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA063"],
-        "dishMode",
-        DishMode.STANDBY_LP,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA100"],
-        "dishMode",
-        DishMode.STANDBY_LP,
-    )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_LP,
+        )
 
     # Wait for DishMaster attribute value update,
     # on CentralNode for value dishMode STANDBY_LP
@@ -122,26 +99,12 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
     )
     central_node_mid.move_to_on()
 
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA001"],
-        "dishMode",
-        DishMode.STANDBY_FP,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA036"],
-        "dishMode",
-        DishMode.STANDBY_FP,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA063"],
-        "dishMode",
-        DishMode.STANDBY_FP,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA100"],
-        "dishMode",
-        DishMode.STANDBY_FP,
-    )
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+        )
 
     # Wait for DishMaster attribute value update,
     # on CentralNode for value dishMode STANDBY_FP
@@ -229,12 +192,14 @@ def check_dish_mode_and_pointing_state(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.OPERATE,
+            lookahead=15,
         )
 
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
+            lookahead=15,
         )
 
 
@@ -251,7 +216,5 @@ def check_subarray_obsState_ready(
     """
     central_node_mid.set_subarray_id(subarray_id)
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "obsState",
-        ObsState.READY,
+        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=15
     )
