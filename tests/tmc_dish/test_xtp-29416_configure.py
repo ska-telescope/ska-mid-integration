@@ -1,5 +1,5 @@
 """Test module for TMC-DISH Configure functionality"""
-import logging
+
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -214,18 +214,6 @@ def check_subarray_obsState_ready(
     """
     Method to check subarray is in READY obsState
     """
-    logging.info(
-        "subarraynode obsstate is %s",
-        subarray_node.subarray_node.obsstate,
-    )
-    logging.info(
-        "csp_master obsstate is %s",
-        subarray_node.subarray_devices["csp_subarray"],
-    )
-    logging.info(
-        "sdp_master obsstate is %s",
-        subarray_node.subarray_devices["sdp_subarray"],
-    )
     central_node_mid.set_subarray_id(subarray_id)
     event_recorder.subscribe_event(
         subarray_node.subarray_devices["sdp_subarray"], "obsState"
