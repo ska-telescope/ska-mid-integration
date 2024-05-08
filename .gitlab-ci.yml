@@ -447,10 +447,7 @@ k8s-test-dish-lmc:
     - dish-lmc-dish100
     - k8s-test-csp-dish
   after_script:
-    - ls -al
-    - ls -al build
-    - ls -al tests
-    - pip3 install -U ska-ser-xray
+    - pip3 install -q -U ska-ser-xray
     - XRAY_TEST_RESULT_FILE="build/cucumber.json" make xray-publish
     - make k8s-uninstall-chart
 
