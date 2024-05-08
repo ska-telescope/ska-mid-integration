@@ -63,6 +63,9 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
         event_recorder.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
         )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
 
     csp_master_sim = simulator_factory.get_or_create_simulator_device(
         SimulatorDeviceType.MID_CSP_MASTER_DEVICE
@@ -91,7 +94,11 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
             "dishMode",
             DishMode.STANDBY_FP,
         )
-
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+        )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.sdp_master,
         "State",
@@ -166,9 +173,8 @@ def check_dish_mode_and_pointing_state(
         event_recorder.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
         )
-        logging.info(
-            "dishmode is 02 %s",
-            central_node_mid.dish_leaf_node_dict["SKA001"].dishMode,
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "pointingState"
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
@@ -176,9 +182,21 @@ def check_dish_mode_and_pointing_state(
             DishMode.OPERATE,
             lookahead=15,
         )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.OPERATE,
+            lookahead=15,
+        )
 
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
+            "pointingState",
+            PointingState.TRACK,
+            lookahead=15,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
             lookahead=15,

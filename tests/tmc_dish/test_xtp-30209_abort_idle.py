@@ -62,7 +62,9 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
         event_recorder.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
         )
-
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
     csp_master_sim = simulator_factory.get_or_create_simulator_device(
         SimulatorDeviceType.MID_CSP_MASTER_DEVICE
     )
@@ -167,6 +169,10 @@ def check_dish_mode(central_node_mid, event_recorder, dish_ids):
     for dish_id in dish_ids.split(","):
         assert (
             central_node_mid.dish_leaf_node_dict[dish_id].dishMode
+            == DishMode.STANDBY_FP
+        )
+        assert (
+            central_node_mid.dish_master_dict[dish_id].dishMode
             == DishMode.STANDBY_FP
         )
 

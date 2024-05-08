@@ -55,6 +55,9 @@ def check_tmc_and_dish_is_on(
         event_recorder.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
         )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
 
     assert csp_master_sim.ping() > 0
     assert sdp_master_sim.ping() > 0
@@ -64,6 +67,11 @@ def check_tmc_and_dish_is_on(
     for dish_id in dish_ids.split(","):
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.STANDBY_FP,
         )
@@ -103,6 +111,11 @@ def check_dish_state(central_node_mid, event_recorder, dish_ids):
     for dish_id in dish_ids.split(","):
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_LP,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.STANDBY_LP,
         )

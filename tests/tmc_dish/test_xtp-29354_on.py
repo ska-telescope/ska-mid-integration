@@ -61,6 +61,9 @@ def move_dish_to_on(central_node_mid, event_recorder):
         event_recorder.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
         )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
 
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
@@ -86,6 +89,11 @@ def check_dish_is_on(central_node_mid, event_recorder, dish_ids):
     for dish_id in dish_ids.split(","):
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.STANDBY_FP,
         )
