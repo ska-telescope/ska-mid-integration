@@ -133,6 +133,9 @@ def invoke_configure(
     input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     input_json = json.loads(input_json)
     _, unique_id = subarray_node.store_configuration_data(
         json.dumps(input_json)
