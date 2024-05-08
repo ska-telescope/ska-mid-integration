@@ -119,7 +119,7 @@ def check_scan_successful(
         subarray_node.subarray_devices["csp_subarray"],
         "obsState",
         ObsState.SCANNING,
-        lookahead=15,
+        lookahead=20,
     )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["csp_subarray"],
