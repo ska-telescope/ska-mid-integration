@@ -146,6 +146,7 @@ def check_subarray_obsstate(
             DishMode.OPERATE,
             lookahead=15,
         )
+
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "pointingState",
@@ -183,15 +184,13 @@ def check_dish_mode_and_pointing_state(
         central_node_mid.dish_leaf_node_dict["SKA001"].dishMode,
     )
     logging.info(
-        "poirtingstate is in end test %s",
+        "pointingstate is in end test %s",
         central_node_mid.dish_leaf_node_dict["SKA001"].pointingState,
     )
     for dish_id in dish_ids.split(","):
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_leaf_node_dict[dish_id],
-            "dishMode",
-            DishMode.OPERATE,
-            lookahead=10,
+        assert (
+            central_node_mid.dish_leaf_node_dict[dish_id].dishMode
+            == DishMode.OPERATE
         )
 
         assert event_recorder.has_change_event_occurred(
