@@ -89,9 +89,6 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
     central_node_mid.move_to_on()
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
-        )
 
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
@@ -151,6 +148,9 @@ def subarray_is_in_ready_obsState(
     for dish_id in dish_ids.split(","):
         event_recorder.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "pointingState"
         )
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
@@ -217,13 +217,6 @@ def check_dish_mode_and_pointing_state(
     Method to check dishMode and pointingState of DISH
     """
     for dish_id in dish_ids.split(","):
-        event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
-        )
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "pointingState"
-        )
-
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "dishMode",
