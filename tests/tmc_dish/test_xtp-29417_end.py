@@ -213,7 +213,7 @@ def check_dish_mode_and_pointing_state(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
             PointingState.READY,
-            lookahead=20,
+            lookahead=15,
         )
 
 

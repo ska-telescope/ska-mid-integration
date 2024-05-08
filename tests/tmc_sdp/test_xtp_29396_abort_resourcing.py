@@ -68,13 +68,13 @@ def telescope_is_in_resourcing_obsstate(
 
 
 @when("I command it to Abort")
-def invoke_abort(central_node_mid):
+def invoke_abort(subarray_node):
     """
     This method invokes abort command on tmc subarray.
     """
 
     time.sleep(0.5)
-    central_node_mid.subarray_abort()
+    subarray_node.abort_subarray()
 
 
 @then(
@@ -83,14 +83,14 @@ def invoke_abort(central_node_mid):
     )
 )
 def sdp_subarray_is_in_aborted_obsstate(
-    central_node_mid, event_recorder, subarray_id
+    central_node_mid, event_recorder, subarray_id, subarray_node
 ):
     """
     Method to check SDP subarray is in ABORTED obsstate
     """
     central_node_mid.set_subarray_id(subarray_id)
     assert event_recorder.has_change_event_occurred(
-        central_node_mid.subarray_devices.get("sdp_subarray"),
+        subarray_node.subarray_devices.get("sdp_subarray"),
         "obsState",
         ObsState.ABORTED,
     )
@@ -109,7 +109,7 @@ def tmc_subarray_is_in_aborted_obsstate(
     """
     central_node_mid.set_subarray_id(subarray_id)
     assert event_recorder.has_change_event_occurred(
-        central_node_mid.subarray_node,
+        subarray_node.subarray_node,
         "obsState",
         ObsState.ABORTED,
     )
