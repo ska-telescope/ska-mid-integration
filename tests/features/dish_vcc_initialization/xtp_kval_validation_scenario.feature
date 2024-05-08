@@ -5,5 +5,4 @@ Feature: TMC handles kValue validation
         When I issue the command LoadDishCfg on TMC with multiple same kValue
         And TMC subarray in ObsState IDLE
         And I invoke Configure command on TMC
-		Then the command is failed and error is raised
-        And the health state is DEGRADED
+		Then the command is failed and the health state of the subarray is DEGRADED
