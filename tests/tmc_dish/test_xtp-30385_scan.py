@@ -4,6 +4,7 @@
 
 import logging
 import time
+import json
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -223,9 +224,11 @@ def check_subarray_obsState_ready(
         "longRunningCommandResult",
         (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
-
+    configure_json = json.loads(configure_input_json)
+    configure_json["tmc"]["scan_duration"] = 10.0
+    LOGGER.info(f"json:{configure_json}")
     pytest.command_result = subarray_node.execute_transition(
-        "Configure", configure_input_json
+        "Configure", json.dumps(configure_json)
     )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
