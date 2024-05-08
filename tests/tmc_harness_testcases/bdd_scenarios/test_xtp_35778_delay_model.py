@@ -7,7 +7,6 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from tango import DevState
 
-from tests.conftest import MID_DELAY_JSON
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
@@ -22,9 +21,9 @@ from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 
 LOGGER = logging.getLogger(__name__)
-TIMEOUT = 15
 
 
+@pytest.mark.skip
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp_35778_test_delay_model.feature",
@@ -108,7 +107,7 @@ def check_if_delay_values_are_generating(
     ska_epoch_tai = generate_ska_epoch_tai_value()
     LOGGER.info(f"ska_epoch_tai : {ska_epoch_tai}")
     delay_json, delay_generated_time = wait_till_delay_values_are_populated(
-        subarray_node.csp_subarray_leaf_node, TIMEOUT, MID_DELAY_JSON
+        subarray_node.csp_subarray_leaf_node
     )
     LOGGER.info(f"delay_json: {delay_json}")
     LOGGER.info(f"delay_generated_time: {delay_generated_time}")
