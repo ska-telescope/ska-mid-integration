@@ -8,7 +8,6 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
-@pytest.mark.aki
 @pytest.mark.SKA_mid
 @scenario(
     "../features/dish_vcc_initialization/xtp_xxxxxx_kval_out_of_range.feature",
