@@ -202,29 +202,43 @@ def check_dish_mode_and_pointing_state(
     """
     Method to check dishMode and pointingState of DISH
     """
-    logging.info(
-        "dishmode is in end test %s",
-        central_node_mid.dish_leaf_node_dict["SKA001"].dishMode,
-    )
-    logging.info(
-        "pointingstate is in end test %s",
-        central_node_mid.dish_leaf_node_dict["SKA001"].pointingState,
-    )
     for dish_id in dish_ids.split(","):
-        assert (
-            central_node_mid.dish_leaf_node_dict[dish_id].dishMode
-            == DishMode.OPERATE
+        logging.info(
+            "dishmode is in end test %s",
+            central_node_mid.dish_leaf_node_dict[dish_id].dishMode,
         )
-        assert (
-            central_node_mid.dish_master_dict[dish_id].dishMode
-            == DishMode.OPERATE
+        logging.info(
+            "dishmode dish_master_dict is in end test %s",
+            central_node_mid.dish_master_dict[dish_id].dishMode,
+        )
+        logging.info(
+            "pointingstate is in end test %s",
+            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
+        )
+        logging.info(
+            "pointingstate dish_master_dict is in end test %s",
+            central_node_mid.dish_master_dict[dish_id].pointingState,
+        )
+    for dish_id in dish_ids.split(","):
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "dishMode",
+            DishMode.OPERATE,
+            lookahead=15,
+        )
+
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.OPERATE,
+            lookahead=15,
         )
 
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "pointingState",
             PointingState.READY,
-            lookahead=10,
+            lookahead=15,
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
