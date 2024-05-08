@@ -1,4 +1,5 @@
 import json
+import time
 
 import pytest
 from pytest_bdd import given, scenario, then, when
@@ -120,6 +121,7 @@ def move_subarray_node_to_idle_obsstate(
         (unique_id[0], str(int(ResultCode.OK))),
         lookahead=5,
     )
+    time.sleep(3)
 
 
 @when("I invoke Configure command on TMC")
