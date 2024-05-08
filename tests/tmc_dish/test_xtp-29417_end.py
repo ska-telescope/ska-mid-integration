@@ -18,6 +18,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 LOGGER = logging.getLogger(__name__)
 
 
+@pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29417_end.feature",
@@ -204,10 +205,6 @@ def check_dish_mode_and_pointing_state(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.OPERATE,
-        )
-        LOGGER.info(
-            "PointingState %s",
-            central_node_mid.dish_master_dict[dish_id].pointingState,
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
