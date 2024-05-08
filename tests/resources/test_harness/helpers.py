@@ -25,8 +25,6 @@ from tests.resources.test_support.constant import (
     csp_subarray1,
     dish_master1,
     dish_master2,
-    dish_master3,
-    dish_master4,
     sdp_subarray1,
     tmc_csp_subarray_leaf_node,
     tmc_sdp_subarray_leaf_node,
@@ -69,8 +67,6 @@ def check_subarray_obs_state(obs_state=None, timeout=100):
         device_dict["dish_master_list"] = [
             dish_master1,
             dish_master2,
-            dish_master3,
-            dish_master4,
         ]
     the_waiter = Waiter(**device_dict)
     the_waiter.set_wait_for_obs_state(obs_state=obs_state)

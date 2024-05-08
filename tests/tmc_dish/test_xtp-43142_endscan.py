@@ -213,8 +213,8 @@ def move_subarray_obsState_to_scanning(
         (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
 
-    pytest.command_result = subarray_node.store_configuration_data(
-        configure_input_json
+    pytest.command_result = subarray_node.execute_transition(
+        "Configure", configure_input_json
     )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,

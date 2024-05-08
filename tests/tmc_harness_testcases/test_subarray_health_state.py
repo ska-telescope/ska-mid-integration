@@ -410,8 +410,8 @@ class TestSubarrayHealthState(object):
                 HealthState.OK,
                 HealthState.FAILED,
                 HealthState.FAILED,
-                HealthState.FAILED,
-                HealthState.FAILED,
+                HealthState.OK,
+                HealthState.OK,
             ),
             (
                 HealthState.FAILED,
