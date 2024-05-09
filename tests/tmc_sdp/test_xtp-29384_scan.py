@@ -112,7 +112,7 @@ def check_subarray_is_configured(
     configure_json = json.loads(configure_input_json)
     configure_json["tmc"]["scan_duration"] = 10.0
     pytest.command_result = subarray_node.store_configuration_data(
-        json.dumps(configure_input_json)
+        json.dumps(configure_json)
     )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["sdp_subarray"],
