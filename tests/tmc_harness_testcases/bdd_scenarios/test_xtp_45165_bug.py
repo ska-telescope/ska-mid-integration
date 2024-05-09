@@ -71,10 +71,10 @@ def move_subarray_node_to_idle_obsstate(
         ObsState.IDLE,
     )
     event_recorder.subscribe_event(
-        subarray_node.subarray_node, "longRunningCommandResult"
+        central_node_mid.central_node, "longRunningCommandResult"
     )
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
+        central_node_mid.central_node,
         "longRunningCommandResult",
         (unique_id[0], str(ResultCode.OK.value)),
     )
