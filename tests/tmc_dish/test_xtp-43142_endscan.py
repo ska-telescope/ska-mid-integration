@@ -277,6 +277,26 @@ def invoke_endscan(
     pytest.command_result = subarray_node.remove_scan_data()
 
 
+@given(parsers.parse("scan_id gets cleared from Dish {dish_ids}"))
+def check_scan_id(
+    central_node_mid: CentralNodeWrapperMid,
+    event_recorder: EventRecorder,
+    dish_ids: str,
+):
+    """
+    Method to check scan_id value of DISH
+    """
+    for dish_id in dish_ids.split(","):
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "scanID"
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "scanID",
+            "",
+        )
+
+
 @then(
     parsers.parse(
         "the Dish {dish_ids} remains in "
@@ -294,11 +314,6 @@ def check_dish_mode_and_pointing_state_after_endscan(
     for dish_id in dish_ids.split(","):
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "scanID"
-        )
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "scanID",
-            "",
         )
         assert (
             central_node_mid.dish_master_dict[dish_id].dishMode

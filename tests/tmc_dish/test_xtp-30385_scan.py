@@ -33,7 +33,7 @@ LOGGER = logging.getLogger(__name__)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-30385_scan.feature",
-    "TMC executes Scan command on DISH.LMC",
+    "TMC executes Scan command on DISH",
 )
 def test_tmc_dish_scan():
     """
@@ -246,8 +246,7 @@ def check_subarray_obsState_ready(
 
 @given(
     parsers.parse(
-        "DishMaster {dish_ids} is in dishMode"
-        + " OPERATE with pointingState TRACK"
+        "Dish {dish_ids} is in dishMode" + " OPERATE with pointingState TRACK"
     )
 )
 def check_dish_mode_and_pointing_state(
@@ -292,9 +291,29 @@ def invoke_scan(
     )
 
 
+@given(parsers.parse("{scan_id} assigned to Dish {dish_ids}"))
+def check_scan_id(
+    central_node_mid: CentralNodeWrapperMid,
+    event_recorder: EventRecorder,
+    dish_ids: str,
+):
+    """
+    Method to check scan_id value of DISH
+    """
+    for dish_id in dish_ids.split(","):
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "scanID"
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "scanID",
+            "1",
+        )
+
+
 @then(
     parsers.parse(
-        "the DishMaster {dish_ids} remains in dishMode"
+        "the Dish {dish_ids} remains in dishMode"
         + " OPERATE and pointingState TRACK"
     )
 )
@@ -309,11 +328,6 @@ def check_dish_mode_and_pointing_state_after_scan(
     for dish_id in dish_ids.split(","):
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "scanID"
-        )
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "scanID",
-            "1",
         )
         assert (
             central_node_mid.dish_master_dict[dish_id].dishMode

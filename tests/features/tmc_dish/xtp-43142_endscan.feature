@@ -6,7 +6,8 @@ Scenario: TMC mid executes EndScan command on DISH
     And TMC subarray <subarray_id> is in obsState SCANNING
     And DishMaster <dish_ids> is in dishMode OPERATE with pointingState TRACK
     When I issue the EndScan command to the TMC subarray <subarray_id>
-    Then the Dish <dish_ids> remains in dishMode OPERATE and pointingState TRACK  
+    Then scan_id gets cleared from Dish <dish_ids>
+    And the Dish <dish_ids> remains in dishMode OPERATE and pointingState TRACK  
     And TMC SubarrayNode transitions to obsState READY
     Examples:
 
