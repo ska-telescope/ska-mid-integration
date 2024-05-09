@@ -590,7 +590,7 @@ class Waiter:
                 )
             )
 
-        if self.tmc_dish_leaf_node3:
+        if self.tmc_dish_leaf_node4:
             self.waits.append(
                 watch(Resource(self.tmc_dish_leaf_node4)).to_become(
                     "pointingState", changed_to="TRACK"
