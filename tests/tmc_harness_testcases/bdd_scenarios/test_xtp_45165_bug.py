@@ -51,6 +51,7 @@ def move_subarray_node_to_idle_obsstate(
     central_node_mid: CentralNodeWrapperMid,
     event_recorder: EventRecorder,
     command_input_factory: JsonFactory,
+    subarray_node: SubarrayNodeWrapper,
     subarray_id: str,
 ) -> None:
     """Move TMC Subarray to IDLE obsState."""
@@ -62,12 +63,20 @@ def move_subarray_node_to_idle_obsstate(
     assign_input = json.loads(assign_input_json)
     assign_input["subarray_id"] = int(subarray_id)
     central_node_mid.store_resources(json.dumps(assign_input))
-
-    event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
+    _, unique_id = central_node_mid.store_resources(assign_input_json)
+    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_node,
         "obsState",
         ObsState.IDLE,
+    )
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (unique_id[0], str(ResultCode.OK.value)),
     )
 
 
