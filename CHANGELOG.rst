@@ -7,6 +7,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+[0.19.2]
+************
+* Integrate TMC CspSubarrayLeafNode latest image v0.162 and TMC SubarrayNode latest image v0.17.5 with SKB-329 bug fix
+* Affected BDD test case - XTP-32140
 [0.19.1]
 ************
 * Intermediate chart with TMC updates to work with dish-lmc chart 3.0.0
