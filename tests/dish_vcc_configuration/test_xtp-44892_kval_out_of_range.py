@@ -1,10 +1,12 @@
 import pytest
-from pytest_bdd import given, parsers, scenario, then, when
-from tango import DevState
+from pytest_bdd import parsers, scenario, then, when
 
+from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
+from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
 )
+from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
@@ -14,36 +16,9 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
     "TMC is able to reject command when kValue is out of range",
 )
 def test_dish_id_vcc_configuration_kvalue_out_of_range():
-    """This test validate that TMC is able to load the dish vcc
-    configuration file provided to LoadDishCfg command.
-    Validate that k-numbers set on dish masters
-    Validate sysParam and sourceSysParam attribute set on csp master leaf node
+    """This test validate that TMC is able to reject the command
+    if the kvalue is out of range (1 to 1177)
     """
-
-
-@given("a TMC")
-def given_tmc():
-    """Given a TMC"""
-
-
-@given("Telescope is in ON state")
-def telescope_in_on_state(central_node_mid, event_recorder):
-    """Move Telescope to ON state
-    Args
-    :param central_node_mid: fixture for a TMC CentralNode Mid under test
-    which provides simulated master devices
-    :param event_recorder: fixture for a MockTangoEventCallbackGroup
-    for validating the subscribing and receiving events.
-    """
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
-    central_node_mid.move_to_on()
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.ON,
-    )
 
 
 @when(
@@ -51,7 +26,9 @@ def telescope_in_on_state(central_node_mid, event_recorder):
     "configuration file"
 )
 def invoke_load_dish_cfg(
-    central_node_mid, event_recorder, command_input_factory
+    central_node_mid: CentralNodeWrapperMid,
+    event_recorder: EventRecorder,
+    command_input_factory: JsonFactory,
 ):
     """Call load_dish_cfg method which invoke LoadDishCfg
     command on CentralNode
@@ -81,7 +58,10 @@ def invoke_load_dish_cfg(
 
 
 @then(parsers.parse("TMC rejects the command with error {error_message}"))
-def test_tmc_rejects_command_with_error(error_message):
-    """Test validate that command failed with error message"""
+def test_tmc_rejects_command_with_error(error_message: str):
+    """
+    Test validate that command failed with error message
+    :param error_message: error message to be validated for command rejection
+    """
     assert pytest.command_result_code == ResultCode.REJECTED
     assert error_message in pytest.command_result_message[0]

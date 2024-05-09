@@ -260,7 +260,8 @@ def shared_context():
 @pytest.fixture(scope="module")
 def stored_unique_id():
     """
-    store the unique_ids
+    A placeholder fixture to access
+    the uniques_ids in multiple function as a parameter
     :returns: empty list
     """
     return []
