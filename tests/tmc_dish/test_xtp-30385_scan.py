@@ -291,11 +291,12 @@ def invoke_scan(
     )
 
 
-@given(parsers.parse("{scan_id} assigned to Dish {dish_ids}"))
+@then(parsers.parse("{scan_id} assigned to Dish {dish_ids}"))
 def check_scan_id(
     central_node_mid: CentralNodeWrapperMid,
     event_recorder: EventRecorder,
     dish_ids: str,
+    scan_id: str,
 ):
     """
     Method to check scan_id value of DISH
@@ -307,7 +308,7 @@ def check_scan_id(
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "scanID",
-            "1",
+            scan_id,
         )
 
 

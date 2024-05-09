@@ -277,7 +277,7 @@ def invoke_endscan(
     pytest.command_result = subarray_node.remove_scan_data()
 
 
-@given(parsers.parse("scan_id gets cleared from Dish {dish_ids}"))
+@then(parsers.parse("scan_id gets cleared from Dish {dish_ids}"))
 def check_scan_id(
     central_node_mid: CentralNodeWrapperMid,
     event_recorder: EventRecorder,
