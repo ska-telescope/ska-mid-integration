@@ -257,6 +257,15 @@ def shared_context():
     return SharedContext()
 
 
+@pytest.fixture(scope="module")
+def stored_unique_id():
+    """
+    store the unique_ids
+    :returns: empty list
+    """
+    return []
+
+
 @pytest.fixture(scope="session", autouse=True)
 def is_dish_vcc_set():
     """

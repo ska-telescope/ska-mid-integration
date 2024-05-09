@@ -111,7 +111,7 @@ def move_subarray_node_to_idle_obsstate(
         central_node_mid.subarray_node,
         "obsState",
         ObsState.IDLE,
-        lookahead=20,
+        lookahead=10,
     )
 
     assert event_recorder.has_change_event_occurred(
