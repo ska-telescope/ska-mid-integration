@@ -484,7 +484,7 @@ k8s-test-tmc-with-sdp:
     CI_KEEP_NAMESPACE: 'true'
   environment:
     name: test/$CI_COMMIT_REF_SLUG
-    on_stop: stop-k8s-test-tmc-with-sdp
+    # on_stop: stop-k8s-test-tmc-with-sdp
     auto_stop_in: 1 minute
 
 
