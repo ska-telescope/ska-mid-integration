@@ -1,6 +1,5 @@
 """Test module to test delay functionality."""
 import json
-import logging
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -17,8 +16,6 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
-
-LOGGER = logging.getLogger(__name__)
 
 
 @pytest.mark.SKA_mid
