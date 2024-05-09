@@ -1,5 +1,6 @@
 """Test module for TMC-DISH EndScan functionality"""
 
+import json
 import time
 
 import pytest
@@ -24,7 +25,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-43142_endscan.feature",
-    "TMC executes EndScan command on DISH.LMC",
+    "TMC mid executes EndScan command on DISH",
 )
 def test_tmc_dish_endscan():
     """
@@ -212,9 +213,10 @@ def move_subarray_obsState_to_scanning(
         "longRunningCommandResult",
         (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
-
+    configure_json = json.loads(configure_input_json)
+    configure_json["tmc"]["scan_duration"] = 10.0
     pytest.command_result = subarray_node.execute_transition(
-        "Configure", configure_input_json
+        "Configure", json.dumps(configure_json)
     )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
@@ -277,7 +279,7 @@ def invoke_endscan(
 
 @then(
     parsers.parse(
-        "the DishMaster {dish_ids} remains in "
+        "the Dish {dish_ids} remains in "
         + "dishMode OPERATE and pointingState TRACK"
     )
 )

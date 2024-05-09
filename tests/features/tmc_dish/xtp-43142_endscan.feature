@@ -1,12 +1,12 @@
 # This BDD test performs TMC-Dish pairwise testing to verify EndScan command flow.
 @XTP-29778 @Team_SAHYADRI @tmc_dish
-Scenario: TMC executes EndScan command on DISH.LMC
+Scenario: TMC mid executes EndScan command on DISH
     Given a Telescope consisting of TMC, DISH <dish_ids>, simulated CSP and simulated SDP
     And the Telescope is in ON state
     And TMC subarray <subarray_id> is in obsState SCANNING
     And DishMaster <dish_ids> is in dishMode OPERATE with pointingState TRACK
     When I issue the EndScan command to the TMC subarray <subarray_id>
-    Then the DishMaster <dish_ids> remains in dishMode OPERATE and pointingState TRACK  
+    Then the Dish <dish_ids> remains in dishMode OPERATE and pointingState TRACK  
     And TMC SubarrayNode transitions to obsState READY
     Examples:
 
