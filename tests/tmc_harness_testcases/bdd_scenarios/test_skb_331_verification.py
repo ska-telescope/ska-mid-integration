@@ -53,7 +53,6 @@ def move_subarray_node_to_idle_obsstate(
     central_node_mid: CentralNodeWrapperMid,
     event_recorder: EventRecorder,
     command_input_factory: JsonFactory,
-    subarray_id: str,
 ) -> None:
     """Move TMC Subarray to IDLE ObsState."""
     assign_input_json = prepare_json_args_for_centralnode_commands(
