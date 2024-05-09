@@ -93,7 +93,7 @@ def test_configure_timeout_and_error_propagation_csp(
             "longRunningCommandResult"
         ].assert_change_event(
             (unique_id[0], Anything),
-            lookahead=7,
+            lookahead=10,
         )
 
         assert "Configure" in assertion_data["attribute_value"][0]

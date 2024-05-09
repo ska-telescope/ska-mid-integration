@@ -7,7 +7,7 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
-[0.19.2]
+[0.20.0]
 ************
 * Integrate TMC CspSubarrayLeafNode latest image v0.162 and TMC SubarrayNode latest image v0.17.5 with SKB-329 bug fix
 * Affected BDD test case - XTP-32140
