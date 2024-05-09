@@ -239,6 +239,18 @@ def check_dish_mode_and_pointing_state(
             dish_id,
             central_node_mid.dish_master_dict[dish_id].dishMode,
         )
+        logging.info(
+            "pointingstate for dln in end test %s %s",
+            dish_id,
+            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
+        )
+        logging.info(
+            "pointingstate for dish master in end test %s %s",
+            dish_id,
+            central_node_mid.dish_master_dict[dish_id].pointingState,
+        )
+
+    for dish_id in dish_ids.split(","):
         assert (
             central_node_mid.dish_master_dict[dish_id].dishMode
             == DishMode.OPERATE

@@ -326,7 +326,7 @@ class SubarrayNodeWrapper(object):
             SIMULATED_DEVICES_DICT["csp_and_dish"]
             or SIMULATED_DEVICES_DICT["all_mocks"]
         ):
-            for dish_master in self.dish_leaf_node_list:
+            for dish_master in self.dish_master_list:
                 dish_master.SetDirectDishMode(DishMode.STANDBY_LP)
                 dish_master.SetDirectState(DevState.STANDBY)
                 dish_master.ResetDelay()
