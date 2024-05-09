@@ -24,6 +24,8 @@ from tests.resources.test_harness.constant import (
     tmc_csp_subarray_leaf_node,
     tmc_dish_leaf_node1,
     tmc_dish_leaf_node2,
+    tmc_dish_leaf_node3,
+    tmc_dish_leaf_node4,
     tmc_sdp_subarray_leaf_node,
     tmc_subarraynode1,
 )
@@ -90,10 +92,7 @@ class SubarrayNodeWrapper(object):
         self.subarray_node = DeviceProxy(self.tmc_subarraynode1)
         self.csp_subarray_leaf_node = DeviceProxy(tmc_csp_subarray_leaf_node)
         self.sdp_subarray_leaf_node = DeviceProxy(tmc_sdp_subarray_leaf_node)
-        self.dish_leaf_node_list = [
-            DeviceProxy(tmc_dish_leaf_node1),
-            DeviceProxy(tmc_dish_leaf_node2),
-        ]
+
         if (
             SIMULATED_DEVICES_DICT["csp_and_sdp"]
             and not SIMULATED_DEVICES_DICT["all_mocks"]
@@ -114,6 +113,12 @@ class SubarrayNodeWrapper(object):
             DeviceProxy(dish_fqdn063),
             DeviceProxy(dish_fqdn100),
         ]
+        self.dish_leaf_node_list = [
+            DeviceProxy(tmc_dish_leaf_node1),
+            DeviceProxy(tmc_dish_leaf_node2),
+            DeviceProxy(tmc_dish_leaf_node3),
+            DeviceProxy(tmc_dish_leaf_node4),
+        ]
 
         self.subarray_devices = {
             "csp_subarray": DeviceProxy(csp_subarray1),
@@ -130,6 +135,7 @@ class SubarrayNodeWrapper(object):
         self.ABORTED_OBS_STATE = ABORTED
         self.csp_subarray1 = csp_subarray1
         self.sdp_subarray1 = sdp_subarray1
+        device_dict["dish_master_list"] = self.dish_leaf_node_list
 
     def _setup(self):
         """ """
@@ -137,7 +143,7 @@ class SubarrayNodeWrapper(object):
             SIMULATED_DEVICES_DICT["csp_and_dish"]
             or SIMULATED_DEVICES_DICT["all_mocks"]
         ):
-            for dish_master_proxy in self.dish_master_list:
+            for dish_master_proxy in self.dish_leaf_node_list:
                 dish_master_proxy.SetDirectState(DevState.STANDBY)
                 # Setting DishMode to STANDBY_FP
                 dish_master_proxy.SetDirectDishMode(DishMode.STANDBY_FP)
@@ -317,7 +323,7 @@ class SubarrayNodeWrapper(object):
             SIMULATED_DEVICES_DICT["csp_and_dish"]
             or SIMULATED_DEVICES_DICT["all_mocks"]
         ):
-            for dish_master in self.dish_master_list:
+            for dish_master in self.dish_leaf_node_list:
                 dish_master.SetDirectDishMode(DishMode.STANDBY_LP)
                 dish_master.SetDirectState(DevState.STANDBY)
                 dish_master.ResetDelay()

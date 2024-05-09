@@ -61,6 +61,9 @@ def check_tmc_and_dish_is_on(
 
     assert csp_master_sim.ping() > 0
     assert sdp_master_sim.ping() > 0
+    for dish_id in dish_ids.split(","):
+        assert central_node_mid.dish_master_dict[dish_id].ping() > 0
+        assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
 
     central_node_mid.move_to_on()
 
