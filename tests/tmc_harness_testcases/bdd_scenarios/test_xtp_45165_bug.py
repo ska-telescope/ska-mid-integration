@@ -86,6 +86,9 @@ def invoke_configure_command(
     subarray_node.store_configuration_data(configure_input_json)
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     _, unique_id = subarray_node.store_configuration_data(configure_input_json)
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
