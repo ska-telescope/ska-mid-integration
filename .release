@@ -1,20 +1,17 @@
-release=0.19.2
-tag=0.19.2
+release=0.20.0
+tag=0.20.0
 tag_description=
 **Charts:**
-**1. ska-tmc-integration 0.19.1 - 0.19.2*
+**1. ska-tmc-integration 0.19.1 - 0.20.0*
 
-    **1.1 ska-tmc-mid - 0.19.1 - 0.19.2:
+    **1.1 ska-tmc-mid - 0.19.1 - 0.20.0:
         a. Integrate TMC-Dish Scan functionality implementation
-        b. Verified SKB-292 and SKB-293
 
 
 release_notes=
 **Charts:**
-**1. ska-tmc-integration 0.19.1 - 0.19.2:**
+**1. ska-tmc-integration 0.19.1 - 0.20.0:**
 
-    **1.1 ska-tmc-mid - 0.19.1 - 0.19.2:
+    **1.1 ska-tmc-mid - 0.19.1 - 0.20.0:
         a. Integrate TMC-Dish Scan functionality implementation
-        b. Verified SKB-292 and SKB-293
-
 

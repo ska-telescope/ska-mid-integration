@@ -7,9 +7,8 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
-[0.19.2]
+[0.20.0]
 * Integrate TMC-Dish Scan functionality implementation
-* Verified SKB-292 and SKB-293
 
 [0.19.1]
 ************
