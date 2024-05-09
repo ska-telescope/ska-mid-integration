@@ -111,7 +111,7 @@ def check_sdp_is_in_idle_obsstate(
     )
 )
 def check_tmc_is_in_idle_obsstate(
-    central_node_mid, event_recorder, subarray_id, store_unique_id
+    central_node_mid, event_recorder, subarray_id, stored_unique_id
 ):
     """Method to check TMC is in IDLE obsstate."""
     check_subarray_instance(central_node_mid.subarray_node, subarray_id)
@@ -127,7 +127,7 @@ def check_tmc_is_in_idle_obsstate(
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (store_unique_id[0], str(int(ResultCode.OK))),
+        (stored_unique_id[0], str(int(ResultCode.OK))),
         lookahead=5,
     )
 
