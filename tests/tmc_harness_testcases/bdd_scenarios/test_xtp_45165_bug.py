@@ -23,7 +23,7 @@ LOGGER = logging.getLogger(__name__)
 
 @pytest.mark.SKA_mid
 @scenario(
-    "../features/test_harness/xtp_xxxx_verify_bug.feature",
+    "../features/test_harness/xtp_45165_verify_bug.feature",
     "Verify SKB-329",
 )
 def test_tmc_csp_delay_functionality() -> None:
@@ -48,14 +48,14 @@ def check_telescope_is_in_on_state(
     )
 
 
-@given(parsers.parse("TMC subarray {subarray_id} is moved to ObsState IDLE"))
+@given(parsers.parse("TMC Subarray {subarray_id} is moved to obsState IDLE"))
 def move_subarray_node_to_idle_obsstate(
     central_node_mid: CentralNodeWrapperMid,
     event_recorder: EventRecorder,
     command_input_factory: JsonFactory,
     subarray_id: str,
 ) -> None:
-    """Move TMC Subarray to IDLE ObsState."""
+    """Move TMC Subarray to IDLE obsState."""
     central_node_mid.set_subarray_id(subarray_id)
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
@@ -73,14 +73,14 @@ def move_subarray_node_to_idle_obsstate(
     )
 
 
-@when("I configure the TMC subarray")
+@when("I configure the TMC Subarray")
 def invoke_configure_command(
     subarray_node: SubarrayNodeWrapper,
     command_input_factory: JsonFactory,
     event_recorder: EventRecorder,
 ) -> None:
     """
-    Invokes Configure command and checks whether subarray is in ObsState READY
+    Invokes Configure command and checks whether subarray is in obsState READY
     """
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
@@ -109,7 +109,7 @@ def check_if_delay_values_are_generating(
 
 @then(
     parsers.parse(
-        "the TMC subarray {subarray_id} transitions to ObsState READY"
+        "the TMC Subarray {subarray_id} transitions to obsState READY"
     )
 )
 def check_if_tmc_subarray_moved_to_ready_obsstate(
