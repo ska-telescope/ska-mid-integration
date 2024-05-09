@@ -59,11 +59,13 @@ def telescope_is_in_resourcing_obsstate(
         central_node_mid.subarray_node,
         "obsState",
         ObsState.RESOURCING,
+        lookahead=10,
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_devices.get("sdp_subarray"),
         "obsState",
         ObsState.RESOURCING,
+        lookahead=10,
     )
 
 

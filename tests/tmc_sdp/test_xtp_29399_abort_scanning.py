@@ -1,4 +1,6 @@
 """Test TMC-SDP Abort functionality in Scanning obstate"""
+import json
+
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
@@ -75,11 +77,13 @@ def subarray_is_in_scanning_obsstate(
         (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
 
-    configure_json = prepare_json_args_for_commands(
+    configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
+    configure_json = json.loads(configure_input_json)
+    configure_json["tmc"]["scan_duration"] = 10.0
     pytest.command_result = subarray_node.store_configuration_data(
-        configure_json
+        json.dumps(configure_json)
     )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["sdp_subarray"],
@@ -137,6 +141,7 @@ def sdp_subarray_is_in_aborted_obsstate(
         subarray_node.subarray_devices.get("sdp_subarray"),
         "obsState",
         ObsState.ABORTED,
+        lookahead=12,
     )
 
 
@@ -153,7 +158,5 @@ def tmc_subarray_is_in_aborted_obsstate(
     """
     subarray_node.set_subarray_id(subarray_id)
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "obsState",
-        ObsState.ABORTED,
+        subarray_node.subarray_node, "obsState", ObsState.ABORTED, lookahead=12
     )
