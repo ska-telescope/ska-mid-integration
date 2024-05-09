@@ -99,6 +99,9 @@ def move_subarray_node_to_idle_obsstate(
     subarray_node,
 ) -> None:
     """Move TMC Subarray to IDLE obsstate."""
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )

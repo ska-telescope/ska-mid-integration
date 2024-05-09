@@ -101,6 +101,9 @@ def move_subarray_node_to_idle_obsstate(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     # Create json for AssignResources commands with requested subarray_id
     assign_input = json.loads(assign_input_json)
     _, unique_id = central_node_mid.perform_action(
