@@ -296,15 +296,16 @@ def execute_configure_scan_sequence(
     """A method to invoke configure and scan  command"""
 
     check_subarray_instance(subarray_node.subarray_node, subarray_id)
+
     configure_json = prepare_json_args_for_commands(
         "configure1_mid", command_input_factory
     )
 
+    subarray_node.subarray_node.set_timeout_millis(8000)
     configure_cycle = "initial"
     processed_scan_type = ""
 
     combined_dict = dict(zip(eval(scan_ids), eval(scan_types)))
-
     for scan_id, scan_type in combined_dict.items():
         configure_json = update_scan_type(configure_json, scan_type)
         _, unique_id = subarray_node.store_configuration_data(configure_json)
