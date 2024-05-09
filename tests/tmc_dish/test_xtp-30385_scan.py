@@ -185,6 +185,7 @@ def turn_on_telescope(
         central_node_mid.central_node,
         "telescopeState",
         DevState.ON,
+        lookahead=15,
     )
 
 

@@ -165,11 +165,13 @@ def tmc_status_idle(json_factory):
 @when("I issue the command Configure passing a correct JSON script")
 def tmc_accepts_configure_command_with_valid_json(json_factory):
     configure_json = json_factory("command_Configure")
+    configure_input_json = json.loads(configure_json)
+    configure_input_json["tmc"]["scan_duration"] = 10.0
     release_json = json_factory("command_ReleaseResources")
     try:
         # Invoke Configure() Command on TMC
         tmc_helper.configure_subarray(
-            configure_json, **ON_OFF_DEVICE_COMMAND_DICT
+            json.dumps(configure_input_json), **ON_OFF_DEVICE_COMMAND_DICT
         )
         LOGGER.info("Invoked Configure command on TMC SubarrayNode")
     except Exception:
