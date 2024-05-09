@@ -62,8 +62,7 @@ def move_subarray_node_to_idle_obsstate(
     # Create json for AssignResources commands with requested subarray_id
     assign_input = json.loads(assign_input_json)
     assign_input["subarray_id"] = int(subarray_id)
-    central_node_mid.store_resources(json.dumps(assign_input))
-    _, unique_id = central_node_mid.store_resources(assign_input_json)
+    _, unique_id = central_node_mid.store_resources(json.dumps(assign_input))
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_node,
