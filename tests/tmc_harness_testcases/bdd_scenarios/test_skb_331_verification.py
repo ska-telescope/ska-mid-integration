@@ -90,7 +90,9 @@ def invoke_configure_command(
     + " containing output_host and output_port"
 )
 def check_json_content(subarray_node):
-    input_json = subarray_node.csp_subarray_leaf_node.commandCallInfo[-1][-1]
+    input_json = subarray_node.subarray_devices[
+        "csp_subarray"
+    ].commandCallInfo[-1][-1]
     fsp_list = json.loads(input_json)["cbf"]["fsp"]
     for fsp_config in fsp_list:
         assert "output_host" in fsp_config.keys()
