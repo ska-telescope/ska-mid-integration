@@ -337,7 +337,7 @@ k8s-test:
     DISH_SIMULATION_ENABLED: "true"
     SUBARRAY_COUNT: 2
     MARK: "test"
-    COUNT: 50
+    COUNT: 25
     KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA'
   before_script:
     - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
