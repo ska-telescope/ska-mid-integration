@@ -75,7 +75,10 @@ device_dict = {
     "dish_master_list": [
         dish_master1,
         dish_master2,
+        dish_master3,
+        dish_master4,
     ],
+    "dish_leaf_node_list": [],
     "csp_subarray_leaf_node": tmc_csp_subarray_leaf_node,
     "sdp_subarray_leaf_node": tmc_sdp_subarray_leaf_node,
 }
@@ -135,7 +138,7 @@ class SubarrayNodeWrapper(object):
         self.ABORTED_OBS_STATE = ABORTED
         self.csp_subarray1 = csp_subarray1
         self.sdp_subarray1 = sdp_subarray1
-        device_dict["dish_master_list"] = self.dish_leaf_node_list
+        device_dict["dish_leaf_node_list"] = self.dish_leaf_node_list
 
     def _setup(self):
         """ """
@@ -143,7 +146,7 @@ class SubarrayNodeWrapper(object):
             SIMULATED_DEVICES_DICT["csp_and_dish"]
             or SIMULATED_DEVICES_DICT["all_mocks"]
         ):
-            for dish_master_proxy in self.dish_leaf_node_list:
+            for dish_master_proxy in self.dish_master_list:
                 dish_master_proxy.SetDirectState(DevState.STANDBY)
                 # Setting DishMode to STANDBY_FP
                 dish_master_proxy.SetDirectDishMode(DishMode.STANDBY_FP)

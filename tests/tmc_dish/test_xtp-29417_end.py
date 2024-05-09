@@ -1,5 +1,6 @@
 """Test module for TMC-DISH End functionality"""
 
+import logging
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -227,18 +228,25 @@ def check_dish_mode_and_pointing_state(
     Method to check dishMode and pointingState of DISH
     """
     for dish_id in dish_ids.split(","):
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_leaf_node_dict[dish_id],
-            "dishMode",
-            DishMode.OPERATE,
-            lookahead=15,
+        # logs added for testing, will be removed before merging into master
+        logging.info(
+            "dishmode for dln in end test %s %s",
+            dish_id,
+            central_node_mid.dish_leaf_node_dict[dish_id].dishMode,
+        )
+        logging.info(
+            "dishmode for dish master in end test %s %s",
+            dish_id,
+            central_node_mid.dish_master_dict[dish_id].dishMode,
+        )
+        assert (
+            central_node_mid.dish_master_dict[dish_id].dishMode
+            == DishMode.OPERATE
         )
 
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "dishMode",
-            DishMode.OPERATE,
-            lookahead=15,
+        assert (
+            central_node_mid.dish_leaf_node_dict[dish_id].dishMode
+            == DishMode.OPERATE
         )
 
         assert event_recorder.has_change_event_occurred(
