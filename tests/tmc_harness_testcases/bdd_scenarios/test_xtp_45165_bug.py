@@ -69,6 +69,12 @@ def move_subarray_node_to_idle_obsstate(
         "obsState",
         ObsState.IDLE,
     )
+    _, unique_id = central_node_mid.store_resources(assign_input_json)
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (unique_id[0], str(ResultCode.OK.value)),
+    )
 
 
 @when("I configure the TMC Subarray")
@@ -85,6 +91,13 @@ def invoke_configure_command(
     )
     subarray_node.store_configuration_data(configure_input_json)
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
+    _, unique_id = subarray_node.store_configuration_data(configure_input_json)
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (unique_id[0], str(ResultCode.OK.value)),
+        lookahead=5,
+    )
 
 
 @then(
