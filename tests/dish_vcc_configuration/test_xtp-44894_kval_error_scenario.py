@@ -4,6 +4,7 @@ import pytest
 from pytest_bdd import given, scenario, then, when
 from ska_control_model import ObsState
 from ska_tango_base.control_model import HealthState
+from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
@@ -95,6 +96,7 @@ def move_subarray_node_to_idle_obsstate(
     central_node_mid: CentralNodeWrapperMid,
     event_recorder: EventRecorder,
     command_input_factory: JsonFactory,
+    subarray_node,
 ) -> None:
     """Move TMC Subarray to IDLE obsstate."""
     assign_input_json = prepare_json_args_for_centralnode_commands(
@@ -120,6 +122,14 @@ def move_subarray_node_to_idle_obsstate(
         (unique_id[0], str(int(ResultCode.OK))),
         lookahead=5,
     )
+
+    assertion_data = event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        attribute_name="longRunningCommandResult",
+        attribute_value=(Anything, str(int(ResultCode.OK))),
+    )
+
+    assert "AssignResources" in assertion_data["attribute_value"][0]
 
 
 @when("I invoke Configure command on TMC")
