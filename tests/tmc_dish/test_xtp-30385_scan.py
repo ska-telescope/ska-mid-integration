@@ -2,9 +2,9 @@
 """
 
 
+import json
 import logging
 import time
-import json
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
