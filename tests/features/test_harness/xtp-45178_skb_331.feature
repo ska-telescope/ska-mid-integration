@@ -1,7 +1,7 @@
 Feature: Default
 
 	#Verify the output_host and output_port in configure json send to csp subarray
-	@XTP-45178 @XTP-28347
+	@XTP-45178 @XTP-28347 @SKA_mid @skb331
 	Scenario: Verify the output_host and output_port in configure json send to csp subarray 
 		Given the telescope is in ON state
 		And TMC subarray in ObsState IDLE
