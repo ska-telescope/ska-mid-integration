@@ -70,22 +70,7 @@ def check_subarray_obs_state(
     )
 
     central_node_mid.set_subarray_id(subarray_id)
-    # subarray_node.force_change_of_obs_state(
-    #     "READY",
-    #     assign_input_json=assign_input_json,
-    #     configure_input_json=configure_input_json,
-    # )
 
-    # assert event_recorder.has_change_event_occurred(
-    #     subarray_node.subarray_devices.get("sdp_subarray"),
-    #     "obsState",
-    #     ObsState.READY,
-    # )
-    # assert event_recorder.has_change_event_occurred(
-    #     subarray_node.subarray_node,
-    #     "obsState",
-    #     ObsState.READY,
-    # )
     event_recorder.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
     )
