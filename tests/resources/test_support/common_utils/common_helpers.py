@@ -326,10 +326,10 @@ class Waiter:
         self.tmc_sdp_subarray_leaf_node = kwargs.get(
             "tmc_sdp_subarray_leaf_node"
         )
-        self.tmc_dish_leaf_node1 = kwargs.get("tmc_dish_leaf_node1")
-        self.tmc_dish_leaf_node2 = kwargs.get("tmc_dish_leaf_node2")
-        self.tmc_dish_leaf_node3 = kwargs.get("tmc_dish_leaf_node3")
-        self.tmc_dish_leaf_node4 = kwargs.get("tmc_dish_leaf_node4")
+        self.dish_master1 = kwargs.get("dish_master1")
+        self.dish_master2 = kwargs.get("dish_master2")
+        self.dish_master3 = kwargs.get("dish_master3")
+        self.dish_master4 = kwargs.get("dish_master4")
 
     def clear_watches(self):
         """Resets the waits list"""
@@ -357,27 +357,27 @@ class Waiter:
                 "State", changed_to="OFF"
             )
         )
-        if self.tmc_dish_leaf_node1:
+        if self.dish_master1:
             self.waits.append(
-                watch(Resource(self.tmc_dish_leaf_node1)).to_become(
+                watch(Resource(self.dish_master1)).to_become(
                     "dishMode", changed_to="STANDBY_LP"
                 )
             )
-        if self.tmc_dish_leaf_node2:
+        if self.dish_master2:
             self.waits.append(
-                watch(Resource(self.tmc_dish_leaf_node2)).to_become(
+                watch(Resource(self.dish_master2)).to_become(
                     "dishMode", changed_to="STANDBY_LP"
                 )
             )
-        if self.tmc_dish_leaf_node3:
+        if self.dish_master3:
             self.waits.append(
-                watch(Resource(self.tmc_dish_leaf_node3)).to_become(
+                watch(Resource(self.dish_master3)).to_become(
                     "dishMode", changed_to="STANDBY_LP"
                 )
             )
-        if self.tmc_dish_leaf_node4:
+        if self.dish_master4:
             self.waits.append(
-                watch(Resource(self.tmc_dish_leaf_node4)).to_become(
+                watch(Resource(self.dish_master4)).to_become(
                     "dishMode", changed_to="STANDBY_LP"
                 )
             )
@@ -404,27 +404,27 @@ class Waiter:
                 "State", changed_to="STANDBY"
             )
         )
-        if self.tmc_dish_leaf_node1:
+        if self.dish_master1:
             self.waits.append(
-                watch(Resource(self.tmc_dish_leaf_node1)).to_become(
+                watch(Resource(self.dish_master1)).to_become(
                     "State", changed_to="STANDBY"
                 )
             )
-        if self.tmc_dish_leaf_node2:
+        if self.dish_master2:
             self.waits.append(
-                watch(Resource(self.tmc_dish_leaf_node2)).to_become(
+                watch(Resource(self.dish_master2)).to_become(
                     "State", changed_to="STANDBY"
                 )
             )
-        if self.tmc_dish_leaf_node3:
+        if self.dish_master3:
             self.waits.append(
-                watch(Resource(self.tmc_dish_leaf_node3)).to_become(
+                watch(Resource(self.dish_master3)).to_become(
                     "State", changed_to="STANDBY"
                 )
             )
-        if self.tmc_dish_leaf_node4:
+        if self.dish_master4:
             self.waits.append(
-                watch(Resource(self.tmc_dish_leaf_node4)).to_become(
+                watch(Resource(self.dish_master4)).to_become(
                     "State", changed_to="STANDBY"
                 )
             )
@@ -451,27 +451,27 @@ class Waiter:
                 "State", changed_to="ON"
             )
         )
-        if self.tmc_dish_leaf_node1:
+        if self.dish_master1:
             self.waits.append(
-                watch(Resource(self.tmc_dish_leaf_node1)).to_become(
+                watch(Resource(self.dish_master1)).to_become(
                     "dishMode", changed_to="STANDBY_FP"
                 )
             )
-        if self.tmc_dish_leaf_node2:
+        if self.dish_master2:
             self.waits.append(
-                watch(Resource(self.tmc_dish_leaf_node2)).to_become(
+                watch(Resource(self.dish_master2)).to_become(
                     "dishMode", changed_to="STANDBY_FP"
                 )
             )
-        if self.tmc_dish_leaf_node3:
+        if self.dish_master3:
             self.waits.append(
-                watch(Resource(self.tmc_dish_leaf_node3)).to_become(
+                watch(Resource(self.dish_master3)).to_become(
                     "dishMode", changed_to="STANDBY_FP"
                 )
             )
-        if self.tmc_dish_leaf_node4:
+        if self.dish_master4:
             self.waits.append(
-                watch(Resource(self.tmc_dish_leaf_node4)).to_become(
+                watch(Resource(self.dish_master4)).to_become(
                     "dishMode", changed_to="STANDBY_FP"
                 )
             )
@@ -569,30 +569,9 @@ class Waiter:
             )
         )
 
-        if self.tmc_dish_leaf_node1:
+        if self.dish_master1:
             self.waits.append(
-                watch(Resource(self.tmc_dish_leaf_node1)).to_become(
-                    "pointingState", changed_to="TRACK"
-                )
-            )
-
-        if self.tmc_dish_leaf_node2:
-            self.waits.append(
-                watch(Resource(self.tmc_dish_leaf_node2)).to_become(
-                    "pointingState", changed_to="TRACK"
-                )
-            )
-
-        if self.tmc_dish_leaf_node3:
-            self.waits.append(
-                watch(Resource(self.tmc_dish_leaf_node3)).to_become(
-                    "pointingState", changed_to="TRACK"
-                )
-            )
-
-        if self.tmc_dish_leaf_node4:
-            self.waits.append(
-                watch(Resource(self.tmc_dish_leaf_node4)).to_become(
+                watch(Resource(self.dish_master1)).to_become(
                     "pointingState", changed_to="TRACK"
                 )
             )
@@ -626,33 +605,20 @@ class Waiter:
             )
         )
 
-        if self.tmc_dish_leaf_node1:
+        if self.dish_master1:
             self.waits.append(
-                watch(Resource(self.tmc_dish_leaf_node1)).to_become(
+                watch(Resource(self.dish_master1)).to_become(
                     "pointingState", changed_to="TRACK"
                 )
             )
 
-        if self.tmc_dish_leaf_node2:
+        if self.dish_master2:
             self.waits.append(
-                watch(Resource(self.tmc_dish_leaf_node2)).to_become(
+                watch(Resource(self.dish_master2)).to_become(
                     "pointingState", changed_to="TRACK"
                 )
             )
 
-        if self.tmc_dish_leaf_node3:
-            self.waits.append(
-                watch(Resource(self.tmc_dish_leaf_node3)).to_become(
-                    "pointingState", changed_to="TRACK"
-                )
-            )
-
-        if self.tmc_dish_leaf_node4:
-            self.waits.append(
-                watch(Resource(self.tmc_dish_leaf_node4)).to_become(
-                    "pointingState", changed_to="TRACK"
-                )
-            )
         self.waits.append(
             watch(Resource(self.tmc_subarraynode1)).to_become(
                 "obsState", changed_to="READY"
@@ -765,7 +731,7 @@ class Waiter:
             )
 
     def set_wait_for_pointingstate(self, pointingstate: str, devices: list):
-        """Waits for intermediate obsState change for given devices."""
+        """Waits for intermidiate obsState change for given devices."""
         for device in devices:
             self.waits.append(
                 watch(Resource(device)).to_become(
