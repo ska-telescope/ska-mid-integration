@@ -509,9 +509,9 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             device_proxy.SetDirectState(subarray_state)
 
         # If Dish master provided then set it to standby
-        if self.dish_master_list:
-            for device in self.dish_master_list:
-                device.SetDirectDishMode(dish_mode)
+        # if self.dish_master_list:
+        #     for device in self.dish_master_list:
+        #         device.SetDirectDishMode(dish_mode)
 
     def set_value_with_csp_sdp_mocks(self, subarray_state: DevState) -> None:
         """
@@ -545,9 +545,9 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             device_proxy.SetDirectState(subarray_state)
 
         # If Dish master provided then set it to standby
-        if self.dish_master_list and dish_mode:
-            for device in self.dish_master_list:
-                device.SetDirectDishMode(dish_mode)
+        # if self.dish_master_list and dish_mode:
+        #     for device in self.dish_master_list:
+        #         device.SetDirectDishMode(dish_mode)
 
     def set_values_with_csp_dish_mocks(
         self, subarray_state: DevState, dish_mode: DishMode
@@ -567,9 +567,9 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             device_proxy.SetDirectState(subarray_state)
 
         # If Dish master provided then set it to standby
-        if self.dish_master_list:
-            for device in self.dish_master_list:
-                device.SetDirectDishMode(dish_mode)
+        # if self.dish_master_list:
+        #     for device in self.dish_master_list:
+        #         device.SetDirectDishMode(dish_mode)
 
     def set_values_with_sdp_dish_mocks(
         self, subarray_state: DevState, dish_mode: DishMode
@@ -587,9 +587,9 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             device_proxy.SetDirectState(subarray_state)
 
         # If Dish master provided then set it to standby
-        if self.dish_master_list:
-            for device in self.dish_master_list:
-                device.SetDirectDishMode(dish_mode)
+        # if self.dish_master_list:
+        #     for device in self.dish_master_list:
+        #         device.SetDirectDishMode(dish_mode)
 
     def tear_down(self) -> None:
         """Handle Tear down of central Node"""
