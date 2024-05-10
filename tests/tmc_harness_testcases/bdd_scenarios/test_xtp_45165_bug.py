@@ -18,7 +18,6 @@ from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 
 
-@pytest.mark.test
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp_45165_verify_bug.feature",
