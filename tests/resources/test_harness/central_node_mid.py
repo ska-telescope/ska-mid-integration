@@ -303,18 +303,18 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 self.csp_master.adminMode = 0
             wait_csp_master_off()
             self.central_node.TelescopeOn()
-            self.set_values_with_sdp_dish_mocks(
-                DevState.ON, DishMode.STANDBY_FP
-            )
+            # self.set_values_with_sdp_dish_mocks(
+            #     DevState.ON, DishMode.STANDBY_FP
+            # )
         elif SIMULATED_DEVICES_DICT["sdp"]:
             LOGGER.info("Invoking TelescopeOn() on simulated sdp")
             if self.csp_master.adminMode != 0:
                 self.csp_master.adminMode = 0
             wait_csp_master_off()
             self.central_node.TelescopeOn()
-            self.set_values_on_device(
-                DevState.ON, [self.subarray_devices.get("sdp_subarray")]
-            )
+            # self.set_values_on_device(
+            #     DevState.ON, [self.subarray_devices.get("sdp_subarray")]
+            # )
         else:
             LOGGER.info("Invoke TelescopeOn() on all real sub-systems")
             self.central_node.TelescopeOn()
@@ -348,14 +348,14 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         elif SIMULATED_DEVICES_DICT["sdp_and_dish"]:
             LOGGER.info("Invoking TelescopeOff() on simulated sdp and dish")
             self.central_node.TelescopeOff()
-            self.set_values_with_sdp_dish_mocks(
-                DevState.OFF, DishMode.STANDBY_LP
-            )
+            # self.set_values_with_sdp_dish_mocks(
+            #     DevState.OFF, DishMode.STANDBY_LP
+            # )
         elif SIMULATED_DEVICES_DICT["sdp"]:
             self.central_node.TelescopeOff()
-            self.set_values_on_device(
-                DevState.OFF, [self.subarray_devices.get("sdp_subarray")]
-            )
+            # self.set_values_on_device(
+            #     DevState.OFF, [self.subarray_devices.get("sdp_subarray")]
+            # )
         else:
             LOGGER.info("Invoke TelescopeOff() with all real sub-systems")
             self.central_node.TelescopeOff()
@@ -394,14 +394,14 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 "Invoking TelescopeStandBy() on simulated sdp and dish"
             )
             self.central_node.TelescopeStandBy()
-            self.set_values_with_sdp_dish_mocks(
-                DevState.OFF, DishMode.STANDBY_LP
-            )
+            # self.set_values_with_sdp_dish_mocks(
+            #     DevState.OFF, DishMode.STANDBY_LP
+            # )
         elif SIMULATED_DEVICES_DICT["sdp"]:
             self.central_node.TelescopeStandBy()
-            self.set_values_on_device(
-                DevState.Standby, [self.subarray_devices.get("sdp_subarray")]
-            )
+            # self.set_values_on_device(
+            #     DevState.Standby, [self.subarray_devices.get("sdp_subarray")]
+            # )
         else:
             LOGGER.info("Invoke TelescopeStandBy() with all real sub-systems")
             self.central_node.TelescopeStandBy()
@@ -502,16 +502,16 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         """
         device_to_on_list = [
             self.subarray_devices.get("csp_subarray"),
-            self.subarray_devices.get("sdp_subarray"),
+            # self.subarray_devices.get("sdp_subarray"),
         ]
         for device in device_to_on_list:
             device_proxy = DeviceProxy(device)
             device_proxy.SetDirectState(subarray_state)
 
         # If Dish master provided then set it to standby
-        if self.dish_master_list:
-            for device in self.dish_master_list:
-                device.SetDirectDishMode(dish_mode)
+        # if self.dish_master_list:
+        #     for device in self.dish_master_list:
+        #         device.SetDirectDishMode(dish_mode)
 
     def set_value_with_csp_sdp_mocks(self, subarray_state: DevState) -> None:
         """
@@ -522,7 +522,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         """
         device_to_on_list = [
             self.subarray_devices.get("csp_subarray"),
-            self.subarray_devices.get("sdp_subarray"),
+            # self.subarray_devices.get("sdp_subarray"),
         ]
         for device in device_to_on_list:
             device_proxy = DeviceProxy(device)
@@ -567,9 +567,9 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             device_proxy.SetDirectState(subarray_state)
 
         # If Dish master provided then set it to standby
-        if self.dish_master_list:
-            for device in self.dish_master_list:
-                device.SetDirectDishMode(dish_mode)
+        # if self.dish_master_list:
+        #     for device in self.dish_master_list:
+        #         device.SetDirectDishMode(dish_mode)
 
     def set_values_with_sdp_dish_mocks(
         self, subarray_state: DevState, dish_mode: DishMode
