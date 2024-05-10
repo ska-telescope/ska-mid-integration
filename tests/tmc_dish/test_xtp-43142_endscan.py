@@ -226,7 +226,7 @@ def move_subarray_obsState_to_scanning(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.OPERATE,
-            lookashed=10,
+            lookahead=10,
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
