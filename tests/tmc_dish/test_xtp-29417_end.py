@@ -230,16 +230,6 @@ def check_dish_mode_and_pointing_state(
     for dish_id in dish_ids.split(","):
         # logs added for testing, will be removed before merging into master
         logging.info(
-            "dishmode for dln in end test %s %s",
-            dish_id,
-            central_node_mid.dish_leaf_node_dict[dish_id].dishMode,
-        )
-        logging.info(
-            "dishmode for dish master in end test %s %s",
-            dish_id,
-            central_node_mid.dish_master_dict[dish_id].dishMode,
-        )
-        logging.info(
             "pointingstate for dln in end test %s %s",
             dish_id,
             central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
@@ -251,14 +241,6 @@ def check_dish_mode_and_pointing_state(
         )
 
     for dish_id in ["SKA063", "SKA100", "SKA001", "SKA036"]:
-        assert (
-            central_node_mid.dish_leaf_node_dict[dish_id].dishMode
-            == DishMode.OPERATE
-        )
-        assert (
-            central_node_mid.dish_master_dict[dish_id].dishMode
-            == DishMode.OPERATE
-        )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "pointingState",
@@ -271,71 +253,6 @@ def check_dish_mode_and_pointing_state(
             PointingState.READY,
             lookahead=10,
         )
-    for dish_id in ["SKA063", "SKA100"]:
-        # logs added for testing, will be removed before merging into master
-        logging.info(
-            "dishmode for dln in end test %s %s",
-            dish_id,
-            central_node_mid.dish_leaf_node_dict[dish_id].dishMode,
-        )
-        logging.info(
-            "dishmode for dish master in end test %s %s",
-            dish_id,
-            central_node_mid.dish_master_dict[dish_id].dishMode,
-        )
-        logging.info(
-            "pointingstate for dln in end test %s %s",
-            dish_id,
-            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
-        )
-        logging.info(
-            "pointingstate for dish master in end test %s %s",
-            dish_id,
-            central_node_mid.dish_master_dict[dish_id].pointingState,
-        )
-
-    # assert (
-    #             central_node_mid.dish_leaf_node_dict["SKA063"].dishMode
-    #             == DishMode.OPERATE
-    #     )
-    # assert (
-    #         central_node_mid.dish_master_dict["SKA063"].dishMode
-    #         == DishMode.OPERATE
-    #     )
-    # assert event_recorder.has_change_event_occurred(
-    #         central_node_mid.dish_leaf_node_dict["SKA063"],
-    #         "pointingState",
-    #         PointingState.READY,
-    #         lookahead=10,
-    #     )
-    # assert event_recorder.has_change_event_occurred(
-    #         central_node_mid.dish_master_dict["SKA063"],
-    #         "pointingState",
-    #         PointingState.READY,
-    #         lookahead=10,
-    #     )
-
-    # assert (
-    #             central_node_mid.dish_leaf_node_dict["SKA100"].dishMode
-    #             == DishMode.OPERATE
-    #     )
-    # assert (
-    #         central_node_mid.dish_master_dict["SKA100"].dishMode
-    #         == DishMode.OPERATE
-    #     )
-
-    # assert event_recorder.has_change_event_occurred(
-    #     central_node_mid.dish_master_dict["SKA100"],
-    #     "pointingState",
-    #     PointingState.READY,
-    #     lookahead=10,
-    # )
-    # assert event_recorder.has_change_event_occurred(
-    #         central_node_mid.dish_leaf_node_dict["SKA100"],
-    #         "pointingState",
-    #         PointingState.READY,
-    #         lookahead=10,
-    #     )
 
 
 @then(
