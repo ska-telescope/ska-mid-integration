@@ -92,7 +92,6 @@ def invoke_configure_command(
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    subarray_node.store_configuration_data(configure_input_json)
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     _, unique_id = subarray_node.store_configuration_data(configure_input_json)
     event_recorder.subscribe_event(
