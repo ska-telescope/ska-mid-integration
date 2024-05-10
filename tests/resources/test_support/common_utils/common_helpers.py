@@ -635,7 +635,7 @@ class Waiter:
 
         if self.tmc_dish_leaf_node2:
             self.waits.append(
-                watch(Resource(self.tmc_dish_leaf_node3)).to_become(
+                watch(Resource(self.tmc_dish_leaf_node2)).to_become(
                     "pointingState", changed_to="TRACK"
                 )
             )
@@ -765,7 +765,7 @@ class Waiter:
             )
 
     def set_wait_for_pointingstate(self, pointingstate: str, devices: list):
-        """Waits for intermidiate obsState change for given devices."""
+        """Waits for intermediate obsState change for given devices."""
         for device in devices:
             self.waits.append(
                 watch(Resource(device)).to_become(
