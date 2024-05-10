@@ -424,6 +424,7 @@ k8s-test-dish-lmc:
   tags:
     - ska-k8s
   variables:
+    CI_KEEP_NAMESPACE: "true"
     DISH_SIMULATION_ENABLED: "false"
     SUBARRAY_COUNT: 2
     DISH_TANGO_HOST: "tango-databaseds"
