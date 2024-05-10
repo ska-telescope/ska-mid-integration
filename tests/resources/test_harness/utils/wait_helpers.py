@@ -32,7 +32,6 @@ class Waiter:
         self.csp_master = kwargs.get("csp_master")
         self.tmc_subarraynode1 = kwargs.get("tmc_subarraynode")
         self.dish_master_list = kwargs.get("dish_master_list")
-        self.dish_master_list = kwargs.get("dish_master_list")
         self.tmc_csp_subarray_leaf_node = kwargs.get("csp_subarray_leaf_node")
         self.tmc_sdp_subarray_leaf_node = kwargs.get("sdp_subarray_leaf_node")
         self.cbf_subarray1 = kwargs.get("cbf_subarray1")
@@ -44,9 +43,9 @@ class Waiter:
 
     def set_wait_for_dish(self, attribute_name, state_name):
         """Set wait for dish"""
-        for dish_leaf_node in self.dish_master_list:
+        for dish_master in self.dish_master_list:
             self.waits.append(
-                watch(Resource(dish_leaf_node)).to_become(
+                watch(Resource(dish_master)).to_become(
                     attribute_name, changed_to=state_name
                 )
             )

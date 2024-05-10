@@ -62,10 +62,10 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
     """
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
         )
         event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode"
+            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
         )
     csp_master_sim = simulator_factory.get_or_create_simulator_device(
         SimulatorDeviceType.MID_CSP_MASTER_DEVICE
@@ -90,12 +90,12 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_leaf_node_dict[dish_id],
+            central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.STANDBY_FP,
         )
         assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
+            central_node_mid.dish_leaf_node_dict[dish_id],
             "dishMode",
             DishMode.STANDBY_FP,
         )
@@ -176,11 +176,11 @@ def check_dish_mode(central_node_mid, event_recorder, dish_ids):
     """
     for dish_id in dish_ids.split(","):
         assert (
-            central_node_mid.dish_leaf_node_dict[dish_id].dishMode
+            central_node_mid.dish_master_dict[dish_id].dishMode
             == DishMode.STANDBY_FP
         )
         assert (
-            central_node_mid.dish_master_dict[dish_id].dishMode
+            central_node_mid.dish_leaf_node_dict[dish_id].dishMode
             == DishMode.STANDBY_FP
         )
 

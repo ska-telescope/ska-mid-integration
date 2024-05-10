@@ -75,10 +75,7 @@ device_dict = {
     "dish_master_list": [
         dish_master1,
         dish_master2,
-        dish_master3,
-        dish_master4,
     ],
-    "dish_leaf_node_list": [],
     "csp_subarray_leaf_node": tmc_csp_subarray_leaf_node,
     "sdp_subarray_leaf_node": tmc_sdp_subarray_leaf_node,
 }
@@ -138,7 +135,6 @@ class SubarrayNodeWrapper(object):
         self.ABORTED_OBS_STATE = ABORTED
         self.csp_subarray1 = csp_subarray1
         self.sdp_subarray1 = sdp_subarray1
-        device_dict["dish_leaf_node_list"] = self.dish_leaf_node_list
 
     def _setup(self):
         """ """

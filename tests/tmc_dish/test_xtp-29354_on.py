@@ -60,10 +60,10 @@ def move_dish_to_on(central_node_mid, event_recorder):
     """
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
         )
         event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode"
+            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
         )
 
     event_recorder.subscribe_event(
@@ -89,12 +89,12 @@ def check_dish_is_on(central_node_mid, event_recorder, dish_ids):
     """
     for dish_id in dish_ids.split(","):
         assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_leaf_node_dict[dish_id],
+            central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.STANDBY_FP,
         )
         assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
+            central_node_mid.dish_leaf_node_dict[dish_id],
             "dishMode",
             DishMode.STANDBY_FP,
         )
