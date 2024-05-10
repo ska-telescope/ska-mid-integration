@@ -229,6 +229,7 @@ class SubarrayNodeWrapper(object):
         Returns:
             (result, message): result, message tuple
         """
+        self.subarray_node.set_timeout_millis(5000)
         result, message = self.subarray_node.Configure(input_string)
         LOGGER.info("Invoked Configure on SubarrayNode")
         return result, message
