@@ -165,7 +165,6 @@ def invoke_configure(
     A method to invoke Configure command
     """
 
-    
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
@@ -174,8 +173,9 @@ def invoke_configure(
         "configure_mid", command_input_factory
     )
     central_node_mid.set_subarray_id(subarray_id)
-    pytest.command_result = subarray_node.execute_transition("Configure",
-                                                        configure_input_json)
+    pytest.command_result = subarray_node.execute_transition(
+        "Configure", configure_input_json
+    )
 
 
 @then(
