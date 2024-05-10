@@ -301,7 +301,6 @@ def execute_configure_scan_sequence(
         "configure1_mid", command_input_factory
     )
 
-    subarray_node.subarray_node.set_timeout_millis(8000)
     configure_cycle = "initial"
     processed_scan_type = ""
 
