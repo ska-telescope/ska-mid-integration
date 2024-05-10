@@ -218,10 +218,27 @@ def move_subarray_obsState_to_scanning(
     pytest.command_result = subarray_node.execute_transition(
         "Configure", json.dumps(configure_json)
     )
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "pointingState"
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.OPERATE,
+            lookashed=10,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "pointingState",
+            PointingState.TRACK,
+            lookahead=10,
+        )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
+        lookahead=15,
     )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
