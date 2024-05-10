@@ -155,12 +155,12 @@ def check_subarray_obsstate(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
 
-    configure_json = prepare_json_args_for_commands(
+    configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    pytest.command_result = subarray_node.store_configuration_data(
-        configure_json
-    )
+    pytest.command_result = subarray_node.execute_transition("Configure",
+                                        configure_input_json)
+
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
@@ -238,7 +238,7 @@ def check_dish_mode_and_pointing_state(
             central_node_mid.dish_master_dict[dish_id].pointingState,
         )
 
-    for dish_id in ["SKA063", "SKA100", "SKA001", "SKA036"]:
+    for dish_id in dish_ids.split(","):
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",

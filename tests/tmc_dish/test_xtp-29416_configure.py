@@ -165,17 +165,17 @@ def invoke_configure(
     A method to invoke Configure command
     """
 
-    central_node_mid.set_subarray_id(subarray_id)
+    
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
 
-    configure_json = prepare_json_args_for_commands(
+    configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    pytest.command_result = subarray_node.store_configuration_data(
-        configure_json
-    )
+    central_node_mid.set_subarray_id(subarray_id)
+    pytest.command_result = subarray_node.execute_transition("Configure",
+                                                        configure_input_json)
 
 
 @then(
