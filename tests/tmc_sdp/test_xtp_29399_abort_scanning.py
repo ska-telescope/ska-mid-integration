@@ -47,6 +47,11 @@ def subarray_is_in_scanning_obsstate(
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.subarray_devices["sdp_subarray"],
+        "State",
+        DevState.ON,
+    )
 
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
