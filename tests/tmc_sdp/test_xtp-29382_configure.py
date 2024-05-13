@@ -101,7 +101,7 @@ def invoke_configure(
     input_json["sdp"]["scan_type"] = scan_type
     central_node_mid.set_subarray_id(subarray_id)
     pytest.command_result = subarray_node.execute_transition(
-        "Configure", argin=input_json
+        "Configure", argin=json.dumps(input_json)
     )
 
 
