@@ -247,6 +247,7 @@ class SubarrayNodeWrapper(object):
         return result, message
 
     def store_scan_data(self, input_string):
+        self.subarray_node.set_timeout_millis(5000)
         result, message = self.subarray_node.Scan(input_string)
         LOGGER.info("Invoked Scan on SubarrayNode")
         return result, message
