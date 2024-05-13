@@ -15,7 +15,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
-@given("Telescope is in ON state")
+@given("a Telescope in ON state")
 def telescope_in_on_state(
     central_node_mid: CentralNodeWrapperMid, event_recorder: EventRecorder
 ):
