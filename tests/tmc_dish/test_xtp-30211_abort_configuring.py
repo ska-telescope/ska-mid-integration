@@ -1,5 +1,6 @@
 """Test TMC-DISH Abort functionality in Configuring obsState"""
 
+import logging
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -254,6 +255,23 @@ def check_dish_mode_and_pointing_state(
     Method to check dishMode and pointingState of DISH
     """
     for dish_id in dish_ids.split(","):
+        logging.info(
+            "dishmode of master is %s",
+            central_node_mid.dish_master_dict[dish_id].dishMode,
+        )
+        logging.info(
+            "dishmode of dln is %s",
+            central_node_mid.dish_leaf_node_dict[dish_id].dishMode,
+        )
+        logging.info(
+            "pointingstate of master is %s",
+            central_node_mid.dish_master_dict[dish_id].pointingState,
+        )
+        logging.info(
+            "pointingstate of dln is %s",
+            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
+        )
+
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
