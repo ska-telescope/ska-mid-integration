@@ -86,7 +86,7 @@ def invoke_configure_command(
     event_recorder: EventRecorder,
 ) -> None:
     """
-    Invokes Configure command and checks whether subarray is in obsState READY
+    Invokes Configure command and checks whether subarray is in obsState READY.
     """
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
