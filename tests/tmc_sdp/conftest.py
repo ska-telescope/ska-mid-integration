@@ -4,6 +4,7 @@ tests."""
 
 import json
 import logging
+import time
 
 from pytest_bdd import given, parsers, then, when
 from ska_control_model import ObsState
@@ -306,6 +307,7 @@ def execute_configure_scan_sequence(
 
     combined_dict = dict(zip(eval(scan_ids), eval(scan_types)))
     for scan_id, scan_type in combined_dict.items():
+        time.sleep(4)
         configure_json = update_scan_type(configure_json, scan_type)
         _, unique_id = subarray_node.execute_transition(
             "Configure", argin=configure_json

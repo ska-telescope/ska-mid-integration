@@ -1,3 +1,4 @@
+import time
 from typing import Any
 
 from tests.resources.test_harness.utils.common_utils import JsonFactory
@@ -37,6 +38,7 @@ class ReadyObsStateResetter(ObsStateResetter):
     def reset(self):
         self.device.clear_all_data()
         self.device.store_resources(self.assign_input)
+        time.sleep(4)
         self.device.store_configuration_data(self.configure_input)
 
 
@@ -88,6 +90,7 @@ class ConfiguringObsStateResetter(ObsStateResetter):
     def reset(self):
         self.device.clear_all_data()
         self.device.store_resources(self.assign_input)
+        time.sleep(4)
         self.device.execute_transition(
             command_name="Configure", argin=self.configure_input
         )
@@ -129,6 +132,7 @@ class ScanningObsStateResetter(ObsStateResetter):
     def reset(self):
         self.device.clear_all_data()
         self.device.store_resources(self.assign_input)
+        time.sleep(4)
         self.device.store_configuration_data(self.configure_input)
         self.device.store_scan_data(self.scan_input)
 

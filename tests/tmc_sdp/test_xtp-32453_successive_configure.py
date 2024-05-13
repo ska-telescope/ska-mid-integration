@@ -1,6 +1,7 @@
 """Test TMC-SDP Reconfigure functionality"""
 
 import json
+import time
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -98,6 +99,10 @@ def execute_initial_configure_command(
     configure_json = prepare_json_args_for_commands(
         input_json1, command_input_factory
     )
+
+    # Wait
+    time.sleep(4)
+
     # subarray_node.store_configuration_data(configure_json)
     subarray_node.execute_transition("Configure", argin=configure_json)
 
@@ -136,6 +141,7 @@ def execute_next_configure_command(
     configure_json = prepare_json_args_for_commands(
         input_json2, command_input_factory
     )
+    time.sleep(4)
     # subarray_node.store_configuration_data(configure_json)
     subarray_node.execute_transition("Configure", argin=configure_json)
 
