@@ -100,9 +100,6 @@ ska-sdp:
           memory: 500Mi
           cpu: 100m
           memory: 50Mi
-    config:
-      kafka:
-        overrideUrl: "ska-sdp-kafka:9092"
   ska-tango-base:
     enabled: false
 
