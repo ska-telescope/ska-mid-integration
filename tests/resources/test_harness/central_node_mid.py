@@ -417,6 +417,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         """
         input_json = json.loads(assign_json)
         generate_eb_pb_ids(input_json)
+        self.central_node.set_timeout_millis(5000)
         result, message = self.central_node.AssignResources(
             json.dumps(input_json)
         )
