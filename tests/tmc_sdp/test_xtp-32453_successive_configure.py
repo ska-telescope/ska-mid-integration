@@ -109,8 +109,8 @@ def execute_initial_configure_command(
     configure_json = prepare_json_args_for_commands(
         input_json1, command_input_factory
     )
-    pytest.command_result = subarray_node.store_configuration_data(
-        configure_json
+    pytest.command_result = subarray_node.execute_transition(
+        "Configure", argin=configure_json
     )
 
 
@@ -131,9 +131,7 @@ def check_subarray_in_ready(subarray_node, event_recorder):
         ObsState.READY,
     )
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "obsState",
-        ObsState.READY,
+        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=15
     )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
@@ -155,8 +153,8 @@ def execute_next_configure_command(
     configure_json = prepare_json_args_for_commands(
         input_json2, command_input_factory
     )
-    pytest.command_result = subarray_node.store_configuration_data(
-        configure_json
+    pytest.command_result = subarray_node.execute_transition(
+        "Configure", argin=configure_json
     )
 
     # TODO :: Issue is raised with SDP team , awating for
