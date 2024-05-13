@@ -9,6 +9,7 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
 )
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
+from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode
 
 
@@ -35,9 +36,7 @@ def test_tmc_dish_abort_in_idle():
         + " simulated CSP and simulated SDP"
     )
 )
-def given_a_telescope(
-    central_node_mid, simulator_factory, event_recorder, dish_ids
-):
+def given_a_telescope(central_node_mid, simulator_factory, dish_ids):
     """
     Given a TMC
     """
@@ -139,7 +138,7 @@ def subarray_is_in_idle_obsState(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-    central_node_mid.store_resources(assign_input_json)
+    pytest.command_result = central_node_mid.store_resources(assign_input_json)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
@@ -156,13 +155,22 @@ def subarray_is_in_idle_obsState(
         ObsState.IDLE,
     )
 
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+    )
+
 
 @when("I issue the Abort command to the TMC subarray")
 def abort_is_invoked(subarray_node):
     """
     This method invokes abort command on tmc subarray.
     """
-    subarray_node.abort_subarray()
+    pytest.command_result = subarray_node.abort_subarray()
 
 
 @then(
@@ -188,8 +196,16 @@ def tmc_subarray_is_in_aborted_obsState(subarray_node, event_recorder):
     """
     Method to check if TMC subarray is in ABORTED obsState
     """
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.ABORTED,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
