@@ -262,3 +262,6 @@ DEFAULT_DISH_VCC_CONFIG = {
         "instrument/ska1_mid_psi/" "ska-mid-cbf-system-parameters.json"
     ),
 }
+
+DISH_001_CALIBRATION_DATA = [1.1, 1.2, 1.3]
+DISH_036_CALIBRATION_DATA = [2.1, 2.2, 2.3]

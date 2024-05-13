@@ -1,11 +1,16 @@
 """Testing the Science Scan after a five point calibration scan"""
+import json
+
 import pytest
 from pytest_bdd import given, scenario, then, when
 from ska_control_model import ObsState
-from ska_tango_base.commands import ResultCode
 
+from tests.resources.test_harness.constant import (
+    DISH_001_CALIBRATION_DATA,
+    DISH_036_CALIBRATION_DATA,
+)
 from tests.resources.test_harness.helpers import (
-    check_lrcr_events,
+    check_long_running_command_status_events,
     check_subarray_obs_state,
     get_device_simulators,
     prepare_json_args_for_commands,
@@ -13,7 +18,6 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 
-@pytest.mark.skip(reason="Fails in READY transition")
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/science_scan_after_calibration_scan.feature",
@@ -116,15 +120,23 @@ def subarray_applies_calibration_solutions_to_dishes(
 ):
     """Then the Subarray fetches and applies the configuration solutions to the
     dishes."""
-    for dish_leaf_node in subarray_node.dish_leaf_node_list:
-        event_recorder.subscribe_event(
-            dish_leaf_node, "longRunningCommandResult"
+
+    for dish_master in subarray_node.dish_master_list[:2]:
+        event_recorder.subscribe_event(dish_master, "longRunningCommandStatus")
+
+    for dish_master in subarray_node.dish_master_list[:2]:
+        check_long_running_command_status_events(
+            event_recorder, dish_master, "TrackLoadStaticOff"
         )
 
-    for dish_leaf_node in subarray_node.dish_leaf_node_list:
-        check_lrcr_events(
-            event_recorder, dish_leaf_node, "TrackLoadStaticOff", ResultCode.OK
-        )
+    assert (
+        json.loads(subarray_node.dish_leaf_node_list[0].lastPointingData)
+        == DISH_001_CALIBRATION_DATA
+    )
+    assert (
+        json.loads(subarray_node.dish_leaf_node_list[1].lastPointingData)
+        == DISH_036_CALIBRATION_DATA
+    )
 
 
 @then("is in READY obsState")

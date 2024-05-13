@@ -2,15 +2,14 @@ import json
 import logging
 import os
 
-import msgpack
-import msgpack_numpy
 from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import HealthState
 from tango import DeviceProxy, DevState
 
 from tests.resources.test_harness.constant import (
-    POINTING_OFFSETS,
+    DISH_001_CALIBRATION_DATA,
+    DISH_036_CALIBRATION_DATA,
     centralnode,
     csp_master,
     csp_subarray1,
@@ -441,12 +440,11 @@ class SubarrayNodeWrapper(object):
         )
         sdp_sim.SetDirectreceiveAddresses(receive_addresses)
 
-        # Setting pointing offsets after encoding the data.
+        # Setting pointing calibration data
         sdp_qc = DeviceProxy(sdp_queue_connector)
-        encoded_data = msgpack.packb(
-            POINTING_OFFSETS, default=msgpack_numpy.encode
-        )
-        sdp_qc.SetDirectPointingOffsets(("msgpack_numpy", encoded_data))
+
+        sdp_qc.SetPointingCalSka001(DISH_001_CALIBRATION_DATA)
+        sdp_qc.SetPointingCalSka036(DISH_036_CALIBRATION_DATA)
 
     def execute_five_point_calibration_scan(
         self,

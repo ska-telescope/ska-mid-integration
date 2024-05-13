@@ -19,7 +19,7 @@
                 [744, "06-00-00-00-00-01"]
             ],
             "delay_cal": "mid-sdp/telstate/rcal0/delay",
-            "pointing_cal": "tango://mid-sdp/queueconnector/01/pointing_offsets"
+            "pointing_cal": "tango://mid-sdp/queueconnector/01/pointing_cal_{dish_id}"
         },
         "pss1": {
             "function": "pulsar search",
@@ -96,7 +96,7 @@
                 [0, 9000, 1]
             ],
             "delay_cal": "mid-sdp/telstate/rcal0/delay",
-            "pointing_cal": "tango://mid-sdp/queueconnector/01/pointing_offsets"
+            "pointing_cal": "tango://mid-sdp/queueconnector/01/pointing_cal_{dish_id}"
         },
         "pss1": {
             "function": "pulsar search",

@@ -404,15 +404,14 @@ def wait_for_attribute_update(
     return False
 
 
-def check_lrcr_events(
+def check_long_running_command_status_events(
     event_recorder,
     device,
     command_name: str,
-    result_code: ResultCode = ResultCode.OK,
     retries: int = 10,
 ):
     """Used to assert command name and result code in
-       longRunningCommandResult event callbacks.
+       longRunningCommandStatus event callbacks.
 
     Args:
         event_recorder (EventRecorder):fixture used to
@@ -426,11 +425,14 @@ def check_lrcr_events(
     COUNT = 0
     while COUNT <= retries:
         assertion_data = event_recorder.has_change_event_occurred(
-            device, "longRunningCommandResult", Anything, lookahead=1
+            device,
+            "longRunningCommandStatus",
+            (Anything, "COMPLETED"),
+            lookahead=10,
         )
         unique_id, result = assertion_data["attribute_value"]
         if unique_id.endswith(command_name):
-            if result == str(result_code.value):
+            if result == "COMPLETED":
                 LOGGER.debug("TRACKLOADSTATICOFF_UID: %s", unique_id)
                 break
         COUNT = COUNT + 1
