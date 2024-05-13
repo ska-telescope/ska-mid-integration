@@ -114,7 +114,6 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             DeviceProxy(dish_fqdn063),
             DeviceProxy(dish_fqdn100),
         ]
-
         self.dish_master_dict = {
             "SKA001": DeviceProxy(dish_fqdn001),
             "SKA036": DeviceProxy(dish_fqdn036),
@@ -127,6 +126,10 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             DeviceProxy(tmc_dish_leaf_node3),
             DeviceProxy(tmc_dish_leaf_node4),
         ]
+
+        # Increase the timeout for Dish Leaf Node devices
+        for dish_leaf_node in self.dish_leaf_node_list:
+            dish_leaf_node.set_timeout_millis(5000)
 
         # Create Dish1 admin device proxy
         self.dish1_admin_dev_name = self.dish_master_list[0].adm_name()
