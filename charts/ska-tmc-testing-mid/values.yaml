@@ -85,12 +85,19 @@ ska-sdp:
   data-pvc:
     create:
       enabled: true
-      size: 20Gi
+      size: 500Mi
       storageClassName: nfss1
   ska-sdp-qa:
     enabled: true
     kafka:
       enabled: false
+      resources:
+        limits:
+          cpu: 200m
+          memory: 100Mi
+        requests:
+          cpu: 100m
+          memory: 50Mi
     config:
       kafka:
         overrideUrl: "ska-sdp-kafka:9092"
