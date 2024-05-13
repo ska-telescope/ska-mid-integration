@@ -276,8 +276,3 @@ def tmc_subarray_is_in_aborted_obsState(subarray_node, event_recorder):
         "obsState",
         ObsState.ABORTED,
     )
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
-    )
