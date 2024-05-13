@@ -1,6 +1,5 @@
 """Test TMC-SDP Abort functionality in RESOURCING obsState"""
 import json
-import time
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -74,8 +73,6 @@ def invoke_abort(subarray_node):
     """
     This method invokes abort command on tmc subarray.
     """
-
-    time.sleep(0.5)
     subarray_node.abort_subarray()
 
 
