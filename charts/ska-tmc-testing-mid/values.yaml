@@ -63,6 +63,13 @@ tmc-mid:
   labels:
     app: ska-tmc-integration
   enabled: true
+  resources:
+    requests:
+      cpu: 200m # 0.5 CPU
+      memory: 500Mi # 1 GB mem
+    limits:
+      cpu: 500m # 1 CPU
+      memory: 1024Mi
   cspsubarrayleafnode:
     DelayCadence: 10
     DelayValidityPeriod: 20
@@ -85,12 +92,18 @@ ska-sdp:
   data-pvc:
     create:
       enabled: true
-      size: 20Gi
+      size: 5Gi
       storageClassName: nfss1
   ska-sdp-qa:
     enabled: true
     kafka:
-      enabled: false
+      resources:
+        limits:
+          cpu: 200m
+          memory: 100Mi
+        requests:
+          cpu: 100m
+          memory: 50Mi
     config:
       kafka:
         overrideUrl: "ska-sdp-kafka:9092"
