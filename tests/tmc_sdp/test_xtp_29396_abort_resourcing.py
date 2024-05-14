@@ -39,10 +39,19 @@ def telescope_is_in_resourcing_obsstate(
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
+    event_recorder.subscribe_event(
+        central_node_mid.subarray_devices["sdp_subarray"], "State"
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.sdp_master,
+        "State",
+        DevState.ON,
+    )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
         DevState.ON,
+        lookahead=15,
     )
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
