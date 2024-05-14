@@ -8,7 +8,6 @@ from typing import Optional, Tuple
 from ska_ser_logging import configure_logging
 from tango import DeviceProxy, DevState
 
-from tests.resources.test_harness.utils.enums import DishMode
 from tests.resources.test_support.common_utils.common_helpers import Resource
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.common_utils.sync_decorators import (
@@ -114,14 +113,11 @@ class TmcHelper:
                 device_proxy = DeviceProxy(device)
                 device_proxy.SetDirectState(DevState.ON)
 
-        # If Dish master list provided then set it to standby
-        dish_master_list = kwargs.get("dish_master_list", [])
-        dish_mode = (
-            DishMode.STANDBY_FP
-        )  # Define dish mode, assuming you have it somewhere
-        for device in dish_master_list:
-            device_proxy = DeviceProxy(device)
-            device_proxy.SetDirectDishMode(dish_mode)
+        # If Dish master provided then set it to standby
+        # dish_master = kwargs.get("dish_master")
+        # if dish_master:
+        #     device_proxy = DeviceProxy(dish_master)
+        #     device_proxy.SetDirectState(DevState.STANDBY)
 
     @sync_set_to_off
     def set_to_off(self, **kwargs: dict) -> None:
@@ -144,13 +140,6 @@ class TmcHelper:
             f"After invoking TelescopeOff command {central_node} State is:\
             {central_node.State()}"
         )
-        dish_master_list = kwargs.get("dish_master_list", [])
-        dish_mode = (
-            DishMode.STANDBY_LP
-        )  # Define dish mode, assuming you have it somewhere
-        for device in dish_master_list:
-            device_proxy = DeviceProxy(device)
-            device_proxy.SetDirectDishMode(dish_mode)
 
     @sync_set_to_standby
     def set_to_standby(self, **kwargs: dict) -> None:
@@ -170,13 +159,7 @@ class TmcHelper:
             device_proxy.SetDirectState(DevState.OFF)
             # TODO: move this to proper place
             device_proxy.ClearCommandCallInfo()
-        dish_master_list = kwargs.get("dish_master_list", [])
-        dish_mode = (
-            DishMode.STANDBY_LP
-        )  # Define dish mode, assuming you have it somewhere
-        for device in dish_master_list:
-            device_proxy = DeviceProxy(device)
-            device_proxy.SetDirectDishMode(dish_mode)
+
         LOGGER.info(
             f"After invoking TelescopeStandBy command {central_node} State is:\
             {central_node.State()}"
