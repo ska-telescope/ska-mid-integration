@@ -8,12 +8,6 @@ from typing import Optional, Tuple
 from ska_ser_logging import configure_logging
 from tango import DeviceProxy, DevState
 
-from tests.resources.test_harness.constant import (
-    dish_master1,
-    dish_master2,
-    dish_master3,
-    dish_master4,
-)
 from tests.resources.test_harness.utils.enums import DishMode
 from tests.resources.test_support.common_utils.common_helpers import Resource
 from tests.resources.test_support.common_utils.result_code import ResultCode
