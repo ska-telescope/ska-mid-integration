@@ -88,6 +88,7 @@ class SubarrayNodeWrapper(object):
         super().__init__()
         self.tmc_subarraynode1 = tmc_subarraynode1
         self.subarray_node = DeviceProxy(self.tmc_subarraynode1)
+        self.subarray_node.set_timeout_millis(5000)
         self.csp_subarray_leaf_node = DeviceProxy(tmc_csp_subarray_leaf_node)
         self.sdp_subarray_leaf_node = DeviceProxy(tmc_sdp_subarray_leaf_node)
         self.dish_leaf_node_list = [
