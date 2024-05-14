@@ -127,6 +127,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             DeviceProxy(tmc_dish_leaf_node4),
         ]
 
+        self.central_node.set_timeout_millis(5000)
         # Increase the timeout for Dish Leaf Node devices
         for dish_leaf_node in self.dish_leaf_node_list:
             dish_leaf_node.set_timeout_millis(5000)
@@ -283,7 +284,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         LOGGER.info(f"Received simulated devices: {SIMULATED_DEVICES_DICT}")
         if SIMULATED_DEVICES_DICT["all_mocks"]:
             LOGGER.info("Invoking TelescopeOn() with all Mocks")
-            self.central_node.set_timeout_millis(5000)
+            # self.central_node.set_timeout_millis(5000)
             self.central_node.TelescopeOn()
             self.set_subarraystate_and_dishmode_with_all_mocks(
                 DevState.ON, DishMode.STANDBY_FP
@@ -418,7 +419,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         """
         input_json = json.loads(assign_json)
         generate_eb_pb_ids(input_json)
-        self.central_node.set_timeout_millis(5000)
+        # self.central_node.set_timeout_millis(5000)
         result, message = self.central_node.AssignResources(
             json.dumps(input_json)
         )
