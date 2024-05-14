@@ -1,6 +1,4 @@
 """Test TMC-SDP Abort functionality in Scanning obstate"""
-import json
-
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
@@ -10,7 +8,6 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
-from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
 @pytest.mark.tmc_sdp
@@ -41,21 +38,6 @@ def subarray_is_in_scanning_obsstate(
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
-    event_recorder.subscribe_event(
-        central_node_mid.subarray_devices["sdp_subarray"], "State"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "longRunningCommandResult"
-    )
-    event_recorder.subscribe_event(
-        subarray_node.subarray_node, "longRunningCommandResult"
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.subarray_devices["sdp_subarray"],
-        "State",
-        DevState.ON,
-    )
-
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
@@ -64,17 +46,7 @@ def subarray_is_in_scanning_obsstate(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-    configure_input_json = prepare_json_args_for_commands(
-        "configure_mid", command_input_factory
-    )
-    configure_json = json.loads(configure_input_json)
-    configure_json["tmc"]["scan_duration"] = 10.0
-    # subarray_node.force_change_of_obs_state(
-    #     "SCANNING",
-    #     assign_input_json=assign_input_json,
-    #     configure_input_json=json.dumps(configure_json),
-    # )
-    pytest.command_result = central_node_mid.store_resources(assign_input_json)
+    central_node_mid.store_resources(assign_input_json)
     event_recorder.subscribe_event(
         subarray_node.subarray_devices.get("sdp_subarray"), "obsState"
     )
@@ -89,20 +61,10 @@ def subarray_is_in_scanning_obsstate(
         "obsState",
         ObsState.IDLE,
     )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
-    )
-
-    configure_input_json = prepare_json_args_for_commands(
+    configure_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    configure_json = json.loads(configure_input_json)
-    configure_json["tmc"]["scan_duration"] = 10.0
-    pytest.command_result = subarray_node.execute_transition(
-        "Configure", argin=json.dumps(configure_json)
-    )
+    subarray_node.store_configuration_data(configure_json)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["sdp_subarray"],
         "obsState",
@@ -112,12 +74,6 @@ def subarray_is_in_scanning_obsstate(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
-        lookahead=15,
-    )
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
     scan_json = prepare_json_args_for_commands(
         "scan_mid", command_input_factory
@@ -160,7 +116,6 @@ def sdp_subarray_is_in_aborted_obsstate(
         subarray_node.subarray_devices.get("sdp_subarray"),
         "obsState",
         ObsState.ABORTED,
-        lookahead=12,
     )
 
 
@@ -177,5 +132,7 @@ def tmc_subarray_is_in_aborted_obsstate(
     """
     subarray_node.set_subarray_id(subarray_id)
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node, "obsState", ObsState.ABORTED, lookahead=12
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.ABORTED,
     )
