@@ -28,6 +28,7 @@ telescope_control = BaseTelescopeControl()
 tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 
 
+@pytest.mark.skip(reason="Removed in SAH-1537")
 @pytest.mark.SKA_mid
 def test_assign_invalid_json(json_factory):
     """Test assign resources command with
@@ -80,6 +81,7 @@ def test_assign_invalid_json(json_factory):
         tear_down(**ON_OFF_DEVICE_COMMAND_DICT)
 
 
+@pytest.mark.skip(reason="Removed in SAH-1537")
 @pytest.mark.SKA_mid
 def test_release_invalid_json(json_factory):
     """Test release with invalid json"""
@@ -140,6 +142,7 @@ def test_release_invalid_json(json_factory):
         tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
 
 
+@pytest.mark.skip(reason="Removed in SAH-1537")
 @pytest.mark.SKA_mid
 def test_invalid_receptor_ids(json_factory):
     """AssignResources and ReleaseResources is executed."""

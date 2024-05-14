@@ -24,6 +24,7 @@ tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 telescope_control = BaseTelescopeControl()
 
 
+@pytest.mark.skip(reason="Removed in SAH-1537")
 @pytest.mark.SKA_mid
 def test_configure_not_allowed_in_empty(json_factory):
     """Test case for configure not allowed in empty"""

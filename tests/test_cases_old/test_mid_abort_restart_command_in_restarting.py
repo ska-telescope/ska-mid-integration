@@ -29,6 +29,7 @@ from tests.resources.test_support.constant import (
 )
 
 
+@pytest.mark.skip(reason="Removed in SAH-1537")
 @pytest.mark.SKA_mid
 def test_mid_abort_restart_in_restarting(json_factory):
     """Abort and Restart is executed."""
