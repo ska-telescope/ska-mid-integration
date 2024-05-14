@@ -1,3 +1,7 @@
+# .readthedocs.yaml
+# Read the Docs configuration file.
+# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+
 version: 2
 
 build:
@@ -12,7 +16,6 @@ build:
       # Install poetry
       # https://python-poetry.org/docs/#installing-manually
       - pip install poetry
-
     post_install:
       # Install dependencies with 'docs' dependency group. If you do not have docs group, please omit it
       # https://python-poetry.org/docs/managing-dependencies/#dependency-groups

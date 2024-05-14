@@ -7,6 +7,11 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+[0.19.1]
+************
+* Intermediate chart with TMC updates to work with dish-lmc chart 3.0.0
+* Fixed issues in the tests
+
 [0.19.0]
 ************
 * Aligned delay model json as per ADR-88
