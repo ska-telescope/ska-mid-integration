@@ -24,6 +24,8 @@ from tests.resources.test_harness.constant import (
     tmc_csp_subarray_leaf_node,
     tmc_dish_leaf_node1,
     tmc_dish_leaf_node2,
+    tmc_dish_leaf_node3,
+    tmc_dish_leaf_node4,
     tmc_sdp_subarray_leaf_node,
     tmc_subarraynode1,
 )
@@ -93,6 +95,8 @@ class SubarrayNodeWrapper(object):
         self.dish_leaf_node_list = [
             DeviceProxy(tmc_dish_leaf_node1),
             DeviceProxy(tmc_dish_leaf_node2),
+            DeviceProxy(tmc_dish_leaf_node3),
+            DeviceProxy(tmc_dish_leaf_node4),
         ]
         if (
             SIMULATED_DEVICES_DICT["csp_and_sdp"]
@@ -230,6 +234,8 @@ class SubarrayNodeWrapper(object):
             (result, message): result, message tuple
         """
         self.subarray_node.set_timeout_millis(5000)
+        for dish_leaf_node in self.dish_leaf_node_list:
+            dish_leaf_node.set_timeout_millis(5000)
         result, message = self.subarray_node.Configure(input_string)
         LOGGER.info("Invoked Configure on SubarrayNode")
         return result, message
@@ -290,6 +296,8 @@ class SubarrayNodeWrapper(object):
             command_name (str): Name of command to execute
         """
         self.subarray_node.set_timeout_millis(5000)
+        for dish_leaf_node in self.dish_leaf_node_list:
+            dish_leaf_node.set_timeout_millis(5000)
         if command_name is not None:
             result, message = self.subarray_node.command_inout(
                 command_name, argin
