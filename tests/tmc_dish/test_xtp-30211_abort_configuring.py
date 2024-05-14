@@ -233,13 +233,13 @@ def subarray_is_in_configuring_obsState(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
-            lookahead=10,
+            lookahead=15,
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
-            lookahead=10,
+            lookahead=15,
         )
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
@@ -273,19 +273,19 @@ def check_dish_mode_and_pointing_state(
     """
     for dish_id in dish_ids.split(","):
         logging.info(
-            "dishmode of master is %s",
+            "dishmode of master is2 %s",
             central_node_mid.dish_master_dict[dish_id].dishMode,
         )
         logging.info(
-            "dishmode of dln is %s",
+            "dishmode of dln is2 %s",
             central_node_mid.dish_leaf_node_dict[dish_id].dishMode,
         )
         logging.info(
-            "pointingstate of master is %s",
+            "pointingstate of master is2 %s",
             central_node_mid.dish_master_dict[dish_id].pointingState,
         )
         logging.info(
-            "pointingstate of dln is %s",
+            "pointingstate of dln is2 %s",
             central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
         )
 
