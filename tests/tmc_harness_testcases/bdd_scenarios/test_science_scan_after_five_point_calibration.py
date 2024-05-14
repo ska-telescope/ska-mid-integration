@@ -14,6 +14,7 @@ from tests.resources.test_harness.helpers import (
     check_subarray_obs_state,
     get_device_simulators,
     prepare_json_args_for_commands,
+    wait_and_validate_device_attribute_value,
 )
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
@@ -34,6 +35,8 @@ def test_science_scan_after_five_point_calibration_scan():
 def given_tmc(subarray_node, event_recorder):
     """Given a TMC"""
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
+    for dish_master in subarray_node.dish_master_list[:2]:
+        event_recorder.subscribe_event(dish_master, "longRunningCommandStatus")
     subarray_node.move_to_on()
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
@@ -122,20 +125,23 @@ def subarray_applies_calibration_solutions_to_dishes(
     dishes."""
 
     for dish_master in subarray_node.dish_master_list[:2]:
-        event_recorder.subscribe_event(dish_master, "longRunningCommandStatus")
-
-    for dish_master in subarray_node.dish_master_list[:2]:
         check_long_running_command_status_events(
             event_recorder, dish_master, "TrackLoadStaticOff"
         )
 
-    assert (
-        json.loads(subarray_node.dish_leaf_node_list[0].lastPointingData)
-        == DISH_001_CALIBRATION_DATA
+    assert wait_and_validate_device_attribute_value(
+        subarray_node.dish_leaf_node_list[0],
+        "lastPointingData",
+        json.dumps(DISH_001_CALIBRATION_DATA),
+        is_json=True,
+        timeout=1,
     )
-    assert (
-        json.loads(subarray_node.dish_leaf_node_list[1].lastPointingData)
-        == DISH_036_CALIBRATION_DATA
+    assert wait_and_validate_device_attribute_value(
+        subarray_node.dish_leaf_node_list[1],
+        "lastPointingData",
+        json.dumps(DISH_036_CALIBRATION_DATA),
+        is_json=True,
+        timeout=1,
     )
 
 

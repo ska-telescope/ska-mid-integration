@@ -428,7 +428,7 @@ def check_long_running_command_status_events(
             device,
             "longRunningCommandStatus",
             (Anything, "COMPLETED"),
-            lookahead=10,
+            lookahead=15,
         )
         unique_id, result = assertion_data["attribute_value"]
         if unique_id.endswith(command_name):
