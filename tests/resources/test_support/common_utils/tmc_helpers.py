@@ -8,7 +8,6 @@ from typing import Optional, Tuple
 from ska_ser_logging import configure_logging
 from tango import DeviceProxy, DevState
 
-from tests.resources.test_harness.utils.enums import DishMode
 from tests.resources.test_support.common_utils.common_helpers import Resource
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.common_utils.sync_decorators import (
@@ -113,16 +112,7 @@ class TmcHelper:
             if device:
                 device_proxy = DeviceProxy(device)
                 device_proxy.SetDirectState(DevState.ON)
-        device_to_standby = [
-            kwargs.get("dish_master1"),
-            kwargs.get("dish_master2"),
-            kwargs.get("dish_master3"),
-            kwargs.get("dish_master4"),
-        ]
-        if device_to_standby:
-            for device in device_to_standby:
-                dish_device_proxy = DeviceProxy(device)
-                dish_device_proxy.SetDirectDishMode(DishMode.STANDBY_FP)
+
         # If Dish master provided then set it to standby
         # dish_master = kwargs.get("dish_master")
         # if dish_master:
@@ -145,16 +135,7 @@ class TmcHelper:
         for device in device_to_off_list:
             device_proxy = DeviceProxy(device)
             device_proxy.SetDirectState(DevState.OFF)
-        device_to_standby = [
-            kwargs.get("dish_master1"),
-            kwargs.get("dish_master2"),
-            kwargs.get("dish_master3"),
-            kwargs.get("dish_master4"),
-        ]
-        if device_to_standby:
-            for device in device_to_standby:
-                dish_device_proxy = DeviceProxy(device)
-                dish_device_proxy.SetDirectDishMode(DishMode.STANDBY_LP)
+
         LOGGER.info(
             f"After invoking TelescopeOff command {central_node} State is:\
             {central_node.State()}"
@@ -178,16 +159,6 @@ class TmcHelper:
             device_proxy.SetDirectState(DevState.OFF)
             # TODO: move this to proper place
             device_proxy.ClearCommandCallInfo()
-        device_to_standby = [
-            kwargs.get("dish_master1"),
-            kwargs.get("dish_master2"),
-            kwargs.get("dish_master3"),
-            kwargs.get("dish_master4"),
-        ]
-        if device_to_standby:
-            for device in device_to_standby:
-                dish_device_proxy = DeviceProxy(device)
-                dish_device_proxy.SetDirectDishMode(DishMode.STANDBY_LP)
 
         LOGGER.info(
             f"After invoking TelescopeStandBy command {central_node} State is:\
