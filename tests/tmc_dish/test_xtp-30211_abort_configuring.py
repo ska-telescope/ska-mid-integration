@@ -200,6 +200,23 @@ def subarray_is_in_configuring_obsState(
     )
 
     for dish_id in dish_ids.split(","):
+        logging.info(
+            "dishmode of master is %s ",
+            central_node_mid.dish_master_dict[dish_id].dishMode,
+        )
+        logging.info(
+            "dishmode of dln is %s",
+            central_node_mid.dish_leaf_node_dict[dish_id].dishMode,
+        )
+        logging.info(
+            "pointingstate of master is %s",
+            central_node_mid.dish_master_dict[dish_id].pointingState,
+        )
+        logging.info(
+            "pointingstate of dln is %s",
+            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
+        )
+
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
@@ -299,6 +316,16 @@ def tmc_subarray_is_in_aborted_obsState(subarray_node, event_recorder):
     """
     Method to check if TMC subarray is in ABORTED obsstate
     """
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices["sdp_subarray"],
+        "obsState",
+        ObsState.ABORTED,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices["csp_subarray"],
+        "obsState",
+        ObsState.ABORTED,
+    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",

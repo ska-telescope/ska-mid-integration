@@ -196,6 +196,18 @@ def subarray_is_in_ready_obsState(
     for dish_id in dish_ids.split(","):
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.OPERATE,
+            lookahead=10,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "dishMode",
+            DishMode.OPERATE,
+            lookahead=10,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
             lookahead=10,
@@ -237,17 +249,13 @@ def check_dish_mode_and_pointing_state(
     Method to check dishMode and pointingState of DISH
     """
     for dish_id in dish_ids.split(","):
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "dishMode",
-            DishMode.OPERATE,
-            lookahead=10,
+        assert (
+            central_node_mid.dish_master_dict[dish_id].dishMode
+            == DishMode.OPERATE
         )
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_leaf_node_dict[dish_id],
-            "dishMode",
-            DishMode.OPERATE,
-            lookahead=10,
+        assert (
+            central_node_mid.dish_leaf_node_dict[dish_id].dishMode
+            == DishMode.OPERATE
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
@@ -270,7 +278,16 @@ def tmc_subarray_is_in_aborted_obsState(
     """
     Method to check if TMC subarray is in ABORTED obsstate
     """
-
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices["sdp_subarray"],
+        "obsState",
+        ObsState.ABORTED,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices["csp_subarray"],
+        "obsState",
+        ObsState.ABORTED,
+    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",

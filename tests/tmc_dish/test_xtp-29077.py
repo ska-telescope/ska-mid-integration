@@ -98,6 +98,10 @@ def move_telescope_to_on_state(central_node_mid, event_recorder):
         event_recorder.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
         )
+
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "telescopeState"
+    )
     # invoking TelescopeOn command
     central_node_mid.move_to_on()
 
@@ -112,10 +116,6 @@ def move_telescope_to_on_state(central_node_mid, event_recorder):
             "dishMode",
             DishMode.STANDBY_FP,
         )
-
-    # Wait for the DishLeafNode to get StandbyFP event form DishMaster before
-    # invoking TelescopeOn command
-    time.sleep(1)
 
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
