@@ -81,55 +81,52 @@ def check_subarray_is_configured(
     )
 
     # execute set of commands and bring SubarrayNode to READY obsState
-    subarray_node.force_change_of_obs_state(
-        "READY",
-        assign_input_json=assign_input_json,
-        configure_input_json=configure_input_json,
+    # subarray_node.force_change_of_obs_state(
+    #     "READY",
+    #     assign_input_json=assign_input_json,
+    #     configure_input_json=configure_input_json,
+    # )
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
     )
-    # event_recorder.subscribe_event(
-    #     central_node_mid.central_node, "longRunningCommandResult"
-    # )
-    # event_recorder.subscribe_event(
-    #     subarray_node.subarray_node, "longRunningCommandResult"
-    # )
-    # pytest.command_result = central_node_mid.
-    # store_resources(assign_input_json)
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
+    pytest.command_result = central_node_mid.store_resources(assign_input_json)
 
-    # assert event_recorder.has_change_event_occurred(
-    #     subarray_node.subarray_devices.get("sdp_subarray"),
-    #     "obsState",
-    #     ObsState.IDLE,
-    # )
-    # assert event_recorder.has_change_event_occurred(
-    #     subarray_node.subarray_node,
-    #     "obsState",
-    #     ObsState.IDLE,
-    # )
-    # assert event_recorder.has_change_event_occurred(
-    #     central_node_mid.central_node,
-    #     "longRunningCommandResult",
-    #     (pytest.command_result[1][0], str(ResultCode.OK.value)),
-    # )
-    # configure_json = json.loads(configure_input_json)
-    # configure_json["tmc"]["scan_duration"] = 10.0
-    # pytest.command_result = subarray_node.store_configuration_data(
-    #     json.dumps(configure_json)
-    # )
-    # assert event_recorder.has_change_event_occurred(
-    #     subarray_node.subarray_devices["sdp_subarray"],
-    #     "obsState",
-    #     ObsState.READY,
-    # )
-    # assert event_recorder.has_change_event_occurred(
-    #     subarray_node.subarray_node,
-    #     "obsState",
-    #     ObsState.READY,
-    # )
-    # assert event_recorder.has_change_event_occurred(
-    #     subarray_node.subarray_node,
-    #     "longRunningCommandResult",
-    #     (pytest.command_result[1][0], str(ResultCode.OK.value)),
-    # )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices.get("sdp_subarray"),
+        "obsState",
+        ObsState.IDLE,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.IDLE,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+    )
+    configure_json = json.loads(configure_input_json)
+    configure_json["tmc"]["scan_duration"] = 10.0
+    pytest.command_result = subarray_node.execute_transition(
+        "Configure", argin=json.dumps(configure_json)
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices["sdp_subarray"],
+        "obsState",
+        ObsState.READY,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=15
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+    )
 
 
 @when(
