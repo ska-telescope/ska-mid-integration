@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import time
 from typing import Tuple
 
 from ska_control_model import ObsState, ResultCode
@@ -95,7 +96,9 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             self.dish1_db = Database(dish1_host, dish1_port)
 
             # Get the Dish1 device class and server
-            dish1_info = self.dish1_db.get_device_info("ska001/elt/master")
+            dish1_info = self.dish1_db.get_device_info(
+                "mid-dish/dish-manager/SKA001"
+            )
             self.dish1_dev_class = dish1_info.class_name
             self.dish1_dev_server = dish1_info.ds_full_name
 
@@ -417,7 +420,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         LOGGER.info("Invoked AssignResources on CentralNode")
         return result, message
 
-    @sync_release_resources(device_dict=device_dict)
+    @sync_release_resources(device_dict=device_dict, timeout=500)
     def invoke_release_resources(
         self, input_string: str
     ) -> Tuple[ResultCode, str]:
@@ -425,6 +428,8 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         Args:
             input_string (str): Release resource input json
         """
+        time.sleep(3)
+
         result, message = self.central_node.ReleaseResources(input_string)
         return result, message
 

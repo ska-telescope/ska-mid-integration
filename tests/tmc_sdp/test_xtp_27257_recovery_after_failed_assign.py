@@ -1,7 +1,7 @@
 """Test TMC-SDP Recovery after failed Assign functionality"""
 import pytest
 from pytest_bdd import given, scenario, then, when
-from ska_control_model import ObsState
+from ska_control_model import ObsState, ResultCode
 from tango import DevState
 
 from tests.resources.test_harness.helpers import (
@@ -9,6 +9,7 @@ from tests.resources.test_harness.helpers import (
 )
 
 
+@pytest.mark.skip(reason="Duplicate scenario")
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp_27257_recovery_after_failed_assign.feature",
@@ -25,6 +26,9 @@ def telescope_with_resources_assigned(
     central_node_mid, event_recorder, command_input_factory
 ):
     """A telescope with resouces assigned, and released from it."""
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
     central_node_mid.set_subarray_id(1)
     central_node_mid.move_to_on()
 
@@ -41,7 +45,7 @@ def telescope_with_resources_assigned(
         "assign_resources_mid", command_input_factory
     )
 
-    central_node_mid.store_resources(assign_input_json)
+    _, unique_id = central_node_mid.store_resources(assign_input_json)
 
     event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
     assert event_recorder.has_change_event_occurred(
@@ -49,15 +53,27 @@ def telescope_with_resources_assigned(
         "obsState",
         ObsState.IDLE,
     )
+    event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (unique_id[0], str(ResultCode.OK.value)),
+    )
 
     release_input_json = prepare_json_args_for_centralnode_commands(
         "release_resources_mid", command_input_factory
     )
-    central_node_mid.invoke_release_resources(release_input_json)
+    _, unique_id = central_node_mid.invoke_release_resources(
+        release_input_json
+    )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_node,
         "obsState",
         ObsState.EMPTY,
+    )
+    event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (unique_id[0], str(ResultCode.OK.value)),
     )
 
 

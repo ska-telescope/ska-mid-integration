@@ -13,8 +13,8 @@ server:
   {{- $sdp_sa_fqdn_prefix:= .Values.global.sdp_subarray_prefix}}
   {{- $isSimulatedDish := .Values.deviceServers.mocks.dish }}
   {{- $real_dish_name := .Values.global.namespace_dish.dish_names }}
-  {{- $DishMasterPrefix := .Values.deviceServers.subarraynode.DishMasterPrefix }}
-  {{- $DishMasterPostfix := .Values.deviceServers.subarraynode.DishMasterPostfix }}
+  {{- $RealDishMasterIdentifier := .Values.deviceServers.subarraynode.RealDishMasterIdentifier }}
+  {{- $SimulatorDishMasterIdentifier := .Values.deviceServers.subarraynode.SimulatorDishMasterIdentifier }}
   {{- $dish_id := .Values.deviceServers.subarraynode.DishIDs }}
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
   {{- range  ( regexSplit " " ((.Values.subarray_count | int) | seq ) -1 ) }}
@@ -27,12 +27,13 @@ server:
           - name: "DishLeafNodePrefix"
             values:
             - "ska_mid/tm_leaf_node/d0"
-          - name: "DishMasterPrefix"
+          - name: "DishMasterIdentifier"
             values:
-            - "{{ $DishMasterPrefix }}"
-          - name: "DishMasterPostfix"
-            values:
-            - "{{ $DishMasterPostfix }}"
+            {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
+            - "{{ $SimulatorDishMasterIdentifier }}"
+            {{- else }}
+            - "{{ $RealDishMasterIdentifier }}" # Real dish
+            {{- end }}
           - name: "CspSubarrayLNFQDN"
             values:
             - "{{ $csp_sa_ln_fqdn_prefix}}{{ printf "%02s" . }}"
@@ -54,7 +55,7 @@ server:
             values:
             {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
             {{- range  $dish_id }}
-            - "{{ . | lower }}/{{ $DishMasterPrefix }}/{{ $DishMasterPostfix }}"
+            - "{{ . | lower }}/{{ $SimulatorDishMasterIdentifier }}"
             {{- end }}
             {{- else }}
             {{- range  $real_dish_name }}
@@ -72,9 +73,7 @@ server:
               - "5"
           - name: "CommandTimeOut"
             values:
-              {{- if or (eq $mocks_enabled false) (eq $isSimulatedDish false) }}
               - "60"
-              {{- end }}
           - name: "AbortCommandTimeout"
             values:
               - "100"

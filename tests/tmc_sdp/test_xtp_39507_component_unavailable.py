@@ -5,7 +5,7 @@ import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from ska_tango_testing.mock.placeholders import Anything
-from tango import DeviceProxy, DevState
+from tango import DevState
 
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
@@ -68,12 +68,10 @@ def subarray_is_in_empty_obsstate(
 
 
 @when("one of the SDP's component subsystem is made unavailable")
-def RestartDevice():
+def sdp_proc_controller_unavailable():
     """
-    This Method Restart the Device server of SDP component
+    Proc control is made unavailable in gitlab script
     """
-    sdp_lmc_controller_fqdn = DeviceProxy("dserver/mocks/01")
-    sdp_lmc_controller_fqdn.RestartServer()
 
 
 @when(parsers.parse("I assign resources to the subarray {subarray_id}"))
@@ -89,50 +87,48 @@ def tmc_assign_resources_invoke(
     )
 
     input_json = update_eb_pb_ids(input_json)
-    pytest.result, pytest.unique_id = central_node_low.store_resources(
-        input_json
+    pytest.result, pytest.unique_id = central_node_low.perform_action(
+        "AssignResources", input_json
     )
 
 
 @then("SDP subarray report the unavailability of SDP Component")
-def sdp_subarray_reports_unavailability(central_node_low, event_recorder):
+def sdp_subarray_reports_unavailability(event_recorder, central_node_low):
     """
     Method to verify SDP subarray reports unavailability to TMC.
     """
-    exception_message = (
-        "Error in invoking AssignResources on SDP Subarray Node"
-    )
     event_recorder.subscribe_event(
-        central_node_low.subarray_devices["sdp_subarray"],
+        central_node_low.central_node,
         "longRunningCommandResult",
     )
-    assertion_data = event_recorder.has_change_event_occurred(
-        central_node_low.subarray_devices["sdp_subarray"],
-        "longRunningCommandResult",
-        (pytest.unique_id[0], Anything),
+    exception_message = (
+        " The processing controller, helm deployer, or both are OFFLINE:"
+        + " cannot start processing blocks.\n"
     )
-    assert "AssignResources" in assertion_data["attribute_value"][0]
-    assert exception_message in assertion_data["attribute_value"][1]
+    pytest.assertion_data = event_recorder.has_change_event_occurred(
+        central_node_low.central_node,
+        attribute_name="longRunningCommandResult",
+        attribute_value=(pytest.unique_id[0], Anything),
+    )
+    assert "AssignResources" in pytest.assertion_data["attribute_value"][0]
+    assert exception_message in pytest.assertion_data["attribute_value"][1]
 
 
 @then("TMC should report the error to client")
-def tmc_reports_unavailability_to_client(central_node_low, event_recorder):
+def tmc_reports_unavailability_to_client():
     """
     Method to verify TMC subarray reports unavailability to client.
     """
     exception_message = (
-        "Error in invoking AssignResources on SDP Subarray Node"
+        "Exception occurred on the following devices:"
+        + " ska_low/tm_subarray_node/1: Exception occurred on the"
+        + " following devices: ska_low/tm_leaf_node/sdp_subarray01:"
+        + " The processing controller, helm deployer, or both are OFFLINE:"
+        + " cannot start processing blocks.\n"
     )
-    event_recorder.subscribe_event(
-        central_node_low.central_node, "longRunningCommandResult"
-    )
-    assertion_data = event_recorder.has_change_event_occurred(
-        central_node_low.subarray_node,
-        "longRunningCommandResult",
-        (pytest.unique_id[0], Anything),
-    )
-    assert "AssignResources" in assertion_data["attribute_value"][0]
-    assert exception_message in assertion_data["attribute_value"][1]
+
+    assert "AssignResources" in pytest.assertion_data["attribute_value"][0]
+    assert exception_message in pytest.assertion_data["attribute_value"][1]
 
 
 @then(parsers.parse("the TMC SubarrayNode {subarray_id} stuck in RESOURCING"))

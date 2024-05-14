@@ -12,6 +12,9 @@ from tests.resources.test_harness.helpers import (
 )
 
 
+@pytest.mark.skip(
+    reason="SKB-309: SDP Sub-system doesn't allow transitional obsStates"
+)
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp_29398_abort_configuring.feature",

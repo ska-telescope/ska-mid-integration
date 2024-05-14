@@ -91,7 +91,7 @@ def test_assign_release_timeout_csp(json_factory, change_event_callbacks):
         assert "AssignResources" in assertion_data["attribute_value"][0]
         exception_message = (
             f"Exception occurred on device: {tmc_subarraynode1}: "
-            + "Exception occurred on the following devices:\n"
+            + "Exception occurred on the following devices: "
             + f"{tmc_csp_subarray_leaf_node}: "
             + "Timeout has occurred, command failed\n"
         )
@@ -233,7 +233,7 @@ def test_release_resources_error_propagation(
 
         exception_message = (
             f"Exception occurred on device: {tmc_subarraynode1}: "
-            + "Exception occurred on the following devices:\n"
+            + "Exception occurred on the following devices: "
             + f"{tmc_csp_subarray_leaf_node}: "
             + "Timeout has occurred, command failed\n"
         )

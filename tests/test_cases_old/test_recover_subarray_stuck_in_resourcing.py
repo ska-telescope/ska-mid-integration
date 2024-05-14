@@ -202,7 +202,7 @@ def test_recover_subarray_stuck_in_resourcing_with_sdp_empty_with_abort(
         )
         assert "AssignResources" in assertion_data["attribute_value"][0]
         assert (
-            "Exception occurred on the following devices:\n"
+            "Exception occurred on the following devices: "
             "ska_mid/tm_leaf_node/sdp_subarray01"
             in assertion_data["attribute_value"][1]
         )
@@ -323,7 +323,7 @@ def test_recover_subarray_stuck_in_resourcing_with_csp_empty_with_abort(
         )
         assert "AssignResources" in assertion_data["attribute_value"][0]
         assert (
-            "Exception occurred on the following devices:\n"
+            "Exception occurred on the following devices: "
             "ska_mid/tm_leaf_node/csp_subarray01"
             in assertion_data["attribute_value"][1]
         )

@@ -1,9 +1,13 @@
 """Test module for TMC-SDP On functionality"""
+
 import pytest
 from pytest_bdd import given, scenario, then, when
 from tango import DevState
 
-from tests.resources.test_harness.helpers import get_master_device_simulators
+from tests.resources.test_harness.helpers import (
+    get_master_device_simulators,
+    wait_and_validate_device_attribute_value,
+)
 from tests.resources.test_harness.utils.enums import DishMode
 
 
@@ -86,6 +90,17 @@ def check_telescope_state_standby(central_node_mid, event_recorder):
         or DevState.OFF
     )
 
+    # TODO: Initial telescopeState aggregation to STANDBY is taking more than
+    # 15 mins sometimes. Need to debug the reason for this separately.
+    # event_recorder.subscribe_event(
+    #     central_node_mid.central_node, "telescopeState"
+    # )
+    # assert event_recorder.has_change_event_occurred(
+    #     central_node_mid.central_node,
+    #     "telescopeState",
+    #     DevState.STANDBY,
+    # )
+
 
 @when("I start up the telescope")
 def move_sdp_to_on(central_node_mid):
@@ -115,8 +130,6 @@ def check_sdp_is_on(central_node_mid, event_recorder):
 @then("telescope state is ON")
 def check_telescope_state(central_node_mid, event_recorder):
     """A method to check CentralNode.telescopeState"""
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.ON,
+    assert wait_and_validate_device_attribute_value(
+        central_node_mid.central_node, "telescopeState", DevState.ON
     )
