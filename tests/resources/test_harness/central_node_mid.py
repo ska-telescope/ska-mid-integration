@@ -67,7 +67,9 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
     def __init__(self) -> None:
         super().__init__()
         self.central_node = DeviceProxy(centralnode)
+        self.central_node.set_timeout_millis(5000)
         self.subarray_node = DeviceProxy(tmc_subarraynode1)
+        self.subarray_node.set_timeout_millis(5000)
         self.csp_master_leaf_node = DeviceProxy(tmc_csp_master_leaf_node)
         self.sdp_master_leaf_node = DeviceProxy(tmc_sdp_master_leaf_node)
         self.sdp_master = DeviceProxy(sdp_master)
