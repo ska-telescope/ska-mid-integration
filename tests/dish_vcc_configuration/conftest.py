@@ -15,7 +15,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
-@given("a Telescope in ON state")
+@given("a Telescope in OFF state")
 def telescope_in_on_state(
     central_node_mid: CentralNodeWrapperMid, event_recorder: EventRecorder
 ):
@@ -29,11 +29,11 @@ def telescope_in_on_state(
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
-    central_node_mid.move_to_on()
+    central_node_mid.move_to_off()
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
-        DevState.ON,
+        DevState.OFF,
     )
 
 
