@@ -283,6 +283,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         LOGGER.info(f"Received simulated devices: {SIMULATED_DEVICES_DICT}")
         if SIMULATED_DEVICES_DICT["all_mocks"]:
             LOGGER.info("Invoking TelescopeOn() with all Mocks")
+            self.central_node.set_timeout_millis(5000)
             self.central_node.TelescopeOn()
             self.set_subarraystate_and_dishmode_with_all_mocks(
                 DevState.ON, DishMode.STANDBY_FP
