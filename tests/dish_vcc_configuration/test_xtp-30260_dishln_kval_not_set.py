@@ -1,11 +1,13 @@
 """Test module for TMC-DISH Dish-VCC k-value validation functionality"""
 
 import json
+from datetime import datetime
 
 import pytest
 from pytest_bdd import given, scenario, then, when
 from tango import DevState
 
+from tests.conftest import LOGGER
 from tests.resources.test_harness.helpers import (
     wait_and_validate_device_attribute_value,
 )
@@ -47,12 +49,17 @@ def given_tmc_with_already_loaded_dish_vcc_config_version(tmc_mid):
 def restart_the_dish_leaf_nodes(tmc_mid):
     """Restart the dish leaf nodes"""
     # Unset values on some of the Dish Leaf Nodes
+    try:
+        tmc_mid.central_node.dish_leaf_node_list[0].SetKValue(0)
 
-    tmc_mid.central_node.dish_leaf_node_list[0].kValue = 0
-
-    # Unset values on some of the Dish Managers
-    tmc_mid.central_node.dish_master_list[3].SetKValue(0)
-
+        # Unset values on some of the Dish Managers
+        tmc_mid.central_node.dish_master_list[3].SetKValue(0)
+    except Exception as ex:
+        LOGGER.error(
+            "Exception %s occurred at with error: %s",
+            ex,
+            datetime.utcnow().strftime("%d/%m/%Y %H:%M:%S:%f"),
+        )
     # [0, 1, 2, 3] are index for dish leaf node list
     tmc_mid.RestartServer("DISHLN_0")
     tmc_mid.RestartServer("DISHLN_3")

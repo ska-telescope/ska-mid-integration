@@ -49,7 +49,7 @@ def given_tmc_with_already_loaded_dish_vcc_config_version(tmc_mid):
 def restart_the_dish_leaf_nodes(tmc_mid):
     """Restart the dish leaf nodes"""
     # Set DLN k-values which are not equal to its respective dish manager
-    tmc_mid.central_node.dish_leaf_node_list[1].kValue = 9
+    tmc_mid.central_node.dish_leaf_node_list[1].SetKValue(9)
     # Set dish manager k-value which are not equal to its respective
     # dish leaf node
     tmc_mid.central_node.dish_master_list[2].SetKValue(10)
