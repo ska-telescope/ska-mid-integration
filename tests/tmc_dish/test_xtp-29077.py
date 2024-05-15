@@ -16,7 +16,10 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.enum import DishMode
 
 
-@pytest.mark.skip
+@pytest.mark.skip(
+    reason="Issue after invocation of 2nd OFF command. OFF command is "
+    + "incomplete on central node. Backlog item added for this test"
+)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29077.feature",
