@@ -24,8 +24,6 @@ from tests.resources.test_harness.constant import (
     tmc_csp_subarray_leaf_node,
     tmc_dish_leaf_node1,
     tmc_dish_leaf_node2,
-    tmc_dish_leaf_node3,
-    tmc_dish_leaf_node4,
     tmc_sdp_subarray_leaf_node,
     tmc_subarraynode1,
 )
@@ -95,8 +93,6 @@ class SubarrayNodeWrapper(object):
         self.dish_leaf_node_list = [
             DeviceProxy(tmc_dish_leaf_node1),
             DeviceProxy(tmc_dish_leaf_node2),
-            DeviceProxy(tmc_dish_leaf_node3),
-            DeviceProxy(tmc_dish_leaf_node4),
         ]
         self.subarray_node.set_timeout_millis(5000)
         for dish_leaf_node in self.dish_leaf_node_list:
