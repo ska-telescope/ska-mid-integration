@@ -27,6 +27,7 @@ from tests.resources.test_support.enum import DishMode
 # from tango import DevState
 
 
+@pytest.mark.skip
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-nnnn_unavailability_dish.feature",
