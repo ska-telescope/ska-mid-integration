@@ -3,7 +3,6 @@
 import ast
 import json
 import logging
-import time
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -63,12 +62,6 @@ def check_telescope_in_initial_state(
             "dishMode",
             DishMode.STANDBY_LP,
         )
-    # Wait for DishMaster attribute value update,
-    # on CentralNode for value dishMode STANDBY_LP
-
-    # TODO: Improvement in tests/implementation
-    # to minimize the need of having sleep
-    time.sleep(5)
     Resource(central_node_mid.central_node).assert_attribute(
         "telescopeState"
     ).equals(["OFF", "STANDBY"])
