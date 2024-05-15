@@ -39,9 +39,7 @@ def telescope_is_in_resourcing_obsstate(
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
-    event_recorder.subscribe_event(
-        central_node_mid.subarray_devices["sdp_subarray"], "State"
-    )
+    event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
     assert event_recorder.has_change_event_occurred(
         central_node_mid.sdp_master,
         "State",
