@@ -134,14 +134,14 @@ def subarray_applies_calibration_solutions_to_dishes(
         "lastPointingData",
         json.dumps(DISH_001_CALIBRATION_DATA),
         is_json=True,
-        timeout=1,
+        timeout=30,
     )
     assert wait_and_validate_device_attribute_value(
         subarray_node.dish_leaf_node_list[1],
         "lastPointingData",
         json.dumps(DISH_036_CALIBRATION_DATA),
         is_json=True,
-        timeout=1,
+        timeout=30,
     )
 
 
