@@ -50,7 +50,7 @@ def restart_the_dish_leaf_nodes(tmc_mid):
     """Restart the dish leaf nodes"""
     # Unset values on some of the Dish Leaf Nodes
     try:
-        tmc_mid.central_node.dish_leaf_node_list[0].SetKValue(0)
+        tmc_mid.central_node.dish_leaf_node_list[0].kValue = 0
 
         # Unset values on some of the Dish Managers
         tmc_mid.central_node.dish_master_list[3].SetKValue(0)
