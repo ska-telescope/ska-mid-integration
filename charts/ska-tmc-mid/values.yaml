@@ -120,8 +120,8 @@ resources:
     cpu: 5500m
     memory: 2000Mi
   requests:
-    cpu: 1500m
-    memory: 1500Mi
+    cpu: 1700m
+    memory: 1600Mi
 
 
 deviceServers:
