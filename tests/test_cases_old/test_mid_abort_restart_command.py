@@ -37,6 +37,7 @@ telescope_control = BaseTelescopeControl()
 tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 
 
+@pytest.mark.skip(reason="Removed in SAH-1537")
 @pytest.mark.SKA_mid
 def test_abort_in_empty(json_factory):
     """Test Abort in EMPTY"""
