@@ -155,6 +155,8 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         )
         device_dict["cbf_subarray1"] = "mid_csp_cbf/sub_elt/subarray_01"
         device_dict["cbf_controller"] = "mid_csp_cbf/sub_elt/controller"
+        device_dict["dish_master_list"] = self.dish_master_list
+        device_dict["dish_leaf_node_list"] = self.dish_leaf_node_list
         self.wait = Waiter(**device_dict)
 
     @property
