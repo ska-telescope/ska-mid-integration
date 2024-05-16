@@ -8,6 +8,7 @@ import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import ObsState
+from tango import DevState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
@@ -22,8 +23,6 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
 # import time
-
-from tango import DevState
 
 
 configure_logging(logging.DEBUG)
