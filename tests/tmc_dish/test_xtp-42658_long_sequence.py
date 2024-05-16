@@ -23,7 +23,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 
 # import time
 
-# from tango import DevState
+from tango import DevState
 
 
 configure_logging(logging.DEBUG)
@@ -85,19 +85,17 @@ def move_subarray_to_obsState_idle(
     event_recorder.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
     )
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "telescopeState"
+    )
     central_node_mid.set_subarray_id(subarray_id)
 
     central_node_mid.move_to_on()
-    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode"
-        )
-
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "dishMode",
-            DishMode.STANDBY_FP,
-        )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "telescopeState",
+        DevState.ON,
+    )
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory

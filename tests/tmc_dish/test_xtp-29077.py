@@ -16,10 +16,14 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.enum import DishMode
 
 
+<<<<<<< HEAD
 @pytest.mark.skip(
     reason="Issue after invocation of 2nd OFF command. OFF command is "
     + "incomplete on central node. Backlog item added for this test"
 )
+=======
+@pytest.mark.skip(reason="Enable when SKB-292, SKB-293 are resolved")
+>>>>>>> 254f9823 (SAH-1536: disable test case)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29077.feature",

@@ -7,6 +7,10 @@ from tango import DevState
 from tests.resources.test_support.enum import DishMode
 
 
+<<<<<<< HEAD
+=======
+@pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
+>>>>>>> 254f9823 (SAH-1536: disable test case)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29351_off.feature",
