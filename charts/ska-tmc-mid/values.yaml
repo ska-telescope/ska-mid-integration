@@ -117,11 +117,11 @@ dishleafnode:
 
 resources:
   limits:
-    cpu: 5000m
-    memory: 2000Mi
+    cpu: 6000m
+    memory: 2200Mi
   requests:
-    cpu: 1000m
-    memory: 1000Mi
+    cpu: 2000m
+    memory: 1800Mi
 
 
 deviceServers:
