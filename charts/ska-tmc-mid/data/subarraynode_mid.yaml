@@ -77,6 +77,15 @@ server:
           - name: "AbortCommandTimeout"
             values:
               - "100"
+          - name: "CspAssignResourcesInterfaceURL"
+            values:
+              - "https://schema.skao.int/ska-csp-assignresources/2.0"
+          - name: "CspScanInterfaceURL"
+            values:
+              - "https://schema.skao.int/ska-csp-scan/2.0"
+          - name: "SdpScanInterfaceURL"
+            values:
+              - "https://schema.skao.int/ska-sdp-scan/0.4"
   {{- end}}
 depends_on:
   - device: sys/database/2
