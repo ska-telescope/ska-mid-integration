@@ -1,6 +1,8 @@
 """
 Test TMC-CSP AssignResources-ReleaseResources-AssignResources functionality
 """
+import time
+
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
@@ -53,6 +55,7 @@ def telescope_is_in_idle_state(
     event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
 
     central_node_mid.move_to_on()
+    time.sleep(2)
 
     check_subarray_instance(central_node_mid.subarray_node, subarray_id)
     assert event_recorder.has_change_event_occurred(
