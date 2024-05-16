@@ -63,32 +63,6 @@ class Waiter:
                 )
             )
 
-    def set_wait_for_going_to_on(self):
-        self.waits.append(
-            watch(Resource(self.sdp_subarray1)).to_become(
-                "State", changed_to="ON"
-            )
-        )
-        self.waits.append(
-            watch(Resource(self.sdp_master)).to_become(
-                "State", changed_to="ON"
-            )
-        )
-        self.waits.append(
-            watch(Resource(self.csp_subarray1)).to_become(
-                "State", changed_to="ON"
-            )
-        )
-        self.waits.append(
-            watch(Resource(self.csp_master)).to_become(
-                "State", changed_to="ON"
-            )
-        )
-        if self.dish_master_list:
-            self.set_wait_for_dish("dishMode", "STANDBY_FP")
-        if self.dish_leaf_node_list:
-            self.set_wait_for_dish("dishMode", "STANDBY_FP")
-
     def set_wait_for_going_to_off(self):
         self.waits.append(
             watch(Resource(self.sdp_subarray1)).to_become(
