@@ -1,4 +1,5 @@
 """Test TMC-SDP Negative Scenarios Unavailable subsystem"""
+import json
 import os
 
 import pytest
@@ -8,8 +9,8 @@ from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
 from tests.resources.test_harness.helpers import (
+    generate_eb_pb_ids,
     prepare_json_args_for_centralnode_commands,
-    update_eb_pb_ids,
 )
 
 
@@ -81,13 +82,13 @@ def tmc_assign_resources_invoke(
     Method to invoke AssignResources command.
     """
     central_node_mid.set_subarray_id(subarray_id)
-    input_json = prepare_json_args_for_centralnode_commands(
+    assign_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-
-    input_json = update_eb_pb_ids(input_json)
+    input_json = json.loads(assign_json)
+    generate_eb_pb_ids(input_json)
     pytest.result, pytest.unique_id = central_node_mid.perform_action(
-        "AssignResources", input_json
+        "AssignResources", json.dumps(input_json)
     )
 
 

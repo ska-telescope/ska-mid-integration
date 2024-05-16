@@ -575,7 +575,7 @@ def generate_id(id_pattern: str) -> str:
     return f"{prefix}{unique_id}{suffix}"
 
 
-def generate_eb_pb_ids(input_json: str):
+def generate_eb_pb_ids(input_json: dict):
     """
     Method to generate different eb_id and pb_id
 
