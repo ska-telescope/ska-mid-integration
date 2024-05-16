@@ -27,6 +27,7 @@ from tests.resources.test_support.constant import (
     centralnode,
     csp_subarray1,
     sdp_subarray1,
+    tmc_csp_subarray_leaf_node,
     tmc_sdp_subarray_leaf_node,
     tmc_subarraynode1,
 )
@@ -100,10 +101,9 @@ def test_configure_timeout_and_error_propagation_csp(
             "Timeout has occurred, command failed"
             in assertion_data["attribute_value"][1]
         )
-        # assert (
-        #     tmc_csp_subarray_leaf_node in assertion_data["attribute_value"]
-        # [1]
-        # )
+        assert (
+            tmc_csp_subarray_leaf_node in assertion_data["attribute_value"][1]
+        )
 
         change_event_callbacks["longRunningCommandResult"].assert_change_event(
             (unique_id[0], str(ResultCode.FAILED.value)),
@@ -191,10 +191,9 @@ def test_configure_timeout_sdp(json_factory, change_event_callbacks):
             "Timeout has occurred, command failed"
             in assertion_data["attribute_value"][1]
         )
-        # assert (
-        #     tmc_sdp_subarray_leaf_node in assertion_data["attribute_value"]
-        # [1]
-        # )
+        assert (
+            tmc_sdp_subarray_leaf_node in assertion_data["attribute_value"][1]
+        )
 
         change_event_callbacks["longRunningCommandResult"].assert_change_event(
             (unique_id[0], str(ResultCode.FAILED.value)),
