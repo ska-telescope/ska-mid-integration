@@ -54,13 +54,13 @@ def subarray_is_in_on_state(
 
 @given("the subarray is in EMPTY obsState")
 def subarray_is_in_empty_obsstate(
-    subarray_node_mid,
+    subarray_node,
     event_recorder,
 ):
     """A method to check if telescope in is EMPTY obsSstate."""
-    event_recorder.subscribe_event(subarray_node_mid.subarray_node, "obsState")
+    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     assert event_recorder.has_change_event_occurred(
-        subarray_node_mid.subarray_node,
+        subarray_node.subarray_node,
         "obsState",
         ObsState.EMPTY,
     )
@@ -131,13 +131,13 @@ def tmc_reports_unavailability_to_client():
 
 
 @then(parsers.parse("the TMC SubarrayNode {subarray_id} stuck in RESOURCING"))
-def tmc_stuck_in_resourcing(subarray_node_mid, event_recorder):
+def tmc_stuck_in_resourcing(subarray_node, event_recorder):
     """
     Method to verify the subarray stuck in RESOURCING obsstate
     """
-    event_recorder.subscribe_event(subarray_node_mid.subarray_node, "obsState")
+    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     assert event_recorder.has_change_event_occurred(
-        subarray_node_mid.subarray_node,
+        subarray_node.subarray_node,
         "obsState",
         ObsState.RESOURCING,
     )
