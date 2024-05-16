@@ -46,6 +46,7 @@ from tests.resources.test_harness.utils.sync_decorators import (
     sync_restart,
     sync_set_to_off,
     sync_set_to_standby,
+    sync_telescope_on,
 )
 from tests.resources.test_harness.utils.wait_helpers import Waiter
 from tests.resources.test_support.common_utils.common_helpers import Resource
@@ -278,6 +279,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 if clear_transition:
                     device.ResetTransitions()
 
+    @sync_telescope_on(device_dict=device_dict)
     def move_to_on(self) -> None:
         """
         A method to invoke TelescopeOn command to
