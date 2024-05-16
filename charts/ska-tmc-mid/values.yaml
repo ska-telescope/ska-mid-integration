@@ -91,7 +91,7 @@ sdpleafnodes:
   image:
     registry: artefact.skao.int
     image: ska-tmc-sdpleafnodes
-    tag: 0.14.2
+    tag: 0.15.0
     pullPolicy: IfNotPresent
 
 cspmasterleafnode:
@@ -117,7 +117,7 @@ dishleafnode:
 
 resources:
   limits:
-    cpu: 4500m
+    cpu: 5000m
     memory: 2000Mi
   requests:
     cpu: 1500m
