@@ -19,11 +19,11 @@ from tests.resources.test_harness.helpers import (
     "SDP Subarray report the error when one of the SDP's component is"
     + " unavailable",
 )
-def test_tmc_sdp_component_unavailable(central_node_low):
+def test_tmc_sdp_component_unavailable(central_node_mid):
     """
     Test case to verify if TMC-SDP component is unavailable
     """
-    assert central_node_low.subarray_devices["sdp_subarray"].ping() > 0
+    assert central_node_mid.subarray_devices["sdp_subarray"].ping() > 0
 
 
 @given("a Telescope consisting of TMC,SDP,simulated CSP and simulated Dish")
@@ -37,16 +37,16 @@ def given_tmc_with_simulated_csp_dish():
 
 @given("the telescope is in ON state")
 def subarray_is_in_on_state(
-    central_node_low,
+    central_node_mid,
     event_recorder,
 ):
     """A method to check if telescope in is ON telescopeState."""
-    central_node_low.move_to_on()
+    central_node_mid.move_to_on()
     event_recorder.subscribe_event(
-        central_node_low.central_node, "telescopeState"
+        central_node_mid.central_node, "telescopeState"
     )
     assert event_recorder.has_change_event_occurred(
-        central_node_low.central_node,
+        central_node_mid.central_node,
         "telescopeState",
         DevState.ON,
     )
@@ -54,13 +54,13 @@ def subarray_is_in_on_state(
 
 @given("the subarray is in EMPTY obsState")
 def subarray_is_in_empty_obsstate(
-    subarray_node_low,
+    subarray_node_mid,
     event_recorder,
 ):
     """A method to check if telescope in is EMPTY obsSstate."""
-    event_recorder.subscribe_event(subarray_node_low.subarray_node, "obsState")
+    event_recorder.subscribe_event(subarray_node_mid.subarray_node, "obsState")
     assert event_recorder.has_change_event_occurred(
-        subarray_node_low.subarray_node,
+        subarray_node_mid.subarray_node,
         "obsState",
         ObsState.EMPTY,
     )
@@ -75,29 +75,29 @@ def sdp_proc_controller_unavailable():
 
 @when(parsers.parse("I assign resources to the subarray {subarray_id}"))
 def tmc_assign_resources_invoke(
-    central_node_low, subarray_id, command_input_factory
+    central_node_mid, subarray_id, command_input_factory
 ):
     """
     Method to invoke AssignResources command.
     """
-    central_node_low.set_subarray_id(subarray_id)
+    central_node_mid.set_subarray_id(subarray_id)
     input_json = prepare_json_args_for_centralnode_commands(
-        "assign_resources_low", command_input_factory
+        "assign_resources_mid", command_input_factory
     )
 
     input_json = update_eb_pb_ids(input_json)
-    pytest.result, pytest.unique_id = central_node_low.perform_action(
+    pytest.result, pytest.unique_id = central_node_mid.perform_action(
         "AssignResources", input_json
     )
 
 
 @then("SDP subarray report the unavailability of SDP Component")
-def sdp_subarray_reports_unavailability(event_recorder, central_node_low):
+def sdp_subarray_reports_unavailability(event_recorder, central_node_mid):
     """
     Method to verify SDP subarray reports unavailability to TMC.
     """
     event_recorder.subscribe_event(
-        central_node_low.central_node,
+        central_node_mid.central_node,
         "longRunningCommandResult",
     )
     exception_message = (
@@ -105,7 +105,7 @@ def sdp_subarray_reports_unavailability(event_recorder, central_node_low):
         + " cannot start processing blocks.\n"
     )
     pytest.assertion_data = event_recorder.has_change_event_occurred(
-        central_node_low.central_node,
+        central_node_mid.central_node,
         attribute_name="longRunningCommandResult",
         attribute_value=(pytest.unique_id[0], Anything),
     )
@@ -120,8 +120,8 @@ def tmc_reports_unavailability_to_client():
     """
     exception_message = (
         "Exception occurred on the following devices:"
-        + " ska_low/tm_subarray_node/1: Exception occurred on the"
-        + " following devices: ska_low/tm_leaf_node/sdp_subarray01:"
+        + " ska_mid/tm_subarray_node/1: Exception occurred on the"
+        + " following devices: ska_mid/tm_leaf_node/sdp_subarray01:"
         + " The processing controller, helm deployer, or both are OFFLINE:"
         + " cannot start processing blocks.\n"
     )
@@ -131,13 +131,13 @@ def tmc_reports_unavailability_to_client():
 
 
 @then(parsers.parse("the TMC SubarrayNode {subarray_id} stuck in RESOURCING"))
-def tmc_stuck_in_resourcing(subarray_node_low, event_recorder):
+def tmc_stuck_in_resourcing(subarray_node_mid, event_recorder):
     """
     Method to verify the subarray stuck in RESOURCING obsstate
     """
-    event_recorder.subscribe_event(subarray_node_low.subarray_node, "obsState")
+    event_recorder.subscribe_event(subarray_node_mid.subarray_node, "obsState")
     assert event_recorder.has_change_event_occurred(
-        subarray_node_low.subarray_node,
+        subarray_node_mid.subarray_node,
         "obsState",
         ObsState.RESOURCING,
     )
