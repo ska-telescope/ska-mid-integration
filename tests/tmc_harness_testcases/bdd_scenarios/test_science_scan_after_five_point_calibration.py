@@ -56,6 +56,12 @@ def a_subarray_after_five_point_calibration(
     event_recorder.subscribe_event(sdp_sim, "obsState")
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     subarray_node.force_change_of_obs_state("READY")
+    sdp_sim = simulator_factory.get_or_create_simulator_device(
+        SimulatorDeviceType.MID_SDP_DEVICE
+    )
+    subarray_node.simulate_receive_addresses_event(
+        sdp_sim, command_input_factory
+    )
     assert event_recorder.has_change_event_occurred(
         csp_sim,
         "obsState",
@@ -99,19 +105,27 @@ def a_subarray_after_five_point_calibration(
 
 @when("I invoke Configure command for a science scan")
 def configure_for_science_scan(
-    subarray_node, simulator_factory, command_input_factory
+    subarray_node, simulator_factory, command_input_factory, event_recorder
 ):
     """When Configure is invoked for a Science Scan."""
     configure_command_input = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
     subarray_node.execute_transition("Configure", configure_command_input)
-    sdp_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_SDP_DEVICE
+    assert check_subarray_obs_state("READY", 500)
+    scan_command_input = prepare_json_args_for_commands(
+        "scan_mid", command_input_factory
     )
-    subarray_node.simulate_receive_addresses_event(
-        sdp_sim, command_input_factory
+    subarray_node.execute_transition("Scan", scan_command_input)
+
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.SCANNING,
+        lookahead=15,
     )
+    # Setting pointing calibration data
+    subarray_node.set_pointing_cal_on_queue_connector()
 
 
 @then(

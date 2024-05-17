@@ -440,6 +440,8 @@ class SubarrayNodeWrapper(object):
         )
         sdp_sim.SetDirectreceiveAddresses(receive_addresses)
 
+    def set_pointing_cal_on_queue_connector(self):
+        """Set Pointing Cal on SDP"""
         # Setting pointing calibration data
         sdp_qc = DeviceProxy(sdp_queue_connector)
 
