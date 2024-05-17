@@ -1,4 +1,6 @@
 """Test module for TMC-SDP EndScan functionality"""
+import json
+
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
@@ -77,6 +79,8 @@ def check_subarray_is_configured(
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
+    configure_json = json.loads(configure_input_json)
+    configure_json["tmc"]["scan_duration"] = 10.0
     scan_input_json = prepare_json_args_for_commands(
         "scan_mid", command_input_factory
     )
@@ -108,7 +112,7 @@ def check_subarray_is_configured(
         "obsState",
         ObsState.IDLE,
     )
-    subarray_node.store_configuration_data(configure_input_json)
+    subarray_node.store_configuration_data(json.dumps(configure_json))
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["sdp_subarray"],
         "obsState",
