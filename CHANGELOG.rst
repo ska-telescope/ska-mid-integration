@@ -7,6 +7,12 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+[0.19.2]
+* Fix bug SKB-337
+* Updated the kValue range to 1 to 1177.
+* kValue range is a device property
+* Configure command gets accepted if the kvalue for assinged dishes are either all same or all different
+
 [0.19.1]
 ************
 * Intermediate chart with TMC updates to work with dish-lmc chart 3.0.0
