@@ -158,6 +158,13 @@ def test_assign_release_timeout_sdp(
             (unique_id[0], Anything),
             lookahead=7,
         )
+        LOGGER.info("assertion_data: %s", assertion_data)
+        LOGGER.info(
+            "assertion_data value1: %s", assertion_data["attribute_value"][0]
+        )
+        LOGGER.info(
+            "assertion_data value2: %s", assertion_data["attribute_value"][1]
+        )
         assert "AssignResources" in assertion_data["attribute_value"][0]
         assert (
             "Timeout has occurred, command failed"
