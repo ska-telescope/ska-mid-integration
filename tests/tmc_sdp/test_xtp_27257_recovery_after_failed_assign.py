@@ -1,4 +1,6 @@
 """Test TMC-SDP Recovery after failed Assign functionality"""
+import time
+
 import pytest
 from pytest_bdd import given, scenario, then, when
 from ska_control_model import ObsState, ResultCode
@@ -40,6 +42,9 @@ def telescope_with_resources_assigned(
         "telescopeState",
         DevState.ON,
     )
+    # Need for thr CentralNode to get the longRunningCommandResult event on
+    # TelescopeOn command completion
+    time.sleep(2)
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory

@@ -1,4 +1,6 @@
 """Test TMC-SDP Abort functionality in Scanning obstate"""
+import time
+
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
@@ -43,6 +45,10 @@ def subarray_is_in_scanning_obsstate(
         "telescopeState",
         DevState.ON,
     )
+    # Need for thr CentralNode to get the longRunningCommandResult event on
+    # TelescopeOn command completion
+    time.sleep(2)
+
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
