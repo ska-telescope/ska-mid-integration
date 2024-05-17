@@ -330,7 +330,12 @@ class Waiter:
         self.dish_master2 = kwargs.get("dish_master2")
         self.dish_master3 = kwargs.get("dish_master3")
         self.dish_master4 = kwargs.get("dish_master4")
+        self.tmc_dish_leaf_node1 = kwargs.get("tmc_dish_leaf_node1")
+        self.tmc_dish_leaf_node2 = kwargs.get("tmc_dish_leaf_node2")
+        self.tmc_dish_leaf_node3 = kwargs.get("tmc_dish_leaf_node3")
+        self.tmc_dish_leaf_node4 = kwargs.get("tmc_dish_leaf_node4")
 
+    # pylint: disable=too-many-lines
     def clear_watches(self):
         """Resets the waits list"""
         self.waits = []
@@ -381,6 +386,30 @@ class Waiter:
                     "dishMode", changed_to="STANDBY_LP"
                 )
             )
+        if self.tmc_dish_leaf_node1:
+            self.waits.append(
+                watch(Resource(self.tmc_dish_leaf_node1)).to_become(
+                    "dishMode", changed_to="STANDBY_LP"
+                )
+            )
+        if self.tmc_dish_leaf_node2:
+            self.waits.append(
+                watch(Resource(self.tmc_dish_leaf_node2)).to_become(
+                    "dishMode", changed_to="STANDBY_LP"
+                )
+            )
+        if self.tmc_dish_leaf_node3:
+            self.waits.append(
+                watch(Resource(self.tmc_dish_leaf_node3)).to_become(
+                    "dishMode", changed_to="STANDBY_LP"
+                )
+            )
+        if self.tmc_dish_leaf_node4:
+            self.waits.append(
+                watch(Resource(self.tmc_dish_leaf_node4)).to_become(
+                    "dishMode", changed_to="STANDBY_LP"
+                )
+            )
 
     def set_wait_for_going_to_standby(self):
         """Sets waits for turning the devices to standby mode"""
@@ -428,6 +457,30 @@ class Waiter:
                     "State", changed_to="STANDBY"
                 )
             )
+        if self.tmc_dish_leaf_node1:
+            self.waits.append(
+                watch(Resource(self.tmc_dish_leaf_node1)).to_become(
+                    "dishMode", changed_to="STANDBY_LP"
+                )
+            )
+        if self.tmc_dish_leaf_node2:
+            self.waits.append(
+                watch(Resource(self.tmc_dish_leaf_node2)).to_become(
+                    "dishMode", changed_to="STANDBY_LP"
+                )
+            )
+        if self.tmc_dish_leaf_node3:
+            self.waits.append(
+                watch(Resource(self.tmc_dish_leaf_node3)).to_become(
+                    "dishMode", changed_to="STANDBY_LP"
+                )
+            )
+        if self.tmc_dish_leaf_node4:
+            self.waits.append(
+                watch(Resource(self.tmc_dish_leaf_node4)).to_become(
+                    "dishMode", changed_to="STANDBY_LP"
+                )
+            )
 
     def set_wait_for_telescope_on(self):
         """Sets waits for turning the devices in ON state"""
@@ -472,6 +525,30 @@ class Waiter:
         if self.dish_master4:
             self.waits.append(
                 watch(Resource(self.dish_master4)).to_become(
+                    "dishMode", changed_to="STANDBY_FP"
+                )
+            )
+        if self.tmc_dish_leaf_node1:
+            self.waits.append(
+                watch(Resource(self.tmc_dish_leaf_node1)).to_become(
+                    "dishMode", changed_to="STANDBY_FP"
+                )
+            )
+        if self.tmc_dish_leaf_node2:
+            self.waits.append(
+                watch(Resource(self.tmc_dish_leaf_node2)).to_become(
+                    "dishMode", changed_to="STANDBY_FP"
+                )
+            )
+        if self.tmc_dish_leaf_node3:
+            self.waits.append(
+                watch(Resource(self.tmc_dish_leaf_node3)).to_become(
+                    "dishMode", changed_to="STANDBY_FP"
+                )
+            )
+        if self.tmc_dish_leaf_node4:
+            self.waits.append(
+                watch(Resource(self.tmc_dish_leaf_node4)).to_become(
                     "dishMode", changed_to="STANDBY_FP"
                 )
             )
