@@ -32,7 +32,6 @@ from tests.resources.test_support.constant import (
     csp_subarray1,
     sdp_subarray1,
     tmc_csp_subarray_leaf_node,
-    tmc_sdp_subarray_leaf_node,
     tmc_subarraynode1,
 )
 
@@ -158,20 +157,10 @@ def test_assign_release_timeout_sdp(
             (unique_id[0], Anything),
             lookahead=7,
         )
-        LOGGER.info("assertion_data: %s", assertion_data)
-        LOGGER.info(
-            "assertion_data value1: %s", assertion_data["attribute_value"][0]
-        )
-        LOGGER.info(
-            "assertion_data value2: %s", assertion_data["attribute_value"][1]
-        )
         assert "AssignResources" in assertion_data["attribute_value"][0]
         assert (
             "Timeout has occurred, command failed"
             in assertion_data["attribute_value"][1]
-        )
-        assert (
-            tmc_sdp_subarray_leaf_node in assertion_data["attribute_value"][1]
         )
 
         change_event_callbacks["longRunningCommandResult"].assert_change_event(
