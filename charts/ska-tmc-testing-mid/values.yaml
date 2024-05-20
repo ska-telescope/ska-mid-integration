@@ -70,13 +70,7 @@ tmc-mid:
   labels:
     app: ska-tmc-integration
   enabled: true
-  resources:
-    requests:
-      cpu: 200m # 0.5 CPU
-      memory: 500Mi # 1 GB mem
-    limits:
-      cpu: 500m # 1 CPU
-      memory: 1024Mi
+  
   cspsubarrayleafnode:
     DelayCadence: 10
     DelayValidityPeriod: 20
