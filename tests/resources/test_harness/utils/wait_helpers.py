@@ -51,6 +51,7 @@ class Waiter:
         )
 
         for dish_master in self.dish_master_list:
+
             self.waits.append(
                 watch(Resource(dish_master)).to_become(
                     attribute_name, changed_to=state_name
@@ -85,8 +86,10 @@ class Waiter:
             )
         )
         if self.dish_master_list:
+            logging.info("here in dish master STANDBYLP wait")
             self.set_wait_for_dish("dishMode", "STANDBY_LP")
         if self.dish_leaf_node_list:
+            logging.info("here in dishln STANDBYLP wait")
             self.set_wait_for_dish("dishMode", "STANDBY_LP")
 
     def set_wait_for_going_to_standby(self):

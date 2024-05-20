@@ -343,6 +343,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         put telescope in OFF state
 
         """
+        LOGGER.info("Invoking TelescopeOff() 1st log")
         if SIMULATED_DEVICES_DICT["all_mocks"]:
             LOGGER.info("Invoking TelescopeOff() with all Mocks")
             self.central_node.TelescopeOff()

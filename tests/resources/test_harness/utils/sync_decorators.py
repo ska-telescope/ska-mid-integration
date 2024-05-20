@@ -1,4 +1,5 @@
 import functools
+import logging
 from contextlib import contextmanager
 
 from tests.resources.test_harness.utils.wait_helpers import Waiter
@@ -39,6 +40,7 @@ def sync_set_to_off(device_dict: dict):
     def decorator_sync_set_to_off(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
+            logging.info("here in off sync decorator")
             the_waiter = Waiter(**device_dict)
             the_waiter.set_wait_for_going_to_off()
             result = func(*args, **kwargs)
