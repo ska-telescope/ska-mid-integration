@@ -93,7 +93,7 @@ ska-sdp:
   data-pvc:
     create:
       enabled: true
-      size: 5Gi
+      size: 3Gi
       storageClassName: nfss1
   ska-sdp-qa:
     enabled: true
