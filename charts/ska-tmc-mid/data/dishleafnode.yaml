@@ -47,7 +47,7 @@ server:
               - "tango::logger"
           - name: "LoggingLevelDefault"
             values:
-              - "4"
+              - "5"
           - name: "CommandTimeOut"
             values:
               - "50"
