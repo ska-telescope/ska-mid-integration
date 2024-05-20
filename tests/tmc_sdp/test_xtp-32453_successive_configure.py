@@ -12,6 +12,7 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
+from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
 @pytest.mark.tmc_sdp
@@ -70,7 +71,7 @@ def telescope_is_in_idle_state(
         "time-to-ready"
     ] = 2
 
-    central_node_mid.store_resources(json.dumps(assign_str))
+    _, unique_id = central_node_mid.store_resources(json.dumps(assign_str))
 
     check_subarray_instance(
         subarray_node.subarray_devices.get("sdp_subarray"), subarray_id
@@ -86,6 +87,17 @@ def telescope_is_in_idle_state(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
+    )
+
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (unique_id[0], str(int(ResultCode.OK))),
+        lookahead=5,
     )
 
 
