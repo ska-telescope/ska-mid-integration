@@ -116,12 +116,9 @@ dishleafnode:
     pullPolicy: IfNotPresent
 
 resources:
-  limits:
-    cpu: 6000m
-    memory: 2200Mi
   requests:
-    cpu: 2400m
-    memory: 1900Mi
+    cpu: 500m
+    memory: 200Mi
 
 
 deviceServers:
