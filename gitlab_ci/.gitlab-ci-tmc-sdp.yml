@@ -9,9 +9,8 @@ k8s-test-tmc-with-sdp:
     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-sdp"
     MARK: 'tmc_sdp'
     SDP_SIMULATION_ENABLED: 'false'
-    TARANTA_ENABLED: 'true'
   environment:
-    name: test/$CI_COMMIT_REF_SLUG
+    name: test/$CI_COMMIT_REF_SLUG-sdp
     on_stop: stop-k8s-test-tmc-with-sdp
     auto_stop_in: 1 minute
 
@@ -21,7 +20,12 @@ stop-k8s-test-tmc-with-sdp:
     - stop-k8s-test
   variables:
     KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-sdp'
+    KUBE_NAMESPACE_SDP: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-sdp'
+    SDP_SIMULATION_ENABLED: 'false'
   script:
     - make k8s-uninstall-chart
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
     - make k8s-delete-namespace
+  environment:
+    name: test/$CI_COMMIT_REF_SLUG-sdp
+    action: stop
