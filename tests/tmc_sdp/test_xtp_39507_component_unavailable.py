@@ -14,6 +14,7 @@ from tests.resources.test_harness.helpers import (
 )
 
 
+@pytest.mark.repeat(50)
 @pytest.mark.tmc_sdp_unhappy
 @scenario(
     "../features/tmc_sdp/xtp_39507_component_unavailable.feature",
@@ -120,7 +121,7 @@ def tmc_reports_unavailability_to_client():
     Method to verify TMC subarray reports unavailability to client.
     """
     exception_message = (
-        "Exception occurred on the following devices:"
+        "Exception occurred on device:"
         + " ska_mid/tm_subarray_node/1: Exception occurred on the"
         + " following devices: ska_mid/tm_leaf_node/sdp_subarray01:"
         + " The processing controller, helm deployer, or both are OFFLINE:"
