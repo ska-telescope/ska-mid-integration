@@ -107,7 +107,7 @@ CUSTOM_VALUES2=	--set tmc-mid.deviceServers.mocks.sdp=$(SDP_SIMULATION_ENABLED)\
 	--set ska-sdp.proccontrol.replicas=$(SDP_PROCCONTROL_REPLICAS)\
 	--set global.sdp.processingNamespace=$(KUBE_NAMESPACE_SDP)\
 	--set ska-sdp.enabled=true\
-	--set ska-sdp.loadBalancer=true
+	--set ska-sdp.lmc.loadBalancer=true
 endif
 
 K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
