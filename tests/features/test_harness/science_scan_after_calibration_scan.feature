@@ -23,5 +23,5 @@ Feature: Enable and Demonstrate 5-point calibration using TMC
 		Given a TMC
 		And a subarray post five point calibration
 		When I invoke Configure command for a science scan
-		Then the subarray fetches calibration solutions from SDP and applies them to the Dishes
+		Then the dish leaf node receive calibration solutions from SDP and applies them to the Dishes
 		And is in READY obsState

@@ -98,8 +98,8 @@ ska-sdp:
   data-pvc:
     create:
       enabled: true
-      size: 20Gi
-      storageClassName: nfss1
+      size: 100Mi
+      storageClassName: ""
   ska-sdp-qa:
     enabled: true
     kafka:

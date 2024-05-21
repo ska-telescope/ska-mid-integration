@@ -129,8 +129,8 @@ def configure_for_science_scan(
 
 
 @then(
-    "the subarray fetches calibration solutions from SDP and applies them to "
-    + "the Dishes"
+    "the dish leaf node receive calibration solutions from SDP and "
+    + "applies them to the Dishes"
 )
 def subarray_applies_calibration_solutions_to_dishes(
     subarray_node, event_recorder
