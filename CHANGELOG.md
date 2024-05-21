@@ -5,7 +5,11 @@ Added
 -----
 [0.19.2]
 ***********
-* Updated Subarray Node to v0.17.6 that resolves the SKB-331 and gets rid of hardcoded interface values
+* Updated Subarray Node to v0.18.0 that resolves the SKB-331 and gets rid of hardcoded interface values
+* Fix bug SKB-337
+* Updated the kValue range to 1 to 1177.
+* kValue range is a device property
+* Configure command gets accepted if the kvalue for assinged dishes are either all same or all different
 
 [0.19.1]
 ************

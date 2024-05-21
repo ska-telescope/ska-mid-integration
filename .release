@@ -5,7 +5,12 @@ tag_description=
 **1. ska-tmc-integration 0.19.1 - 0.19.2*
 
     **1.1 ska-tmc-mid - 0.19.1 - 0.19.2:
-        a. Updated Subarray Node to v0.17.6 that resolves the SKB-331 and gets rid of hardcoded interface values
+        a. Updated Subarray Node to v0.18.0 that resolves the SKB-331 and gets rid of hardcoded interface values
+        b. Fix bug SKB-337
+        c. Updated the kValue range to 1 to 1177.
+        d. kValue range is a device property
+        e. Configure command gets accepted if the kvalue for assinged dishes 
+            are either all same or all different
 
 
 release_notes=
@@ -13,6 +18,20 @@ release_notes=
 **1. ska-tmc-integration 0.19.1 - 0.19.2*
 
     **1.1 ska-tmc-mid - 0.19.1 - 0.19.2:
-        a. Updated Subarray Node to v0.17.6 that resolves the SKB-331 and gets rid of hardcoded interface values
+        a. Updated Subarray Node to v0.18.0 that resolves the SKB-331 and gets rid of hardcoded interface values
+        b. Fix bug SKB-337
+        c. Updated the kValue range to 1 to 1177.
+        d. kValue range is a device property
+        e. Configure command gets accepted if the kvalue for assinged dishes 
+            are either all same or all different
 
+**1. ska-tmc-integration 0.19.1 - 0.19.2:**
+
+    **1.1 ska-tmc-mid - 0.19.1 - 0.19.2:
+        a. Updated Subarray Node to v0.18.0 that resolves the SKB-331 and gets rid of hardcoded interface values
+        b. Fix bug SKB-337
+        c. Updated the kValue range to 1 to 1177.
+        d. kValue range is a device property
+        e. Configure command gets accepted if the kvalue for assinged dishes 
+            are either all same or all different
 

@@ -331,7 +331,6 @@ class Waiter:
         self.dish_master2 = kwargs.get("dish_master2")
         self.dish_master3 = kwargs.get("dish_master3")
         self.dish_master4 = kwargs.get("dish_master4")
-
         self.tmc_dish_leaf_node1 = kwargs.get("tmc_dish_leaf_node1")
         self.tmc_dish_leaf_node2 = kwargs.get("tmc_dish_leaf_node2")
         self.tmc_dish_leaf_node3 = kwargs.get("tmc_dish_leaf_node3")
