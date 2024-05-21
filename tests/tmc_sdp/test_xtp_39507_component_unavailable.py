@@ -10,7 +10,6 @@ from tango import DevState
 
 from tests.resources.test_harness.constant import (
     csp_subarray1,
-    tmc_csp_subarray_leaf_node,
     tmc_subarraynode1,
 )
 from tests.resources.test_harness.helpers import (
@@ -158,11 +157,11 @@ def tmc_stuck_in_resourcing(subarray_node, event_recorder):
     the_waiter = Waiter(**device_dict)
     the_waiter.set_wait_for_specific_obsstate(
         "ABORTED",
-        [csp_subarray1, tmc_csp_subarray_leaf_node, tmc_subarraynode1],
+        [csp_subarray1, tmc_subarraynode1],
     )
     the_waiter.wait(800)
     subarray_node.execute_transition(command_name="Restart", argin=None)
     the_waiter.set_wait_for_specific_obsstate(
-        "EMPTY", [csp_subarray1, tmc_csp_subarray_leaf_node, tmc_subarraynode1]
+        "EMPTY", [csp_subarray1, tmc_subarraynode1]
     )
     the_waiter.wait(800)
