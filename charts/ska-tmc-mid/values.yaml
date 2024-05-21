@@ -109,19 +109,20 @@ cspsubarrayleafnode:
     pullPolicy: IfNotPresent
 
 dishleafnode:
-  image: 
-    registry: artefact.skao.int
+  image:
+    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-dishleafnode
     image: ska-tmc-dishleafnode
-    tag: 0.12.1
+    tag: 0.13.0-dev.c200f5b3c
     pullPolicy: IfNotPresent
+
 
 resources:
   limits:
-    cpu: 6000m
-    memory: 2200Mi
+    cpu: 3500m
+    memory: 2000Mi
   requests:
-    cpu: 2000m
-    memory: 1800Mi
+    cpu: 500m
+    memory: 1000Mi
 
 
 deviceServers:
