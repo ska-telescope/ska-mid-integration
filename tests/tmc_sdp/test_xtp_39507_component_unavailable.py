@@ -8,10 +8,17 @@ from ska_control_model import ObsState
 from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
+from tests.resources.test_harness.constant import (
+    csp_subarray1,
+    tmc_csp_subarray_leaf_node,
+    tmc_subarraynode1,
+)
 from tests.resources.test_harness.helpers import (
     generate_eb_pb_ids,
     prepare_json_args_for_centralnode_commands,
 )
+from tests.resources.test_harness.subarray_node import device_dict
+from tests.resources.test_harness.utils.wait_helpers import Waiter
 
 
 @pytest.mark.repeat(50)
@@ -143,3 +150,19 @@ def tmc_stuck_in_resourcing(subarray_node, event_recorder):
         "obsState",
         ObsState.RESOURCING,
     )
+    # Here the SDP is in EMPTY obsState and in decorators we are waiting for
+    # all devices to be in ABORTED obsState, hence invoking Abort and Restart
+    # command here only
+
+    subarray_node.execute_transition(command_name="Abort", argin=None)
+    the_waiter = Waiter(**device_dict)
+    the_waiter.set_wait_for_specific_obsstate(
+        "ABORTED",
+        [csp_subarray1, tmc_csp_subarray_leaf_node, tmc_subarraynode1],
+    )
+    the_waiter.wait(800)
+    subarray_node.execute_transition(command_name="Restart", argin=None)
+    the_waiter.set_wait_for_specific_obsstate(
+        "EMPTY", [csp_subarray1, tmc_csp_subarray_leaf_node, tmc_subarraynode1]
+    )
+    the_waiter.wait(800)
