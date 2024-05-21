@@ -24,9 +24,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
     "Verify SKB-329",
 )
 def test_tmc_csp_delay_functionality() -> None:
-    """
-    Test case to verify delay generates properly.
-    """
+    """Test case to verify delay generates properly."""
 
 
 @given("the telescope is in ON state")
