@@ -134,6 +134,8 @@ mid-on-demand-deploy-mini-skampi:
     - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
     - make k8s-install-chart
+    - pip install kubernetes 
+    - python create_pod.py
     - make taranta-link
   environment:
     name: $CI_PROJECT_NAME/$CI_COMMIT_REF_SLUG
