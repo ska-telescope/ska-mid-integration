@@ -70,7 +70,7 @@ def telescope_is_in_idle_state(
         "assign_resources_mid_multiple_scantype", command_input_factory
     )
 
-    pytest.command_result = central_node_mid.store_resources(assign_input_json)
+    _, unique_id = central_node_mid.store_resources(assign_input_json)
 
     check_subarray_instance(
         subarray_node.subarray_devices.get("csp_subarray"), subarray_id
@@ -90,7 +90,8 @@ def telescope_is_in_idle_state(
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+        (unique_id[0], str(int(ResultCode.OK))),
+        lookahead=5,
     )
 
 
