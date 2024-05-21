@@ -147,6 +147,9 @@ deviceServers:
     DishIDs: ["SKA001", "SKA036", "SKA063", "SKA100"]
     RealDishMasterIdentifier: "mid-dish/dish-manager"
     SimulatorDishMasterIdentifier: "elt/master"
+    CspAssignResourcesInterfaceURL : "https://schema.skao.int/ska-csp-assignresources/2.0"
+    CspScanInterfaceURL : "https://schema.skao.int/ska-csp-scan/2.0"
+    SdpScanInterfaceURL : "https://schema.skao.int/ska-sdp-scan/0.4"
 
   sdpsubarrayleafnode:
     enabled: true 

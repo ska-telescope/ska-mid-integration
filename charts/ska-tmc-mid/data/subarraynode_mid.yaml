@@ -17,6 +17,9 @@ server:
   {{- $SimulatorDishMasterIdentifier := .Values.deviceServers.subarraynode.SimulatorDishMasterIdentifier }}
   {{- $dish_id := .Values.deviceServers.subarraynode.DishIDs }}
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
+  {{- $CspAssignResourcesInterfaceURL := .Values.deviceServers.subarraynode.CspAssignResourcesInterfaceURL}}
+  {{- $CspScanInterfaceURL := .Values.deviceServers.subarraynode.CspScanInterfaceURL}}
+  {{- $SdpScanInterfaceURL := .Values.deviceServers.subarraynode.SdpScanInterfaceURL}}
   {{- range  ( regexSplit " " ((.Values.subarray_count | int) | seq ) -1 ) }}
     - name: "{{ printf "%02s" . }}"
       classes:
@@ -79,13 +82,13 @@ server:
               - "100"
           - name: "CspAssignResourcesInterfaceURL"
             values:
-              - "https://schema.skao.int/ska-csp-assignresources/2.0"
+              - {{$CspAssignResourcesInterfaceURL}}
           - name: "CspScanInterfaceURL"
             values:
-              - "https://schema.skao.int/ska-csp-scan/2.0"
+              - {{$CspScanInterfaceURL}}
           - name: "SdpScanInterfaceURL"
             values:
-              - "https://schema.skao.int/ska-sdp-scan/0.4"
+              - {{$SdpScanInterfaceURL}}
   {{- end}}
 depends_on:
   - device: sys/database/2
