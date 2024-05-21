@@ -549,8 +549,8 @@ k8s-test-mid-with-csp:
     CI_KEEP_NAMESPACE: 'true'
   environment:
     name: test/$CI_COMMIT_REF_SLUG
-    on_stop: stop-k8s-test-mid-with-csp
-    auto_stop_in: 1 minute
+    # on_stop: stop-k8s-test-mid-with-csp
+    # auto_stop_in: 1 minute
 
 
 stop-k8s-test-mid-with-csp:
