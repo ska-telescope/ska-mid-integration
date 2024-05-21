@@ -37,5 +37,3 @@ To test with tmc_csp execute the command `make k8s-test MARK=tmc-csp CSP_SIMULAT
 
 
 
-
-

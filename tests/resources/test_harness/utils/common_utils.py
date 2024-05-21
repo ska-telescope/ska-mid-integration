@@ -1,5 +1,6 @@
 """This module implement common utils
 """
+import time
 from os.path import dirname, join
 
 from ska_control_model import ObsState
@@ -232,3 +233,10 @@ def wait_for_device_status_scanning(device_name: str) -> None:
     the_waiter = Waiter()
     the_waiter.set_wait_for_specific_obsstate("SCANNING", [device_name])
     the_waiter.wait(200)
+
+
+def wait_added_for_skb372():
+    """
+    Waits for few seocnds
+    """
+    time.sleep(4)

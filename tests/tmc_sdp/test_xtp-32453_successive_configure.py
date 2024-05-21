@@ -1,7 +1,6 @@
 """Test TMC-SDP Reconfigure functionality"""
 
 import json
-import time
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -12,6 +11,9 @@ from tests.resources.test_harness.helpers import (
     check_subarray_instance,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
+)
+from tests.resources.test_harness.utils.common_utils import (
+    wait_added_for_skb372,
 )
 
 
@@ -100,10 +102,7 @@ def execute_initial_configure_command(
         input_json1, command_input_factory
     )
 
-    # Wait
-    time.sleep(4)
-
-    # subarray_node.store_configuration_data(configure_json)
+    wait_added_for_skb372()
     subarray_node.execute_transition("Configure", argin=configure_json)
 
 
@@ -141,8 +140,7 @@ def execute_next_configure_command(
     configure_json = prepare_json_args_for_commands(
         input_json2, command_input_factory
     )
-    time.sleep(4)
-    # subarray_node.store_configuration_data(configure_json)
+    wait_added_for_skb372()
     subarray_node.execute_transition("Configure", argin=configure_json)
 
     # TODO :: Issue is raised with SDP team , awating for

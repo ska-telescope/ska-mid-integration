@@ -91,8 +91,8 @@ def given_assign_resources_executed_on_tmc_subarray(
         "telescopeState",
         DevState.ON,
     )
-    # Need for thr CentralNode to get the longRunningCommandResult event on
-    # TelescopeOn command completion
+    # Need to add a wait explicitly as the CentralNode does not receive
+    # the longRunningCommandResult event on TelescopeOn command completion
     time.sleep(2)
 
     check_subarray_instance(subarray_node.subarray_node, subarray_id)
