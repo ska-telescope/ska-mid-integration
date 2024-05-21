@@ -87,7 +87,7 @@ ska-sdp:
       function: sdp-queue-connector
       resources:
         limits:
-          memory: 1Gi
+          memory: 500Mi
           cpu: 0.5
         requests:
           memory: 100Mi
