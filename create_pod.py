@@ -1,5 +1,8 @@
+import os
 from kubernetes import client, config
 config.load_kube_config()
+
+SDP_NAMESPACE = os.environ.get("KUBE_NAMESPACE_SDP", "ska-tmc-integration-sdp")
 
 POD_CONTAINER = "data-prep"
 POD_COMMAND = [
@@ -52,11 +55,11 @@ pod_spec["spec"]["containers"][0]["command"][2] = (
     pod_spec["spec"]["containers"][0]["command"][2].format(path="/mnt/data/product/eb-test-20210630-00001/ska-sdp/pb-test-20211111-00001/"))
 
 # Check Pod does not already exist
-k8s_pods = core_api.list_namespaced_pod("ska-tmc-integration-sdp")
+k8s_pods = core_api.list_namespaced_pod(SDP_NAMESPACE)
 for item in k8s_pods.items:
     assert (
         item.metadata.name != pod_spec["metadata"]["name"]
     ), f"Pod {item.metadata.name} already exists"
 
-core_api.create_namespaced_pod("ska-tmc-integration-sdp", pod_spec)
+core_api.create_namespaced_pod(SDP_NAMESPACE, pod_spec)
 
