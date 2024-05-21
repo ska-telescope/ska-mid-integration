@@ -43,7 +43,7 @@ K8S_CHARTS ?= ska-tmc-$(DEPLOYMENT_TYPE) ska-tmc-testing-$(DEPLOYMENT_TYPE)## li
 K8S_CHART ?= $(HELM_CHART)
 
 DISH_TANGO_HOST ?= tango-databaseds
-COUNT ?= 1
+COUNT ?= 1 ## Number of times the tests should run
 CLUSTER_DOMAIN ?= cluster.local
 PORT ?= 10000
 SUBARRAY_COUNT ?= 1

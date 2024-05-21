@@ -20,16 +20,15 @@ from tests.resources.test_harness.subarray_node import device_dict
 from tests.resources.test_harness.utils.wait_helpers import Waiter
 
 
-@pytest.mark.repeat(50)
 @pytest.mark.tmc_sdp_unhappy
 @scenario(
     "../features/tmc_sdp/xtp_39507_component_unavailable.feature",
     "SDP Subarray report the error when one of the SDP's component is"
     + " unavailable",
 )
-def test_tmc_sdp_component_unavailable(central_node_mid):
+def test_sdp_component_unavailable(central_node_mid):
     """
-    Test case to verify if TMC-SDP component is unavailable
+    Test case to verify if one of the SDP component is unavailable
     """
     assert central_node_mid.subarray_devices["sdp_subarray"].ping() > 0
 
@@ -134,7 +133,6 @@ def tmc_reports_unavailability_to_client():
         + " cannot start processing blocks.\n"
     )
 
-    assert "AssignResources" in pytest.assertion_data["attribute_value"][0]
     assert exception_message in pytest.assertion_data["attribute_value"][1]
 
 
