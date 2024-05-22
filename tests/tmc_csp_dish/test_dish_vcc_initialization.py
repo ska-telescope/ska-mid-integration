@@ -253,7 +253,6 @@ def validate_dish_vcc_config_after_central_node_and_csp_mln_restart(
     assert tmc_mid.dish_leaf_node_list[3].kValue == 101
 
 
-@pytest.mark.skip(reason="Dish VCC is not getting set")
 @pytest.mark.tmc_csp_dish
 @pytest.mark.SKA_mid
 @scenario(
