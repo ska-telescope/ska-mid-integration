@@ -470,7 +470,7 @@ stop-k8s-test-dish-lmc:
 
 k8s-test-tmc-with-sdp:
   tags:
-    - k8srunner
+    - ska-k8s
   variables:
     TELESCOPE: 'SKA-mid'
     PORT: "10000"
