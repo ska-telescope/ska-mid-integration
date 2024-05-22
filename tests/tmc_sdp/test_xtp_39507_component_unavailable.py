@@ -7,7 +7,6 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from ska_tango_base.control_model import HealthState
 from ska_tango_testing.mock.placeholders import Anything
-from tango import DevState
 
 from tests.resources.test_harness.helpers import (
     generate_eb_pb_ids,
@@ -35,23 +34,6 @@ def given_tmc_with_simulated_csp_dish():
     assert os.environ.get("DISH_SIMULATION_ENABLED") == "true"
     assert os.environ.get("SDP_SIMULATION_ENABLED") == "false"
     assert os.environ.get("CSP_SIMULATION_ENABLED") == "true"
-
-
-@given("the telescope is in ON state")
-def subarray_is_in_on_state(
-    central_node_mid,
-    event_recorder,
-):
-    """A method to check if telescope in is ON telescopeState."""
-    central_node_mid.move_to_on()
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.ON,
-    )
 
 
 @given("the subarray is in EMPTY obsState")
