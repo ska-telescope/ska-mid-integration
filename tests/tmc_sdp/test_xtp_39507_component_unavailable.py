@@ -71,8 +71,8 @@ def subarray_is_in_empty_obsstate(
 @when("one of the SDP's component subsystem is made unavailable")
 def sdp_proc_controller_unavailable(central_node_mid):
     """
-    Proc control is made unavailable in gitlab script, asserted SDP Master's
-    HealthState as degraded to verify the same
+    Processing controller is made unavailable in gitlab script, asserted SDP
+    Controller's HealthState as degraded to verify the same
     """
     assert central_node_mid.sdp_master.healthState == HealthState.DEGRADED
 

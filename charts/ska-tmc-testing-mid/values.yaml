@@ -97,14 +97,6 @@ ska-sdp:
       storageClassName: nfss1
   ska-sdp-qa:
     enabled: true
-    kafka:
-      resources:
-        limits:
-          cpu: 200m
-          memory: 100Mi
-        requests:
-          cpu: 100m
-          memory: 50Mi
     config:
       kafka:
         overrideUrl: "ska-sdp-kafka:9092"
@@ -112,6 +104,13 @@ ska-sdp:
     enabled: false
   kafka:
     enabled: true
+    resources:
+        limits:
+          cpu: 200m
+          memory: 100Mi
+        requests:
+          cpu: 100m
+          memory: 50Mi
 
  
 # SKUID
