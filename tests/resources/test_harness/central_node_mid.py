@@ -45,7 +45,6 @@ from tests.resources.test_harness.utils.sync_decorators import (
     sync_release_resources,
     sync_restart,
     sync_set_to_off,
-    sync_set_to_on,
     sync_set_to_standby,
 )
 from tests.resources.test_harness.utils.wait_helpers import Waiter
@@ -128,14 +127,12 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             DeviceProxy(tmc_dish_leaf_node3),
             DeviceProxy(tmc_dish_leaf_node4),
         ]
-
         self.dish_leaf_node_dict = {
             "SKA001": DeviceProxy(tmc_dish_leaf_node1),
             "SKA036": DeviceProxy(tmc_dish_leaf_node2),
             "SKA063": DeviceProxy(tmc_dish_leaf_node3),
             "SKA100": DeviceProxy(tmc_dish_leaf_node4),
         }
-
         # Create Dish1 admin device proxy
         self.dish1_admin_dev_name = self.dish_master_list[0].adm_name()
         self.dish1_admin_dev_proxy = DeviceProxy(self.dish1_admin_dev_name)
@@ -153,16 +150,8 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 "release_resources_mid"
             )
         )
-
-        # if (
-        #     SIMULATED_DEVICES_DICT["sdp_and_dish"]
-        #     or SIMULATED_DEVICES_DICT["sdp"]
-        # ) and not SIMULATED_DEVICES_DICT["all_mocks"]:
         device_dict["cbf_subarray1"] = "mid_csp_cbf/sub_elt/subarray_01"
         device_dict["cbf_controller"] = "mid_csp_cbf/sub_elt/controller"
-
-        # device_dict["dish_master_list"] = self.dish_master_list
-        # device_dict["dish_leaf_node_list"] = self.dish_leaf_node_list
         self.wait = Waiter(**device_dict)
 
     @property
@@ -287,7 +276,6 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 if clear_transition:
                     device.ResetTransitions()
 
-    @sync_set_to_on(device_dict=device_dict)
     def move_to_on(self) -> None:
         """
         A method to invoke TelescopeOn command to
@@ -343,7 +331,6 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         put telescope in OFF state
 
         """
-        LOGGER.info("Invoking TelescopeOff() 1st log")
         if SIMULATED_DEVICES_DICT["all_mocks"]:
             LOGGER.info("Invoking TelescopeOff() with all Mocks")
             self.central_node.TelescopeOff()
@@ -633,11 +620,6 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             self.subarray_restart()
         elif self.subarray_node.obsState == ObsState.ABORTED:
             self.subarray_restart()
-        # if (
-        #     SIMULATED_DEVICES_DICT["all_mocks"]
-        #     or SIMULATED_DEVICES_DICT["csp_and_dish"]
-        # ):
-        #     self.move_to_off()
         if self.telescope_state != "OFF":
             self.move_to_off()
         self._clear_command_call_and_transition_data(clear_transition=True)

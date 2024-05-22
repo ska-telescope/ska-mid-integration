@@ -72,7 +72,10 @@ device_dict = {
     "tmc_subarraynode": tmc_subarraynode1,
     "sdp_master": sdp_master,
     "centralnode": centralnode,
-    "dish_master_list": [dish_master1, dish_master2],
+    "dish_master_list": [
+        dish_master1,
+        dish_master2,
+    ],
     "csp_subarray_leaf_node": tmc_csp_subarray_leaf_node,
     "sdp_subarray_leaf_node": tmc_sdp_subarray_leaf_node,
 }
@@ -89,7 +92,10 @@ class SubarrayNodeWrapper(object):
         self.subarray_node = DeviceProxy(self.tmc_subarraynode1)
         self.csp_subarray_leaf_node = DeviceProxy(tmc_csp_subarray_leaf_node)
         self.sdp_subarray_leaf_node = DeviceProxy(tmc_sdp_subarray_leaf_node)
-
+        self.dish_leaf_node_list = [
+            DeviceProxy(tmc_dish_leaf_node1),
+            DeviceProxy(tmc_dish_leaf_node2),
+        ]
         if (
             SIMULATED_DEVICES_DICT["csp_and_sdp"]
             and not SIMULATED_DEVICES_DICT["all_mocks"]
@@ -110,6 +116,7 @@ class SubarrayNodeWrapper(object):
             DeviceProxy(dish_fqdn063),
             DeviceProxy(dish_fqdn100),
         ]
+
         self.dish_leaf_node_list = [
             DeviceProxy(tmc_dish_leaf_node1),
             DeviceProxy(tmc_dish_leaf_node2),
@@ -132,8 +139,6 @@ class SubarrayNodeWrapper(object):
         self.ABORTED_OBS_STATE = ABORTED
         self.csp_subarray1 = csp_subarray1
         self.sdp_subarray1 = sdp_subarray1
-        device_dict["dish_master_list"] = self.dish_master_list
-        device_dict["dish_leaf_node_list"] = self.dish_leaf_node_list
 
     def _setup(self):
         """ """
