@@ -13,12 +13,15 @@ from tests.resources.test_harness.helpers import (
     check_long_running_command_status_events,
     check_subarray_obs_state,
     get_device_simulators,
+    prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
     wait_and_validate_device_attribute_value,
 )
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
+from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
+@pytest.mark.tmc_dish
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/science_scan_after_calibration_scan.feature",
@@ -32,12 +35,12 @@ def test_science_scan_after_five_point_calibration_scan():
 
 
 @given("a TMC")
-def given_tmc(subarray_node, event_recorder):
+def given_tmc(central_node_mid, subarray_node, event_recorder):
     """Given a TMC"""
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     for dish_master in subarray_node.dish_master_list[:2]:
         event_recorder.subscribe_event(dish_master, "longRunningCommandStatus")
-    subarray_node.move_to_on()
+    central_node_mid.move_to_on()
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
@@ -47,7 +50,11 @@ def given_tmc(subarray_node, event_recorder):
 
 @given("a subarray post five point calibration")
 def a_subarray_after_five_point_calibration(
-    subarray_node, event_recorder, simulator_factory, command_input_factory
+    central_node_mid,
+    subarray_node,
+    event_recorder,
+    simulator_factory,
+    command_input_factory,
 ):
     """Given a Subarray after the five point Calibration scan."""
     csp_sim, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
@@ -55,7 +62,33 @@ def a_subarray_after_five_point_calibration(
     event_recorder.subscribe_event(csp_sim, "obsState")
     event_recorder.subscribe_event(sdp_sim, "obsState")
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-    subarray_node.force_change_of_obs_state("READY")
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+
+    assign_input_json = prepare_json_args_for_centralnode_commands(
+        "assign_resources_mid", command_input_factory
+    )
+    _, unique_id = central_node_mid.store_resources(assign_input_json)
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.IDLE,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (unique_id[0], str(int(ResultCode.OK))),
+        lookahead=5,
+    )
+
+    config_input_json = prepare_json_args_for_commands(
+        "configure_mid", command_input_factory
+    )
+    subarray_node.store_configuration_data(config_input_json)
     sdp_sim = simulator_factory.get_or_create_simulator_device(
         SimulatorDeviceType.MID_SDP_DEVICE
     )
