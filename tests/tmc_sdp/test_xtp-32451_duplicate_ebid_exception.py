@@ -1,5 +1,7 @@
 """TMC Subarray handles the exception duplicate eb-id raised
 by SDP subarray"""
+import time
+
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState, ResultCode
@@ -16,9 +18,6 @@ from tests.resources.test_support.constant import (
 )
 
 
-@pytest.mark.skip(
-    reason="getting Corba calltimeout issue in dishleafnode logs"
-)
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp-32451_sdp_exception.feature",
@@ -92,6 +91,9 @@ def given_assign_resources_executed_on_tmc_subarray(
         "telescopeState",
         DevState.ON,
     )
+    # Need to add a wait explicitly as the CentralNode does not receive
+    # the longRunningCommandResult event on TelescopeOn command completion
+    time.sleep(2)
 
     check_subarray_instance(subarray_node.subarray_node, subarray_id)
     assert event_recorder.has_change_event_occurred(

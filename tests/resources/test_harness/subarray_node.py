@@ -95,6 +95,10 @@ class SubarrayNodeWrapper(object):
             DeviceProxy(tmc_dish_leaf_node1),
             DeviceProxy(tmc_dish_leaf_node2),
         ]
+        self.subarray_node.set_timeout_millis(5000)
+        for dish_leaf_node in self.dish_leaf_node_list:
+            dish_leaf_node.set_timeout_millis(5000)
+
         if (
             SIMULATED_DEVICES_DICT["csp_and_sdp"]
             and not SIMULATED_DEVICES_DICT["all_mocks"]
