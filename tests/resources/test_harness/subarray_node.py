@@ -72,18 +72,7 @@ device_dict = {
     "tmc_subarraynode": tmc_subarraynode1,
     "sdp_master": sdp_master,
     "centralnode": centralnode,
-    "dish_master_list": [
-        dish_master1,
-        dish_master2,
-        dish_master3,
-        dish_master4,
-    ],
-    "dish_leaf_node_list": [
-        tmc_dish_leaf_node1,
-        tmc_dish_leaf_node2,
-        tmc_dish_leaf_node3,
-        tmc_dish_leaf_node4,
-    ],
+    "dish_master_list": [dish_master1, dish_master2],
     "csp_subarray_leaf_node": tmc_csp_subarray_leaf_node,
     "sdp_subarray_leaf_node": tmc_sdp_subarray_leaf_node,
 }
