@@ -2,7 +2,7 @@ import os
 from kubernetes import client, config
 config.load_kube_config()
 
-SDP_NAMESPACE = os.environ.get("KUBE_NAMESPACE", "ska-tmc-integration-sdp")
+SDP_NAMESPACE = os.environ.get("KUBE_NAMESPACE_SDP", "ska-tmc-integration-sdp")
 
 POD_CONTAINER = "data-prep"
 POD_COMMAND = [
