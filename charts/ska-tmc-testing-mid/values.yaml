@@ -95,20 +95,17 @@ ska-sdp:
       size: 100Mi
       storageClassName: nfss1
   ska-sdp-qa:
+    enabled: true
     kafka:
-      resources:
-        limits:
-          cpu: 1024m
-          memory: 1024Mi
-          cpu: 200m
-          memory: 100Mi
-        requests:
-          cpu: 250m
-          memory: 500Mi
-          cpu: 100m
-          memory: 50Mi
+      enabled: false
+    config:
+      kafka:
+        overrideUrl: "ska-sdp-kafka:9092"
   ska-tango-base:
     enabled: false
+  kafka:
+    enabled: true
+
 
  
 # SKUID
