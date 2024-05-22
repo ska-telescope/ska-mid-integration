@@ -163,6 +163,7 @@ def check_subarray_is_in_idle_obsstate(
         subarray_node.subarray_node,
         "longRunningCommandResult",
         (pytest.command_result[1][0], str(ResultCode.OK.value)),
+        lookahead=5,
     )
 
 
