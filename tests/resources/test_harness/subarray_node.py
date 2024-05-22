@@ -346,6 +346,7 @@ class SubarrayNodeWrapper(object):
                 dish_master2,
             ]:
                 device = DeviceProxy(sim_device)
+                device.set_timeout_millis(5000)
                 device.ClearCommandCallInfo()
                 if clear_transition:
                     device.ResetTransitions()
@@ -356,6 +357,7 @@ class SubarrayNodeWrapper(object):
                 dish_master2,
             ]:
                 device = DeviceProxy(sim_device)
+                device.set_timeout_millis(5000)
                 device.ClearCommandCallInfo()
                 if clear_transition:
                     device.ResetTransitions()
@@ -367,6 +369,7 @@ class SubarrayNodeWrapper(object):
                 dish_master2,
             ]:
                 device = DeviceProxy(sim_device)
+                device.set_timeout_millis(5000)
                 device.ClearCommandCallInfo()
                 if clear_transition:
                     device.ResetTransitions()
