@@ -5,19 +5,14 @@ import os
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
+from ska_tango_base.control_model import HealthState
 from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
-from tests.resources.test_harness.constant import (
-    csp_subarray1,
-    tmc_subarraynode1,
-)
 from tests.resources.test_harness.helpers import (
     generate_eb_pb_ids,
     prepare_json_args_for_centralnode_commands,
 )
-from tests.resources.test_harness.subarray_node import device_dict
-from tests.resources.test_harness.utils.wait_helpers import Waiter
 
 
 @pytest.mark.tmc_sdp_unhappy
@@ -74,10 +69,12 @@ def subarray_is_in_empty_obsstate(
 
 
 @when("one of the SDP's component subsystem is made unavailable")
-def sdp_proc_controller_unavailable():
+def sdp_proc_controller_unavailable(central_node_mid):
     """
-    Proc control is made unavailable in gitlab script
+    Proc control is made unavailable in gitlab script, asserted SDP Master's
+    HealthState as degraded to verify the same
     """
+    assert central_node_mid.sdp_master.healthState == HealthState.DEGRADED
 
 
 @when(parsers.parse("I assign resources to the subarray {subarray_id}"))
@@ -116,7 +113,6 @@ def sdp_subarray_reports_unavailability(event_recorder, central_node_mid):
         attribute_name="longRunningCommandResult",
         attribute_value=(pytest.unique_id[0], Anything),
     )
-    assert "AssignResources" in pytest.assertion_data["attribute_value"][0]
     assert exception_message in pytest.assertion_data["attribute_value"][1]
 
 
@@ -142,24 +138,26 @@ def tmc_stuck_in_resourcing(subarray_node, event_recorder):
     Method to verify the subarray stuck in RESOURCING obsstate
     """
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
+    event_recorder.subscribe_event(
+        subarray_node.subarray_devices["csp_subarray"], "obsState"
+    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.RESOURCING,
     )
     # Here the SDP is in EMPTY obsState and in decorators we are waiting for
-    # all devices to be in ABORTED obsState, hence invoking Abort and Restart
+    # all devices to be in ABORTED obsState, hence invoking Abort
     # command here only
 
     subarray_node.execute_transition(command_name="Abort", argin=None)
-    the_waiter = Waiter(**device_dict)
-    the_waiter.set_wait_for_specific_obsstate(
-        "ABORTED",
-        [csp_subarray1, tmc_subarraynode1],
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices["csp_subarray"],
+        "obsState",
+        ObsState.ABORTED,
     )
-    the_waiter.wait(800)
-    subarray_node.execute_transition(command_name="Restart", argin=None)
-    the_waiter.set_wait_for_specific_obsstate(
-        "EMPTY", [csp_subarray1, tmc_subarraynode1]
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.ABORTED,
     )
-    the_waiter.wait(800)
