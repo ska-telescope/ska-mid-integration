@@ -13,8 +13,8 @@ from tests.resources.test_harness.helpers import (
     update_scan_type,
 )
 from tests.resources.test_harness.utils.common_utils import (
-    check_configure_successful,
-    check_scan_successful,
+    check_configure_successful_csp,
+    check_scan_successful_csp,
 )
 
 configure_logging(logging.DEBUG)
@@ -59,7 +59,7 @@ def execute_configure_scan_sequence(
         configure_json = update_scan_type(configure_json, scan_type)
         _, unique_id = subarray_node.store_configuration_data(configure_json)
 
-        check_configure_successful(
+        check_configure_successful_csp(
             subarray_node, event_recorder, unique_id, scan_type
         )
 
@@ -71,7 +71,7 @@ def execute_configure_scan_sequence(
 
         _, unique_id = subarray_node.store_scan_data(scan_json)
 
-        check_scan_successful(
+        check_scan_successful_csp(
             subarray_node, event_recorder, scan_id, unique_id
         )
 

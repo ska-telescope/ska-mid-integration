@@ -338,6 +338,7 @@ k8s-test:
     SUBARRAY_COUNT: 2
     COUNT: 1
     KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA'
+    CI_KEEP_NAMESPACE: 'true'
   before_script:
     - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
@@ -481,9 +482,10 @@ k8s-test-tmc-with-sdp:
     MARK: 'tmc_sdp'
     SDP_SIMULATION_ENABLED: 'false'
     TARANTA_ENABLED: 'true'
+    CI_KEEP_NAMESPACE: 'true'
   environment:
     name: test/$CI_COMMIT_REF_SLUG
-    on_stop: stop-k8s-test-tmc-with-sdp
+    # on_stop: stop-k8s-test-tmc-with-sdp
     auto_stop_in: 1 minute
 
 

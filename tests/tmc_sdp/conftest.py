@@ -15,9 +15,13 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
     update_scan_id,
+    update_scan_type,
 )
 from tests.resources.test_harness.utils.common_utils import (
-    check_scan_successful_csp,
+    check_configure_successful,
+    check_obsstate_sdp_in_first_configure,
+    check_scan_successful,
+    wait_added_for_skb372,
 )
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
@@ -27,14 +31,15 @@ LOGGER = logging.getLogger(__name__)
 
 @given("Telescope is ON state")
 def given_a_tmc(central_node_mid, event_recorder, subarray_node):
-    """A method to define TMC and CSP and subscribe ."""
+    """A method to define TMC and SDP ,move to ON state
+    and subscribe events"""
     assert central_node_mid.central_node.ping() > 0
-    assert central_node_mid.subarray_devices["csp_subarray"].ping() > 0
+    assert central_node_mid.subarray_devices["sdp_subarray"].ping() > 0
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
     event_recorder.subscribe_event(
-        subarray_node.subarray_devices.get("csp_subarray"), "obsState"
+        subarray_node.subarray_devices.get("sdp_subarray"), "obsState"
     )
 
     event_recorder.subscribe_event(
@@ -42,8 +47,12 @@ def given_a_tmc(central_node_mid, event_recorder, subarray_node):
     )
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     event_recorder.subscribe_event(
-        subarray_node.subarray_devices["csp_subarray"], "scanID"
+        subarray_node.subarray_devices["sdp_subarray"], "scanID"
     )
+    event_recorder.subscribe_event(
+        subarray_node.subarray_devices["sdp_subarray"], "scanType"
+    )
+
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
@@ -76,13 +85,19 @@ def telescope_is_in_idle_state(
     )
 
     assign_str = json.loads(assign_input_json)
+    # Here we are adding this to get an event of ObsState CONFIGURING from
+    # SDP Subarray
+    assign_str["sdp"]["processing_blocks"][0]["parameters"][
+        "time-to-ready"
+    ] = 20
+
     _, unique_id = central_node_mid.store_resources(json.dumps(assign_str))
 
     check_subarray_instance(
-        subarray_node.subarray_devices.get("csp_subarray"), subarray_id
+        subarray_node.subarray_devices.get("sdp_subarray"), subarray_id
     )
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_devices.get("csp_subarray"),
+        subarray_node.subarray_devices.get("sdp_subarray"),
         "obsState",
         ObsState.IDLE,
     )
@@ -98,7 +113,7 @@ def telescope_is_in_idle_state(
         central_node_mid.central_node,
         "longRunningCommandResult",
         (unique_id[0], str(int(ResultCode.OK))),
-        lookahead=5,
+        lookahead=10,
     )
 
 
@@ -123,13 +138,19 @@ def reassign_resources(
 
     assign_str = json.loads(assign_input_json)
 
+    # Here we are adding this to get an event of ObsState CONFIGURING from
+    # SDP Subarray
+    assign_str["sdp"]["processing_blocks"][0]["parameters"][
+        "time-to-ready"
+    ] = 10
+
     _, unique_id = central_node_mid.store_resources(json.dumps(assign_str))
 
     check_subarray_instance(
-        subarray_node.subarray_devices.get("csp_subarray"), subarray_id
+        subarray_node.subarray_devices.get("sdp_subarray"), subarray_id
     )
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_devices.get("csp_subarray"),
+        subarray_node.subarray_devices.get("sdp_subarray"),
         "obsState",
         ObsState.IDLE,
     )
@@ -158,27 +179,27 @@ def execute_end_command(
     subarray_id,
     scan_types,
 ):
-    """ "A method to invoke end command"""
+    """A method to invoke end command"""
 
     central_node_mid.set_subarray_id(subarray_id)
-    _, unique_id = subarray_node.end_observation()
-
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_devices["csp_subarray"],
-        "obsState",
-        ObsState.IDLE,
-        lookahead=20,
-    )
+    _, unique_id = subarray_node.execute_transition("End")
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node, "obsState", ObsState.IDLE, lookahead=20
     )
 
     assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices["sdp_subarray"],
+        "obsState",
+        ObsState.IDLE,
+        lookahead=20,
+    )
+
+    assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
         (unique_id[0], str(int(ResultCode.OK))),
-        lookahead=10,
+        lookahead=20,
     )
 
 
@@ -189,7 +210,7 @@ def execute_release_resources_command(
     event_recorder,
     subarray_id,
 ):
-    """ "A method to invoke Release Resources command"""
+    """A method to invoke Release Resources command"""
 
     release_input_json = prepare_json_args_for_centralnode_commands(
         "release_resources_mid", command_input_factory
@@ -200,18 +221,19 @@ def execute_release_resources_command(
     )
 
     check_subarray_instance(
-        central_node_mid.subarray_devices.get("csp_subarray"), subarray_id
+        central_node_mid.subarray_devices.get("sdp_subarray"), subarray_id
     )
     assert event_recorder.has_change_event_occurred(
-        central_node_mid.subarray_devices.get("csp_subarray"),
+        central_node_mid.subarray_devices.get("sdp_subarray"),
         "obsState",
         ObsState.EMPTY,
+        lookahead=20,
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
         (unique_id[0], str(int(ResultCode.OK))),
-        lookahead=5,
+        lookahead=20,
     )
 
 
@@ -229,26 +251,95 @@ def check_tmc_is_in_empty_obsstate(
         central_node_mid.subarray_node,
         "obsState",
         ObsState.EMPTY,
+        lookahead=20,
     )
 
 
-@when(
-    parsers.parse(
-        "reperform scan with same configuration and new scan id {new_scan_id}"
-    )
-)
+@when(parsers.parse("reperform scan with same configuration and new scan id"))
 def reexecute_scan_command(
-    command_input_factory, event_recorder, subarray_node, new_scan_id
+    command_input_factory,
+    event_recorder,
+    subarray_node,
 ):
     """A method to invoke scan command with new scan_id"""
 
+    scan_id = 10
     scan_json = prepare_json_args_for_commands(
         "scan_mid", command_input_factory
     )
 
-    scan_json = update_scan_id(scan_json, new_scan_id)
+    scan_json = update_scan_id(scan_json, scan_id)
     _, unique_id = subarray_node.execute_transition("Scan", argin=scan_json)
 
-    check_scan_successful_csp(
-        subarray_node, event_recorder, new_scan_id, unique_id
+    check_scan_successful(subarray_node, event_recorder, scan_id, unique_id)
+
+
+@when(
+    parsers.parse(
+        "configure and scan TMC SubarrayNode {subarray_id} "
+        "for {new_scan_types} and {new_scan_ids}"
     )
+)
+@when(
+    parsers.parse(
+        "configure and scan TMC SubarrayNode {subarray_id} "
+        "for each {scan_types} and {scan_ids}"
+    )
+)
+def execute_configure_scan_sequence(
+    subarray_node,
+    command_input_factory,
+    scan_ids,
+    event_recorder,
+    subarray_id,
+    scan_types,
+):
+    """A method to invoke configure and scan  command"""
+
+    check_subarray_instance(subarray_node.subarray_node, subarray_id)
+
+    configure_json = prepare_json_args_for_commands(
+        "configure1_mid", command_input_factory
+    )
+
+    configure_cycle = "initial"
+    processed_scan_type = ""
+
+    combined_dict = dict(zip(eval(scan_ids), eval(scan_types)))
+    for scan_id, scan_type in combined_dict.items():
+        wait_added_for_skb372()
+        configure_json = update_scan_type(configure_json, scan_type)
+        _, unique_id = subarray_node.execute_transition(
+            "Configure", argin=configure_json
+        )
+
+        if configure_cycle == "initial":
+            check_obsstate_sdp_in_first_configure(
+                event_recorder, subarray_node
+            )
+            configure_cycle = "Next"
+
+        check_configure_successful(
+            subarray_node,
+            event_recorder,
+            unique_id,
+            scan_type,
+            processed_scan_type,
+        )
+
+        scan_json = prepare_json_args_for_commands(
+            "scan_mid", command_input_factory
+        )
+        scan_json = update_scan_id(scan_json, scan_id)
+        _, unique_id = subarray_node.execute_transition(
+            "Scan", argin=scan_json
+        )
+        check_scan_successful(
+            subarray_node, event_recorder, scan_id, unique_id
+        )
+        processed_scan_type = scan_type
+
+        LOGGER.debug(
+            f"Configure-scan sequence completed for {scan_id} "
+            f"and scan_type {scan_type}"
+        )
