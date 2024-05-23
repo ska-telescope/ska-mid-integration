@@ -68,7 +68,7 @@ for item in k8s_pods.items:
 core_api.create_namespaced_pod(os.environ.get("SDP_NAMESPACE"), pod_spec)
     
 EOL
-echo "Creating SDP data copy pod ..."
+echo "Creating SDP data copy pod in $SDP_NAMESPACE"
 kubectl get pods -n $SDP_NAMESPACE
 fi
 
@@ -86,6 +86,6 @@ core_api.delete_namespaced_pod(
     async_req=False, grace_period_seconds=0
 )
 EOL
-echo "Deleting SDP data copy pod ..."
+echo "Deleting SDP data copy pod in $SDP_NAMESPACE"
 kubectl get pods -n $SDP_NAMESPACE
 fi
