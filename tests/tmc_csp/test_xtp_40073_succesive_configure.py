@@ -111,6 +111,9 @@ def execute_first_configure_command(
     """ "A method to invoke first configure command"""
 
     check_subarray_instance(subarray_node.subarray_node, subarray_id)
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     configure_json = prepare_json_args_for_commands(
         input_json1, command_input_factory
     )
@@ -119,9 +122,6 @@ def execute_first_configure_command(
         subarray_node.subarray_devices["csp_subarray"],
         "obsState",
         ObsState.CONFIGURING,
-    )
-    event_recorder.subscribe_event(
-        subarray_node.subarray_node, "longRunningCommandResult"
     )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
