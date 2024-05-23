@@ -114,13 +114,17 @@ def execute_first_configure_command(
     configure_json = prepare_json_args_for_commands(
         input_json1, command_input_factory
     )
-    pytest.command_result = subarray_node.store_configuration_data(
-        configure_json
-    )
+    _, unique_id = subarray_node.store_configuration_data(configure_json)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["csp_subarray"],
         "obsState",
         ObsState.CONFIGURING,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (unique_id[0], str(int(ResultCode.OK))),
+        lookahead=5,
     )
 
 
