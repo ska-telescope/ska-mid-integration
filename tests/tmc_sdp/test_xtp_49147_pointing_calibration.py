@@ -30,12 +30,12 @@ def test_pointing_calibration_during_five_point_scan():
 
 
 @given("a TMC")
-def given_tmc(subarray_node, event_recorder):
+def given_tmc(central_node_mid, subarray_node, event_recorder):
     """Given a TMC"""
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     for dish_master in subarray_node.dish_master_list[:2]:
         event_recorder.subscribe_event(dish_master, "longRunningCommandStatus")
-    subarray_node.move_to_on()
+    central_node_mid.move_to_on()
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
