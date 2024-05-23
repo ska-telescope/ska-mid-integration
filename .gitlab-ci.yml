@@ -134,9 +134,8 @@ mid-on-demand-deploy-mini-skampi:
     - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
     - make k8s-install-chart
-    - pip install kubernetes 
-    - python create_pod.py
-    - make taranta-link
+    - chmod u=rwx,go=rx tests/scripts/sdp_data_copy.sh
+    - ${PWD}/tests/scripts/sdp_data_copy.sh create_pod
   environment:
     name: $CI_PROJECT_NAME/$CI_COMMIT_REF_SLUG
     kubernetes:
@@ -296,6 +295,7 @@ mid-on-demand-destroy-mini-skampi:
   script:
     - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
+    - ${PWD}/tests/scripts/sdp_data_copy.sh delete_pod
     - make k8s-uninstall-chart
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
     - make k8s-delete-namespace
@@ -459,6 +459,7 @@ stop-k8s-test-dish-lmc:
 k8s-test-tmc-with-sdp:
   extends:
     - k8s-test
+    - ${PWD}/tests/scripts/sdp_data_copy.sh create_pod
   variables:
     TELESCOPE: 'SKA-mid'
     PORT: "10000"
@@ -483,6 +484,7 @@ stop-k8s-test-tmc-with-sdp:
     - make k8s-uninstall-chart
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
     - make k8s-delete-namespace
+    - ${PWD}/tests/scripts/sdp_data_copy.sh delete_pod
 
 
 
