@@ -83,6 +83,9 @@ def assign_resource_for_five_point_calibration(
     event_recorder.subscribe_event(csp_sim, "obsState")
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     event_recorder.subscribe_event(
+        central_node_mid.subarray_devices.get("sdp_subarray"), "obsState"
+    )
+    event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
     event_recorder.subscribe_event(
@@ -92,11 +95,16 @@ def assign_resource_for_five_point_calibration(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_five_point_sdp", command_input_factory
     )
-    _, unique_id = central_node_mid.perform_action(
-        "AssignResources", assign_input_json
-    )
+
+    _, unique_id = central_node_mid.store_resources(assign_input_json)
+
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
+        "obsState",
+        ObsState.IDLE,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.subarray_devices.get("sdp_subarray"),
         "obsState",
         ObsState.IDLE,
     )
