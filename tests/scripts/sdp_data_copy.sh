@@ -53,7 +53,7 @@ core_api = client.CoreV1Api()
 pod_spec = DATA_POD_DEF.copy()
 
 # Update the name of the pod and the data PVC
-pod_spec["metadata"]["name"] = "sdp-test-data"
+pod_spec["metadata"]["name"] = "sdp-data-copy"
 pod_spec["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] = "test-pvc"
 pod_spec["spec"]["containers"][0]["command"][2] = (
 pod_spec["spec"]["containers"][0]["command"][2].format(path=os.environ.get("SDP_DATA_COPY_PATH"))
@@ -82,7 +82,7 @@ from kubernetes import client, config
 config.load_kube_config()
 core_api = client.CoreV1Api()
 core_api.delete_namespaced_pod(
-    "sdp-test-data",os.environ.get("SDP_NAMESPACE"), 
+    "sdp-data-copy",os.environ.get("SDP_NAMESPACE"), 
     async_req=False, grace_period_seconds=0
 )
 EOL
