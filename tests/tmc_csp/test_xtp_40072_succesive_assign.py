@@ -47,9 +47,9 @@ def subarray_is_in_empty_obsstate(
         central_node_mid.central_node, "telescopeState"
     )
     event_recorder.subscribe_event(
-        central_node_mid.subarray_devices["csp_subarray"], "obsState"
+        subarray_node.subarray_devices["csp_subarray"], "obsState"
     )
-    event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
+    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
 
     central_node_mid.move_to_on()
 
@@ -91,8 +91,6 @@ def invoke_first_assign_resources(
     resources = ast.literal_eval(receptors1)
     assign_input_json["dish"]["receptor_ids"] = resources
     assigned_resources.extend(resources)
-    LOGGER.info(f"assigned resources::: {assigned_resources}")
-
     LOGGER.info(f"assignresources: {assign_input_json}")
     pytest.command_result = central_node_mid.store_resources(
         json.dumps(assign_input_json)

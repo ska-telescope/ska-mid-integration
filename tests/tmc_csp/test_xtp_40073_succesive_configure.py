@@ -36,7 +36,7 @@ def given_a_tmc(
 ):
     """A method to define TMC and CSP and subscribe ."""
     assert central_node_mid.central_node.ping() > 0
-    assert central_node_mid.subarray_devices["csp_subarray"].ping() > 0
+    assert subarray_node.subarray_devices["csp_subarray"].ping() > 0
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
