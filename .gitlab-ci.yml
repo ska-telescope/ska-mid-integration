@@ -296,10 +296,9 @@ mid-on-demand-destroy-mini-skampi:
   script:
     - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
+    - ${PWD}/tests/scripts/sdp_data_copy.sh delete_pod
     - make k8s-uninstall-chart
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
-    - kubectl -n $KUBE_NAMESPACE_SDP delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
-    - kubectl delete namespace $KUBE_NAMESPACE_SDP
     - make k8s-delete-namespace
   environment:
     name: $CI_PROJECT_NAME/$CI_COMMIT_REF_SLUG
@@ -484,12 +483,11 @@ stop-k8s-test-tmc-with-sdp:
     - stop-k8s-test
   variables:
     KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-sdp'
-    KUBE_NAMESPACE_SDP: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-on-demand-tmc-test-sdp"
+    KUBE_NAMESPACE_SDP: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-sdp'
   script:
+    - ${PWD}/tests/scripts/sdp_data_copy.sh delete_pod
     - make k8s-uninstall-chart
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
-    - kubectl -n $KUBE_NAMESPACE_SDP delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
-    - kubectl delete namespace $KUBE_NAMESPACE_SDP
     - make k8s-delete-namespace
 
 

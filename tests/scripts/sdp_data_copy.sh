@@ -68,7 +68,7 @@ for item in k8s_pods.items:
 core_api.create_namespaced_pod(os.environ.get("SDP_NAMESPACE"), pod_spec)
     
 EOL
-echo "Pod created successfully"
+echo "Creating SDP data copy pod ..."
 kubectl get pods -n $SDP_NAMESPACE
 fi
 
@@ -76,9 +76,6 @@ fi
 #Delete pod
 if [ "$1" == "delete_pod" ]
 then
-echo "Deleting pod ..."
-kubectl get pods -n $SDP_NAMESPACE
-
 python << EOL
 import os
 from kubernetes import client, config
@@ -89,4 +86,6 @@ core_api.delete_namespaced_pod(
     async_req=False, grace_period_seconds=0
 )
 EOL
+echo "Deleting SDP data copy pod ..."
+kubectl get pods -n $SDP_NAMESPACE
 fi
