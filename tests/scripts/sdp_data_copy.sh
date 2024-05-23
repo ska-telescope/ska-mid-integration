@@ -79,12 +79,19 @@ then
 python << EOL
 import os
 from kubernetes import client, config
+from kubernetes.client.rest import ApiException
 config.load_kube_config()
 core_api = client.CoreV1Api()
-core_api.delete_namespaced_pod(
-    "sdp-data-copy",os.environ.get("SDP_NAMESPACE"), 
-    async_req=False, grace_period_seconds=0
-)
+try:
+    core_api.delete_namespaced_pod(
+        "sdp-data-copy",os.environ.get("SDP_NAMESPACE"), 
+        async_req=False, grace_period_seconds=0
+    )
+except ApiException as e:
+    if e.status == 404:
+        print(f"Pod sdp-data-copy does not exist in namespace {os.environ.get('SDP_NAMESPACE')}.")
+    else:
+        print(f"An error occurred: {e}")
 EOL
 echo "Deleting SDP data copy pod in $SDP_NAMESPACE"
 kubectl get pods -n $SDP_NAMESPACE
