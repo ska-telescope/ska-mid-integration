@@ -136,6 +136,7 @@ mid-on-demand-deploy-mini-skampi:
     - make k8s-install-chart
     - chmod u=rwx,go=rx tests/scripts/sdp_data_copy.sh
     - ${PWD}/tests/scripts/sdp_data_copy.sh create_pod
+    - make taranta-link
   environment:
     name: $CI_PROJECT_NAME/$CI_COMMIT_REF_SLUG
     kubernetes:
