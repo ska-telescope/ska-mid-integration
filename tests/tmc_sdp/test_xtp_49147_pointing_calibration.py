@@ -114,7 +114,10 @@ def configure_for_science_scan(subarray_node, command_input_factory):
     configure_command_input = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    subarray_node.execute_transition("Configure", configure_command_input)
+    # Update scan type to pointing
+    configure_json = json.loads(configure_command_input)
+    configure_json["sdp"]["scan_type"] = "pointing"
+    subarray_node.execute_transition("Configure", json.dumps(configure_json))
     assert check_subarray_obs_state("READY", 500)
 
 
