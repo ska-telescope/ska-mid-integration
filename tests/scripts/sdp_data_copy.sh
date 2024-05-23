@@ -1,29 +1,34 @@
+#!/bin/bash
+
+#Export variables 
+export SDP_NAMESPACE="${KUBE_NAMESPACE_SDP:-"ska-tmc-integration-sdp"}"
+export POD_CONTAINER="data-prep"
+export SDP_DATA_COPY_PATH="/mnt/data/product/eb-test-20210630-00001/ska-sdp/pb-test-20211111-00001/" 
+
+#Install k8s python package
+pip list | grep -i kubernetes
+if [ "$?" -ne "0" ]
+then
+    pip install kubernetes
+fi
+
+#Create pod
+if [ "$1" == "create_pod" ]
+then
+python << EOL
 import os
 from kubernetes import client, config
 config.load_kube_config()
-
-SDP_NAMESPACE = os.environ.get("KUBE_NAMESPACE_SDP", "ska-tmc-integration-sdp")
 
 POD_CONTAINER = "data-prep"
 POD_COMMAND = [
     "/bin/bash",
     "-c",
     "apt-get update && apt-get install -y git git-lfs;"
-    # "gsutil -m cp -r 'gs://ska1-simulation-data/simulations/pointing-offset/orc-1915/"
-    # "global-5_point-8-b2g-astropy-1s-5chunk-gaussianvp_pe0pe1-7-4.5/addoffset/t0.ms' .;"
-    # "gsutil -m cp -r 'gs://ska1-simulation-data/simulations/pointing-offset/orc-1915/"
-    # "global-5_point-8-b2g-astropy-1s-5chunk-gaussianvp_pe0pe1-7-4.5/addoffset/t1.ms' .;"
-    # "gsutil -m cp -r 'gs://ska1-simulation-data/simulations/pointing-offset/orc-1915/"
-    # "global-5_point-8-b2g-astropy-1s-5chunk-gaussianvp_pe0pe1-7-4.5/addoffset/t2.ms' .;"
-    # "gsutil -m cp -r 'gs://ska1-simulation-data/simulations/pointing-offset/orc-1915/"
-    # "global-5_point-8-b2g-astropy-1s-5chunk-gaussianvp_pe0pe1-7-4.5/addoffset/t3.ms' .;"
-    # "gsutil -m cp -r 'gs://ska1-simulation-data/simulations/pointing-offset/orc-1915/"
-    # "global-5_point-8-b2g-astropy-1s-5chunk-gaussianvp_pe0pe1-7-4.5/addoffset/t4.ms' .;"
     "git clone -n --depth=1 --filter=tree:0 --branch=0.20.0 "
     "https://gitlab.com/ska-telescope/sdp/ska-sdp-integration.git; cd ska-sdp-integration;"
-    # "cd ska-sdp-integration; git sparse-checkout set --no-cone tests/resources/data/pointing-data;"
     "git checkout; git lfs fetch; cd tests/resources/data/pointing-data;"
-    "mkdir -p {path}; cp -r *.ms {path};"
+    "mkdir -p {path}; cp -rv *.ms {path};"
     " trap : TERM; sleep infinity & wait",
 ]
 
@@ -44,22 +49,43 @@ DATA_POD_DEF = {
         "volumes": [{"name": "data", "persistentVolumeClaim": {"claimName": "testing"}}],
     },
 }
-
 core_api = client.CoreV1Api()
 pod_spec = DATA_POD_DEF.copy()
 
 # Update the name of the pod and the data PVC
-pod_spec["metadata"]["name"] = "sdp-test-data"
+pod_spec["metadata"]["name"] = "sdp-data-copy"
 pod_spec["spec"]["volumes"][0]["persistentVolumeClaim"]["claimName"] = "test-pvc"
 pod_spec["spec"]["containers"][0]["command"][2] = (
-    pod_spec["spec"]["containers"][0]["command"][2].format(path="/mnt/data/product/eb-test-20210630-00001/ska-sdp/pb-test-20211111-00001/"))
-
+pod_spec["spec"]["containers"][0]["command"][2].format(path=os.environ.get("SDP_DATA_COPY_PATH"))
+)
 # Check Pod does not already exist
-k8s_pods = core_api.list_namespaced_pod(SDP_NAMESPACE)
+k8s_pods = core_api.list_namespaced_pod(os.environ.get("SDP_NAMESPACE"))
 for item in k8s_pods.items:
     assert (
         item.metadata.name != pod_spec["metadata"]["name"]
     ), f"Pod {item.metadata.name} already exists"
 
-core_api.create_namespaced_pod(SDP_NAMESPACE, pod_spec)
+core_api.create_namespaced_pod(os.environ.get("SDP_NAMESPACE"), pod_spec)
+    
+EOL
+echo "Creating SDP data copy pod ..."
+kubectl get pods -n $SDP_NAMESPACE
+fi
 
+
+#Delete pod
+if [ "$1" == "delete_pod" ]
+then
+python << EOL
+import os
+from kubernetes import client, config
+config.load_kube_config()
+core_api = client.CoreV1Api()
+core_api.delete_namespaced_pod(
+    "sdp-data-copy",os.environ.get("SDP_NAMESPACE"), 
+    async_req=False, grace_period_seconds=0
+)
+EOL
+echo "Deleting SDP data copy pod ..."
+kubectl get pods -n $SDP_NAMESPACE
+fi
