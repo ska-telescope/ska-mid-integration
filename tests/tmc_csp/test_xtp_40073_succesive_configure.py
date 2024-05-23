@@ -120,6 +120,9 @@ def execute_first_configure_command(
         "obsState",
         ObsState.CONFIGURING,
     )
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
