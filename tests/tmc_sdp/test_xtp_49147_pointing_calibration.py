@@ -91,7 +91,9 @@ def assign_resource_for_five_point_calibration(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_five_point_sdp", command_input_factory
     )
-    _, unique_id = central_node_mid.store_resources(assign_input_json)
+    _, unique_id = central_node_mid.perform_action(
+        "AssignResources", assign_input_json
+    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
