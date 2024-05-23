@@ -76,6 +76,7 @@ fi
 #Delete pod
 if [ "$1" == "delete_pod" ]
 then
+echo "Deleting SDP data copy pod in $SDP_NAMESPACE"
 python << EOL
 import os
 from kubernetes import client, config
@@ -93,6 +94,5 @@ except ApiException as e:
     else:
         print(f"An error occurred: {e}")
 EOL
-echo "Deleting SDP data copy pod in $SDP_NAMESPACE"
 kubectl get pods -n $SDP_NAMESPACE
 fi
