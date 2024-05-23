@@ -494,6 +494,7 @@ stop-k8s-test-tmc-with-sdp:
     - make k8s-uninstall-chart
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
     - make k8s-delete-namespace
+  when: manual
 
 
 

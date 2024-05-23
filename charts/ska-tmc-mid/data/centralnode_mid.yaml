@@ -109,7 +109,7 @@ server:
             - "3000"
         - name: "CommandTimeout"
           values:
-            - "60"
+            - "120"
 depends_on:
   - device: sys/database/2
 image:
