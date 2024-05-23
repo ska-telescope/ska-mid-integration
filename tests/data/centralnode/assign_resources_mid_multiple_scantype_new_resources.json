@@ -4,9 +4,7 @@
   "subarray_id": 1,
   "dish": {
     "receptor_ids": [
-      "SKA001",
-      "SKA036"
-
+       "SKA063" ,"SKA100"
 
     ]
   },
@@ -249,8 +247,7 @@
         4
       ],
       "receptors": [
-      "SKA001",
-      "SKA036"
+      "SKA063" ,"SKA100"
       ],
       "receive_nodes": 10
     }

@@ -34,3 +34,12 @@ To test with tmc_sdp pair execute the command `make k8s-test MARK=tmc_sdp SDP_SI
 * ``Abort``            -  Testing Abort command on TMC with real SDP controller and SDP Subarrays and mocked/simulated CSP and Dish subsystems.
 
 * ``Restart``          -  Testing Restart command on TMC with real SDP controller and SDP Subarrays and mocked/simulated CSP and Dish subsystems.
+
+Long command sequence implementation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* ``TMC Mid executes configure-scan sequence of commands successfully`` - Testing TMC-SDP long sequence for configure-scan functionality by parameterizing the scan_types and scan_ids
+
+*``TMC Mid executes multiple scan with same configuration successfully`` - Testing TMC-SDP long sequence for multiple scans functionality by parameterizing the scan_types and scan_ids
+
+*``TMC Mid executes multiple scans with different resources and configurations`` - Testing TMC-SDP long sequence for multiple scan functionality by parameterizing new scan_type and new scan_ids
