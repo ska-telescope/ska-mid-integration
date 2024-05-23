@@ -21,7 +21,6 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
-@pytest.mark.tmc_dish
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/science_scan_after_calibration_scan.feature",
