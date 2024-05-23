@@ -107,6 +107,9 @@ server:
             - "3000"
             - "DishVccValidationStatus"
             - "3000"
+        - name: "CommandTimeout"
+          values:
+            - "60"
 depends_on:
   - device: sys/database/2
 image:
