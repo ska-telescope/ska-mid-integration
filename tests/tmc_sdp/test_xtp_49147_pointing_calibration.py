@@ -1,6 +1,5 @@
 """Testing the Science Scan after a five point calibration scan"""
 import json
-import time
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -47,7 +46,6 @@ def given_tmc(central_node_mid, subarray_node, event_recorder):
         event_recorder.subscribe_event(dish_master, "longRunningCommandStatus")
 
     central_node_mid.move_to_on()
-    time.sleep(120)
 
     assert event_recorder.has_change_event_occurred(
         central_node_mid.sdp_master,

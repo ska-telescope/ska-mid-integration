@@ -28,7 +28,7 @@ POD_COMMAND = [
     "git clone -n --depth=1 --filter=tree:0 --branch=0.20.0 "
     "https://gitlab.com/ska-telescope/sdp/ska-sdp-integration.git; cd ska-sdp-integration;"
     "git checkout; git lfs fetch; cd tests/resources/data/pointing-data;"
-    "mkdir -p {path}; cp -rv *.ms {path};"
+    "mkdir -p {path}; cp -rv *.ms {path}; ls -l {path};echo data_copied_successfully"
     " trap : TERM; sleep infinity & wait",
 ]
 
