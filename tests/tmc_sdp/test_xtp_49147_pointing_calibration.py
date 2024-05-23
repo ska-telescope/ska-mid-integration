@@ -18,6 +18,7 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
 @pytest.mark.tmc_sdp
+@pytest.mark.pointing_cal
 @scenario(
     "../features/tmc_sdp/xtp_49147_pointing_calibration_five_point.feature",
     "TMC is able to process pointing calibration received from SDP during "
