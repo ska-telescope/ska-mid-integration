@@ -459,6 +459,8 @@ stop-k8s-test-dish-lmc:
 k8s-test-tmc-with-sdp:
   extends:
     - k8s-test
+  script:
+    - chmod u=rwx,go=rx tests/scripts/sdp_data_copy.sh
     - ./tests/scripts/sdp_data_copy.sh create_pod
   variables:
     TELESCOPE: 'SKA-mid'
