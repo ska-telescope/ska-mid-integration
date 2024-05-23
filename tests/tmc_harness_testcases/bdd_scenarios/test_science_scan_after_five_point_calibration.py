@@ -22,6 +22,7 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
 @pytest.mark.SKA_mid
+@pytest.mark.tmc_dish
 @scenario(
     "../features/test_harness/science_scan_after_calibration_scan.feature",
     "TMC behaviour during a science scan after a five point calibration scan.",
