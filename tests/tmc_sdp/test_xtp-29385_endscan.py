@@ -94,12 +94,6 @@ def check_subarray_is_configured(
     )
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
 
-    # execute set of commands and bring SubarrayNode to SCANNING obsState
-    # subarray_node.force_change_of_obs_state(
-    #     "SCANNING",
-    #     assign_input_json=assign_input_json,
-    #     configure_input_json=configure_input_json,
-    # )
     central_node_mid.store_resources(assign_input_json)
 
     assert event_recorder.has_change_event_occurred(
