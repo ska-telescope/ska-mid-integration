@@ -6,7 +6,11 @@ export POD_CONTAINER="data-prep"
 export SDP_DATA_COPY_PATH="/mnt/data/product/eb-test-20210630-00001/ska-sdp/pb-test-20211111-00001/" 
 
 #Install k8s python package
-pip install kubernetes
+pip list | grep -i kubernetes
+if [ "$?" -ne "0" ]
+then
+    pip install kubernetes
+fi
 
 #Create pod
 if [ "$1" == "create_pod" ]
@@ -64,11 +68,17 @@ for item in k8s_pods.items:
 core_api.create_namespaced_pod(os.environ.get("SDP_NAMESPACE"), pod_spec)
     
 EOL
+echo "Pod created successfully"
+kubectl get pods -n $SDP_NAMESPACE
 fi
+
 
 #Delete pod
 if [ "$1" == "delete_pod" ]
 then
+echo "Deleting pod ..."
+kubectl get pods -n $SDP_NAMESPACE
+
 python << EOL
 import os
 from kubernetes import client, config
