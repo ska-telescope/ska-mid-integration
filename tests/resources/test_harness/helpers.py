@@ -474,7 +474,7 @@ def wait_for_last_pointing_data(dish_leaf_node, timeout=50) -> None:
     start_time = time.time()
     time_elapsed = 0
     while (
-        dish_leaf_node.lastPointingData != "Not Set"
+        dish_leaf_node.lastPointingData == "Not Set"
         and time_elapsed <= timeout
     ):
         time.sleep(1)
