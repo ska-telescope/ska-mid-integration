@@ -19,9 +19,9 @@ cache:
 # It is also specified that only the master branch will be subject of this job.
 
 stages:
+  - lint
   - build
   - on-demand
-  - lint
   - test
   - integration
   - publish
@@ -130,9 +130,8 @@ mid-on-demand-deploy-mini-skampi:
     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-on-demand-tmc-test"
     TARANTA_ENABLED: "true"
     KUBE_NAMESPACE_SDP: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-on-demand-tmc-test-sdp"
-    KUBE_NAMESPACE_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-on-demand-tmc-test-sdp"
   script:
-    - make cred SERVICE_ACCOUNT=$KUBE_NAMESPACE_SERVICE_ACCOUNT KUBE_NAMESPACE=$KUBE_NAMESPACE_SDP
+    - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
     - make k8s-install-chart
     - chmod u=rwx,go=rx tests/scripts/sdp_data_copy.sh
