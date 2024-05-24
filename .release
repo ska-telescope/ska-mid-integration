@@ -1,20 +1,18 @@
-release=0.20.0
-tag=0.20.0
+release=0.20.1
+tag=0.20.1
 tag_description=
 **Charts:**
-**1. ska-tmc-integration 0.19.1 - 0.20.0*
+**1. ska-tmc-integration 0.20.0 - 0.20.1*
 
-    **1.1 ska-tmc-mid - 0.19.1 - 0.20.0:
-        a. Intermediate chart with TMC updates to work with dish-lmc chart 3.0.0
-        b. Fixed issues in the tests
-
+    **1.1 ska-tmc-mid - 0.20.0 - 0.20.1:
+        a. SP-4028 Delay Model Improvements
+        b. SKB-329 and SKB-330 bug fixes on CspSubarrayLeafNode(v0.16.2)
 
 release_notes=
 **Charts:**
-**1. ska-tmc-integration 0.19.1 - 0.20.0:**
+**1. ska-tmc-integration 0.20.0 - 0.20.1:**
 
-    **1.1 ska-tmc-mid - 0.19.1 - 0.20.0:
-        a. Intermediate chart with TMC updates to work with dish-lmc chart 3.0.0
-        b. Fixed issues in the tests
-
+    **1.1 ska-tmc-mid - 0.20.0 - 0.20.1:
+        a. SP-4028 Delay Model Improvements
+        b. SKB-329 and SKB-330 bug fixes on CspSubarrayLeafNode(v0.16.2)
 
