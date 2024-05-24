@@ -27,10 +27,6 @@ tmc_dish_leaf_node2 = "ska_mid/tm_leaf_node/d0036"
 tmc_dish_leaf_node3 = "ska_mid/tm_leaf_node/d0063"
 tmc_dish_leaf_node4 = "ska_mid/tm_leaf_node/d0100"
 
-tmc_dish_leaf_node1 = "ska_mid/tm_leaf_node/d0001"
-tmc_dish_leaf_node2 = "ska_mid/tm_leaf_node/d0036"
-tmc_dish_leaf_node3 = "ska_mid/tm_leaf_node/d0063"
-tmc_dish_leaf_node4 = "ska_mid/tm_leaf_node/d0100"
 
 DEVICE_HEALTH_STATE_OK_INFO = {
     tmc_csp_subarray_leaf_node: "OK",
