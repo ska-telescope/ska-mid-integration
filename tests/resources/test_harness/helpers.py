@@ -470,15 +470,15 @@ def wait_for_delay_updates_stop_on_delay_model(csp_subarray_leaf_node) -> None:
         )
 
 
-def wait_for_last_pointing_data(dish_leaf_node) -> None:
+def wait_for_last_pointing_data(dish_leaf_node, timeout=50) -> None:
     start_time = time.time()
     time_elapsed = 0
     last_pointing_data = dish_leaf_node.lastPointingData
-    while last_pointing_data != "Not Set" and time_elapsed <= TIMEOUT:
+    while last_pointing_data != "Not Set" and time_elapsed <= timeout:
         time.sleep(1)
         time_elapsed = time.time() - start_time
     LOGGER.info(f"time_elapsed: {time_elapsed}")
-    if time_elapsed > TIMEOUT:
+    if time_elapsed > timeout:
         raise Exception(
             "Timeout while waiting for Dish Leaf Node to generate \
                 last pointing data."
