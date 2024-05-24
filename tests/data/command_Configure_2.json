@@ -94,8 +94,8 @@
       }
     },
     "sdp": {
-      "interface": "https://schema.skao.int/ska-sdp-configure/0.3",
-      "scan_type": "science_A"
+      "interface": "https://schema.skao.int/ska-sdp-configure/0.4",
+      "scan_type": "target:a"
     },
     "tmc": {
       "scan_duration": 10.0

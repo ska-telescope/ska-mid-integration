@@ -1,17 +1,21 @@
-###########
-Change Log
-###########
-
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
-[0.20.1]
+[0.20.0]
 ************
 * SP-4028 Delay Model Improvements
 * SKB-329 and SKB-330 bug fixes on CspSubarrayLeafNode(v0.16.2)
 * Updated affected BDD test case - XTP-32140
+
+[0.19.2]
+***********
+* Updated Subarray Node to v0.18.0 that resolves the SKB-331 and gets rid of hardcoded interface values
+* Fix bug SKB-337
+* Updated the kValue range to 1 to 1177.
+* kValue range is a device property
+* Configure command gets accepted if the kvalue for assinged dishes are either all same or all different
 
 [0.19.1]
 ************

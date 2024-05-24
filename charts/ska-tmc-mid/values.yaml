@@ -77,7 +77,7 @@ centralnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-centralnode
-    tag: 0.14.6
+    tag: 0.15.0
     pullPolicy: IfNotPresent
 
 subarraynode:
@@ -118,12 +118,9 @@ dishleafnode:
 
 
 resources:
-  limits:
-    cpu: 3500m
-    memory: 2000Mi
   requests:
     cpu: 500m
-    memory: 500Mi
+    memory: 200Mi
 
 
 deviceServers:
@@ -137,10 +134,13 @@ deviceServers:
     RealDishMasterIdentifier: "mid-dish/dish-manager"
     SimulatorDishMasterIdentifier: "elt/master"
     DishVccConfig:
-      DishVccUri: "car://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata"
+      DishVccUri: "car://gitlab.com/ska-telescope/ska-telmodel-data?ska-sdp-tmlite-repository-1.0.0#tmdata"
       DishVccFilePath: "instrument/ska1_mid_psi/ska-mid-cbf-system-parameters.json"
       Enabled: "true"
       DishKvalueAggregationAllowedPercent: "100.0"
+    KValueValidRange:
+      min: 1
+      max: 1177
 
   subarraynode:
     enabled: true
