@@ -714,6 +714,7 @@ def check_for_device_command_event(
             attribute_name=attr_name,
             attribute_value=(Anything, Anything),
         )
+        LOGGER.info("The assertion data is %s", assertion_data)
         if assertion_data["attribute_value"][0].endswith(command_name):
             if event_data in assertion_data["attribute_value"][1]:
                 event_found = True
