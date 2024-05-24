@@ -71,6 +71,8 @@ EOL
 echo "Creating SDP data copy pod in $SDP_NAMESPACE"
 kubectl get all,pvc -n $SDP_NAMESPACE
 kubectl describe pod/sdp-data-copy -n $SDP_NAMESPACE
+echo "*****************************************************************"
+kubectl describe pvc test-pvc -n $SDP_NAMESPACE
 fi
 
 
