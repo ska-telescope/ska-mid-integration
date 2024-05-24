@@ -43,11 +43,12 @@ Negative Scenario implemented
 
 * ``SDP Component Unavailable`` - Testing TMC-SDP for the verification of whether the SDP component is available or not and it successfully reports the
     availability of the component to TMC.
+    
 Long command sequence implementation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * ``TMC Mid executes configure-scan sequence of commands successfully`` - Testing TMC-SDP long sequence for configure-scan functionality by parameterizing the scan_types and scan_ids
 
-*``TMC Mid executes multiple scan with same configuration successfully`` - Testing TMC-SDP long sequence for multiple scans functionality by parameterizing the scan_types and scan_ids
+* ``TMC Mid executes multiple scan with same configuration successfully`` - Testing TMC-SDP long sequence for multiple scans functionality by parameterizing the scan_types and scan_ids
 
-*``TMC Mid executes multiple scans with different resources and configurations`` - Testing TMC-SDP long sequence for multiple scan functionality by parameterizing new scan_type and new scan_ids
+* ``TMC Mid executes multiple scans with different resources and configurations`` - Testing TMC-SDP long sequence for multiple scan functionality by parameterizing new scan_type and new scan_ids
