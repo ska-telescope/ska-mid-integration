@@ -470,7 +470,7 @@ def wait_for_delay_updates_stop_on_delay_model(csp_subarray_leaf_node) -> None:
         )
 
 
-def wait_for_last_pointing_data(dish_leaf_node, timeout=50) -> None:
+def is_last_pointing_data_updated(dish_leaf_node, timeout=50) -> bool:
     start_time = time.time()
     time_elapsed = 0
     while (
@@ -489,6 +489,7 @@ def wait_for_last_pointing_data(dish_leaf_node, timeout=50) -> None:
             "Timeout while waiting for Dish Leaf Node to generate \
                 last pointing data."
         )
+    return True
 
 
 def generate_ska_epoch_tai_value() -> Time:

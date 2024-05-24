@@ -10,9 +10,9 @@ from tests.resources.test_harness.helpers import (
     check_long_running_command_status_events,
     check_subarray_obs_state,
     get_device_simulators,
+    is_last_pointing_data_updated,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
-    wait_for_last_pointing_data,
 )
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
@@ -172,9 +172,9 @@ def subarray_applies_calibration_solutions_to_dishes(
             event_recorder, dish_master, "TrackLoadStaticOff"
         )
 
-    assert wait_for_last_pointing_data(
+    assert is_last_pointing_data_updated(
         subarray_node.dish_leaf_node_list[0],
     )
-    assert wait_for_last_pointing_data(
+    assert is_last_pointing_data_updated(
         subarray_node.dish_leaf_node_list[1],
     )
