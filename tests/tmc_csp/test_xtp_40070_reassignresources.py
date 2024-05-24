@@ -66,7 +66,7 @@ def telescope_is_in_idle_state(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-    _, unique_id = central_node_mid.store_resources(assign_input_json)
+    pytest.command_result = central_node_mid.store_resources(assign_input_json)
 
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_devices.get("csp_subarray"),
@@ -75,15 +75,6 @@ def telescope_is_in_idle_state(
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_node, "obsState", ObsState.IDLE, lookahead=10
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "longRunningCommandResult"
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "longRunningCommandResult",
-        (unique_id[0], str(ResultCode.OK.value)),
-        lookahead=30,
     )
 
 
