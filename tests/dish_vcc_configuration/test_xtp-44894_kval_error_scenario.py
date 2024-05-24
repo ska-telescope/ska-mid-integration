@@ -14,7 +14,6 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
-@pytest.mark.skip(reason="Debugging")
 @pytest.mark.SKA_mid
 @scenario(
     "../features/dish_vcc_initialization/xtp_44894_kvalue_validation.feature",
