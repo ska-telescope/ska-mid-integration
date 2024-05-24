@@ -69,7 +69,7 @@ core_api.create_namespaced_pod(os.environ.get("SDP_NAMESPACE"), pod_spec)
     
 EOL
 echo "Creating SDP data copy pod in $SDP_NAMESPACE"
-kubectl get pods -n $SDP_NAMESPACE
+kubectl get all -n $SDP_NAMESPACE
 fi
 
 
@@ -94,5 +94,5 @@ except ApiException as e:
     else:
         print(f"An error occurred: {e}")
 EOL
-kubectl get pods -n $SDP_NAMESPACE
+kubectl get all -n $SDP_NAMESPACE
 fi
