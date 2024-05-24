@@ -1,20 +1,37 @@
-release=0.19.1
-tag=0.19.1
+release=0.19.2
+tag=0.19.2
 tag_description=
 **Charts:**
-**1. ska-tmc-integration 0.19.0 - 0.19.1*
+**1. ska-tmc-integration 0.19.1 - 0.19.2*
 
-    **1.1 ska-tmc-mid - 0.19.0 - 0.19.1:
-        a. Intermediate chart with TMC updates to work with dish-lmc chart 3.0.0
-        b. Fixed issues in the tests
+    **1.1 ska-tmc-mid - 0.19.1 - 0.19.2:
+        a. Updated Subarray Node to v0.18.0 that resolves the SKB-331 and gets rid of hardcoded interface values
+        b. Fix bug SKB-337
+        c. Updated the kValue range to 1 to 1177.
+        d. kValue range is a device property
+        e. Configure command gets accepted if the kvalue for assinged dishes 
+            are either all same or all different
 
 
 release_notes=
 **Charts:**
-**1. ska-tmc-integration 0.19.0 - 0.19.1:**
+**1. ska-tmc-integration 0.19.1 - 0.19.2*
 
-    **1.1 ska-tmc-mid - 0.19.0 - 0.19.1:
-        a. Intermediate chart with TMC updates to work with dish-lmc chart 3.0.0
-        b. Fixed issues in the tests
+    **1.1 ska-tmc-mid - 0.19.1 - 0.19.2:
+        a. Updated Subarray Node to v0.18.0 that resolves the SKB-331 and gets rid of hardcoded interface values
+        b. Fix bug SKB-337
+        c. Updated the kValue range to 1 to 1177.
+        d. kValue range is a device property
+        e. Configure command gets accepted if the kvalue for assinged dishes 
+            are either all same or all different
 
+**1. ska-tmc-integration 0.19.1 - 0.19.2:**
+
+    **1.1 ska-tmc-mid - 0.19.1 - 0.19.2:
+        a. Updated Subarray Node to v0.18.0 that resolves the SKB-331 and gets rid of hardcoded interface values
+        b. Fix bug SKB-337
+        c. Updated the kValue range to 1 to 1177.
+        d. kValue range is a device property
+        e. Configure command gets accepted if the kvalue for assinged dishes 
+            are either all same or all different
 

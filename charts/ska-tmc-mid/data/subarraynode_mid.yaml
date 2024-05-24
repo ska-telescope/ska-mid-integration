@@ -17,6 +17,9 @@ server:
   {{- $SimulatorDishMasterIdentifier := .Values.deviceServers.subarraynode.SimulatorDishMasterIdentifier }}
   {{- $dish_id := .Values.deviceServers.subarraynode.DishIDs }}
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
+  {{- $CspAssignResourcesInterfaceURL := .Values.deviceServers.subarraynode.CspAssignResourcesInterfaceURL}}
+  {{- $CspScanInterfaceURL := .Values.deviceServers.subarraynode.CspScanInterfaceURL}}
+  {{- $SdpScanInterfaceURL := .Values.deviceServers.subarraynode.SdpScanInterfaceURL}}
   {{- range  ( regexSplit " " ((.Values.subarray_count | int) | seq ) -1 ) }}
     - name: "{{ printf "%02s" . }}"
       classes:
@@ -77,6 +80,15 @@ server:
           - name: "AbortCommandTimeout"
             values:
               - "100"
+          - name: "CspAssignResourcesInterfaceURL"
+            values:
+              - {{$CspAssignResourcesInterfaceURL}}
+          - name: "CspScanInterfaceURL"
+            values:
+              - {{$CspScanInterfaceURL}}
+          - name: "SdpScanInterfaceURL"
+            values:
+              - {{$SdpScanInterfaceURL}}
   {{- end}}
 depends_on:
   - device: sys/database/2
