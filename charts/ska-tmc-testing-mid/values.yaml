@@ -117,7 +117,7 @@ ska-sdp:
     create:
       enabled: true
       size: 100Mi
-      storageClassName: ""
+      storageClassName: nfss1
   ska-sdp-qa:
     enabled: true
     kafka:
