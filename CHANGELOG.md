@@ -5,6 +5,7 @@ Added
 -----
 [0.20.0]
 * Integrate TMC-Dish Scan functionality implementation
+Intermediate chart with TMC updates to work with dish-lmc chart 3.2.0
 [0.19.2]
 ***********
 * Updated Subarray Node to v0.18.0 that resolves the SKB-331 and gets rid of hardcoded interface values
