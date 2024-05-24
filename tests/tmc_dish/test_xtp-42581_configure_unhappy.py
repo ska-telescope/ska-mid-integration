@@ -213,7 +213,6 @@ def configure_command_rejection_by_dish(
             central_node_mid.dish_master_dict[dish_id],
             "longRunningCommandStatus",
             (Anything, "REJECTED"),
-            lookahead=5,
         )
 
 
