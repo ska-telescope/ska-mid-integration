@@ -6,10 +6,12 @@ import time
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
-from ska_tango_testing.mock.placeholders import Anything
+
+# from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
 from tests.resources.test_harness.helpers import (
+    check_long_running_command_status,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
@@ -209,11 +211,17 @@ def configure_command_rejection_by_dish(
     # In order to complete this clause, error propagation for TMC-Dish
     # interface needs to be completed.
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        assert event_recorder.has_change_event_occurred(
+        assert check_long_running_command_status(
             central_node_mid.dish_master_dict[dish_id],
             "longRunningCommandStatus",
-            (Anything, "REJECTED"),
+            "_ConfigureBand1",
+            "REJECTED",
         )
+        # assert event_recorder.has_change_event_occurred(
+        #     central_node_mid.dish_master_dict[dish_id],
+        #     "longRunningCommandStatus",
+        #     (Anything, "REJECTED"),
+        # )
 
 
 @then("TMC subarray remains in obsState READY")
