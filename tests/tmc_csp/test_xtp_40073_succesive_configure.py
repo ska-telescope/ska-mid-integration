@@ -166,12 +166,6 @@ def check_subarray_is_in_idle_obsstate(
         "obsState",
         ObsState.READY,
     )
-    # assert event_recorder.has_change_event_occurred(
-    #     subarray_node.subarray_node,
-    #     "longRunningCommandResult",
-    #     (pytest.command_result[1][0], str(ResultCode.OK.value)),
-    #     lookahead=5,
-    # )
 
 
 @when(
