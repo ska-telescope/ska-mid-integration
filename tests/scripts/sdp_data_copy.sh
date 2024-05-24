@@ -46,7 +46,7 @@ DATA_POD_DEF = {
                 "volumeMounts": [{"mountPath": "/mnt/data", "name": "data"}],
             }
         ],
-        "volumes": [{"name": "data", "persistentVolumeClaim": {"claimName": "testing"}}],
+        "volumes": [{"name": "data", "persistentVolumeClaim": {"claimName": "test-pvc"}}],
     },
 }
 core_api = client.CoreV1Api()
@@ -70,6 +70,7 @@ core_api.create_namespaced_pod(os.environ.get("SDP_NAMESPACE"), pod_spec)
 EOL
 echo "Creating SDP data copy pod in $SDP_NAMESPACE"
 kubectl get all,pvc -n $SDP_NAMESPACE
+kubectl describe pod/sdp-data-copy -n $SDP_NAMESPACE
 fi
 
 
