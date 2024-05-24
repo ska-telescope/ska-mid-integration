@@ -13,7 +13,7 @@ from tests.resources.test_harness.helpers import (
 
 
 @pytest.mark.skip(
-    reason="SKB-309: SDP Sub-system doesn't allow transitional obsStates"
+    reason="Need to test with SDP 0.20.0 which has fix of the issue"
 )
 @pytest.mark.tmc_sdp
 @scenario(
