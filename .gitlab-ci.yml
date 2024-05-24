@@ -19,10 +19,10 @@ cache:
 # It is also specified that only the master branch will be subject of this job.
 
 stages:
-  - lint
   - build
   - on-demand
   - test
+  - lint
   - integration
   - publish
   - staging
@@ -136,6 +136,7 @@ mid-on-demand-deploy-mini-skampi:
     - make k8s-install-chart
     - chmod u=rwx,go=rx tests/scripts/sdp_data_copy.sh
     - ${PWD}/tests/scripts/sdp_data_copy.sh create_pod
+    - make taranta-link
   environment:
     name: $CI_PROJECT_NAME/$CI_COMMIT_REF_SLUG
     kubernetes:
@@ -474,9 +475,10 @@ k8s-test-tmc-with-sdp:
     KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-sdp'
     KUBE_NAMESPACE_SDP: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-sdp'
     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-sdp"
-    MARK: 'tmc_sdp'
+    MARK: 'pointing_cal'
     SDP_SIMULATION_ENABLED: 'false'
     TARANTA_ENABLED: 'true'
+    CI_KEEP_NAMESPACE: 'true'
   environment:
     name: test/$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-test-tmc-with-sdp
@@ -494,6 +496,7 @@ stop-k8s-test-tmc-with-sdp:
     - make k8s-uninstall-chart
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
     - make k8s-delete-namespace
+  when: manual
 
 
 

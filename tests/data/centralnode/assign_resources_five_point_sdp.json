@@ -76,7 +76,7 @@
                   "num_scan": 5,
                   "additional_args": [
                       "--thresh_width",
-                      "0.5",
+                      "1.50",
                       "--bw_factor",
                       "0.7",
                       "1.1",

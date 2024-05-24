@@ -4,6 +4,7 @@ import json
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
+from tango import DevState
 
 from tests.resources.test_harness.helpers import (
     check_long_running_command_status_events,
@@ -17,6 +18,7 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
 @pytest.mark.tmc_sdp
+@pytest.mark.pointing_cal
 @scenario(
     "../features/tmc_sdp/xtp_49147_pointing_calibration_five_point.feature",
     "TMC is able to process pointing calibration received from SDP during "
@@ -30,12 +32,36 @@ def test_pointing_calibration_during_five_point_scan():
 
 
 @given("a TMC")
-def given_tmc(subarray_node, event_recorder):
+def given_tmc(central_node_mid, subarray_node, event_recorder):
     """Given a TMC"""
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "telescopeState"
+    )
+    event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
+    event_recorder.subscribe_event(
+        central_node_mid.subarray_devices["sdp_subarray"], "State"
+    )
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     for dish_master in subarray_node.dish_master_list[:2]:
         event_recorder.subscribe_event(dish_master, "longRunningCommandStatus")
-    subarray_node.move_to_on()
+
+    central_node_mid.move_to_on()
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.sdp_master,
+        "State",
+        DevState.ON,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.subarray_devices["sdp_subarray"],
+        "State",
+        DevState.ON,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "telescopeState",
+        DevState.ON,
+    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
@@ -57,6 +83,9 @@ def assign_resource_for_five_point_calibration(
     event_recorder.subscribe_event(csp_sim, "obsState")
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     event_recorder.subscribe_event(
+        central_node_mid.subarray_devices.get("sdp_subarray"), "obsState"
+    )
+    event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
     event_recorder.subscribe_event(
@@ -66,9 +95,18 @@ def assign_resource_for_five_point_calibration(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_five_point_sdp", command_input_factory
     )
-    _, unique_id = central_node_mid.store_resources(assign_input_json)
+
+    _, unique_id = central_node_mid.store_resources(
+        assign_input_json, is_update_eb_id_required=False
+    )
+
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
+        "obsState",
+        ObsState.IDLE,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.subarray_devices.get("sdp_subarray"),
         "obsState",
         ObsState.IDLE,
     )
@@ -86,7 +124,10 @@ def configure_for_science_scan(subarray_node, command_input_factory):
     configure_command_input = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    subarray_node.execute_transition("Configure", configure_command_input)
+    # Update scan type to pointing
+    configure_json = json.loads(configure_command_input)
+    configure_json["sdp"]["scan_type"] = "pointing"
+    subarray_node.execute_transition("Configure", json.dumps(configure_json))
     assert check_subarray_obs_state("READY", 500)
 
 

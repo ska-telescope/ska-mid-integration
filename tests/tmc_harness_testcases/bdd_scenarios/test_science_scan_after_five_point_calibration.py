@@ -12,7 +12,6 @@ from tests.resources.test_harness.constant import (
 from tests.resources.test_harness.helpers import (
     check_long_running_command_status_events,
     check_subarray_obs_state,
-    get_device_simulators,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
     wait_and_validate_device_attribute_value,
@@ -22,6 +21,7 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
 @pytest.mark.SKA_mid
+@pytest.mark.tmc_dish
 @scenario(
     "../features/test_harness/science_scan_after_calibration_scan.feature",
     "TMC behaviour during a science scan after a five point calibration scan.",
@@ -56,7 +56,12 @@ def a_subarray_after_five_point_calibration(
     command_input_factory,
 ):
     """Given a Subarray after the five point Calibration scan."""
-    csp_sim, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
+    csp_sim = simulator_factory.get_or_create_simulator_device(
+        SimulatorDeviceType.MID_CSP_DEVICE
+    )
+    sdp_sim = simulator_factory.get_or_create_simulator_device(
+        SimulatorDeviceType.MID_SDP_DEVICE
+    )
 
     event_recorder.subscribe_event(csp_sim, "obsState")
     event_recorder.subscribe_event(sdp_sim, "obsState")
@@ -88,9 +93,7 @@ def a_subarray_after_five_point_calibration(
         "configure_mid", command_input_factory
     )
     subarray_node.store_configuration_data(config_input_json)
-    sdp_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_SDP_DEVICE
-    )
+
     subarray_node.simulate_receive_addresses_event(
         sdp_sim, command_input_factory
     )
@@ -137,7 +140,7 @@ def a_subarray_after_five_point_calibration(
 
 @when("I invoke Configure command for a science scan")
 def configure_for_science_scan(
-    subarray_node, simulator_factory, command_input_factory, event_recorder
+    subarray_node, command_input_factory, event_recorder
 ):
     """When Configure is invoked for a Science Scan."""
     configure_command_input = prepare_json_args_for_commands(
