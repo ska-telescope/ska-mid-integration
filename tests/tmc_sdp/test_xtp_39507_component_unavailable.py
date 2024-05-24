@@ -119,8 +119,8 @@ def sdp_subarray_reports_unavailability(
         "longRunningCommandResult",
     )
     exception_message = (
-        " The processing controller, helm deployer, or both are OFFLINE:"
-        + " cannot start processing blocks.\n"
+        "The processing controller, helm deployer, or both "
+        + "are OFFLINE: cannot start processing blocks."
     )
     assert check_for_device_command_event(
         subarray_node.sdp_subarray_leaf_node,
