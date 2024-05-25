@@ -431,7 +431,7 @@ k8s-test-dish-lmc:
     - make cred SERVICE_ACCOUNT=$DISH_LMC_SERVICE_ACCOUNT
     - make k8s-install-chart
     - make k8s-wait
-    - make k8s-test MARK=tmc_dish
+    - make k8s-test MARK=test_dish_lmc
   needs:
     - dish-lmc-dish001
     - dish-lmc-dish036

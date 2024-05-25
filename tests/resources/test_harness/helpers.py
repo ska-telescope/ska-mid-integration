@@ -41,7 +41,7 @@ CSP_SIMULATION_ENABLED = os.getenv("CSP_SIMULATION_ENABLED")
 DISH_SIMULATION_ENABLED = os.getenv("DISH_SIMULATION_ENABLED")
 
 
-def check_subarray_obs_state(obs_state=None, timeout=100):
+def check_subarray_obs_state(obs_state=None, timeout=100, dish_master_list=[]):
     device_dict = {
         "sdp_subarray": sdp_subarray1,
         "csp_subarray": csp_subarray1,
@@ -63,10 +63,13 @@ def check_subarray_obs_state(obs_state=None, timeout=100):
         + str(Resource(csp_subarray1).get("obsState"))
     )
     if obs_state == "READY":
-        device_dict["dish_master_list"] = [
-            dish_master1,
-            dish_master2,
-        ]
+        if dish_master_list:
+            device_dict["dish_master_list"] = dish_master_list
+        else:
+            device_dict["dish_master_list"] = [
+                dish_master1,
+                dish_master2,
+            ]
     the_waiter = Waiter(**device_dict)
     the_waiter.set_wait_for_obs_state(obs_state=obs_state)
     the_waiter.wait(timeout / 0.1)

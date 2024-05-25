@@ -18,10 +18,12 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.common_utils.result_code import ResultCode
+from tests.resources.test_support.enum import DishMode, PointingState
 
 
 @pytest.mark.SKA_mid
 @pytest.mark.tmc_dish
+@pytest.mark.test_dish_lmc
 @scenario(
     "../features/test_harness/science_scan_after_calibration_scan.feature",
     "TMC behaviour during a science scan after a five point calibration scan.",
@@ -37,7 +39,7 @@ def test_science_scan_after_five_point_calibration_scan():
 def given_tmc(central_node_mid, subarray_node, event_recorder):
     """Given a TMC"""
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-    for dish_master in subarray_node.dish_master_list[:2]:
+    for dish_master in subarray_node.dish_master_list:
         event_recorder.subscribe_event(dish_master, "longRunningCommandStatus")
     central_node_mid.move_to_on()
     assert event_recorder.has_change_event_occurred(
@@ -88,15 +90,29 @@ def a_subarray_after_five_point_calibration(
         (unique_id[0], str(int(ResultCode.OK))),
         lookahead=5,
     )
+    subarray_node.simulate_receive_addresses_event(
+        sdp_sim, command_input_factory
+    )
 
     config_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    subarray_node.store_configuration_data(config_input_json)
+    subarray_node.execute_transition("Configure", config_input_json)
 
-    subarray_node.simulate_receive_addresses_event(
-        sdp_sim, command_input_factory
-    )
+    for dish_master in subarray_node.dish_master_list:
+        event_recorder.subscribe_event(dish_master, "dishMode")
+        event_recorder.subscribe_event(dish_master, "pointingState")
+        assert event_recorder.has_change_event_occurred(
+            dish_master,
+            "dishMode",
+            DishMode.OPERATE,
+        )
+
+        assert event_recorder.has_change_event_occurred(
+            dish_master,
+            "pointingState",
+            PointingState.TRACK,
+        )
     assert event_recorder.has_change_event_occurred(
         csp_sim,
         "obsState",
@@ -123,7 +139,9 @@ def a_subarray_after_five_point_calibration(
         ObsState.SCANNING,
         lookahead=15,
     )
-    assert check_subarray_obs_state("READY", 500)
+    assert check_subarray_obs_state(
+        "READY", 500, dish_master_list=subarray_node.dish_master_name_list
+    )
 
     scan_jsons = ["scan_mid" for _ in range(4)]
     partial_configuration_jsons = [
@@ -147,7 +165,9 @@ def configure_for_science_scan(
         "configure_mid", command_input_factory
     )
     subarray_node.execute_transition("Configure", configure_command_input)
-    assert check_subarray_obs_state("READY", 500)
+    assert check_subarray_obs_state(
+        "READY", 500, dish_master_list=subarray_node.dish_master_name_list
+    )
     scan_command_input = prepare_json_args_for_commands(
         "scan_mid", command_input_factory
     )
@@ -173,7 +193,7 @@ def subarray_applies_calibration_solutions_to_dishes(
     """Then the Subarray fetches and applies the configuration solutions to the
     dishes."""
 
-    for dish_master in subarray_node.dish_master_list[:2]:
+    for dish_master in subarray_node.dish_master_list:
         check_long_running_command_status_events(
             event_recorder, dish_master, "TrackLoadStaticOff"
         )
@@ -195,6 +215,8 @@ def subarray_applies_calibration_solutions_to_dishes(
 
 
 @then("is in READY obsState")
-def subarray_is_in_ready_obsstate():
+def subarray_is_in_ready_obsstate(subarray_node):
     """Subarray is in READY obsState."""
-    assert check_subarray_obs_state("READY", 500)
+    assert check_subarray_obs_state(
+        "READY", 500, dish_master_list=subarray_node.dish_master_name_list
+    )

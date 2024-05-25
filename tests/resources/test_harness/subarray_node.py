@@ -117,6 +117,12 @@ class SubarrayNodeWrapper(object):
             DeviceProxy(dish_fqdn063),
             DeviceProxy(dish_fqdn100),
         ]
+        self.dish_master_name_list = [
+            dish_fqdn001,
+            dish_fqdn036,
+            dish_fqdn063,
+            dish_fqdn100,
+        ]
 
         self.subarray_devices = {
             "csp_subarray": DeviceProxy(csp_subarray1),
@@ -505,7 +511,9 @@ class SubarrayNodeWrapper(object):
             ObsState.CONFIGURING,
             lookahead=15,
         )
-        assert check_subarray_obs_state(obs_state="READY")
+        assert check_subarray_obs_state(
+            obs_state="READY", dish_master_list=self.dish_master_name_list
+        )
 
         # Scan 1
         self.execute_transition("Scan", scan_1)
@@ -515,7 +523,9 @@ class SubarrayNodeWrapper(object):
             ObsState.SCANNING,
             lookahead=15,
         )
-        assert check_subarray_obs_state(obs_state="READY")
+        assert check_subarray_obs_state(
+            obs_state="READY", dish_master_list=self.dish_master_name_list
+        )
 
         # Partial configure 2
         self.execute_transition("Configure", partial_configure_2)
@@ -525,7 +535,9 @@ class SubarrayNodeWrapper(object):
             ObsState.CONFIGURING,
             lookahead=15,
         )
-        assert check_subarray_obs_state(obs_state="READY")
+        assert check_subarray_obs_state(
+            obs_state="READY", dish_master_list=self.dish_master_name_list
+        )
 
         # Scan 2
         self.execute_transition("Scan", scan_2)
@@ -535,7 +547,9 @@ class SubarrayNodeWrapper(object):
             ObsState.SCANNING,
             lookahead=15,
         )
-        assert check_subarray_obs_state(obs_state="READY")
+        assert check_subarray_obs_state(
+            obs_state="READY", dish_master_list=self.dish_master_name_list
+        )
 
         # Partial configure 3
         self.execute_transition("Configure", partial_configure_3)
@@ -545,7 +559,9 @@ class SubarrayNodeWrapper(object):
             ObsState.CONFIGURING,
             lookahead=15,
         )
-        assert check_subarray_obs_state(obs_state="READY")
+        assert check_subarray_obs_state(
+            obs_state="READY", dish_master_list=self.dish_master_name_list
+        )
 
         # Scan 3
         self.execute_transition("Scan", scan_3)
@@ -555,7 +571,9 @@ class SubarrayNodeWrapper(object):
             ObsState.SCANNING,
             lookahead=15,
         )
-        assert check_subarray_obs_state(obs_state="READY")
+        assert check_subarray_obs_state(
+            obs_state="READY", dish_master_list=self.dish_master_name_list
+        )
 
         # Partial configure 4
         self.execute_transition("Configure", partial_configure_4)
@@ -565,7 +583,9 @@ class SubarrayNodeWrapper(object):
             ObsState.CONFIGURING,
             lookahead=15,
         )
-        assert check_subarray_obs_state(obs_state="READY")
+        assert check_subarray_obs_state(
+            obs_state="READY", dish_master_list=self.dish_master_name_list
+        )
 
         # Scan 4
         self.execute_transition("Scan", scan_4)
@@ -575,4 +595,6 @@ class SubarrayNodeWrapper(object):
             ObsState.SCANNING,
             lookahead=15,
         )
-        assert check_subarray_obs_state("READY")
+        assert check_subarray_obs_state(
+            "READY", dish_master_list=self.dish_master_name_list
+        )
