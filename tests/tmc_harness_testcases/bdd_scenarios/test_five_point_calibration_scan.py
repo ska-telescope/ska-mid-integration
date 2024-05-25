@@ -6,6 +6,7 @@ from ska_control_model import ObsState
 from tests.resources.test_harness.helpers import (
     check_subarray_obs_state,
     get_device_simulators,
+    prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
 
@@ -39,11 +40,16 @@ def a_configured_subarray(
 ):
     """Given a subarray configured for a calibration scan."""
     csp_sim, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
+    assign_input_json = prepare_json_args_for_centralnode_commands(
+        "assign_resources_mid", command_input_factory
+    )
 
     event_recorder.subscribe_event(csp_sim, "obsState")
     event_recorder.subscribe_event(sdp_sim, "obsState")
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-    subarray_node.force_change_of_obs_state("READY")
+    subarray_node.force_change_of_obs_state(
+        "READY", assign_input_json=assign_input_json
+    )
     assert event_recorder.has_change_event_occurred(
         csp_sim,
         "obsState",
