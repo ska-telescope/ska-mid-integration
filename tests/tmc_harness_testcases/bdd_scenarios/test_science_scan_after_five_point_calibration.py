@@ -21,6 +21,7 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
+@pytest.mark.repeat(50)
 @pytest.mark.test
 @pytest.mark.SKA_mid
 @pytest.mark.tmc_dish
