@@ -26,6 +26,9 @@ def test_five_point_calibration_scan():
 def given_tmc(subarray_node, event_recorder):
     """Given a TMC"""
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     subarray_node.move_to_on()
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,

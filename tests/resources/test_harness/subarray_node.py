@@ -52,6 +52,7 @@ from tests.resources.test_harness.utils.sync_decorators import (
     sync_restart,
 )
 from tests.resources.test_support.common_utils.common_helpers import Resource
+from tests.resources.test_support.common_utils.result_code import ResultCode
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -504,11 +505,19 @@ class SubarrayNodeWrapper(object):
         )
 
         # Partial configure 1
-        self.execute_transition("Configure", partial_configure_1)
+        _, unique_id = self.execute_transition(
+            "Configure", partial_configure_1
+        )
         assert event_recorder.has_change_event_occurred(
             self.subarray_node,
             "obsState",
             ObsState.CONFIGURING,
+            lookahead=15,
+        )
+        assert event_recorder.has_change_event_occurred(
+            self.subarray_node,
+            "longRunningCommandResult",
+            (unique_id[0], str(int(ResultCode.OK))),
             lookahead=15,
         )
         assert check_subarray_obs_state(
@@ -528,11 +537,19 @@ class SubarrayNodeWrapper(object):
         )
 
         # Partial configure 2
-        self.execute_transition("Configure", partial_configure_2)
+        _, unique_id = self.execute_transition(
+            "Configure", partial_configure_2
+        )
         assert event_recorder.has_change_event_occurred(
             self.subarray_node,
             "obsState",
             ObsState.CONFIGURING,
+            lookahead=15,
+        )
+        assert event_recorder.has_change_event_occurred(
+            self.subarray_node,
+            "longRunningCommandResult",
+            (unique_id[0], str(int(ResultCode.OK))),
             lookahead=15,
         )
         assert check_subarray_obs_state(
@@ -552,11 +569,19 @@ class SubarrayNodeWrapper(object):
         )
 
         # Partial configure 3
-        self.execute_transition("Configure", partial_configure_3)
+        _, unique_id = self.execute_transition(
+            "Configure", partial_configure_3
+        )
         assert event_recorder.has_change_event_occurred(
             self.subarray_node,
             "obsState",
             ObsState.CONFIGURING,
+            lookahead=15,
+        )
+        assert event_recorder.has_change_event_occurred(
+            self.subarray_node,
+            "longRunningCommandResult",
+            (unique_id[0], str(int(ResultCode.OK))),
             lookahead=15,
         )
         assert check_subarray_obs_state(
@@ -576,11 +601,19 @@ class SubarrayNodeWrapper(object):
         )
 
         # Partial configure 4
-        self.execute_transition("Configure", partial_configure_4)
+        _, unique_id = self.execute_transition(
+            "Configure", partial_configure_4
+        )
         assert event_recorder.has_change_event_occurred(
             self.subarray_node,
             "obsState",
             ObsState.CONFIGURING,
+            lookahead=15,
+        )
+        assert event_recorder.has_change_event_occurred(
+            self.subarray_node,
+            "longRunningCommandResult",
+            (unique_id[0], str(int(ResultCode.OK))),
             lookahead=15,
         )
         assert check_subarray_obs_state(
