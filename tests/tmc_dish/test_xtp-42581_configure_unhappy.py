@@ -217,11 +217,6 @@ def configure_command_rejection_by_dish(
             "_ConfigureBand1",
             "REJECTED",
         )
-        # assert event_recorder.has_change_event_occurred(
-        #     central_node_mid.dish_master_dict[dish_id],
-        #     "longRunningCommandStatus",
-        #     (Anything, "REJECTED"),
-        # )
 
 
 @then("TMC subarray remains in obsState READY")
