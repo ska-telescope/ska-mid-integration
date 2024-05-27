@@ -113,15 +113,13 @@ dishleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-dishleafnode
-    tag: 0.13.2
+    tag: 0.13.1-dev.c08d9cc85
     pullPolicy: IfNotPresent
-
 
 resources:
   requests:
     cpu: 500m
     memory: 200Mi
-
 
 deviceServers:
   centralnode:
