@@ -21,11 +21,8 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
-@pytest.mark.repeat(50)
-@pytest.mark.test
 @pytest.mark.SKA_mid
 @pytest.mark.tmc_dish
-@pytest.mark.test_dish_lmc
 @scenario(
     "../features/test_harness/science_scan_after_calibration_scan.feature",
     "TMC behaviour during a science scan after a five point calibration scan.",
