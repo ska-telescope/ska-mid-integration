@@ -119,8 +119,8 @@ def sdp_subarray_reports_unavailability(
         "longRunningCommandResult",
     )
     exception_message = (
-        " The processing controller, helm deployer, or both are OFFLINE:"
-        + " cannot start processing blocks.\n"
+        "The processing controller, helm deployer, or both "
+        + "are OFFLINE: cannot start processing blocks."
     )
     assert check_for_device_command_event(
         subarray_node.sdp_subarray_leaf_node,
@@ -132,7 +132,9 @@ def sdp_subarray_reports_unavailability(
 
 
 @then("TMC should report the error to client")
-def tmc_reports_unavailability_to_client():
+def tmc_reports_unavailability_to_client(
+    event_recorder: EventRecorder, central_node_mid: CentralNodeWrapperMid
+):
     """
     Method to verify TMC subarray reports unavailability to client.
     """
@@ -143,8 +145,17 @@ def tmc_reports_unavailability_to_client():
         + " The processing controller, helm deployer, or both are OFFLINE:"
         + " cannot start processing blocks.\n"
     )
-
-    assert exception_message in pytest.assertion_data["attribute_value"][1]
+    event_recorder.subscribe_event(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+    )
+    assert check_for_device_command_event(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        exception_message,
+        event_recorder,
+        "AssignResources",
+    )
 
 
 @then(parsers.parse("the TMC SubarrayNode {subarray_id} stuck in RESOURCING"))

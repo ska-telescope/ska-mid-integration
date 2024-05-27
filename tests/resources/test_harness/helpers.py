@@ -36,7 +36,6 @@ LOGGER = logging.getLogger(__name__)
 TIMEOUT = 20
 EB_PB_ID_LENGTH = 15
 
-
 SDP_SIMULATION_ENABLED = os.getenv("SDP_SIMULATION_ENABLED")
 CSP_SIMULATION_ENABLED = os.getenv("CSP_SIMULATION_ENABLED")
 DISH_SIMULATION_ENABLED = os.getenv("DISH_SIMULATION_ENABLED")
@@ -657,6 +656,32 @@ def update_eb_pb_ids(input_json: str) -> str:
     return input_json
 
 
+def update_scan_type(configure_json: str, json_value: str) -> str:
+    """
+    Method to update json with different scan type
+    :param configure_json: json to utilised to update values.
+
+    :param json_value: new json value to be updated in json
+    """
+    input_json = json.loads(configure_json)
+    input_json["sdp"]["scan_type"] = json_value
+    input_json = json.dumps(input_json)
+    return input_json
+
+
+def update_scan_id(input_json: str, scan_id: int) -> str:
+    """
+    Method to update scan_id in input json..
+    :param input_json: json to utilised to update values.
+
+    :param json_value: new json value to be updated in json
+    """
+    input_json = json.loads(input_json)
+    input_json["scan_id"] = int(scan_id)
+    updated_json = json.dumps(input_json)
+    return updated_json
+
+
 def check_long_running_command_status(
     device, lrcr_command, command_name, status
 ):
@@ -714,6 +739,7 @@ def check_for_device_command_event(
             attribute_name=attr_name,
             attribute_value=(Anything, Anything),
         )
+        LOGGER.info("The assertion data is %s", assertion_data)
         if assertion_data["attribute_value"][0].endswith(command_name):
             if event_data in assertion_data["attribute_value"][1]:
                 event_found = True
