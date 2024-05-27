@@ -31,6 +31,7 @@ from tests.resources.test_harness.helpers import (
     check_subarray_obs_state,
     generate_eb_pb_ids,
     prepare_json_args_for_commands,
+    wait_and_validate_device_attribute_value,
 )
 from tests.resources.test_harness.utils.constant import (
     ABORTED,
@@ -524,6 +525,19 @@ class SubarrayNodeWrapper(object):
             obs_state="READY", dish_master_list=self.dish_master_name_list
         )
 
+        # assert sourceOffset gets populated as expected
+        ca_offset, ie_offset = (
+            json.loads(partial_configure_1)["pointing"]["target"][key]
+            for key in ("ca_offset_arcsec", "ie_offset_arcsec")
+        )
+        for dish_leaf_node in self.dish_leaf_node_list:
+            wait_and_validate_device_attribute_value(
+                dish_leaf_node,
+                "sourceOffset",
+                f"{[ca_offset, ie_offset]}",
+                is_list=True,
+            )
+
         # Scan 1
         self.execute_transition("Scan", scan_1)
         assert event_recorder.has_change_event_occurred(
@@ -552,6 +566,19 @@ class SubarrayNodeWrapper(object):
             (unique_id[0], str(int(ResultCode.OK))),
             lookahead=15,
         )
+        # assert sourceOffset gets populated as expected
+        ca_offset, ie_offset = (
+            json.loads(partial_configure_2)["pointing"]["target"][key]
+            for key in ("ca_offset_arcsec", "ie_offset_arcsec")
+        )
+        for dish_leaf_node in self.dish_leaf_node_list:
+            wait_and_validate_device_attribute_value(
+                dish_leaf_node,
+                "sourceOffset",
+                f"{[ca_offset, ie_offset]}",
+                is_list=True,
+            )
+
         assert check_subarray_obs_state(
             obs_state="READY", dish_master_list=self.dish_master_name_list
         )
@@ -584,6 +611,18 @@ class SubarrayNodeWrapper(object):
             (unique_id[0], str(int(ResultCode.OK))),
             lookahead=15,
         )
+        # assert sourceOffset gets populated as expected
+        ca_offset, ie_offset = (
+            json.loads(partial_configure_3)["pointing"]["target"][key]
+            for key in ("ca_offset_arcsec", "ie_offset_arcsec")
+        )
+        for dish_leaf_node in self.dish_leaf_node_list:
+            wait_and_validate_device_attribute_value(
+                dish_leaf_node,
+                "sourceOffset",
+                f"{[ca_offset, ie_offset]}",
+                is_list=True,
+            )
         assert check_subarray_obs_state(
             obs_state="READY", dish_master_list=self.dish_master_name_list
         )
@@ -616,6 +655,18 @@ class SubarrayNodeWrapper(object):
             (unique_id[0], str(int(ResultCode.OK))),
             lookahead=15,
         )
+        # assert sourceOffset gets populated as expected
+        ca_offset, ie_offset = (
+            json.loads(partial_configure_4)["pointing"]["target"][key]
+            for key in ("ca_offset_arcsec", "ie_offset_arcsec")
+        )
+        for dish_leaf_node in self.dish_leaf_node_list:
+            wait_and_validate_device_attribute_value(
+                dish_leaf_node,
+                "sourceOffset",
+                f"{[ca_offset, ie_offset]}",
+                is_list=True,
+            )
         assert check_subarray_obs_state(
             obs_state="READY", dish_master_list=self.dish_master_name_list
         )

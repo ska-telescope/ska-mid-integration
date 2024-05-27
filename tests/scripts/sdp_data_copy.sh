@@ -1,8 +1,10 @@
 #!/bin/bash
 
+#This shell script creates a pod which makes the data available for calibration scan to SDP(pointing offset script).
+#This script also deletes the pod when the job gets finished.
+
 #Export variables 
 export SDP_NAMESPACE="${KUBE_NAMESPACE_SDP:-"ska-tmc-integration-sdp"}"
-export POD_CONTAINER="data-prep"
 export SDP_DATA_COPY_PATH="/mnt/data/product/eb-test-20210630-00001/ska-sdp/pb-test-20211111-00001/" 
 
 #Install k8s python package
@@ -70,9 +72,6 @@ core_api.create_namespaced_pod(os.environ.get("SDP_NAMESPACE"), pod_spec)
 EOL
 echo "Creating SDP data copy pod in $SDP_NAMESPACE"
 kubectl get all,pvc -n $SDP_NAMESPACE
-kubectl describe pod/sdp-data-copy -n $SDP_NAMESPACE
-echo "*****************************************************************"
-kubectl describe pvc test-pvc -n $SDP_NAMESPACE
 fi
 
 
