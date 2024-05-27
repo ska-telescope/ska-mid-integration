@@ -8,8 +8,7 @@ from tango import DeviceProxy
 from tests.resources.test_support.constant import alarm_handler1
 
 
-@pytest.mark.itest
-@pytest.mark.repeat(50)
+@pytest.mark.SKA_mid
 @scenario(
     "../features/tmc_sdp/nan_alarm.feature",
     "TMC mid raises an alarm when it encounters NaN"
