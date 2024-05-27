@@ -184,17 +184,20 @@ def subarray_is_in_configuring_obsState(
         subarray_node.subarray_devices["sdp_subarray"],
         "obsState",
         ObsState.CONFIGURING,
+        lookahead=10,
     )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["csp_subarray"],
         "obsState",
         ObsState.CONFIGURING,
+        lookahead=10,
     )
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.CONFIGURING,
+        lookahead=10,
     )
 
     for dish_id in dish_ids.split(","):
