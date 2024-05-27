@@ -8,6 +8,7 @@ from typing import Any
 
 import pytest
 from astropy.time import Time
+from numpy import array_equal
 from ska_ser_logging import configure_logging
 from ska_tango_base.commands import ResultCode
 from ska_tango_base.control_model import HealthState
@@ -626,7 +627,8 @@ def wait_and_validate_device_attribute_value(
     device: DeviceProxy,
     attribute_name: str,
     expected_value: str,
-    is_json: str = False,
+    is_json: bool = False,
+    is_list: bool = False,
     timeout: int = 300,
 ):
     """This method wait and validate if attribute value is equal to provided
@@ -647,6 +649,8 @@ def wait_and_validate_device_attribute_value(
                 expected_value
             ):
                 return True
+            elif is_list:
+                return array_equal(attribute_value, json.loads(expected_value))
             elif attribute_value == expected_value:
                 return True
         except Exception as e:
