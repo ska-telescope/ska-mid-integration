@@ -1,5 +1,7 @@
 """Test TMC-CSP succesive configure functionality"""
 
+import time
+
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
@@ -66,6 +68,9 @@ def telescope_is_in_idle_state(
         "telescopeState",
         DevState.ON,
     )
+    # Need to add a wait explicitly as the CentralNode does not receive
+    # the longRunningCommandResult event on TelescopeOn command completion
+    time.sleep(2)
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid_multiple_scantype", command_input_factory
     )
