@@ -46,4 +46,6 @@ Long command sequence implementation
 
 *''TMC Mid executes multiple scans with different configurations, intermittently ending configurations'' - Testing TMC-CSP long sequence for multiple scan functionality by parameterizing new scan_type and new scan_ids intermittently ending configurations.
 
-*''TMC-CSP succesive configure functionality''- Testing TMC-CSP long sequence for configure functionality by parameterizing the subarray_id and different configure_json.
+*''TMC-CSP succesive configure functionality''- Testing TMC-CSP successive configure command invocation by invoking second configure after successful implementation of first configure command.
+
+*''TMC-CSP succesive AssignResources functionality''- Testing TMC-CSP successive AssignResources command invocation by invoking second AssignResources after successful implementation of first AssignResources command.
