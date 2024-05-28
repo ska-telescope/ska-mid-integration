@@ -11,6 +11,7 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
+@pytest.mark.skip(reason="Enable when STS-855 is resolved")
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp-39938_multiple_scan_different_config.feature",

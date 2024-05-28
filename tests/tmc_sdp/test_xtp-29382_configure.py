@@ -12,6 +12,7 @@ from tests.resources.test_harness.helpers import (
 )
 
 
+@pytest.mark.skip(reason="Enable when STS-855 is resolved")
 @pytest.mark.skip(
     reason="getting Corba calltimeout issue in dishleafnode logs"
 )

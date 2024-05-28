@@ -11,6 +11,7 @@ from tests.resources.test_harness.helpers import (
 )
 
 
+@pytest.mark.skip(reason="Enable when STS-855 is resolved")
 @pytest.mark.skip(reason="Duplicate scenario")
 @pytest.mark.tmc_sdp
 @scenario(

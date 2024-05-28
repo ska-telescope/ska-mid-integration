@@ -10,6 +10,7 @@ from tests.resources.test_harness.helpers import (
 )
 
 
+@pytest.mark.skip(reason="Enable when STS-855 is resolved")
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp-32452_assign_release_assign_sequence.feature",

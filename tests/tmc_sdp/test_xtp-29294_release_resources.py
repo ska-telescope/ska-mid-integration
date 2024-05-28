@@ -13,6 +13,7 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
+@pytest.mark.skip(reason="Enable when STS-855 is resolved")
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp-29294_release_resources.feature",

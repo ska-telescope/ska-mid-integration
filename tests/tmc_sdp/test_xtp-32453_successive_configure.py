@@ -18,6 +18,7 @@ from tests.resources.test_harness.utils.common_utils import (
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
+@pytest.mark.skip(reason="Enable when STS-855 is resolved")
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp-32453_successive_configure_with_real_sdp.feature",
