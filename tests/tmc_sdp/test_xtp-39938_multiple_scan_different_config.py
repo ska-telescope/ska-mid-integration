@@ -11,6 +11,8 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
+@pytest.mark.skip(reason="STS-855-SDP side Issue")
+# SDP Side Issue: Docker images in Harbor overwritten by new releases
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp-39938_multiple_scan_different_config.feature",
