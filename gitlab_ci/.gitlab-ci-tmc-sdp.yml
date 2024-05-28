@@ -14,6 +14,8 @@ k8s-test-tmc-with-sdp:
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
     - 'make help | grep k8s-test'
     - make k8s-install-chart
+    - chmod u=rwx,go=rx tests/scripts/sdp_data_copy.sh
+    - ${PWD}/tests/scripts/sdp_data_copy.sh create_pod
     - make k8s-wait
     - make k8s-wait KUBE_APP="ska-sdp"
   environment:
@@ -30,6 +32,7 @@ stop-k8s-test-tmc-with-sdp:
     KUBE_NAMESPACE_SDP: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-sdp'
     SDP_SIMULATION_ENABLED: 'false'
   script:
+    - ${PWD}/tests/scripts/sdp_data_copy.sh delete_pod
     - make k8s-uninstall-chart
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
     - make k8s-delete-namespace
