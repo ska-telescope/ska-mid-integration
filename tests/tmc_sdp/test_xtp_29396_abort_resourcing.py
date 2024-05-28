@@ -13,6 +13,7 @@ from tests.resources.test_harness.helpers import (
 )
 
 
+@pytest.mark.skip(reason="Skipped due to issue raised in STS-855 by SDP")
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp_29396_abort_resourcing.feature",

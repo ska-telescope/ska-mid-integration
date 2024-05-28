@@ -10,6 +10,7 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
+@pytest.mark.skip(reason="Skipped due to issue raised in STS-855 by SDP")
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp-35244_long_sequence_configure_scan.feature",
