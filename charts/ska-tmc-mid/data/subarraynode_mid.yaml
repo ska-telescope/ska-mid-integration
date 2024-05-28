@@ -76,7 +76,7 @@ server:
               - "5"
           - name: "CommandTimeOut"
             values:
-              - "60"
+              - "90"
           - name: "AbortCommandTimeout"
             values:
               - "100"

@@ -137,6 +137,7 @@ class SubarrayNodeWrapper(object):
         self.ABORTED_OBS_STATE = ABORTED
         self.csp_subarray1 = csp_subarray1
         self.sdp_subarray1 = sdp_subarray1
+        self.subarray_node.set_timeout_millis(5000)
 
     def _setup(self):
         """ """

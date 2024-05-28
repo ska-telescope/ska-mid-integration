@@ -29,6 +29,7 @@ from tests.resources.test_harness.utils.common_utils import (
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
+MID_DELAYMODEL_VERSION = "https://schema.skao.int/ska-mid-csp-delaymodel/3.0"
 
 
 def pytest_sessionstart(session):
@@ -257,6 +258,16 @@ def shared_context():
     return SharedContext()
 
 
+@pytest.fixture(scope="module")
+def stored_unique_id():
+    """
+    A placeholder fixture to access
+    the uniques_ids in multiple function as a parameter
+    :returns: empty list
+    """
+    return []
+
+
 @pytest.fixture(scope="session", autouse=True)
 def is_dish_vcc_set():
     """
@@ -277,3 +288,17 @@ def is_dish_vcc_set():
         "isDishVccConfigSet",
         True,
     ), "Timeout while waiting for isDishVccConfigSet to true"
+
+
+MID_DELAY_JSON = {
+    "interface": "",
+    "start_validity_sec": 0.1,
+    "cadence_sec": 0.1,
+    "validity_period_sec": 0.1,
+    "config_id": "",
+    "subarray": 1,
+    "receptor_delays": [
+        {"receptor": "", "xypol_coeffs_ns": [], "ypol_offset_ns": 0.0},
+        {"receptor": "", "xypol_coeffs_ns": [], "ypol_offset_ns": 0.0},
+    ],
+}
