@@ -77,7 +77,7 @@ centralnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-centralnode
-    tag: 0.14.6
+    tag: 0.15.0
     pullPolicy: IfNotPresent
 
 subarraynode:
@@ -111,11 +111,10 @@ cspsubarrayleafnode:
 
 dishleafnode:
   image:
-    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-dishleafnode
+    registry: artefact.skao.int
     image: ska-tmc-dishleafnode
-    tag: 0.13.2-dev.c906503b7
+    tag: 0.13.3
     pullPolicy: IfNotPresent
-
 
 resources:
   limits:
@@ -141,6 +140,9 @@ deviceServers:
       DishVccFilePath: "instrument/ska1_mid_psi/ska-mid-cbf-system-parameters.json"
       Enabled: "true"
       DishKvalueAggregationAllowedPercent: "100.0"
+    KValueValidRange:
+      min: 1
+      max: 1177
 
   subarraynode:
     enabled: true

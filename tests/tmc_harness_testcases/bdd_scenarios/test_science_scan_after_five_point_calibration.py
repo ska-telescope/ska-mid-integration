@@ -40,12 +40,19 @@ def given_tmc(central_node_mid, subarray_node, event_recorder):
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     for dish_master in subarray_node.dish_master_list:
         event_recorder.subscribe_event(dish_master, "longRunningCommandStatus")
+        event_recorder.subscribe_event(dish_master, "dishMode")
     central_node_mid.move_to_on()
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.EMPTY,
     )
+    for dish_master in subarray_node.dish_master_list:
+        assert event_recorder.has_change_event_occurred(
+            dish_master,
+            "dishMode",
+            DishMode.STANDBY_FP,
+        )
 
 
 @given("a subarray post five point calibration")

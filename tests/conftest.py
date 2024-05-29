@@ -29,6 +29,7 @@ from tests.resources.test_harness.utils.common_utils import (
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
+MID_DELAYMODEL_VERSION = "https://schema.skao.int/ska-mid-csp-delaymodel/3.0"
 
 
 def pytest_sessionstart(session):
@@ -255,6 +256,16 @@ def shared_context():
     This is used for sharing data between BDD tests
     """
     return SharedContext()
+
+
+@pytest.fixture(scope="module")
+def stored_unique_id():
+    """
+    A placeholder fixture to access
+    the uniques_ids in multiple function as a parameter
+    :returns: empty list
+    """
+    return []
 
 
 @pytest.fixture(scope="session", autouse=True)
