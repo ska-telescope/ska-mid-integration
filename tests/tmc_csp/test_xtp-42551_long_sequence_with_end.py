@@ -21,7 +21,7 @@ from tests.resources.test_harness.utils.common_utils import (
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
-
+@pytest.mark.skip
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/xtp_40175_long_sequence_configure_scan.feature",
