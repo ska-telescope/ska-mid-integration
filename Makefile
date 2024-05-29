@@ -107,7 +107,7 @@ CUSTOM_VALUES2=	--set tmc-mid.deviceServers.mocks.sdp=$(SDP_SIMULATION_ENABLED)\
 	--set ska-sdp.proccontrol.replicas=$(SDP_PROCCONTROL_REPLICAS)\
 	--set global.sdp.processingNamespace=$(KUBE_NAMESPACE_SDP)\
 	--set ska-sdp.enabled=true\
-	--set ska-sdp.lmc.loadBalancer=true
+	--set ska-sdp.lmc.loadBalancer=true\
 	--set tmc-mid.subarray_count=1\
 	--set ska-sdp.lmc.nsubarray=1
 endif
