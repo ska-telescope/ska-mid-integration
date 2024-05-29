@@ -111,16 +111,22 @@ def a_subarray_after_five_point_calibration(
     for dish_master in subarray_node.dish_master_list:
         event_recorder.subscribe_event(dish_master, "dishMode")
         event_recorder.subscribe_event(dish_master, "pointingState")
-        assert event_recorder.has_change_event_occurred(
-            dish_master,
-            "dishMode",
-            DishMode.OPERATE,
-        )
+        # assert event_recorder.has_change_event_occurred(
+        #     dish_master,
+        #     "dishMode",
+        #     DishMode.OPERATE,
+        # )
 
-        assert event_recorder.has_change_event_occurred(
-            dish_master,
-            "pointingState",
-            PointingState.TRACK,
+        # assert event_recorder.has_change_event_occurred(
+        #     dish_master,
+        #     "pointingState",
+        #     PointingState.TRACK,
+        # )
+        assert wait_and_validate_device_attribute_value(
+            dish_master, "dishMode", DishMode.OPERATE, timeout=50
+        )
+        assert wait_and_validate_device_attribute_value(
+            dish_master, "pointingState", PointingState.TRACK, timeout=50
         )
     assert event_recorder.has_change_event_occurred(
         csp_sim,
