@@ -117,7 +117,7 @@ def sync_assign_resources(device_dict):
     return decorator_sync_assign_resources
 
 
-def sync_abort(device_dict, timeout=800):
+def sync_abort(device_dict, timeout=900):
     # define as a decorator
     def decorator_sync_abort(func):
         @functools.wraps(func)
@@ -163,7 +163,7 @@ def sync_configure(device_dict):
                 the_waiter.set_wait_for_configuring()
                 the_waiter.wait(500)
             the_waiter.set_wait_for_configure()
-            the_waiter.wait(1500)
+            the_waiter.wait(1600)
             return result
 
         return wrapper

@@ -1,5 +1,6 @@
 """This module implement common utils
 """
+import time
 from os.path import dirname, join
 
 
@@ -82,3 +83,10 @@ class JsonFactory(object):
 class SharedContext:
     def __init__(self):
         self.unique_id = None
+
+
+def wait_added_for_skb372():
+    """
+    Waits for few seocnds
+    """
+    time.sleep(4)

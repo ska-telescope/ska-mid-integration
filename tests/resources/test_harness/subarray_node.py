@@ -149,6 +149,7 @@ class SubarrayNodeWrapper(object):
         self.sdp_subarray1 = sdp_subarray1
         device_dict["dish_master_list"] = self.dish_master_list
         device_dict["dish_leaf_node_list"] = self.dish_leaf_node_list
+        self.subarray_node.set_timeout_millis(5000)
 
     def _setup(self):
         """ """

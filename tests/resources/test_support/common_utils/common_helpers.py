@@ -13,6 +13,7 @@ from tango import CmdArgType, DeviceProxy, EventType
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
+# pylint: disable=too-many-lines
 
 
 class Resource:

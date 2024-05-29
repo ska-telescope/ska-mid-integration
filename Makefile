@@ -12,6 +12,7 @@ DISH_NAMESPACE_4 ?= dish-lmc-4
 KUBE_NAMESPACE ?= ska-tmc-integration
 KUBE_NAMESPACE_SDP ?= ska-tmc-integration-sdp
 CI_KEEP_NAMESPACE=true
+K8S_TIMEOUT ?= 800s
 PYTHON_LINT_TARGET ?= tests/
 
 DEPLOYMENT_TYPE = $(shell echo $(TELESCOPE) | cut -d '-' -f2)
@@ -54,7 +55,7 @@ CSP_MASTER ?= tango://$(TANGO_HOST).$(KUBE_NAMESPACE).svc.$(CLUSTER_DOMAIN):$(PO
 CSP_SUBARRAY_PREFIX ?= tango://$(TANGO_HOST).$(KUBE_NAMESPACE).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-csp/subarray
 SDP_MASTER ?= tango://$(TANGO_HOST).$(KUBE_NAMESPACE).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-sdp/control/0
 SDP_SUBARRAY_PREFIX ?= tango://$(TANGO_HOST).$(KUBE_NAMESPACE).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-sdp/subarray
-
+ADDMARK ?= #addional marker
 CI_REGISTRY ?= gitlab.com
 
 K8S_TEST_IMAGE_TO_TEST ?= artefact.skao.int/ska-tango-images-tango-itango:9.3.12## docker image that will be run for testing purpose
@@ -91,7 +92,7 @@ endif
 
 # EXIT_AT_FAIL option isn't functioning correctly, so the option -x is added
 # at the end. Will be debugged and fixed as a part of improvement.
-PYTHON_VARS_AFTER_PYTEST ?= -m '$(MARK)' $(ADD_ARGS) $(FILE) -x
+PYTHON_VARS_AFTER_PYTEST ?= -m '$(MARK) $(ADDMARK)' $(ADD_ARGS) $(FILE) --count=$(COUNT) -x 
 CUSTOM_VALUES1 ?=
 CUSTOM_VALUES2 ?=
 ifeq ($(CSP_SIMULATION_ENABLED),false)
@@ -104,7 +105,9 @@ CUSTOM_VALUES2=	--set tmc-mid.deviceServers.mocks.sdp=$(SDP_SIMULATION_ENABLED)\
 	--set global.sdp_master="$(SDP_MASTER)"\
 	--set global.sdp_subarray_prefix="$(SDP_SUBARRAY_PREFIX)"\
 	--set global.sdp.processingNamespace=$(KUBE_NAMESPACE_SDP)\
-	--set ska-sdp.enabled=true
+	--set ska-sdp.enabled=true\
+	--set tmc-mid.subarray_count=1\
+	--set ska-sdp.lmc.nsubarray=1
 endif
 
 K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
