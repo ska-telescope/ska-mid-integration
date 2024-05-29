@@ -4,6 +4,7 @@ import json
 import pytest
 from pytest_bdd import given, scenario, then, when
 from ska_control_model import ObsState
+from tango import DevState
 
 from tests.resources.test_harness.constant import (
     DISH_001_CALIBRATION_DATA,
@@ -38,6 +39,9 @@ def test_science_scan_after_five_point_calibration_scan():
 def given_tmc(central_node_mid, subarray_node, event_recorder):
     """Given a TMC"""
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "telescopeState"
+    )
     for dish_master in subarray_node.dish_master_list:
         event_recorder.subscribe_event(dish_master, "longRunningCommandStatus")
         event_recorder.subscribe_event(dish_master, "dishMode")
@@ -47,12 +51,11 @@ def given_tmc(central_node_mid, subarray_node, event_recorder):
         "obsState",
         ObsState.EMPTY,
     )
-    for dish_master in subarray_node.dish_master_list:
-        assert event_recorder.has_change_event_occurred(
-            dish_master,
-            "dishMode",
-            DishMode.STANDBY_FP,
-        )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "telescopeState",
+        DevState.ON,
+    )
 
 
 @given("a subarray post five point calibration")
