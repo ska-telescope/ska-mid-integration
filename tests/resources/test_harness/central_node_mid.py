@@ -631,12 +631,9 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         elif self.subarray_node.obsState == ObsState.ABORTED:
             self.subarray_restart()
 
-        if (
-            SIMULATED_DEVICES_DICT["all_mocks"]
-            or SIMULATED_DEVICES_DICT["csp_and_dish"]
-        ):
-            # if self.telescope_state != "OFF":
+        if self.telescope_state != "OFF":
             self.move_to_off()
+
         self._clear_command_call_and_transition_data(clear_transition=True)
         # if source dish vcc config is empty or not matching with default
         # dish vcc then load default dish vcc config
