@@ -10,9 +10,11 @@ from tests.resources.test_harness.helpers import (
     check_subarray_instance,
     prepare_json_args_for_centralnode_commands,
 )
+from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
-@pytest.mark.skip(reason="Skipped due to issue raised in STS-855 by SDP")
+@pytest.mark.skip(reason="STS-855-SDP side Issue")
+# SDP Side Issue: Docker images in Harbor overwritten by new releases
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp-29293_assign_resources.feature",
@@ -76,14 +78,15 @@ def subarray_is_in_empty_obsstate(
     )
 )
 def assign_resources_to_subarray(
-    central_node_mid, command_input_factory, subarray_id
+    central_node_mid, command_input_factory, subarray_id, stored_unique_id
 ):
     """Method to assign resources to subarray."""
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
     check_subarray_instance(central_node_mid.subarray_node, subarray_id)
-    central_node_mid.store_resources(assign_input_json)
+    _, unique_id = central_node_mid.store_resources(assign_input_json)
+    stored_unique_id.append(unique_id[0])
 
 
 @then(parsers.parse("the sdp subarray {subarray_id} obsState is IDLE"))
@@ -110,7 +113,7 @@ def check_sdp_is_in_idle_obsstate(
     )
 )
 def check_tmc_is_in_idle_obsstate(
-    central_node_mid, event_recorder, subarray_id
+    central_node_mid, event_recorder, subarray_id, stored_unique_id
 ):
     """Method to check TMC is in IDLE obsstate."""
     check_subarray_instance(central_node_mid.subarray_node, subarray_id)
@@ -118,6 +121,16 @@ def check_tmc_is_in_idle_obsstate(
         central_node_mid.subarray_node,
         "obsState",
         ObsState.IDLE,
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (stored_unique_id[0], str(int(ResultCode.OK))),
+        lookahead=5,
     )
 
 

@@ -42,6 +42,12 @@ This project is integration of the TMC components for the `Square Kilometre Arra
    developer_guide/pair_wise_test_tmc_dish
    developer_guide/pair_wise_tests
 
+.. toctree::
+   :maxdepth: 1
+   :caption: Releases
+
+   CHANGELOG.rst
+
 Indices and tables
 ------------------
 * :ref:`genindex`

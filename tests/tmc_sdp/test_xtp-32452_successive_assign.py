@@ -10,7 +10,8 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-@pytest.mark.skip(reason="Skipped due to issue raised in STS-855 by SDP")
+@pytest.mark.skip(reason="STS-855-SDP side Issue")
+# SDP Side Issue: Docker images in Harbor overwritten by new releases
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp-32452_assign_release_assign_sequence.feature",

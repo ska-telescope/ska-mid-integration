@@ -438,7 +438,9 @@ def check_lrcr_events(
             pytest.fail("Assertion Failed")
 
 
-def wait_till_delay_values_are_populated(csp_subarray_leaf_node) -> None:
+def wait_till_delay_values_are_populated(
+    csp_subarray_leaf_node,
+) -> None:
     start_time = time.time()
     time_elapsed = 0
     while csp_subarray_leaf_node.delayModel == "" or time_elapsed <= TIMEOUT:

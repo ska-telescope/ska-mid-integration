@@ -52,11 +52,11 @@ ska-taranta:
     replicas: 1
     resources:
       requests:
-        cpu: 600m # 600m = 0.6 CPU
-        memory: 512Mi # 512Mi = 0.5 GB mem
+        cpu: 100m # 100m = 0.1 CPU
+        memory: 100Mi # 100Mi = 0.1 GB mem
       limits:
-        cpu: 1000m # 1000m = 1 CPU
-        memory: 1024Mi # 1024Mi = 1 GB mem
+        cpu: 200m # 200m = 0.2CPU
+        memory: 200Mi # 200Mi = 0.2 GB mem
 
 # Tmc-Mid
 tmc-mid:
