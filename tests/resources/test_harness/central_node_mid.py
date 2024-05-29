@@ -150,8 +150,15 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 "release_resources_mid"
             )
         )
-        device_dict["cbf_subarray1"] = "mid_csp_cbf/sub_elt/subarray_01"
-        device_dict["cbf_controller"] = "mid_csp_cbf/sub_elt/controller"
+        if (
+            SIMULATED_DEVICES_DICT["sdp_and_dish"]
+            or SIMULATED_DEVICES_DICT["sdp"]
+        ) and not SIMULATED_DEVICES_DICT["all_mocks"]:
+            device_dict["cbf_subarray1"] = "mid_csp_cbf/sub_elt/subarray_01"
+            device_dict["cbf_controller"] = "mid_csp_cbf/sub_elt/controller"
+
+        device_dict["dish_master_list"] = self.dish_master_list
+        device_dict["dish_leaf_node_list"] = self.dish_leaf_node_list
         self.wait = Waiter(**device_dict)
 
     @property
@@ -621,7 +628,12 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             self.subarray_restart()
         elif self.subarray_node.obsState == ObsState.ABORTED:
             self.subarray_restart()
-        if self.telescope_state != "OFF":
+
+        if (
+            SIMULATED_DEVICES_DICT["all_mocks"]
+            or SIMULATED_DEVICES_DICT["csp_and_dish"]
+        ):
+            # if self.telescope_state != "OFF":
             self.move_to_off()
         self._clear_command_call_and_transition_data(clear_transition=True)
         # if source dish vcc config is empty or not matching with default
