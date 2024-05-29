@@ -8,9 +8,9 @@ from tango import DeviceProxy
 from tests.resources.test_support.constant import alarm_handler1
 
 
-@pytest.mark.SKA_mid
+@pytest.mark.atest
 @scenario(
-    "../features/tmc_sdp/nan_alarm.feature",
+    "../features/test_harness/xtp_50437_nan_alarm.feature",
     "TMC mid raises an alarm when it encounters NaN"
     " in received pointing calibration",
 )
@@ -40,7 +40,7 @@ def dish_leaf_node_receives_nan_from_sdp(tmc_mid):
     queue_connector.SetPointingCalSka001([1.0, NaN, 2.1])
 
 
-@then("the alarm is raised for NaN found in last pointing data")
+@then("an alarm is raised for NaN found in last pointing data")
 def test_load_alarm():
     """A method to load tmc alarm for Alarm handler instance"""
     global alarm_handler, alarm_list
