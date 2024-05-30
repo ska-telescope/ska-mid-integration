@@ -18,8 +18,6 @@ from tests.resources.test_harness.utils.common_utils import (
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
-@pytest.mark.skip(reason="STS-855-SDP side Issue")
-# SDP Side Issue: Docker images in Harbor overwritten by new releases
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp-32453_successive_configure_with_real_sdp.feature",
