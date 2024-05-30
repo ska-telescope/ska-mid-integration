@@ -125,6 +125,7 @@ def execute_initial_configure_command(
     configure_json = prepare_json_args_for_commands(
         input_json1, command_input_factory
     )
+
     wait_added_for_skb372()
     subarray_node.execute_transition("Configure", argin=configure_json)
 

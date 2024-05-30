@@ -110,7 +110,10 @@ server:
             - "5"
         - name: "DishVccInitTimeout"
           values:
-            - "70" 
+            - "180"
+        - name: "CommandTimeOut"
+          values:
+            - "70"
         - name: "polled_attr"
           values:
             - "isDishVccConfigSet"
