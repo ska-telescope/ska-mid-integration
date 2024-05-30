@@ -41,6 +41,7 @@ def sync_set_to_off(device_dict: dict):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             logging.info("here in off sync decorator")
+            logging.info("Device Dict: %s", device_dict)
             the_waiter = Waiter(**device_dict)
             the_waiter.set_wait_for_going_to_off()
             result = func(*args, **kwargs)
