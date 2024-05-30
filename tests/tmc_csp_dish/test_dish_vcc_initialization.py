@@ -3,6 +3,7 @@ Test case to validate negative scenario for
    Dish Vcc map configuration feature
 """
 import json
+import logging
 
 import pytest
 from pytest_bdd import given, scenario, then, when
@@ -40,6 +41,13 @@ def given_tmc_using_default_version(tmc_mid, command_input_factory):
         tmc_mid.csp_master_leaf_node.sourceDishVccConfig
     ) == json.loads(expected_source_dish_vcc_config)
 
+    logging.info("In GIVEN 01 -------------------------")
+    for dish in tmc_mid.central_node.dish_master_list:
+        logging.info("Dish dishMode: %s", dish.dishMode)
+
+    for dish_leaf in tmc_mid.central_node.dish_leaf_node_list:
+        logging.info("Dish Leaf dishMode: %s", dish_leaf.dishMode)
+
 
 @when("I restart the CspMasterLeafNode and CentralNode is running")
 def restart_csp_master_leaf_node(tmc_mid):
@@ -51,6 +59,13 @@ def restart_csp_master_leaf_node(tmc_mid):
         "DishVccMapValidationResult",
         str(int(ResultCode.OK)),
     )
+
+    logging.info("In WHEN 02 -------------------")
+    for dish in tmc_mid.central_node.dish_master_list:
+        logging.info("Dish dishMode: %s", dish.dishMode)
+
+    for dish_leaf in tmc_mid.central_node.dish_leaf_node_list:
+        logging.info("Dish Leaf dishMode: %s", dish_leaf.dishMode)
 
 
 @then(
@@ -68,6 +83,13 @@ def validate_csp_mln_dish_vcc_version(tmc_mid, command_input_factory):
         tmc_mid.csp_master_leaf_node.sourceDishVccConfig
     ) == json.loads(expected_source_dish_vcc_config)
 
+    logging.info("In THEN 03 ------------------")
+    for dish in tmc_mid.central_node.dish_master_list:
+        logging.info("Dish dishMode: %s", dish.dishMode)
+
+    for dish_leaf in tmc_mid.central_node.dish_leaf_node_list:
+        logging.info("Dish Leaf dishMode: %s", dish_leaf.dishMode)
+
 
 @then("TMC should report Dish-VCC config set to true")
 def validate_central_node_dish_vcc_config(tmc_mid):
@@ -83,6 +105,12 @@ def validate_central_node_dish_vcc_config(tmc_mid):
         json.loads(tmc_mid.central_node.DishVccValidationStatus)
         == result_string_to_match
     )
+    logging.info("In THEN 04 -----------------")
+    for dish in tmc_mid.central_node.dish_master_list:
+        logging.info("Dish dishMode: %s", dish.dishMode)
+
+    for dish_leaf in tmc_mid.central_node.dish_leaf_node_list:
+        logging.info("Dish Leaf dishMode: %s", dish_leaf.dishMode)
 
 
 @pytest.mark.tmc_csp_dish
