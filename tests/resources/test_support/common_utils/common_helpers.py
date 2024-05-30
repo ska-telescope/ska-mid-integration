@@ -27,6 +27,7 @@ class Resource:
     def get(self, attr):
         """Method for getting attributes"""
         device_proxy = DeviceProxy(self.device_name)
+        device_proxy.set_timeout_millis(5000)
         attrs = device_proxy.get_attribute_list()
         if attr not in attrs:
             return "attribute not found"
@@ -336,7 +337,6 @@ class Waiter:
         self.tmc_dish_leaf_node3 = kwargs.get("tmc_dish_leaf_node3")
         self.tmc_dish_leaf_node4 = kwargs.get("tmc_dish_leaf_node4")
 
-    # pylint: disable=too-many-lines
     def clear_watches(self):
         """Resets the waits list"""
         self.waits = []

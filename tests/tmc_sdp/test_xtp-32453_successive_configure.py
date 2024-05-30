@@ -12,6 +12,9 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
+from tests.resources.test_harness.utils.common_utils import (
+    wait_added_for_skb372,
+)
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
@@ -122,7 +125,8 @@ def execute_initial_configure_command(
     configure_json = prepare_json_args_for_commands(
         input_json1, command_input_factory
     )
-    subarray_node.store_configuration_data(configure_json)
+    wait_added_for_skb372()
+    subarray_node.execute_transition("Configure", argin=configure_json)
 
 
 @when("the subarray transitions to obsState READY")
@@ -159,7 +163,8 @@ def execute_next_configure_command(
     configure_json = prepare_json_args_for_commands(
         input_json2, command_input_factory
     )
-    subarray_node.store_configuration_data(configure_json)
+    wait_added_for_skb372()
+    subarray_node.execute_transition("Configure", argin=configure_json)
 
     # TODO :: Issue is raised with SDP team , awating for
     #  confirmation to raise it as bug

@@ -91,7 +91,7 @@ sdpleafnodes:
   image:
     registry: artefact.skao.int
     image: ska-tmc-sdpleafnodes
-    tag: 0.14.2
+    tag: 0.15.0
     pullPolicy: IfNotPresent
 
 cspmasterleafnode:
@@ -155,7 +155,7 @@ deviceServers:
     SdpScanInterfaceURL: "https://schema.skao.int/ska-sdp-scan/0.4"
 
   sdpsubarrayleafnode:
-    enabled: true 
+    enabled: true
     file: "data/sdpsubarrayleafnode.yaml"
 
   sdpmasterleafnode:
