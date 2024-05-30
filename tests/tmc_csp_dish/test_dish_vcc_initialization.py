@@ -43,12 +43,16 @@ def given_tmc_using_default_version(tmc_mid, command_input_factory):
 
     logging.info("In GIVEN 01 -------------------------")
     for dish in tmc_mid.central_node.dish_master_list:
-        logging.info("Dish device name", dish.dev_name())
+        logging.info("Dish device name", str(dish.dev_name()))
         logging.info("Dish dishMode: %s", dish.dishMode)
 
     for dish_leaf in tmc_mid.central_node.dish_leaf_node_list:
-        logging.info("Dish Leaf device name", dish_leaf.dev_name())
+        logging.info("Dish Leaf device name", str(dish_leaf.dev_name()))
         logging.info("Dish Leaf dishMode: %s", dish_leaf.dishMode)
+        logging.info(
+            "DishMasterFQDN Property: %s",
+            dish_leaf.get_property("DishMasterFQDN"),
+        )
 
 
 @when("I restart the CspMasterLeafNode and CentralNode is running")
