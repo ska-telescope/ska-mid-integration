@@ -1,5 +1,6 @@
 import pytest
 from ska_control_model import ObsState, ResultCode
+from tango import DevState
 
 from tests.resources.test_harness.helpers import (
     check_assigned_resources,
@@ -47,7 +48,16 @@ class TestMidCentralNodeAssignResources(object):
         event_recorder.subscribe_event(
             central_node_mid.central_node, "longRunningCommandResult"
         )
+        event_recorder.subscribe_event(
+            central_node_mid.central_node, "telescopeState"
+        )
         central_node_mid.move_to_on()
+
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.central_node,
+            "telescopeState",
+            DevState.ON,
+        )
         _, unique_id = central_node_mid.perform_action(
             "AssignResources", assign_input_json
         )
