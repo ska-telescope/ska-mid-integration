@@ -1,7 +1,5 @@
 """Test module for TMC-DISH Off functionality"""
 
-import logging
-
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from tango import DevState
@@ -65,15 +63,7 @@ def check_tmc_and_dish_is_on(
     assert sdp_master_sim.ping() > 0
     for dish_id in dish_ids.split(","):
         assert central_node_mid.dish_master_dict[dish_id].ping() > 0
-        logging.info(
-            "Dish dishMode: %s",
-            central_node_mid.dish_master_dict[dish_id].dishMode,
-        )
         assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
-        logging.info(
-            "DishLeafNode dishMode: %s",
-            central_node_mid.dish_leaf_node_dict[dish_id].dishMode,
-        )
 
     central_node_mid.move_to_on()
 
@@ -144,4 +134,3 @@ def check_telescopeOff_state(central_node_mid, event_recorder):
         "telescopeState",
         DevState.OFF,
     )
-    assert 0
