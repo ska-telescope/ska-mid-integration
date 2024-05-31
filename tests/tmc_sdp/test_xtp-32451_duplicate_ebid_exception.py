@@ -110,9 +110,7 @@ def given_assign_resources_executed_on_tmc_subarray(
         "AssignResources", assign_input_json
     )
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "obsState",
-        ObsState.IDLE,
+        subarray_node.subarray_node, "obsState", ObsState.IDLE, lookahead=15
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
