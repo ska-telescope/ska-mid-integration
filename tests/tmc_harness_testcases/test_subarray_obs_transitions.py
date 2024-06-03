@@ -1,3 +1,4 @@
+import json
 import logging
 
 import pytest
@@ -73,7 +74,7 @@ class TestSubarrayNodeObsStateTransitions(object):
 
         subarray_node.move_to_on()
 
-        assign_input = (
+        assign_input = json.loads(
             command_input_factory.create_assign_resources_configuration(
                 "assign_resources_mid"
             )
@@ -87,7 +88,8 @@ class TestSubarrayNodeObsStateTransitions(object):
         logging.info("assign_input: %s", assign_input)
 
         subarray_node.force_change_of_obs_state(
-            dest_state_name=source_obs_state, assign_input_json=assign_input
+            dest_state_name=source_obs_state,
+            assign_input_json=json.dumps(assign_input),
         )
 
         subarray_node.execute_transition(trigger)
