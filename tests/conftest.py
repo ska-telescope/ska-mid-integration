@@ -291,7 +291,7 @@ def is_dish_vcc_set():
 
 
 MID_DELAY_JSON = {
-    "interface": "",
+    "interface": "https://schema.skao.int/ska-mid-csp-delaymodel/3.0",
     "start_validity_sec": 0.1,
     "cadence_sec": 0.1,
     "validity_period_sec": 0.1,
