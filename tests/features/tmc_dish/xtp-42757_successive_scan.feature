@@ -13,4 +13,4 @@ Scenario Outline: Testing of successive Scan functionality for tmc-dish interfac
 
         Examples:
         | receiver_band1 | scan_duration1 | receiver_band2 | scan_duration2 |
-        |       1        |      300       |       2        |      500       |
+        |       1        |      10        |       2        |      5         |

@@ -8,6 +8,7 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
 from tango import DevState
 
+from tests.conftest import LOGGER
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
@@ -67,6 +68,8 @@ def turn_on_telescope(
 
     time.sleep(5)
 
+    LOGGER.info("Invoking Move to on ####################################")
+
     central_node_mid.move_to_on()
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
@@ -86,6 +89,8 @@ def turn_on_telescope(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
+
+    LOGGER.info("Invoking AssignResources #################################")
 
     pytest.command_result = central_node_mid.store_resources(assign_input_json)
 
@@ -113,6 +118,8 @@ def invoke_configure(
     """
     A method to invoke Configure command
     """
+
+    LOGGER.info("Invoking Configure #################################")
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
@@ -133,6 +140,7 @@ def check_dish_mode_and_pointing_state(
     Method to check dishMode and pointingState of DISH and
     SubarrayNode obsState.
     """
+    LOGGER.info("Checking for Ready ObsState events #####################")
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
@@ -162,6 +170,7 @@ def invoke_scan(subarray_node, command_input_factory, event_recorder):
     """
     A method to invoke Scan command
     """
+    LOGGER.info("Invoking Scan and checking for scanning evts #############")
     scan_input_json = prepare_json_args_for_commands(
         "scan_mid", command_input_factory
     )
