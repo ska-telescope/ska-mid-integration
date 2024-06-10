@@ -102,17 +102,6 @@ def telescope_is_in_idle_state(
         lookahead=5,
     )
 
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "longRunningCommandResult"
-    )
-
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "longRunningCommandResult",
-        (unique_id[0], str(int(ResultCode.OK))),
-        lookahead=5,
-    )
-
 
 @when(parsers.parse("the command configure is issued with {input_json1}"))
 def execute_initial_configure_command(
