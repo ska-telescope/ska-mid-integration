@@ -29,7 +29,7 @@ endif
 # KUBE_NAMESPACE defines the Kubernetes Namespace that will be deployed to
 # using Helm.  If this does not already exist it will be created
 ifneq ($(CI_JOB_ID),)
-KUBE_NAMESPACE ?= ci-$(CI_PROJECT_NAME)-$(CI_COMMIT_SHORT_SHA)
+KUBE_NAMESPACE ?= ci-$(CI_PROJECT_NAME)-$(CI_JOB_ID)
 endif
 # HELM_RELEASE is the release that all Kubernetes resources will be labelled
 # with
