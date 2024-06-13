@@ -44,10 +44,10 @@ dependencies:
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-taranta.enabled
   - name: ska-csp-lmc-mid
-    version: 0.20.0
+    version: 0.21.0
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-csp-lmc-mid.enabled
   - name: ska-mid-cbf-mcs
-    version: 0.14.1
+    version: 0.14.2
     repository:  https://artefact.skao.int/repository/helm-internal
     condition: ska-csp-lmc-mid.enabled
