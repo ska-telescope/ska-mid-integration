@@ -5,8 +5,8 @@ dish-lmc-dish001:
     - ska-k8s
   variables:
     DISH_INDEX: "001"
-    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
-    DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_JOB_ID-dish-lmc-$DISH_INDEX"
+    DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_JOB_ID-dish-lmc-$DISH_INDEX"
     DISH_HELM_RELEASE: "3.2.0"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
   before_script:
@@ -29,8 +29,8 @@ dish-lmc-dish036:
     - dish-lmc-dish001
   variables:
     DISH_INDEX: "036"
-    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
-    DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_JOB_ID-dish-lmc-$DISH_INDEX"
+    DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_JOB_ID-dish-lmc-$DISH_INDEX"
     DISH_HELM_RELEASE: "3.2.0"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
   environment:
@@ -43,8 +43,8 @@ dish-lmc-dish063:
     - dish-lmc-dish001
   variables:
     DISH_INDEX: "063"
-    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
-    DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_JOB_ID-dish-lmc-$DISH_INDEX"
+    DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_JOB_ID-dish-lmc-$DISH_INDEX"
     DISH_HELM_RELEASE: "3.2.0"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
   environment:
@@ -57,8 +57,8 @@ dish-lmc-dish100:
     - dish-lmc-dish001
   variables:
     DISH_INDEX: "100"
-    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
-    DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_JOB_ID-dish-lmc-$DISH_INDEX"
+    DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_JOB_ID-dish-lmc-$DISH_INDEX"
     DISH_HELM_RELEASE: "3.2.0"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
     TARANTA_ENABLED: "true"
@@ -74,7 +74,7 @@ stop-k8s-dish-lmc-001:
   extends:
     - stop-k8s-test
   variables:
-    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-001"
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_JOB_ID-dish-lmc-001"
     DISH_HELM_RELEASE: "3.2.0"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
   script:
@@ -86,7 +86,7 @@ stop-k8s-dish-lmc-036:
   extends:
     - stop-k8s-dish-lmc-001
   variables:
-    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-036"
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_JOB_ID-dish-lmc-036"
     DISH_HELM_RELEASE: "3.2.0"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
 
@@ -94,7 +94,7 @@ stop-k8s-dish-lmc-063:
   extends:
     - stop-k8s-dish-lmc-001
   variables:
-    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-063"
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_JOB_ID-dish-lmc-063"
     DISH_HELM_RELEASE: "3.2.0"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
 
@@ -102,6 +102,6 @@ stop-k8s-dish-lmc-100:
   extends:
     - stop-k8s-dish-lmc-001
   variables:
-    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-100"
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_JOB_ID-dish-lmc-100"
     DISH_HELM_RELEASE: "3.2.0"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
