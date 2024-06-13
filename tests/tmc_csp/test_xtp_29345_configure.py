@@ -3,7 +3,7 @@ import json
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
-from ska_control_model import ObsState
+from ska_control_model import ObsState, ResultCode
 from tango import DevState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
@@ -85,7 +85,9 @@ def invoke_configure_command(
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    subarray_node.execute_transition("Configure", argin=configure_input_json)
+    pytest.command_result = subarray_node.execute_transition(
+        "Configure", argin=configure_input_json
+    )
 
 
 @then(
@@ -116,11 +118,19 @@ def check_if_tmc_subarray_moved_to_ready_obsstate(
     subarray_node: SubarrayNodeWrapper, event_recorder: EventRecorder
 ) -> None:
     """Ensure TMC Subarray is moved to READY obsstate"""
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
         lookahead=20,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
 
 
