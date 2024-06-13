@@ -79,14 +79,24 @@ def move_subarray_node_to_idle_obsstate(
     )
 )
 def invoke_configure_command(
-    subarray_node: SubarrayNodeWrapper, command_input_factory: JsonFactory
+    subarray_node: SubarrayNodeWrapper,
+    command_input_factory: JsonFactory,
+    event_recorder: EventRecorder,
 ) -> None:
     """Invoke Configure command."""
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
     pytest.command_result = subarray_node.execute_transition(
         "Configure", argin=configure_input_json
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
 
 
@@ -118,19 +128,11 @@ def check_if_tmc_subarray_moved_to_ready_obsstate(
     subarray_node: SubarrayNodeWrapper, event_recorder: EventRecorder
 ) -> None:
     """Ensure TMC Subarray is moved to READY obsstate"""
-    event_recorder.subscribe_event(
-        subarray_node.subarray_node, "longRunningCommandResult"
-    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
         lookahead=20,
-    )
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
 
 
