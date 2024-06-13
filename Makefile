@@ -28,6 +28,11 @@ ifeq ($(EXIT_AT_FAIL),true)
 ADD_ARGS += -x
 endif
 
+# KUBE_NAMESPACE defines the Kubernetes Namespace that will be deployed to
+# using Helm.  If this does not already exist it will be created
+ifneq ($(CI_JOB_ID),)
+KUBE_NAMESPACE ?= ci-$(CI_PROJECT_NAME)-$(CI_COMMIT_SHORT_SHA)
+endif
 # HELM_RELEASE is the release that all Kubernetes resources will be labelled
 # with
 HELM_RELEASE ?= test
@@ -162,9 +167,6 @@ ifeq ($(SDP_SIMULATION_ENABLED),false)
 	@echo "k8s-pre-install-chart: creating the SDP namespace $(KUBE_NAMESPACE_SDP)"
 	@make k8s-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP)
 endif
-
-# Add k8s-info to get more information about deployments
-k8s-post-install-chart: k8s-info
 
 # to create SDP namespace
 k8s-pre-install-chart-car:
