@@ -60,8 +60,16 @@ def move_subarray_node_to_idle_obsstate(
     # Create json for AssignResources commands with requested subarray_id
     assign_input = json.loads(assign_input_json)
     assign_input["subarray_id"] = int(subarray_id)
-    central_node_mid.perform_action(
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+    pytest.command_result = central_node_mid.perform_action(
         "AssignResources", json.dumps(assign_input)
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
 
     event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
@@ -84,9 +92,6 @@ def invoke_configure_command(
     event_recorder: EventRecorder,
 ) -> None:
     """Invoke Configure command."""
-    event_recorder.subscribe_event(
-        subarray_node.subarray_node, "longRunningCommandResult"
-    )
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
