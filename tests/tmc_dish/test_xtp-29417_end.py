@@ -286,6 +286,16 @@ def check_dish_mode_and_pointing_state(
             PointingState.READY,
             lookahead=10,
         )
+        logging.info(
+            "pointingstate for dln %s %s",
+            dish_id,
+            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
+        )
+        logging.info(
+            "pointingstate for dish master %s %s",
+            dish_id,
+            central_node_mid.dish_master_dict[dish_id].pointingState,
+        )
 
 
 @then(
