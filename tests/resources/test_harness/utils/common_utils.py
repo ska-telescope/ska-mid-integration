@@ -322,9 +322,6 @@ def check_configure_successful_csp(
         "READY", [subarray_node.subarray_node]
     )
     the_waiter.wait(150)
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
-    )
 
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
@@ -335,4 +332,8 @@ def check_configure_successful_csp(
         "longRunningCommandResult",
         (unique_id[0], str(int(ResultCode.OK))),
         lookahead=10,
+    )
+
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
     )
