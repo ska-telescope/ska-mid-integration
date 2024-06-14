@@ -1,5 +1,7 @@
 k8s-test-dish-lmc:
   stage: test
+  extends:
+    - k8s-test
   tags:
     - ska-k8s
   variables:
