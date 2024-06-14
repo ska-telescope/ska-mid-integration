@@ -1,6 +1,7 @@
 """Test module for TMC-DISH End functionality"""
 
 import logging
+import time
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -258,6 +259,7 @@ def check_dish_mode_and_pointing_state(
     """
     Method to check dishMode and pointingState of DISH
     """
+    time.sleep(250)
     for dish_id in dish_ids.split(","):
         # logs added for testing, will be removed before merging into master
         logging.info(
