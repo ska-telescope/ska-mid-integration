@@ -35,6 +35,7 @@ k8s-test-csp-dish:
       # This repetition is needed for gitlab to parse the namespace correctly
       namespace: $KUBE_NAMESPACE
     on_stop: stop-k8s-test-csp-dish
+    CI_KEEP_NAMESPACE: "true"
   allow_failure: false # need to keep this to unlock the pipeline
 
 
