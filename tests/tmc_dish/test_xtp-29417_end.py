@@ -102,6 +102,17 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
             "dishMode",
             DishMode.STANDBY_FP,
         )
+        # logs added for testing, will be removed before merging into master
+        logging.info(
+            "pointingstate for dln %s %s",
+            dish_id,
+            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
+        )
+        logging.info(
+            "pointingstate for dish master %s %s",
+            dish_id,
+            central_node_mid.dish_master_dict[dish_id].pointingState,
+        )
 
     assert event_recorder.has_change_event_occurred(
         central_node_mid.sdp_master,
@@ -154,6 +165,18 @@ def check_subarray_obsstate(
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        # logs added for testing, will be removed before merging into master
+        logging.info(
+            "pointingstate for dln %s %s",
+            dish_id,
+            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
+        )
+        logging.info(
+            "pointingstate for dish master %s %s",
+            dish_id,
+            central_node_mid.dish_master_dict[dish_id].pointingState,
+        )
 
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
@@ -192,6 +215,16 @@ def check_subarray_obsstate(
             "pointingState",
             PointingState.TRACK,
             lookahead=10,
+        )
+        logging.info(
+            "pointingstate for dln %s %s",
+            dish_id,
+            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
+        )
+        logging.info(
+            "pointingstate for dish master %s %s",
+            dish_id,
+            central_node_mid.dish_master_dict[dish_id].pointingState,
         )
 
     assert event_recorder.has_change_event_occurred(
