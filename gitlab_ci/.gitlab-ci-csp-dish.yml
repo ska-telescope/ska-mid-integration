@@ -18,7 +18,6 @@ k8s-test-csp-dish:
     DISH_NAMESPACE_4: "ci-$CI_PROJECT_NAME-$CI_JOB_ID-dish-lmc-$DISH_INDEX_100"
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_JOB_ID-test-mid-csp-dish"
     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_JOB_ID-test-mid-csp-dish"
-    CI_KEEP_NAMESPACE: "true"
   script:
     - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
