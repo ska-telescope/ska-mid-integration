@@ -49,7 +49,7 @@ mid-on-demand-deploy-mini-skampi:
   variables:
     DISH_SIMULATION_ENABLED: "false"
     SDP_SIMULATION_ENABLED: "false"
-    CSP_SIMULATION_ENABLED: "false"
+    CSP_SIMULATION_ENABLED: "true"
     SUBARRAY_COUNT: 2
     DISH_TANGO_HOST: "tango-databaseds"
     PORT: "10000"
