@@ -103,6 +103,16 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
             "dishMode",
             DishMode.STANDBY_FP,
         )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "pointingState",
+            PointingState.READY,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "pointingState",
+            PointingState.READY,
+        )
         # logs added for testing, will be removed before merging into master
         logging.info(
             "pointingstate for dln %s %s",
@@ -316,4 +326,3 @@ def check_subarray_obsState_idle(
         "longRunningCommandResult",
         (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
-    assert 0
