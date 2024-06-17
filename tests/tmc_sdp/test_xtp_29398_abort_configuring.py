@@ -12,9 +12,7 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-@pytest.mark.skip(
-    reason="Need to test with SDP 0.20.0 which has fix of the issue"
-)
+@pytest.mark.skip(reason="Skipped due to issue raised in STS-855 by SDP")
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp_29398_abort_configuring.feature",

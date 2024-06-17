@@ -4,7 +4,6 @@ import pytest
 from pytest_bdd import given, scenario, then, when
 from tango import DevState
 
-from tests.conftest import LOGGER
 from tests.resources.test_harness.helpers import (
     get_master_device_simulators,
     wait_and_validate_device_attribute_value,
@@ -82,8 +81,13 @@ def given_a_tmc(central_node_mid, simulator_factory, event_recorder):
 @given("telescope state is STANDBY")
 def check_telescope_state_standby(central_node_mid, event_recorder):
     """A method to check CentralNode telescopeState STANDBY"""
-    LOGGER.info(
-        "TelescopeState is: %s", central_node_mid.central_node.telescopeState
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "telescopeState"
+    )
+
+    assert (
+        central_node_mid.central_node.telescopeState == DevState.STANDBY
+        or DevState.OFF
     )
 
     # TODO: Initial telescopeState aggregation to STANDBY is taking more than

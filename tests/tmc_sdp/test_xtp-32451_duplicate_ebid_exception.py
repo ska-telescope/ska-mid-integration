@@ -325,6 +325,7 @@ def assign_resources_executed_on_subarray(
         subarray_node.subarray_devices.get("sdp_subarray"),
         "obsState",
         ObsState.IDLE,
+        lookahead=10,
     )
 
     check_subarray_instance(subarray_node.subarray_node, subarray_id)
@@ -332,4 +333,5 @@ def assign_resources_executed_on_subarray(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
+        lookahead=10,
     )
