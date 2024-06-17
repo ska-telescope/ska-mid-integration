@@ -159,6 +159,7 @@ def get_device_simulator_with_given_name(simulator_factory, devices):
         "sdp subarray": SimulatorDeviceType.MID_SDP_DEVICE,
         "csp master": SimulatorDeviceType.MID_CSP_MASTER_DEVICE,
         "sdp master": SimulatorDeviceType.MID_SDP_MASTER_DEVICE,
+        "dish master1": SimulatorDeviceType.DISH_DEVICE,
     }
     sim_device_proxy_list = []
     for device_name in devices:
@@ -575,7 +576,7 @@ def generate_id(id_pattern: str) -> str:
     return f"{prefix}{unique_id}{suffix}"
 
 
-def generate_eb_pb_ids(input_json: str):
+def generate_eb_pb_ids(input_json: dict):
     """
     Method to generate different eb_id and pb_id
 
@@ -740,6 +741,7 @@ def check_for_device_command_event(
             attribute_name=attr_name,
             attribute_value=(Anything, Anything),
         )
+        LOGGER.info("The assertion data is %s", assertion_data)
         if assertion_data["attribute_value"][0].endswith(command_name):
             if event_data in assertion_data["attribute_value"][1]:
                 event_found = True
