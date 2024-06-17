@@ -70,6 +70,12 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
         event_recorder.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
         )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "pointingState"
+        )
 
     csp_master_sim = simulator_factory.get_or_create_simulator_device(
         SimulatorDeviceType.MID_CSP_MASTER_DEVICE
@@ -197,12 +203,6 @@ def check_subarray_obsstate(
     )
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
-        )
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "pointingState"
-        )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
