@@ -3,7 +3,7 @@ import json
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
-from ska_control_model import ObsState
+from ska_control_model import ObsState, ResultCode
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
@@ -35,6 +35,9 @@ def move_subarray_node_to_idle_obsstate(
     subarray_id: str,
 ) -> None:
     """Move TMC Subarray to IDLE obsstate."""
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
     central_node_mid.set_subarray_id(subarray_id)
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
@@ -42,8 +45,13 @@ def move_subarray_node_to_idle_obsstate(
     # Create json for AssignResources commands with requested subarray_id
     assign_input = json.loads(assign_input_json)
     assign_input["subarray_id"] = int(subarray_id)
-    central_node_mid.perform_action(
+    pytest.command_result = central_node_mid.perform_action(
         "AssignResources", json.dumps(assign_input)
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
 
     event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
@@ -61,13 +69,25 @@ def move_subarray_node_to_idle_obsstate(
     )
 )
 def invoke_configure_command(
-    subarray_node: SubarrayNodeWrapper, command_input_factory: JsonFactory
+    subarray_node: SubarrayNodeWrapper,
+    command_input_factory: JsonFactory,
+    event_recorder: EventRecorder,
 ) -> None:
     """Invoke Configure command."""
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    subarray_node.execute_transition("Configure", argin=configure_input_json)
+    pytest.command_result = subarray_node.execute_transition(
+        "Configure", argin=configure_input_json
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+    )
 
 
 @then(
