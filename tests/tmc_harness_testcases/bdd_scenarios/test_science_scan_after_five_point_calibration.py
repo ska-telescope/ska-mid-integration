@@ -11,7 +11,6 @@ from tests.resources.test_harness.constant import (
     DISH_036_CALIBRATION_DATA,
 )
 from tests.resources.test_harness.helpers import (
-    check_long_running_command_status_events,
     check_subarray_obs_state,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
