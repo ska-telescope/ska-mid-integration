@@ -63,6 +63,7 @@ tmc-mid:
   labels:
     app: ska-tmc-integration
   enabled: true
+  
   cspsubarrayleafnode:
     DelayCadence: 10
     DelayValidityPeriod: 20
@@ -120,8 +121,6 @@ ska-sdp:
       storageClassName: nfss1
   ska-sdp-qa:
     enabled: true
-    kafka:
-      enabled: false
     config:
       kafka:
         overrideUrl: "ska-sdp-kafka:9092"
@@ -129,6 +128,13 @@ ska-sdp:
     enabled: false
   kafka:
     enabled: true
+    resources:
+        limits:
+          cpu: 200m
+          memory: 100Mi
+        requests:
+          cpu: 100m
+          memory: 50Mi
 
  
 # SKUID
