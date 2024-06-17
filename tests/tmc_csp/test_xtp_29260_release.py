@@ -28,6 +28,9 @@ def subarray_in_idle_obsstate(
     """Checks if SubarrayNode's obsState attribute value is IDLE"""
     central_node_mid.set_subarray_id(subarray_id)
     event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
@@ -51,7 +54,6 @@ def subarray_in_idle_obsstate(
         central_node_mid.central_node,
         "longRunningCommandResult",
         (pytest.command_result[1][0], str(ResultCode.OK.value)),
-        lookahead=5,
     )
 
 

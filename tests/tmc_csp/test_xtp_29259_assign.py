@@ -86,7 +86,6 @@ def tmc_subarray_idle(central_node_mid, event_recorder, subarray_id):
         central_node_mid.central_node,
         "longRunningCommandResult",
         (pytest.command_result[1][0], str(ResultCode.OK.value)),
-        lookahead=5,
     )
 
 
