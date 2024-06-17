@@ -4,7 +4,6 @@ import json
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
-from tango import DevState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
@@ -26,23 +25,6 @@ def test_tmc_csp_configure_functionality() -> None:
     """
     Test case to verify TMC-CSP Configure functionality
     """
-
-
-@given("the telescope is in ON state")
-def check_telescope_is_in_on_state(
-    central_node_mid: CentralNodeWrapperMid, event_recorder: EventRecorder
-) -> None:
-    """Ensure telescope is in ON state."""
-    central_node_mid.move_to_on()
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.ON,
-        lookahead=15,
-    )
 
 
 @given(parsers.parse("TMC subarray {subarray_id} in ObsState IDLE"))

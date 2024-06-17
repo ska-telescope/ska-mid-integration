@@ -5,7 +5,6 @@ import json
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState, ResultCode
-from tango import DevState
 
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
@@ -21,38 +20,6 @@ def test_assignresources_command():
     """BDD test scenario for verifying successful execution of
     the AssignResources command with TMC and CSP devices for pairwise
     testing."""
-
-
-@given("the telescope is in ON state")
-def given_a_telescope_in_on_state(central_node_mid, event_recorder):
-    """Checks if CentralNode's telescopeState attribute value is on."""
-
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "longRunningCommandResult"
-    )
-    central_node_mid.move_to_on()
-    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
-    event_recorder.subscribe_event(
-        central_node_mid.subarray_devices["csp_subarray"], "State"
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.csp_master,
-        "State",
-        DevState.ON,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.subarray_devices["csp_subarray"],
-        "State",
-        DevState.ON,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.ON,
-    )
 
 
 @given(parsers.parse("TMC subarray {subarray_id} is in EMPTY ObsState"))
