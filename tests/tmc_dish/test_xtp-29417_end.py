@@ -317,4 +317,3 @@ def check_subarray_obsState_idle(
         "longRunningCommandResult",
         (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
-    assert 0
