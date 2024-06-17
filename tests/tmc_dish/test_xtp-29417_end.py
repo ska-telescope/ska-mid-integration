@@ -259,7 +259,7 @@ def check_dish_mode_and_pointing_state(
     """
     Method to check dishMode and pointingState of DISH
     """
-    time.sleep(250)
+    time.sleep(6000)
     for dish_id in dish_ids.split(","):
         # logs added for testing, will be removed before merging into master
         logging.info(
@@ -316,3 +316,4 @@ def check_subarray_obsState_idle(
         "longRunningCommandResult",
         (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
+    assert 0
