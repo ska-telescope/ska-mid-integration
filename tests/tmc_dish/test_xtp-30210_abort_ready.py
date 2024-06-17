@@ -332,4 +332,3 @@ def tmc_subarray_is_in_aborted_obsState(
         "obsState",
         ObsState.ABORTED,
     )
-    assert 0
