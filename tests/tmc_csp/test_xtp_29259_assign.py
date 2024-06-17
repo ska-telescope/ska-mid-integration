@@ -75,6 +75,9 @@ def csp_subarray_idle(central_node_mid, event_recorder, subarray_id):
 )
 def tmc_subarray_idle(central_node_mid, event_recorder, subarray_id):
     """Checks if SubarrayNode's obsState attribute value is IDLE"""
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
     central_node_mid.set_subarray_id(subarray_id)
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_node, "obsState", ObsState.IDLE
