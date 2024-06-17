@@ -259,7 +259,7 @@ def check_dish_mode_and_pointing_state(
     """
     Method to check dishMode and pointingState of DISH
     """
-    time.sleep(6000)
+    time.sleep(240)
     for dish_id in dish_ids.split(","):
         # logs added for testing, will be removed before merging into master
         logging.info(
