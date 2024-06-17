@@ -104,7 +104,7 @@ cspmasterleafnode:
 
 cspsubarrayleafnode:
   image:
-    registry: harbor.skao.int/staging
+    registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
     tag: 0.17.0
     pullPolicy: IfNotPresent
