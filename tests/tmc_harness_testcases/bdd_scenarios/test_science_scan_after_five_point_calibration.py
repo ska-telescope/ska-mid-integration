@@ -22,7 +22,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 
 
 @pytest.mark.SKA_mid
-@pytest.mark.tmc_dish_test
+@pytest.mark.tmc_dish
 @scenario(
     "../features/test_harness/science_scan_after_calibration_scan.feature",
     "TMC behaviour during a science scan after a five point calibration scan.",
@@ -110,17 +110,8 @@ def a_subarray_after_five_point_calibration(
     for dish_master in subarray_node.dish_master_list:
         event_recorder.subscribe_event(dish_master, "dishMode")
         event_recorder.subscribe_event(dish_master, "pointingState")
-        # assert event_recorder.has_change_event_occurred(
-        #     dish_master,
-        #     "dishMode",
-        #     DishMode.OPERATE,
-        # )
-
-        # assert event_recorder.has_change_event_occurred(
-        #     dish_master,
-        #     "pointingState",
-        #     PointingState.TRACK,
-        # )
+        # Once Event recorder issue is fixed then use event
+        # for assertion
         assert wait_and_validate_device_attribute_value(
             dish_master, "dishMode", DishMode.OPERATE, timeout=50
         )
