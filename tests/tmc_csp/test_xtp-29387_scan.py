@@ -13,7 +13,9 @@ from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 
 
-@pytest.mark.skip(reason="Failure is under investigation")
+@pytest.mark.skip(
+    reason="Scan functionality is broken. It will fixed in SAH-1498"
+)
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/xtp_29387_scan.feature",
