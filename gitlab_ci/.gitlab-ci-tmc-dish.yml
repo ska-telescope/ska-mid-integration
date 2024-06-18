@@ -37,6 +37,12 @@ k8s-test-dish-lmc:
     - pip3 install -U ska-ser-xray
     - XRAY_TEST_RESULT_FILE="build/cucumber.json" make xray-publish
     - make k8s-uninstall-chart
+  environment:
+    name: $CI_PROJECT_NAME/$CI_COMMIT_REF_SLUG
+    kubernetes:
+      # This repetition is needed for gitlab to parse the namespace correctly
+      namespace: $KUBE_NAMESPACE
+    on_stop: stop-k8s-test-dish-lmc
 
 stop-k8s-test-dish-lmc:
   extends:
