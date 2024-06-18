@@ -213,7 +213,6 @@ def check_subarray_obsState_ready(
     )
     configure_json = json.loads(configure_input_json)
     configure_json["tmc"]["scan_duration"] = 10.0
-    LOGGER.info(f"json:{configure_json}")
     pytest.command_result = subarray_node.execute_transition(
         "Configure", json.dumps(configure_json)
     )
