@@ -18,8 +18,6 @@ from tests.resources.test_harness.utils.common_utils import (
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
-@pytest.mark.skip(reason="STS-855-SDP side Issue")
-# SDP Side Issue: Docker images in Harbor overwritten by new releases
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp-32453_successive_configure_with_real_sdp.feature",
@@ -93,17 +91,6 @@ def telescope_is_in_idle_state(
         "obsState",
         ObsState.IDLE,
     )
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "longRunningCommandResult"
-    )
-
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "longRunningCommandResult",
-        (unique_id[0], str(int(ResultCode.OK))),
-        lookahead=5,
-    )
-
     event_recorder.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
     )

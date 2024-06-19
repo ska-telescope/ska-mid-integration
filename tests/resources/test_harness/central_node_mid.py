@@ -116,6 +116,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             DeviceProxy(dish_fqdn063),
             DeviceProxy(dish_fqdn100),
         ]
+
         self.dish_master_dict = {
             "SKA001": DeviceProxy(dish_fqdn001),
             "SKA036": DeviceProxy(dish_fqdn036),
@@ -134,6 +135,12 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         for dish_leaf_node in self.dish_leaf_node_list:
             dish_leaf_node.set_timeout_millis(5000)
 
+        self.dish_leaf_node_dict = {
+            "SKA001": DeviceProxy(tmc_dish_leaf_node1),
+            "SKA036": DeviceProxy(tmc_dish_leaf_node2),
+            "SKA063": DeviceProxy(tmc_dish_leaf_node3),
+            "SKA100": DeviceProxy(tmc_dish_leaf_node4),
+        }
         # Create Dish1 admin device proxy
         self.dish1_admin_dev_name = self.dish_master_list[0].adm_name()
         self.dish1_admin_dev_proxy = DeviceProxy(self.dish1_admin_dev_name)
@@ -151,8 +158,15 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 "release_resources_mid"
             )
         )
-        device_dict["cbf_subarray1"] = "mid_csp_cbf/sub_elt/subarray_01"
-        device_dict["cbf_controller"] = "mid_csp_cbf/sub_elt/controller"
+        if (
+            SIMULATED_DEVICES_DICT["sdp_and_dish"]
+            or SIMULATED_DEVICES_DICT["sdp"]
+        ) and not SIMULATED_DEVICES_DICT["all_mocks"]:
+            device_dict["cbf_subarray1"] = "mid_csp_cbf/sub_elt/subarray_01"
+            device_dict["cbf_controller"] = "mid_csp_cbf/sub_elt/controller"
+
+        device_dict["dish_master_list"] = self.dish_master_list
+        device_dict["dish_leaf_node_list"] = self.dish_leaf_node_list
         self.wait = Waiter(**device_dict)
 
     @property
@@ -502,26 +516,6 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             for device in self.dish_master_list:
                 device.SetDirectDishMode(dish_mode)
 
-    def set_values_with_sdp_dish_mocks(
-        self, subarray_state: DevState, dish_mode: DishMode
-    ) -> None:
-        """
-        A method to set values on mock SDP and Dish devices.
-        Args:
-            subarray_state: DevState - subarray state value for
-                                    SDP Subarray
-            dish_mode: DishMode - dish mode value for Dish Masters
-        """
-        device_to_on_list = [self.subarray_devices.get("sdp_subarray")]
-        for device in device_to_on_list:
-            device_proxy = DeviceProxy(device)
-            device_proxy.SetDirectState(subarray_state)
-
-        # If Dish master provided then set it to standby
-        if self.dish_master_list:
-            for device in self.dish_master_list:
-                device.SetDirectDishMode(dish_mode)
-
     def tear_down(self) -> None:
         """Handle Tear down of central Node"""
         Subarray_node_obsstate = self.subarray_node.obsState
@@ -547,7 +541,13 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         elif self.subarray_node.obsState == ObsState.ABORTED:
             self.subarray_restart()
         if self.telescope_state != "OFF":
-            self.move_to_off()
+            if (SIMULATED_DEVICES_DICT["sdp"]) and not SIMULATED_DEVICES_DICT[
+                "all_mocks"
+            ]:
+                LOGGER.info("Tear down is not required.")
+
+            else:
+                self.move_to_off()
         self._clear_command_call_and_transition_data(clear_transition=True)
         # if source dish vcc config is empty or not matching with default
         # dish vcc then load default dish vcc config

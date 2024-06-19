@@ -99,6 +99,7 @@ class TmcHelper:
         """
 
         central_node = DeviceProxy(self.centralnode)
+        central_node.set_timeout_millis(5000)
         LOGGER.info(
             f"Before Sending TelescopeOn command {central_node}\
             State is:{central_node.State()}"

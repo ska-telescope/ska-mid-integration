@@ -17,8 +17,8 @@ from tests.resources.test_support.enum import DishMode
 
 
 @pytest.mark.skip(
-    reason="The test needs to be updated as part of "
-    + "integration testing of story SAH-1509"
+    reason="Issue after invocation of 2nd OFF command. OFF command is "
+    + "incomplete on central node. Backlog item added for this test"
 )
 @pytest.mark.tmc_dish
 @scenario(
@@ -52,10 +52,9 @@ def given_telescope(central_node_mid, simulator_factory):
     assert central_node_mid.central_node.ping() > 0
     assert csp_master_sim.ping() > 0
     assert sdp_master_sim.ping() > 0
-    assert central_node_mid.dish_master_list[0].ping() > 0
-    assert central_node_mid.dish_master_list[1].ping() > 0
-    assert central_node_mid.dish_master_list[2].ping() > 0
-    assert central_node_mid.dish_master_list[3].ping() > 0
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        assert central_node_mid.dish_master_dict[dish_id].ping() > 0
+        assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
 
 
 @given("dishes with Dish IDs 001, 036, 063, 100 are registered on the TangoDB")
@@ -87,82 +86,40 @@ def given_the_dishes_registered_in_tango_db(central_node_mid):
 @given("dishleafnodes for dishes with IDs 001, 036, 063, 100 are available")
 def check_if_dish_leaf_nodes_alive(central_node_mid):
     """A method to check if the dish leaf nodes are alive"""
-
-    assert central_node_mid.dish_leaf_node_list[0].ping() > 0
-    assert central_node_mid.dish_leaf_node_list[1].ping() > 0
-    assert central_node_mid.dish_leaf_node_list[2].ping() > 0
-    assert central_node_mid.dish_leaf_node_list[3].ping() > 0
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
 
 
 @given("command TelescopeOn was sent and received by the dishes")
 def move_telescope_to_on_state(central_node_mid, event_recorder):
     """A method to put Telescope to ON state"""
 
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_list[0], "dishMode"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_list[1], "dishMode"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_list[2], "dishMode"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_list[3], "dishMode"
-    )
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
+        )
+
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
-
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_list[0],
-        "dishMode",
-        DishMode.STANDBY_LP,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_list[1],
-        "dishMode",
-        DishMode.STANDBY_LP,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_list[2],
-        "dishMode",
-        DishMode.STANDBY_LP,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_list[3],
-        "dishMode",
-        DishMode.STANDBY_LP,
-    )
-
-    # Wait for the DishLeafNode to get StandbyLP event form DishMaster before
-    time.sleep(4)
     # invoking TelescopeOn command
     central_node_mid.move_to_on()
 
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_list[0],
-        "dishMode",
-        DishMode.STANDBY_FP,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_list[1],
-        "dishMode",
-        DishMode.STANDBY_FP,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_list[2],
-        "dishMode",
-        DishMode.STANDBY_FP,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_list[3],
-        "dishMode",
-        DishMode.STANDBY_FP,
-    )
-    # Wait for the DishLeafNode to get StandbyFP event form DishMaster before
-    # invoking TelescopeOn command
-    time.sleep(1)
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+        )
+
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
@@ -187,7 +144,7 @@ def fail_to_connect_dish(central_node_mid):
     central_node_mid.dish1_admin_dev_proxy.RestartServer()
     # Added a wait for the completion of dish device deletion from TANGO
     # database and the dish device restart
-    time.sleep(2)
+    time.sleep(5)
 
 
 @when("command TelescopeOff is sent")
@@ -195,21 +152,17 @@ def invoke_telescope_off_command(central_node_mid, event_recorder):
     """A method to put Telescope to OFF state"""
     central_node_mid.move_to_off()
 
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_list[1],
-        "dishMode",
-        DishMode.STANDBY_LP,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_list[2],
-        "dishMode",
-        DishMode.STANDBY_LP,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_list[3],
-        "dishMode",
-        DishMode.STANDBY_LP,
-    )
+    for dish_id in ["SKA036", "SKA063", "SKA100"]:
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_LP,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_LP,
+        )
 
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
@@ -282,10 +235,12 @@ def recheck_if_central_node_running(central_node_mid):
 
 
 @then("the telescope is in OFF state")
-def check_if_telescope_is_in_off_state(central_node_mid, event_recorder):
-    assert central_node_mid.dish_master_list[1].dishMode == DishMode.STANDBY_LP
-    assert central_node_mid.dish_master_list[2].dishMode == DishMode.STANDBY_LP
-    assert central_node_mid.dish_master_list[3].dishMode == DishMode.STANDBY_LP
+def check_if_telescope_is_in_off_state(central_node_mid):
+    for dish_id in ["SKA036", "SKA063", "SKA100"]:
+        assert (
+            central_node_mid.dish_master_dict[dish_id].dishMode
+            == DishMode.STANDBY_LP
+        )
 
     wait_and_validate_device_attribute_value(
         central_node_mid.dish_master_list[0],

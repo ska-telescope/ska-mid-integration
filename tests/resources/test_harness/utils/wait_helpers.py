@@ -32,6 +32,7 @@ class Waiter:
         self.csp_master = kwargs.get("csp_master")
         self.tmc_subarraynode1 = kwargs.get("tmc_subarraynode")
         self.dish_master_list = kwargs.get("dish_master_list")
+        self.dish_leaf_node_list = kwargs.get("dish_leaf_node_list")
         self.tmc_csp_subarray_leaf_node = kwargs.get("csp_subarray_leaf_node")
         self.tmc_sdp_subarray_leaf_node = kwargs.get("sdp_subarray_leaf_node")
         self.cbf_subarray1 = kwargs.get("cbf_subarray1")
@@ -44,11 +45,20 @@ class Waiter:
     def set_wait_for_dish(self, attribute_name, state_name):
         """Set wait for dish"""
         for dish_master in self.dish_master_list:
-            self.waits.append(
-                watch(Resource(dish_master)).to_become(
-                    attribute_name, changed_to=state_name
+            if dish_master.dishMode != state_name:
+                self.waits.append(
+                    watch(Resource(dish_master)).to_become(
+                        attribute_name, changed_to=state_name
+                    )
                 )
-            )
+
+        for dish_leaf_node in self.dish_leaf_node_list:
+            if dish_leaf_node.dishMode != state_name:
+                self.waits.append(
+                    watch(Resource(dish_leaf_node)).to_become(
+                        attribute_name, changed_to=state_name
+                    )
+                )
 
     def set_wait_for_going_to_off(self):
         self.waits.append(
@@ -73,6 +83,8 @@ class Waiter:
         )
         if self.dish_master_list:
             self.set_wait_for_dish("dishMode", "STANDBY_LP")
+        if self.dish_leaf_node_list:
+            self.set_wait_for_dish("dishMode", "STANDBY_LP")
 
     def set_wait_for_going_to_standby(self):
         self.waits.append(
@@ -96,6 +108,8 @@ class Waiter:
             )
         )
         if self.dish_master_list:
+            self.set_wait_for_dish("dishMode", "STANDBY_LP")
+        if self.dish_leaf_node_list:
             self.set_wait_for_dish("dishMode", "STANDBY_LP")
 
     def set_wait_for_telescope_on(self):
@@ -230,6 +244,8 @@ class Waiter:
         )
         if self.dish_master_list:
             self.set_wait_for_dish("pointingState", "TRACK")
+        if self.dish_leaf_node_list:
+            self.set_wait_for_dish("pointingState", "TRACK")
 
     def set_wait_for_configure(self):
         self.waits.append(
@@ -253,6 +269,9 @@ class Waiter:
             )
         )
         if self.dish_master_list:
+            self.set_wait_for_dish("dishMode", "OPERATE")
+            self.set_wait_for_dish("pointingState", "TRACK")
+        if self.dish_leaf_node_list:
             self.set_wait_for_dish("dishMode", "OPERATE")
             self.set_wait_for_dish("pointingState", "TRACK")
 

@@ -45,7 +45,6 @@ global:
     - "sdpsubarrayleafnode"
     - "subarraynode"
 
-
   # fqdn for mid devices
   tmc_subarray_prefix: "ska_mid/tm_subarray_node"
   csp_subarray_ln_prefix: "ska_mid/tm_leaf_node/csp_subarray"
@@ -84,7 +83,7 @@ subarraynode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-subarraynode
-    tag: 0.18.0
+    tag: 0.18.2
     pullPolicy: IfNotPresent
 
 
@@ -113,12 +112,11 @@ dishleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-dishleafnode
-    tag: 0.13.2
+    tag: 0.14.0
     pullPolicy: IfNotPresent
 
 resources:
   limits:
-    cpu: 3500m
     memory: 2000Mi
   requests:
     cpu: 500m
