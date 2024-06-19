@@ -1,6 +1,5 @@
 """Test TMC-DISH Abort functionality in Ready obsState"""
 
-import logging
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -222,23 +221,6 @@ def subarray_is_in_ready_obsState(
             PointingState.TRACK,
             lookahead=10,
         )
-        logging.info("Dish ID is: %s", dish_id)
-        logging.info(
-            "DishMode is: %s",
-            central_node_mid.dish_master_dict[dish_id].dishMode,
-        )
-        logging.info(
-            "pointingState is: %s",
-            central_node_mid.dish_master_dict[dish_id].pointingState,
-        )
-        logging.info(
-            "DishLN dishMode is: %s",
-            central_node_mid.dish_leaf_node_dict[dish_id].dishMode,
-        )
-        logging.info(
-            "DishLN pointingState is: %s",
-            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
-        )
 
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
@@ -290,23 +272,6 @@ def check_dish_mode_and_pointing_state(
             "pointingState",
             PointingState.READY,
             lookahead=10,
-        )
-        logging.info("Dish ID is: %s", dish_id)
-        logging.info(
-            "DishMode is: %s",
-            central_node_mid.dish_master_dict[dish_id].dishMode,
-        )
-        logging.info(
-            "pointingState is: %s",
-            central_node_mid.dish_master_dict[dish_id].pointingState,
-        )
-        logging.info(
-            "DishLN dishMode is: %s",
-            central_node_mid.dish_leaf_node_dict[dish_id].dishMode,
-        )
-        logging.info(
-            "DishLN pointingState is: %s",
-            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
         )
 
 

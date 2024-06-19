@@ -1,7 +1,5 @@
 """Test module for TMC-DISH End functionality"""
 
-import logging
-import time
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -91,11 +89,6 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
     event_recorder.subscribe_event(csp_master_sim, "State")
     event_recorder.subscribe_event(sdp_master_sim, "State")
 
-    # assert event_recorder.has_change_event_occurred(
-    #     central_node_mid.central_node,
-    #     "telescopeState",
-    #     DevState.OFF,
-    # )
     central_node_mid.move_to_on()
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
@@ -108,18 +101,6 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
             central_node_mid.dish_leaf_node_dict[dish_id],
             "dishMode",
             DishMode.STANDBY_FP,
-        )
-
-        # logs added for testing, will be removed before merging into master
-        logging.info(
-            "pointingstate for dln %s %s",
-            dish_id,
-            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
-        )
-        logging.info(
-            "pointingstate for dish master %s %s",
-            dish_id,
-            central_node_mid.dish_master_dict[dish_id].pointingState,
         )
 
     assert event_recorder.has_change_event_occurred(
@@ -173,18 +154,6 @@ def check_subarray_obsstate(
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
-    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        # logs added for testing, will be removed before merging into master
-        logging.info(
-            "pointingstate for dln %s %s",
-            dish_id,
-            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
-        )
-        logging.info(
-            "pointingstate for dish master %s %s",
-            dish_id,
-            central_node_mid.dish_master_dict[dish_id].pointingState,
-        )
 
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
@@ -218,16 +187,6 @@ def check_subarray_obsstate(
             PointingState.TRACK,
             lookahead=10,
         )
-        logging.info(
-            "pointingstate for dln %s %s",
-            dish_id,
-            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
-        )
-        logging.info(
-            "pointingstate for dish master %s %s",
-            dish_id,
-            central_node_mid.dish_master_dict[dish_id].pointingState,
-        )
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
@@ -260,20 +219,6 @@ def check_dish_mode_and_pointing_state(
     """
     Method to check dishMode and pointingState of DISH
     """
-    time.sleep(240)
-    for dish_id in dish_ids.split(","):
-        # logs added for testing, will be removed before merging into master
-        logging.info(
-            "pointingstate for dln in end test %s %s",
-            dish_id,
-            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
-        )
-        logging.info(
-            "pointingstate for dish master in end test %s %s",
-            dish_id,
-            central_node_mid.dish_master_dict[dish_id].pointingState,
-        )
-
     for dish_id in dish_ids.split(","):
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
@@ -286,16 +231,6 @@ def check_dish_mode_and_pointing_state(
             "pointingState",
             PointingState.READY,
             lookahead=10,
-        )
-        logging.info(
-            "pointingstate for dln %s %s",
-            dish_id,
-            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
-        )
-        logging.info(
-            "pointingstate for dish master %s %s",
-            dish_id,
-            central_node_mid.dish_master_dict[dish_id].pointingState,
         )
 
 

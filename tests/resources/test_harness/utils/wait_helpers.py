@@ -45,9 +45,6 @@ class Waiter:
     def set_wait_for_dish(self, attribute_name, state_name):
         """Set wait for dish"""
         for dish_master in self.dish_master_list:
-            LOGGER.info("dish master dishMode: %s", dish_master.dishMode)
-            LOGGER.info("State name: %s", state_name)
-            LOGGER.info("dish master is: %s", str(dish_master.dev_name()))
             if dish_master.dishMode != state_name:
                 self.waits.append(
                     watch(Resource(dish_master)).to_become(
@@ -56,8 +53,6 @@ class Waiter:
                 )
 
         for dish_leaf_node in self.dish_leaf_node_list:
-            LOGGER.info("dish leaf node dishMode: %s", dish_leaf_node.dishMode)
-            LOGGER.info("State name: %s", state_name)
             if dish_leaf_node.dishMode != state_name:
                 self.waits.append(
                     watch(Resource(dish_leaf_node)).to_become(

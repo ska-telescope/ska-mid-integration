@@ -1,12 +1,11 @@
 import functools
-import logging
 from contextlib import contextmanager
 
 from tests.resources.test_harness.utils.wait_helpers import Waiter
 from tests.resources.test_support.common_utils.base_utils import DeviceUtils
 from tests.resources.test_support.common_utils.common_helpers import Resource
 
-TIMEOUT = 500
+TIMEOUT = 1000
 
 
 def sync_telescope_on(func):
@@ -40,12 +39,10 @@ def sync_set_to_off(device_dict: dict):
     def decorator_sync_set_to_off(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            logging.info("here in off sync decorator")
-            logging.info("Device Dict: %s", device_dict)
             the_waiter = Waiter(**device_dict)
             the_waiter.set_wait_for_going_to_off()
             result = func(*args, **kwargs)
-            the_waiter.wait(1000)
+            the_waiter.wait(TIMEOUT)
             return result
 
         return wrapper
