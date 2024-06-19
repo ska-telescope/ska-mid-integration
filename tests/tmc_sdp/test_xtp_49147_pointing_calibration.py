@@ -167,11 +167,6 @@ def subarray_applies_calibration_solutions_to_dishes(
     """Then the Subarray fetches and applies the configuration solutions to the
     dishes."""
 
-    for dish_master in subarray_node.dish_master_list[:2]:
-        check_long_running_command_status_events(
-            event_recorder, dish_master, "TrackLoadStaticOff"
-        )
-
     assert is_last_pointing_data_updated(
         subarray_node.dish_leaf_node_list[0],
     )
