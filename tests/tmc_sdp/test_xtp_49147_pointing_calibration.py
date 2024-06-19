@@ -7,7 +7,6 @@ from ska_control_model import ObsState
 from tango import DevState
 
 from tests.resources.test_harness.helpers import (
-    check_long_running_command_status_events,
     check_subarray_obs_state,
     get_device_simulators,
     is_last_pointing_data_updated,
