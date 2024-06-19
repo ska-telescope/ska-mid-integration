@@ -39,9 +39,6 @@ k8s-test-dish-lmc:
     - make k8s-uninstall-chart
   environment:
     name: test/$CI_COMMIT_REF_SLUG
-    kubernetes:
-      # This repetition is needed for gitlab to parse the namespace correctly
-      namespace: $KUBE_NAMESPACE
     on_stop: stop-k8s-test-dish-lmc
 
 stop-k8s-test-dish-lmc:
