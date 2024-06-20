@@ -1,7 +1,5 @@
 """Test module for TMC-DISH Off functionality"""
 
-import time
-
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from tango import DevState
@@ -10,7 +8,6 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.enum import DishMode
 
 
-@pytest.mark.skip(reason="Enable when SKB-292, SKB-293 are resolved")
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29351_off.feature",
@@ -58,23 +55,15 @@ def check_tmc_and_dish_is_on(
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "dishMode"
         )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
+        )
 
     assert csp_master_sim.ping() > 0
     assert sdp_master_sim.ping() > 0
-
     for dish_id in dish_ids.split(","):
         assert central_node_mid.dish_master_dict[dish_id].ping() > 0
-        assert (
-            central_node_mid.dish_master_dict[dish_id].dishMode
-            == DishMode.STANDBY_LP
-        )
-
-    # Wait for DishMaster attribute value update,
-    # on CentralNode for value dishMode STANDBY_LP
-
-    # TODO: Improvement in tests/implementation
-    # to minimize the need of having sleep
-    time.sleep(5)
+        assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
 
     central_node_mid.move_to_on()
 
@@ -84,12 +73,11 @@ def check_tmc_and_dish_is_on(
             "dishMode",
             DishMode.STANDBY_FP,
         )
-    # Wait for DishMaster attribute value update,
-    # on CentralNode for value dishMode STANDBY_FP
-
-    # TODO: Improvement in tests/implementation
-    # to minimize the need of having sleep
-    time.sleep(5)
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+        )
 
     assert event_recorder.has_change_event_occurred(
         central_node_mid.sdp_master,
@@ -126,6 +114,11 @@ def check_dish_state(central_node_mid, event_recorder, dish_ids):
     for dish_id in dish_ids.split(","):
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_LP,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
             "dishMode",
             DishMode.STANDBY_LP,
         )
