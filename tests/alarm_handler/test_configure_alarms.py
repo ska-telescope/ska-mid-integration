@@ -17,7 +17,15 @@ logger = logging.getLogger(__name__)
     reason="alarm summary key error to be resolved under SAH-1510"
 )
 def test_load_alarm():
-    """A method to load tmc alarm for Alarm handler instance"""
+    """
+    Handles the scenario where an alarm is raised due to NaN values
+    found in the dish leaf node last pointing data.
+
+    This method triggers the TMC alarm for the Alarm Handler instance,
+    ensuring that the system correctly identifies and responds to NaN
+    values in the pointing data
+
+    """
     alarm_handler = DeviceProxy(alarm_handler1)
     alarm_formula = (
         "tag=CentralNode_telescopehealthstate_degraded;formula="
