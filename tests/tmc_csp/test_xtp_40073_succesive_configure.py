@@ -122,7 +122,6 @@ def execute_first_configure_command(
     configure_json = prepare_json_args_for_commands(
         input_json1, command_input_factory
     )
-    # _, unique_id = subarray_node.store_configuration_data(configure_json)
     _, unique_id = subarray_node.execute_transition(
         "Configure", argin=configure_json
     )
@@ -195,9 +194,6 @@ def execute_second_configure_command(
     configure_json = prepare_json_args_for_commands(
         input_json2, command_input_factory
     )
-    # pytest.command_result = subarray_node.store_configuration_data(
-    #     configure_json
-    # )
     subarray_node.execute_transition("Configure", argin=configure_json)
 
     assert event_recorder.has_change_event_occurred(

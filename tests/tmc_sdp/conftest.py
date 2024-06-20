@@ -312,6 +312,7 @@ def execute_configure_scan_sequence(
         _, unique_id = subarray_node.execute_transition(
             "Configure", argin=configure_json
         )
+
         if configure_cycle == "initial":
             check_obsstate_sdp_in_first_configure(
                 event_recorder, subarray_node
