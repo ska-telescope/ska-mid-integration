@@ -7,11 +7,11 @@ from ska_control_model import ObsState
 from tango import DevState
 
 from tests.resources.test_harness.helpers import (
-    check_subarray_obs_state,
     get_device_simulators,
     is_last_pointing_data_updated,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
+    wait_and_validate_device_attribute_value,
 )
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
@@ -44,7 +44,8 @@ def given_tmc(central_node_mid, subarray_node, event_recorder):
     for dish_master in subarray_node.dish_master_list[:2]:
         event_recorder.subscribe_event(dish_master, "longRunningCommandStatus")
 
-    central_node_mid.move_to_on()
+    if central_node_mid.telescope_state != "ON":
+        central_node_mid.move_to_on()
 
     assert event_recorder.has_change_event_occurred(
         central_node_mid.sdp_master,
@@ -127,7 +128,10 @@ def configure_for_science_scan(subarray_node, command_input_factory):
     configure_json = json.loads(configure_command_input)
     configure_json["sdp"]["scan_type"] = "pointing"
     subarray_node.execute_transition("Configure", json.dumps(configure_json))
-    assert check_subarray_obs_state("READY", 500, subarray_node=subarray_node)
+    # assert check_subarray_obs_state("READY", 5)
+    assert wait_and_validate_device_attribute_value(
+        subarray_node.subarray_node, "obsState", ObsState.READY, timeout=120
+    )
 
 
 @when(
@@ -153,8 +157,14 @@ def invoke_scan_five_times(
             ObsState.SCANNING,
             lookahead=15,
         )
-        assert check_subarray_obs_state(
-            "READY", 600, subarray_node=subarray_node
+        # assert check_subarray_obs_state(
+        #     "READY", 600, subarray_node
+        # )
+        assert wait_and_validate_device_attribute_value(
+            subarray_node.subarray_node,
+            "obsState",
+            ObsState.READY,
+            timeout=120,
         )
 
 
