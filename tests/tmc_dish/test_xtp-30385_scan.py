@@ -237,18 +237,6 @@ def check_dish_mode_and_pointing_state(
         (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
 
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "obsState",
-        ObsState.READY,
-        lookahead=10,
-    )
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
-    )
-
 
 @when(
     parsers.parse("I issue the Scan command to the TMC subarray {subarray_id}")
