@@ -83,9 +83,9 @@ def a_configured_subarray(
 
 
 @given("the subarray is in READY obsState")
-def a_subarray_in_ready_obsstate():
+def a_subarray_in_ready_obsstate(subarray_node):
     """A subarray in READY obsState."""
-    assert check_subarray_obs_state("READY", 500)
+    assert check_subarray_obs_state("READY", 500, subarray_node)
 
 
 @when(
@@ -120,6 +120,6 @@ def when_i_perform_partial_configurations_and_scans(
 @then(
     "the subarray executes the commands successfully and is in READY obsState"
 )
-def subarray_executes_commands_successfully():
+def subarray_executes_commands_successfully(subarray_node):
     """Subarray executes the commands successfully and is in READY obsState."""
-    assert check_subarray_obs_state("READY", 500)
+    assert check_subarray_obs_state("READY", 500, subarray_node)

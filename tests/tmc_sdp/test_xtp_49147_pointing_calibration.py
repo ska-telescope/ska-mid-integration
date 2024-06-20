@@ -127,7 +127,7 @@ def configure_for_science_scan(subarray_node, command_input_factory):
     configure_json = json.loads(configure_command_input)
     configure_json["sdp"]["scan_type"] = "pointing"
     subarray_node.execute_transition("Configure", json.dumps(configure_json))
-    assert check_subarray_obs_state("READY", 500)
+    assert check_subarray_obs_state("READY", 500, subarray_node=subarray_node)
 
 
 @when(
@@ -153,7 +153,9 @@ def invoke_scan_five_times(
             ObsState.SCANNING,
             lookahead=15,
         )
-        assert check_subarray_obs_state("READY", 600)
+        assert check_subarray_obs_state(
+            "READY", 600, subarray_node=subarray_node
+        )
 
 
 @then(

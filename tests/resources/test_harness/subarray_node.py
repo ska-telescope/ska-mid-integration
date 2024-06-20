@@ -541,9 +541,7 @@ class SubarrayNodeWrapper(object):
             (unique_id[0], str(int(ResultCode.OK))),
             lookahead=15,
         )
-        assert check_subarray_obs_state(
-            obs_state="READY", dish_master_list=self.dish_master_name_list
-        )
+        assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
 
         # assert sourceOffset gets populated as expected
         ca_offset, ie_offset = (
@@ -566,9 +564,7 @@ class SubarrayNodeWrapper(object):
             ObsState.SCANNING,
             lookahead=15,
         )
-        assert check_subarray_obs_state(
-            obs_state="READY", dish_master_list=self.dish_master_name_list
-        )
+        assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
 
         # Partial configure 2
         _, unique_id = self.execute_transition(
@@ -599,9 +595,7 @@ class SubarrayNodeWrapper(object):
                 is_list=True,
             )
 
-        assert check_subarray_obs_state(
-            obs_state="READY", dish_master_list=self.dish_master_name_list
-        )
+        assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
 
         # Scan 2
         self.execute_transition("Scan", scan_2)
@@ -611,9 +605,7 @@ class SubarrayNodeWrapper(object):
             ObsState.SCANNING,
             lookahead=15,
         )
-        assert check_subarray_obs_state(
-            obs_state="READY", dish_master_list=self.dish_master_name_list
-        )
+        assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
 
         # Partial configure 3
         _, unique_id = self.execute_transition(
@@ -643,9 +635,7 @@ class SubarrayNodeWrapper(object):
                 f"{[ca_offset, ie_offset]}",
                 is_list=True,
             )
-        assert check_subarray_obs_state(
-            obs_state="READY", dish_master_list=self.dish_master_name_list
-        )
+        assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
 
         # Scan 3
         self.execute_transition("Scan", scan_3)
@@ -655,9 +645,7 @@ class SubarrayNodeWrapper(object):
             ObsState.SCANNING,
             lookahead=15,
         )
-        assert check_subarray_obs_state(
-            obs_state="READY", dish_master_list=self.dish_master_name_list
-        )
+        assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
 
         # Partial configure 4
         _, unique_id = self.execute_transition(
@@ -687,9 +675,7 @@ class SubarrayNodeWrapper(object):
                 f"{[ca_offset, ie_offset]}",
                 is_list=True,
             )
-        assert check_subarray_obs_state(
-            obs_state="READY", dish_master_list=self.dish_master_name_list
-        )
+        assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
 
         # Scan 4
         self.execute_transition("Scan", scan_4)
@@ -699,6 +685,4 @@ class SubarrayNodeWrapper(object):
             ObsState.SCANNING,
             lookahead=15,
         )
-        assert check_subarray_obs_state(
-            "READY", dish_master_list=self.dish_master_name_list
-        )
+        assert check_subarray_obs_state("READY", subarray_node=self)

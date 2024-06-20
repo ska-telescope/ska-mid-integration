@@ -24,8 +24,6 @@ from tests.resources.test_harness.utils.wait_helpers import Waiter, watch
 from tests.resources.test_support.common_utils.common_helpers import Resource
 from tests.resources.test_support.constant import (
     csp_subarray1,
-    dish_master1,
-    dish_master2,
     sdp_subarray1,
     tmc_csp_subarray_leaf_node,
     tmc_sdp_subarray_leaf_node,
@@ -42,7 +40,7 @@ CSP_SIMULATION_ENABLED = os.getenv("CSP_SIMULATION_ENABLED")
 DISH_SIMULATION_ENABLED = os.getenv("DISH_SIMULATION_ENABLED")
 
 
-def check_subarray_obs_state(obs_state=None, timeout=100, dish_master_list=[]):
+def check_subarray_obs_state(obs_state=None, timeout=100, subarray_node=None):
     device_dict = {
         "sdp_subarray": sdp_subarray1,
         "csp_subarray": csp_subarray1,
@@ -63,14 +61,10 @@ def check_subarray_obs_state(obs_state=None, timeout=100, dish_master_list=[]):
         f"{csp_subarray1}.obsState : "
         + str(Resource(csp_subarray1).get("obsState"))
     )
-    if obs_state == "READY":
-        if dish_master_list:
-            device_dict["dish_master_list"] = dish_master_list
-        else:
-            device_dict["dish_master_list"] = [
-                dish_master1,
-                dish_master2,
-            ]
+    if obs_state == "READY" and subarray_node:
+        device_dict["dish_master_list"] = subarray_node.dish_master_list
+        device_dict["dish_leaf_node_list"] = subarray_node.dish_leaf_node_list
+
     the_waiter = Waiter(**device_dict)
     the_waiter.set_wait_for_obs_state(obs_state=obs_state)
     the_waiter.wait(timeout / 0.1)

@@ -144,9 +144,7 @@ def a_subarray_after_five_point_calibration(
         ObsState.SCANNING,
         lookahead=15,
     )
-    assert check_subarray_obs_state(
-        "READY", 500, dish_master_list=subarray_node.dish_master_name_list
-    )
+    assert check_subarray_obs_state("READY", 500, subarray_node=subarray_node)
 
     scan_jsons = ["scan_mid" for _ in range(4)]
     partial_configuration_jsons = [
@@ -170,9 +168,7 @@ def configure_for_science_scan(
         "configure_mid", command_input_factory
     )
     subarray_node.execute_transition("Configure", configure_command_input)
-    assert check_subarray_obs_state(
-        "READY", 500, dish_master_list=subarray_node.dish_master_name_list
-    )
+    assert check_subarray_obs_state("READY", 500, subarray_node=subarray_node)
     scan_command_input = prepare_json_args_for_commands(
         "scan_mid", command_input_factory
     )
@@ -217,6 +213,4 @@ def subarray_applies_calibration_solutions_to_dishes(
 @then("is in READY obsState")
 def subarray_is_in_ready_obsstate(subarray_node):
     """Subarray is in READY obsState."""
-    assert check_subarray_obs_state(
-        "READY", 500, dish_master_list=subarray_node.dish_master_name_list
-    )
+    assert check_subarray_obs_state("READY", 500, subarray_node=subarray_node)
