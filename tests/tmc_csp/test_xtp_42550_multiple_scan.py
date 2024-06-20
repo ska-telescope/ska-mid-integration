@@ -61,7 +61,10 @@ def execute_configure_scan_sequence(
     for scan_id, scan_type in combined_dict.items():
 
         configure_json = update_scan_type(configure_json, scan_type)
-        _, unique_id = subarray_node.store_configuration_data(configure_json)
+        # _, unique_id = subarray_node.store_configuration_data(configure_json)
+        _, unique_id = subarray_node.execute_transition(
+            "Configure", argin=configure_json
+        )
 
         check_configure_successful_csp(
             subarray_node, event_recorder, unique_id, scan_type
@@ -110,7 +113,9 @@ def execute_new_configure_scan_sequence(
     for scan_id, scan_type in combined_dict.items():
         configure_json = update_scan_type(configure_json, scan_type)
         # _, unique_id = subarray_node.store_configuration_data(configure_json)
-        _, unique_id = subarray_node.subarray_node.Configure(configure_json)
+        _, unique_id = subarray_node.execute_transition(
+            "Configure", argin=configure_json
+        )
 
         check_configure_successful_csp(
             subarray_node, event_recorder, unique_id, scan_type
