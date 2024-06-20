@@ -99,7 +99,6 @@ def telescope_is_in_idle_state(
         central_node_mid.central_node,
         "longRunningCommandResult",
         (unique_id[0], str(int(ResultCode.OK))),
-        lookahead=15,
     )
 
 

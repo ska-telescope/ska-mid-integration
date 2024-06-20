@@ -24,6 +24,8 @@ from tests.resources.test_harness.constant import (
     tmc_csp_subarray_leaf_node,
     tmc_dish_leaf_node1,
     tmc_dish_leaf_node2,
+    tmc_dish_leaf_node3,
+    tmc_dish_leaf_node4,
     tmc_sdp_subarray_leaf_node,
     tmc_subarraynode1,
 )
@@ -73,6 +75,14 @@ device_dict = {
     "dish_master_list": [
         dish_master1,
         dish_master2,
+        dish_master3,
+        dish_master4,
+    ],
+    "dish_leaf_node_list": [
+        tmc_dish_leaf_node1,
+        tmc_dish_leaf_node2,
+        tmc_dish_leaf_node3,
+        tmc_dish_leaf_node4,
     ],
     "csp_subarray_leaf_node": tmc_csp_subarray_leaf_node,
     "sdp_subarray_leaf_node": tmc_sdp_subarray_leaf_node,
@@ -120,6 +130,13 @@ class SubarrayNodeWrapper(object):
             DeviceProxy(dish_fqdn100),
         ]
 
+        self.dish_leaf_node_list = [
+            DeviceProxy(tmc_dish_leaf_node1),
+            DeviceProxy(tmc_dish_leaf_node2),
+            DeviceProxy(tmc_dish_leaf_node3),
+            DeviceProxy(tmc_dish_leaf_node4),
+        ]
+
         self.subarray_devices = {
             "csp_subarray": DeviceProxy(csp_subarray1),
             "sdp_subarray": DeviceProxy(sdp_subarray1),
@@ -135,6 +152,8 @@ class SubarrayNodeWrapper(object):
         self.ABORTED_OBS_STATE = ABORTED
         self.csp_subarray1 = csp_subarray1
         self.sdp_subarray1 = sdp_subarray1
+        device_dict["dish_master_list"] = self.dish_master_list
+        device_dict["dish_leaf_node_list"] = self.dish_leaf_node_list
         self.subarray_node.set_timeout_millis(5000)
 
     def _setup(self):
