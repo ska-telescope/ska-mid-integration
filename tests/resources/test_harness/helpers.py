@@ -473,12 +473,12 @@ def wait_till_delay_values_are_populated(
 def wait_for_delay_updates_stop_on_delay_model(csp_subarray_leaf_node) -> None:
     start_time = time.time()
     time_elapsed = 0
-    LOGGER.info(f"Delay Model is: {csp_subarray_leaf_node.delayModel}")
     LOGGER.info(
-        f"Delay Model type is: {type(csp_subarray_leaf_node.delayModel)}"
+        f"Delay Model is: {json.loads(csp_subarray_leaf_node.delayModel)}"
     )
+    LOGGER.info(f"Initial Delay JSON is: {INITIAL_MID_DELAY_JSON}")
     while (
-        csp_subarray_leaf_node.delayModel != str(INITIAL_MID_DELAY_JSON)
+        json.loads(csp_subarray_leaf_node.delayModel) != INITIAL_MID_DELAY_JSON
         and time_elapsed <= TIMEOUT
     ):
         time.sleep(1)
