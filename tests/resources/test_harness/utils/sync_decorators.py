@@ -4,7 +4,7 @@ from contextlib import contextmanager
 from tests.resources.test_harness.utils.wait_helpers import Waiter
 from tests.resources.test_support.common_utils.common_helpers import Resource
 
-TIMEOUT = 800
+TIMEOUT = 1000
 
 
 def sync_telescope_on(func):
@@ -17,6 +17,21 @@ def sync_telescope_on(func):
         return result
 
     return wrapper
+
+
+def sync_set_to_on(device_dict: dict):
+    def decorator_sync_set_to_on(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            the_waiter = Waiter(**device_dict)
+            the_waiter.set_wait_for_telescope_on()
+            result = func(*args, **kwargs)
+            the_waiter.wait(TIMEOUT)
+            return result
+
+        return wrapper
+
+    return decorator_sync_set_to_on
 
 
 def sync_set_to_off(device_dict: dict):

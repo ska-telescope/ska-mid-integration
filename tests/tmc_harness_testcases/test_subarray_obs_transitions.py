@@ -1,3 +1,6 @@
+import json
+import logging
+
 import pytest
 from ska_tango_base.control_model import ObsState
 
@@ -26,6 +29,7 @@ class TestSubarrayNodeObsStateTransitions(object):
         self,
         subarray_node,
         simulator_factory,
+        command_input_factory,
         source_obs_state,
         trigger,
         destination_obs_state,
@@ -70,7 +74,23 @@ class TestSubarrayNodeObsStateTransitions(object):
 
         subarray_node.move_to_on()
 
-        subarray_node.force_change_of_obs_state(source_obs_state)
+        assign_input = json.loads(
+            command_input_factory.create_assign_resources_configuration(
+                "assign_resources_mid"
+            )
+        )
+        assign_input["dish"]["receptor_ids"] = [
+            "SKA001",
+            "SKA036",
+            "SKA063",
+            "SKA100",
+        ]
+        logging.info("assign_input: %s", assign_input)
+
+        subarray_node.force_change_of_obs_state(
+            dest_state_name=source_obs_state,
+            assign_input_json=json.dumps(assign_input),
+        )
 
         subarray_node.execute_transition(trigger)
 
