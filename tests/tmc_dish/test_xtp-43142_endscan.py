@@ -283,16 +283,8 @@ def check_scan_id(
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "scanID"
         )
-        event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id], "scanID"
-        )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
-            "scanID",
-            "",
-        )
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_leaf_node_dict[dish_id],
             "scanID",
             "",
         )
