@@ -41,8 +41,6 @@ def given_tmc(central_node_mid, subarray_node, event_recorder):
         central_node_mid.subarray_devices["sdp_subarray"], "State"
     )
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-    for dish_master in subarray_node.dish_master_list[:2]:
-        event_recorder.subscribe_event(dish_master, "longRunningCommandStatus")
 
     if central_node_mid.telescope_state != "ON":
         central_node_mid.move_to_on()
@@ -128,7 +126,6 @@ def configure_for_science_scan(subarray_node, command_input_factory):
     configure_json = json.loads(configure_command_input)
     configure_json["sdp"]["scan_type"] = "pointing"
     subarray_node.execute_transition("Configure", json.dumps(configure_json))
-    # assert check_subarray_obs_state("READY", 5)
     assert wait_and_validate_device_attribute_value(
         subarray_node.subarray_node, "obsState", ObsState.READY, timeout=120
     )
@@ -157,9 +154,6 @@ def invoke_scan_five_times(
             ObsState.SCANNING,
             lookahead=15,
         )
-        # assert check_subarray_obs_state(
-        #     "READY", 600, subarray_node
-        # )
         assert wait_and_validate_device_attribute_value(
             subarray_node.subarray_node,
             "obsState",

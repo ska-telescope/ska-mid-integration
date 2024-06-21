@@ -1,18 +1,16 @@
-release=0.20.0
-tag=0.20.0
+release=0.21.0
+tag=0.21.0
 tag_description=
 **Charts:**
-**1. ska-tmc-integration 0.19.2 - 0.20.0*
+**1. ska-tmc-integration 0.20.0 - 0.21.0*
 
-    **1.1 ska-tmc-mid - 0.19.2- 0.20.0:
-        a. SP-4028 Delay Model Improvements
-        b. SKB-329 and SKB-330 bug fixes on CspSubarrayLeafNode(v0.16.2)
+    **1.1 ska-tmc-mid - 0.20.0- 0.21.0:
+        a. ADR-76 changes improvement done in Dish Leaf node and Subarray Node
 
 release_notes=
 **Charts:**
-**1. ska-tmc-integration 0.19.2 - 0.20.0:**
+**1. ska-tmc-integration 0.20.0 - 0.21.0:**
 
-    **1.1 ska-tmc-mid - 0.19.2 - 0.20.0:
-        a. SP-4028 Delay Model Improvements
-        b. SKB-329 and SKB-330 bug fixes on CspSubarrayLeafNode(v0.16.2)
+    **1.1 ska-tmc-mid - 0.20.0 - 0.21.0:
+        a. Integrate ADR-76 changes improvement done in Dish Leaf node and Subarray Node
 

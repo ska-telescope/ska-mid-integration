@@ -3,6 +3,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+[0.21.0]
+************
+* ADR-76 changes improvement done in Dish Leaf node and Subarray Node
+
 [0.20.0]
 ************
 * SP-4028 Delay Model Improvements

@@ -42,7 +42,6 @@ def given_tmc(central_node_mid, subarray_node, event_recorder):
         central_node_mid.central_node, "telescopeState"
     )
     for dish_master in subarray_node.dish_master_list:
-        event_recorder.subscribe_event(dish_master, "longRunningCommandStatus")
         event_recorder.subscribe_event(dish_master, "dishMode")
     central_node_mid.move_to_on()
     assert event_recorder.has_change_event_occurred(
