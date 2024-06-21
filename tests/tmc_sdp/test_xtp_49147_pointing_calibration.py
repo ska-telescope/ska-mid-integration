@@ -2,9 +2,8 @@
 import json
 
 import pytest
-from pytest_bdd import given, parsers, scenario, then, when
+from pytest_bdd import parsers, scenario, then, when
 from ska_control_model import ObsState
-from tango import DevState
 
 from tests.resources.test_harness.helpers import (
     get_device_simulators,
@@ -17,7 +16,6 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
 @pytest.mark.tmc_sdp
-@pytest.mark.pointing_cal
 @scenario(
     "../features/tmc_sdp/xtp_49147_pointing_calibration_five_point.feature",
     "TMC is able to process pointing calibration received from SDP during "
@@ -28,43 +26,6 @@ def test_pointing_calibration_during_five_point_scan():
     Test case to verify the Science scan functionality after a five point
     calibration scan on TMC
     """
-
-
-@given("a TMC")
-def given_tmc(central_node_mid, subarray_node, event_recorder):
-    """Given a TMC"""
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
-    event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
-    event_recorder.subscribe_event(
-        central_node_mid.subarray_devices["sdp_subarray"], "State"
-    )
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-
-    if central_node_mid.telescope_state != "ON":
-        central_node_mid.move_to_on()
-
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.sdp_master,
-        "State",
-        DevState.ON,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.subarray_devices["sdp_subarray"],
-        "State",
-        DevState.ON,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.ON,
-    )
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "obsState",
-        ObsState.EMPTY,
-    )
 
 
 @when("I assign resources for five point calibration scan")
