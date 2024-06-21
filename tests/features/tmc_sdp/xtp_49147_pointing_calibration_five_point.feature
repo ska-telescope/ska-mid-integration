@@ -4,13 +4,12 @@ Feature: TMC Dish Pointing (ADR-95 and ADR-76)
 	#[https://confluence.skatelescope.org/display/SWSI/ADR-95+DISH+Pointing]
 	@XTP-49147 @XTP-28347
 	Scenario: TMC is able to process pointing calibration received from SDP during five point calibration scan.
-		Scenario Outline: TMC is able to process pointing calibration received from SDP during five point calibration scan.
-		    Given a TMC
-		    When I assign resources for five point calibration scan
-		    And I configure subarray for a calibration scan
-		    And I invoke calibration scan five times with scan ids <scan_ids>
-		    Then the TMC receive pointing calibration from SDP and applies them to the Dishes
-		    
-		    Examples:
-		    | scan_ids                                                            |
-		    | 1,2,3,4,5                                                           |
+		Given a TMC
+		When I assign resources for five point calibration scan
+		And I configure subarray for a calibration scan
+		And I invoke calibration scan five times with scan ids <scan_ids>
+		Then the TMC receive pointing calibration from SDP and applies them to the Dishes
+
+		Examples:
+			| scan_ids                                                            |
+			| 1,2,3,4,5                                                           |

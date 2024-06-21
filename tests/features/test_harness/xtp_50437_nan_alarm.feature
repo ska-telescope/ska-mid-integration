@@ -1,4 +1,4 @@
-@SP-4029 @XTP-50437 @SKA_mid
+@SP-4029 @XTP-50437 @XTP-28347 @SKA_mid
 Feature: TMC Dish Pointing (ADR-95 and ADR-76)	
 	Scenario: TMC mid raises an alarm when it encounters NaN in received pointing calibration
 		Given a TMC mid with already executed calibration scans

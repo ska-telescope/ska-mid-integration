@@ -1,5 +1,6 @@
 """Test module for TMC-DISH On functionality"""
 
+import pytest
 from numpy import nan as NaN
 from pytest_bdd import given, scenario, then, when
 from tango import DeviceProxy
@@ -7,6 +8,7 @@ from tango import DeviceProxy
 from tests.resources.test_support.constant import alarm_handler1
 
 
+@pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp_50437_nan_alarm.feature",
     "TMC mid raises an alarm when it encounters NaN"
