@@ -105,15 +105,13 @@ def check_telescope_state(central_node_mid, event_recorder):
     """
     Method to check if TMC central node is ON
     """
-
     assert event_recorder.has_change_event_occurred(
-        central_node_mid.sdp_master,
+        central_node_mid.csp_master,
         "State",
         DevState.ON,
     )
-
     assert event_recorder.has_change_event_occurred(
-        central_node_mid.csp_master,
+        central_node_mid.sdp_master,
         "State",
         DevState.ON,
     )

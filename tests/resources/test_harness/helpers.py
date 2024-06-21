@@ -38,6 +38,19 @@ SDP_SIMULATION_ENABLED = os.getenv("SDP_SIMULATION_ENABLED")
 CSP_SIMULATION_ENABLED = os.getenv("CSP_SIMULATION_ENABLED")
 DISH_SIMULATION_ENABLED = os.getenv("DISH_SIMULATION_ENABLED")
 
+INITIAL_MID_DELAY_JSON = {
+    "interface": "https://schema.skao.int/ska-mid-csp-delaymodel/3.0",
+    "start_validity_sec": 0.1,
+    "cadence_sec": 0.1,
+    "validity_period_sec": 0.1,
+    "config_id": "",
+    "subarray": 1,
+    "receptor_delays": [
+        {"receptor": "", "xypol_coeffs_ns": [], "ypol_offset_ns": 0.0},
+        {"receptor": "", "xypol_coeffs_ns": [], "ypol_offset_ns": 0.0},
+    ],
+}
+
 
 def check_subarray_obs_state(obs_state=None, timeout=100, subarray_node=None):
     device_dict = {
@@ -423,7 +436,10 @@ def wait_till_delay_values_are_populated(
 def wait_for_delay_updates_stop_on_delay_model(csp_subarray_leaf_node) -> None:
     start_time = time.time()
     time_elapsed = 0
-    while csp_subarray_leaf_node.delayModel != "" and time_elapsed <= TIMEOUT:
+    while (
+        json.loads(csp_subarray_leaf_node.delayModel) != INITIAL_MID_DELAY_JSON
+        and time_elapsed <= TIMEOUT
+    ):
         time.sleep(1)
         time_elapsed = time.time() - start_time
     LOGGER.info(f"time_elapsed: {time_elapsed}")
