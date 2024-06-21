@@ -40,7 +40,13 @@ def dish_leaf_node_receives_nan_from_sdp(tmc_mid):
 
 @then("an alarm is raised for NaN found in last pointing data")
 def test_load_alarm():
-    """A method to load tmc alarm for Alarm handler instance"""
+    """Handles the scenario where an alarm is raised due to NaN values
+    found in the dish leaf node last pointing data.
+
+    This method triggers the TMC alarm for the Alarm Handler instance,
+    ensuring that the system correctly identifies and responds to NaN
+    values in the pointing data
+    """
     global alarm_handler, alarm_list
     alarm_handler = DeviceProxy(alarm_handler1)
     alarm_formula = (
