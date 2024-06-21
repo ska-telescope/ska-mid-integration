@@ -15,6 +15,7 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
+@pytest.mark.skip(reason="enable this test case once SKB-401 is fixed")
 @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp_49147_pointing_calibration_five_point.feature",
