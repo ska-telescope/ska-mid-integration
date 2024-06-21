@@ -14,7 +14,10 @@ from tests.resources.test_harness.helpers import (
     wait_till_delay_values_are_populated,
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
-from tests.resources.test_harness.utils.common_utils import JsonFactory
+from tests.resources.test_harness.utils.common_utils import (
+    JsonFactory,
+    wait_added_for_skb372,
+)
 
 
 @pytest.mark.tmc_csp
@@ -79,6 +82,7 @@ def move_subarray_node_to_idle_obsstate(
         ObsState.IDLE,
         lookahead=20,
     )
+    wait_added_for_skb372()
 
 
 @when(
