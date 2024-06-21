@@ -1,4 +1,6 @@
 k8s-test-tmc-with-sdp:
+  extends:
+    - k8s-test
   tags:
     - ska-k8s
   variables:

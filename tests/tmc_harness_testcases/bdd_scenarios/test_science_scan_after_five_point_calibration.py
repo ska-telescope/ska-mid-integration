@@ -21,11 +21,12 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
+@pytest.mark.mtest
 @pytest.mark.SKA_mid
 @pytest.mark.tmc_dish
 @scenario(
     "../features/test_harness/science_scan_after_calibration_scan.feature",
-    "TMC behaviour during a science scan after a five point calibration scan.",
+    "TMC Behavior During a Five-Point Calibration Scan",
 )
 def test_science_scan_after_five_point_calibration_scan():
     """
@@ -56,7 +57,7 @@ def given_tmc(central_node_mid, subarray_node, event_recorder):
     )
 
 
-@given("a subarray post five point calibration")
+@when("five point calibration scan performed on given subarray")
 def a_subarray_after_five_point_calibration(
     central_node_mid,
     subarray_node,
@@ -155,29 +156,6 @@ def a_subarray_after_five_point_calibration(
         scan_jsons,
         event_recorder,
         command_input_factory,
-    )
-
-
-@when("I invoke Configure command for a science scan")
-def configure_for_science_scan(
-    subarray_node, command_input_factory, event_recorder
-):
-    """When Configure is invoked for a Science Scan."""
-    configure_command_input = prepare_json_args_for_commands(
-        "configure_mid", command_input_factory
-    )
-    subarray_node.execute_transition("Configure", configure_command_input)
-    assert check_subarray_obs_state("READY", 500, subarray_node=subarray_node)
-    scan_command_input = prepare_json_args_for_commands(
-        "scan_mid", command_input_factory
-    )
-    subarray_node.execute_transition("Scan", scan_command_input)
-
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "obsState",
-        ObsState.SCANNING,
-        lookahead=15,
     )
     # Setting pointing calibration data
     subarray_node.set_pointing_cal_on_queue_connector()

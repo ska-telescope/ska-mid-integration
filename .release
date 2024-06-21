@@ -5,12 +5,16 @@ tag_description=
 **1. ska-tmc-integration 0.20.0 - 0.21.0*
 
     **1.1 ska-tmc-mid - 0.20.0- 0.21.0:
-        a. ADR-76 changes improvement done in Dish Leaf node and Subarray Node
+        a. Improvement as per ADR-76 changes are done in Dish Leaf node and Subarray Node.
+        b. Enabled ProgramTrackTable.
+        c. Fixed CORBA issues in dish leaf node while execution of commands.
 
 release_notes=
 **Charts:**
 **1. ska-tmc-integration 0.20.0 - 0.21.0:**
 
     **1.1 ska-tmc-mid - 0.20.0 - 0.21.0:
-        a. Integrate ADR-76 changes improvement done in Dish Leaf node and Subarray Node
+        a. Improvement as per ADR-76 changes are done in Dish Leaf node and Subarray Node.
+        b. Enabled ProgramTrackTable.
+        c. Fixed CORBA issues in dish leaf node while execution of commands.
 

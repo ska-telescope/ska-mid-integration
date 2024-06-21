@@ -5,7 +5,9 @@ Added
 -----
 [0.21.0]
 ************
-* ADR-76 changes improvement done in Dish Leaf node and Subarray Node
+* Improvement as per ADR-76 changes are done in Dish Leaf node and Subarray Node.
+* Enabled ProgramTrackTable.
+* Fixed CORBA issues in dish leaf node while execution of commands.
 
 [0.20.0]
 ************
