@@ -130,7 +130,6 @@ ska-sdp:
     enabled: true
 
 
- 
 # SKUID
 ska-ser-skuid:
   labels:
