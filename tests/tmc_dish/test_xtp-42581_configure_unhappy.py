@@ -1,13 +1,10 @@
 """Test module for TMC-DISH Configure functionality"""
 
 import json
-import time
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
-
-# from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
 from tests.resources.test_harness.helpers import (
@@ -95,7 +92,6 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
         "telescopeState",
         DevState.ON,
     )
-
 
 
 @given("the TMC subarray is in IDLE obsState")
@@ -261,9 +257,7 @@ def invoke_successive_configure(
         + "already band B {receiver_band}"
     )
 )
-def configure_command_rejection_by_dish(
-     central_node_mid
-):
+def configure_command_rejection_by_dish(central_node_mid):
     # In order to complete this clause, error propagation for TMC-Dish
     # interface needs to be completed.
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:

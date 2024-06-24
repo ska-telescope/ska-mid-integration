@@ -8,13 +8,12 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
 from tango import DevState
 
-from tests.conftest import LOGGER
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
-from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
+from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
@@ -99,7 +98,7 @@ def turn_on_telescope(
         "telescopeState",
         DevState.ON,
     )
-    
+
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
@@ -121,7 +120,6 @@ def turn_on_telescope(
         "longRunningCommandResult",
         (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
-
 
 
 @given(
