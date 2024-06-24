@@ -15,6 +15,7 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
+from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
@@ -38,26 +39,44 @@ def test_tmc_dish_successive_configure_with_same_receiver_band():
 
 
 @given("a Telescope in ON state")
-def turn_on_telescope(central_node_mid, event_recorder):
+def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
     """
     A method to put Telescope ON
     """
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "dishMode"
         )
         event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "pointingState"
+            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
         )
 
-    # TODO: Improvement in tests/implementation
-    # to minimize the need of having sleep
+    csp_master_sim = simulator_factory.get_or_create_simulator_device(
+        SimulatorDeviceType.MID_CSP_MASTER_DEVICE
+    )
+    sdp_master_sim = simulator_factory.get_or_create_simulator_device(
+        SimulatorDeviceType.MID_SDP_MASTER_DEVICE
+    )
 
-    time.sleep(5)
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "telescopeState"
+    )
+
+    event_recorder.subscribe_event(csp_master_sim, "State")
+    event_recorder.subscribe_event(sdp_master_sim, "State")
+
     central_node_mid.move_to_on()
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.csp_master,
+        "State",
+        DevState.ON,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.sdp_master,
+        "State",
+        DevState.ON,
+    )
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         assert event_recorder.has_change_event_occurred(
@@ -65,11 +84,18 @@ def turn_on_telescope(central_node_mid, event_recorder):
             "dishMode",
             DishMode.STANDBY_FP,
         )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+        )
+
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
         DevState.ON,
     )
+
 
 
 @given("the TMC subarray is in IDLE obsState")
@@ -137,30 +163,60 @@ def check_dish_mode_and_pointing_state(
     """
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode"
-        )
-        event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "pointingState"
         )
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "dishMode",
-            DishMode.OPERATE,
-            lookahead=15,
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
         )
 
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.OPERATE,
+            lookahead=10,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "dishMode",
+            DishMode.OPERATE,
+            lookahead=10,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
-            lookahead=15,
+            lookahead=10,
         )
-    time.sleep(5)
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "pointingState",
+            PointingState.TRACK,
+            lookahead=10,
+        )
+
+    event_recorder.subscribe_event(
+        subarray_node.subarray_devices["sdp_subarray"], "obsState"
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices["sdp_subarray"],
+        "obsState",
+        ObsState.READY,
+        lookahead=10,
+    )
+    event_recorder.subscribe_event(
+        subarray_node.subarray_devices["csp_subarray"], "obsState"
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices["csp_subarray"],
+        "obsState",
+        ObsState.READY,
+        lookahead=10,
+    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
-        lookahead=15,
+        lookahead=10,
     )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
@@ -202,11 +258,11 @@ def invoke_successive_configure(
 @then(
     parsers.parse(
         "the dish rejects the command with message receiver band is "
-        + "already band B{receiver_band}"
+        + "already band B {receiver_band}"
     )
 )
 def configure_command_rejection_by_dish(
-    receiver_band, event_recorder, central_node_mid
+     central_node_mid
 ):
     # In order to complete this clause, error propagation for TMC-Dish
     # interface needs to be completed.

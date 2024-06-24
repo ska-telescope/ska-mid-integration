@@ -5,7 +5,7 @@ Scenario Outline: Testing of successive configure functionality with same receiv
     And the command configure is issued to the TMC subarray with <receiver_band>
     And the subarray transitions to obsState READY
     When the next successive configure command is issued to the TMC subarray with <receiver_band>
-    Then the dish rejects the command with message receiver band is already band B<receiver_band>
+    Then the dish rejects the command with message receiver band is already band B <receiver_band>
     And TMC subarray remains in obsState READY
 
         Examples:

@@ -14,6 +14,7 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_commands,
 )
 from tests.resources.test_support.common_utils.result_code import ResultCode
+from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
@@ -48,29 +49,38 @@ def turn_on_telescope(
     """
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode", 500.0
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
         )
         event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "pointingState", 500.0
+            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
         )
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "longRunningCommandResult"
+
+    csp_master_sim = simulator_factory.get_or_create_simulator_device(
+        SimulatorDeviceType.MID_CSP_MASTER_DEVICE
     )
-    event_recorder.subscribe_event(
-        subarray_node.subarray_node, "longRunningCommandResult"
+    sdp_master_sim = simulator_factory.get_or_create_simulator_device(
+        SimulatorDeviceType.MID_SDP_MASTER_DEVICE
     )
+
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
 
-    # TODO: Improvement in tests/implementation
-    # to minimize the need of having sleep
-
-    time.sleep(5)
-
-    LOGGER.info("Invoking Move to on ####################################")
+    event_recorder.subscribe_event(csp_master_sim, "State")
+    event_recorder.subscribe_event(sdp_master_sim, "State")
 
     central_node_mid.move_to_on()
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.csp_master,
+        "State",
+        DevState.ON,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.sdp_master,
+        "State",
+        DevState.ON,
+    )
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         assert event_recorder.has_change_event_occurred(
@@ -78,19 +88,23 @@ def turn_on_telescope(
             "dishMode",
             DishMode.STANDBY_FP,
         )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+        )
+
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
         DevState.ON,
     )
-
+    
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-
-    LOGGER.info("Invoking AssignResources #################################")
 
     pytest.command_result = central_node_mid.store_resources(assign_input_json)
 
@@ -99,11 +113,15 @@ def turn_on_telescope(
         "obsState",
         ObsState.IDLE,
     )
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
         (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
+
 
 
 @given(
@@ -119,7 +137,6 @@ def invoke_configure(
     A method to invoke Configure command
     """
 
-    LOGGER.info("Invoking Configure #################################")
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
@@ -140,23 +157,63 @@ def check_dish_mode_and_pointing_state(
     Method to check dishMode and pointingState of DISH and
     SubarrayNode obsState.
     """
-    LOGGER.info("Checking for Ready ObsState events #####################")
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "pointingState"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
+        )
+
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.OPERATE,
+            lookahead=10,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "dishMode",
+            DishMode.OPERATE,
+            lookahead=10,
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
+            lookahead=10,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "pointingState",
+            PointingState.TRACK,
+            lookahead=10,
         )
 
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=15
+    event_recorder.subscribe_event(
+        subarray_node.subarray_devices["sdp_subarray"], "obsState"
     )
-
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices["sdp_subarray"],
+        "obsState",
+        ObsState.READY,
+        lookahead=10,
+    )
+    event_recorder.subscribe_event(
+        subarray_node.subarray_devices["csp_subarray"], "obsState"
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices["csp_subarray"],
+        "obsState",
+        ObsState.READY,
+        lookahead=10,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.READY,
+        lookahead=10,
+    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
@@ -170,7 +227,7 @@ def invoke_scan(subarray_node, command_input_factory, event_recorder):
     """
     A method to invoke Scan command
     """
-    LOGGER.info("Invoking Scan and checking for scanning evts #############")
+
     scan_input_json = prepare_json_args_for_commands(
         "scan_mid", command_input_factory
     )
