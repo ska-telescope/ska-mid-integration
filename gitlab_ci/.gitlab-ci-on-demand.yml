@@ -69,6 +69,8 @@ mid-on-demand-deploy-mini-skampi:
     - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
     - make k8s-install-chart
+    - chmod u=rwx,go=rx tests/scripts/sdp_data_copy.sh
+    - ${PWD}/tests/scripts/sdp_data_copy.sh create_pod
     - make taranta-link
   needs:
     - on-demand-dish-lmc-dish001
@@ -202,6 +204,7 @@ mid-on-demand-destroy-mini-skampi:
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
     - make k8s-uninstall-chart
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
+    - ${PWD}/tests/scripts/sdp_data_copy.sh delete_pod
     - make k8s-delete-namespace
   environment:
     name: $CI_PROJECT_NAME/$CI_COMMIT_REF_SLUG

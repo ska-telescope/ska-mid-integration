@@ -107,6 +107,8 @@ CUSTOM_VALUES2=	--set tmc-mid.deviceServers.mocks.sdp=$(SDP_SIMULATION_ENABLED)\
 	--set global.sdp_subarray_prefix="$(SDP_SUBARRAY_PREFIX)"\
 	--set ska-sdp.proccontrol.replicas=$(SDP_PROCCONTROL_REPLICAS)\
 	--set global.sdp.processingNamespace=$(KUBE_NAMESPACE_SDP)\
+	--set ska-sdp.kafka.clusterDomain=$(CLUSTER_DOMAIN) \
+	--set ska-sdp.kafka.zookeeper.clusterDomain=$(CLUSTER_DOMAIN) \
 	--set ska-sdp.enabled=true\
 	--set ska-sdp.lmc.loadBalancer=true\
 	--set tmc-mid.subarray_count=1\

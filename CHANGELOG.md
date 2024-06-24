@@ -3,9 +3,20 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+[0.22.0]
+************
+* Integrate TMC-Dish Scan functionality implementation (REL-1295)
+
+[0.21.0]
+************
+* Improvement as per ADR-76 changes are done in Dish Leaf node and Subarray Node.
+* Enabled ProgramTrackTable.
+* Fixed CORBA issues in dish leaf node while execution of commands.
+
 [0.20.1]
 ************
 * Integrate TMC-Dish Scan functionality implementation
+* This release is from branch sah-1524
 
 [0.20.0]
 ************
