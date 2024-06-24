@@ -29,6 +29,43 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
+@given("a TMC")
+def given_tmc(central_node_mid, subarray_node, event_recorder):
+    """Given a TMC"""
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "telescopeState"
+    )
+    event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
+    event_recorder.subscribe_event(
+        central_node_mid.subarray_devices["sdp_subarray"], "State"
+    )
+    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
+
+    if central_node_mid.telescope_state != "ON":
+        central_node_mid.move_to_on()
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.sdp_master,
+        "State",
+        DevState.ON,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.subarray_devices["sdp_subarray"],
+        "State",
+        DevState.ON,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "telescopeState",
+        DevState.ON,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.EMPTY,
+    )
+
+
 @given("Telescope is ON state")
 def given_a_tmc(central_node_mid, event_recorder, subarray_node):
     """A method to define TMC and SDP ,move to ON state

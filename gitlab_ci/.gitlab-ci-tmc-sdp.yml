@@ -1,4 +1,6 @@
 k8s-test-tmc-with-sdp:
+  extends:
+    - k8s-test
   tags:
     - ska-k8s
   variables:
@@ -15,6 +17,8 @@ k8s-test-tmc-with-sdp:
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
     - 'make help | grep k8s-test'
     - make k8s-install-chart SDP_PROCCONTROL_REPLICAS=0
+    - chmod u=rwx,go=rx tests/scripts/sdp_data_copy.sh
+    - ${PWD}/tests/scripts/sdp_data_copy.sh create_pod
     - make k8s-wait
     - make k8s-test MARK='tmc_sdp_unhappy'
     - make k8s-install-chart SDP_PROCCONTROL_REPLICAS=1
@@ -39,6 +43,7 @@ stop-k8s-test-tmc-with-sdp:
   variables:
     KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-sdp'
   script:
+    - ${PWD}/tests/scripts/sdp_data_copy.sh delete_pod
     - make k8s-uninstall-chart
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
     - make k8s-delete-namespace

@@ -113,7 +113,7 @@ server:
             - "180"
         - name: "CommandTimeOut"
           values:
-            - "70"
+            - "120"
         - name: "polled_attr"
           values:
             - "isDishVccConfigSet"

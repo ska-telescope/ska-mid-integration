@@ -1,5 +1,7 @@
 
 dish-lmc-dish001:
+  extends:
+    - k8s-test
   stage: test
   tags:
     - ska-k8s
@@ -26,6 +28,8 @@ dish-lmc-dish001:
 
 dish-lmc-dish036:
   extends:
+    - k8s-test
+  extends:
     - dish-lmc-dish001
   variables:
     DISH_INDEX: "036"
@@ -40,6 +44,8 @@ dish-lmc-dish036:
 
 dish-lmc-dish063:
   extends:
+    - k8s-test
+  extends:
     - dish-lmc-dish001
   variables:
     DISH_INDEX: "063"
@@ -53,6 +59,8 @@ dish-lmc-dish063:
     action: stop
 
 dish-lmc-dish100:
+  extends:
+    - k8s-test
   extends:
     - dish-lmc-dish001
   variables:

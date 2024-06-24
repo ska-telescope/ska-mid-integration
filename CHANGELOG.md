@@ -3,6 +3,12 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+[0.21.0]
+************
+* Improvement as per ADR-76 changes are done in Dish Leaf node and Subarray Node.
+* Enabled ProgramTrackTable.
+* Fixed CORBA issues in dish leaf node while execution of commands.
+
 [0.20.0]
 ************
 * SP-4028 Delay Model Improvements

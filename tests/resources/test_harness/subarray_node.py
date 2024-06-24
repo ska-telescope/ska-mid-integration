@@ -2,15 +2,14 @@ import json
 import logging
 import os
 
-import msgpack
-import msgpack_numpy
 from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import HealthState
 from tango import DeviceProxy, DevState
 
 from tests.resources.test_harness.constant import (
-    POINTING_OFFSETS,
+    DISH_001_CALIBRATION_DATA,
+    DISH_036_CALIBRATION_DATA,
     centralnode,
     csp_master,
     csp_subarray1,
@@ -34,6 +33,7 @@ from tests.resources.test_harness.helpers import (
     check_subarray_obs_state,
     generate_eb_pb_ids,
     prepare_json_args_for_commands,
+    wait_and_validate_device_attribute_value,
 )
 from tests.resources.test_harness.utils.constant import (
     ABORTED,
@@ -55,6 +55,7 @@ from tests.resources.test_harness.utils.sync_decorators import (
     sync_restart,
 )
 from tests.resources.test_support.common_utils.common_helpers import Resource
+from tests.resources.test_support.common_utils.result_code import ResultCode
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -127,6 +128,12 @@ class SubarrayNodeWrapper(object):
             DeviceProxy(dish_fqdn036),
             DeviceProxy(dish_fqdn063),
             DeviceProxy(dish_fqdn100),
+        ]
+        self.dish_master_name_list = [
+            dish_fqdn001,
+            dish_fqdn036,
+            dish_fqdn063,
+            dish_fqdn100,
         ]
 
         self.dish_leaf_node_list = [
@@ -469,12 +476,13 @@ class SubarrayNodeWrapper(object):
         )
         sdp_sim.SetDirectreceiveAddresses(receive_addresses)
 
-        # Setting pointing offsets after encoding the data.
+    def set_pointing_cal_on_queue_connector(self):
+        """Set Pointing Cal on SDP"""
+        # Setting pointing calibration data
         sdp_qc = DeviceProxy(sdp_queue_connector)
-        encoded_data = msgpack.packb(
-            POINTING_OFFSETS, default=msgpack_numpy.encode
-        )
-        sdp_qc.SetDirectPointingOffsets(("msgpack_numpy", encoded_data))
+
+        sdp_qc.SetPointingCalSka001(DISH_001_CALIBRATION_DATA)
+        sdp_qc.SetPointingCalSka036(DISH_036_CALIBRATION_DATA)
 
     def execute_five_point_calibration_scan(
         self,
@@ -518,14 +526,35 @@ class SubarrayNodeWrapper(object):
         )
 
         # Partial configure 1
-        self.execute_transition("Configure", partial_configure_1)
+        _, unique_id = self.execute_transition(
+            "Configure", partial_configure_1
+        )
         assert event_recorder.has_change_event_occurred(
             self.subarray_node,
             "obsState",
             ObsState.CONFIGURING,
             lookahead=15,
         )
-        assert check_subarray_obs_state(obs_state="READY")
+        assert event_recorder.has_change_event_occurred(
+            self.subarray_node,
+            "longRunningCommandResult",
+            (unique_id[0], str(int(ResultCode.OK))),
+            lookahead=15,
+        )
+        assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
+
+        # assert sourceOffset gets populated as expected
+        ca_offset, ie_offset = (
+            json.loads(partial_configure_1)["pointing"]["target"][key]
+            for key in ("ca_offset_arcsec", "ie_offset_arcsec")
+        )
+        for dish_leaf_node in self.dish_leaf_node_list:
+            wait_and_validate_device_attribute_value(
+                dish_leaf_node,
+                "sourceOffset",
+                f"{[ca_offset, ie_offset]}",
+                is_list=True,
+            )
 
         # Scan 1
         self.execute_transition("Scan", scan_1)
@@ -535,17 +564,38 @@ class SubarrayNodeWrapper(object):
             ObsState.SCANNING,
             lookahead=15,
         )
-        assert check_subarray_obs_state(obs_state="READY")
+        assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
 
         # Partial configure 2
-        self.execute_transition("Configure", partial_configure_2)
+        _, unique_id = self.execute_transition(
+            "Configure", partial_configure_2
+        )
         assert event_recorder.has_change_event_occurred(
             self.subarray_node,
             "obsState",
             ObsState.CONFIGURING,
             lookahead=15,
         )
-        assert check_subarray_obs_state(obs_state="READY")
+        assert event_recorder.has_change_event_occurred(
+            self.subarray_node,
+            "longRunningCommandResult",
+            (unique_id[0], str(int(ResultCode.OK))),
+            lookahead=15,
+        )
+        # assert sourceOffset gets populated as expected
+        ca_offset, ie_offset = (
+            json.loads(partial_configure_2)["pointing"]["target"][key]
+            for key in ("ca_offset_arcsec", "ie_offset_arcsec")
+        )
+        for dish_leaf_node in self.dish_leaf_node_list:
+            wait_and_validate_device_attribute_value(
+                dish_leaf_node,
+                "sourceOffset",
+                f"{[ca_offset, ie_offset]}",
+                is_list=True,
+            )
+
+        assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
 
         # Scan 2
         self.execute_transition("Scan", scan_2)
@@ -555,17 +605,37 @@ class SubarrayNodeWrapper(object):
             ObsState.SCANNING,
             lookahead=15,
         )
-        assert check_subarray_obs_state(obs_state="READY")
+        assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
 
         # Partial configure 3
-        self.execute_transition("Configure", partial_configure_3)
+        _, unique_id = self.execute_transition(
+            "Configure", partial_configure_3
+        )
         assert event_recorder.has_change_event_occurred(
             self.subarray_node,
             "obsState",
             ObsState.CONFIGURING,
             lookahead=15,
         )
-        assert check_subarray_obs_state(obs_state="READY")
+        assert event_recorder.has_change_event_occurred(
+            self.subarray_node,
+            "longRunningCommandResult",
+            (unique_id[0], str(int(ResultCode.OK))),
+            lookahead=15,
+        )
+        # assert sourceOffset gets populated as expected
+        ca_offset, ie_offset = (
+            json.loads(partial_configure_3)["pointing"]["target"][key]
+            for key in ("ca_offset_arcsec", "ie_offset_arcsec")
+        )
+        for dish_leaf_node in self.dish_leaf_node_list:
+            wait_and_validate_device_attribute_value(
+                dish_leaf_node,
+                "sourceOffset",
+                f"{[ca_offset, ie_offset]}",
+                is_list=True,
+            )
+        assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
 
         # Scan 3
         self.execute_transition("Scan", scan_3)
@@ -575,17 +645,37 @@ class SubarrayNodeWrapper(object):
             ObsState.SCANNING,
             lookahead=15,
         )
-        assert check_subarray_obs_state(obs_state="READY")
+        assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
 
         # Partial configure 4
-        self.execute_transition("Configure", partial_configure_4)
+        _, unique_id = self.execute_transition(
+            "Configure", partial_configure_4
+        )
         assert event_recorder.has_change_event_occurred(
             self.subarray_node,
             "obsState",
             ObsState.CONFIGURING,
             lookahead=15,
         )
-        assert check_subarray_obs_state(obs_state="READY")
+        assert event_recorder.has_change_event_occurred(
+            self.subarray_node,
+            "longRunningCommandResult",
+            (unique_id[0], str(int(ResultCode.OK))),
+            lookahead=15,
+        )
+        # assert sourceOffset gets populated as expected
+        ca_offset, ie_offset = (
+            json.loads(partial_configure_4)["pointing"]["target"][key]
+            for key in ("ca_offset_arcsec", "ie_offset_arcsec")
+        )
+        for dish_leaf_node in self.dish_leaf_node_list:
+            wait_and_validate_device_attribute_value(
+                dish_leaf_node,
+                "sourceOffset",
+                f"{[ca_offset, ie_offset]}",
+                is_list=True,
+            )
+        assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
 
         # Scan 4
         self.execute_transition("Scan", scan_4)
@@ -595,4 +685,4 @@ class SubarrayNodeWrapper(object):
             ObsState.SCANNING,
             lookahead=15,
         )
-        assert check_subarray_obs_state("READY")
+        assert check_subarray_obs_state("READY", subarray_node=self)

@@ -88,6 +88,30 @@ ska-sdp:
   lmc:
     prefix: mid
     nsubarray: 2
+    queueconnector:
+      image: artefact.skao.int/ska-sdp-lmc-queue-connector
+      version: 4.1.0
+      domain: queue-connector
+      function: sdp-queue-connector
+      resources:
+        limits:
+          memory: 500Mi
+          cpu: 0.5
+        requests:
+          memory: 100Mi
+          cpu: 0.3
+    pointing-offset:
+      image: artefact.skao.int/ska-sdp-wflow-pointing-offset
+      version: 0.5.0
+      script: pointing-offset
+      imagePullPolicy: IfNotPresent
+      command:
+        - pointing-offset
+      dataProductStorage:
+        name: test-pvc
+        mountPath: /mnt/data
+
+
   console:
     enabled: true
   data-pvc:
@@ -104,13 +128,6 @@ ska-sdp:
     enabled: false
   kafka:
     enabled: true
-    resources:
-        limits:
-          cpu: 200m
-          memory: 100Mi
-        requests:
-          cpu: 100m
-          memory: 50Mi
 
  
 # SKUID

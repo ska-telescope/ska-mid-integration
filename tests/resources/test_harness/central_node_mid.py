@@ -398,13 +398,16 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             self.central_node.TelescopeStandBy()
 
     @sync_assign_resources(device_dict=device_dict)
-    def store_resources(self, assign_json: str) -> Tuple[ResultCode, str]:
+    def store_resources(
+        self, assign_json: str, is_update_eb_id_required: bool = True
+    ) -> Tuple[ResultCode, str]:
         """Invoke Assign Resource command on central Node
         Args:
             assign_json (str): Assign resource input json
         """
         input_json = json.loads(assign_json)
-        generate_eb_pb_ids(input_json)
+        if is_update_eb_id_required:
+            generate_eb_pb_ids(input_json)
         result, message = self.central_node.AssignResources(
             json.dumps(input_json)
         )
