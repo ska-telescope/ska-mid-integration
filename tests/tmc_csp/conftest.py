@@ -38,6 +38,7 @@ def given_a_tmc(central_node_mid, event_recorder, subarray_node):
     event_recorder.subscribe_event(
         central_node_mid.subarray_devices["csp_subarray"], "State"
     )
+    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
@@ -55,6 +56,11 @@ def given_a_tmc(central_node_mid, event_recorder, subarray_node):
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_devices["csp_subarray"],
         "State",
+        DevState.ON,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "telescopeState",
         DevState.ON,
     )
 
