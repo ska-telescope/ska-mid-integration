@@ -106,7 +106,6 @@ class SubarrayNodeWrapper(object):
             DeviceProxy(tmc_dish_leaf_node1),
             DeviceProxy(tmc_dish_leaf_node2),
         ]
-        self.subarray_node.set_timeout_millis(5000)
         for dish_leaf_node in self.dish_leaf_node_list:
             dish_leaf_node.set_timeout_millis(5000)
 
@@ -161,7 +160,6 @@ class SubarrayNodeWrapper(object):
         self.sdp_subarray1 = sdp_subarray1
         device_dict["dish_master_list"] = self.dish_master_list
         device_dict["dish_leaf_node_list"] = self.dish_leaf_node_list
-        self.subarray_node.set_timeout_millis(5000)
 
     def _setup(self):
         """ """
