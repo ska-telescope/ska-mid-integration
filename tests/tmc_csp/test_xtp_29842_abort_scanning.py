@@ -10,9 +10,6 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-@pytest.mark.skip(
-    reason="Scan functionality is broken. It will fixed in SAH-1498"
-)
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/xtp_29842_abort_scanning.feature",
@@ -63,10 +60,6 @@ def subarray_is_in_scanning_obsstate(
         "scan_mid", command_input_factory
     )
 
-    event_recorder.subscribe_event(
-        subarray_node.subarray_devices.get("csp_subarray"), "obsState"
-    )
-    event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
     event_recorder.subscribe_event(
         subarray_node.csp_subarray_leaf_node, "cspSubarrayObsState"
     )

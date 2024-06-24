@@ -13,9 +13,6 @@ from tests.resources.test_harness.helpers import (
 LOGGER = logging.getLogger(__name__)
 
 
-@pytest.mark.skip(
-    reason="Scan functionality is broken. It will fixed in SAH-1498"
-)
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/xtp_29394_endscan.feature",
@@ -39,15 +36,6 @@ def move_subarray_node_to_scanning_obsstate(
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
-    event_recorder.subscribe_event(
-        subarray_node.subarray_devices["csp_subarray"], "obsState"
-    )
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-
     # execute set of commands and bring SubarrayNode to SCANNING obsState
     subarray_node.force_change_of_obs_state(
         "SCANNING",

@@ -10,7 +10,6 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-@pytest.mark.skip(reason="Requires CBF chart with ska-telmodel v.1.15.0")
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/xtp_29839_abort_idle_ready.feature",
@@ -56,10 +55,6 @@ def subarray_is_in_given_obsstate(
     )
     subarray_node.set_subarray_id(subarray_id)
     central_node_mid.store_resources(assign_input_json)
-    event_recorder.subscribe_event(
-        subarray_node.subarray_devices.get("csp_subarray"), "obsState"
-    )
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices.get("csp_subarray"),
         "obsState",

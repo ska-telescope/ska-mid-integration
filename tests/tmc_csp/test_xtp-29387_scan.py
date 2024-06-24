@@ -13,9 +13,6 @@ from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 
 
-@pytest.mark.skip(
-    reason="Scan functionality is broken. It will fixed in SAH-1498"
-)
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/xtp_29387_scan.feature",
@@ -43,14 +40,6 @@ def subarray_in_ready_obsstate(
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
-    event_recorder.subscribe_event(
-        subarray_node.subarray_devices["csp_subarray"], "obsState"
-    )
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-
     subarray_node.force_change_of_obs_state(
         "READY",
         assign_input_json=assign_input_json,
@@ -83,9 +72,6 @@ def invoke_scan(subarray_node, command_input_factory):
 @then(parsers.parse("the CSP subarray transitions to ObsState SCANNING"))
 def csp_subarray_scanning(subarray_node, event_recorder):
     """Checks if Csp Subarray's obsState attribute value is SCANNING"""
-    event_recorder.subscribe_event(
-        subarray_node.subarray_devices["csp_subarray"], "obsState"
-    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["csp_subarray"],
         "obsState",

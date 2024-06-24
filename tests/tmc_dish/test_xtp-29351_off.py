@@ -66,6 +66,16 @@ def check_tmc_and_dish_is_on(
         assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
 
     central_node_mid.move_to_on()
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.csp_master,
+        "State",
+        DevState.ON,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.sdp_master,
+        "State",
+        DevState.ON,
+    )
 
     for dish_id in dish_ids.split(","):
         assert event_recorder.has_change_event_occurred(
@@ -79,16 +89,6 @@ def check_tmc_and_dish_is_on(
             DishMode.STANDBY_FP,
         )
 
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.sdp_master,
-        "State",
-        DevState.ON,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.csp_master,
-        "State",
-        DevState.ON,
-    )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",

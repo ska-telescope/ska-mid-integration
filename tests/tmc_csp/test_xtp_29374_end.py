@@ -18,7 +18,6 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 LOGGER = logging.getLogger(__name__)
 
 
-@pytest.mark.skip(reason="Requires CBF chart with ska-telmodel v.1.15.0")
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/xtp_29374_end.feature",
@@ -50,7 +49,6 @@ def move_subarray_node_to_ready_obsstate(
         "AssignResources", json.dumps(assign_input)
     )
 
-    event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_node,
         "obsState",
@@ -80,9 +78,6 @@ def check_if_csp_subarray_moved_to_idle_obsstate(
     subarray_node: SubarrayNodeWrapper, event_recorder
 ):
     """Ensure CSP subarray is moved to IDLE obsstate"""
-    event_recorder.subscribe_event(
-        subarray_node.subarray_devices["csp_subarray"], "obsState"
-    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["csp_subarray"],
         "obsState",

@@ -35,10 +35,6 @@ def subarray_is_in_aborted_obsstate(
         "assign_resources_mid", command_input_factory
     )
     central_node_mid.store_resources(assign_input_json)
-    event_recorder.subscribe_event(
-        subarray_node.subarray_devices.get("csp_subarray"), "obsState"
-    )
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices.get("csp_subarray"),
         "obsState",

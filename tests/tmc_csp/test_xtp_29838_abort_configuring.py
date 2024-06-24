@@ -11,7 +11,6 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-@pytest.mark.skip(reason="Requires CBF chart with ska-telmodel v.1.15.0")
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/xtp_29838_abort_configuring.feature",
@@ -60,10 +59,6 @@ def subarray_is_in_configuring_obsstate(
         "configure_mid", command_input_factory
     )
 
-    event_recorder.subscribe_event(
-        subarray_node.subarray_devices.get("csp_subarray"), "obsState"
-    )
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     event_recorder.subscribe_event(
         subarray_node.csp_subarray_leaf_node, "cspSubarrayObsState"
     )
