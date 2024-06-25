@@ -754,3 +754,25 @@ def check_for_device_command_event(
         elapsed_time = time.time() - start_time
 
     return event_found
+
+
+def retry_tango_command(
+    device: DeviceProxy, command_name: str, argin=None
+) -> bool:
+    """Method which will invoke command if Dev Error is received"""
+
+    retry = 0
+    while retry <= 3:
+        try:
+            device.command_inout(command_name, argin)
+
+            break
+        except Exception as e:
+            LOGGER.exception(
+                "Exception occurred while executing command: %s", e
+            )
+            if retry == 2:
+                return False
+            retry += 1
+        time.sleep(0.1)
+    return True
