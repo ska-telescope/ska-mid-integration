@@ -6,8 +6,8 @@ import time
 from datetime import datetime
 from typing import Any
 
-import pytest
 from astropy.time import Time
+from numpy import array_equal
 from ska_ser_logging import configure_logging
 from ska_tango_base.commands import ResultCode
 from ska_tango_base.control_model import HealthState
@@ -23,8 +23,6 @@ from tests.resources.test_harness.utils.wait_helpers import Waiter, watch
 from tests.resources.test_support.common_utils.common_helpers import Resource
 from tests.resources.test_support.constant import (
     csp_subarray1,
-    dish_master1,
-    dish_master2,
     sdp_subarray1,
     tmc_csp_subarray_leaf_node,
     tmc_sdp_subarray_leaf_node,
@@ -36,13 +34,25 @@ LOGGER = logging.getLogger(__name__)
 TIMEOUT = 20
 EB_PB_ID_LENGTH = 15
 
-
 SDP_SIMULATION_ENABLED = os.getenv("SDP_SIMULATION_ENABLED")
 CSP_SIMULATION_ENABLED = os.getenv("CSP_SIMULATION_ENABLED")
 DISH_SIMULATION_ENABLED = os.getenv("DISH_SIMULATION_ENABLED")
 
+INITIAL_MID_DELAY_JSON = {
+    "interface": "https://schema.skao.int/ska-mid-csp-delaymodel/3.0",
+    "start_validity_sec": 0.1,
+    "cadence_sec": 0.1,
+    "validity_period_sec": 0.1,
+    "config_id": "",
+    "subarray": 1,
+    "receptor_delays": [
+        {"receptor": "", "xypol_coeffs_ns": [], "ypol_offset_ns": 0.0},
+        {"receptor": "", "xypol_coeffs_ns": [], "ypol_offset_ns": 0.0},
+    ],
+}
 
-def check_subarray_obs_state(obs_state=None, timeout=100):
+
+def check_subarray_obs_state(obs_state=None, timeout=100, subarray_node=None):
     device_dict = {
         "sdp_subarray": sdp_subarray1,
         "csp_subarray": csp_subarray1,
@@ -63,11 +73,10 @@ def check_subarray_obs_state(obs_state=None, timeout=100):
         f"{csp_subarray1}.obsState : "
         + str(Resource(csp_subarray1).get("obsState"))
     )
-    if obs_state == "READY":
-        device_dict["dish_master_list"] = [
-            dish_master1,
-            dish_master2,
-        ]
+    if obs_state == "READY" and subarray_node:
+        device_dict["dish_master_list"] = subarray_node.dish_master_list
+        device_dict["dish_leaf_node_list"] = subarray_node.dish_leaf_node_list
+
     the_waiter = Waiter(**device_dict)
     the_waiter.set_wait_for_obs_state(obs_state=obs_state)
     the_waiter.wait(timeout / 0.1)
@@ -160,6 +169,7 @@ def get_device_simulator_with_given_name(simulator_factory, devices):
         "sdp subarray": SimulatorDeviceType.MID_SDP_DEVICE,
         "csp master": SimulatorDeviceType.MID_CSP_MASTER_DEVICE,
         "sdp master": SimulatorDeviceType.MID_SDP_MASTER_DEVICE,
+        "dish master1": SimulatorDeviceType.DISH_DEVICE,
     }
     sim_device_proxy_list = []
     for device_name in devices:
@@ -404,41 +414,9 @@ def wait_for_attribute_update(
     return False
 
 
-def check_lrcr_events(
-    event_recorder,
-    device,
-    command_name: str,
-    result_code: ResultCode = ResultCode.OK,
-    retries: int = 10,
-):
-    """Used to assert command name and result code in
-       longRunningCommandResult event callbacks.
-
-    Args:
-        event_recorder (EventRecorder):fixture used to
-        capture event callbacks
-        device (str): device for which attribute needs to be checked
-        command_name (str): command name to check
-        result_code (ResultCode): result_code to check.
-        Defaults to ResultCode.OK.
-        retries (int):number of events to check. Defaults to 10.
-    """
-    COUNT = 0
-    while COUNT <= retries:
-        assertion_data = event_recorder.has_change_event_occurred(
-            device, "longRunningCommandResult", Anything, lookahead=1
-        )
-        unique_id, result = assertion_data["attribute_value"]
-        if unique_id.endswith(command_name):
-            if result == str(result_code.value):
-                LOGGER.debug("TRACKLOADSTATICOFF_UID: %s", unique_id)
-                break
-        COUNT = COUNT + 1
-        if COUNT >= retries:
-            pytest.fail("Assertion Failed")
-
-
-def wait_till_delay_values_are_populated(csp_subarray_leaf_node) -> None:
+def wait_till_delay_values_are_populated(
+    csp_subarray_leaf_node,
+) -> None:
     start_time = time.time()
     time_elapsed = 0
     while csp_subarray_leaf_node.delayModel == "" or time_elapsed <= TIMEOUT:
@@ -458,7 +436,10 @@ def wait_till_delay_values_are_populated(csp_subarray_leaf_node) -> None:
 def wait_for_delay_updates_stop_on_delay_model(csp_subarray_leaf_node) -> None:
     start_time = time.time()
     time_elapsed = 0
-    while csp_subarray_leaf_node.delayModel != "" and time_elapsed <= TIMEOUT:
+    while (
+        json.loads(csp_subarray_leaf_node.delayModel) != INITIAL_MID_DELAY_JSON
+        and time_elapsed <= TIMEOUT
+    ):
         time.sleep(1)
         time_elapsed = time.time() - start_time
     LOGGER.info(f"time_elapsed: {time_elapsed}")
@@ -467,6 +448,28 @@ def wait_for_delay_updates_stop_on_delay_model(csp_subarray_leaf_node) -> None:
             "Timeout while waiting for CspSubarrayLeafNode to generate \
                 delay values."
         )
+
+
+def is_last_pointing_data_updated(dish_leaf_node, timeout=50) -> bool:
+    start_time = time.time()
+    time_elapsed = 0
+    while (
+        dish_leaf_node.lastPointingData == "Not Set"
+        and time_elapsed <= timeout
+    ):
+        time.sleep(1)
+        time_elapsed = time.time() - start_time
+    LOGGER.info(
+        "time_elapsed: %s and last pointing data is %s",
+        time_elapsed,
+        dish_leaf_node.lastPointingData,
+    )
+    if time_elapsed > timeout:
+        raise Exception(
+            "Timeout while waiting for Dish Leaf Node to generate \
+                last pointing data."
+        )
+    return True
 
 
 def generate_ska_epoch_tai_value() -> Time:
@@ -574,7 +577,7 @@ def generate_id(id_pattern: str) -> str:
     return f"{prefix}{unique_id}{suffix}"
 
 
-def generate_eb_pb_ids(input_json: str):
+def generate_eb_pb_ids(input_json: dict):
     """
     Method to generate different eb_id and pb_id
 
@@ -600,7 +603,8 @@ def wait_and_validate_device_attribute_value(
     device: DeviceProxy,
     attribute_name: str,
     expected_value: str,
-    is_json: str = False,
+    is_json: bool = False,
+    is_list: bool = False,
     timeout: int = 300,
 ):
     """This method wait and validate if attribute value is equal to provided
@@ -621,6 +625,8 @@ def wait_and_validate_device_attribute_value(
                 expected_value
             ):
                 return True
+            elif is_list:
+                return array_equal(attribute_value, json.loads(expected_value))
             elif attribute_value == expected_value:
                 return True
         except Exception as e:
@@ -654,6 +660,32 @@ def update_eb_pb_ids(input_json: str) -> str:
         pb["pb_id"] = generate_id("pb-test")
     input_json = json.dumps(input_json)
     return input_json
+
+
+def update_scan_type(configure_json: str, json_value: str) -> str:
+    """
+    Method to update json with different scan type
+    :param configure_json: json to utilised to update values.
+
+    :param json_value: new json value to be updated in json
+    """
+    input_json = json.loads(configure_json)
+    input_json["sdp"]["scan_type"] = json_value
+    input_json = json.dumps(input_json)
+    return input_json
+
+
+def update_scan_id(input_json: str, scan_id: int) -> str:
+    """
+    Method to update scan_id in input json..
+    :param input_json: json to utilised to update values.
+
+    :param json_value: new json value to be updated in json
+    """
+    input_json = json.loads(input_json)
+    input_json["scan_id"] = int(scan_id)
+    updated_json = json.dumps(input_json)
+    return updated_json
 
 
 def check_long_running_command_status(
@@ -713,6 +745,7 @@ def check_for_device_command_event(
             attribute_name=attr_name,
             attribute_value=(Anything, Anything),
         )
+        LOGGER.info("The assertion data is %s", assertion_data)
         if assertion_data["attribute_value"][0].endswith(command_name):
             if event_data in assertion_data["attribute_value"][1]:
                 event_found = True

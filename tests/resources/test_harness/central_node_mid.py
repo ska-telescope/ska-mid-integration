@@ -67,7 +67,9 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
     def __init__(self) -> None:
         super().__init__()
         self.central_node = DeviceProxy(centralnode)
+        self.central_node.set_timeout_millis(5000)
         self.subarray_node = DeviceProxy(tmc_subarraynode1)
+        self.subarray_node.set_timeout_millis(5000)
         self.csp_master_leaf_node = DeviceProxy(tmc_csp_master_leaf_node)
         self.sdp_master_leaf_node = DeviceProxy(tmc_sdp_master_leaf_node)
         self.sdp_master = DeviceProxy(sdp_master)
@@ -128,6 +130,17 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             DeviceProxy(tmc_dish_leaf_node4),
         ]
 
+        self.central_node.set_timeout_millis(5000)
+        # Increase the timeout for Dish Leaf Node devices
+        for dish_leaf_node in self.dish_leaf_node_list:
+            dish_leaf_node.set_timeout_millis(5000)
+
+        self.dish_leaf_node_dict = {
+            "SKA001": DeviceProxy(tmc_dish_leaf_node1),
+            "SKA036": DeviceProxy(tmc_dish_leaf_node2),
+            "SKA063": DeviceProxy(tmc_dish_leaf_node3),
+            "SKA100": DeviceProxy(tmc_dish_leaf_node4),
+        }
         # Create Dish1 admin device proxy
         self.dish1_admin_dev_name = self.dish_master_list[0].adm_name()
         self.dish1_admin_dev_proxy = DeviceProxy(self.dish1_admin_dev_name)
@@ -145,8 +158,15 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 "release_resources_mid"
             )
         )
-        device_dict["cbf_subarray1"] = "mid_csp_cbf/sub_elt/subarray_01"
-        device_dict["cbf_controller"] = "mid_csp_cbf/sub_elt/controller"
+        if (
+            SIMULATED_DEVICES_DICT["sdp_and_dish"]
+            or SIMULATED_DEVICES_DICT["sdp"]
+        ) and not SIMULATED_DEVICES_DICT["all_mocks"]:
+            device_dict["cbf_subarray1"] = "mid_csp_cbf/sub_elt/subarray_01"
+            device_dict["cbf_controller"] = "mid_csp_cbf/sub_elt/controller"
+
+        device_dict["dish_master_list"] = self.dish_master_list
+        device_dict["dish_leaf_node_list"] = self.dish_leaf_node_list
         self.wait = Waiter(**device_dict)
 
     @property
@@ -267,6 +287,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 dish_master4,
             ]:
                 device = DeviceProxy(sim_device)
+                device.set_timeout_millis(5000)
                 device.ClearCommandCallInfo()
                 if clear_transition:
                     device.ResetTransitions()
@@ -281,21 +302,17 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         if SIMULATED_DEVICES_DICT["all_mocks"]:
             LOGGER.info("Invoking TelescopeOn() with all Mocks")
             self.central_node.TelescopeOn()
-            self.set_subarraystate_and_dishmode_with_all_mocks(
-                DevState.ON, DishMode.STANDBY_FP
-            )
+            self.set_csp_subarray_state(DevState.ON)
 
         elif SIMULATED_DEVICES_DICT["csp_and_sdp"]:
             LOGGER.info("Invoking TelescopeOn() on simulated csp and sdp")
             self.central_node.TelescopeOn()
-            self.set_value_with_csp_sdp_mocks(DevState.ON)
+            self.set_csp_subarray_state(DevState.ON)
 
         elif SIMULATED_DEVICES_DICT["csp_and_dish"]:
             LOGGER.info("Invoking TelescopeOn() on simulated csp and Dish")
             self.central_node.TelescopeOn()
-            self.set_values_with_csp_dish_mocks(
-                DevState.ON, DishMode.STANDBY_FP
-            )
+            self.set_csp_subarray_state(DevState.ON)
 
         elif SIMULATED_DEVICES_DICT["sdp_and_dish"]:
             LOGGER.info("Invoking TelescopeOn() on simulated sdp and dish")
@@ -303,18 +320,12 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 self.csp_master.adminMode = 0
             wait_csp_master_off()
             self.central_node.TelescopeOn()
-            self.set_values_with_sdp_dish_mocks(
-                DevState.ON, DishMode.STANDBY_FP
-            )
         elif SIMULATED_DEVICES_DICT["sdp"]:
             LOGGER.info("Invoking TelescopeOn() on simulated sdp")
             if self.csp_master.adminMode != 0:
                 self.csp_master.adminMode = 0
             wait_csp_master_off()
             self.central_node.TelescopeOn()
-            self.set_values_on_device(
-                DevState.ON, [self.subarray_devices.get("sdp_subarray")]
-            )
         else:
             LOGGER.info("Invoke TelescopeOn() on all real sub-systems")
             self.central_node.TelescopeOn()
@@ -329,33 +340,23 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         if SIMULATED_DEVICES_DICT["all_mocks"]:
             LOGGER.info("Invoking TelescopeOff() with all Mocks")
             self.central_node.TelescopeOff()
-            self.set_subarraystate_and_dishmode_with_all_mocks(
-                DevState.OFF, DishMode.STANDBY_LP
-            )
+            self.set_csp_subarray_state(DevState.OFF)
 
         elif SIMULATED_DEVICES_DICT["csp_and_sdp"]:
             LOGGER.info("Invoking TelescopeOff() on simulated csp and sdp")
             self.central_node.TelescopeOff()
-            self.set_value_with_csp_sdp_mocks(DevState.OFF)
+            self.set_csp_subarray_state(DevState.OFF)
 
         elif SIMULATED_DEVICES_DICT["csp_and_dish"]:
             LOGGER.info("Invoking TelescopeOff() on simulated csp and Dish")
             self.central_node.TelescopeOff()
-            self.set_values_with_csp_dish_mocks(
-                DevState.OFF, DishMode.STANDBY_LP
-            )
+            self.set_csp_subarray_state(DevState.OFF)
 
         elif SIMULATED_DEVICES_DICT["sdp_and_dish"]:
             LOGGER.info("Invoking TelescopeOff() on simulated sdp and dish")
             self.central_node.TelescopeOff()
-            self.set_values_with_sdp_dish_mocks(
-                DevState.OFF, DishMode.STANDBY_LP
-            )
         elif SIMULATED_DEVICES_DICT["sdp"]:
             self.central_node.TelescopeOff()
-            self.set_values_on_device(
-                DevState.OFF, [self.subarray_devices.get("sdp_subarray")]
-            )
         else:
             LOGGER.info("Invoke TelescopeOff() with all real sub-systems")
             self.central_node.TelescopeOff()
@@ -371,49 +372,42 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         if SIMULATED_DEVICES_DICT["all_mocks"]:
             LOGGER.info("Invoking TelescopeStandBy() with all Mocks")
             self.central_node.TelescopeStandBy()
-            self.set_subarraystate_and_dishmode_with_all_mocks(
-                DevState.OFF, DishMode.STANDBY_LP
-            )
+            self.set_csp_subarray_state(DevState.OFF)
 
         elif SIMULATED_DEVICES_DICT["csp_and_sdp"]:
             LOGGER.info("Invoking TelescopeStandBy() on simulated csp and sdp")
             self.central_node.TelescopeStandBy()
-            self.set_value_with_csp_sdp_mocks(DevState.OFF)
+            self.set_csp_subarray_state(DevState.OFF)
 
         elif SIMULATED_DEVICES_DICT["csp_and_dish"]:
             LOGGER.info(
                 "Invoking TelescopeStandBy() on simulated csp and Dish"
             )
             self.central_node.TelescopeStandBy()
-            self.set_values_with_csp_dish_mocks(
-                DevState.OFF, DishMode.STANDBY_LP
-            )
+            self.set_csp_subarray_state(DevState.OFF)
 
         elif SIMULATED_DEVICES_DICT["sdp_and_dish"]:
             LOGGER.info(
                 "Invoking TelescopeStandBy() on simulated sdp and dish"
             )
             self.central_node.TelescopeStandBy()
-            self.set_values_with_sdp_dish_mocks(
-                DevState.OFF, DishMode.STANDBY_LP
-            )
         elif SIMULATED_DEVICES_DICT["sdp"]:
             self.central_node.TelescopeStandBy()
-            self.set_values_on_device(
-                DevState.Standby, [self.subarray_devices.get("sdp_subarray")]
-            )
         else:
             LOGGER.info("Invoke TelescopeStandBy() with all real sub-systems")
             self.central_node.TelescopeStandBy()
 
     @sync_assign_resources(device_dict=device_dict)
-    def store_resources(self, assign_json: str) -> Tuple[ResultCode, str]:
+    def store_resources(
+        self, assign_json: str, is_update_eb_id_required: bool = True
+    ) -> Tuple[ResultCode, str]:
         """Invoke Assign Resource command on central Node
         Args:
             assign_json (str): Assign resource input json
         """
         input_json = json.loads(assign_json)
-        generate_eb_pb_ids(input_json)
+        if is_update_eb_id_required:
+            generate_eb_pb_ids(input_json)
         result, message = self.central_node.AssignResources(
             json.dumps(input_json)
         )
@@ -490,15 +484,12 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         )
         return result, message
 
-    def set_subarraystate_and_dishmode_with_all_mocks(
-        self, subarray_state: DevState, dish_mode: DishMode
-    ) -> None:
+    def set_csp_subarray_state(self, subarray_state: DevState) -> None:
         """
-        A method to set values on mock CSP, SDP and Dish devices.
+        A method to set the State on mock CSP Subarray device.
         Args:
             subarray_state: DevState - subarray state value for
-                                        CSP and SDP Subarrays
-            dish_mode: DishMode - dish mode value for Dish Masters
+                                        CSP Subarray
         """
         device_to_on_list = [
             self.subarray_devices.get("csp_subarray"),
@@ -616,7 +607,13 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         elif self.subarray_node.obsState == ObsState.ABORTED:
             self.subarray_restart()
         if self.telescope_state != "OFF":
-            self.move_to_off()
+            if (SIMULATED_DEVICES_DICT["sdp"]) and not SIMULATED_DEVICES_DICT[
+                "all_mocks"
+            ]:
+                LOGGER.info("Tear down is not required.")
+
+            else:
+                self.move_to_off()
         self._clear_command_call_and_transition_data(clear_transition=True)
         # if source dish vcc config is empty or not matching with default
         # dish vcc then load default dish vcc config

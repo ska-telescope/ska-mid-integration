@@ -7,10 +7,12 @@ from os.path import dirname, join
 
 import pytest
 import tango
+from pytest_bdd import given
 from ska_ser_logging import configure_logging
 from ska_tango_testing.mock.tango.event_callback import (
     MockTangoEventCallbackGroup,
 )
+from tango import DevState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.constant import centralnode, csp_master
@@ -29,6 +31,7 @@ from tests.resources.test_harness.utils.common_utils import (
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
+MID_DELAYMODEL_VERSION = "https://schema.skao.int/ska-mid-csp-delaymodel/3.0"
 
 
 def pytest_sessionstart(session):
@@ -83,7 +86,7 @@ def json_factory():
 
 TELESCOPE_ENV = os.getenv("TELESCOPE")
 
-TIMEOUT = 1000
+TIMEOUT = 2000
 
 
 def update_configure_json(
@@ -257,6 +260,16 @@ def shared_context():
     return SharedContext()
 
 
+@pytest.fixture(scope="module")
+def stored_unique_id():
+    """
+    A placeholder fixture to access
+    the uniques_ids in multiple function as a parameter
+    :returns: empty list
+    """
+    return []
+
+
 @pytest.fixture(scope="session", autouse=True)
 def is_dish_vcc_set():
     """
@@ -277,3 +290,33 @@ def is_dish_vcc_set():
         "isDishVccConfigSet",
         True,
     ), "Timeout while waiting for isDishVccConfigSet to true"
+
+
+@given("the telescope is in ON state")
+def check_telescope_is_in_on_state(
+    central_node_mid: CentralNodeWrapperMid, event_recorder: EventRecorder
+) -> None:
+    """Ensure telescope is in ON state."""
+    central_node_mid.move_to_on()
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "telescopeState"
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "telescopeState",
+        DevState.ON,
+    )
+
+
+MID_DELAY_JSON = {
+    "interface": "https://schema.skao.int/ska-mid-csp-delaymodel/3.0",
+    "start_validity_sec": 0.1,
+    "cadence_sec": 0.1,
+    "validity_period_sec": 0.1,
+    "config_id": "",
+    "subarray": 1,
+    "receptor_delays": [
+        {"receptor": "", "xypol_coeffs_ns": [], "ypol_offset_ns": 0.0},
+        {"receptor": "", "xypol_coeffs_ns": [], "ypol_offset_ns": 0.0},
+    ],
+}

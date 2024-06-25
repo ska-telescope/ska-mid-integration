@@ -52,17 +52,18 @@ ska-taranta:
     replicas: 1
     resources:
       requests:
-        cpu: 600m # 600m = 0.6 CPU
-        memory: 512Mi # 512Mi = 0.5 GB mem
+        cpu: 100m # 100m = 0.1 CPU
+        memory: 100Mi # 100Mi = 0.1 GB mem
       limits:
-        cpu: 1000m # 1000m = 1 CPU
-        memory: 1024Mi # 1024Mi = 1 GB mem
+        cpu: 200m # 200m = 0.2CPU
+        memory: 200Mi # 200Mi = 0.2 GB mem
 
 # Tmc-Mid
 tmc-mid:
   labels:
     app: ska-tmc-integration
   enabled: true
+  
   cspsubarrayleafnode:
     DelayCadence: 10
     DelayValidityPeriod: 20
@@ -75,22 +76,51 @@ tmc-mid:
       sdp: true
 
 ska-sdp:
+  resources:
+    limits:
+      memory: 200Mi
+      cpu: 0.1
+    requests:
+      memory: 100Mi
+      cpu: 0.2
   legacy_compatibility: true
   enabled: false
   lmc:
     prefix: mid
     nsubarray: 2
+    queueconnector:
+      image: artefact.skao.int/ska-sdp-lmc-queue-connector
+      version: 4.1.0
+      domain: queue-connector
+      function: sdp-queue-connector
+      resources:
+        limits:
+          memory: 500Mi
+          cpu: 0.5
+        requests:
+          memory: 100Mi
+          cpu: 0.3
+    pointing-offset:
+      image: artefact.skao.int/ska-sdp-wflow-pointing-offset
+      version: 0.5.0
+      script: pointing-offset
+      imagePullPolicy: IfNotPresent
+      command:
+        - pointing-offset
+      dataProductStorage:
+        name: test-pvc
+        mountPath: /mnt/data
+
+
   console:
     enabled: true
   data-pvc:
     create:
       enabled: true
-      size: 20Gi
+      size: 100Mi
       storageClassName: nfss1
   ska-sdp-qa:
     enabled: true
-    kafka:
-      enabled: false
     config:
       kafka:
         overrideUrl: "ska-sdp-kafka:9092"

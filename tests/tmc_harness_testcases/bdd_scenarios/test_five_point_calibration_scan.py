@@ -6,13 +6,11 @@ from ska_control_model import ObsState
 from tests.resources.test_harness.helpers import (
     check_subarray_obs_state,
     get_device_simulators,
+    prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
 
 
-@pytest.mark.skip(
-    reason="Scan functionality is broken. It will fixed in SAH-1498"
-)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/five_point_scan.feature",
@@ -28,6 +26,9 @@ def test_five_point_calibration_scan():
 def given_tmc(subarray_node, event_recorder):
     """Given a TMC"""
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     subarray_node.move_to_on()
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
@@ -42,11 +43,16 @@ def a_configured_subarray(
 ):
     """Given a subarray configured for a calibration scan."""
     csp_sim, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
+    assign_input_json = prepare_json_args_for_centralnode_commands(
+        "assign_resources_mid", command_input_factory
+    )
 
     event_recorder.subscribe_event(csp_sim, "obsState")
     event_recorder.subscribe_event(sdp_sim, "obsState")
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-    subarray_node.force_change_of_obs_state("READY")
+    subarray_node.force_change_of_obs_state(
+        "READY", assign_input_json=assign_input_json
+    )
     assert event_recorder.has_change_event_occurred(
         csp_sim,
         "obsState",
@@ -77,9 +83,9 @@ def a_configured_subarray(
 
 
 @given("the subarray is in READY obsState")
-def a_subarray_in_ready_obsstate():
+def a_subarray_in_ready_obsstate(subarray_node):
     """A subarray in READY obsState."""
-    assert check_subarray_obs_state("READY", 500)
+    assert check_subarray_obs_state("READY", 500, subarray_node)
 
 
 @when(
@@ -114,6 +120,6 @@ def when_i_perform_partial_configurations_and_scans(
 @then(
     "the subarray executes the commands successfully and is in READY obsState"
 )
-def subarray_executes_commands_successfully():
+def subarray_executes_commands_successfully(subarray_node):
     """Subarray executes the commands successfully and is in READY obsState."""
-    assert check_subarray_obs_state("READY", 500)
+    assert check_subarray_obs_state("READY", 500, subarray_node)

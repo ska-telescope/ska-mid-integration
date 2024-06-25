@@ -1,20 +1,20 @@
-release=0.19.1
-tag=0.19.1
+release=0.21.0
+tag=0.21.0
 tag_description=
 **Charts:**
-**1. ska-tmc-integration 0.19.0 - 0.19.1*
+**1. ska-tmc-integration 0.20.0 - 0.21.0*
 
-    **1.1 ska-tmc-mid - 0.19.0 - 0.19.1:
-        a. Intermediate chart with TMC updates to work with dish-lmc chart 3.0.0
-        b. Fixed issues in the tests
-
+    **1.1 ska-tmc-mid - 0.20.0- 0.21.0:
+        a. Improvement as per ADR-76 changes are done in Dish Leaf node and Subarray Node.
+        b. Enabled ProgramTrackTable.
+        c. Fixed CORBA issues in dish leaf node while execution of commands.
 
 release_notes=
 **Charts:**
-**1. ska-tmc-integration 0.19.0 - 0.19.1:**
+**1. ska-tmc-integration 0.20.0 - 0.21.0:**
 
-    **1.1 ska-tmc-mid - 0.19.0 - 0.19.1:
-        a. Intermediate chart with TMC updates to work with dish-lmc chart 3.0.0
-        b. Fixed issues in the tests
-
+    **1.1 ska-tmc-mid - 0.20.0 - 0.21.0:
+        a. Improvement as per ADR-76 changes are done in Dish Leaf node and Subarray Node.
+        b. Enabled ProgramTrackTable.
+        c. Fixed CORBA issues in dish leaf node while execution of commands.
 

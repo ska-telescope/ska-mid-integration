@@ -35,5 +35,17 @@ To test with tmc_csp execute the command `make k8s-test MARK=tmc-csp CSP_SIMULAT
 
 * ``Restart``   -  Testing Restart command on TMC with Real-CSP in place.
 
+Long command sequence implementation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+* ``TMC Mid executes configure-scan sequence of commands successfully`` - Testing TMC-CSP long sequence for configure-scan functionality by parameterizing the scan_types and scan_ids.
 
+*``TMC Mid executes multiple scan with same configuration successfully`` - Testing TMC-CSP long sequence for multiple scans functionality by parameterizing the scan_types and scan_ids.
+
+*``TMC Mid executes multiple scans with different resources and configurations`` - Testing TMC-CSP long sequence for multiple scan functionality by parameterizing new scan_type and new scan_ids.
+
+*''TMC Mid executes multiple scans with different configurations, intermittently ending configurations'' - Testing TMC-CSP long sequence for multiple scan functionality by parameterizing new scan_type and new scan_ids intermittently ending configurations.
+
+*''TMC-CSP succesive configure functionality''- Testing TMC-CSP successive configure command invocation by invoking second configure after successful implementation of first configure command.
+
+*''TMC-CSP succesive AssignResources functionality''- Testing TMC-CSP successive AssignResources command invocation by invoking second AssignResources after successful implementation of first AssignResources command.
