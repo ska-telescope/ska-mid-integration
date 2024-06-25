@@ -187,7 +187,9 @@ def check_dish_mode_and_pointing_state(
             PointingState.TRACK,
             lookahead=10,
         )
-
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     event_recorder.subscribe_event(
         subarray_node.subarray_devices["sdp_subarray"], "obsState"
     )
@@ -283,6 +285,12 @@ def invoke_end_command(subarray_node, event_recorder, central_node_mid):
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
+            "pointingState",
+            PointingState.READY,
+            lookahead=10,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
             "pointingState",
             PointingState.READY,
             lookahead=10,

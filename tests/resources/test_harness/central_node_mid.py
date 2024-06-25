@@ -493,27 +493,6 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         """
         device_to_on_list = [
             self.subarray_devices.get("csp_subarray"),
-            self.subarray_devices.get("sdp_subarray"),
-        ]
-        for device in device_to_on_list:
-            device_proxy = DeviceProxy(device)
-            device_proxy.SetDirectState(subarray_state)
-
-        # If Dish master provided then set it to standby
-        # if self.dish_master_list:
-        #     for device in self.dish_master_list:
-        #         device.SetDirectDishMode(dish_mode)
-
-    def set_value_with_csp_sdp_mocks(self, subarray_state: DevState) -> None:
-        """
-        A method to set values on mock CSP and SDP devices.
-        Args:
-            subarray_state: DevState - subarray state value for
-                                    CSP and SDP Subarrays
-        """
-        device_to_on_list = [
-            self.subarray_devices.get("csp_subarray"),
-            self.subarray_devices.get("sdp_subarray"),
         ]
         for device in device_to_on_list:
             device_proxy = DeviceProxy(device)
@@ -536,51 +515,9 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             device_proxy.SetDirectState(subarray_state)
 
         # If Dish master provided then set it to standby
-        # if self.dish_master_list and dish_mode:
-        #     for device in self.dish_master_list:
-        #         device.SetDirectDishMode(dish_mode)
-
-    def set_values_with_csp_dish_mocks(
-        self, subarray_state: DevState, dish_mode: DishMode
-    ) -> None:
-        """
-        A method to set values on mock CSP and Dish devices.
-        Args:
-            subarray_state: DevState - subarray state value for
-                                    CSP Subarray
-            dish_mode: DishMode - dish mode value for Dish Masters
-        """
-        device_to_on_list = [
-            self.subarray_devices.get("csp_subarray"),
-        ]
-        for device in device_to_on_list:
-            device_proxy = DeviceProxy(device)
-            device_proxy.SetDirectState(subarray_state)
-
-        # If Dish master provided then set it to standby
-        # if self.dish_master_list:
-        #     for device in self.dish_master_list:
-        #         device.SetDirectDishMode(dish_mode)
-
-    def set_values_with_sdp_dish_mocks(
-        self, subarray_state: DevState, dish_mode: DishMode
-    ) -> None:
-        """
-        A method to set values on mock SDP and Dish devices.
-        Args:
-            subarray_state: DevState - subarray state value for
-                                    SDP Subarray
-            dish_mode: DishMode - dish mode value for Dish Masters
-        """
-        device_to_on_list = [self.subarray_devices.get("sdp_subarray")]
-        for device in device_to_on_list:
-            device_proxy = DeviceProxy(device)
-            device_proxy.SetDirectState(subarray_state)
-
-        # If Dish master provided then set it to standby
-        # if self.dish_master_list:
-        #     for device in self.dish_master_list:
-        #         device.SetDirectDishMode(dish_mode)
+        if self.dish_master_list and dish_mode:
+            for device in self.dish_master_list:
+                device.SetDirectDishMode(dish_mode)
 
     def tear_down(self) -> None:
         """Handle Tear down of central Node"""
