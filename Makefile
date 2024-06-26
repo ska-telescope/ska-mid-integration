@@ -200,3 +200,27 @@ test-requirements:
 	@poetry export --without-hashes --dev --format requirements.txt --output tests/requirements.txt
 
 k8s-pre-test: test-requirements
+
+## ############################################
+## Focused test targets
+## 
+## Idea: for debug purposes, it is useful to run a single test or a single file
+##       This section provides targets for that. Those targets use the `-k`
+##       option which allows to match a substring in the test name.
+
+PYTHON_TEST_NAME ?=## Name of your test target (it will be passed to pytest through -k) 
+PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) -k '$(PYTHON_TEST_NAME)'
+
+# Usage example: run just the test that contains the
+#	string "scan" or "abort" in the function name
+
+# make k8s-test PYTHON_TEST_NAME="scan or abort"
+
+## ############################################
+## Further customisation of the test targets
+
+# Verbose error tracebacks
+PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --tb=long
+
+# Generate a BDD report
+# PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --bdd-report=build/tests/report.html
