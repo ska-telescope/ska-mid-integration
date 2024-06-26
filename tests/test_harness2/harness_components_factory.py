@@ -22,10 +22,9 @@ from tests.test_harness2.production_components.sdp_wrapper import (
     ProductionSDPWrapper,
 )
 from tests.test_harness2.sys_components.csp_wrapper import CSPWrapper
-from tests.test_harness2.sys_components.dishes_wrapper import (
-    DishesWrapper,
-)
+from tests.test_harness2.sys_components.dishes_wrapper import DishesWrapper
 from tests.test_harness2.sys_components.sdp_wrapper import SDPWrapper
+from tests.test_harness2.sys_components.tmc_wrapper import TMCWrapper
 
 
 class HarnessComponentsFactory:
@@ -58,16 +57,13 @@ class HarnessComponentsFactory:
             csp_wrapper=self.create_csp_wrapper(),
             dishes_wrapper=self.create_dishes_wrapper(),
         )
-    
+
     def create_tmc_wrapper(self) -> TMCWrapper:
         """Create a TMC wrapper.
 
         return: A TMC wrapper instance.
         """
-        return TMCWrapper(
-            self.config_factory.get_TMC_configuration()
-        )
-
+        return TMCWrapper(self.config_factory.get_TMC_configuration())
 
     def create_sdp_wrapper(self) -> SDPWrapper:
         """Create a SDP wrapper.

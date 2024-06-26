@@ -6,8 +6,8 @@ from os.path import dirname, join
 
 from ska_control_model import ObsState
 
-from tests.test_harness2.utils.wait_helpers import Waiter
 from tests.resources.test_support.common_utils.result_code import ResultCode
+from tests.test_harness2.utils.wait_helpers import Waiter
 
 
 def get_subarray_input_json(slug):
@@ -21,7 +21,7 @@ def get_subarray_input_json(slug):
         dirname(__file__),
         "..",
         "..",
-        "..",
+        # "..",
         "data",
         "subarray",
         f"{slug}.json",
@@ -42,7 +42,7 @@ def get_centralnode_input_json(slug):
         dirname(__file__),
         "..",
         "..",
-        "..",
+        # "..",
         "data",
         "centralnode",
         f"{slug}.json",

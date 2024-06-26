@@ -15,6 +15,7 @@ from ska_tango_base.control_model import HealthState
 from ska_tango_testing.mock.placeholders import Anything
 from tango import DeviceProxy
 
+from tests.resources.test_support.common_utils.common_helpers import Resource
 from tests.test_harness2.constant import (
     csp_subarray1,
     device_dict,
@@ -30,7 +31,6 @@ from tests.test_harness2.simulator_factory import SimulatorFactory
 from tests.test_harness2.utils.common_utils import JsonFactory
 from tests.test_harness2.utils.enums import SimulatorDeviceType
 from tests.test_harness2.utils.wait_helpers import Waiter, watch
-from tests.resources.test_support.common_utils.common_helpers import Resource
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
