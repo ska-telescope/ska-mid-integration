@@ -55,5 +55,5 @@ def invoke_load_dish_cfg(
         central_node_mid.central_node,
         "longRunningCommandResult",
         (unique_id[0], str(int(ResultCode.OK))),
-        lookahead=5,
+        lookahead=10,
     )
