@@ -10,35 +10,35 @@ from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import HealthState
 from tango import DeviceProxy, DevState
 
-from tests.resources.test_harness.config.configuration_factory import (
+from tests.test_harness2.config.configuration_factory import (
     TestHarnessConfigurationFactory,
 )
-from tests.resources.test_harness.config.test_wrappers_configurations import (
+from tests.test_harness2.config.test_wrappers_configurations import (
     CSPConfiguration,
     DishesConfiguration,
     SDPConfiguration,
     TMCConfiguration,
 )
-from tests.resources.test_harness.constant import (
+from tests.test_harness2.constant import (
     POINTING_OFFSETS,
     sdp_queue_connector,
 )
-from tests.resources.test_harness.helpers import (  # SIMULATED_DEVICES_DICT,
+from tests.test_harness2.helpers import (  # SIMULATED_DEVICES_DICT,
     check_subarray_obs_state,
     generate_eb_pb_ids,
     prepare_json_args_for_commands,
 )
-from tests.resources.test_harness.utils.constant import (
+from tests.test_harness2.utils.constant import (
     ABORTED,
     IDLE,
     ON,
     READY,
 )
-from tests.resources.test_harness.utils.enums import DishMode, SubarrayObsState
-from tests.resources.test_harness.utils.obs_state_resetter import (
+from tests.test_harness2.utils.enums import DishMode, SubarrayObsState
+from tests.test_harness2.utils.obs_state_resetter import (
     ObsStateResetterFactory,
 )
-from tests.resources.test_harness.utils.sync_decorators import (
+from tests.test_harness2.utils.sync_decorators import (
     sync_abort,
     sync_assign_resources,
     sync_configure,

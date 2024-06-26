@@ -5,8 +5,8 @@ import time
 
 from tango import DeviceProxy
 
-from tests.resources.test_harness.constant import tmc_csp_master_leaf_node
-from tests.resources.test_harness.harness_components_factory import (
+from tests.test_harness2.constant import tmc_csp_master_leaf_node
+from tests.test_harness2.harness_components_factory import (
     HarnessComponentsFactory,
 )
 

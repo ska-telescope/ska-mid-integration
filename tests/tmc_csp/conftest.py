@@ -5,6 +5,7 @@ tests."""
 import json
 import logging
 
+from pytest import fixture
 from pytest_bdd import given, parsers, then, when
 from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
@@ -252,3 +253,22 @@ def reexecute_scan_command(
     check_scan_successful_csp(
         subarray_node, event_recorder, new_scan_id, unique_id
     )
+
+
+# ----------------------------------------------------------
+# New fixtures
+
+@fixture
+def test_harness():
+    """Create an unique test harness with proxies to all devices."""
+    pass
+
+@fixture
+def central_node_facade(test_harness):
+    """Create a facade to TMC central node and all its operations."""
+    pass
+
+@fixture
+def subarray_node_facade(test_harness):
+    """Create a facade to TMC subarray node and all its operations."""
+    pass

@@ -5,7 +5,7 @@ import logging
 
 from ska_ser_logging import configure_logging
 
-from tests.resources.test_harness.constant import DEFAULT_DISH_VCC_CONFIG
+from tests.test_harness2.constant import DEFAULT_DISH_VCC_CONFIG
 from tests.resources.test_support.common_utils.common_helpers import (
     AttributeWatcher,
     Resource,

@@ -10,21 +10,21 @@ from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import HealthState
 from tango import DeviceProxy, DevState
 
-from tests.resources.test_harness.config.test_wrappers_configurations import (
+from tests.test_harness2.config.test_wrappers_configurations import (
     TMCConfiguration,
 )
-from tests.resources.test_harness.constant import (
+from tests.test_harness2.constant import (
     device_dict,  # TODO: find a way to handle this dependency
 )
-from tests.resources.test_harness.constant import DEFAULT_DISH_VCC_CONFIG
-from tests.resources.test_harness.helpers import generate_eb_pb_ids
-from tests.resources.test_harness.sys_components.csp_wrapper import CSPWrapper
-from tests.resources.test_harness.sys_components.dishes_wrapper import (
+from tests.test_harness2.constant import DEFAULT_DISH_VCC_CONFIG
+from tests.test_harness2.helpers import generate_eb_pb_ids
+from tests.test_harness2.sys_components.csp_wrapper import CSPWrapper
+from tests.test_harness2.sys_components.dishes_wrapper import (
     DishesWrapper,
 )
-from tests.resources.test_harness.sys_components.sdp_wrapper import SDPWrapper
-from tests.resources.test_harness.utils.common_utils import JsonFactory
-from tests.resources.test_harness.utils.sync_decorators import (
+from tests.test_harness2.sys_components.sdp_wrapper import SDPWrapper
+from tests.test_harness2.utils.common_utils import JsonFactory
+from tests.test_harness2.utils.sync_decorators import (
     sync_abort,
     sync_assign_resources,
     sync_load_dish_cfg,
@@ -33,7 +33,7 @@ from tests.resources.test_harness.utils.sync_decorators import (
     sync_set_to_off,
     sync_set_to_standby,
 )
-from tests.resources.test_harness.utils.wait_helpers import Waiter
+from tests.test_harness2.utils.wait_helpers import Waiter
 from tests.resources.test_support.common_utils.common_helpers import Resource
 
 # SIMULATED_DEVICES_DICT, wait_csp_master_off,

@@ -1,6 +1,6 @@
 """A wrapper for a production SDP."""
 
-from tests.resources.test_harness.sys_components.sdp_wrapper import SDPWrapper
+from tests.test_harness2.sys_components.sdp_wrapper import SDPWrapper
 
 
 class ProductionSDPWrapper(SDPWrapper):

@@ -1,31 +1,31 @@
 """Create real or emulated test harness components."""
-from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
-from tests.resources.test_harness.config.configuration_factory import (
+from tests.test_harness2.central_node_mid import CentralNodeWrapperMid
+from tests.test_harness2.config.configuration_factory import (
     TestHarnessConfigurationFactory,
 )
-from tests.resources.test_harness.emulated_components.csp_wrapper import (
+from tests.test_harness2.emulated_components.csp_wrapper import (
     EmulatedCSPWrapper,
 )
-from tests.resources.test_harness.emulated_components.dishes_wrapper import (
+from tests.test_harness2.emulated_components.dishes_wrapper import (
     EmulatedDishesWrapper,
 )
-from tests.resources.test_harness.emulated_components.sdp_wrapper import (
+from tests.test_harness2.emulated_components.sdp_wrapper import (
     EmulatedSDPWrapper,
 )
-from tests.resources.test_harness.production_components.csp_wrapper import (
+from tests.test_harness2.production_components.csp_wrapper import (
     ProductionCSPWrapper,
 )
-from tests.resources.test_harness.production_components.dishes_wrapper import (
+from tests.test_harness2.production_components.dishes_wrapper import (
     ProductionDishesWrapper,
 )
-from tests.resources.test_harness.production_components.sdp_wrapper import (
+from tests.test_harness2.production_components.sdp_wrapper import (
     ProductionSDPWrapper,
 )
-from tests.resources.test_harness.sys_components.csp_wrapper import CSPWrapper
-from tests.resources.test_harness.sys_components.dishes_wrapper import (
+from tests.test_harness2.sys_components.csp_wrapper import CSPWrapper
+from tests.test_harness2.sys_components.dishes_wrapper import (
     DishesWrapper,
 )
-from tests.resources.test_harness.sys_components.sdp_wrapper import SDPWrapper
+from tests.test_harness2.sys_components.sdp_wrapper import SDPWrapper
 
 
 class HarnessComponentsFactory:
@@ -58,6 +58,16 @@ class HarnessComponentsFactory:
             csp_wrapper=self.create_csp_wrapper(),
             dishes_wrapper=self.create_dishes_wrapper(),
         )
+    
+    def create_tmc_wrapper(self) -> TMCWrapper:
+        """Create a TMC wrapper.
+
+        return: A TMC wrapper instance.
+        """
+        return TMCWrapper(
+            self.config_factory.get_TMC_configuration()
+        )
+
 
     def create_sdp_wrapper(self) -> SDPWrapper:
         """Create a SDP wrapper.

@@ -1,12 +1,12 @@
 """A wrapper for emulated dishes."""
 
-from tests.resources.test_harness.config.test_wrappers_configurations import (
+from tests.test_harness2.config.test_wrappers_configurations import (
     DishesConfiguration,
 )
-from tests.resources.test_harness.sys_components.dishes_wrapper import (
+from tests.test_harness2.sys_components.dishes_wrapper import (
     DishesWrapper,
 )
-from tests.resources.test_harness.utils.emulated_teardown import (
+from tests.test_harness2.utils.emulated_teardown import (
     clear_command_call,
     reset_health_state,
     reset_transitions_data,

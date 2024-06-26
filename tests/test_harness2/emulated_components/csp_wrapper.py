@@ -2,8 +2,8 @@
 
 from tango import DevState
 
-from tests.resources.test_harness.sys_components.csp_wrapper import CSPWrapper
-from tests.resources.test_harness.utils.emulated_teardown import (
+from tests.test_harness2.sys_components.csp_wrapper import CSPWrapper
+from tests.test_harness2.utils.emulated_teardown import (
     clear_command_call,
     reset_health_state,
     reset_transitions_data,

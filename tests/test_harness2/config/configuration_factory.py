@@ -2,10 +2,10 @@
 
 import os
 
-from tests.resources.test_harness.config.emulation_configuration import (
+from tests.test_harness2.config.emulation_configuration import (
     EmulationConfiguration,
 )
-from tests.resources.test_harness.config.test_wrappers_configurations import (
+from tests.test_harness2.config.test_wrappers_configurations import (
     CSPConfiguration,
     DishesConfiguration,
     SDPConfiguration,

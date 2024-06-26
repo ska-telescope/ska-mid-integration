@@ -1,10 +1,10 @@
 """A wrapper for a production CSP."""
 
-from tests.resources.test_harness.config.test_wrappers_configurations import (
+from tests.test_harness2.config.test_wrappers_configurations import (
     CSPConfiguration,
 )
-from tests.resources.test_harness.helpers import wait_csp_master_off
-from tests.resources.test_harness.sys_components.csp_wrapper import CSPWrapper
+from tests.test_harness2.helpers import wait_csp_master_off
+from tests.test_harness2.sys_components.csp_wrapper import CSPWrapper
 
 
 class ProductionCSPWrapper(CSPWrapper):

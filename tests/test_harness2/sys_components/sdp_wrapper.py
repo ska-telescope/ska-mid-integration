@@ -4,10 +4,10 @@ import abc
 
 from tango import DeviceProxy
 
-from tests.resources.test_harness.config.configuration_factory import (
+from tests.test_harness2.config.configuration_factory import (
     TestHarnessConfigurationFactory,
 )
-from tests.resources.test_harness.config.test_wrappers_configurations import (
+from tests.test_harness2.config.test_wrappers_configurations import (
     SDPConfiguration,
 )
 
