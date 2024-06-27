@@ -1,6 +1,7 @@
 """Test module for TMC-DISH Configure functionality"""
 
 import json
+import logging
 import time
 
 import pytest
@@ -98,13 +99,11 @@ def turn_on_telescope(
         "telescopeState",
         DevState.ON,
     )
-
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-
     pytest.command_result = central_node_mid.store_resources(assign_input_json)
 
     assert event_recorder.has_change_event_occurred(
@@ -282,7 +281,34 @@ def invoke_end_command(subarray_node, event_recorder, central_node_mid):
     This method invokes End command
     """
     pytest.command_result = subarray_node.execute_transition("End")
+
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        # logs added for testing, will be removed before merging into master
+        logging.info(
+            "pointingstate for dln %s %s",
+            dish_id,
+            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
+        )
+        logging.info(
+            "pointingstate for dish master %s %s",
+            dish_id,
+            central_node_mid.dish_master_dict[dish_id].pointingState,
+        )
+    # sleep added for debugging purpose
+    time.sleep(15)
+
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        # logs added for testing, will be removed before merging into master
+        logging.info(
+            "pointingstate for dln after sleep %s %s",
+            dish_id,
+            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
+        )
+        logging.info(
+            "pointingstate for dish master after sleep %s %s",
+            dish_id,
+            central_node_mid.dish_master_dict[dish_id].pointingState,
+        )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
@@ -298,6 +324,7 @@ def invoke_end_command(subarray_node, event_recorder, central_node_mid):
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node, "obsState", ObsState.IDLE, lookahead=10
     )
+
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
