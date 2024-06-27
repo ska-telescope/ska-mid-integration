@@ -108,6 +108,9 @@ class StateChangeWaiter:
         :raises TimeoutError: If not all the expected state changes
             occurred within the timeout.
         """
+        if not self.pending_state_changes:
+            return
+
         res = self.event_tracer.query_events(
             # build a predicate that checks if all the state changes
             # have occurred in the event tracer (NOTE: it ignores instead

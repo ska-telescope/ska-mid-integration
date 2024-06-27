@@ -17,6 +17,7 @@ from tests.test_harness2.production_components.dishes_wrapper import (
 from tests.test_harness2.production_components.sdp_wrapper import (
     ProductionSDPWrapper,
 )
+from tests.test_harness2.sut_actions.move_to_off import MoveToOff
 from tests.test_harness2.sut_configuration.configuration_factory import (
     TestHarnessConfigurationFactory,
 )
@@ -56,6 +57,7 @@ class HarnessComponentsFactory:
             sdp_wrapper=self.create_sdp_wrapper(),
             csp_wrapper=self.create_csp_wrapper(),
             dishes_wrapper=self.create_dishes_wrapper(),
+            move_to_off_action=MoveToOff(),
         )
 
     def create_tmc_wrapper(self) -> TMCWrapper:

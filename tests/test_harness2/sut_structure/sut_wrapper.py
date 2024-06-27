@@ -25,8 +25,6 @@ from tests.test_harness2.utils.sync_decorators import (
     sync_load_dish_cfg,
     sync_release_resources,
     sync_restart,
-    sync_set_to_off,
-    sync_set_to_standby,
 )
 from tests.test_harness2.utils.wait_helpers import Waiter
 
@@ -47,6 +45,7 @@ class SUTWrapper:  # pylint: disable=too-many-public-methods
         sdp_wrapper: SDPWrapper,
         csp_wrapper: CSPWrapper,
         dishes_wrapper: DishesWrapper,
+        move_to_off_action: SUTAction,
     ) -> None:
         super().__init__()
 
@@ -54,6 +53,8 @@ class SUTWrapper:  # pylint: disable=too-many-public-methods
         self.sdp = sdp_wrapper
         self.csp = csp_wrapper
         self.dishes = dishes_wrapper
+
+        self._move_to_off_action = move_to_off_action
 
         # NOTE: todo: remove this bad dependency
         device_dict["cbf_subarray1"] = "mid_csp_cbf/sub_elt/subarray_01"
@@ -230,42 +231,6 @@ class SUTWrapper:  # pylint: disable=too-many-public-methods
         action.execute()
 
     # -----------------------------------------------------------
-    # ON/OFF/STANDBY ACTIONS
-    # They seem to be operations that move nodes State
-    # ("hardware" state)
-
-    def move_to_on(self) -> None:
-        """
-        A method to invoke TelescopeOn command to
-        put telescope in ON state
-        """
-        LOGGER.info("Starting up the Telescope")
-        # LOGGER.info(f"Received emulated devices: {emulation_configuration}")
-
-        self.csp.move_to_on()
-        self.tmc.move_central_node_to_on()
-
-    @sync_set_to_off(device_dict=device_dict)
-    def move_to_off(self) -> None:
-        """
-        A method to invoke TelescopeOff command to
-        put telescope in OFF state
-        """
-        self.tmc.move_central_node_to_off()
-        self.csp.move_to_off()
-
-    @sync_set_to_standby(device_dict=device_dict)
-    def set_standby(self) -> None:
-        """
-        A method to invoke TelescopeStandby command to
-        put telescope in STANDBY state
-        """
-        LOGGER.info("Putting Telescope in Standby state")
-
-        self.tmc.set_central_node_to_standby()
-        self.csp.move_to_off()
-
-    # -----------------------------------------------------------
     # SUB-ARRAY ACTIONS
 
     def set_subarray_id(self, requested_subarray_id: str) -> None:
@@ -362,7 +327,7 @@ class SUTWrapper:  # pylint: disable=too-many-public-methods
 
         # NOTE: temporarily moved here because of synchronization
         if self.tmc.telescope_state != "OFF":
-            self.move_to_off()
+            self.execute_action(self._move_to_off_action)
 
         # reset HealthState.UNKNOWN in emulated devices
         # reset command calls and transitions in emulated devices

@@ -5,6 +5,8 @@ from tango import DevState
 
 from tests.resources.test_harness.helpers import get_master_device_simulators
 from tests.test_harness2.sut_actions.move_to_off import MoveToOff
+from tests.test_harness2.sut_actions.move_to_on import MoveToOn
+from tests.test_harness2.sut_actions.set_standby import SetStandby
 from tests.test_harness2.sut_structure.sut_wrapper import SUTWrapper
 
 
@@ -61,7 +63,7 @@ def given_the_sut(central_node_facade: SUTWrapper, simulator_factory):
     assert dish_master_sim_3.ping() > 0
     assert dish_master_sim_4.ping() > 0
     if central_node_facade.telescope_state != "ON":
-        central_node_facade.move_to_on()
+        central_node_facade.execute_action(MoveToOn())
 
 
 @given("telescope is in ON state")
@@ -90,7 +92,8 @@ def move_sdp_to_off(central_node_facade: SUTWrapper):
 @when("I standby the telescope")
 def move_sdp_to_standby(central_node_facade: SUTWrapper):
     """A method to put tmc to STANDBY"""
-    central_node_facade.set_standby()
+    # central_node_facade.set_standby()
+    central_node_facade.execute_action(SetStandby())
 
 
 @then("the CSP must go to OFF state")

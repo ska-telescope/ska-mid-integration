@@ -9,9 +9,9 @@ from tests.test_harness2.event_recorder import EventRecorder
 from tests.test_harness2.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
-    wait_csp_master_off,
 )
 from tests.test_harness2.subarray_node import SubarrayNodeWrapper
+from tests.test_harness2.sut_actions.move_to_on import MoveToOn
 from tests.test_harness2.sut_structure.sut_wrapper import SUTWrapper
 from tests.test_harness2.utils.common_utils import JsonFactory
 
@@ -29,7 +29,7 @@ def test_scan_command_harness_refactor():
 
 @given("the telescope is in ON state")
 def given_a_telescope_in_on_state(
-    central_node_facade, subarray_node_facade, event_recorder
+    central_node_facade: SUTWrapper, subarray_node_facade, event_recorder
 ):
     """Checks if CentralNode's telescopeState attribute value is on."""
     event_recorder.subscribe_event(
@@ -44,9 +44,10 @@ def given_a_telescope_in_on_state(
         }
     )
 
-    central_node_facade.csp_master.adminMode = 0
-    wait_csp_master_off()
-    central_node_facade.move_to_on()
+    # central_node_facade.csp_master.adminMode = 0
+    # wait_csp_master_off()
+    # central_node_facade.move_to_on()
+    central_node_facade.execute_action(MoveToOn())
 
     event_recorder.subscribe_event(central_node_facade.csp_master, "State")
     event_recorder.subscribe_event(
@@ -81,12 +82,14 @@ def subarray_in_ready_obsstate(
 ) -> None:
     """Move TMC Subarray to READY obsstate."""
     central_node_facade.set_subarray_id(subarray_id)
+
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
+
     event_recorder.subscribe_event(
         central_node_facade.central_node, "telescopeState"
     )
@@ -102,6 +105,7 @@ def subarray_in_ready_obsstate(
         assign_input_json=assign_input_json,
         configure_input_json=configure_input_json,
     )
+
     assert event_recorder.has_change_event_occurred(
         subarray_node_facade.subarray_devices["csp_subarray"],
         "obsState",

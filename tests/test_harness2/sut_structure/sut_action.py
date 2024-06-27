@@ -2,14 +2,14 @@
 
 import abc
 
-from tests.test_harness2.command_mechanism.state_change_waiter import (
-    ExpectedStateChange,
-    StateChangeWaiter,
-)
 from tests.test_harness2.sut_structure.csp_wrapper import CSPWrapper
 from tests.test_harness2.sut_structure.dishes_wrapper import DishesWrapper
 from tests.test_harness2.sut_structure.sdp_wrapper import SDPWrapper
 from tests.test_harness2.sut_structure.tmc_wrapper import TMCWrapper
+from tests.test_harness2.utils.state_change_waiter import (
+    ExpectedStateChange,
+    StateChangeWaiter,
+)
 
 
 class SUTAction(abc.ABC):

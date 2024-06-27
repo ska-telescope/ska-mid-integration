@@ -1,4 +1,4 @@
-"""An action to move the central node to OFF State."""
+"""An action to set the central node to STANDBY State."""
 
 from tango import DevState
 
@@ -7,19 +7,23 @@ from tests.test_harness2.utils.enums import DishMode
 from tests.test_harness2.utils.state_change_waiter import ExpectedStateChange
 
 
-class MoveToOff(SUTAction):
-    """An action to move the central node to off."""
+class SetStandby(SUTAction):
+    """An action to set the central node to STANDBY State."""
 
     def _action(self):
-        self.tmc.move_central_node_to_off()
+        self.tmc.set_central_node_to_standby()
         self.csp.move_to_off()
 
     def expected_outcome(self):
         res = [
             ExpectedStateChange(self.sdp.sdp_subarray, "State", DevState.OFF),
-            ExpectedStateChange(self.sdp.sdp_master, "State", DevState.OFF),
+            ExpectedStateChange(
+                self.sdp.sdp_master, "State", DevState.STANDBY
+            ),
             ExpectedStateChange(self.csp.csp_subarray, "State", DevState.OFF),
-            ExpectedStateChange(self.csp.csp_master, "State", DevState.OFF),
+            ExpectedStateChange(
+                self.csp.csp_master, "State", DevState.STANDBY
+            ),
         ]
 
         res += [
