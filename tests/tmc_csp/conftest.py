@@ -274,7 +274,7 @@ def test_harness() -> SUTWrapper:
 
 
 @fixture
-def central_node_facade(
+def sut(
     test_harness: SUTWrapper,
 ) -> SUTWrapper:
     """Create a facade to TMC central node and all its operations."""

@@ -36,7 +36,7 @@ def test_tmc_csp_telescope_standby_harness_refactor():
     "a Telescope consisting of TMC, CSP, simulated DISH and simulated"
     + " SDP devices"
 )
-def given_the_sut(central_node_facade: SUTWrapper, simulator_factory):
+def given_the_sut(sut: SUTWrapper, simulator_factory):
     """
     Given a TMC
 
@@ -54,28 +54,29 @@ def given_the_sut(central_node_facade: SUTWrapper, simulator_factory):
         dish_master_sim_4,
     ) = get_master_device_simulators(simulator_factory)
 
-    assert central_node_facade.central_node.ping() > 0
-    assert central_node_facade.sdp_master.ping() > 0
-    assert central_node_facade.subarray_devices["sdp_subarray"].ping() > 0
+    assert sut.tmc.central_node.ping() > 0
+    assert sut.sdp.sdp_master.ping() > 0
+    assert sut.sdp.sdp_subarray.ping() > 0
+
+    # NOTE: why this?
     assert sdp_master_sim.ping() > 0
     assert dish_master_sim_1.ping() > 0
     assert dish_master_sim_2.ping() > 0
     assert dish_master_sim_3.ping() > 0
     assert dish_master_sim_4.ping() > 0
-    if central_node_facade.telescope_state != "ON":
-        central_node_facade.execute_action(MoveToOn())
+
+    # NOTE: will ever the "ON" string match the DevState.ON?
+    if sut.tmc.telescope_state != "ON":
+        # central_node_mid.move_to_on()
+        sut.execute_action(MoveToOn())
 
 
 @given("telescope is in ON state")
-def check_telescope_state_is_on(
-    central_node_facade: SUTWrapper, event_recorder
-):
+def check_telescope_state_is_on(sut: SUTWrapper, event_recorder):
     """A method to check if telescopeState is on"""
-    event_recorder.subscribe_event(
-        central_node_facade.central_node, "telescopeState"
-    )
+    event_recorder.subscribe_event(sut.tmc.central_node, "telescopeState")
     assert event_recorder.has_change_event_occurred(
-        central_node_facade.central_node,
+        sut.tmc.central_node,
         "telescopeState",
         DevState.ON,
         lookahead=15,
@@ -83,69 +84,62 @@ def check_telescope_state_is_on(
 
 
 @when("I switch off telescope")
-def move_sdp_to_off(central_node_facade: SUTWrapper):
+def move_sdp_to_off(sut: SUTWrapper):
     """A method to put tmc to OFF"""
-    # central_node_facade.move_to_off()
-    central_node_facade.execute_action(MoveToOff())
+    # central_node_mid.move_to_off()
+    sut.execute_action(MoveToOff())
 
 
 @when("I standby the telescope")
-def move_sdp_to_standby(central_node_facade: SUTWrapper):
+def move_sdp_to_standby(sut: SUTWrapper):
     """A method to put tmc to STANDBY"""
-    # central_node_facade.set_standby()
-    central_node_facade.execute_action(SetStandby())
+    # central_node_mid.set_standby()
+    sut.execute_action(SetStandby())
 
 
 @then("the CSP must go to OFF state")
-def check_csp_is_off(central_node_facade: SUTWrapper, event_recorder):
+def check_csp_is_off(sut: SUTWrapper, event_recorder):
     """A method to check CSP's State"""
-    event_recorder.subscribe_event(central_node_facade.csp_master, "State")
-    event_recorder.subscribe_event(
-        central_node_facade.subarray_devices["csp_subarray"], "State"
-    )
+    event_recorder.subscribe_event(sut.csp.csp_master, "State")
+    event_recorder.subscribe_event(sut.csp.csp_subarray, "State")
     assert event_recorder.has_change_event_occurred(
-        central_node_facade.csp_master,
+        sut.csp.csp_master,
         "State",
         DevState.OFF,
     )
     assert event_recorder.has_change_event_occurred(
-        central_node_facade.subarray_devices["csp_subarray"],
+        sut.csp.csp_subarray,
         "State",
         DevState.OFF,
     )
 
 
 @then("telescope state is OFF")
-def check_telescope_state_off(central_node_facade: SUTWrapper, event_recorder):
+def check_telescope_state_off(sut: SUTWrapper, event_recorder):
     """A method to check CentralNode.telescopeState"""
     assert event_recorder.has_change_event_occurred(
-        central_node_facade.central_node,
+        sut.tmc.central_node,
         "telescopeState",
         DevState.OFF,
     )
 
 
 @then("the csp controller must go to standby state")
-def check_csp_master_is_moved_to_standby(
-    central_node_facade: SUTWrapper, event_recorder
-):
+def check_csp_master_is_moved_to_standby(sut: SUTWrapper, event_recorder):
     """A method to check CSP controllers State"""
-    event_recorder.subscribe_event(central_node_facade.csp_master, "State")
+    event_recorder.subscribe_event(sut.csp.csp_master, "State")
     assert event_recorder.has_change_event_occurred(
-        central_node_facade.csp_master, "State", DevState.STANDBY, lookahead=15
+        sut.csp.csp_master, "State", DevState.STANDBY, lookahead=15
     )
 
 
 @then("the csp subarray must go to off state")
-def check_csp_subarray_is_moved_to_off(
-    central_node_facade: SUTWrapper, event_recorder
-):
+def check_csp_subarray_is_moved_to_off(sut: SUTWrapper, event_recorder):
     """A method to check CSP Subarray's State"""
-    event_recorder.subscribe_event(
-        central_node_facade.subarray_devices["csp_subarray"], "State"
-    )
+    event_recorder.subscribe_event(sut.csp.csp_subarray, "State")
     assert event_recorder.has_change_event_occurred(
-        central_node_facade.subarray_devices["csp_subarray"],
+        # central_node_mid.subarray_devices["csp_subarray"],
+        sut.csp.csp_subarray,
         "State",
         DevState.OFF,
         lookahead=10,
@@ -153,12 +147,11 @@ def check_csp_subarray_is_moved_to_off(
 
 
 @then("telescope state is STANDBY")
-def check_telescope_state_is_standby(
-    central_node_facade: SUTWrapper, event_recorder
-):
+def check_telescope_state_is_standby(sut: SUTWrapper, event_recorder):
     """A method to check CentralNode.telescopeState"""
     assert event_recorder.has_change_event_occurred(
-        central_node_facade.central_node,
+        # sut.central_node,
+        sut.tmc.central_node,
         "telescopeState",
         DevState.STANDBY,
     )

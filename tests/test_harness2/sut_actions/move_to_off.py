@@ -1,16 +1,22 @@
 """An action to move the central node to OFF State."""
 
+import logging
+
 from tango import DevState
 
 from tests.test_harness2.sut_structure.sut_action import SUTAction
 from tests.test_harness2.utils.enums import DishMode
 from tests.test_harness2.utils.state_change_waiter import ExpectedStateChange
 
+LOGGER = logging.getLogger(__name__)
+
 
 class MoveToOff(SUTAction):
     """An action to move the central node to off."""
 
     def _action(self):
+        LOGGER.info("Moving the central node to OFF state")
+
         self.tmc.move_central_node_to_off()
         self.csp.move_to_off()
 
