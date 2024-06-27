@@ -1,34 +1,16 @@
-"""A command to move the central node to off."""
+"""An action to move the central node to off."""
 
 from tango import DevState
 
-from tests.test_harness2.command_mechanism.command import TestHarnessCommand
 from tests.test_harness2.command_mechanism.state_change_waiter import (
     ExpectedStateChange,
 )
-from tests.test_harness2.sys_components.csp_wrapper import CSPWrapper
-from tests.test_harness2.sys_components.dishes_wrapper import DishesWrapper
-from tests.test_harness2.sys_components.sdp_wrapper import SDPWrapper
-from tests.test_harness2.sys_components.tmc_wrapper import TMCWrapper
+from tests.test_harness2.sut_structure.sut_action import SUTAction
 from tests.test_harness2.utils.enums import DishMode
 
 
-class MoveToOffCommand(TestHarnessCommand):
-    """A command to move the central node to off."""
-
-    def __init__(
-        self,
-        tmc: TMCWrapper,
-        csp: CSPWrapper,
-        sdp: SDPWrapper,
-        dishes: DishesWrapper,
-    ):
-        super().__init__()
-
-        self.tmc = tmc
-        self.csp = csp
-        self.sdp = sdp
-        self.dishes = dishes
+class MoveToOff(SUTAction):
+    """An action to move the central node to off."""
 
     def _action(self):
         self.tmc.move_central_node_to_off()

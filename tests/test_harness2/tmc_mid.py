@@ -6,11 +6,11 @@ import time
 from tango import DeviceProxy
 
 from tests.test_harness2.constant import tmc_csp_master_leaf_node
-from tests.test_harness2.harness_components_factory import (
+from tests.test_harness2.sut_initialization.harness_components_factory import (
     HarnessComponentsFactory,
 )
 
-from .central_node_mid import CentralNodeWrapperMid
+from .sut_structure.sut_wrapper import SUTWrapper
 
 
 # NOTE: What is this class for? What does it do?
@@ -18,7 +18,7 @@ class TMCMid:
     def __init__(self):
         """Set all devices proxy required for TMC"""
         harness_factory = HarnessComponentsFactory()
-        self.central_node: CentralNodeWrapperMid = (
+        self.central_node: SUTWrapper = (
             harness_factory.create_central_node_wrapper()
         )
         self.csp_master_leaf_node = DeviceProxy(tmc_csp_master_leaf_node)

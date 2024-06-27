@@ -4,7 +4,7 @@ import abc
 
 from tango import DeviceProxy
 
-from tests.test_harness2.config.test_wrappers_configurations import (
+from tests.test_harness2.sut_configuration.components_config import (
     DishesConfiguration,
 )
 

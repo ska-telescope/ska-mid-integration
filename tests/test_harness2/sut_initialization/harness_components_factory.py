@@ -1,8 +1,4 @@
 """Create real or emulated test harness components."""
-from tests.test_harness2.central_node_mid import CentralNodeWrapperMid
-from tests.test_harness2.config.configuration_factory import (
-    TestHarnessConfigurationFactory,
-)
 from tests.test_harness2.emulated_components.csp_wrapper import (
     EmulatedCSPWrapper,
 )
@@ -21,10 +17,14 @@ from tests.test_harness2.production_components.dishes_wrapper import (
 from tests.test_harness2.production_components.sdp_wrapper import (
     ProductionSDPWrapper,
 )
-from tests.test_harness2.sys_components.csp_wrapper import CSPWrapper
-from tests.test_harness2.sys_components.dishes_wrapper import DishesWrapper
-from tests.test_harness2.sys_components.sdp_wrapper import SDPWrapper
-from tests.test_harness2.sys_components.tmc_wrapper import TMCWrapper
+from tests.test_harness2.sut_configuration.configuration_factory import (
+    TestHarnessConfigurationFactory,
+)
+from tests.test_harness2.sut_structure.csp_wrapper import CSPWrapper
+from tests.test_harness2.sut_structure.dishes_wrapper import DishesWrapper
+from tests.test_harness2.sut_structure.sdp_wrapper import SDPWrapper
+from tests.test_harness2.sut_structure.sut_wrapper import SUTWrapper
+from tests.test_harness2.sut_structure.tmc_wrapper import TMCWrapper
 
 
 class HarnessComponentsFactory:
@@ -38,7 +38,7 @@ class HarnessComponentsFactory:
     def _emulation_config(self):
         return self.config_factory.emulation_configuration
 
-    def create_central_node_wrapper(self) -> CentralNodeWrapperMid:
+    def create_central_node_wrapper(self) -> SUTWrapper:
         """Create a central node wrapper (i.e., test harness entry point).
 
         return: A central node wrapper instance.
@@ -51,7 +51,7 @@ class HarnessComponentsFactory:
         # - what's the actual state of the system (some version information
         #   asked directly to the devices, etc.)
 
-        return CentralNodeWrapperMid(
+        return SUTWrapper(
             tmc_wrapper=self.create_tmc_wrapper(),
             sdp_wrapper=self.create_sdp_wrapper(),
             csp_wrapper=self.create_csp_wrapper(),

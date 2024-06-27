@@ -1,6 +1,6 @@
 """A wrapper for an emulated SDP."""
 
-from tests.test_harness2.sys_components.sdp_wrapper import SDPWrapper
+from tests.test_harness2.sut_structure.sdp_wrapper import SDPWrapper
 from tests.test_harness2.utils.emulated_teardown import (
     clear_command_call,
     reset_health_state,

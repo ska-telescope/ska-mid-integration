@@ -10,10 +10,10 @@ from tango import DeviceProxy, DevState
 
 from tests.resources.test_support.common_utils.common_helpers import Resource
 from tests.resources.test_support.common_utils.result_code import ResultCode
-from tests.test_harness2.config.test_wrappers_configurations import (
+from tests.test_harness2.helpers import generate_eb_pb_ids
+from tests.test_harness2.sut_configuration.components_config import (
     TMCConfiguration,
 )
-from tests.test_harness2.helpers import generate_eb_pb_ids
 from tests.test_harness2.utils.common_utils import JsonFactory
 
 configure_logging(logging.DEBUG)

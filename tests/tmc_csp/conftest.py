@@ -21,11 +21,11 @@ from tests.resources.test_harness.utils.common_utils import (
     check_scan_successful_csp,
 )
 from tests.resources.test_support.common_utils.result_code import ResultCode
-from tests.test_harness2.central_node_mid import CentralNodeWrapperMid
-from tests.test_harness2.harness_components_factory import (
+from tests.test_harness2.subarray_node import SubarrayNodeWrapper
+from tests.test_harness2.sut_initialization.harness_components_factory import (
     HarnessComponentsFactory,
 )
-from tests.test_harness2.subarray_node import SubarrayNodeWrapper
+from tests.test_harness2.sut_structure.sut_wrapper import SUTWrapper
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -265,7 +265,7 @@ def reexecute_scan_command(
 
 
 @fixture
-def test_harness() -> CentralNodeWrapperMid:
+def test_harness() -> SUTWrapper:
     """Create an unique test harness with proxies to all devices."""
     components_factory = HarnessComponentsFactory()
     test_harness = components_factory.create_central_node_wrapper()
@@ -275,8 +275,8 @@ def test_harness() -> CentralNodeWrapperMid:
 
 @fixture
 def central_node_facade(
-    test_harness: CentralNodeWrapperMid,
-) -> CentralNodeWrapperMid:
+    test_harness: SUTWrapper,
+) -> SUTWrapper:
     """Create a facade to TMC central node and all its operations."""
     return test_harness
 

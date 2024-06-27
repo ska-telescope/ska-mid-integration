@@ -11,20 +11,20 @@ from ska_tango_base.control_model import HealthState
 from tango import DeviceProxy, DevState
 
 from tests.resources.test_support.common_utils.common_helpers import Resource
-from tests.test_harness2.config.configuration_factory import (
-    TestHarnessConfigurationFactory,
-)
-from tests.test_harness2.config.test_wrappers_configurations import (
-    CSPConfiguration,
-    DishesConfiguration,
-    SDPConfiguration,
-    TMCConfiguration,
-)
 from tests.test_harness2.constant import POINTING_OFFSETS, sdp_queue_connector
 from tests.test_harness2.helpers import (  # SIMULATED_DEVICES_DICT,
     check_subarray_obs_state,
     generate_eb_pb_ids,
     prepare_json_args_for_commands,
+)
+from tests.test_harness2.sut_configuration.components_config import (
+    CSPConfiguration,
+    DishesConfiguration,
+    SDPConfiguration,
+    TMCConfiguration,
+)
+from tests.test_harness2.sut_configuration.configuration_factory import (
+    TestHarnessConfigurationFactory,
 )
 from tests.test_harness2.utils.constant import ABORTED, IDLE, ON, READY
 from tests.test_harness2.utils.enums import DishMode, SubarrayObsState

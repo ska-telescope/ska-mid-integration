@@ -5,7 +5,6 @@ from ska_control_model import ObsState
 from ska_tango_testing.integration import log_events
 from tango import DevState
 
-from tests.test_harness2.central_node_mid import CentralNodeWrapperMid
 from tests.test_harness2.event_recorder import EventRecorder
 from tests.test_harness2.helpers import (
     prepare_json_args_for_centralnode_commands,
@@ -13,6 +12,7 @@ from tests.test_harness2.helpers import (
     wait_csp_master_off,
 )
 from tests.test_harness2.subarray_node import SubarrayNodeWrapper
+from tests.test_harness2.sut_structure.sut_wrapper import SUTWrapper
 from tests.test_harness2.utils.common_utils import JsonFactory
 
 
@@ -73,7 +73,7 @@ def given_a_telescope_in_on_state(
 
 @given(parsers.parse("TMC subarray {subarray_id} is in READY ObsState"))
 def subarray_in_ready_obsstate(
-    central_node_facade: CentralNodeWrapperMid,
+    central_node_facade: SUTWrapper,
     event_recorder: EventRecorder,
     command_input_factory: JsonFactory,
     subarray_node_facade: SubarrayNodeWrapper,

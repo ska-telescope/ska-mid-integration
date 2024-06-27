@@ -13,10 +13,11 @@ from tests.test_harness2.constant import (
     device_dict,  # TODO: find a way to handle this dependency
 )
 from tests.test_harness2.constant import DEFAULT_DISH_VCC_CONFIG
-from tests.test_harness2.sys_components.csp_wrapper import CSPWrapper
-from tests.test_harness2.sys_components.dishes_wrapper import DishesWrapper
-from tests.test_harness2.sys_components.sdp_wrapper import SDPWrapper
-from tests.test_harness2.sys_components.tmc_wrapper import TMCWrapper
+from tests.test_harness2.sut_structure.csp_wrapper import CSPWrapper
+from tests.test_harness2.sut_structure.dishes_wrapper import DishesWrapper
+from tests.test_harness2.sut_structure.sdp_wrapper import SDPWrapper
+from tests.test_harness2.sut_structure.sut_action import SUTAction
+from tests.test_harness2.sut_structure.tmc_wrapper import TMCWrapper
 from tests.test_harness2.utils.common_utils import JsonFactory
 from tests.test_harness2.utils.sync_decorators import (
     sync_abort,
@@ -35,7 +36,7 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
-class CentralNodeWrapperMid:  # pylint: disable=too-many-public-methods
+class SUTWrapper:  # pylint: disable=too-many-public-methods
     """A wrapper class to implement common tango specific details
     and standard set of commands for TMC Mid CentralNode,
     defined by the SKA Control Model."""
@@ -216,6 +217,17 @@ class CentralNodeWrapperMid:  # pylint: disable=too-many-public-methods
             value (DevState): telescope state value
         """
         self.tmc.telescope_state = value
+
+    def execute_action(self, action: SUTAction):
+        """Execute an action on the SUT.
+
+        :param action: The action to execute.
+
+        :raises TimeoutError: If the expected outcome does not occur
+            within a timeout.
+        """
+        action.set_sut_components(self.tmc, self.csp, self.sdp, self.dishes)
+        action.execute()
 
     # -----------------------------------------------------------
     # ON/OFF/STANDBY ACTIONS

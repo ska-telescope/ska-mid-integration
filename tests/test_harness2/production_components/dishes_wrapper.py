@@ -2,10 +2,10 @@
 
 from tango.db import Database
 
-from tests.test_harness2.config.test_wrappers_configurations import (
+from tests.test_harness2.sut_configuration.components_config import (
     DishesConfiguration,
 )
-from tests.test_harness2.sys_components.dishes_wrapper import DishesWrapper
+from tests.test_harness2.sut_structure.dishes_wrapper import DishesWrapper
 
 
 class ProductionDishesWrapper(DishesWrapper):
