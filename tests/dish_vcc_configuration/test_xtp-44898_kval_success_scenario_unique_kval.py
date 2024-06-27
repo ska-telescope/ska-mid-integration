@@ -10,7 +10,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid1
 @scenario(
     "../features/dish_vcc_initialization/"
     "xtp_44895_kval_validation_success.feature",
