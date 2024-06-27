@@ -4,7 +4,6 @@ import json
 import logging
 import time
 
-from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import HealthState
 from tango import DeviceProxy, DevState
@@ -64,6 +63,12 @@ class TMCWrapper:
 
         # NOTE: `state` is never used
 
+        # initialize in advance the release resources input json
+        json_factory = JsonFactory()
+        self.release_input = json_factory.create_centralnode_configuration(
+            "release_resources_mid"
+        )
+
     @property
     def state(self) -> DevState:
         """TMC CentralNode operational state"""
@@ -113,6 +118,26 @@ class TMCWrapper:
         # NOTE: same as for `state`
         self._telescope_health_state = value
 
+    # NOTE: same as for `state`
+    @property
+    def telescope_state(self) -> DevState:
+        """Telescope state representing overall state of telescope"""
+
+        self._telescope_state = Resource(self.central_node).get(
+            "telescopeState"
+        )
+        return self._telescope_state
+
+    @telescope_state.setter
+    def telescope_state(self, value: DevState) -> None:
+        """Telescope state representing overall state of telescope
+
+        Args:
+            value (DevState): telescope state value
+        """
+        # NOTE: this setter is never used + same as for `state`
+        self._telescope_state = value
+
     # -----------------------------------------------------------
     # telescopeState central node actions
 
@@ -131,11 +156,37 @@ class TMCWrapper:
     # -----------------------------------------------------------
     # obsState central node actions
 
+    def load_dish_vcc_configuration(
+        self, dish_vcc_config: str
+    ) -> tuple[ResultCode, str]:
+        """Invoke LoadDishCfg command on central Node
+        :param dish_vcc_config: Dish vcc configuration json string
+        """
+        result, message = self.central_node.LoadDishCfg(dish_vcc_config)
+        return result, message
+
+    def perform_action(
+        self, command_name: str, input_json: str
+    ) -> tuple[ResultCode, str]:
+        """Execute provided command on centralnode
+        Args:
+            command_name (str): Name of command to execute
+            input_json (str): Json send as input to execute command
+        """
+        result, message = self.central_node.command_inout(
+            command_name, input_json
+        )
+        return result, message
+
     def store_resources(self, assign_json: str) -> tuple[ResultCode, str]:
         """Store resources"""
         input_json = json.loads(assign_json)
         generate_eb_pb_ids(input_json)
-        return self.central_node.AssignResources(json.dumps(input_json))
+        result, message = self.central_node.AssignResources(
+            json.dumps(input_json)
+        )
+        LOGGER.info("Invoked AssignResources on CentralNode")
+        return result, message
 
     def invoke_release_resources(
         self, input_string: str
@@ -180,40 +231,36 @@ class TMCWrapper:
     # -----------------------------------------------------------
     # Teardown actions
 
-    def teardown(self):
-        """Teardown the TMC"""
-        self._reset_subarray_obs_state()
-        self._reset_telescope_state()
+    # def tear_down(self):
+    #     """Teardown the TMC"""
+    #     self._reset_subarray_obs_state()
+    #     self._reset_telescope_state()
 
-    def _reset_subarray_obs_state(self):
-        """Reset subarray obs state"""
-        Subarray_node_obsstate = self.subarray_node.obsState
-        LOGGER.info(
-            f"Calling tear down for CentralNode for SubarrayNode's \
-                {Subarray_node_obsstate} obsstate."
-        )
+    # def _reset_subarray_obs_state(self):
+    #     """Reset subarray obs state"""
+    #     Subarray_node_obsstate = self.subarray_node.obsState
+    #     LOGGER.info(
+    #         f"Calling tear down for CentralNode for SubarrayNode's \
+    #             {Subarray_node_obsstate} obsstate."
+    #     )
 
-        if self.subarray_node.obsState == ObsState.IDLE:
-            LOGGER.info("Calling Release Resource on centralnode")
-            json_factory = JsonFactory()
-            release_input = json_factory.create_centralnode_configuration(
-                "release_resources_mid"
-            )
-            self.invoke_release_resources(release_input)
-        elif self.subarray_node.obsState in [
-            ObsState.RESOURCING,
-            ObsState.SCANNING,
-            ObsState.CONFIGURING,
-            ObsState.READY,
-            ObsState.IDLE,
-        ]:
-            LOGGER.info("Calling Abort and Restart on SubarrayNode")
-            self.subarray_abort()
-            self.subarray_restart()
-        elif self.subarray_node.obsState == ObsState.ABORTED:
-            self.subarray_restart()
+    #     if self.subarray_node.obsState == ObsState.IDLE:
+    #         LOGGER.info("Calling Release Resource on centralnode")
+    #         self.invoke_release_resources(self.release_input)
+    #     elif self.subarray_node.obsState in [
+    #         ObsState.RESOURCING,
+    #         ObsState.SCANNING,
+    #         ObsState.CONFIGURING,
+    #         ObsState.READY,
+    #         ObsState.IDLE,
+    #     ]:
+    #         LOGGER.info("Calling Abort and Restart on SubarrayNode")
+    #         self.subarray_abort()
+    #         self.subarray_restart()
+    #     elif self.subarray_node.obsState == ObsState.ABORTED:
+    #         self.subarray_restart()
 
-    def _reset_telescope_state(self) -> None:
-        """Reset telescope state"""
-        if self.telescope_state != "OFF":
-            self.move_central_node_to_off()
+    # def _reset_telescope_state(self) -> None:
+    #     """Reset telescope state"""
+    #     if self.telescope_state != "OFF":
+    #         self.move_central_node_to_off()

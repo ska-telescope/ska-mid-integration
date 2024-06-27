@@ -2,6 +2,7 @@
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
+from ska_tango_testing.integration import log_events
 from tango import DevState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
@@ -34,6 +35,14 @@ def given_a_telescope_in_on_state(
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
+    log_events(
+        {
+            central_node_mid.central_node: ["telescopeState"],
+            central_node_mid.csp_master: ["State"],
+            central_node_mid.subarray_devices["csp_subarray"]: ["State"],
+        }
+    )
+
     central_node_mid.csp_master.adminMode = 0
     wait_csp_master_off()
     central_node_mid.move_to_on()

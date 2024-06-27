@@ -52,7 +52,7 @@ class HarnessComponentsFactory:
         #   asked directly to the devices, etc.)
 
         return CentralNodeWrapperMid(
-            tmc_configuration=self.config_factory.get_TMC_configuration(),
+            tmc_wrapper=self.create_tmc_wrapper(),
             sdp_wrapper=self.create_sdp_wrapper(),
             csp_wrapper=self.create_csp_wrapper(),
             dishes_wrapper=self.create_dishes_wrapper(),

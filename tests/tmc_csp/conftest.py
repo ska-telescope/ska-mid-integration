@@ -268,7 +268,9 @@ def reexecute_scan_command(
 def test_harness() -> CentralNodeWrapperMid:
     """Create an unique test harness with proxies to all devices."""
     components_factory = HarnessComponentsFactory()
-    return components_factory.create_central_node_wrapper()
+    test_harness = components_factory.create_central_node_wrapper()
+    yield test_harness
+    test_harness.tear_down()
 
 
 @fixture
@@ -282,4 +284,6 @@ def central_node_facade(
 @fixture
 def subarray_node_facade():
     """Create a facade to TMC subarray node and all its operations."""
-    return SubarrayNodeWrapper()
+    subarray_node = SubarrayNodeWrapper()
+    yield subarray_node
+    subarray_node.tear_down()

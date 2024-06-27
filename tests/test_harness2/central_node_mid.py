@@ -2,7 +2,6 @@
 
 import json
 import logging
-import time
 from typing import Tuple
 
 from ska_control_model import ObsState, ResultCode
@@ -10,18 +9,14 @@ from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import HealthState
 from tango import DeviceProxy, DevState
 
-from tests.resources.test_support.common_utils.common_helpers import Resource
-from tests.test_harness2.config.test_wrappers_configurations import (
-    TMCConfiguration,
-)
 from tests.test_harness2.constant import (
     device_dict,  # TODO: find a way to handle this dependency
 )
 from tests.test_harness2.constant import DEFAULT_DISH_VCC_CONFIG
-from tests.test_harness2.helpers import generate_eb_pb_ids
 from tests.test_harness2.sys_components.csp_wrapper import CSPWrapper
 from tests.test_harness2.sys_components.dishes_wrapper import DishesWrapper
 from tests.test_harness2.sys_components.sdp_wrapper import SDPWrapper
+from tests.test_harness2.sys_components.tmc_wrapper import TMCWrapper
 from tests.test_harness2.utils.common_utils import JsonFactory
 from tests.test_harness2.utils.sync_decorators import (
     sync_abort,
@@ -47,59 +42,23 @@ class CentralNodeWrapperMid:  # pylint: disable=too-many-public-methods
 
     def __init__(
         self,
-        tmc_configuration: TMCConfiguration,
+        tmc_wrapper: TMCWrapper,
         sdp_wrapper: SDPWrapper,
         csp_wrapper: CSPWrapper,
         dishes_wrapper: DishesWrapper,
     ) -> None:
         super().__init__()
 
+        self.tmc = tmc_wrapper
         self.sdp = sdp_wrapper
         self.csp = csp_wrapper
         self.dishes = dishes_wrapper
 
-        # inside TMC
-        self.central_node = DeviceProxy(tmc_configuration.centralnode_name)
-        self.central_node.set_timeout_millis(5000)
-        self.subarray_node = DeviceProxy(
-            tmc_configuration.tmc_subarraynode1_name
-        )
-        self.subarray_node.set_timeout_millis(5000)
-        self.csp_master_leaf_node = DeviceProxy(
-            tmc_configuration.tmc_csp_master_leaf_node_name
-        )
-        self.sdp_master_leaf_node = DeviceProxy(
-            tmc_configuration.tmc_sdp_master_leaf_node_name
-        )
-
-        # NOTE: not so much used EXTERNALLY, internally just on this
-        # constructor. So what is the sense of this list?
-        self.dish_leaf_node_list = [  # Those instead are inside TMC
-            DeviceProxy(tmc_configuration.tmc_dish_leaf_node1_name),
-            DeviceProxy(tmc_configuration.tmc_dish_leaf_node2_name),
-            DeviceProxy(tmc_configuration.tmc_dish_leaf_node3_name),
-            DeviceProxy(tmc_configuration.tmc_dish_leaf_node4_name),
-        ]
-
-        # Create Dish1 leaf node admin device proxy
-        self.dish1_leaf_admin_dev_name = self.dish_leaf_node_list[0].adm_name()
-        self.dish1_leaf_admin_dev_proxy = DeviceProxy(
-            self.dish1_leaf_admin_dev_name
-        )
-
-        self._state = DevState.OFF
-
-        # TODO: find the right place for this
-        # and also see if we can encapsulate external actions on it
-        # in methods/commands
-        self.json_factory = JsonFactory()
-        self.release_input = (
-            self.json_factory.create_centralnode_configuration(
-                "release_resources_mid"
-            )
-        )
+        # NOTE: todo: remove this bad dependency
         device_dict["cbf_subarray1"] = "mid_csp_cbf/sub_elt/subarray_01"
         device_dict["cbf_controller"] = "mid_csp_cbf/sub_elt/controller"
+        device_dict["dish_master_list"] = self.dish_master_list
+        device_dict["dish_leaf_node_list"] = self.dish_leaf_node_list
         self.wait = Waiter(**device_dict)
 
     # -----------------------------------------------------------
@@ -107,6 +66,42 @@ class CentralNodeWrapperMid:  # pylint: disable=too-many-public-methods
     # TODO: change external references to those properties
     # ISSUE: it has to be done with updated test... better if
     # in just one quick and light MR
+
+    # Central Node
+    @property
+    def central_node(self) -> DeviceProxy:
+        """CentralNode device proxy"""
+        return self.tmc.central_node
+
+    @property
+    def subarray_node(self) -> DeviceProxy:
+        """SubarrayNode device proxy"""
+        return self.tmc.subarray_node
+
+    @property
+    def csp_master_leaf_node(self) -> DeviceProxy:
+        """CSP Master Leaf Node device proxy"""
+        return self.tmc.csp_master_leaf_node
+
+    @property
+    def sdp_master_leaf_node(self) -> DeviceProxy:
+        """SDP Master Leaf Node device proxy"""
+        return self.tmc.sdp_master_leaf_node
+
+    @property
+    def dish_leaf_node_list(self) -> list[DeviceProxy]:
+        """Dish Leaf Node device proxies as a list"""
+        return self.tmc.dish_leaf_node_list
+
+    @property
+    def dish1_leaf_admin_dev_name(self) -> str:
+        """Dish1 Leaf Admin device name"""
+        return self.tmc.dish1_leaf_admin_dev_name
+
+    @property
+    def dish1_leaf_admin_dev_proxy(self) -> DeviceProxy:
+        """Dish1 Leaf Admin device proxy"""
+        return self.tmc.dish1_leaf_admin_dev_proxy
 
     #
     # SDP & CSP
@@ -172,8 +167,7 @@ class CentralNodeWrapperMid:  # pylint: disable=too-many-public-methods
     @property
     def state(self) -> DevState:
         """TMC CentralNode operational state"""
-        self._state = Resource(self.central_node).get("State")
-        return self._state
+        return self.tmc.state
 
     @state.setter
     def state(self, value: DevState):
@@ -182,31 +176,22 @@ class CentralNodeWrapperMid:  # pylint: disable=too-many-public-methods
         Args:
             value (DevState): operational state value
         """
-        # NOTE: what is the sense of this setter? If I will ever
-        # access it through the getter it will always use an updated
-        # value from the device. So, this setter is useless (unless
-        # you directly access `self._state`, but 1) it's never done and
-        # 2) it is an anti-pattern...). It may be something that ideally
-        # is used to change central_node state (?)
-        self._state = value
+        self.tmc.state = value
 
     @property
     def IsDishVccConfigSet(self):
         """Return DishVccConfigSet flag"""
-        return self.central_node.isDishVccConfigSet
+        return self.tmc.IsDishVccConfigSet
 
     @property
     def DishVccValidationStatus(self):
         """Current dish vcc validation status of central node"""
-        return self.central_node.DishVccValidationStatus
+        return self.tmc.DishVccValidationStatus
 
     @property
     def telescope_health_state(self) -> HealthState:
         """Telescope health state representing overall health of telescope"""
-        self._telescope_health_state = Resource(self.central_node).get(
-            "telescopeHealthState"
-        )
-        return self._telescope_health_state
+        return self.tmc.telescope_health_state
 
     @telescope_health_state.setter
     def telescope_health_state(self, value: HealthState) -> None:
@@ -215,18 +200,13 @@ class CentralNodeWrapperMid:  # pylint: disable=too-many-public-methods
         Args:
             value (HealthState): telescope health state value
         """
-        # NOTE: same as for `state`
-        self._telescope_health_state = value
+        self.tmc.telescope_health_state = value
 
     # NOTE: same as for `state`
     @property
     def telescope_state(self) -> DevState:
         """Telescope state representing overall state of telescope"""
-
-        self._telescope_state = Resource(self.central_node).get(
-            "telescopeState"
-        )
-        return self._telescope_state
+        return self.tmc.telescope_state
 
     @telescope_state.setter
     def telescope_state(self, value: DevState) -> None:
@@ -235,8 +215,7 @@ class CentralNodeWrapperMid:  # pylint: disable=too-many-public-methods
         Args:
             value (DevState): telescope state value
         """
-        # NOTE: this setter is never used + same as for `state`
-        self._telescope_state = value
+        self.tmc.telescope_state = value
 
     # -----------------------------------------------------------
     # ON/OFF/STANDBY ACTIONS
@@ -252,7 +231,7 @@ class CentralNodeWrapperMid:  # pylint: disable=too-many-public-methods
         # LOGGER.info(f"Received emulated devices: {emulation_configuration}")
 
         self.csp.move_to_on()
-        self.central_node.TelescopeOn()
+        self.tmc.move_central_node_to_on()
 
     @sync_set_to_off(device_dict=device_dict)
     def move_to_off(self) -> None:
@@ -260,7 +239,7 @@ class CentralNodeWrapperMid:  # pylint: disable=too-many-public-methods
         A method to invoke TelescopeOff command to
         put telescope in OFF state
         """
-        self.central_node.TelescopeOff()
+        self.tmc.move_central_node_to_off()
         self.csp.move_to_off()
 
     @sync_set_to_standby(device_dict=device_dict)
@@ -271,7 +250,7 @@ class CentralNodeWrapperMid:  # pylint: disable=too-many-public-methods
         """
         LOGGER.info("Putting Telescope in Standby state")
 
-        self.central_node.TelescopeStandBy()
+        self.tmc.set_central_node_to_standby()
         self.csp.move_to_off()
 
     # -----------------------------------------------------------
@@ -280,34 +259,19 @@ class CentralNodeWrapperMid:  # pylint: disable=too-many-public-methods
     def set_subarray_id(self, requested_subarray_id: str) -> None:
         """This method creates subarray devices for the requested subarray
         id"""
-        self.subarray_node = DeviceProxy(
-            f"ska_mid/tm_subarray_node/{requested_subarray_id}"
-        )
-
-        # NOTE: why zfill(2) after the first DeviceProxy creation?
-        subarray_id = str(requested_subarray_id).zfill(2)
-
         self.sdp.set_subarray_id(requested_subarray_id)
         self.csp.set_subarray_id(requested_subarray_id)
-
-        self.csp_subarray_leaf_node = DeviceProxy(
-            f"ska_mid/tm_leaf_node/csp_subarray{subarray_id}"
-        )
-        self.sdp_subarray_leaf_node = DeviceProxy(
-            f"ska_mid/tm_leaf_node/sdp_subarray{subarray_id}"
-        )
+        self.tmc.set_subarray_id(requested_subarray_id)
 
     @sync_abort(device_dict=device_dict)
     def subarray_abort(self) -> Tuple[ResultCode, str]:
         """Invoke Abort command on subarray Node"""
-        result, message = self.subarray_node.Abort()
-        return result, message
+        return self.tmc.subarray_abort()
 
     @sync_restart(device_dict=device_dict)
     def subarray_restart(self) -> Tuple[ResultCode, str]:
         """Invoke Restart command on subarray Node"""
-        result, message = self.subarray_node.Restart()
-        return result, message
+        return self.tmc.subarray_restart()
 
     # -----------------------------------------------------------
     # CENTRAL NODE ACTIONS
@@ -318,8 +282,7 @@ class CentralNodeWrapperMid:  # pylint: disable=too-many-public-methods
         """Invoke LoadDishCfg command on central Node
         :param dish_vcc_config: Dish vcc configuration json string
         """
-        result, message = self.central_node.LoadDishCfg(dish_vcc_config)
-        return result, message
+        return self.tmc.load_dish_vcc_configuration(dish_vcc_config)
 
     def perform_action(
         self, command_name: str, input_json: str
@@ -329,11 +292,7 @@ class CentralNodeWrapperMid:  # pylint: disable=too-many-public-methods
             command_name (str): Name of command to execute
             input_json (str): Json send as input to execute command
         """
-
-        result, message = self.central_node.command_inout(
-            command_name, input_json
-        )
-        return result, message
+        return self.tmc.perform_action(command_name, input_json)
 
     # RESOURCE RELATED COMMANDS
     # (still actions on CentralNode!)
@@ -344,13 +303,7 @@ class CentralNodeWrapperMid:  # pylint: disable=too-many-public-methods
         Args:
             assign_json (str): Assign resource input json
         """
-        input_json = json.loads(assign_json)
-        generate_eb_pb_ids(input_json)
-        result, message = self.central_node.AssignResources(
-            json.dumps(input_json)
-        )
-        LOGGER.info("Invoked AssignResources on CentralNode")
-        return result, message
+        return self.tmc.store_resources(assign_json)
 
     @sync_release_resources(device_dict=device_dict, timeout=500)
     def invoke_release_resources(
@@ -360,10 +313,7 @@ class CentralNodeWrapperMid:  # pylint: disable=too-many-public-methods
         Args:
             input_string (str): Release resource input json
         """
-        time.sleep(3)
-
-        result, message = self.central_node.ReleaseResources(input_string)
-        return result, message
+        return self.tmc.invoke_release_resources(input_string)
 
     # -----------------------------------------------------------
     # TEARDOWN
@@ -371,16 +321,20 @@ class CentralNodeWrapperMid:  # pylint: disable=too-many-public-methods
     # NOTE: used a lot in fixtures
     def tear_down(self) -> None:
         """Handle Tear down of central Node"""
-        Subarray_node_obsstate = self.subarray_node.obsState
+        # NOTE: temporarily moved here because of synchronization
+        Subarray_node_obsstate = self.tmc.subarray_node.obsState
         LOGGER.info(
             f"Calling tear down for CentralNode for SubarrayNode's \
                 {Subarray_node_obsstate} obsstate."
         )
 
-        # reset obsState (?)
         if self.subarray_node.obsState == ObsState.IDLE:
             LOGGER.info("Calling Release Resource on centralnode")
-            self.invoke_release_resources(self.release_input)
+            json_factory = JsonFactory()
+            release_input = json_factory.create_centralnode_configuration(
+                "release_resources_mid"
+            )
+            self.invoke_release_resources(release_input)
         elif self.subarray_node.obsState in [
             ObsState.RESOURCING,
             ObsState.SCANNING,
@@ -394,8 +348,8 @@ class CentralNodeWrapperMid:  # pylint: disable=too-many-public-methods
         elif self.subarray_node.obsState == ObsState.ABORTED:
             self.subarray_restart()
 
-        # reset telescopeState (?)
-        if self.telescope_state != "OFF":
+        # NOTE: temporarily moved here because of synchronization
+        if self.tmc.telescope_state != "OFF":
             self.move_to_off()
 
         # reset HealthState.UNKNOWN in emulated devices

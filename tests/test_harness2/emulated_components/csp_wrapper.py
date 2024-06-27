@@ -23,7 +23,7 @@ class EmulatedCSPWrapper(CSPWrapper):
         self.csp_subarray.SetDirectState(DevState.OFF)
 
     def tear_down(self) -> None:
-        self.move_to_off()
+        # self.move_to_off()
 
         # NOTE: reset health state just to csp_master?
         # Why not to csp_subarray1?
