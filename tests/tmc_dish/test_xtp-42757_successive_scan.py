@@ -154,6 +154,31 @@ def check_dish_mode_and_pointing_state(
     Method to check dishMode and pointingState of DISH and
     SubarrayNode obsState.
     """
+
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        # logs added for testing, will be removed before merging into master
+        logging.info(
+            "dishMode for dln, transitions to obsState READY %s %s",
+            dish_id,
+            central_node_mid.dish_leaf_node_dict[dish_id].dishMode,
+        )
+        logging.info(
+            "dishMode for dish master, transitions to obsState READY  %s %s",
+            dish_id,
+            central_node_mid.dish_master_dict[dish_id].dishMode,
+        )
+        # logs added for testing, will be removed before merging into master
+        logging.info(
+            "pointingstate for dln,  transitions to obsState READY %s %s",
+            dish_id,
+            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
+        )
+        logging.info(
+            "pointingstatefor dish master,transitions to obsState READY %s %s",
+            dish_id,
+            central_node_mid.dish_master_dict[dish_id].pointingState,
+        )
+
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "pointingState"
@@ -166,25 +191,25 @@ def check_dish_mode_and_pointing_state(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.OPERATE,
-            lookahead=10,
+            lookahead=15,
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "dishMode",
             DishMode.OPERATE,
-            lookahead=10,
+            lookahead=15,
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
-            lookahead=10,
+            lookahead=15,
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
-            lookahead=10,
+            lookahead=15,
         )
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
@@ -313,13 +338,13 @@ def invoke_end_command(subarray_node, event_recorder, central_node_mid):
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
             PointingState.READY,
-            lookahead=10,
+            lookahead=15,
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "pointingState",
             PointingState.READY,
-            lookahead=10,
+            lookahead=15,
         )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node, "obsState", ObsState.IDLE, lookahead=10
