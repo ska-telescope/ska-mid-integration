@@ -8,7 +8,13 @@ from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import HealthState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
-from tests.resources.test_harness.constant import sdp_master
+from tests.resources.test_harness.constant import (
+    centralnode,
+    csp_master,
+    csp_subarray1,
+    dish_master1,
+    sdp_master,
+)
 from tests.resources.test_harness.helpers import (
     get_device_simulator_with_given_name,
     wait_until_devices_operational,
@@ -19,7 +25,7 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
-@pytest.mark.tmc_sdp_unhappy
+@pytest.mark.tmc_sdp_unhappy1
 @scenario(
     "../features/tmc_sdp/xtp_39503_health_state_unhappy_path.feature",
     "Verify TMC TelescopeHealthState transition based on SDP Controller"
@@ -51,12 +57,11 @@ def given_telescope_setup_with_simulators(
     csp_master_sim, dish_master_sim = simulated_devices
 
     devices_to_monitor = [
-        central_node_mid.central_node,
-        central_node_mid.sdp_master,
-        central_node_mid.subarray_devices["sdp_subarray"],
-        central_node_mid.subarray_devices["csp_subarray"],
-        csp_master_sim,
-        dish_master_sim,
+        centralnode,
+        sdp_master,
+        csp_subarray1,
+        csp_master,
+        dish_master1,
     ]
 
     assert wait_until_devices_operational(devices_to_monitor)
