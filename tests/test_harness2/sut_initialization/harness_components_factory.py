@@ -24,7 +24,7 @@ from tests.test_harness2.sut_configuration.configuration_factory import (
 from tests.test_harness2.sut_structure.csp_wrapper import CSPWrapper
 from tests.test_harness2.sut_structure.dishes_wrapper import DishesWrapper
 from tests.test_harness2.sut_structure.sdp_wrapper import SDPWrapper
-from tests.test_harness2.sut_structure.sut_wrapper import SUTWrapper
+from tests.test_harness2.sut_structure.sut_wrapper import TelescopeWrapper
 from tests.test_harness2.sut_structure.tmc_wrapper import TMCWrapper
 
 
@@ -39,7 +39,7 @@ class HarnessComponentsFactory:
     def _emulation_config(self):
         return self.config_factory.emulation_configuration
 
-    def create_central_node_wrapper(self) -> SUTWrapper:
+    def create_telescope_wrapper(self) -> TelescopeWrapper:
         """Create a central node wrapper (i.e., test harness entry point).
 
         return: A central node wrapper instance.
@@ -52,7 +52,7 @@ class HarnessComponentsFactory:
         # - what's the actual state of the system (some version information
         #   asked directly to the devices, etc.)
 
-        return SUTWrapper(
+        return TelescopeWrapper(
             tmc_wrapper=self.create_tmc_wrapper(),
             sdp_wrapper=self.create_sdp_wrapper(),
             csp_wrapper=self.create_csp_wrapper(),

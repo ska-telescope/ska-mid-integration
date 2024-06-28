@@ -10,7 +10,7 @@ from tests.test_harness2.sut_initialization.harness_components_factory import (
     HarnessComponentsFactory,
 )
 
-from .sut_structure.sut_wrapper import SUTWrapper
+from .sut_structure.sut_wrapper import TelescopeWrapper
 
 
 # NOTE: What is this class for? What does it do?
@@ -18,32 +18,32 @@ class TMCMid:
     def __init__(self):
         """Set all devices proxy required for TMC"""
         harness_factory = HarnessComponentsFactory()
-        self.central_node: SUTWrapper = (
-            harness_factory.create_central_node_wrapper()
+        self.central_node: TelescopeWrapper = (
+            harness_factory.create_telescope_wrapper()
         )
         self.csp_master_leaf_node = DeviceProxy(tmc_csp_master_leaf_node)
         self.csp_master_ln_server = DeviceProxy(
             f"dserver/{self.csp_master_leaf_node.info().server_id}"
         )
         self.central_node_server = DeviceProxy(
-            f"dserver/{self.central_node.central_node.info().server_id}"
+            f"dserver/{self.central_node.tmc.central_node.info().server_id}"
         )
         self.dish_leaf_node_server = ""
 
     @property
     def IsDishVccConfigSet(self):
         """ """
-        return self.central_node.IsDishVccConfigSet
+        return self.central_node.tmc.IsDishVccConfigSet
 
     @property
     def DishVccValidationStatus(self):
         """Current dish vcc validation status of central node"""
-        return self.central_node.DishVccValidationStatus
+        return self.central_node.tmc.DishVccValidationStatus
 
     @property
     def dish_leaf_node_list(self):
         """Return Dish Leaf Node List"""
-        return self.central_node.dish_leaf_node_list
+        return self.central_node.tmc.dish_leaf_node_list
 
     def RestartServer(self, server_type: str):
         """Restart server based on provided server type"""
@@ -54,7 +54,9 @@ class TMCMid:
         elif server_type.startswith("DISHLN"):
             index = int(server_type.split("_")[-1])
             dish_leaf_node_server_id = (
-                self.central_node.dish_leaf_node_list[index].info().server_id
+                self.central_node.tmc.dish_leaf_node_list[index]
+                .info()
+                .server_id
             )
             self.dish_leaf_node_server = DeviceProxy(
                 f"dserver/{dish_leaf_node_server_id}"

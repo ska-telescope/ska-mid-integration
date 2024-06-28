@@ -16,7 +16,7 @@ from tests.test_harness2.sut_actions.force_change_of_obs_state import (
 )
 from tests.test_harness2.sut_actions.move_to_on import MoveToOn
 from tests.test_harness2.sut_actions.store_scan_data import StoreScanData
-from tests.test_harness2.sut_structure.sut_wrapper import SUTWrapper
+from tests.test_harness2.sut_structure.sut_wrapper import TelescopeWrapper
 from tests.test_harness2.utils.common_utils import JsonFactory
 
 
@@ -33,7 +33,7 @@ def test_scan_command_harness_refactor():
 
 @given("the telescope is in ON state")
 def given_a_telescope_in_on_state(
-    sut: SUTWrapper, subarray_node_facade, event_recorder
+    sut: TelescopeWrapper, subarray_node_facade, event_recorder
 ):
     """Checks if CentralNode's telescopeState attribute value is on."""
     event_recorder.subscribe_event(sut.tmc.central_node, "telescopeState")
@@ -76,7 +76,7 @@ def given_a_telescope_in_on_state(
 
 @given(parsers.parse("TMC subarray {subarray_id} is in READY ObsState"))
 def subarray_in_ready_obsstate(
-    sut: SUTWrapper,
+    sut: TelescopeWrapper,
     event_recorder: EventRecorder,
     command_input_factory: JsonFactory,
     subarray_node_facade: SubarrayNodeWrapper,
@@ -92,7 +92,7 @@ def subarray_in_ready_obsstate(
         "configure_mid", command_input_factory
     )
 
-    event_recorder.subscribe_event(sut.central_node, "telescopeState")
+    event_recorder.subscribe_event(sut.tmc.central_node, "telescopeState")
     event_recorder.subscribe_event(
         subarray_node_facade.subarray_devices["csp_subarray"], "obsState"
     )
@@ -133,7 +133,7 @@ def subarray_in_ready_obsstate(
     parsers.parse("I issue the scan command to the TMC subarray {subarray_id}")
 )
 def invoke_scan(
-    sut: SUTWrapper,
+    sut: TelescopeWrapper,
     subarray_node_facade: SubarrayNodeWrapper,
     command_input_factory,
 ):
@@ -165,7 +165,7 @@ def csp_subarray_scanning(subarray_node_facade, event_recorder):
     )
 )
 def tmc_subarray_scanning(
-    sut: SUTWrapper, subarray_node_facade, event_recorder, subarray_id
+    sut: TelescopeWrapper, subarray_node_facade, event_recorder, subarray_id
 ):
     """Checks if SubarrayNode's obsState attribute value is SCANNING"""
     sut.set_subarray_id(int(subarray_id))
@@ -185,7 +185,7 @@ def tmc_subarray_scanning(
     )
 )
 def csp_subarray_ObsState(
-    sut: SUTWrapper, subarray_node_facade, event_recorder, subarray_id
+    sut: TelescopeWrapper, subarray_node_facade, event_recorder, subarray_id
 ):
     """Checks if SubarrayNode's obsState attribute value is READY"""
     sut.set_subarray_id(int(subarray_id))
@@ -203,7 +203,7 @@ def csp_subarray_ObsState(
     )
 )
 def tmc_subarray_ready(
-    sut: SUTWrapper, subarray_node_facade, event_recorder, subarray_id
+    sut: TelescopeWrapper, subarray_node_facade, event_recorder, subarray_id
 ):
     """Checks if SubarrayNode's obsState attribute value is EMPTY"""
     sut.set_subarray_id(int(subarray_id))

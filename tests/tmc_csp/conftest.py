@@ -25,7 +25,7 @@ from tests.test_harness2.subarray_node import SubarrayNodeWrapper
 from tests.test_harness2.sut_initialization.harness_components_factory import (
     HarnessComponentsFactory,
 )
-from tests.test_harness2.sut_structure.sut_wrapper import SUTWrapper
+from tests.test_harness2.sut_structure.sut_wrapper import TelescopeWrapper
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -265,18 +265,18 @@ def reexecute_scan_command(
 
 
 @fixture
-def test_harness() -> SUTWrapper:
+def test_harness() -> TelescopeWrapper:
     """Create an unique test harness with proxies to all devices."""
     components_factory = HarnessComponentsFactory()
-    test_harness = components_factory.create_central_node_wrapper()
+    test_harness = components_factory.create_telescope_wrapper()
     yield test_harness
     test_harness.tear_down()
 
 
 @fixture
 def sut(
-    test_harness: SUTWrapper,
-) -> SUTWrapper:
+    test_harness: TelescopeWrapper,
+) -> TelescopeWrapper:
     """Create a facade to TMC central node and all its operations."""
     return test_harness
 
