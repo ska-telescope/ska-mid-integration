@@ -810,15 +810,13 @@ def retry_tango_command(
 def check_devices_operational(devices_to_monitor: List[str]) -> bool:
     """Checks if all devices are exported in Tango DB"""
     database = Database()
-    instance_info = database.get_device_exported(devices_to_monitor)
 
-    LOGGER.info("instance_info: %s", instance_info)
-
-    # Check if all devices are exported
     operational_flags = [
-        device.value_string[0] in devices_to_monitor
-        for device in instance_info
+        database.get_device_exported(device).value_string[0] == device
+        for device in devices_to_monitor
     ]
+
+    LOGGER.info("operational_flags: %s", operational_flags)
 
     return all(operational_flags)
 

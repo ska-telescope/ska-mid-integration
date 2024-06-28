@@ -331,6 +331,12 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             LOGGER.info("Invoke TelescopeOn() on all real sub-systems")
             self.central_node.TelescopeOn()
 
+        # It was obsereved that On Command takes time to reach to Central
+        # node and hence completition sometimes get Delayed ,
+        # hence this sleep is added
+
+        time.sleep(0.2)
+
     @sync_set_to_off(device_dict=device_dict)
     def move_to_off(self) -> None:
         """
