@@ -140,9 +140,12 @@ def invoke_configure(
     configure_input = json.loads(configure_input_json)
     configure_input["dish"]["receiver_band"] = receiver_band1
     configure_input["tmc"]["scan_duration"] = float(scan_duration1)
-    pytest.command_result = subarray_node.store_configuration_data(
-        json.dumps(configure_input)
+    pytest.command_result = subarray_node.execute_transition(
+        "Configure", configure_input
     )
+    # pytest.command_result = subarray_node.store_configuration_data(
+    #     json.dumps(configure_input)
+    # )
 
 
 @then("the TMC subarray transitions to obsState READY")
@@ -256,6 +259,7 @@ def invoke_scan(subarray_node, command_input_factory, event_recorder):
         "scan_mid", command_input_factory
     )
     subarray_node.execute_transition("Scan", scan_input_json)
+
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
@@ -307,8 +311,33 @@ def invoke_end_command(subarray_node, event_recorder, central_node_mid):
     """
     pytest.command_result = subarray_node.execute_transition("End")
 
+    # for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+    #     # logs added for testing, will be removed before merging into master
+    #     logging.info(
+    #         "pointingstate for dln %s %s",
+    #         dish_id,
+    #         central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
+    #     )
+    #     logging.info(
+    #         "pointingstate for dish master %s %s",
+    #         dish_id,
+    #         central_node_mid.dish_master_dict[dish_id].pointingState,
+    #     )
+    # sleep added for debugging purpose
+    # time.sleep(240)
+
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         # logs added for testing, will be removed before merging into master
+        # logging.info(
+        #     "pointingstate for dln after sleep %s %s",
+        #     dish_id,
+        #     central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
+        # )
+        # logging.info(
+        #     "pointingstate for dish master after sleep %s %s",
+        #     dish_id,
+        #     central_node_mid.dish_master_dict[dish_id].pointingState,
+        # )
         logging.info(
             "pointingstate for dln %s %s",
             dish_id,
@@ -316,21 +345,6 @@ def invoke_end_command(subarray_node, event_recorder, central_node_mid):
         )
         logging.info(
             "pointingstate for dish master %s %s",
-            dish_id,
-            central_node_mid.dish_master_dict[dish_id].pointingState,
-        )
-    # sleep added for debugging purpose
-    time.sleep(15)
-
-    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        # logs added for testing, will be removed before merging into master
-        logging.info(
-            "pointingstate for dln after sleep %s %s",
-            dish_id,
-            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
-        )
-        logging.info(
-            "pointingstate for dish master after sleep %s %s",
             dish_id,
             central_node_mid.dish_master_dict[dish_id].pointingState,
         )
@@ -376,6 +390,9 @@ def invoke_next_configure(
     configure_input["dish"]["receiver_band"] = receiver_band2
     configure_input["tmc"]["scan_duration"] = float(scan_duration2)
     configure_input["csp"]["common"]["frequency_band"] = receiver_band2
-    pytest.command_result = subarray_node.store_configuration_data(
-        json.dumps(configure_input)
+    # pytest.command_result = subarray_node.store_configuration_data(
+    #     json.dumps(configure_input)
+    # )
+    pytest.command_result = subarray_node.execute_transition(
+        "Configure", configure_input
     )
