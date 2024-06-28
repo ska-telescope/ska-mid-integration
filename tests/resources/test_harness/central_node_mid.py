@@ -579,3 +579,4 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 (unique_id[0], str(int(ResultCode.OK))),
                 lookahead=10,
             )
+            event_recorder.clear_events()
