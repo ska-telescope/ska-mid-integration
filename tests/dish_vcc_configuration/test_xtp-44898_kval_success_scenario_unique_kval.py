@@ -10,7 +10,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
-@pytest.mark.SKA_mid1
+@pytest.mark.SKA_mid
 @scenario(
     "../features/dish_vcc_initialization/"
     "xtp_44895_kval_validation_success.feature",
@@ -55,5 +55,5 @@ def invoke_load_dish_cfg(
         central_node_mid.central_node,
         "longRunningCommandResult",
         (unique_id[0], str(int(ResultCode.OK))),
-        lookahead=10,
+        lookahead=5,
     )

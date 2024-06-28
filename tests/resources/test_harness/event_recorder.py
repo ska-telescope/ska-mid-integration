@@ -45,13 +45,6 @@ class EventRecorder(object):
             timeout=timeout,
         )
 
-        # event_id = device.subscribe_event(
-        #     attribute_name,
-        #     EventType.CHANGE_EVENT,
-        #     attribute_change_event_callback[callable_name],
-        # )
-        # -------------------------------------------------------
-
         # This approach ensures that the subscription to the event is
         # attempted multiple times if it fails initially due to transient
         # issues, while also logging any persistent issues that might

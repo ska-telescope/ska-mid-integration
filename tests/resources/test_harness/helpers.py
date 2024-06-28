@@ -778,48 +778,19 @@ def retry_tango_command(
     return True
 
 
-# def check_devices_operational(devices_to_monitor) -> bool:
-#         """Checks if device is exported in Tango DB"""
-#         database = Database()
-#         instance_info = database.get_device_exported(
-#             devices_to_monitor
-#         )
-#
-#         LOGGER.info("instance_info : %s", instance_info)
-#         # Check if All devices is exported
-#
-#         operational_flag = []
-#
-#         for device in instance_info :
-#             if  (
-#                 device.value_string[0] in devices_to_monitor :
-#
-#             ):
-#                 operational_flag.append(True)
-#             else :
-#                 operational_flag.append(False)
-#
-#         unique_operational = set(operational_flag)
-#
-#         if unique_operational :
-#             return True
-#         else :
-#             return False
-
-
 def check_devices_operational(devices_to_monitor: List[str]) -> bool:
     """Checks if all devices are exported in Tango DB"""
     database = Database()
     device_names = database.get_device_exported("*")
-    LOGGER.info("device_names: %s", device_names)
+    LOGGER.debug("device_names: %s", device_names)
 
     operational_flags = []
     for device in devices_to_monitor:
 
-        instance_info = database.get_device_exported(device)
+        instance_info = database.get_device_info(device)
 
         LOGGER.info("instance_info: %s", instance_info)
-        if instance_info.value_string[0] == device:
+        if instance_info.exported:
             operational_flags.append(True)
         else:
             operational_flags.append(False)
