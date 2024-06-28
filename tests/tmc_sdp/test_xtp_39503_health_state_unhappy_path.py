@@ -1,16 +1,22 @@
 """Test case for verifying TMC TelescopeHealthState transition based on SDP
  Controller HealthState."""
+import logging
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
+from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import HealthState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.constant import sdp_master
 from tests.resources.test_harness.helpers import (
     get_device_simulator_with_given_name,
+    wait_until_devices_operational,
 )
 from tests.resources.test_harness.simulator_factory import SimulatorFactory
+
+configure_logging(logging.DEBUG)
+LOGGER = logging.getLogger(__name__)
 
 
 @pytest.mark.tmc_sdp_unhappy
@@ -43,6 +49,17 @@ def given_telescope_setup_with_simulators(
         simulator_factory, ["csp master", "dish master1"]
     )
     csp_master_sim, dish_master_sim = simulated_devices
+
+    devices_to_monitor = [
+        central_node_mid.central_node,
+        central_node_mid.sdp_master,
+        central_node_mid.subarray_devices["sdp_subarray"],
+        central_node_mid.subarray_devices["csp_subarray"],
+        csp_master_sim,
+        dish_master_sim,
+    ]
+
+    assert wait_until_devices_operational(devices_to_monitor)
 
     assert central_node_mid.central_node.ping() > 0
     assert central_node_mid.sdp_master.ping() > 0

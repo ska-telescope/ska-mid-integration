@@ -4,7 +4,7 @@ import os
 import re
 import time
 from datetime import datetime
-from typing import Any
+from typing import Any, List
 
 from astropy.time import Time
 from numpy import array_equal
@@ -12,7 +12,7 @@ from ska_ser_logging import configure_logging
 from ska_tango_base.commands import ResultCode
 from ska_tango_base.control_model import HealthState
 from ska_tango_testing.mock.placeholders import Anything
-from tango import DeviceProxy
+from tango import Database, DeviceProxy
 
 from tests.resources.test_harness.constant import device_dict
 from tests.resources.test_harness.event_recorder import EventRecorder
@@ -776,3 +776,70 @@ def retry_tango_command(
             retry += 1
         time.sleep(0.1)
     return True
+
+
+# def check_devices_operational(devices_to_monitor) -> bool:
+#         """Checks if device is exported in Tango DB"""
+#         database = Database()
+#         instance_info = database.get_device_exported(
+#             devices_to_monitor
+#         )
+#
+#         LOGGER.info("instance_info : %s", instance_info)
+#         # Check if All devices is exported
+#
+#         operational_flag = []
+#
+#         for device in instance_info :
+#             if  (
+#                 device.value_string[0] in devices_to_monitor :
+#
+#             ):
+#                 operational_flag.append(True)
+#             else :
+#                 operational_flag.append(False)
+#
+#         unique_operational = set(operational_flag)
+#
+#         if unique_operational :
+#             return True
+#         else :
+#             return False
+
+
+def check_devices_operational(devices_to_monitor: List[str]) -> bool:
+    """Checks if all devices are exported in Tango DB"""
+    database = Database()
+    instance_info = database.get_device_exported(devices_to_monitor)
+
+    LOGGER.info("instance_info: %s", instance_info)
+
+    # Check if all devices are exported
+    operational_flags = [
+        device.value_string[0] in devices_to_monitor
+        for device in instance_info
+    ]
+
+    return all(operational_flags)
+
+
+def wait_until_devices_operational(devices_to_monitor):
+    """Waits until devices are operational or timeout is reached."""
+    start_time = time.time()
+    TIMEOUT = 30
+
+    while time.time() - start_time < TIMEOUT:
+        try:
+            if check_devices_operational(devices_to_monitor):
+                return True  # Devices are operational, exit function
+        except Exception as exception:
+            LOGGER.info(
+                "Error while checking devices operational: %s", exception
+            )
+
+        time.sleep(1)
+
+    LOGGER.info(
+        "Timeout of %d seconds reached. Devices are not operational.", TIMEOUT
+    )
+    return False
