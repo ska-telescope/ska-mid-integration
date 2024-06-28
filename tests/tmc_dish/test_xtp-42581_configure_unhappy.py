@@ -144,8 +144,11 @@ def invoke_configure(
     )
     configure_input = json.loads(configure_input_json)
     configure_input["dish"]["receiver_band"] = receiver_band
-    pytest.command_result = subarray_node.store_configuration_data(
-        json.dumps(configure_input)
+    # pytest.command_result = subarray_node.store_configuration_data(
+    #     json.dumps(configure_input)
+    # )
+    pytest.command_result = subarray_node.execute_transition(
+        "Configure", json.dumps(configure_input)
     )
 
 
@@ -242,12 +245,17 @@ def invoke_successive_configure(
             central_node_mid.dish_master_dict[dish_id],
             "longRunningCommandStatus",
         )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "longRunningCommandStatus",
+        )
 
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
     configure_input = json.loads(configure_input_json)
     configure_input["dish"]["receiver_band"] = receiver_band
+
     subarray_node.execute_transition("Configure", json.dumps(configure_input))
 
 
@@ -263,6 +271,12 @@ def configure_command_rejection_by_dish(central_node_mid):
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         assert check_long_running_command_status(
             central_node_mid.dish_master_dict[dish_id],
+            "longRunningCommandStatus",
+            "_ConfigureBand1",
+            "REJECTED",
+        )
+        assert check_long_running_command_status(
+            central_node_mid.dish_leaf_node_dict[dish_id],
             "longRunningCommandStatus",
             "_ConfigureBand1",
             "REJECTED",
