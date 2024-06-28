@@ -141,7 +141,7 @@ def invoke_configure(
     configure_input["dish"]["receiver_band"] = receiver_band1
     configure_input["tmc"]["scan_duration"] = float(scan_duration1)
     pytest.command_result = subarray_node.execute_transition(
-        "Configure", configure_input
+        "Configure", json.dumps(configure_input)
     )
     # pytest.command_result = subarray_node.store_configuration_data(
     #     json.dumps(configure_input)
@@ -394,5 +394,5 @@ def invoke_next_configure(
     #     json.dumps(configure_input)
     # )
     pytest.command_result = subarray_node.execute_transition(
-        "Configure", configure_input
+        "Configure", json.dumps(configure_input)
     )
