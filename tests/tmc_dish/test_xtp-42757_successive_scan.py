@@ -1,7 +1,6 @@
 """Test module for TMC-DISH Configure functionality"""
 
 import json
-import logging
 import time
 
 import pytest
@@ -285,18 +284,6 @@ def invoke_end_command(subarray_node, event_recorder, central_node_mid):
     pytest.command_result = subarray_node.execute_transition("End")
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        # logs added for testing, will be removed before merging into master
-
-        logging.info(
-            "pointingstate for dln %s %s",
-            dish_id,
-            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
-        )
-        logging.info(
-            "pointingstate for dish master %s %s",
-            dish_id,
-            central_node_mid.dish_master_dict[dish_id].pointingState,
-        )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
