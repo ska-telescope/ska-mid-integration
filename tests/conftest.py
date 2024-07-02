@@ -231,6 +231,9 @@ def wait_for_pointing_state_change(
     start_time = time.time()
 
     while time.time() - start_time < timeout_seconds:
+        logging.info(
+            "dishfqdn.pointingState.value: %s", dishfqdn.pointingState.value
+        )
         if dishfqdn.pointingState.value == target_mode:
             return True
         time.sleep(1)
