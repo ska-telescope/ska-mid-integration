@@ -85,7 +85,7 @@ device_dict = {
 
 # NOTE: another wrapper with a partially overlapping interface (?)
 # TODO: after refactoring central node, choose what to do with this too
-class SubarrayNodeWrapper:
+class TMCSubarrayNodeFacade:
     """Subarray Node class which implement methods required for test cases
     to test subarray node.
     """
@@ -219,6 +219,7 @@ class SubarrayNodeWrapper:
         self,
     ):
         """Move subarray to ON state."""
+        # TODO: extract a TelescopeAction subclass or remove
         if self.state != self.ON_STATE:
             Resource(
                 tmc_configuration.tmc_subarraynode1_name
@@ -237,6 +238,7 @@ class SubarrayNodeWrapper:
         self,
     ):
         """Move Subarray to OFF state."""
+        # TODO: extract a TelescopeAction subclass or remove
         Resource(tmc_configuration.tmc_subarraynode1_name).assert_attribute(
             "State"
         ).equals("ON")
@@ -255,6 +257,7 @@ class SubarrayNodeWrapper:
         Returns:
             (result, message): result, message tuple
         """
+        # TODO: extract a TelescopeAction subclass or remove
         result, message = self.subarray_node.Configure(input_string)
         LOGGER.info("Invoked Configure on SubarrayNode")
         return result, message
@@ -262,6 +265,7 @@ class SubarrayNodeWrapper:
     @sync_end(device_dict=device_dict)
     def end_observation(self):
         """Invoke End command on subarray Node."""
+        # TODO: extract a TelescopeAction subclass or remove
         result, message = self.subarray_node.End()
         LOGGER.info("Invoked End on SubarrayNode")
         return result, message
@@ -269,12 +273,14 @@ class SubarrayNodeWrapper:
     @sync_endscan(device_dict=device_dict)
     def remove_scan_data(self):
         """Invoke EndScan command on subarray Node."""
+        # TODO: extract a TelescopeAction subclass or remove
         result, message = self.subarray_node.EndScan()
         LOGGER.info("Invoked EndScan on SubarrayNode")
         return result, message
 
     def store_scan_data(self, input_string):
         """Invoke Scan command on subarray Node."""
+        # TODO: extract a TelescopeAction subclass or remove
         result, message = self.subarray_node.Scan(input_string)
         LOGGER.info("Invoked Scan on SubarrayNode")
         return result, message
@@ -282,12 +288,14 @@ class SubarrayNodeWrapper:
     @sync_abort(device_dict=device_dict)
     def abort_subarray(self):
         """Invoke Abort command on subarray Node."""
+        # TODO: extract a TelescopeAction subclass or remove
         result, message = self.subarray_node.Abort()
         LOGGER.info("Invoked Abort on SubarrayNode")
         return result, message
 
     @sync_restart(device_dict=device_dict)
     def restart_subarray(self):  # pylint: disable=missing-function-docstring
+        # TODO: extract a TelescopeAction subclass or remove
         result, message = self.subarray_node.Restart()
         LOGGER.info("Invoked Restart on SubarrayNode")
         return result, message
@@ -298,6 +306,7 @@ class SubarrayNodeWrapper:
         Args:
             assign_json (str): Assign resource input json
         """
+        # TODO: extract a TelescopeAction subclass or remove
         input_json = json.loads(assign_json)
         generate_eb_pb_ids(input_json)
         result, message = self.subarray_node.AssignResources(
@@ -311,6 +320,7 @@ class SubarrayNodeWrapper:
         self,
     ):
         """Invoke Release Resource command on subarray Node."""
+        # TODO: extract a TelescopeAction subclass or remove
         result, message = self.subarray_node.ReleaseAllResources()
         LOGGER.info("Invoked Release Resource on SubarrayNode")
         return result, message
@@ -320,6 +330,7 @@ class SubarrayNodeWrapper:
         Args:
             command_name (str): Name of command to execute
         """
+        # TODO: extract a TelescopeAction subclass or remove
         if command_name is not None:
             result, message = self.subarray_node.command_inout(
                 command_name, argin
@@ -407,6 +418,9 @@ class SubarrayNodeWrapper:
 
     def tear_down(self):
         """Tear down after each test run"""
+        # TODO: extract a TelescopeAction subclass
+        # think about merging with central node's tear_down method
+        # and make it an unique action that "resets" the whole telescope
 
         LOGGER.info("Calling Tear down for subarray")
         self._clear_command_call_and_transition_data(clear_transition=True)
