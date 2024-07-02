@@ -70,6 +70,22 @@ def given_the_sut(sut: TelescopeWrapper, simulator_factory):
         # central_node_mid.move_to_on()
         sut.execute_action(MoveToOn())
 
+    # sut.execute_action(factory.create_move_to_on())
+    # move_to_on(sut)
+    # sut.move_to_on()
+
+    # NOTE: SUT in this context is TMC and CSP. The others are technically
+    # not part of the SUT. They are part of the test environment.
+
+    # telescope? Better
+
+    # telescope.tmc.send_move_to_on_command()
+
+    # (Inside send_move_to_on_command())
+
+    # TMC sends the command ON to
+    # telescope.tmc.central_node.MoveToOn()
+
 
 @given("telescope is in ON state")
 def check_telescope_state_is_on(sut: TelescopeWrapper, event_recorder):
