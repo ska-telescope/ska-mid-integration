@@ -19,7 +19,7 @@ class MoveToOff(TelescopeAction):
     def _action(self):
         LOGGER.info("Moving the central node to OFF state")
 
-        self.telescope.tmc.move_central_node_to_off()
+        self.telescope.tmc.central_node.TelescopeOff()
         self.telescope.csp.move_to_off()
 
     def expected_outcome(self):

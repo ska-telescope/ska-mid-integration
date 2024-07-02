@@ -19,7 +19,7 @@ class SetStandby(TelescopeAction):
     def _action(self):
         LOGGER.info("Setting the central node to STANDBY state")
 
-        self.telescope.tmc.set_central_node_to_standby()
+        self.telescope.tmc.central_node.TelescopeStandby()
         self.telescope.csp.move_to_off()
 
     def expected_outcome(self):

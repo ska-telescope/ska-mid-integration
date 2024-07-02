@@ -2,6 +2,7 @@
 
 import json
 import logging
+import time
 from typing import Tuple
 
 from ska_control_model import ObsState, ResultCode
@@ -11,8 +12,9 @@ from tests.test_harness3.constant import (
     device_dict,  # TODO: find a way to handle this dependency
 )
 from tests.test_harness3.constant import DEFAULT_DISH_VCC_CONFIG
-from tests.test_harness3.telescope_actions.telescope_action import (
-    TelescopeAction,
+from tests.test_harness3.helpers import generate_eb_pb_ids
+from tests.test_harness3.telescope_actions.central_node.move_to_off import (
+    MoveToOff,
 )
 from tests.test_harness3.telescope_structure.telescope_wrapper import (
     TelescopeWrapper,
@@ -39,16 +41,10 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
     defined by the SKA Control Model.
     TODO: re-write"""
 
-    def __init__(
-        self,
-        telescope: TelescopeWrapper,
-        move_to_off_action: TelescopeAction,
-    ) -> None:
+    def __init__(self, telescope: TelescopeWrapper) -> None:
         super().__init__()
 
         self._telescope = telescope
-
-        self._move_to_off_action = move_to_off_action
 
         # NOTE: todo: remove this bad dependency
         device_dict["cbf_subarray1"] = "mid_csp_cbf/sub_elt/subarray_01"
@@ -61,22 +57,14 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
         ] = self._telescope.tmc.dish_leaf_node_list
         self.wait = Waiter(**device_dict)
 
-    def execute_action(self, action: TelescopeAction) -> None:
-        """Execute the provided action"""
-        action.set_sut_components(
-            tmc=self._telescope.tmc,
-            csp=self._telescope.csp,
-            sdp=self._telescope.sdp,
-            dishes=self._telescope.dishes,
-        )
-        action.execute()
-
     # -----------------------------------------------------------
     # SUB-ARRAY ACTIONS
 
     def set_subarray_id(self, requested_subarray_id: str) -> None:
         """This method creates subarray devices for the requested subarray
         id"""
+        # TODO: separate in a TelescopeAction
+        # TODO: this is something that should stay in TMCSubarrayFacade
         self._telescope.sdp.set_subarray_id(requested_subarray_id)
         self._telescope.csp.set_subarray_id(requested_subarray_id)
         self._telescope.tmc.set_subarray_id(requested_subarray_id)
@@ -84,11 +72,15 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
     @sync_abort(device_dict=device_dict)
     def subarray_abort(self) -> Tuple[ResultCode, str]:
         """Invoke Abort command on subarray Node"""
+        # TODO: separate in a TelescopeAction
+        # TODO: this is something that should stay in TMCSubarrayFacade
         return self._telescope.tmc.subarray_abort()
 
     @sync_restart(device_dict=device_dict)
     def subarray_restart(self) -> Tuple[ResultCode, str]:
         """Invoke Restart command on subarray Node"""
+        # TODO: separate in a TelescopeAction
+        # TODO: this is something that should stay in TMCSubarrayFacade
         return self._telescope.tmc.subarray_restart()
 
     # -----------------------------------------------------------
@@ -100,7 +92,11 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
         """Invoke LoadDishCfg command on central Node
         :param dish_vcc_config: Dish vcc configuration json string
         """
-        return self._telescope.tmc.load_dish_vcc_configuration(dish_vcc_config)
+        # TODO: separate in a TelescopeAction
+        result, message = self._telescope.tmc.central_node.LoadDishCfg(
+            dish_vcc_config
+        )
+        return result, message
 
     def perform_action(
         self, command_name: str, input_json: str
@@ -110,7 +106,11 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
             command_name (str): Name of command to execute
             input_json (str): Json send as input to execute command
         """
-        return self._telescope.tmc.perform_action(command_name, input_json)
+        # TODO: separate in a TelescopeAction
+        result, message = self._telescope.tmc.central_node.command_inout(
+            command_name, input_json
+        )
+        return result, message
 
     # RESOURCE RELATED COMMANDS
     # (still actions on CentralNode!)
@@ -121,7 +121,14 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
         Args:
             assign_json (str): Assign resource input json
         """
-        return self._telescope.tmc.store_resources(assign_json)
+        # TODO: separate in a TelescopeAction
+        input_json = json.loads(assign_json)
+        generate_eb_pb_ids(input_json)
+        result, message = self._telescope.tmc.central_node.AssignResources(
+            json.dumps(input_json)
+        )
+        LOGGER.info("Invoked AssignResources on CentralNode")
+        return result, message
 
     @sync_release_resources(device_dict=device_dict, timeout=500)
     def invoke_release_resources(
@@ -131,7 +138,13 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
         Args:
             input_string (str): Release resource input json
         """
-        return self._telescope.tmc.invoke_release_resources(input_string)
+        # TODO: separate in a TelescopeAction
+        time.sleep(3)
+
+        result, message = self._telescope.tmc.central_node.ReleaseResources(
+            input_string
+        )
+        return result, message
 
     # -----------------------------------------------------------
     # TEARDOWN
@@ -139,7 +152,7 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
     # NOTE: used a lot in fixtures
     def tear_down(self) -> None:
         """Handle Tear down of central Node"""
-        # TODO: move this teardown logic in a separate action
+        # TODO: separate in a TelescopeAction
 
         # NOTE: temporarily moved here because of synchronization
         Subarray_node_obsstate = self._telescope.tmc.subarray_node.obsState
@@ -170,7 +183,7 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
 
         # NOTE: temporarily moved here because of synchronization
         if self._telescope.tmc.telescope_state != "OFF":
-            self.execute_action(self._move_to_off_action)
+            MoveToOff(self._telescope).execute()
 
         # reset HealthState.UNKNOWN in emulated devices
         # reset command calls and transitions in emulated devices

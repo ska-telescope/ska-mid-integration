@@ -1,16 +1,12 @@
 """A wrapper for the TMC component."""
 
-import json
 import logging
-import time
 
 from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import HealthState
 from tango import DeviceProxy, DevState
 
 from tests.resources.test_support.common_utils.common_helpers import Resource
-from tests.resources.test_support.common_utils.result_code import ResultCode
-from tests.test_harness3.helpers import generate_eb_pb_ids
 from tests.test_harness3.telescope_config.components_config import (
     TMCConfiguration,
 )
@@ -139,68 +135,6 @@ class TMCDevices:
         self._telescope_state = value
 
     # -----------------------------------------------------------
-    # telescopeState central node actions
-
-    def move_central_node_to_on(self):
-        """Move CentralNode to ON state"""
-        self.central_node.TelescopeOn()
-
-    def move_central_node_to_off(self):
-        """Move CentralNode to OFF state"""
-        self.central_node.TelescopeOff()
-
-    def set_central_node_to_standby(self):
-        """Move CentralNode to STANDBY state"""
-        self.central_node.TelescopeStandby()
-
-    # -----------------------------------------------------------
-    # obsState central node actions
-
-    def load_dish_vcc_configuration(
-        self, dish_vcc_config: str
-    ) -> tuple[ResultCode, str]:
-        """Invoke LoadDishCfg command on central Node
-        :param dish_vcc_config: Dish vcc configuration json string
-        """
-        result, message = self.central_node.LoadDishCfg(dish_vcc_config)
-        return result, message
-
-    def perform_action(
-        self, command_name: str, input_json: str
-    ) -> tuple[ResultCode, str]:
-        """Execute provided command on centralnode
-        Args:
-            command_name (str): Name of command to execute
-            input_json (str): Json send as input to execute command
-        """
-        result, message = self.central_node.command_inout(
-            command_name, input_json
-        )
-        return result, message
-
-    def store_resources(self, assign_json: str) -> tuple[ResultCode, str]:
-        """Store resources"""
-        input_json = json.loads(assign_json)
-        generate_eb_pb_ids(input_json)
-        result, message = self.central_node.AssignResources(
-            json.dumps(input_json)
-        )
-        LOGGER.info("Invoked AssignResources on CentralNode")
-        return result, message
-
-    def invoke_release_resources(
-        self, input_string: str
-    ) -> tuple[ResultCode, str]:
-        """Invoke Release Resource command on central Node
-        Args:
-            input_string (str): Release resource input json
-        """
-        time.sleep(3)
-
-        result, message = self.central_node.ReleaseResources(input_string)
-        return result, message
-
-    # -----------------------------------------------------------
     # Subarray state actions
 
     def set_subarray_id(self, subarray_id: int):
@@ -219,14 +153,6 @@ class TMCDevices:
         self.sdp_subarray_leaf_node = DeviceProxy(
             f"ska_mid/tm_leaf_node/sdp_subarray{subarray_id}"
         )
-
-    def subarray_abort(self) -> tuple[ResultCode, str]:
-        """Abort subarray"""
-        return self.subarray_node.Abort()
-
-    def subarray_restart(self) -> tuple[ResultCode, str]:
-        """Restart subarray"""
-        return self.subarray_node.Restart()
 
     # -----------------------------------------------------------
     # Teardown actions
