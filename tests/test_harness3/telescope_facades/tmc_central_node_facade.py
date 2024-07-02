@@ -42,8 +42,6 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
     TODO: re-write"""
 
     def __init__(self, telescope: TelescopeWrapper) -> None:
-        super().__init__()
-
         self._telescope = telescope
 
         # NOTE: todo: remove this bad dependency
@@ -56,6 +54,24 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
             "dish_leaf_node_list"
         ] = self._telescope.tmc.dish_leaf_node_list
         self.wait = Waiter(**device_dict)
+
+    # -----------------------------------------------------------
+    # CENTRAL NODE DEVICES
+
+    @property
+    def central_node(self):
+        """The central node Tango device proxy."""
+        return self._telescope.tmc.central_node
+    
+    @property
+    def csp_master_leaf_node(self):
+        """The CSP master leaf node Tango device proxy."""
+        return self._telescope.tmc.csp_master_leaf_node
+    
+    @property
+    def sdp_master_leaf_node(self):
+        """The SDP master leaf node Tango device proxy."""
+        return self._telescope.tmc.sdp_master_leaf_node
 
     # -----------------------------------------------------------
     # SUB-ARRAY ACTIONS
