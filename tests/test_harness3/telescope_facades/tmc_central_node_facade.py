@@ -7,6 +7,7 @@ from typing import Tuple
 
 from ska_control_model import ObsState, ResultCode
 from ska_ser_logging import configure_logging
+from tango import DeviceProxy, DevState
 
 from tests.test_harness3.constant import (
     device_dict,  # TODO: find a way to handle this dependency
@@ -15,6 +16,12 @@ from tests.test_harness3.constant import DEFAULT_DISH_VCC_CONFIG
 from tests.test_harness3.helpers import generate_eb_pb_ids
 from tests.test_harness3.telescope_actions.central_node.move_to_off import (
     MoveToOff,
+)
+from tests.test_harness3.telescope_actions.central_node.move_to_on import (
+    MoveToOn,
+)
+from tests.test_harness3.telescope_actions.central_node.set_standby import (
+    SetStandby,
 )
 from tests.test_harness3.telescope_structure.telescope_wrapper import (
     TelescopeWrapper,
@@ -59,19 +66,48 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
     # CENTRAL NODE DEVICES
 
     @property
-    def central_node(self):
+    def central_node(self) -> DeviceProxy:
         """The central node Tango device proxy."""
         return self._telescope.tmc.central_node
-    
+
     @property
-    def csp_master_leaf_node(self):
+    def csp_master_leaf_node(self) -> DeviceProxy:
         """The CSP master leaf node Tango device proxy."""
         return self._telescope.tmc.csp_master_leaf_node
-    
+
     @property
-    def sdp_master_leaf_node(self):
+    def sdp_master_leaf_node(self) -> DeviceProxy:
         """The SDP master leaf node Tango device proxy."""
         return self._telescope.tmc.sdp_master_leaf_node
+
+    # -----------------------------------------------------------
+    # CENTRAL NODE PROPERTIES
+
+    # NOTE: same as for `state`
+    @property
+    def telescope_state(self) -> DevState:
+        """Get telescope state representing overall state of telescope."""
+        self._telescope.tmc.telescope_state
+
+    @telescope_state.setter
+    def telescope_state(self, value: DevState) -> None:
+        """Set telescope state representing overall state of telescope."""
+        self._telescope.tmc.telescope_state = value
+
+    # -----------------------------------------------------------
+    # STATE ACTIONS
+
+    def move_to_on(self) -> None:
+        """Move the telescope to ON state."""
+        MoveToOn(self._telescope).execute()
+
+    def move_to_off(self) -> None:
+        """Move the telescope to OFF state."""
+        MoveToOff(self._telescope).execute()
+
+    def set_standby(self) -> None:
+        """Set the telescope to STANDBY state."""
+        SetStandby(self._telescope).execute()
 
     # -----------------------------------------------------------
     # SUB-ARRAY ACTIONS
@@ -198,7 +234,7 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
             self.subarray_restart()
 
         # NOTE: temporarily moved here because of synchronization
-        if self._telescope.tmc.telescope_state != "OFF":
+        if self.telescope_state != "OFF":
             MoveToOff(self._telescope).execute()
 
         # reset HealthState.UNKNOWN in emulated devices

@@ -21,11 +21,30 @@ from tests.resources.test_harness.utils.common_utils import (
     check_scan_successful_csp,
 )
 from tests.resources.test_support.common_utils.result_code import ResultCode
-from tests.test_harness2.subarray_node import SubarrayNodeWrapper
-from tests.test_harness2.sut_initialization.harness_components_factory import (
-    HarnessComponentsFactory,
+from tests.test_harness2.subarray_node import (
+    SubarrayNodeWrapper as SubarrayNodeWrapper2,
 )
-from tests.test_harness2.sut_structure.sut_wrapper import TelescopeWrapper
+from tests.test_harness2.sut_initialization.harness_components_factory import (
+    HarnessComponentsFactory as HarnessComponentsFactory2,
+)
+from tests.test_harness2.sut_structure.sut_wrapper import (
+    TelescopeWrapper as TelescopeWrapper2,
+)
+from tests.test_harness3.telescope_facades.csp_facade import CSPFacade
+from tests.test_harness3.telescope_facades.dishes_facade import DishesFacade
+from tests.test_harness3.telescope_facades.sdp_facade import SDPFacade
+from tests.test_harness3.telescope_facades.tmc_central_node_facade import (
+    TMCCentralNodeFacade,
+)
+from tests.test_harness3.telescope_facades.tmc_subarray_node_facade import (
+    TMCSubarrayNodeFacade,
+)
+from tests.test_harness3.telescope_init.telescope_structure_factory import (
+    TelescopeStructureFactory,
+)
+from tests.test_harness3.telescope_structure.telescope_wrapper import (
+    TelescopeWrapper,
+)
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -265,9 +284,9 @@ def reexecute_scan_command(
 
 
 @fixture
-def test_harness() -> TelescopeWrapper:
+def test_harness() -> TelescopeWrapper2:
     """Create an unique test harness with proxies to all devices."""
-    components_factory = HarnessComponentsFactory()
+    components_factory = HarnessComponentsFactory2()
     test_harness = components_factory.create_telescope_wrapper()
     yield test_harness
     test_harness.tear_down()
@@ -275,15 +294,60 @@ def test_harness() -> TelescopeWrapper:
 
 @fixture
 def sut(
-    test_harness: TelescopeWrapper,
-) -> TelescopeWrapper:
+    test_harness: TelescopeWrapper2,
+) -> TelescopeWrapper2:
     """Create a facade to TMC central node and all its operations."""
     return test_harness
 
 
 @fixture
-def subarray_node_facade():
+def subarray_node_facade2():
     """Create a facade to TMC subarray node and all its operations."""
-    subarray_node = SubarrayNodeWrapper()
+    subarray_node = SubarrayNodeWrapper2()
     yield subarray_node
     subarray_node.tear_down()
+
+
+# ----------------------------------------------------------
+# New fixtures (refactor 3)
+
+
+@fixture
+def telescope_wrapper() -> TelescopeWrapper:
+    """Create an unique test harness with proxies to all devices."""
+    components_factory = TelescopeStructureFactory()
+    return components_factory.create_telescope_wrapper()
+
+
+@fixture
+def central_node_facade(telescope_wrapper: TelescopeWrapper):
+    """Create a facade to TMC central node and all its operations."""
+    central_node_facade = TMCCentralNodeFacade(telescope_wrapper)
+    yield central_node_facade
+    central_node_facade.tear_down()
+
+
+@fixture
+def subarray_node_facade(telescope_wrapper: TelescopeWrapper):
+    """Create a facade to TMC subarray node and all its operations."""
+    subarray_node = TMCSubarrayNodeFacade()
+    yield subarray_node
+    subarray_node.tear_down()
+
+
+@fixture
+def csp(telescope_wrapper: TelescopeWrapper):
+    """Create a facade to CSP devices."""
+    return CSPFacade(telescope_wrapper)
+
+
+@fixture
+def sdp(telescope_wrapper: TelescopeWrapper):
+    """Create a facade to SDP devices."""
+    return SDPFacade(telescope_wrapper)
+
+
+@fixture
+def dishes(telescope_wrapper: TelescopeWrapper):
+    """Create a facade to dishes devices."""
+    return DishesFacade(telescope_wrapper)
