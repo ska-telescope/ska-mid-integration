@@ -14,12 +14,9 @@ from tests.test_harness3.constant import DEFAULT_DISH_VCC_CONFIG
 from tests.test_harness3.telescope_actions.telescope_action import (
     TelescopeAction,
 )
-from tests.test_harness3.telescope_structure.csp_devices import CSPDevices
-from tests.test_harness3.telescope_structure.dishes_devices import (
-    DishesDevices,
+from tests.test_harness3.telescope_structure.telescope_wrapper import (
+    TelescopeWrapper,
 )
-from tests.test_harness3.telescope_structure.sdp_devices import SDPDevices
-from tests.test_harness3.telescope_structure.tmc_devices import TMCDevices
 from tests.test_harness3.utils.common_utils import JsonFactory
 from tests.test_harness3.utils.sync_decorators import (
     sync_abort,
@@ -44,35 +41,33 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
 
     def __init__(
         self,
-        tmc_wrapper: TMCDevices,
-        sdp_wrapper: SDPDevices,
-        csp_wrapper: CSPDevices,
-        dishes_wrapper: DishesDevices,
+        telescope: TelescopeWrapper,
         move_to_off_action: TelescopeAction,
     ) -> None:
         super().__init__()
 
-        self.tmc = tmc_wrapper
-        self.sdp = sdp_wrapper
-        self.csp = csp_wrapper
-        self.dishes = dishes_wrapper
+        self._telescope = telescope
 
         self._move_to_off_action = move_to_off_action
 
         # NOTE: todo: remove this bad dependency
         device_dict["cbf_subarray1"] = "mid_csp_cbf/sub_elt/subarray_01"
         device_dict["cbf_controller"] = "mid_csp_cbf/sub_elt/controller"
-        device_dict["dish_master_list"] = self.dishes.dish_master_list
-        device_dict["dish_leaf_node_list"] = self.tmc.dish_leaf_node_list
+        device_dict[
+            "dish_master_list"
+        ] = self._telescope.dishes.dish_master_list
+        device_dict[
+            "dish_leaf_node_list"
+        ] = self._telescope.tmc.dish_leaf_node_list
         self.wait = Waiter(**device_dict)
 
     def execute_action(self, action: TelescopeAction) -> None:
         """Execute the provided action"""
         action.set_sut_components(
-            tmc=self.tmc,
-            csp=self.csp,
-            sdp=self.sdp,
-            dishes=self.dishes,
+            tmc=self._telescope.tmc,
+            csp=self._telescope.csp,
+            sdp=self._telescope.sdp,
+            dishes=self._telescope.dishes,
         )
         action.execute()
 
@@ -82,19 +77,19 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
     def set_subarray_id(self, requested_subarray_id: str) -> None:
         """This method creates subarray devices for the requested subarray
         id"""
-        self.sdp.set_subarray_id(requested_subarray_id)
-        self.csp.set_subarray_id(requested_subarray_id)
-        self.tmc.set_subarray_id(requested_subarray_id)
+        self._telescope.sdp.set_subarray_id(requested_subarray_id)
+        self._telescope.csp.set_subarray_id(requested_subarray_id)
+        self._telescope.tmc.set_subarray_id(requested_subarray_id)
 
     @sync_abort(device_dict=device_dict)
     def subarray_abort(self) -> Tuple[ResultCode, str]:
         """Invoke Abort command on subarray Node"""
-        return self.tmc.subarray_abort()
+        return self._telescope.tmc.subarray_abort()
 
     @sync_restart(device_dict=device_dict)
     def subarray_restart(self) -> Tuple[ResultCode, str]:
         """Invoke Restart command on subarray Node"""
-        return self.tmc.subarray_restart()
+        return self._telescope.tmc.subarray_restart()
 
     # -----------------------------------------------------------
     # CENTRAL NODE ACTIONS
@@ -105,7 +100,7 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
         """Invoke LoadDishCfg command on central Node
         :param dish_vcc_config: Dish vcc configuration json string
         """
-        return self.tmc.load_dish_vcc_configuration(dish_vcc_config)
+        return self._telescope.tmc.load_dish_vcc_configuration(dish_vcc_config)
 
     def perform_action(
         self, command_name: str, input_json: str
@@ -115,7 +110,7 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
             command_name (str): Name of command to execute
             input_json (str): Json send as input to execute command
         """
-        return self.tmc.perform_action(command_name, input_json)
+        return self._telescope.tmc.perform_action(command_name, input_json)
 
     # RESOURCE RELATED COMMANDS
     # (still actions on CentralNode!)
@@ -126,7 +121,7 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
         Args:
             assign_json (str): Assign resource input json
         """
-        return self.tmc.store_resources(assign_json)
+        return self._telescope.tmc.store_resources(assign_json)
 
     @sync_release_resources(device_dict=device_dict, timeout=500)
     def invoke_release_resources(
@@ -136,7 +131,7 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
         Args:
             input_string (str): Release resource input json
         """
-        return self.tmc.invoke_release_resources(input_string)
+        return self._telescope.tmc.invoke_release_resources(input_string)
 
     # -----------------------------------------------------------
     # TEARDOWN
@@ -147,20 +142,20 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
         # TODO: move this teardown logic in a separate action
 
         # NOTE: temporarily moved here because of synchronization
-        Subarray_node_obsstate = self.tmc.subarray_node.obsState
+        Subarray_node_obsstate = self._telescope.tmc.subarray_node.obsState
         LOGGER.info(
             f"Calling tear down for CentralNode for SubarrayNode's \
                 {Subarray_node_obsstate} obsstate."
         )
 
-        if self.tmc.subarray_node.obsState == ObsState.IDLE:
+        if self._telescope.tmc.subarray_node.obsState == ObsState.IDLE:
             LOGGER.info("Calling Release Resource on centralnode")
             json_factory = JsonFactory()
             release_input = json_factory.create_centralnode_configuration(
                 "release_resources_mid"
             )
             self.invoke_release_resources(release_input)
-        elif self.tmc.subarray_node.obsState in [
+        elif self._telescope.tmc.subarray_node.obsState in [
             ObsState.RESOURCING,
             ObsState.SCANNING,
             ObsState.CONFIGURING,
@@ -170,26 +165,28 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
             LOGGER.info("Calling Abort and Restart on SubarrayNode")
             self.subarray_abort()
             self.subarray_restart()
-        elif self.tmc.subarray_node.obsState == ObsState.ABORTED:
+        elif self._telescope.tmc.subarray_node.obsState == ObsState.ABORTED:
             self.subarray_restart()
 
         # NOTE: temporarily moved here because of synchronization
-        if self.tmc.telescope_state != "OFF":
+        if self._telescope.tmc.telescope_state != "OFF":
             self.execute_action(self._move_to_off_action)
 
         # reset HealthState.UNKNOWN in emulated devices
         # reset command calls and transitions in emulated devices
-        self.csp.tear_down()
-        self.sdp.tear_down()
-        self.dishes.tear_down()
+        self._telescope.csp.tear_down()
+        self._telescope.sdp.tear_down()
+        self._telescope.dishes.tear_down()
 
         # if source dish vcc config is empty or not matching with default
         # dish vcc then load default dish vcc config
         # CSP_SIMULATION_ENABLED condition will be removed after testing
         # with real csp
         if (
-            not self.tmc.csp_master_leaf_node.sourceDishVccConfig
-            or json.loads(self.tmc.csp_master_leaf_node.sourceDishVccConfig)
+            not self._telescope.tmc.csp_master_leaf_node.sourceDishVccConfig
+            or json.loads(
+                self._telescope.tmc.csp_master_leaf_node.sourceDishVccConfig
+            )
             != DEFAULT_DISH_VCC_CONFIG
         ):
             self._load_default_dish_vcc_config()
@@ -232,7 +229,7 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
     #         dish_mode: DishMode - dish mode value for Dish Masters
     #     """
     #     # device_to_on_list = [self.subarray_devices.get("sdp_subarray")]
-    #     device_to_on_list = [self.sdp.sdp_subarray]
+    #     device_to_on_list = [self._telescope.sdp.sdp_subarray]
 
     #     for device in device_to_on_list:
     #         device_proxy = DeviceProxy(device)
@@ -272,4 +269,4 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
     #     if (
     #         emulation_configuration.csp and emulation_configuration.dish
     #     ) or emulation_configuration.all_emulated():
-    #         self.csp_master.ResetSysParams()
+    #         self._telescope.csp_master.ResetSysParams()

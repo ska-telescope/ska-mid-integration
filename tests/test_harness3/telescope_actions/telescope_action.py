@@ -2,12 +2,9 @@
 
 import abc
 
-from tests.test_harness3.telescope_structure.csp_devices import CSPDevices
-from tests.test_harness3.telescope_structure.dishes_devices import (
-    DishesDevices,
+from tests.test_harness3.telescope_structure.telescope_wrapper import (
+    TelescopeWrapper,
 )
-from tests.test_harness3.telescope_structure.sdp_devices import SDPDevices
-from tests.test_harness3.telescope_structure.tmc_devices import TMCDevices
 from tests.test_harness3.utils.state_change_waiter import (
     ExpectedStateChange,
     StateChangeWaiter,
@@ -43,14 +40,10 @@ class TelescopeAction(abc.ABC):
 
     COMMAND_TIMEOUT = 30
 
-    def __init__(self) -> None:
+    def __init__(self, telescope: TelescopeWrapper) -> None:
         super().__init__()
+        self.telescope = telescope
         self._state_change_waiter = StateChangeWaiter()
-
-        self.tmc: TMCDevices = None
-        self.csp: CSPDevices = None
-        self.sdp: SDPDevices = None
-        self.dishes: DishesDevices = None
 
     @abc.abstractmethod
     def _action(self):
@@ -62,25 +55,6 @@ class TelescopeAction(abc.ABC):
         """The expected outcome of the command."""
         pass
 
-    def set_sut_components(
-        self,
-        tmc: TMCDevices,
-        csp: CSPDevices,
-        sdp: SDPDevices,
-        dishes: DishesDevices,
-    ) -> None:
-        """Set the SUT components for the action.
-
-        :param tmc: The TMC component of the SUT.
-        :param csp: The CSP component of the SUT.
-        :param sdp: The SDP component of the SUT.
-        :param dishes: The Dishes component of the SUT.
-        """
-        self.tmc = tmc
-        self.csp = csp
-        self.sdp = sdp
-        self.dishes = dishes
-
     def execute(self):
         """Execute the command.
 
@@ -91,13 +65,7 @@ class TelescopeAction(abc.ABC):
 
         :raises TimeoutError: If the expected outcome does not occur
             within a timeout.
-        :raises ValueError: If the SUT components are not set.
         """
-        if not all([self.tmc, self.csp, self.sdp, self.dishes]):
-            raise ValueError(
-                "The SUT components must be set before executing the command."
-            )
-
         # Subscribe to the expected state changes
         self._state_change_waiter.reset()
         self._state_change_waiter.add_expected_state_changes(

@@ -18,6 +18,7 @@ class ForceChangeOfObsState(TelescopeAction):
 
     def __init__(
         self,
+        telescope,
         subarray_node_facade: SubarrayNodeWrapper,
         dest_state_name: str,
         assign_input_json: str = "",
@@ -25,7 +26,7 @@ class ForceChangeOfObsState(TelescopeAction):
         scan_input_json: str = "",
     ):
         """Initialize the action with the target state."""
-        super().__init__()
+        super().__init__(telescope)
 
         # TODO: remove the reference to subarray_node
         # (OBS state resetter could use actions)

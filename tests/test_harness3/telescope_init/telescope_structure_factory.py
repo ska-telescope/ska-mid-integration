@@ -59,10 +59,10 @@ class TelescopeStructureFactory:
         # or the singleton may be achieved through fixtures
 
         return TelescopeWrapper(
-            tmc_wrapper=self.create_tmc_wrapper(),
-            sdp_wrapper=self.create_sdp_wrapper(),
-            csp_wrapper=self.create_csp_wrapper(),
-            dishes_wrapper=self.create_dishes_wrapper(),
+            tmc=self.create_tmc_wrapper(),
+            sdp=self.create_sdp_wrapper(),
+            csp=self.create_csp_wrapper(),
+            dishes=self.create_dishes_wrapper(),
         )
 
     def create_tmc_wrapper(self) -> TMCDevices:

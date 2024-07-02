@@ -19,20 +19,28 @@ class MoveToOff(TelescopeAction):
     def _action(self):
         LOGGER.info("Moving the central node to OFF state")
 
-        self.tmc.move_central_node_to_off()
-        self.csp.move_to_off()
+        self.telescope.tmc.move_central_node_to_off()
+        self.telescope.csp.move_to_off()
 
     def expected_outcome(self):
         res = [
-            ExpectedStateChange(self.sdp.sdp_subarray, "State", DevState.OFF),
-            ExpectedStateChange(self.sdp.sdp_master, "State", DevState.OFF),
-            ExpectedStateChange(self.csp.csp_subarray, "State", DevState.OFF),
-            ExpectedStateChange(self.csp.csp_master, "State", DevState.OFF),
+            ExpectedStateChange(
+                self.telescope.sdp.sdp_subarray, "State", DevState.OFF
+            ),
+            ExpectedStateChange(
+                self.telescope.sdp.sdp_master, "State", DevState.OFF
+            ),
+            ExpectedStateChange(
+                self.telescope.csp.csp_subarray, "State", DevState.OFF
+            ),
+            ExpectedStateChange(
+                self.telescope.csp.csp_master, "State", DevState.OFF
+            ),
         ]
 
         res += [
             ExpectedStateChange(dish, "dishMode", DishMode.STANDBY_LP)
-            for dish in self.dishes.dish_master_list
+            for dish in self.telescope.dishes.dish_master_list
         ]
 
         return res

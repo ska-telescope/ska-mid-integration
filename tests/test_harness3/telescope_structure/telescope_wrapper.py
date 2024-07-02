@@ -17,7 +17,7 @@ class TelescopeWrapper:  # pylint: disable=too-many-public-methods
     defined by the SKA Control Model.
     TODO: re-write contract."""
 
-    tmc_wrapper: TMCDevices
-    sdp_wrapper: SDPDevices
-    csp_wrapper: CSPDevices
-    dishes_wrapper: DishesDevices
+    tmc: TMCDevices
+    sdp: SDPDevices
+    csp: CSPDevices
+    dishes: DishesDevices

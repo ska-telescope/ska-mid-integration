@@ -12,12 +12,14 @@ LOGGER = logging.getLogger(__name__)
 class StoreScanData(TelescopeAction):
     """Invoke Scan command on subarray Node."""
 
-    def __init__(self, input_string: str):
-        super().__init__()
+    def __init__(self, telescope, input_string: str):
+        super().__init__(telescope)
         self.input_string = input_string
 
     def _action(self):
-        result, message = self.tmc.subarray_node.Scan(self.input_string)
+        result, message = self.telescope.tmc.subarray_node.Scan(
+            self.input_string
+        )
         LOGGER.info("Invoked Scan on SubarrayNode")
         return result, message
 

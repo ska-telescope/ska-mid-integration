@@ -19,24 +19,28 @@ class SetStandby(TelescopeAction):
     def _action(self):
         LOGGER.info("Setting the central node to STANDBY state")
 
-        self.tmc.set_central_node_to_standby()
-        self.csp.move_to_off()
+        self.telescope.tmc.set_central_node_to_standby()
+        self.telescope.csp.move_to_off()
 
     def expected_outcome(self):
         res = [
-            ExpectedStateChange(self.sdp.sdp_subarray, "State", DevState.OFF),
             ExpectedStateChange(
-                self.sdp.sdp_master, "State", DevState.STANDBY
+                self.telescope.sdp.sdp_subarray, "State", DevState.OFF
             ),
-            ExpectedStateChange(self.csp.csp_subarray, "State", DevState.OFF),
             ExpectedStateChange(
-                self.csp.csp_master, "State", DevState.STANDBY
+                self.telescope.sdp.sdp_master, "State", DevState.STANDBY
+            ),
+            ExpectedStateChange(
+                self.telescope.csp.csp_subarray, "State", DevState.OFF
+            ),
+            ExpectedStateChange(
+                self.telescope.csp.csp_master, "State", DevState.STANDBY
             ),
         ]
 
         res += [
             ExpectedStateChange(dish, "dishMode", DishMode.STANDBY_LP)
-            for dish in self.dishes.dish_master_list
+            for dish in self.telescope.dishes.dish_master_list
         ]
 
         return res

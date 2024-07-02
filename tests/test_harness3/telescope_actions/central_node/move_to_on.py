@@ -15,8 +15,8 @@ class MoveToOn(TelescopeAction):
     def _action(self):
         LOGGER.info("Moving the central node to ON state")
 
-        self.tmc.move_central_node_to_on()
-        self.csp.move_to_on()
+        self.telescope.tmc.move_central_node_to_on()
+        self.telescope.csp.move_to_on()
 
     def expected_outcome(self):
         """No expected outcome for this action."""
