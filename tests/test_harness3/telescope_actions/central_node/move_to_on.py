@@ -2,12 +2,14 @@
 
 import logging
 
-from tests.test_harness3.sut_structure.sut_action import SUTAction
+from tests.test_harness3.telescope_actions.telescope_action import (
+    TelescopeAction,
+)
 
 LOGGER = logging.getLogger(__name__)
 
 
-class MoveToOn(SUTAction):
+class MoveToOn(TelescopeAction):
     """An action to move the central node to ON State."""
 
     def _action(self):

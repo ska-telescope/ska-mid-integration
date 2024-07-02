@@ -4,14 +4,16 @@ import logging
 
 from tango import DevState
 
-from tests.test_harness3.sut_structure.sut_action import SUTAction
+from tests.test_harness3.telescope_actions.telescope_action import (
+    TelescopeAction,
+)
 from tests.test_harness3.utils.enums import DishMode
 from tests.test_harness3.utils.state_change_waiter import ExpectedStateChange
 
 LOGGER = logging.getLogger(__name__)
 
 
-class SetStandby(SUTAction):
+class SetStandby(TelescopeAction):
     """An action to set the central node to STANDBY State."""
 
     def _action(self):

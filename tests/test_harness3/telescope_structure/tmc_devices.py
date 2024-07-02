@@ -11,7 +11,7 @@ from tango import DeviceProxy, DevState
 from tests.resources.test_support.common_utils.common_helpers import Resource
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.test_harness3.helpers import generate_eb_pb_ids
-from tests.test_harness3.sut_configuration.components_config import (
+from tests.test_harness3.telescope_config.components_config import (
     TMCConfiguration,
 )
 from tests.test_harness3.utils.common_utils import JsonFactory
@@ -20,7 +20,7 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
-class TMCWrapper:
+class TMCDevices:
     """A wrapper for the TMC component."""
 
     def __init__(self, tmc_configuration: TMCConfiguration):

@@ -2,13 +2,15 @@
 
 from tango.db import Database
 
-from tests.test_harness3.sut_configuration.components_config import (
+from tests.test_harness3.telescope_config.components_config import (
     DishesConfiguration,
 )
-from tests.test_harness3.sut_structure.dishes_wrapper import DishesWrapper
+from tests.test_harness3.telescope_structure.dishes_devices import (
+    DishesDevices,
+)
 
 
-class ProductionDishesWrapper(DishesWrapper):
+class ProductionDishesDevices(DishesDevices):
     """A wrapper for production dishes."""
 
     def _pre_init_dish_names(

@@ -2,13 +2,13 @@
 
 import os
 
-from tests.test_harness3.sut_configuration.components_config import (
+from tests.test_harness3.telescope_config.components_config import (
     CSPConfiguration,
     DishesConfiguration,
     SDPConfiguration,
     TMCConfiguration,
 )
-from tests.test_harness3.sut_configuration.emulation_config import (
+from tests.test_harness3.telescope_config.emulation_config import (
     EmulationConfiguration,
 )
 

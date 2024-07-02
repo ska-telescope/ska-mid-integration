@@ -11,11 +11,15 @@ from tests.test_harness3.constant import (
     device_dict,  # TODO: find a way to handle this dependency
 )
 from tests.test_harness3.constant import DEFAULT_DISH_VCC_CONFIG
-from tests.test_harness3.sut_structure.csp_wrapper import CSPWrapper
-from tests.test_harness3.sut_structure.dishes_wrapper import DishesWrapper
-from tests.test_harness3.sut_structure.sdp_wrapper import SDPWrapper
-from tests.test_harness3.sut_structure.sut_action import SUTAction
-from tests.test_harness3.sut_structure.tmc_wrapper import TMCWrapper
+from tests.test_harness3.telescope_actions.telescope_action import (
+    TelescopeAction,
+)
+from tests.test_harness3.telescope_structure.csp_devices import CSPDevices
+from tests.test_harness3.telescope_structure.dishes_devices import (
+    DishesDevices,
+)
+from tests.test_harness3.telescope_structure.sdp_devices import SDPDevices
+from tests.test_harness3.telescope_structure.tmc_devices import TMCDevices
 from tests.test_harness3.utils.common_utils import JsonFactory
 from tests.test_harness3.utils.sync_decorators import (
     sync_abort,
@@ -32,18 +36,19 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
-class TelescopeWrapper:  # pylint: disable=too-many-public-methods
+class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
     """A wrapper class to implement common tango specific details
     and standard set of commands for TMC Mid CentralNode,
-    defined by the SKA Control Model."""
+    defined by the SKA Control Model.
+    TODO: re-write"""
 
     def __init__(
         self,
-        tmc_wrapper: TMCWrapper,
-        sdp_wrapper: SDPWrapper,
-        csp_wrapper: CSPWrapper,
-        dishes_wrapper: DishesWrapper,
-        move_to_off_action: SUTAction,
+        tmc_wrapper: TMCDevices,
+        sdp_wrapper: SDPDevices,
+        csp_wrapper: CSPDevices,
+        dishes_wrapper: DishesDevices,
+        move_to_off_action: TelescopeAction,
     ) -> None:
         super().__init__()
 
@@ -61,15 +66,14 @@ class TelescopeWrapper:  # pylint: disable=too-many-public-methods
         device_dict["dish_leaf_node_list"] = self.tmc.dish_leaf_node_list
         self.wait = Waiter(**device_dict)
 
-    def execute_action(self, action: SUTAction):
-        """Execute an action on the SUT.
-
-        :param action: The action to execute.
-
-        :raises TimeoutError: If the expected outcome does not occur
-            within a timeout.
-        """
-        action.set_sut_components(self.tmc, self.csp, self.sdp, self.dishes)
+    def execute_action(self, action: TelescopeAction) -> None:
+        """Execute the provided action"""
+        action.set_sut_components(
+            tmc=self.tmc,
+            csp=self.csp,
+            sdp=self.sdp,
+            dishes=self.dishes,
+        )
         action.execute()
 
     # -----------------------------------------------------------
@@ -140,6 +144,8 @@ class TelescopeWrapper:  # pylint: disable=too-many-public-methods
     # NOTE: used a lot in fixtures
     def tear_down(self) -> None:
         """Handle Tear down of central Node"""
+        # TODO: move this teardown logic in a separate action
+
         # NOTE: temporarily moved here because of synchronization
         Subarray_node_obsstate = self.tmc.subarray_node.obsState
         LOGGER.info(

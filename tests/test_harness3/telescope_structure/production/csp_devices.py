@@ -1,13 +1,13 @@
 """A wrapper for a production CSP."""
 
 from tests.test_harness3.helpers import wait_csp_master_off
-from tests.test_harness3.sut_configuration.components_config import (
+from tests.test_harness3.telescope_config.components_config import (
     CSPConfiguration,
 )
-from tests.test_harness3.sut_structure.csp_wrapper import CSPWrapper
+from tests.test_harness3.telescope_structure.csp_devices import CSPDevices
 
 
-class ProductionCSPWrapper(CSPWrapper):
+class ProductionCSPDevices(CSPDevices):
     """A wrapper for a production CSP.
 
     TODO: describe differences.

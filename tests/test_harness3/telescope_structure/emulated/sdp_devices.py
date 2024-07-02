@@ -1,6 +1,6 @@
 """A wrapper for an emulated SDP."""
 
-from tests.test_harness3.sut_structure.sdp_wrapper import SDPWrapper
+from tests.test_harness3.telescope_structure.sdp_devices import SDPDevices
 from tests.test_harness3.utils.emulated_teardown import (
     clear_command_call,
     reset_health_state,
@@ -8,7 +8,7 @@ from tests.test_harness3.utils.emulated_teardown import (
 )
 
 
-class EmulatedSDPWrapper(SDPWrapper):
+class EmulatedSDPDevices(SDPDevices):
     """A wrapper for an emulated SDP."""
 
     def tear_down(self) -> None:

@@ -3,7 +3,9 @@
 import logging
 
 from tests.test_harness3.subarray_node import SubarrayNodeWrapper
-from tests.test_harness3.sut_structure.sut_action import SUTAction
+from tests.test_harness3.telescope_actions.telescope_action import (
+    TelescopeAction,
+)
 from tests.test_harness3.utils.obs_state_resetter import (
     ObsStateResetterFactory,
 )
@@ -11,7 +13,7 @@ from tests.test_harness3.utils.obs_state_resetter import (
 LOGGER = logging.getLogger(__name__)
 
 
-class ForceChangeOfObsState(SUTAction):
+class ForceChangeOfObsState(TelescopeAction):
     """Force the change of the ObsState in Subarray to a target state."""
 
     def __init__(

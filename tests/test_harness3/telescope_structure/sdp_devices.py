@@ -4,10 +4,10 @@ import abc
 
 from tango import DeviceProxy
 
-from tests.test_harness3.sut_configuration.components_config import (
+from tests.test_harness3.telescope_config.components_config import (
     SDPConfiguration,
 )
-from tests.test_harness3.sut_configuration.configuration_factory import (
+from tests.test_harness3.telescope_config.configuration_factory import (
     TestHarnessConfigurationFactory,
 )
 
@@ -16,7 +16,7 @@ emulation_configuration = (
 )
 
 
-class SDPWrapper(abc.ABC):
+class SDPDevices(abc.ABC):
     """A test wrapper for the SDP."""
 
     def __init__(self, sdp_configuration: SDPConfiguration):

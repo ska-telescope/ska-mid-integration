@@ -17,13 +17,13 @@ from tests.test_harness3.helpers import (  # SIMULATED_DEVICES_DICT,
     generate_eb_pb_ids,
     prepare_json_args_for_commands,
 )
-from tests.test_harness3.sut_configuration.components_config import (
+from tests.test_harness3.telescope_config.components_config import (
     CSPConfiguration,
     DishesConfiguration,
     SDPConfiguration,
     TMCConfiguration,
 )
-from tests.test_harness3.sut_configuration.configuration_factory import (
+from tests.test_harness3.telescope_config.configuration_factory import (
     TestHarnessConfigurationFactory,
 )
 from tests.test_harness3.utils.constant import ABORTED, IDLE, ON, READY

@@ -4,13 +4,13 @@ import abc
 
 from tango import DeviceProxy
 
-from tests.test_harness3.sut_configuration.components_config import (
+from tests.test_harness3.telescope_config.components_config import (
     DishesConfiguration,
 )
 
 
 # NOTE: in future, may some dishes be emulated and some real?
-class DishesWrapper(abc.ABC):
+class DishesDevices(abc.ABC):
     """A test wrapper for the dishes."""
 
     def __init__(self, dishes_configuration: DishesConfiguration):

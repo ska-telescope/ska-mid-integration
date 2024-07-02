@@ -2,12 +2,14 @@
 
 import logging
 
-from tests.test_harness3.sut_structure.sut_action import SUTAction
+from tests.test_harness3.telescope_actions.telescope_action import (
+    TelescopeAction,
+)
 
 LOGGER = logging.getLogger(__name__)
 
 
-class StoreScanData(SUTAction):
+class StoreScanData(TelescopeAction):
     """Invoke Scan command on subarray Node."""
 
     def __init__(self, input_string: str):

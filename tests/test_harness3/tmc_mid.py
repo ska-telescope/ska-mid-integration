@@ -6,19 +6,19 @@ import time
 from tango import DeviceProxy
 
 from tests.test_harness3.constant import tmc_csp_master_leaf_node
-from tests.test_harness3.sut_initialization.harness_components_factory import (
-    HarnessComponentsFactory,
+from tests.test_harness3.telescope_init.telescope_structure_factory import (
+    TelescopeStructureFactory,
 )
 
-from .sut_structure.sut_wrapper import TelescopeWrapper
+from .telescope_facades.tmc_central_node_facade import TMCCentralNodeFacade
 
 
 # NOTE: What is this class for? What does it do?
 class TMCMid:
     def __init__(self):
         """Set all devices proxy required for TMC"""
-        harness_factory = HarnessComponentsFactory()
-        self.central_node: TelescopeWrapper = (
+        harness_factory = TelescopeStructureFactory()
+        self.central_node: TMCCentralNodeFacade = (
             harness_factory.create_telescope_wrapper()
         )
         self.csp_master_leaf_node = DeviceProxy(tmc_csp_master_leaf_node)

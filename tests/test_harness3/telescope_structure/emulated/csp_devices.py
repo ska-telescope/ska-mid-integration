@@ -2,7 +2,7 @@
 
 from tango import DevState
 
-from tests.test_harness3.sut_structure.csp_wrapper import CSPWrapper
+from tests.test_harness3.telescope_structure.csp_devices import CSPDevices
 from tests.test_harness3.utils.emulated_teardown import (
     clear_command_call,
     reset_health_state,
@@ -10,7 +10,7 @@ from tests.test_harness3.utils.emulated_teardown import (
 )
 
 
-class EmulatedCSPWrapper(CSPWrapper):
+class EmulatedCSPDevices(CSPDevices):
     """A wrapper for an emulated CSP."""
 
     def move_to_on(self) -> None:

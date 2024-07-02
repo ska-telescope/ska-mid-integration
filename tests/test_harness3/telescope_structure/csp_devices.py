@@ -4,12 +4,12 @@ import abc
 
 from tango import DeviceProxy
 
-from tests.test_harness3.sut_configuration.components_config import (
+from tests.test_harness3.telescope_config.components_config import (
     CSPConfiguration,
 )
 
 
-class CSPWrapper(abc.ABC):
+class CSPDevices(abc.ABC):
     """A test wrapper for the CSP."""
 
     def __init__(self, csp_configuration: CSPConfiguration):

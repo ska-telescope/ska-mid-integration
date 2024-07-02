@@ -2,17 +2,19 @@
 
 import abc
 
-from tests.test_harness3.sut_structure.csp_wrapper import CSPWrapper
-from tests.test_harness3.sut_structure.dishes_wrapper import DishesWrapper
-from tests.test_harness3.sut_structure.sdp_wrapper import SDPWrapper
-from tests.test_harness3.sut_structure.tmc_wrapper import TMCWrapper
+from tests.test_harness3.telescope_structure.csp_devices import CSPDevices
+from tests.test_harness3.telescope_structure.dishes_devices import (
+    DishesDevices,
+)
+from tests.test_harness3.telescope_structure.sdp_devices import SDPDevices
+from tests.test_harness3.telescope_structure.tmc_devices import TMCDevices
 from tests.test_harness3.utils.state_change_waiter import (
     ExpectedStateChange,
     StateChangeWaiter,
 )
 
 
-class SUTAction(abc.ABC):
+class TelescopeAction(abc.ABC):
     """A generic action executed over the SUT and its components.
 
     An action over the SUT is a command made by:
@@ -45,10 +47,10 @@ class SUTAction(abc.ABC):
         super().__init__()
         self._state_change_waiter = StateChangeWaiter()
 
-        self.tmc: TMCWrapper = None
-        self.csp: CSPWrapper = None
-        self.sdp: SDPWrapper = None
-        self.dishes: DishesWrapper = None
+        self.tmc: TMCDevices = None
+        self.csp: CSPDevices = None
+        self.sdp: SDPDevices = None
+        self.dishes: DishesDevices = None
 
     @abc.abstractmethod
     def _action(self):
@@ -62,10 +64,10 @@ class SUTAction(abc.ABC):
 
     def set_sut_components(
         self,
-        tmc: TMCWrapper,
-        csp: CSPWrapper,
-        sdp: SDPWrapper,
-        dishes: DishesWrapper,
+        tmc: TMCDevices,
+        csp: CSPDevices,
+        sdp: SDPDevices,
+        dishes: DishesDevices,
     ) -> None:
         """Set the SUT components for the action.
 

@@ -1,9 +1,9 @@
 """A wrapper for a production SDP."""
 
-from tests.test_harness3.sut_structure.sdp_wrapper import SDPWrapper
+from tests.test_harness3.telescope_structure.sdp_devices import SDPDevices
 
 
-class ProductionSDPWrapper(SDPWrapper):
+class ProductionSDPDevices(SDPDevices):
     """A wrapper for a production SDP."""
 
     def tear_down(self) -> None:

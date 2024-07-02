@@ -1,34 +1,37 @@
 """Create real or emulated test harness components."""
-from tests.test_harness3.emulated_components.csp_wrapper import (
-    EmulatedCSPWrapper,
-)
-from tests.test_harness3.emulated_components.dishes_wrapper import (
-    EmulatedDishesWrapper,
-)
-from tests.test_harness3.emulated_components.sdp_wrapper import (
-    EmulatedSDPWrapper,
-)
-from tests.test_harness3.production_components.csp_wrapper import (
-    ProductionCSPWrapper,
-)
-from tests.test_harness3.production_components.dishes_wrapper import (
-    ProductionDishesWrapper,
-)
-from tests.test_harness3.production_components.sdp_wrapper import (
-    ProductionSDPWrapper,
-)
-from tests.test_harness3.sut_actions.move_to_off import MoveToOff
-from tests.test_harness3.sut_configuration.configuration_factory import (
+from tests.test_harness3.telescope_config.configuration_factory import (
     TestHarnessConfigurationFactory,
 )
-from tests.test_harness3.sut_structure.csp_wrapper import CSPWrapper
-from tests.test_harness3.sut_structure.dishes_wrapper import DishesWrapper
-from tests.test_harness3.sut_structure.sdp_wrapper import SDPWrapper
-from tests.test_harness3.sut_structure.sut_wrapper import TelescopeWrapper
-from tests.test_harness3.sut_structure.tmc_wrapper import TMCWrapper
+from tests.test_harness3.telescope_structure.csp_devices import CSPDevices
+from tests.test_harness3.telescope_structure.dishes_devices import (
+    DishesDevices,
+)
+from tests.test_harness3.telescope_structure.emulated.csp_devices import (
+    EmulatedCSPDevices,
+)
+from tests.test_harness3.telescope_structure.emulated.dishes_devices import (
+    EmulatedDishesDevices,
+)
+from tests.test_harness3.telescope_structure.emulated.sdp_devices import (
+    EmulatedSDPDevices,
+)
+from tests.test_harness3.telescope_structure.production.csp_devices import (
+    ProductionCSPDevices,
+)
+from tests.test_harness3.telescope_structure.production.dishes_devices import (
+    ProductionDishesDevices,
+)
+from tests.test_harness3.telescope_structure.production.sdp_devices import (
+    ProductionSDPDevices,
+)
+from tests.test_harness3.telescope_structure.sdp_devices import SDPDevices
+from tests.test_harness3.telescope_structure.telescope_wrapper import (
+    TelescopeWrapper,
+)
+from tests.test_harness3.telescope_structure.tmc_devices import TMCDevices
 
 
-class HarnessComponentsFactory:
+class TelescopeStructureFactory:
     """Given a configuration, create real or emulated test harness."""
 
     def __init__(self):
@@ -52,60 +55,62 @@ class HarnessComponentsFactory:
         # - what's the actual state of the system (some version information
         #   asked directly to the devices, etc.)
 
+        # TODO: could TelescopeWrapper and its components be singletons (?)
+        # or the singleton may be achieved through fixtures
+
         return TelescopeWrapper(
             tmc_wrapper=self.create_tmc_wrapper(),
             sdp_wrapper=self.create_sdp_wrapper(),
             csp_wrapper=self.create_csp_wrapper(),
             dishes_wrapper=self.create_dishes_wrapper(),
-            move_to_off_action=MoveToOff(),
         )
 
-    def create_tmc_wrapper(self) -> TMCWrapper:
+    def create_tmc_wrapper(self) -> TMCDevices:
         """Create a TMC wrapper.
 
         return: A TMC wrapper instance.
         """
-        return TMCWrapper(self.config_factory.get_TMC_configuration())
+        return TMCDevices(self.config_factory.get_TMC_configuration())
 
-    def create_sdp_wrapper(self) -> SDPWrapper:
+    def create_sdp_wrapper(self) -> SDPDevices:
         """Create a SDP wrapper.
 
         return: A SDP wrapper instance.
         """
         if self._emulation_config.sdp:
-            return EmulatedSDPWrapper(
+            return EmulatedSDPDevices(
                 self.config_factory.get_SDP_configuration()
             )
 
-        return ProductionSDPWrapper(
+        return ProductionSDPDevices(
             self.config_factory.get_SDP_configuration()
         )
 
-    def create_csp_wrapper(self) -> CSPWrapper:
+    def create_csp_wrapper(self) -> CSPDevices:
         """Create a CSP wrapper.
 
         return: A CSP wrapper instance.
         """
         if self._emulation_config.csp:
-            return EmulatedCSPWrapper(
+            return EmulatedCSPDevices(
                 self.config_factory.get_CSP_configuration()
             )
 
-        return ProductionCSPWrapper(
+        return ProductionCSPDevices(
             csp_configuration=self.config_factory.get_CSP_configuration(),
             all_production=self._emulation_config.all_production,
         )
 
-    def create_dishes_wrapper(self) -> DishesWrapper:
+    def create_dishes_wrapper(self) -> DishesDevices:
         """Create a dishes wrapper.
 
         return: A dishes wrapper instance.
         """
         if self._emulation_config.dish:
-            return EmulatedDishesWrapper(
+            return EmulatedDishesDevices(
                 self.config_factory.get_dish_configuration()
             )
 
-        return ProductionDishesWrapper(
+        return ProductionDishesDevices(
             self.config_factory.get_dish_configuration()
         )
