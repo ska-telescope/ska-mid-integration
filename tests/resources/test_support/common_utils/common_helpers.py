@@ -53,7 +53,7 @@ class Resource:
 
                 sleep(1)
 
-        LOGGER.info("Timeout of %d seconds reached - %d", TIMEOUT, Exception)
+        LOGGER.info("Timeout of %d seconds reached - %s", TIMEOUT, Exception)
         raise Exception
 
     def assert_attribute(self, attr):
