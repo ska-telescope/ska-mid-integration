@@ -1,6 +1,8 @@
 """Test TMC-DISH Abort functionality in Ready obsState"""
 
 
+import logging
+
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
@@ -222,6 +224,26 @@ def subarray_is_in_ready_obsState(
             PointingState.TRACK,
             lookahead=10,
         )
+        logging.info(
+            "DISHMODE for Dish %s: %s",
+            dish_id,
+            central_node_mid.dish_master_dict[dish_id].dishMode,
+        )
+        logging.info(
+            "DISHMODE for DishLN %s: %s",
+            dish_id,
+            central_node_mid.dish_leaf_node_dict[dish_id].dishMode,
+        )
+        logging.info(
+            "pointingState for Dish %s: %s",
+            dish_id,
+            central_node_mid.dish_master_dict[dish_id].pointingState,
+        )
+        logging.info(
+            "pointingState for DishLN %s: %s",
+            dish_id,
+            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
+        )
 
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
@@ -254,14 +276,6 @@ def check_dish_mode_and_pointing_state(
     Method to check dishMode and pointingState of DISH
     """
     for dish_id in dish_ids.split(","):
-        assert (
-            central_node_mid.dish_master_dict[dish_id].dishMode
-            == DishMode.OPERATE
-        )
-        assert (
-            central_node_mid.dish_leaf_node_dict[dish_id].dishMode
-            == DishMode.OPERATE
-        )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
@@ -273,6 +287,34 @@ def check_dish_mode_and_pointing_state(
             "pointingState",
             PointingState.READY,
             lookahead=10,
+        )
+        logging.info(
+            "DISHMODE for Dish %s: %s",
+            dish_id,
+            central_node_mid.dish_master_dict[dish_id].dishMode,
+        )
+        logging.info(
+            "DISHMODE for DishLN %s: %s",
+            dish_id,
+            central_node_mid.dish_leaf_node_dict[dish_id].dishMode,
+        )
+        logging.info(
+            "pointingState for Dish %s: %s",
+            dish_id,
+            central_node_mid.dish_master_dict[dish_id].pointingState,
+        )
+        logging.info(
+            "pointingState for DishLN %s: %s",
+            dish_id,
+            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
+        )
+        assert (
+            central_node_mid.dish_master_dict[dish_id].dishMode
+            == DishMode.OPERATE
+        )
+        assert (
+            central_node_mid.dish_leaf_node_dict[dish_id].dishMode
+            == DishMode.OPERATE
         )
 
 

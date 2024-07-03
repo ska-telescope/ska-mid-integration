@@ -1,6 +1,8 @@
 """Test module for TMC-DISH End functionality"""
 
 
+import logging
+
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
@@ -188,6 +190,26 @@ def check_subarray_obsstate(
             PointingState.TRACK,
             lookahead=10,
         )
+        logging.info(
+            "DISHMODE for Dish %s: %s",
+            dish_id,
+            central_node_mid.dish_master_dict[dish_id].dishMode,
+        )
+        logging.info(
+            "DISHMODE for DishLN %s: %s",
+            dish_id,
+            central_node_mid.dish_leaf_node_dict[dish_id].dishMode,
+        )
+        logging.info(
+            "pointingState for Dish %s: %s",
+            dish_id,
+            central_node_mid.dish_master_dict[dish_id].pointingState,
+        )
+        logging.info(
+            "pointingState for DishLN %s: %s",
+            dish_id,
+            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
+        )
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
@@ -224,6 +246,7 @@ def check_dish_mode_and_pointing_state(
         assert wait_for_pointing_state_change(
             PointingState.READY, central_node_mid.dish_master_dict[dish_id], 20
         )
+
         # assert event_recorder.has_change_event_occurred(
         #     central_node_mid.dish_master_dict[dish_id],
         #     "pointingState",
@@ -241,6 +264,26 @@ def check_dish_mode_and_pointing_state(
         #     PointingState.READY,
         #     lookahead=10,
         # )
+        logging.info(
+            "DISHMODE for Dish %s: %s",
+            dish_id,
+            central_node_mid.dish_master_dict[dish_id].dishMode,
+        )
+        logging.info(
+            "DISHMODE for DishLN %s: %s",
+            dish_id,
+            central_node_mid.dish_leaf_node_dict[dish_id].dishMode,
+        )
+        logging.info(
+            "pointingState for Dish %s: %s",
+            dish_id,
+            central_node_mid.dish_master_dict[dish_id].pointingState,
+        )
+        logging.info(
+            "pointingState for DishLN %s: %s",
+            dish_id,
+            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
+        )
 
 
 @then(
