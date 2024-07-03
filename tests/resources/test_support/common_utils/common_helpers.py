@@ -28,11 +28,12 @@ class Resource:
         """Method for getting attributes"""
         start_time = time()
         TIMEOUT = 30
+        device_proxy = DeviceProxy(self.device_name)
+        device_proxy.set_timeout_millis(5000)
 
         while time() - start_time < TIMEOUT:
             try:
-                device_proxy = DeviceProxy(self.device_name)
-                device_proxy.set_timeout_millis(5000)
+
                 attrs = device_proxy.get_attribute_list()
                 if attr not in attrs:
                     return "attribute not found"
