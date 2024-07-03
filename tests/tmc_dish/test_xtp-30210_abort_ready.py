@@ -288,6 +288,18 @@ def check_dish_mode_and_pointing_state(
             PointingState.READY,
             lookahead=10,
         )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+            lookahead=10,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+            lookahead=10,
+        )
         logging.info(
             "DISHMODE for Dish %s: %s",
             dish_id,
@@ -307,14 +319,6 @@ def check_dish_mode_and_pointing_state(
             "pointingState for DishLN %s: %s",
             dish_id,
             central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
-        )
-        assert (
-            central_node_mid.dish_master_dict[dish_id].dishMode
-            == DishMode.OPERATE
-        )
-        assert (
-            central_node_mid.dish_leaf_node_dict[dish_id].dishMode
-            == DishMode.OPERATE
         )
 
 
