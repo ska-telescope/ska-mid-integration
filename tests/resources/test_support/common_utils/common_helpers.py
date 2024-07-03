@@ -49,14 +49,11 @@ class Resource:
                 if isinstance(value, ndarray):
                     return tuple(value)
                 return getattr(device_proxy, attr)
-            except Exception as exception:
-                LOGGER.info("Error: %s", exception)
+            except Exception:
 
-            sleep(1)
+                sleep(1)
 
-        LOGGER.info(
-            "Timeout of %d seconds reached. Unable to read attribute.", TIMEOUT
-        )
+        LOGGER.info("Timeout of %d seconds reached - %d", TIMEOUT, Exception)
         raise Exception
 
     def assert_attribute(self, attr):

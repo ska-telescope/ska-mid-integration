@@ -335,7 +335,7 @@ class SubarrayNodeWrapper(object):
                     "Exception occurred while executing command: %s", e
                 )
                 if retry == 2:
-                    return result, message
+                    raise Exception
                 retry += 1
             time.sleep(0.1)
 
