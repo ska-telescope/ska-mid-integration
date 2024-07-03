@@ -53,10 +53,10 @@ class EventRecorder(object):
         # based on specific requirements or characteristics of the
         # environment in which the code runs.
 
-        start_time = time()
+        start_time = time.time()
         TIMEOUT = 30
 
-        while time() - start_time < TIMEOUT:
+        while time.time() - start_time < TIMEOUT:
             try:
                 event_id = device.subscribe_event(
                     attribute_name,
