@@ -55,7 +55,7 @@ def subarray_is_in_configuring_obsstate(
     # Subarray
     assign_str["sdp"]["processing_blocks"][0]["parameters"][
         "time-to-ready"
-    ] = 10
+    ] = 5
 
     central_node_mid.store_resources(json.dumps(assign_str))
     event_recorder.subscribe_event(
