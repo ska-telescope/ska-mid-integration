@@ -49,12 +49,14 @@ class EventRecorder(object):
         # attempted multiple times if it fails initially due to transient
         # issues, while also logging any persistent issues that might
         # require further investigation. Adjustments can be made to the
-        # retry count (retry <= 3) or the wait time (time.sleep(...))
+        # wait time (time.sleep(...))
         # based on specific requirements or characteristics of the
         # environment in which the code runs.
 
-        retry = 0
-        while retry <= 3:
+        start_time = time()
+        TIMEOUT = 30
+
+        while time() - start_time < TIMEOUT:
             try:
                 event_id = device.subscribe_event(
                     attribute_name,
@@ -63,16 +65,15 @@ class EventRecorder(object):
                 )
                 break
 
-            except Exception as e:
-                LOGGER.exception(
-                    "Exception occurred while executing command: %s", e
-                )
-                if retry == 2:
-                    raise e
-                retry += 1
-            time.sleep(0.1)
+            except Exception:
+                time.sleep(1)
+        else:
+            LOGGER.info(
+                "Timeout of %d seconds reached - %d", TIMEOUT, Exception
+            )
+            raise Exception
 
-        # --------------------------------------------------------
+        # ----------------------------------------------------------
 
         self.subscribed_devices.append((device, event_id))
 
