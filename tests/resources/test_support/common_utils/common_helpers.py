@@ -3,7 +3,7 @@ import logging
 import signal
 import threading
 from datetime import datetime
-from time import sleep
+from time import sleep, time
 
 from numpy import ndarray
 from ska_ser_logging import configure_logging
@@ -26,21 +26,37 @@ class Resource:
 
     def get(self, attr):
         """Method for getting attributes"""
-        device_proxy = DeviceProxy(self.device_name)
-        device_proxy.set_timeout_millis(5000)
-        attrs = device_proxy.get_attribute_list()
-        if attr not in attrs:
-            return "attribute not found"
-        attr_data_type = device_proxy._get_attribute_config(attr).data_type
-        if attr_data_type == CmdArgType.DevEnum:
-            return getattr(device_proxy, attr).name
-        if attr_data_type == CmdArgType.DevState:
-            return str(device_proxy.read_attribute(attr).value)
+        start_time = time()
+        TIMEOUT = 30
 
-        value = getattr(device_proxy, attr)
-        if isinstance(value, ndarray):
-            return tuple(value)
-        return getattr(device_proxy, attr)
+        while time() - start_time < TIMEOUT:
+            try:
+                device_proxy = DeviceProxy(self.device_name)
+                device_proxy.set_timeout_millis(5000)
+                attrs = device_proxy.get_attribute_list()
+                if attr not in attrs:
+                    return "attribute not found"
+                attr_data_type = device_proxy._get_attribute_config(
+                    attr
+                ).data_type
+                if attr_data_type == CmdArgType.DevEnum:
+                    return getattr(device_proxy, attr).name
+                if attr_data_type == CmdArgType.DevState:
+                    return str(device_proxy.read_attribute(attr).value)
+
+                value = getattr(device_proxy, attr)
+                if isinstance(value, ndarray):
+                    return tuple(value)
+                return getattr(device_proxy, attr)
+            except Exception as exception:
+                LOGGER.info("Error: %s", exception)
+
+            sleep(1)
+
+        LOGGER.info(
+            "Timeout of %d seconds reached. Unable to read attribute.", TIMEOUT
+        )
+        raise Exception
 
     def assert_attribute(self, attr):
         """Method for asserting"""
