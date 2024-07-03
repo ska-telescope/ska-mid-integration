@@ -79,14 +79,6 @@ def turn_on_telescope(central_node_mid, event_recorder):
     )
     central_node_mid.move_to_on()
 
-    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode"
-        )
-        event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
-        )
-
     event_recorder.subscribe_event(central_node_mid.csp_master, "State")
     event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
 
@@ -102,6 +94,12 @@ def turn_on_telescope(central_node_mid, event_recorder):
     )
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
+        )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
@@ -146,13 +144,6 @@ def subarray_is_in_configuring_obsState(
     event_recorder.subscribe_event(
         subarray_node.subarray_devices.get("csp_subarray"), "obsState"
     )
-    for dish_id in dish_ids.split(","):
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "pointingState"
-        )
-        event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
-        )
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
@@ -202,30 +193,37 @@ def subarray_is_in_configuring_obsState(
     )
 
     for dish_id in dish_ids.split(","):
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "pointingState"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
+        )
+
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
-            "dishMode",
-            DishMode.OPERATE,
+            "pointingState",
+            PointingState.TRACK,
             lookahead=10,
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
-            "dishMode",
-            DishMode.OPERATE,
+            "pointingState",
+            PointingState.TRACK,
             lookahead=10,
         )
 
     for dish_id in dish_ids.split(","):
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
-            "pointingState",
-            PointingState.TRACK,
+            "dishMode",
+            DishMode.OPERATE,
             lookahead=10,
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
-            "pointingState",
-            PointingState.TRACK,
+            "dishMode",
+            DishMode.OPERATE,
             lookahead=10,
         )
     event_recorder.subscribe_event(

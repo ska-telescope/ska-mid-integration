@@ -77,7 +77,7 @@ def check_dish_is_on(central_node_mid, event_recorder, dish_ids):
     Method to check dishMode after invoking
     telescopeOn command on central node
     """
-    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+    for dish_id in dish_ids.split(","):
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "dishMode"
         )
@@ -85,7 +85,6 @@ def check_dish_is_on(central_node_mid, event_recorder, dish_ids):
             central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
         )
 
-    for dish_id in dish_ids.split(","):
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",

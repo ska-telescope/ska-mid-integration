@@ -70,21 +70,9 @@ def turn_on_telescope(central_node_mid, event_recorder):
     #     SimulatorDeviceType.MID_SDP_MASTER_DEVICE
     # )
 
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
-
     central_node_mid.move_to_on()
     event_recorder.subscribe_event(central_node_mid.csp_master, "State")
     event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
-
-    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode"
-        )
-        event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
-        )
 
     assert event_recorder.has_change_event_occurred(
         central_node_mid.csp_master,
@@ -98,6 +86,13 @@ def turn_on_telescope(central_node_mid, event_recorder):
     )
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
+        )
+
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
@@ -108,6 +103,10 @@ def turn_on_telescope(central_node_mid, event_recorder):
             "dishMode",
             DishMode.STANDBY_FP,
         )
+
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "telescopeState"
+    )
 
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
