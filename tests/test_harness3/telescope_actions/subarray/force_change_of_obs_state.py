@@ -5,9 +5,6 @@ import logging
 from tests.test_harness3.telescope_actions.telescope_action import (
     TelescopeAction,
 )
-from tests.test_harness3.telescope_facades.tmc_subarray_node_facade import (
-    TMCSubarrayNodeFacade,
-)
 from tests.test_harness3.utils.obs_state_resetter import (
     ObsStateResetterFactory,
 )
@@ -21,7 +18,7 @@ class ForceChangeOfObsState(TelescopeAction):
     def __init__(
         self,
         telescope,
-        subarray_node_facade: TMCSubarrayNodeFacade,
+        subarray_node_facade,  #: TMCSubarrayNodeFacade,
         dest_state_name: str,
         assign_input_json: str = "",
         configure_input_json: str = "",

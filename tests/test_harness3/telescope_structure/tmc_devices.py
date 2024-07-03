@@ -49,6 +49,9 @@ class TMCDevices:
             DeviceProxy(tmc_configuration.tmc_dish_leaf_node4_name),
         ]
 
+        for dish_leaf_node in self.dish_leaf_node_list:
+            dish_leaf_node.set_timeout_millis(5000)
+
         # Create Dish1 leaf node admin device proxy
         self.dish1_leaf_admin_dev_name = self.dish_leaf_node_list[0].adm_name()
         self.dish1_leaf_admin_dev_proxy = DeviceProxy(
@@ -64,6 +67,9 @@ class TMCDevices:
         self.release_input = json_factory.create_centralnode_configuration(
             "release_resources_mid"
         )
+
+    # -----------------------------------------------------------
+    # CentralNode properties
 
     @property
     def state(self) -> DevState:
@@ -133,6 +139,24 @@ class TMCDevices:
         """
         # NOTE: this setter is never used + same as for `state`
         self._telescope_state = value
+
+    # -----------------------------------------------------------
+    # Subarray node properties
+
+    @property
+    def subarray_state(self) -> DevState:
+        """TMC SubarrayNode operational state"""
+        self._state = Resource(self.subarray_node).get("State")
+        return self._state
+
+    @subarray_state.setter
+    def subarray_state(self, value):
+        """Sets value for TMC subarrayNode operational state
+
+        Args:
+            value (DevState): operational state value
+        """
+        self._state = value
 
     # -----------------------------------------------------------
     # Subarray state actions

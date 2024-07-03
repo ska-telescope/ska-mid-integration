@@ -17,6 +17,27 @@ from tests.test_harness3.helpers import (  # SIMULATED_DEVICES_DICT,
     generate_eb_pb_ids,
     prepare_json_args_for_commands,
 )
+from tests.test_harness3.telescope_actions.subarray.force_change_of_obs_state import (  # pylint: disable=line-too-long # noqa: E501
+    ForceChangeOfObsState,
+)
+from tests.test_harness3.telescope_actions.subarray.set_subarray_id import (
+    SetSubarrayId,
+)
+from tests.test_harness3.telescope_actions.subarray.store_scan_data import (
+    StoreScanData,
+)
+from tests.test_harness3.telescope_actions.subarray.subarray_abort import (
+    SubarrayAbort,
+)
+from tests.test_harness3.telescope_actions.subarray.subarray_move_to_off import (  # pylint: disable=line-too-long # noqa: E501
+    SubarrayMoveToOff,
+)
+from tests.test_harness3.telescope_actions.subarray.subarray_move_to_on import (  # pylint: disable=line-too-long # noqa: E501
+    SubarrayMoveToOn,
+)
+from tests.test_harness3.telescope_actions.subarray.subarray_restart import (
+    SubarrayRestart,
+)
 from tests.test_harness3.telescope_config.components_config import (
     CSPConfiguration,
     DishesConfiguration,
@@ -26,19 +47,17 @@ from tests.test_harness3.telescope_config.components_config import (
 from tests.test_harness3.telescope_config.configuration_factory import (
     TestHarnessConfigurationFactory,
 )
+from tests.test_harness3.telescope_structure.telescope_wrapper import (
+    TelescopeWrapper,
+)
 from tests.test_harness3.utils.constant import ABORTED, IDLE, ON, READY
 from tests.test_harness3.utils.enums import DishMode, SubarrayObsState
-from tests.test_harness3.utils.obs_state_resetter import (
-    ObsStateResetterFactory,
-)
 from tests.test_harness3.utils.sync_decorators import (
-    sync_abort,
     sync_assign_resources,
     sync_configure,
     sync_end,
     sync_endscan,
     sync_release_resources,
-    sync_restart,
 )
 
 configure_logging(logging.DEBUG)
@@ -90,38 +109,14 @@ class TMCSubarrayNodeFacade:
     to test subarray node.
     """
 
-    def __init__(self) -> None:
+    # pylint: disable=too-many-public-methods
+    # TODO: cleanup!
+
+    def __init__(self, telescope: TelescopeWrapper) -> None:
         """Initialize the SubarrayNodeWrapper."""
         # NOTE: similar public attributes and initialization procedure
-        self.subarray_node = DeviceProxy(
-            tmc_configuration.tmc_subarraynode1_name
-        )
-        self.subarray_node.set_timeout_millis(5000)
 
-        self.csp_subarray_leaf_node = DeviceProxy(
-            tmc_configuration.tmc_csp_subarray_leaf_node_name
-        )
-        self.sdp_subarray_leaf_node = DeviceProxy(
-            tmc_configuration.tmc_sdp_subarray_leaf_node_name
-        )
-        self.dish_leaf_node_list = [
-            DeviceProxy(tmc_configuration.tmc_dish_leaf_node1_name),
-            DeviceProxy(tmc_configuration.tmc_dish_leaf_node2_name),
-        ]
-        for dish_leaf_node in self.dish_leaf_node_list:
-            dish_leaf_node.set_timeout_millis(5000)
-
-        self.dish_master_list = [
-            DeviceProxy(dishes_configuration.dish_master1_name),
-            DeviceProxy(dishes_configuration.dish_master2_name),
-            DeviceProxy(dishes_configuration.dish_master3_name),
-            DeviceProxy(dishes_configuration.dish_master4_name),
-        ]
-
-        self.subarray_devices = {
-            "csp_subarray": DeviceProxy(csp_configuration.csp_subarray1_name),
-            "sdp_subarray": DeviceProxy(sdp_configuration.sdp_subarray1_name),
-        }
+        self._telescope = telescope
 
         self._state = DevState.OFF
         self.obs_state = SubarrayObsState.EMPTY
@@ -142,27 +137,46 @@ class TMCSubarrayNodeFacade:
         if (
             emulation_configuration.csp and emulation_configuration.dish
         ) or emulation_configuration.all_emulated():
-            for dish_master_proxy in self.dish_master_list:
+            for dish_master_proxy in self._telescope.dishes.dish_master_list:
                 dish_master_proxy.SetDirectState(DevState.STANDBY)
                 # Setting DishMode to STANDBY_FP
                 dish_master_proxy.SetDirectDishMode(DishMode.STANDBY_FP)
 
+    # -----------------------------------------------------------
+    # SUBARRAY DEVICES
+
+    @property
+    def dish_leaf_node_list(self):
+        """Return Dish Leaf Node List"""
+        return self._telescope.tmc.dish_leaf_node_list[:2]
+
+    @property
+    def subarray_node(self):
+        """Return Subarray Node Proxy"""
+        return self._telescope.tmc.subarray_node
+
+    @property
+    def csp_master_leaf_node(self):
+        """Return CSP Master Leaf Node Proxy"""
+        return self._telescope.tmc.csp_master_leaf_node
+
+    @property
+    def sdp_master_leaf_node(self):
+        """Return SDP Master Leaf Node Proxy"""
+        return self._telescope.tmc.sdp_master_leaf_node
+
+    # -----------------------------------------------------------
+    # SUBARRAY PROPERTIES
+
     @property
     def state(self) -> DevState:
-        """TMC SubarrayNode operational state"""
-        self._state = Resource(tmc_configuration.tmc_subarraynode1_name).get(
-            "State"
-        )
-        return self._state
+        """TMC SubarrayNode operational state."""
+        return self._telescope.tmc.subarray_state
 
     @state.setter
     def state(self, value):
-        """Sets value for TMC subarrayNode operational state
-
-        Args:
-            value (DevState): operational state value
-        """
-        self._state = value
+        """Sets value for TMC subarrayNode operational state."""
+        self._telescope.tmc.subarray_state = value
 
     @property
     def obs_state(self):
@@ -199,55 +213,16 @@ class TMCSubarrayNodeFacade:
         self._health_state = value
 
     def set_subarray_id(self, requested_subarray_id: str) -> None:
-        """This method creates subarray devices for the requested subarray
-        id"""
-        # NOTE: redundant method with central node (?)
-        # (it actually contains a subset of the central node's method actions)
-        subarray_id = str(requested_subarray_id).zfill(2)
-        self.subarray_devices = {
-            "csp_subarray": DeviceProxy(f"mid-csp/subarray/{subarray_id}"),
-            "sdp_subarray": DeviceProxy(f"mid-sdp/subarray/{subarray_id}"),
-        }
-        self.csp_subarray_leaf_node = DeviceProxy(
-            f"ska_mid/tm_leaf_node/csp_subarray{subarray_id}"
-        )
-        self.sdp_subarray_leaf_node = DeviceProxy(
-            f"ska_mid/tm_leaf_node/sdp_subarray{subarray_id}"
-        )
+        """Create subarray devices for the requested subarray."""
+        SetSubarrayId(self._telescope, requested_subarray_id).execute()
 
-    def move_to_on(
-        self,
-    ):
+    def move_to_on(self):
         """Move subarray to ON state."""
-        # TODO: extract a TelescopeAction subclass or remove
-        if self.state != self.ON_STATE:
-            Resource(
-                tmc_configuration.tmc_subarraynode1_name
-            ).assert_attribute("State").equals("OFF")
-            result, message = self.subarray_node.On()
-            LOGGER.info("Invoked ON on SubarrayNode")
-            return (
-                result,
-                message,
-            )
-        # pylint says inconsistent-return-statements,
-        # what should be returned here?
-        return None
+        SubarrayMoveToOn(self._telescope).execute()
 
-    def move_to_off(
-        self,
-    ):
+    def move_to_off(self):
         """Move Subarray to OFF state."""
-        # TODO: extract a TelescopeAction subclass or remove
-        Resource(tmc_configuration.tmc_subarraynode1_name).assert_attribute(
-            "State"
-        ).equals("ON")
-        result, message = self.subarray_node.Off()
-        LOGGER.info("Invoked OFF on SubarrayNode")
-        return (
-            result,
-            message,
-        )
+        SubarrayMoveToOff(self._telescope).execute()
 
     @sync_configure(device_dict=device_dict)
     def store_configuration_data(self, input_string: str):
@@ -258,7 +233,9 @@ class TMCSubarrayNodeFacade:
             (result, message): result, message tuple
         """
         # TODO: extract a TelescopeAction subclass or remove
-        result, message = self.subarray_node.Configure(input_string)
+        result, message = self._telescope.tmc.subarray_node.Configure(
+            input_string
+        )
         LOGGER.info("Invoked Configure on SubarrayNode")
         return result, message
 
@@ -266,7 +243,7 @@ class TMCSubarrayNodeFacade:
     def end_observation(self):
         """Invoke End command on subarray Node."""
         # TODO: extract a TelescopeAction subclass or remove
-        result, message = self.subarray_node.End()
+        result, message = self._telescope.tmc.subarray_node.End()
         LOGGER.info("Invoked End on SubarrayNode")
         return result, message
 
@@ -274,31 +251,23 @@ class TMCSubarrayNodeFacade:
     def remove_scan_data(self):
         """Invoke EndScan command on subarray Node."""
         # TODO: extract a TelescopeAction subclass or remove
-        result, message = self.subarray_node.EndScan()
+        result, message = self._telescope.tmc.subarray_node.EndScan()
         LOGGER.info("Invoked EndScan on SubarrayNode")
         return result, message
 
     def store_scan_data(self, input_string):
         """Invoke Scan command on subarray Node."""
-        # TODO: extract a TelescopeAction subclass or remove
-        result, message = self.subarray_node.Scan(input_string)
-        LOGGER.info("Invoked Scan on SubarrayNode")
-        return result, message
+        StoreScanData(self._telescope, input_string).execute()
 
-    @sync_abort(device_dict=device_dict)
+    # @sync_abort(device_dict=device_dict)
     def abort_subarray(self):
         """Invoke Abort command on subarray Node."""
-        # TODO: extract a TelescopeAction subclass or remove
-        result, message = self.subarray_node.Abort()
-        LOGGER.info("Invoked Abort on SubarrayNode")
-        return result, message
+        return SubarrayAbort(self._telescope).execute()
 
-    @sync_restart(device_dict=device_dict)
-    def restart_subarray(self):  # pylint: disable=missing-function-docstring
-        # TODO: extract a TelescopeAction subclass or remove
-        result, message = self.subarray_node.Restart()
-        LOGGER.info("Invoked Restart on SubarrayNode")
-        return result, message
+    # @sync_restart(device_dict=device_dict)
+    def restart_subarray(self):
+        """Invoke Restart command on subarray Node."""
+        return SubarrayRestart(self._telescope).execute()
 
     @sync_assign_resources(device_dict)
     def store_resources(self, assign_json: str):
@@ -309,7 +278,7 @@ class TMCSubarrayNodeFacade:
         # TODO: extract a TelescopeAction subclass or remove
         input_json = json.loads(assign_json)
         generate_eb_pb_ids(input_json)
-        result, message = self.subarray_node.AssignResources(
+        result, message = self._telescope.tmc.subarray_node.AssignResources(
             json.dumps(input_json)
         )
         LOGGER.info("Invoked AssignResources on SubarrayNode")
@@ -321,7 +290,10 @@ class TMCSubarrayNodeFacade:
     ):
         """Invoke Release Resource command on subarray Node."""
         # TODO: extract a TelescopeAction subclass or remove
-        result, message = self.subarray_node.ReleaseAllResources()
+        (
+            result,
+            message,
+        ) = self._telescope.tmc.subarray_node.ReleaseAllResources()
         LOGGER.info("Invoked Release Resource on SubarrayNode")
         return result, message
 
@@ -332,7 +304,7 @@ class TMCSubarrayNodeFacade:
         """
         # TODO: extract a TelescopeAction subclass or remove
         if command_name is not None:
-            result, message = self.subarray_node.command_inout(
+            result, message = self._telescope.tmc.subarray_node.command_inout(
                 command_name, argin
             )
             LOGGER.info(f"Invoked {command_name} on SubarrayNode")
@@ -382,7 +354,7 @@ class TMCSubarrayNodeFacade:
         if (
             emulation_configuration.csp and emulation_configuration.dish
         ) or emulation_configuration.all_emulated():
-            for dish_master in self.dish_master_list:
+            for dish_master in self._telescope.dishes.dish_master_list:
                 dish_master.SetDirectDishMode(DishMode.STANDBY_LP)
                 dish_master.SetDirectState(DevState.STANDBY)
                 dish_master.ResetDelay()
@@ -428,17 +400,23 @@ class TMCSubarrayNodeFacade:
         if self.obs_state in ("RESOURCING", "CONFIGURING", "SCANNING"):
             """Invoke Abort and Restart"""
             LOGGER.info("Invoking Abort on Subarray")
-            self.abort_subarray()
-            self.restart_subarray()
+            # self.abort_subarray()
+            # self.restart_subarray()
+            SubarrayAbort(self._telescope).execute()
+            SubarrayRestart(self._telescope).execute()
         elif self.obs_state == "ABORTED":
             """Invoke Restart"""
             LOGGER.info("Invoking Restart on Subarray")
-            self.restart_subarray()
+            # self.restart_subarray()
+            SubarrayRestart(self._telescope).execute()
         else:
-            self.force_change_of_obs_state("EMPTY")
+            # self.force_change_of_obs_state("EMPTY")
+            ForceChangeOfObsState(self._telescope, self, "EMPTY").execute()
 
         # Move Subarray to OFF state
-        self.move_to_off()
+        # self.move_to_off()
+        SubarrayMoveToOff(self._telescope).execute()
+
         self._reset_dishes()
         self._reset_simulator_devices()
         assert check_subarray_obs_state("EMPTY")
@@ -465,23 +443,15 @@ class TMCSubarrayNodeFacade:
         configure_input_json: str = "",
         scan_input_json: str = "",
     ) -> None:
-        """Force SubarrayNode obsState to provided obsState
-
-        Args:
-            dest_state_name (str): Destination obsState
-        """
-        factory_obj = ObsStateResetterFactory()
-        obs_state_resetter = factory_obj.create_obs_state_resetter(
-            dest_state_name, self
-        )
-        if assign_input_json:
-            obs_state_resetter.assign_input = assign_input_json
-        if configure_input_json:
-            obs_state_resetter.configure_input = configure_input_json
-        if scan_input_json:
-            obs_state_resetter.scan_input = scan_input_json
-        obs_state_resetter.reset()
-        self._clear_command_call_and_transition_data()
+        """Force SubarrayNode obsState to provided obsState."""
+        ForceChangeOfObsState(
+            self._telescope,
+            self,
+            dest_state_name,
+            assign_input_json,
+            configure_input_json,
+            scan_input_json,
+        ).execute()
 
     def simulate_receive_addresses_event(self, sdp_sim, command_input_factory):
         """Sets the receive addresses attribute on SDP Subarray so an event can
@@ -543,7 +513,7 @@ class TMCSubarrayNodeFacade:
         # Partial configure 1
         self.execute_transition("Configure", partial_configure_1)
         assert event_recorder.has_change_event_occurred(
-            self.subarray_node,
+            self._telescope.tmc.subarray_node,
             "obsState",
             ObsState.CONFIGURING,
             lookahead=15,
@@ -553,7 +523,7 @@ class TMCSubarrayNodeFacade:
         # Scan 1
         self.execute_transition("Scan", scan_1)
         assert event_recorder.has_change_event_occurred(
-            self.subarray_node,
+            self._telescope.tmc.subarray_node,
             "obsState",
             ObsState.SCANNING,
             lookahead=15,
@@ -563,7 +533,7 @@ class TMCSubarrayNodeFacade:
         # Partial configure 2
         self.execute_transition("Configure", partial_configure_2)
         assert event_recorder.has_change_event_occurred(
-            self.subarray_node,
+            self._telescope.tmc.subarray_node,
             "obsState",
             ObsState.CONFIGURING,
             lookahead=15,
@@ -573,7 +543,7 @@ class TMCSubarrayNodeFacade:
         # Scan 2
         self.execute_transition("Scan", scan_2)
         assert event_recorder.has_change_event_occurred(
-            self.subarray_node,
+            self._telescope.tmc.subarray_node,
             "obsState",
             ObsState.SCANNING,
             lookahead=15,
@@ -583,7 +553,7 @@ class TMCSubarrayNodeFacade:
         # Partial configure 3
         self.execute_transition("Configure", partial_configure_3)
         assert event_recorder.has_change_event_occurred(
-            self.subarray_node,
+            self._telescope.tmc.subarray_node,
             "obsState",
             ObsState.CONFIGURING,
             lookahead=15,
@@ -593,7 +563,7 @@ class TMCSubarrayNodeFacade:
         # Scan 3
         self.execute_transition("Scan", scan_3)
         assert event_recorder.has_change_event_occurred(
-            self.subarray_node,
+            self._telescope.tmc.subarray_node,
             "obsState",
             ObsState.SCANNING,
             lookahead=15,
@@ -603,7 +573,7 @@ class TMCSubarrayNodeFacade:
         # Partial configure 4
         self.execute_transition("Configure", partial_configure_4)
         assert event_recorder.has_change_event_occurred(
-            self.subarray_node,
+            self._telescope.tmc.subarray_node,
             "obsState",
             ObsState.CONFIGURING,
             lookahead=15,
@@ -613,7 +583,7 @@ class TMCSubarrayNodeFacade:
         # Scan 4
         self.execute_transition("Scan", scan_4)
         assert event_recorder.has_change_event_occurred(
-            self.subarray_node,
+            self._telescope.tmc.subarray_node,
             "obsState",
             ObsState.SCANNING,
             lookahead=15,

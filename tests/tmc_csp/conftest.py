@@ -330,7 +330,7 @@ def central_node_facade(telescope_wrapper: TelescopeWrapper):
 @fixture
 def subarray_node_facade(telescope_wrapper: TelescopeWrapper):
     """Create a facade to TMC subarray node and all its operations."""
-    subarray_node = TMCSubarrayNodeFacade()
+    subarray_node = TMCSubarrayNodeFacade(telescope_wrapper)
     yield subarray_node
     subarray_node.tear_down()
 

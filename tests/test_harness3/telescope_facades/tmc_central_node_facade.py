@@ -23,16 +23,20 @@ from tests.test_harness3.telescope_actions.central_node.move_to_on import (
 from tests.test_harness3.telescope_actions.central_node.set_standby import (
     SetStandby,
 )
+from tests.test_harness3.telescope_actions.subarray.subarray_abort import (
+    SubarrayAbort,
+)
+from tests.test_harness3.telescope_actions.subarray.subarray_restart import (
+    SubarrayRestart,
+)
 from tests.test_harness3.telescope_structure.telescope_wrapper import (
     TelescopeWrapper,
 )
 from tests.test_harness3.utils.common_utils import JsonFactory
 from tests.test_harness3.utils.sync_decorators import (
-    sync_abort,
     sync_assign_resources,
     sync_load_dish_cfg,
     sync_release_resources,
-    sync_restart,
 )
 from tests.test_harness3.utils.wait_helpers import Waiter
 
@@ -112,28 +116,28 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
     # -----------------------------------------------------------
     # SUB-ARRAY ACTIONS
 
-    def set_subarray_id(self, requested_subarray_id: str) -> None:
-        """This method creates subarray devices for the requested subarray
-        id"""
-        # TODO: separate in a TelescopeAction
-        # TODO: this is something that should stay in TMCSubarrayFacade
-        self._telescope.sdp.set_subarray_id(requested_subarray_id)
-        self._telescope.csp.set_subarray_id(requested_subarray_id)
-        self._telescope.tmc.set_subarray_id(requested_subarray_id)
+    # def set_subarray_id(self, requested_subarray_id: str) -> None:
+    #     """This method creates subarray devices for the requested subarray
+    #     id"""
+    #     # TODO: separate in a TelescopeAction
+    #     # TODO: this is something that should stay in TMCSubarrayFacade
+    #     self._telescope.sdp.set_subarray_id(requested_subarray_id)
+    #     self._telescope.csp.set_subarray_id(requested_subarray_id)
+    #     self._telescope.tmc.set_subarray_id(requested_subarray_id)
 
-    @sync_abort(device_dict=device_dict)
-    def subarray_abort(self) -> Tuple[ResultCode, str]:
-        """Invoke Abort command on subarray Node"""
-        # TODO: separate in a TelescopeAction
-        # TODO: this is something that should stay in TMCSubarrayFacade
-        return self._telescope.tmc.subarray_abort()
+    # @sync_abort(device_dict=device_dict)
+    # def subarray_abort(self) -> Tuple[ResultCode, str]:
+    #     """Invoke Abort command on subarray Node"""
+    #     # TODO: separate in a TelescopeAction
+    #     # TODO: this is something that should stay in TMCSubarrayFacade
+    #     return self._telescope.tmc.subarray_abort()
 
-    @sync_restart(device_dict=device_dict)
-    def subarray_restart(self) -> Tuple[ResultCode, str]:
-        """Invoke Restart command on subarray Node"""
-        # TODO: separate in a TelescopeAction
-        # TODO: this is something that should stay in TMCSubarrayFacade
-        return self._telescope.tmc.subarray_restart()
+    # @sync_restart(device_dict=device_dict)
+    # def subarray_restart(self) -> Tuple[ResultCode, str]:
+    #     """Invoke Restart command on subarray Node"""
+    #     # TODO: separate in a TelescopeAction
+    #     # TODO: this is something that should stay in TMCSubarrayFacade
+    #     return self._telescope.tmc.subarray_restart()
 
     # -----------------------------------------------------------
     # CENTRAL NODE ACTIONS
@@ -228,10 +232,10 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
             ObsState.IDLE,
         ]:
             LOGGER.info("Calling Abort and Restart on SubarrayNode")
-            self.subarray_abort()
-            self.subarray_restart()
+            SubarrayAbort(self._telescope).execute()
+            SubarrayRestart(self._telescope).execute()
         elif self._telescope.tmc.subarray_node.obsState == ObsState.ABORTED:
-            self.subarray_restart()
+            SubarrayRestart(self._telescope).execute()
 
         # NOTE: temporarily moved here because of synchronization
         if self.telescope_state != "OFF":

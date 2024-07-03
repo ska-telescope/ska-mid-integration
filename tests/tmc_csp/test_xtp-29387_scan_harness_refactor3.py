@@ -34,7 +34,6 @@ def test_scan_command_harness_refactor3():
 @given("the telescope is in ON state")
 def given_a_telescope_in_on_state(
     central_node_facade: TMCCentralNodeFacade,
-    subarray_node_facade,
     csp: CSPFacade,
     event_recorder: EventRecorder,
 ):
@@ -88,7 +87,7 @@ def subarray_in_ready_obsstate(
     subarray_id: str,
 ) -> None:
     """Move TMC Subarray to READY obsstate."""
-    central_node_facade.set_subarray_id(subarray_id)
+    subarray_node_facade.set_subarray_id(subarray_id)
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
@@ -100,9 +99,7 @@ def subarray_in_ready_obsstate(
     event_recorder.subscribe_event(
         central_node_facade.central_node, "telescopeState"
     )
-    event_recorder.subscribe_event(
-        subarray_node_facade.subarray_devices["csp_subarray"], "obsState"
-    )
+    event_recorder.subscribe_event(csp.csp_subarray, "obsState")
     event_recorder.subscribe_event(
         subarray_node_facade.subarray_node, "obsState"
     )
@@ -132,7 +129,6 @@ def subarray_in_ready_obsstate(
     parsers.parse("I issue the scan command to the TMC subarray {subarray_id}")
 )
 def invoke_scan(
-    central_node_facade: TMCCentralNodeFacade,
     subarray_node_facade: TMCSubarrayNodeFacade,
     command_input_factory,
 ):
@@ -161,13 +157,12 @@ def csp_subarray_scanning(csp: CSPFacade, event_recorder):
     )
 )
 def tmc_subarray_scanning(
-    central_node_facade: TMCCentralNodeFacade,
     subarray_node_facade: TMCSubarrayNodeFacade,
     event_recorder,
     subarray_id,
 ):
     """Checks if SubarrayNode's obsState attribute value is SCANNING"""
-    central_node_facade.set_subarray_id(int(subarray_id))
+    subarray_node_facade.set_subarray_id(int(subarray_id))
     assert event_recorder.has_change_event_occurred(
         subarray_node_facade.subarray_node,
         "obsState",
@@ -183,13 +178,13 @@ def tmc_subarray_scanning(
     )
 )
 def csp_subarray_ObsState(
-    central_node_facade: TMCCentralNodeFacade,
+    subarray_node_facade: TMCSubarrayNodeFacade,
     csp: CSPFacade,
     event_recorder,
     subarray_id,
 ):
     """Checks if SubarrayNode's obsState attribute value is READY"""
-    central_node_facade.set_subarray_id(int(subarray_id))
+    subarray_node_facade.set_subarray_id(int(subarray_id))
     assert event_recorder.has_change_event_occurred(
         # subarray_node_facade.subarray_devices["csp_subarray"],
         csp.csp_subarray,
@@ -204,13 +199,12 @@ def csp_subarray_ObsState(
     )
 )
 def tmc_subarray_ready(
-    central_node_facade: TMCCentralNodeFacade,
     subarray_node_facade: TMCSubarrayNodeFacade,
     event_recorder,
     subarray_id,
 ):
     """Checks if SubarrayNode's obsState attribute value is EMPTY"""
-    central_node_facade.set_subarray_id(int(subarray_id))
+    subarray_node_facade.set_subarray_id(int(subarray_id))
 
     assert event_recorder.has_change_event_occurred(
         subarray_node_facade.subarray_node,

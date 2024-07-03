@@ -38,6 +38,9 @@ class TelescopeAction(abc.ABC):
     to implement a concrete command).
     """
 
+    # TODO: deal action result
+    # TODO: fix documentation
+
     COMMAND_TIMEOUT = 30
 
     def __init__(self, telescope: TelescopeWrapper) -> None:
