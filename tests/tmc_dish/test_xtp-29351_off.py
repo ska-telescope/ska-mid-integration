@@ -43,12 +43,17 @@ def check_tmc_and_dish_is_on(central_node_mid, event_recorder, dish_ids):
     #     SimulatorDeviceType.MID_SDP_MASTER_DEVICE
     # )
 
+    assert central_node_mid.csp_master.ping() > 0
+    assert central_node_mid.sdp_master.ping() > 0
+    for dish_id in dish_ids.split(","):
+        assert central_node_mid.dish_master_dict[dish_id].ping() > 0
+        assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
+
+    central_node_mid.move_to_on()
+
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
-
-    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
-    event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
 
     for dish_id in dish_ids.split(","):
         event_recorder.subscribe_event(
@@ -58,13 +63,9 @@ def check_tmc_and_dish_is_on(central_node_mid, event_recorder, dish_ids):
             central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
         )
 
-    assert central_node_mid.csp_master.ping() > 0
-    assert central_node_mid.sdp_master.ping() > 0
-    for dish_id in dish_ids.split(","):
-        assert central_node_mid.dish_master_dict[dish_id].ping() > 0
-        assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
+    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
+    event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
 
-    central_node_mid.move_to_on()
     assert event_recorder.has_change_event_occurred(
         central_node_mid.csp_master,
         "State",

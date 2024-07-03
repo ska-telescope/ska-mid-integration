@@ -61,13 +61,6 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
     """
     A method to put Telescope ON
     """
-    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode"
-        )
-        event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
-        )
     # csp_master_sim = simulator_factory.get_or_create_simulator_device(
     #     SimulatorDeviceType.MID_CSP_MASTER_DEVICE
     # )
@@ -79,15 +72,22 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
         central_node_mid.central_node, "telescopeState"
     )
 
-    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
-    event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
-
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
         DevState.OFF,
     )
     central_node_mid.move_to_on()
+    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
+    event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
+
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
+        )
 
     assert event_recorder.has_change_event_occurred(
         central_node_mid.csp_master,

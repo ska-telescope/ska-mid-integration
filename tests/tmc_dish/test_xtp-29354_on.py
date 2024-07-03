@@ -43,8 +43,6 @@ def given_a_telescope(central_node_mid, event_recorder, dish_ids):
     # sdp_master_sim = simulator_factory.get_or_create_simulator_device(
     #     SimulatorDeviceType.MID_SDP_MASTER_DEVICE
     # )
-    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
-    event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
     assert central_node_mid.csp_master.ping() > 0
     assert central_node_mid.sdp_master.ping() > 0
     for dish_id in dish_ids.split(","):
@@ -57,13 +55,6 @@ def move_dish_to_on(central_node_mid, event_recorder):
     """
     A method to put Telescope ON
     """
-    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode"
-        )
-        event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
-        )
 
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
@@ -86,6 +77,14 @@ def check_dish_is_on(central_node_mid, event_recorder, dish_ids):
     Method to check dishMode after invoking
     telescopeOn command on central node
     """
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
+        )
+
     for dish_id in dish_ids.split(","):
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
@@ -104,6 +103,9 @@ def check_telescope_state(central_node_mid, event_recorder):
     """
     Method to check if TMC central node is ON
     """
+    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
+    event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
+
     assert event_recorder.has_change_event_occurred(
         central_node_mid.csp_master,
         "State",
