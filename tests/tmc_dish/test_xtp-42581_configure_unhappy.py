@@ -12,7 +12,8 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
-from tests.resources.test_harness.utils.enums import SimulatorDeviceType
+
+# from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
@@ -37,7 +38,7 @@ def test_tmc_dish_successive_configure_with_same_receiver_band():
 
 
 @given("a Telescope in ON state")
-def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
+def turn_on_telescope(central_node_mid, event_recorder):
     """
     A method to put Telescope ON
     """
@@ -49,19 +50,19 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
             central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
         )
 
-    csp_master_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_CSP_MASTER_DEVICE
-    )
-    sdp_master_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_SDP_MASTER_DEVICE
-    )
+    # csp_master_sim = simulator_factory.get_or_create_simulator_device(
+    #     SimulatorDeviceType.MID_CSP_MASTER_DEVICE
+    # )
+    # sdp_master_sim = simulator_factory.get_or_create_simulator_device(
+    #     SimulatorDeviceType.MID_SDP_MASTER_DEVICE
+    # )
 
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
 
-    event_recorder.subscribe_event(csp_master_sim, "State")
-    event_recorder.subscribe_event(sdp_master_sim, "State")
+    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
+    event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
 
     central_node_mid.move_to_on()
 
