@@ -76,8 +76,10 @@ class TelescopeAction(abc.ABC):
         )
 
         # Execute the action
-        self._action()
+        res = self._action()
 
         # Wait for the expected state changes to occur within a timeout
         # or raise a TimeoutError
         self._state_change_waiter.wait_all(self.COMMAND_TIMEOUT)
+
+        return res

@@ -40,7 +40,7 @@ class ForceChangeOfObsState(TelescopeAction):
         LOGGER.info("Forcing the change of ObsState in Subarray")
         factory_obj = ObsStateResetterFactory()
         obs_state_resetter = factory_obj.create_obs_state_resetter(
-            self.dest_state_name, self.subarray_node_facade
+            self.dest_state_name, self.telescope
         )
         if self.assign_input_json:
             obs_state_resetter.assign_input = self.assign_input_json

@@ -1,22 +1,40 @@
-# pylint: skip-file
-from typing import Any
+"""Tool to move the subarray observation state to a specific state."""
 
+import abc
+
+from tests.test_harness3.telescope_actions.subarray.store_scan_data import (
+    SubarrayStoreScanData,
+)
+from tests.test_harness3.telescope_actions.subarray.subarray_abort import (
+    SubarrayAbort,
+)
+from tests.test_harness3.telescope_actions.subarray.subarray_clear_obs_state import (  # pylint: disable=line-too-long # noqa: E501
+    SubarrayClearObsState,
+)
+from tests.test_harness3.telescope_actions.subarray.subarray_execute_transition import (  # pylint: disable=line-too-long # noqa: E501
+    SubarrayExecuteTransition,
+)
+from tests.test_harness3.telescope_actions.subarray.subarray_store_configuration_data import (  # pylint: disable=line-too-long # noqa: E501
+    SubarrayStoreConfigurationData,
+)
+from tests.test_harness3.telescope_actions.subarray.subarray_store_resources import (  # pylint: disable=line-too-long # noqa: E501
+    SubarrayStoreResources,
+)
+from tests.test_harness3.telescope_structure.telescope_wrapper import (
+    TelescopeWrapper,
+)
 from tests.test_harness3.utils.common_utils import (
     JsonFactory,
     wait_added_for_skb372,
 )
 
-# TODO: inspect further
 
+class ObsStateResetter(abc.ABC):
+    """Tool to move the subarray observation state to a specific state."""
 
-class ObsStateResetter(object):
-    """
-    Class to reset the obsState of Device
-    """
-
-    def __init__(self, name: str, device: Any):
+    def __init__(self, name: str, telescope: TelescopeWrapper):
         self.name = name
-        self.device = device
+        self.telescope = telescope
 
         self.json_factory = JsonFactory()
         self.assign_input = (
@@ -31,6 +49,11 @@ class ObsStateResetter(object):
             "scan_mid"
         )
 
+    @abc.abstractmethod
+    def reset(self):
+        """Move the subarray observation state to a specific state."""
+        pass
+
 
 class ReadyObsStateResetter(ObsStateResetter):
     """
@@ -41,10 +64,12 @@ class ReadyObsStateResetter(ObsStateResetter):
     state_name = "READY"
 
     def reset(self):
-        self.device.clear_all_data()
-        self.device.store_resources(self.assign_input)
+        SubarrayClearObsState(self.telescope).execute()
+        SubarrayStoreResources(self.telescope, self.assign_input).execute()
         wait_added_for_skb372()
-        self.device.store_configuration_data(self.configure_input)
+        SubarrayStoreConfigurationData(
+            self.telescope, self.configure_input
+        ).execute()
 
 
 class IdleObsStateResetter(ObsStateResetter):
@@ -56,8 +81,8 @@ class IdleObsStateResetter(ObsStateResetter):
     state_name = "IDLE"
 
     def reset(self):
-        self.device.clear_all_data()
-        self.device.store_resources(self.assign_input)
+        SubarrayClearObsState(self.telescope).execute()
+        SubarrayStoreResources(self.telescope, self.assign_input).execute()
 
 
 class EmptyObsStateResetter(ObsStateResetter):
@@ -68,7 +93,7 @@ class EmptyObsStateResetter(ObsStateResetter):
     state_name = "EMPTY"
 
     def reset(self):
-        self.device.clear_all_data()
+        SubarrayClearObsState(self.telescope).execute()
 
 
 class ResourcingObsStateResetter(ObsStateResetter):
@@ -79,10 +104,10 @@ class ResourcingObsStateResetter(ObsStateResetter):
     state_name = "RESOURCING"
 
     def reset(self):
-        self.device.clear_all_data()
-        self.device.execute_transition(
-            command_name="AssignResources", argin=self.assign_input
-        )
+        SubarrayClearObsState(self.telescope).execute()
+        SubarrayExecuteTransition(
+            self.telescope, "AssignResources", argin=self.assign_input
+        ).execute()
 
 
 class ConfiguringObsStateResetter(ObsStateResetter):
@@ -93,12 +118,12 @@ class ConfiguringObsStateResetter(ObsStateResetter):
     state_name = "CONFIGURING"
 
     def reset(self):
-        self.device.clear_all_data()
-        self.device.store_resources(self.assign_input)
+        SubarrayClearObsState(self.telescope).execute()
+        SubarrayStoreResources(self.telescope, self.assign_input).execute()
         wait_added_for_skb372()
-        self.device.execute_transition(
-            command_name="Configure", argin=self.configure_input
-        )
+        SubarrayExecuteTransition(
+            self.telescope, "Configure", argin=self.configure_input
+        ).execute()
 
 
 class AbortingObsStateResetter(ObsStateResetter):
@@ -109,9 +134,11 @@ class AbortingObsStateResetter(ObsStateResetter):
     state_name = "ABORTING"
 
     def reset(self):
-        self.device.clear_all_data()
-        self.device.store_resources(self.assign_input)
-        self.device.execute_transition(command_name="Abort", argin=None)
+        SubarrayClearObsState(self.telescope).execute()
+        SubarrayStoreResources(self.telescope, self.assign_input).execute()
+        SubarrayExecuteTransition(
+            self.telescope, "Abort", argin=None
+        ).execute()
 
 
 class AbortedObsStateResetter(ObsStateResetter):
@@ -122,9 +149,9 @@ class AbortedObsStateResetter(ObsStateResetter):
     state_name = "ABORTED"
 
     def reset(self):
-        self.device.clear_all_data()
-        self.device.store_resources(self.assign_input)
-        self.device.abort_subarray()
+        SubarrayClearObsState(self.telescope).execute()
+        SubarrayStoreResources(self.telescope, self.assign_input).execute()
+        SubarrayAbort(self.telescope).execute()
 
 
 class ScanningObsStateResetter(ObsStateResetter):
@@ -135,14 +162,18 @@ class ScanningObsStateResetter(ObsStateResetter):
     state_name = "SCANNING"
 
     def reset(self):
-        self.device.clear_all_data()
-        self.device.store_resources(self.assign_input)
+        SubarrayClearObsState(self.telescope).execute()
+        SubarrayStoreResources(self.telescope, self.assign_input).execute()
         wait_added_for_skb372()
-        self.device.store_configuration_data(self.configure_input)
-        self.device.store_scan_data(self.scan_input)
+        SubarrayStoreConfigurationData(
+            self.telescope, self.configure_input
+        ).execute()
+        SubarrayStoreScanData(self.telescope, self.scan_input).execute()
 
 
 class ObsStateResetterFactory:
+    """Factory class to create ObsStateResetter instances."""
+
     table = {
         "EMPTY": EmptyObsStateResetter,
         "RESOURCING": ResourcingObsStateResetter,
@@ -154,6 +185,9 @@ class ObsStateResetterFactory:
         "SCANNING": ScanningObsStateResetter,
     }
 
-    def create_obs_state_resetter(self, state_name: str, device: Any):
-        obs_state_resetter = self.table[state_name](state_name, device)
+    def create_obs_state_resetter(
+        self, state_name: str, telescope: TelescopeWrapper
+    ):
+        """Create an ObsStateResetter instance."""
+        obs_state_resetter = self.table[state_name](state_name, telescope)
         return obs_state_resetter

@@ -14,7 +14,6 @@ from tests.resources.test_support.common_utils.common_helpers import Resource
 from tests.test_harness3.constant import POINTING_OFFSETS, sdp_queue_connector
 from tests.test_harness3.helpers import (  # SIMULATED_DEVICES_DICT,
     check_subarray_obs_state,
-    generate_eb_pb_ids,
     prepare_json_args_for_commands,
 )
 from tests.test_harness3.telescope_actions.subarray.force_change_of_obs_state import (  # pylint: disable=line-too-long # noqa: E501
@@ -24,10 +23,16 @@ from tests.test_harness3.telescope_actions.subarray.set_subarray_id import (
     SetSubarrayId,
 )
 from tests.test_harness3.telescope_actions.subarray.store_scan_data import (
-    StoreScanData,
+    SubarrayStoreScanData,
 )
 from tests.test_harness3.telescope_actions.subarray.subarray_abort import (
     SubarrayAbort,
+)
+from tests.test_harness3.telescope_actions.subarray.subarray_clear_obs_state import (  # pylint: disable=line-too-long # noqa: E501
+    SubarrayClearObsState,
+)
+from tests.test_harness3.telescope_actions.subarray.subarray_execute_transition import (  # pylint: disable=line-too-long # noqa: E501
+    SubarrayExecuteTransition,
 )
 from tests.test_harness3.telescope_actions.subarray.subarray_move_to_off import (  # pylint: disable=line-too-long # noqa: E501
     SubarrayMoveToOff,
@@ -37,6 +42,12 @@ from tests.test_harness3.telescope_actions.subarray.subarray_move_to_on import (
 )
 from tests.test_harness3.telescope_actions.subarray.subarray_restart import (
     SubarrayRestart,
+)
+from tests.test_harness3.telescope_actions.subarray.subarray_store_configuration_data import (  # pylint: disable=line-too-long # noqa: E501
+    SubarrayStoreConfigurationData,
+)
+from tests.test_harness3.telescope_actions.subarray.subarray_store_resources import (  # pylint: disable=line-too-long # noqa: E501
+    SubarrayStoreResources,
 )
 from tests.test_harness3.telescope_config.components_config import (
     CSPConfiguration,
@@ -53,8 +64,6 @@ from tests.test_harness3.telescope_structure.telescope_wrapper import (
 from tests.test_harness3.utils.constant import ABORTED, IDLE, ON, READY
 from tests.test_harness3.utils.enums import DishMode, SubarrayObsState
 from tests.test_harness3.utils.sync_decorators import (
-    sync_assign_resources,
-    sync_configure,
     sync_end,
     sync_endscan,
     sync_release_resources,
@@ -180,20 +189,13 @@ class TMCSubarrayNodeFacade:
 
     @property
     def obs_state(self):
-        """TMC SubarrayNode observation state"""
-        self._obs_state = Resource(
-            tmc_configuration.tmc_subarraynode1_name
-        ).get("obsState")
-        return self._obs_state
+        """TMC SubarrayNode observation state."""
+        return self._telescope.tmc._subarray_obs_state
 
     @obs_state.setter
     def obs_state(self, value):
-        """Sets value for TMC subarrayNode observation state
-
-        Args:
-            value (DevState): observation state value
-        """
-        self._obs_state = value
+        """Sets value for TMC subarrayNode observation state."""
+        self._telescope.tmc._subarray_obs_state = value
 
     @property
     def health_state(self) -> HealthState:
@@ -224,20 +226,14 @@ class TMCSubarrayNodeFacade:
         """Move Subarray to OFF state."""
         SubarrayMoveToOff(self._telescope).execute()
 
-    @sync_configure(device_dict=device_dict)
+    # @sync_configure(device_dict=device_dict)
     def store_configuration_data(self, input_string: str):
-        """Invoke configure command on subarray Node
-        Args:
-            input_string (str): config input json
-        Returns:
-            (result, message): result, message tuple
+        """Invoke configure command on subarray Node.
+
+        :param input_string: input string as json
+        :return: result, message
         """
-        # TODO: extract a TelescopeAction subclass or remove
-        result, message = self._telescope.tmc.subarray_node.Configure(
-            input_string
-        )
-        LOGGER.info("Invoked Configure on SubarrayNode")
-        return result, message
+        SubarrayStoreConfigurationData(self._telescope, input_string).execute()
 
     @sync_end(device_dict=device_dict)
     def end_observation(self):
@@ -257,7 +253,7 @@ class TMCSubarrayNodeFacade:
 
     def store_scan_data(self, input_string):
         """Invoke Scan command on subarray Node."""
-        StoreScanData(self._telescope, input_string).execute()
+        SubarrayStoreScanData(self._telescope, input_string).execute()
 
     # @sync_abort(device_dict=device_dict)
     def abort_subarray(self):
@@ -269,20 +265,13 @@ class TMCSubarrayNodeFacade:
         """Invoke Restart command on subarray Node."""
         return SubarrayRestart(self._telescope).execute()
 
-    @sync_assign_resources(device_dict)
+    # @sync_assign_resources(device_dict)
     def store_resources(self, assign_json: str):
         """Invoke Assign Resource command on subarray Node
         Args:
             assign_json (str): Assign resource input json
         """
-        # TODO: extract a TelescopeAction subclass or remove
-        input_json = json.loads(assign_json)
-        generate_eb_pb_ids(input_json)
-        result, message = self._telescope.tmc.subarray_node.AssignResources(
-            json.dumps(input_json)
-        )
-        LOGGER.info("Invoked AssignResources on SubarrayNode")
-        return result, message
+        SubarrayStoreResources(self._telescope, assign_json).execute()
 
     @sync_release_resources(device_dict)
     def release_resources_subarray(
@@ -303,18 +292,9 @@ class TMCSubarrayNodeFacade:
             command_name (str): Name of command to execute
         """
         # TODO: extract a TelescopeAction subclass or remove
-        if command_name is not None:
-            result, message = self._telescope.tmc.subarray_node.command_inout(
-                command_name, argin
-            )
-            LOGGER.info(f"Invoked {command_name} on SubarrayNode")
-            return (
-                result,
-                message,
-            )
-        # pylint says inconsistent-return-statements,
-        # what should be returned here?
-        return None
+        SubarrayExecuteTransition(
+            self._telescope, command_name, argin
+        ).execute()
 
     def _reset_simulator_devices(self):
         """Reset Simulator devices to it's original state"""
@@ -397,6 +377,7 @@ class TMCSubarrayNodeFacade:
         LOGGER.info("Calling Tear down for subarray")
         self._clear_command_call_and_transition_data(clear_transition=True)
 
+        # NOTE: how is this different than SubarrayClearObsState?
         if self.obs_state in ("RESOURCING", "CONFIGURING", "SCANNING"):
             """Invoke Abort and Restart"""
             LOGGER.info("Invoking Abort on Subarray")
@@ -424,17 +405,7 @@ class TMCSubarrayNodeFacade:
     def clear_all_data(self):
         """Method to clear the observations
         and put the SubarrayNode in EMPTY"""
-        if self.obs_state in [
-            "IDLE",
-            "RESOURCING",
-            "READY",
-            "CONFIGURING",
-            "SCANNING",
-        ]:
-            self.abort_subarray()
-            self.restart_subarray()
-        elif self.obs_state == "ABORTED":
-            self.restart_subarray()
+        SubarrayClearObsState(self._telescope).execute()
 
     def force_change_of_obs_state(
         self,

@@ -35,6 +35,12 @@ class SubarrayRestart(TelescopeAction):
                 "sdpSubarrayObsState",
                 ObsState.EMPTY,
             ),
+            # TODO: add this too
+            # ExpectedStateChange(
+            #     self.telescope.tmc.subarray_node,
+            #     "assignedResources",
+            #     None,
+            # ),
             ExpectedStateChange(
                 self.telescope.csp.csp_subarray, "obsState", ObsState.EMPTY
             ),

@@ -11,6 +11,7 @@ from tests.test_harness3.telescope_config.components_config import (
     TMCConfiguration,
 )
 from tests.test_harness3.utils.common_utils import JsonFactory
+from tests.test_harness3.utils.enums import SubarrayObsState
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -59,7 +60,8 @@ class TMCDevices:
         )
 
         self._state = DevState.OFF
-
+        self._subarray_state = DevState.OFF
+        self._subarray_obs_state = SubarrayObsState.EMPTY
         # NOTE: `state` is never used
 
         # initialize in advance the release resources input json
@@ -146,8 +148,8 @@ class TMCDevices:
     @property
     def subarray_state(self) -> DevState:
         """TMC SubarrayNode operational state"""
-        self._state = Resource(self.subarray_node).get("State")
-        return self._state
+        self._subarray_state = Resource(self.subarray_node).get("State")
+        return self._subarray_state
 
     @subarray_state.setter
     def subarray_state(self, value):
@@ -156,7 +158,18 @@ class TMCDevices:
         Args:
             value (DevState): operational state value
         """
-        self._state = value
+        self._subarray_state = value
+
+    @property
+    def subarray_obs_state(self):
+        """TMC SubarrayNode observation state."""
+        self._subarray_obs_state = Resource(self.subarray_node).get("obsState")
+        return self._subarray_obs_state
+
+    @subarray_obs_state.setter
+    def subarray_obs_state(self, value):
+        """Sets value for TMC subarrayNode observation state."""
+        self._subarray_obs_state = value
 
     # -----------------------------------------------------------
     # Subarray state actions
