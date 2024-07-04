@@ -5,8 +5,8 @@ import logging
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
-from tango import DevState
 
+from tests.conftest import MID_DELAY_JSON
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
@@ -14,7 +14,6 @@ from tests.resources.test_harness.helpers import (
     generate_ska_epoch_tai_value,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
-    wait_for_delay_updates_stop_on_delay_model,
     wait_till_delay_values_are_populated,
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
@@ -23,7 +22,6 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 LOGGER = logging.getLogger(__name__)
 
 
-@pytest.mark.test00
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp_35778_test_delay_model.feature",
@@ -33,22 +31,6 @@ def test_tmc_csp_delay_functionality() -> None:
     """
     Test case to verify delay generates properly.
     """
-
-
-@given("the telescope is in ON state")
-def check_telescope_is_in_on_state(
-    central_node_mid: CentralNodeWrapperMid, event_recorder: EventRecorder
-) -> None:
-    """Ensure telescope is in ON state."""
-    central_node_mid.move_to_on()
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.ON,
-    )
 
 
 @given(parsers.parse("TMC subarray {subarray_id} in ObsState IDLE"))
@@ -137,9 +119,9 @@ def check_if_delay_values_are_stop_generating(
     subarray_node: SubarrayNodeWrapper,
 ) -> None:
     """Check if delay values are stop generating."""
-    wait_for_delay_updates_stop_on_delay_model(
-        subarray_node.csp_subarray_leaf_node
-    )
+    cspsal_node = subarray_node.csp_subarray_leaf_node
+    delay_json = json.loads(cspsal_node.read_attribute("delayModel").value)
+    assert delay_json == MID_DELAY_JSON
 
 
 @when("I re-configure the TMC subarray")

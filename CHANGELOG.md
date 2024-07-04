@@ -3,9 +3,27 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
-[0.20.0]
+[0.22.0]
+************
+* Integrate TMC-Dish Scan functionality implementation (REL-1295)
+
+[0.21.0]
+************
+* Improvement as per ADR-76 changes are done in Dish Leaf node and Subarray Node.
+* Enabled ProgramTrackTable.
+* Fixed CORBA issues in dish leaf node while execution of commands.
+
+[0.20.1]
+************
 * Integrate TMC-Dish Scan functionality implementation
-Intermediate chart with TMC updates to work with dish-lmc chart 3.2.0
+* This release is from branch sah-1524
+
+[0.20.0]
+************
+* SP-4028 Delay Model Improvements
+* SKB-329 and SKB-330 bug fixes on CspSubarrayLeafNode(v0.16.2)
+* Updated affected BDD test case - XTP-32140
+
 [0.19.2]
 ***********
 * Updated Subarray Node to v0.18.0 that resolves the SKB-331 and gets rid of hardcoded interface values

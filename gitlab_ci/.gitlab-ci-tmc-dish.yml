@@ -1,5 +1,7 @@
 k8s-test-dish-lmc:
   stage: test
+  extends:
+    - k8s-test
   tags:
     - ska-k8s
   variables:
@@ -35,6 +37,9 @@ k8s-test-dish-lmc:
     - pip3 install -U ska-ser-xray
     - XRAY_TEST_RESULT_FILE="build/cucumber.json" make xray-publish
     - make k8s-uninstall-chart
+  environment:
+    name: test/$CI_COMMIT_REF_SLUG
+    on_stop: stop-k8s-test-dish-lmc
 
 stop-k8s-test-dish-lmc:
   extends:

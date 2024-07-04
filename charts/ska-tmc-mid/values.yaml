@@ -84,7 +84,7 @@ subarraynode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-subarraynode
-    tag: 0.18.0
+    tag: 0.19.0
     pullPolicy: IfNotPresent
 
 
@@ -92,35 +92,37 @@ sdpleafnodes:
   image:
     registry: artefact.skao.int
     image: ska-tmc-sdpleafnodes
-    tag: 0.15.0
+    tag: 0.15.1
     pullPolicy: IfNotPresent
 
 cspmasterleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.15.3
+    tag: 0.16.2
     pullPolicy: IfNotPresent
 
 cspsubarrayleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.15.3
+    tag: 0.17.1
     pullPolicy: IfNotPresent
 
 dishleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-dishleafnode
-    tag: 0.13.2
+    tag: 0.14.1
     pullPolicy: IfNotPresent
 
-
 resources:
+  limits:
+    cpu: 3500m
+    memory: 2000Mi
   requests:
     cpu: 500m
-    memory: 200Mi
+    memory: 1000Mi
 
 
 deviceServers:
@@ -149,9 +151,9 @@ deviceServers:
     DishIDs: ["SKA001", "SKA036", "SKA063", "SKA100"]
     RealDishMasterIdentifier: "mid-dish/dish-manager"
     SimulatorDishMasterIdentifier: "elt/master"
-    CspAssignResourcesInterfaceURL : "https://schema.skao.int/ska-csp-assignresources/2.0"
-    CspScanInterfaceURL : "https://schema.skao.int/ska-csp-scan/2.0"
-    SdpScanInterfaceURL : "https://schema.skao.int/ska-sdp-scan/0.4"
+    CspAssignResourcesInterfaceURL: "https://schema.skao.int/ska-csp-assignresources/2.0"
+    CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.0"
+    SdpScanInterfaceURL: "https://schema.skao.int/ska-sdp-scan/0.4"
 
   sdpsubarrayleafnode:
     enabled: true

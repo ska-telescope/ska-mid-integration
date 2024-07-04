@@ -1,5 +1,5 @@
 {
-    "interface": "https://schema.skao.int/ska-tmc-configure/2.1",
+    "interface": "https://schema.skao.int/ska-tmc-configure/2.2",
     "transaction_id": "txn-....-00002",
     "pointing": {
         "target": {

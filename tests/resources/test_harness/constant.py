@@ -233,6 +233,18 @@ device_dict = {
     "dish_master2": dish_master2,
     "dish_master3": dish_master3,
     "dish_master4": dish_master4,
+    "dish_master_list": [
+        dish_master1,
+        dish_master2,
+        dish_master3,
+        dish_master4,
+    ],
+    "dish_leaf_node_list": [
+        tmc_dish_leaf_node1,
+        tmc_dish_leaf_node2,
+        tmc_dish_leaf_node3,
+        tmc_dish_leaf_node4,
+    ],
     "sdp_subarray": sdp_subarray1,
     "csp_subarray": csp_subarray1,
     "sdp_subarray_leaf_node": tmc_sdp_subarray_leaf_node,
@@ -260,6 +272,9 @@ DEFAULT_DISH_VCC_CONFIG = {
         + "ska-sdp-tmlite-repository-1.0.0#tmdata"
     ],
     "tm_data_filepath": (
-        "instrument/ska1_mid_psi/" "ska-mid-cbf-system-parameters.json"
+        "instrument/ska1_mid_psi/ska-mid-cbf-system-parameters.json"
     ),
 }
+
+DISH_001_CALIBRATION_DATA = [1.1, 1.2, 1.3]
+DISH_036_CALIBRATION_DATA = [2.1, 2.2, 2.3]

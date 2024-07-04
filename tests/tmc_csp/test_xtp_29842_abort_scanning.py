@@ -2,7 +2,6 @@
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
-from tango import DevState
 
 from tests.resources.test_harness.helpers import (
     get_master_device_simulators,
@@ -11,7 +10,6 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-@pytest.mark.skip(reason="Requires CBF chart with ska-telmodel v.1.15.0")
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/xtp_29842_abort_scanning.feature",
@@ -34,22 +32,6 @@ def test_tmc_csp_abort_in_scanning(central_node_mid, simulator_factory):
     assert central_node_mid.csp_master.ping() > 0
     assert central_node_mid.subarray_devices["csp_subarray"].ping() > 0
     assert csp_master_sim.ping() > 0
-
-
-@given("the telescope is in ON state")
-def telescope_is_in_on_state(central_node_mid, event_recorder):
-    """
-    This method checks if the telescope is in ON state
-    """
-    central_node_mid.move_to_on()
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.ON,
-    )
 
 
 @given(
@@ -78,10 +60,6 @@ def subarray_is_in_scanning_obsstate(
         "scan_mid", command_input_factory
     )
 
-    event_recorder.subscribe_event(
-        subarray_node.subarray_devices.get("csp_subarray"), "obsState"
-    )
-    event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
     event_recorder.subscribe_event(
         subarray_node.csp_subarray_leaf_node, "cspSubarrayObsState"
     )
