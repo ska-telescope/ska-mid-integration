@@ -33,9 +33,6 @@ tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 telescope_control = BaseTelescopeControl()
 
 
-@pytest.mark.skip(
-    reason="Scan functionality is broken. It will fixed in SAH-1498"
-)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_failed_assigned.feature",
@@ -168,11 +165,13 @@ def tmc_status_idle(json_factory):
 @when("I issue the command Configure passing a correct JSON script")
 def tmc_accepts_configure_command_with_valid_json(json_factory):
     configure_json = json_factory("command_Configure")
+    configure_input_json = json.loads(configure_json)
+    configure_input_json["tmc"]["scan_duration"] = 10.0
     release_json = json_factory("command_ReleaseResources")
     try:
         # Invoke Configure() Command on TMC
         tmc_helper.configure_subarray(
-            configure_json, **ON_OFF_DEVICE_COMMAND_DICT
+            json.dumps(configure_input_json), **ON_OFF_DEVICE_COMMAND_DICT
         )
         LOGGER.info("Invoked Configure command on TMC SubarrayNode")
     except Exception:
@@ -265,9 +264,6 @@ def teardown_the_tmc(json_factory):
     )
 
 
-@pytest.mark.skip(
-    reason="Scan functionality is broken. It will fixed in SAH-1498"
-)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_failed_assigned.feature",
@@ -327,9 +323,6 @@ def send_assignresource_with_invalid_json3(json_factory):
         tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
 
 
-@pytest.mark.skip(
-    reason="Scan functionality is broken. It will fixed in SAH-1498"
-)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_assigning_unavailable_resources.feature",  # noqa: E501
@@ -377,9 +370,6 @@ def invalid_command_rejection_with_unavailable_resources(resources_list):
     assert pytest.command_result[0][0] == ResultCode.REJECTED
 
 
-@pytest.mark.skip(
-    reason="Scan functionality is broken. It will fixed in SAH-1498"
-)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_assigning_unavailable_resources.feature",  # noqa: E501
@@ -392,9 +382,6 @@ def test_assign_resource_successive_invokation_with_unavailable_resources():
     """
 
 
-@pytest.mark.skip(
-    reason="Scan functionality is broken. It will fixed in SAH-1498"
-)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_combination_of_failed_assign_resources.feature",  # noqa: E501
@@ -410,9 +397,6 @@ def test_assign_resource_with_combination():
     """
 
 
-@pytest.mark.skip(
-    reason="Scan functionality is broken. It will fixed in SAH-1498"
-)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_combination_of_failed_assign_resources.feature",  # noqa: E501

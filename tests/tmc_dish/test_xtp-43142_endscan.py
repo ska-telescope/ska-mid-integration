@@ -1,18 +1,15 @@
-"""Test module for TMC-DISH Scan functionality
-"""
+"""Test module for TMC-DISH EndScan functionality"""
+
 import json
-import logging
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
-from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import ObsState
 from tango import DevState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
-    check_long_running_command_status,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
@@ -23,31 +20,22 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
-configure_logging(logging.DEBUG)
-LOGGER = logging.getLogger(__name__)
-
 
 @pytest.mark.tmc_dish
 @scenario(
-    "../features/tmc_dish/xtp-30385_scan.feature",
-    "TMC executes Scan command on DISH",
+    "../features/tmc_dish/xtp-43142_endscan.feature",
+    "TMC mid executes EndScan command on DISH",
 )
-def test_tmc_dish_scan():
+def test_tmc_dish_endscan():
     """
-    Test case to verify TMC-DISH Scan functionality
-
-    Glossary:
-        - "central_node_mid": fixture for a TMC CentralNode under test
-        - "simulator_factory": fixture for SimulatorFactory class,
-        which provides simulated master devices
-        - "event_recorder": fixture for EventRecorder class
+    Test case to verify TMC-DISH EndScan functionality
     """
 
 
 @given(
     parsers.parse(
-        "a Telescope consisting of TMC, DISH {dish_ids},"
-        + " simulated CSP and simulated SDP"
+        "a Telescope consisting of TMC, DISH {dish_ids}"
+        + ", simulated CSP and simulated SDP"
     )
 )
 def given_a_telescope(
@@ -108,17 +96,6 @@ def turn_on_telescope(
     )
     central_node_mid.move_to_on()
 
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.csp_master,
-        "State",
-        DevState.ON,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.sdp_master,
-        "State",
-        DevState.ON,
-    )
-
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
@@ -132,6 +109,17 @@ def turn_on_telescope(
         )
 
     assert event_recorder.has_change_event_occurred(
+        central_node_mid.sdp_master,
+        "State",
+        DevState.ON,
+    )
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.csp_master,
+        "State",
+        DevState.ON,
+    )
+    assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
         DevState.ON,
@@ -139,15 +127,15 @@ def turn_on_telescope(
     )
 
 
-@given(parsers.parse("TMC subarray {subarray_id} is in READY obsState"))
-def check_subarray_obsState_ready(
+@given(parsers.parse("TMC subarray {subarray_id} is in obsState SCANNING"))
+def move_subarray_obsState_to_scanning(
     subarray_node: SubarrayNodeWrapper,
     command_input_factory: JsonFactory,
     event_recorder: EventRecorder,
     central_node_mid: CentralNodeWrapperMid,
     subarray_id: str,
 ):
-    """Method to check subarray is in READY obsState"""
+    """Method to move subarray is in Scanning obsState"""
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
@@ -156,15 +144,18 @@ def check_subarray_obsState_ready(
         central_node_mid.central_node, "longRunningCommandResult"
     )
 
+    central_node_mid.set_subarray_id(subarray_id)
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    central_node_mid.set_subarray_id(subarray_id)
-    pytest.command_result = central_node_mid.store_resources(assign_input_json)
+    scan_input_json = prepare_json_args_for_commands(
+        "scan_mid", command_input_factory
+    )
 
+    pytest.command_result = central_node_mid.store_resources(assign_input_json)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
@@ -176,24 +167,11 @@ def check_subarray_obsState_ready(
         (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
     configure_json = json.loads(configure_input_json)
-    configure_json["tmc"]["scan_duration"] = 10.0
+    configure_json["tmc"]["scan_duration"] = 20.0
     pytest.command_result = subarray_node.execute_transition(
         "Configure", json.dumps(configure_json)
     )
-
-
-@given(
-    parsers.parse(
-        "Dish {dish_ids} is in dishMode" + " OPERATE with pointingState TRACK"
-    )
-)
-def check_dish_mode_and_pointing_state(
-    central_node_mid: CentralNodeWrapperMid,
-    event_recorder: EventRecorder,
-    dish_ids: str,
-    subarray_node: SubarrayNodeWrapper,
-):
-    for dish_id in dish_ids.split(","):
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "pointingState"
         )
@@ -224,7 +202,6 @@ def check_dish_mode_and_pointing_state(
             PointingState.TRACK,
             lookahead=10,
         )
-
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
@@ -237,53 +214,17 @@ def check_dish_mode_and_pointing_state(
         (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
 
-
-@when(
-    parsers.parse("I issue the Scan command to the TMC subarray {subarray_id}")
-)
-def invoke_scan(
-    central_node_mid: CentralNodeWrapperMid,
-    subarray_node: SubarrayNodeWrapper,
-    command_input_factory: JsonFactory,
-    subarray_id: str,
-):
-    """
-    A method to invoke Scan command
-    """
-    scan_input_json = prepare_json_args_for_commands(
-        "scan_mid", command_input_factory
-    )
-    central_node_mid.set_subarray_id(subarray_id)
-    pytest.command_result = subarray_node.execute_transition(
-        "Scan", scan_input_json
+    subarray_node.execute_transition("Scan", scan_input_json)
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.SCANNING,
     )
 
 
-@then(parsers.parse("{scan_id} assigned to Dish {dish_ids}"))
-def check_scan_id(
-    central_node_mid: CentralNodeWrapperMid,
-    event_recorder: EventRecorder,
-    dish_ids: str,
-    scan_id: str,
-):
-    """
-    Method to check scan_id value of DISH
-    """
-    for dish_id in dish_ids.split(","):
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "scanID"
-        )
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "scanID",
-            scan_id,
-        )
-
-
-@then(
+@given(
     parsers.parse(
-        "the Dish {dish_ids} remains in dishMode"
-        + " OPERATE and pointingState TRACK"
+        "DishMaster {dish_ids} is in dishMode OPERATE with pointingState TRACK"
     )
 )
 def check_dish_mode_and_pointing_state_after_scan(
@@ -292,7 +233,7 @@ def check_dish_mode_and_pointing_state_after_scan(
     dish_ids: str,
 ):
     """
-    Method to check dishMode and pointingState of DISH
+    Method to check dishMode and pointingState of DISH after scan command
     """
     for dish_id in dish_ids.split(","):
         assert (
@@ -311,42 +252,85 @@ def check_dish_mode_and_pointing_state_after_scan(
             central_node_mid.dish_leaf_node_dict[dish_id].pointingState
             == PointingState.TRACK
         )
-        assert check_long_running_command_status(
+
+
+@when(
+    parsers.parse(
+        "I issue the EndScan command to the TMC subarray {subarray_id}"
+    )
+)
+def invoke_endscan(
+    subarray_node: SubarrayNodeWrapper,
+    subarray_id: str,
+):
+    """
+    A method to invoke EndScan command
+    """
+    subarray_node.set_subarray_id(subarray_id)
+    pytest.command_result = subarray_node.remove_scan_data()
+
+
+@then(parsers.parse("scan_id gets cleared from Dish {dish_ids}"))
+def check_scan_id(
+    central_node_mid: CentralNodeWrapperMid,
+    event_recorder: EventRecorder,
+    dish_ids: str,
+):
+    """
+    Method to check scan_id value of DISH
+    """
+    for dish_id in dish_ids.split(","):
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "scanID"
+        )
+        assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
-            "longRunningCommandStatus",
-            "_Scan",
-            "COMPLETED",
+            "scanID",
+            "",
         )
 
 
-@then("TMC SubarrayNode transitions to obsState SCANNING")
-def tmc_subarray_scanning(
-    central_node_mid: CentralNodeWrapperMid,
-    subarray_node: SubarrayNodeWrapper,
-    event_recorder: EventRecorder,
-    subarray_id: str,
-):
-    """Checks if SubarrayNode's obsState attribute value is SCANNING"""
-    central_node_mid.set_subarray_id(int(subarray_id))
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "obsState",
-        ObsState.SCANNING,
-    )
-
-
 @then(
-    "TMC SubarrayNode transitions to obsState READY"
-    + " once the scan duration is elapsed"
+    parsers.parse(
+        "the Dish {dish_ids} remains in "
+        + "dishMode OPERATE and pointingState TRACK"
+    )
 )
-def check_subarray_obsstate_ready(
+def check_dish_mode_and_pointing_state_after_endscan(
     central_node_mid: CentralNodeWrapperMid,
+    event_recorder: EventRecorder,
+    dish_ids: str,
+):
+    """
+    Method to check dishMode and pointingState of DISH after EndScan command.
+    """
+    for dish_id in dish_ids.split(","):
+        assert (
+            central_node_mid.dish_master_dict[dish_id].dishMode
+            == DishMode.OPERATE
+        )
+        assert (
+            central_node_mid.dish_leaf_node_dict[dish_id].dishMode
+            == DishMode.OPERATE
+        )
+        assert (
+            central_node_mid.dish_master_dict[dish_id].pointingState
+            == PointingState.TRACK
+        )
+        assert (
+            central_node_mid.dish_leaf_node_dict[dish_id].pointingState
+            == PointingState.TRACK
+        )
+
+
+@then("TMC SubarrayNode transitions to obsState READY")
+def check_subarray_obsstate_ready(
     subarray_node: SubarrayNodeWrapper,
     event_recorder: EventRecorder,
     subarray_id: str,
 ):
     """Checks if SubarrayNode's obsState attribute value is READY"""
-    central_node_mid.set_subarray_id(int(subarray_id))
+    subarray_node.set_subarray_id(subarray_id)
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )

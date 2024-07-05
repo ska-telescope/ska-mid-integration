@@ -43,6 +43,9 @@ class TestMidCentralNodeAssignResources(object):
             central_node_mid.subarray_node, "obsState"
         )
         event_recorder.subscribe_event(
+            central_node_mid.central_node, "telescopeState"
+        )
+        event_recorder.subscribe_event(
             central_node_mid.subarray_node, "assignedResources"
         )
         event_recorder.subscribe_event(
@@ -52,7 +55,6 @@ class TestMidCentralNodeAssignResources(object):
             central_node_mid.central_node, "telescopeState"
         )
         central_node_mid.move_to_on()
-
         assert event_recorder.has_change_event_occurred(
             central_node_mid.central_node,
             "telescopeState",

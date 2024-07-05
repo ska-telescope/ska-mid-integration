@@ -39,10 +39,17 @@ def telescope_is_in_resourcing_obsstate(
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
+    event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.sdp_master,
+        "State",
+        DevState.ON,
+    )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
         DevState.ON,
+        lookahead=15,
     )
     # Need to add a wait explicitly as the CentralNode does not receive
     # the longRunningCommandResult event on TelescopeOn command completion
