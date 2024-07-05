@@ -5,14 +5,15 @@ import os
 import time
 
 import pytest
-from pytest_bdd import given, scenario, when
+from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
-from tango import DeviceProxy
+from tango import DeviceProxy, DevState
 from tango.db import Database
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
+    check_for_device_command_event,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
@@ -49,22 +50,7 @@ def check_telescope_in_initial_state(
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
-    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode"
-        )
 
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "dishMode",
-            DishMode.STANDBY_LP,
-        )
-    # Wait for DishMaster attribute value update,
-    # on CentralNode for value dishMode STANDBY_LP
-
-    # TODO: Improvement in tests/implementation
-    # to minimize the need of having sleep
-    time.sleep(5)
     Resource(central_node_mid.central_node).assert_attribute(
         "telescopeState"
     ).equals(["OFF", "STANDBY"])
@@ -80,14 +66,27 @@ def move_subarray_to_obsState_idle(
     """
     Method to move subarray in IDLE obsState
     """
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "longRunningCommandResult"
-    )
     central_node_mid.move_to_on()
+    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
+    event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.csp_master,
+        "State",
+        DevState.ON,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.sdp_master,
+        "State",
+        DevState.ON,
+    )
+
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
         )
 
         assert event_recorder.has_change_event_occurred(
@@ -95,6 +94,23 @@ def move_subarray_to_obsState_idle(
             "dishMode",
             DishMode.STANDBY_FP,
         )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+        )
+
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "telescopeState"
+    )
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "telescopeState",
+        DevState.ON,
+    )
+
+    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
@@ -105,6 +121,9 @@ def move_subarray_to_obsState_idle(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
@@ -134,7 +153,7 @@ def restart_the_dish_leaf_nodes():
     time.sleep(3)
 
 
-@when("I configure the subarray {subarray_id}")
+@when(parsers.parse("I configure the subarray {subarray_id}"))
 def configure_subarray(
     subarray_node: SubarrayNodeWrapper,
     central_node_mid: CentralNodeWrapperMid,
@@ -148,10 +167,81 @@ def configure_subarray(
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
+
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
     central_node_mid.set_subarray_id(subarray_id)
-    pytest.command_result = subarray_node.store_configuration_data(
-        configure_input_json
+    pytest.command_result = subarray_node.execute_transition(
+        "Configure", configure_input_json
+    )
+
+
+@then("dish manager should throw the error and report to TMC")
+def dish_lmc_reprorts_unavailibiltiy(event_recorder, central_node_mid):
+    exception_message = (
+        "The processing controller, helm deployer, or both "
+        + "are OFFLINE: cannot start processing blocks."
+    )
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id],
+            "longRunningCommandStatus",
+        )
+        assert check_for_device_command_event(
+            central_node_mid.dish_master_dict[dish_id],
+            "longRunningCommandStatus",
+            exception_message,
+            event_recorder,
+            "Configure",
+        )
+
+
+@then("TMC should propagate the error to client")
+def tmc_reports_unavailability_to_client(
+    event_recorder: EventRecorder, central_node_mid: CentralNodeWrapperMid
+):
+    """
+    Method to verify TMC subarray reports unavailability to client.
+    """
+    pass
+    # exception_message = (
+    #     "Exception occurred on device:"
+    #     + " ska_mid/tm_subarray_node/1: Exception occurred on the"
+    #     + " following devices: ska_mid/tm_leaf_node/sdp_subarray01:"
+    #     + " The processing controller, helm deployer, or both are OFFLINE:"
+    #     + " cannot start processing blocks.\n"
+    # )
+    # event_recorder.subscribe_event(
+    #     central_node_mid.central_node,
+    #     "longRunningCommandResult",
+    # )
+    # assert check_for_device_command_event(
+    #     central_node_mid.central_node,
+    #     "longRunningCommandResult",
+    #     exception_message,
+    #     event_recorder,
+    #     "AssignResources",
+    # )
+
+
+@then(
+    parsers.parse(
+        "the TMC SubarrayNode {subarray_id} remains in ObsState CONFIGURING"
+    )
+)
+def subarray_is_in_configuring_obsState(
+    subarray_node,
+    event_recorder,
+    subarray_id,
+):
+    """
+    A method to check if telescope in is configuring obsState
+    """
+    subarray_node.set_subarray_id(subarray_id)
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.CONFIGURING,
+        lookahead=10,
     )

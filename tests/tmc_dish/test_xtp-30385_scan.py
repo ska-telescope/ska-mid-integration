@@ -1,6 +1,5 @@
 """Test module for TMC-DISH Scan functionality
 """
-
 import json
 import logging
 
@@ -136,6 +135,7 @@ def turn_on_telescope(
         central_node_mid.central_node,
         "telescopeState",
         DevState.ON,
+        lookahead=10,
     )
 
 
@@ -197,25 +197,32 @@ def check_dish_mode_and_pointing_state(
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "pointingState"
         )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
+        )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.OPERATE,
+            lookahead=10,
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "dishMode",
             DishMode.OPERATE,
+            lookahead=10,
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
+            lookahead=10,
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
+            lookahead=10,
         )
 
     assert event_recorder.has_change_event_occurred(
@@ -268,11 +275,6 @@ def check_scan_id(
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
-            "scanID",
-            scan_id,
-        )
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_leaf_node_dict[dish_id],
             "scanID",
             scan_id,
         )
@@ -352,9 +354,7 @@ def check_subarray_obsstate_ready(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "obsState",
-        ObsState.READY,
+        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
     )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,

@@ -50,6 +50,9 @@ def execute_configure_scan_sequence(
     scan_types,
 ):
     """Method to invoke configure and scan  command"""
+    event_recorder.subscribe_event(
+        subarray_node.subarray_devices["csp_subarray"], "scanID"
+    )
 
     check_subarray_instance(subarray_node.subarray_node, subarray_id)
     configure_json = prepare_json_args_for_commands(

@@ -775,7 +775,7 @@ class TestSubarrayHealthState(object):
 
         event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
 
-        subarray_node.store_resources(input_json)
+        subarray_node.execute_transition("AssignResources", argin=input_json)
         assert event_recorder.has_change_event_occurred(
             subarray_node.subarray_node, "obsState", ObsState.IDLE
         ), "Waiting for subarray node to complete"

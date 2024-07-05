@@ -129,7 +129,6 @@ ska-sdp:
   kafka:
     enabled: true
 
- 
 # SKUID
 ska-ser-skuid:
   labels:

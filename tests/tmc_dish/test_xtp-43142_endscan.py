@@ -1,6 +1,6 @@
 """Test module for TMC-DISH EndScan functionality"""
 
-import time
+import json
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -17,14 +17,15 @@ from tests.resources.test_harness.simulator_factory import SimulatorFactory
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
+from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
 @pytest.mark.skip
 @pytest.mark.tmc_dish
 @scenario(
-    "../features/tmc_dish/endscan.feature",
-    "TMC executes EndScan command on DISH.LMC",
+    "../features/tmc_dish/xtp-43142_endscan.feature",
+    "TMC mid executes EndScan command on DISH",
 )
 def test_tmc_dish_endscan():
     """
@@ -57,6 +58,7 @@ def given_a_telescope(
     assert sdp_master_sim.ping() > 0
     for dish_id in dish_ids.split(","):
         assert central_node_mid.dish_master_dict[dish_id].ping() > 0
+        assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
 
 
 @given("the Telescope is in ON state")
@@ -66,46 +68,14 @@ def turn_on_telescope(
     simulator_factory: SimulatorFactory,
 ):
     """A method to put Telescope ON"""
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA001"], "dishMode"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA036"], "dishMode"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA063"], "dishMode"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA100"], "dishMode"
-    )
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
+        )
 
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA001"],
-        "dishMode",
-        DishMode.STANDBY_LP,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA036"],
-        "dishMode",
-        DishMode.STANDBY_LP,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA063"],
-        "dishMode",
-        DishMode.STANDBY_LP,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA100"],
-        "dishMode",
-        DishMode.STANDBY_LP,
-    )
-
-    # Wait for DishMaster attribute value update,
-    # on CentralNode for value dishMode STANDBY_FP
-
-    # TODO: Improvement in tests/implementation
-    # to minimize the need of having sleep
-    time.sleep(5)
     csp_master_sim = simulator_factory.get_or_create_simulator_device(
         SimulatorDeviceType.MID_CSP_MASTER_DEVICE
     )
@@ -127,33 +97,17 @@ def turn_on_telescope(
     )
     central_node_mid.move_to_on()
 
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA001"],
-        "dishMode",
-        DishMode.STANDBY_FP,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA036"],
-        "dishMode",
-        DishMode.STANDBY_FP,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA063"],
-        "dishMode",
-        DishMode.STANDBY_FP,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.dish_master_dict["SKA100"],
-        "dishMode",
-        DishMode.STANDBY_FP,
-    )
-
-    # Wait for DishMaster attribute value update,
-    # on CentralNode for value dishMode STANDBY_LP
-
-    # TODO: Improvement in tests/implementation
-    # to minimize the need of having sleep
-    time.sleep(5)
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+        )
 
     assert event_recorder.has_change_event_occurred(
         central_node_mid.sdp_master,
@@ -170,6 +124,7 @@ def turn_on_telescope(
         central_node_mid.central_node,
         "telescopeState",
         DevState.ON,
+        lookahead=10,
     )
 
 
@@ -183,6 +138,12 @@ def move_subarray_obsState_to_scanning(
 ):
     """Method to move subarray is in Scanning obsState"""
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
 
     central_node_mid.set_subarray_id(subarray_id)
     assign_input_json = prepare_json_args_for_centralnode_commands(
@@ -195,18 +156,63 @@ def move_subarray_obsState_to_scanning(
         "scan_mid", command_input_factory
     )
 
-    central_node_mid.store_resources(assign_input_json)
+    pytest.command_result = central_node_mid.store_resources(assign_input_json)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
     )
-
-    subarray_node.execute_transition("Configure", configure_input_json)
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+    )
+    configure_json = json.loads(configure_input_json)
+    configure_json["tmc"]["scan_duration"] = 20.0
+    pytest.command_result = subarray_node.execute_transition(
+        "Configure", json.dumps(configure_json)
+    )
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "pointingState"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.OPERATE,
+            lookahead=10,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "dishMode",
+            DishMode.OPERATE,
+            lookahead=10,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "pointingState",
+            PointingState.TRACK,
+            lookahead=10,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "pointingState",
+            PointingState.TRACK,
+            lookahead=10,
+        )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
+        lookahead=10,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
 
     subarray_node.execute_transition("Scan", scan_input_json)
@@ -236,7 +242,15 @@ def check_dish_mode_and_pointing_state_after_scan(
             == DishMode.OPERATE
         )
         assert (
+            central_node_mid.dish_leaf_node_dict[dish_id].dishMode
+            == DishMode.OPERATE
+        )
+        assert (
             central_node_mid.dish_master_dict[dish_id].pointingState
+            == PointingState.TRACK
+        )
+        assert (
+            central_node_mid.dish_leaf_node_dict[dish_id].pointingState
             == PointingState.TRACK
         )
 
@@ -254,12 +268,32 @@ def invoke_endscan(
     A method to invoke EndScan command
     """
     subarray_node.set_subarray_id(subarray_id)
-    subarray_node.remove_scan_data()
+    pytest.command_result = subarray_node.remove_scan_data()
+
+
+@then(parsers.parse("scan_id gets cleared from Dish {dish_ids}"))
+def check_scan_id(
+    central_node_mid: CentralNodeWrapperMid,
+    event_recorder: EventRecorder,
+    dish_ids: str,
+):
+    """
+    Method to check scan_id value of DISH
+    """
+    for dish_id in dish_ids.split(","):
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "scanID"
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "scanID",
+            "",
+        )
 
 
 @then(
     parsers.parse(
-        "the DishMaster {dish_ids} remains in "
+        "the Dish {dish_ids} remains in "
         + "dishMode OPERATE and pointingState TRACK"
     )
 )
@@ -272,20 +306,20 @@ def check_dish_mode_and_pointing_state_after_endscan(
     Method to check dishMode and pointingState of DISH after EndScan command.
     """
     for dish_id in dish_ids.split(","):
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "scanID"
-        )
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "scanID",
-            "",
-        )
         assert (
             central_node_mid.dish_master_dict[dish_id].dishMode
             == DishMode.OPERATE
         )
         assert (
+            central_node_mid.dish_leaf_node_dict[dish_id].dishMode
+            == DishMode.OPERATE
+        )
+        assert (
             central_node_mid.dish_master_dict[dish_id].pointingState
+            == PointingState.TRACK
+        )
+        assert (
+            central_node_mid.dish_leaf_node_dict[dish_id].pointingState
             == PointingState.TRACK
         )
 
@@ -298,8 +332,14 @@ def check_subarray_obsstate_ready(
 ):
     """Checks if SubarrayNode's obsState attribute value is READY"""
     subarray_node.set_subarray_id(subarray_id)
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
+    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
-        "obsState",
-        ObsState.READY,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], str(ResultCode.OK.value)),
     )
