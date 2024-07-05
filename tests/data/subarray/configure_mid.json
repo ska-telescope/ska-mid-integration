@@ -98,6 +98,6 @@
     "scan_type": "target:a"
   },
   "tmc": {
-    "scan_duration": 5.0
+    "scan_duration": 10.0
   }
 }

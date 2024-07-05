@@ -1,7 +1,6 @@
 """Test module for TMC-DISH Scan functionality
 """
 
-
 import json
 import logging
 
@@ -29,10 +28,6 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
-@pytest.mark.skip(
-    reason="TMC-Dish Scan-EndSCan interface is yet to be "
-    + "tested in integration repository."
-)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-30385_scan.feature",
