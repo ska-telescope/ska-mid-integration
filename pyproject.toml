@@ -1,0 +1,94 @@
+[tool.poetry]
+name = "ska-mid-integration"
+version = "0.1.0"
+description = ""
+authors = ["Snehal Ujjainkar Venkata Reddy"]
+license = "BSD"
+readme = "README.md"
+repository = "https://gitlab.com/ska-telescope/ska-mid-integration"
+packages = [
+    {include = "ska_mid_integration", from = "src"}
+]
+include = [
+    { path = 'tests' }
+]
+classifiers = [
+    'Development Status :: 2 - Pre-Alpha',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: BSD License',
+    'Natural Language :: English',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.10',
+]
+
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.13"
+ipywidgets = "^8.0.2"
+notebook = "^6.4.12"
+jupyterlab = "^3.4.7"
+# jupyterlab-server version > 2.24.0 depends on jsonschema
+# version >=4.18.0 which is incompatible with ska-oso-scripting
+# which requires version 4.17.3. For some reason poetry does not
+# recognise jupyterlab-server <> jsonschema dependency and so does
+# not generate the poetry.lock correctly without this restriction
+jupyterlab-server = "<=2.24.0"
+ska-tmc-cdm = "8.3.0"
+ska-oso-scripting = "7.9.0"
+ska-oso-pdm = "11.4.0"
+ska-sdp-cbf-emulator = "7.0.0"
+kubernetes = "^25.3.0"
+aiokafka = "^0.8.1"
+bokeh = "^3.3.0"
+jupyter-bokeh = "^3.0.7"
+jupyterhub = "^4.0.2"
+h5py= "3.10.0"
+# This is nbformat (from jupyterlab?) dependency which for some
+# reason doesn't get automatically included in the dependencies
+fastjsonschema = "^2.19.1"
+
+[tool.poetry.extras]
+localtango = ["pytango"]
+
+[tool.poetry.group.dev.dependencies]
+pytest = ">=6.2.5,<7.0.0"
+assertpy = "^1.1"
+flake8 = "^5.0.4"
+isort = "^5.10.1"
+black = "^22.10.0"
+pylint = "^2.15.5"
+pytest-cov = "^4.0.0"
+pytest-forked = "^1.4.0"
+pytest-json-report = "^1.5.0"
+pycodestyle = "^2.9.1"
+pylint-junit = "^0.3.2"
+simpleeval = "^0.9.13"
+nbmake = {extras = ["all"], version = "^1.4.1"}
+nbqa = {extras = ["all"], version = "^1.7.0"}
+
+[tool.poetry.group.docs.dependencies]
+Sphinx = "^7.2.6"
+ska-ser-sphinx-theme = "^0.1.2"
+myst-parser = "^2.0.0"
+
+[tool.coverage.run]
+parallel = true
+branch = true
+data_file = ".coverage/.coverage"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[[tool.poetry.source]]
+name = 'ska-nexus'
+url = 'https://artefact.skao.int/repository/pypi-internal/simple'
+
+[[tool.poetry.source]]
+name = "PyPI-public"
+url = 'https://pypi.org/simple'
+
+[tool.poetry.scripts]
+convertnb = "ska_jupyter_scripting.scripts.convert_nb:main"
+pingsut = "ska_jupyter_scripting.scripts.pingsut:main"

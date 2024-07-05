@@ -1,0 +1,142 @@
+image: $SKA_K8S_TOOLS_BUILD_DEPLOY
+
+default:
+  tags:
+    - ska-k8s
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+  MINIKUBE: "false"
+
+stages:
+  - lint
+  - build
+  - test #BDD will come later, just python tests for now if required
+  - deploy
+  - integration
+  - staging # - join-reports
+  - pages
+  - publish  # might not need in our case
+  - scan
+
+# Include CI templates
+include:
+# OCI Images
+# do a custom set of build and publish stages
+  - project: 'ska-telescope/templates-repository'
+    file: 'gitlab-ci/includes/oci-image.gitlab-ci.yml'
+
+# Python packages build,lint, test and publish
+  - project: 'ska-telescope/templates-repository'
+    file: 'gitlab-ci/includes/python.gitlab-ci.yml'
+
+# Jupyter notebook linting and testing
+  - project: 'ska-telescope/templates-repository'
+    file: 'gitlab-ci/includes/notebook.gitlab-ci.yml' # this is for using jupyter notebooks
+
+# Helm Charts
+  - project: 'ska-telescope/templates-repository'
+    file: 'gitlab-ci/includes/helm-chart.gitlab-ci.yml'
+
+# Docs pages
+  - project: 'ska-telescope/templates-repository'
+    file: 'gitlab-ci/includes/docs.gitlab-ci.yml'
+
+# .post step finalisers eg: badges
+  - project: 'ska-telescope/templates-repository'
+    file: 'gitlab-ci/includes/finaliser.gitlab-ci.yml'
+
+# k8s steps
+  - project: 'ska-telescope/templates-repository'
+    file: 'gitlab-ci/includes/k8s.gitlab-ci.yml'
+
+# changelog release page
+  - project: 'ska-telescope/templates-repository'
+    file: 'gitlab-ci/includes/release.gitlab-ci.yml' 
+
+# deploy steps
+  - project: 'ska-telescope/templates-repository'
+    file: 'gitlab-ci/includes/deploy.gitlab-ci.yml' 
+
+notebook-lint:
+  allow_failure: true 
+
+notebook-test:
+  rules:
+    - when: never
+
+python-gemnasium-scan:
+  rules:
+    - when: never
+
+python-test: 
+  rules:
+    - when: never
+
+stop-k8s-test: 
+  rules:
+    - when: never
+
+k8s-test: 
+  rules:
+    - when: never
+
+deploy-integration:
+  rules:
+    - when: never
+ 
+info-integration:
+  rules:
+    - when: never
+
+stop-integration:
+  rules:
+    - when: never
+
+redeploy-integration:
+  rules:
+    - when: never
+
+deploy-mid-integration:
+  extends: deploy-integration
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  variables:
+    KUBE_NAMESPACE: "integration-ska-mid"
+  environment:
+    name: integration-ska-mid
+    on_stop: stop-mid-integration
+
+info-mid-integration:
+  extends: info-integration
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  needs:
+    - deploy-mid-integration
+  variables:
+    KUBE_NAMESPACE: "integration-ska-mid"
+  environment:
+    name: integration-ska-mid
+
+stop-mid-integration:
+  extends: stop-integration
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  needs:
+    - deploy-mid-integration
+  variables:
+    KUBE_NAMESPACE: "integration-ska-mid"
+  environment:
+    name: integration-ska-mid
+    action: stop
+
+redeploy-mid-integration:
+  extends: redeploy-integration
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  variables:
+    KUBE_NAMESPACE: "integration-ska-mid"
+  environment:
+    name: integration-ska-mid
+
+
