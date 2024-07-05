@@ -4,11 +4,9 @@ import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from tango import DevState
 
-# from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.enum import DishMode
 
 
-# @pytest.mark.skip()
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29351_off.feature",
@@ -35,14 +33,6 @@ def check_tmc_and_dish_is_on(central_node_mid, event_recorder, dish_ids):
     """
     Given a TMC , DISH , simulated CSP and simulated in ON state
     """
-
-    # csp_master_sim = simulator_factory.get_or_create_simulator_device(
-    #     SimulatorDeviceType.MID_CSP_MASTER_DEVICE
-    # )
-    # sdp_master_sim = simulator_factory.get_or_create_simulator_device(
-    #     SimulatorDeviceType.MID_SDP_MASTER_DEVICE
-    # )
-
     assert central_node_mid.csp_master.ping() > 0
     assert central_node_mid.sdp_master.ping() > 0
     for dish_id in dish_ids.split(","):

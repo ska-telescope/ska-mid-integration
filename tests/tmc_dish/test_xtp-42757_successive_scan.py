@@ -8,18 +8,14 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
 from tango import DevState
 
-from tests.conftest import wait_for_pointing_state_change
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
-
-# from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
-# @pytest.mark.skip()
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42757_successive_scan.feature",
@@ -48,13 +44,6 @@ def turn_on_telescope(
     """
     A method to put Telescope ON
     """
-    # csp_master_sim = simulator_factory.get_or_create_simulator_device(
-    #     SimulatorDeviceType.MID_CSP_MASTER_DEVICE
-    # )
-    # sdp_master_sim = simulator_factory.get_or_create_simulator_device(
-    #     SimulatorDeviceType.MID_SDP_MASTER_DEVICE
-    # )
-
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
@@ -285,26 +274,19 @@ def invoke_end_command(subarray_node, event_recorder, central_node_mid):
     pytest.command_result = subarray_node.execute_transition("End")
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        wait_for_pointing_state_change(
-            PointingState.READY, central_node_mid.dish_master_dict[dish_id], 20
-        )
-        # assert event_recorder.has_change_event_occurred(
-        #     central_node_mid.dish_master_dict[dish_id],
-        #     "pointingState",
-        #     PointingState.READY,
-        #     lookahead=15,
-        # )
-        wait_for_pointing_state_change(
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "pointingState",
             PointingState.READY,
-            central_node_mid.dish_leaf_node_dict[dish_id],
-            20,
+            lookahead=15,
         )
-        # assert event_recorder.has_change_event_occurred(
-        #     central_node_mid.dish_leaf_node_dict[dish_id],
-        #     "pointingState",
-        #     PointingState.READY,
-        #     lookahead=15,
-        # )
+
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "pointingState",
+            PointingState.READY,
+            lookahead=15,
+        )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node, "obsState", ObsState.IDLE, lookahead=10
     )

@@ -10,13 +10,10 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
-
-# from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
-# @pytest.mark.skip()
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29416_configure.feature",
@@ -44,13 +41,6 @@ def given_a_telescope(central_node_mid, dish_ids):
     """
     Given a TMC
     """
-    # csp_master_sim = simulator_factory.get_or_create_simulator_device(
-    #     SimulatorDeviceType.MID_CSP_MASTER_DEVICE
-    # )
-    # sdp_master_sim = simulator_factory.get_or_create_simulator_device(
-    #     SimulatorDeviceType.MID_SDP_MASTER_DEVICE
-    # )
-
     assert central_node_mid.csp_master.ping() > 0
     assert central_node_mid.sdp_master.ping() > 0
     for dish_id in dish_ids.split(","):
@@ -63,13 +53,6 @@ def turn_on_telescope(central_node_mid, event_recorder):
     """
     A method to put Telescope ON
     """
-    # csp_master_sim = simulator_factory.get_or_create_simulator_device(
-    #     SimulatorDeviceType.MID_CSP_MASTER_DEVICE
-    # )
-    # sdp_master_sim = simulator_factory.get_or_create_simulator_device(
-    #     SimulatorDeviceType.MID_SDP_MASTER_DEVICE
-    # )
-
     central_node_mid.move_to_on()
     event_recorder.subscribe_event(central_node_mid.csp_master, "State")
     event_recorder.subscribe_event(central_node_mid.sdp_master, "State")

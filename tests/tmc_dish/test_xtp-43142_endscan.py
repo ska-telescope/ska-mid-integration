@@ -13,10 +13,8 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
-from tests.resources.test_harness.simulator_factory import SimulatorFactory
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
-from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
@@ -40,21 +38,13 @@ def test_tmc_dish_endscan():
 )
 def given_a_telescope(
     central_node_mid: CentralNodeWrapperMid,
-    simulator_factory: SimulatorFactory,
     dish_ids: str,
 ) -> None:
     """
     Given a TMC
     """
-    csp_master_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_CSP_MASTER_DEVICE
-    )
-    sdp_master_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_SDP_MASTER_DEVICE
-    )
-
-    assert csp_master_sim.ping() > 0
-    assert sdp_master_sim.ping() > 0
+    assert central_node_mid.csp_master.ping() > 0
+    assert central_node_mid.sdp_master.ping() > 0
     for dish_id in dish_ids.split(","):
         assert central_node_mid.dish_master_dict[dish_id].ping() > 0
         assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
@@ -64,7 +54,6 @@ def given_a_telescope(
 def turn_on_telescope(
     central_node_mid: CentralNodeWrapperMid,
     event_recorder: EventRecorder,
-    simulator_factory: SimulatorFactory,
 ):
     """A method to put Telescope ON"""
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
@@ -75,19 +64,12 @@ def turn_on_telescope(
             central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
         )
 
-    csp_master_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_CSP_MASTER_DEVICE
-    )
-    sdp_master_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_SDP_MASTER_DEVICE
-    )
-
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
 
-    event_recorder.subscribe_event(csp_master_sim, "State")
-    event_recorder.subscribe_event(sdp_master_sim, "State")
+    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
+    event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
 
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,

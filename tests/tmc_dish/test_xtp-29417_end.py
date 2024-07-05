@@ -1,20 +1,14 @@
 """Test module for TMC-DISH End functionality"""
 
-
-import logging
-
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
 from tango import DevState
 
-from tests.conftest import wait_for_pointing_state_change
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
-
-# from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
@@ -46,13 +40,6 @@ def given_a_telescope(central_node_mid, event_recorder, dish_ids):
     """
     Given a TMC
     """
-    # csp_master_sim = simulator_factory.get_or_create_simulator_device(
-    #     SimulatorDeviceType.MID_CSP_MASTER_DEVICE
-    # )
-    # sdp_master_sim = simulator_factory.get_or_create_simulator_device(
-    #     SimulatorDeviceType.MID_SDP_MASTER_DEVICE
-    # )
-
     assert central_node_mid.csp_master.ping() > 0
     assert central_node_mid.sdp_master.ping() > 0
     for dish_id in dish_ids.split(","):
@@ -183,26 +170,6 @@ def check_subarray_obsstate(
             PointingState.TRACK,
             lookahead=10,
         )
-        logging.info(
-            "DISHMODE for Dish %s: %s",
-            dish_id,
-            central_node_mid.dish_master_dict[dish_id].dishMode,
-        )
-        logging.info(
-            "DISHMODE for DishLN %s: %s",
-            dish_id,
-            central_node_mid.dish_leaf_node_dict[dish_id].dishMode,
-        )
-        logging.info(
-            "pointingState for Dish %s: %s",
-            dish_id,
-            central_node_mid.dish_master_dict[dish_id].pointingState,
-        )
-        logging.info(
-            "pointingState for DishLN %s: %s",
-            dish_id,
-            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
-        )
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
@@ -236,46 +203,18 @@ def check_dish_mode_and_pointing_state(
     Method to check dishMode and pointingState of DISH
     """
     for dish_id in dish_ids.split(","):
-        assert wait_for_pointing_state_change(
-            PointingState.READY, central_node_mid.dish_master_dict[dish_id], 20
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "pointingState",
+            PointingState.READY,
+            lookahead=10,
         )
 
-        # assert event_recorder.has_change_event_occurred(
-        #     central_node_mid.dish_master_dict[dish_id],
-        #     "pointingState",
-        #     PointingState.READY,
-        #     lookahead=10,
-        # )
-        assert wait_for_pointing_state_change(
-            PointingState.READY,
+        assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
-            20,
-        )
-        # assert event_recorder.has_change_event_occurred(
-        #     central_node_mid.dish_leaf_node_dict[dish_id],
-        #     "pointingState",
-        #     PointingState.READY,
-        #     lookahead=10,
-        # )
-        logging.info(
-            "DISHMODE for Dish %s: %s",
-            dish_id,
-            central_node_mid.dish_master_dict[dish_id].dishMode,
-        )
-        logging.info(
-            "DISHMODE for DishLN %s: %s",
-            dish_id,
-            central_node_mid.dish_leaf_node_dict[dish_id].dishMode,
-        )
-        logging.info(
-            "pointingState for Dish %s: %s",
-            dish_id,
-            central_node_mid.dish_master_dict[dish_id].pointingState,
-        )
-        logging.info(
-            "pointingState for DishLN %s: %s",
-            dish_id,
-            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
+            "pointingState",
+            PointingState.READY,
+            lookahead=10,
         )
 
 

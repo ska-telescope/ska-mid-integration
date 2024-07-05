@@ -1,7 +1,5 @@
 """Test TMC-DISH Abort functionality in Configuring obsState"""
 
-import logging
-
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
@@ -11,13 +9,10 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
-
-# from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
-# @pytest.mark.skip()
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-30211_abort_configuring.feature",
@@ -45,13 +40,6 @@ def given_a_telescope(central_node_mid, event_recorder, dish_ids):
     """
     Given a TMC
     """
-    # csp_master_sim = simulator_factory.get_or_create_simulator_device(
-    #     SimulatorDeviceType.MID_CSP_MASTER_DEVICE
-    # )
-    # sdp_master_sim = simulator_factory.get_or_create_simulator_device(
-    #     SimulatorDeviceType.MID_SDP_MASTER_DEVICE
-    # )
-
     assert central_node_mid.csp_master.ping() > 0
     assert central_node_mid.sdp_master.ping() > 0
     for dish_id in dish_ids.split(","):
@@ -62,14 +50,6 @@ def given_a_telescope(central_node_mid, event_recorder, dish_ids):
 @given("the Telescope is in ON state")
 def turn_on_telescope(central_node_mid, event_recorder):
     """A method to put Telescope ON"""
-
-    # csp_master_sim = simulator_factory.get_or_create_simulator_device(
-    #     SimulatorDeviceType.MID_CSP_MASTER_DEVICE
-    # )
-    # sdp_master_sim = simulator_factory.get_or_create_simulator_device(
-    #     SimulatorDeviceType.MID_SDP_MASTER_DEVICE
-    # )
-
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
@@ -249,7 +229,7 @@ def abort_is_invoked(subarray_node):
 @then(
     parsers.parse(
         "the DishMaster {dish_ids} transitions to dishMode"
-        + " OPERATE and pointingState READY"
+        + " STANDBYFP and pointingState READY"
     )
 )
 def check_dish_mode_and_pointing_state(
@@ -259,14 +239,6 @@ def check_dish_mode_and_pointing_state(
     Method to check dishMode and pointingState of DISH
     """
     for dish_id in dish_ids.split(","):
-        # assert (
-        #     central_node_mid.dish_master_dict[dish_id].dishMode
-        #     == DishMode.OPERATE
-        # )
-        # assert (
-        #     central_node_mid.dish_leaf_node_dict[dish_id].dishMode
-        #     == DishMode.OPERATE
-        # )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
@@ -290,26 +262,6 @@ def check_dish_mode_and_pointing_state(
             "pointingState",
             PointingState.READY,
             lookahead=10,
-        )
-        logging.info(
-            "DISHMODE for Dish %s: %s",
-            dish_id,
-            central_node_mid.dish_master_dict[dish_id].dishMode,
-        )
-        logging.info(
-            "DISHMODE for DishLN %s: %s",
-            dish_id,
-            central_node_mid.dish_leaf_node_dict[dish_id].dishMode,
-        )
-        logging.info(
-            "pointingState for Dish %s: %s",
-            dish_id,
-            central_node_mid.dish_master_dict[dish_id].pointingState,
-        )
-        logging.info(
-            "pointingState for DishLN %s: %s",
-            dish_id,
-            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
         )
 
 
