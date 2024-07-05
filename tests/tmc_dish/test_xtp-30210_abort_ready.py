@@ -224,7 +224,7 @@ def abort_is_invoked(subarray_node):
 @then(
     parsers.parse(
         "the DishMaster {dish_ids} transitions to dishMode"
-        + " OPERATE and pointingState READY"
+        + " STANDBY-FP and pointingState READY"
     )
 )
 def check_dish_mode_and_pointing_state(

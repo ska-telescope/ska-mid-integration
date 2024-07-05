@@ -1,6 +1,5 @@
 # Project makefile for a ska-tmc-integration project. You should normally only need to modify
 # CAR_OCI_REGISTRY_USER and PROJECT below.
-CI_KEEP_NAMESPACE = true
 ALARM_HANDLER_FQDN= "alarm/handler/01"
 CAR_OCI_REGISTRY_HOST:=artefact.skao.int
 PROJECT = ska-tmc-integration

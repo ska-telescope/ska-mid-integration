@@ -8,7 +8,7 @@ Scenario: TMC executes Scan command on DISH
     When I issue the scan command to the TMC subarray <subarray_id>
     Then <scan_id> assigned to Dish <dish_ids>
     And the Dish <dish_ids> remains in dishMode OPERATE and pointingState TRACK  
-    And  TMC SubarrayNode transitions to obsState SCANNING
+    And TMC SubarrayNode transitions to obsState SCANNING
     And TMC SubarrayNode transitions to obsState READY once the scan duration is elapsed
     Examples:
 
