@@ -1,0 +1,244 @@
+"""Create a `TelescopeAction` to reset the subarray in a certain obs state."""
+
+import time
+from typing import Callable
+
+from ska_control_model import ObsState
+
+from tests.test_harness3.telescope_actions.subarray.store_scan_data import (
+    SubarrayStoreScanData,
+)
+from tests.test_harness3.telescope_actions.subarray.subarray_abort import (
+    SubarrayAbort,
+)
+from tests.test_harness3.telescope_actions.subarray.subarray_clear_obs_state import (  # pylint: disable=line-too-long # noqa: E501
+    SubarrayClearObsState,
+)
+from tests.test_harness3.telescope_actions.subarray.subarray_execute_transition import (  # pylint: disable=line-too-long # noqa: E501
+    SubarrayExecuteTransition,
+)
+from tests.test_harness3.telescope_actions.subarray.subarray_store_configuration_data import (  # pylint: disable=line-too-long # noqa: E501
+    SubarrayStoreConfigurationData,
+)
+from tests.test_harness3.telescope_actions.subarray.subarray_store_resources import (  # pylint: disable=line-too-long # noqa: E501
+    SubarrayStoreResources,
+)
+from tests.test_harness3.telescope_actions.telescope_action import (
+    TelescopeAction,
+)
+from tests.test_harness3.telescope_actions.telescope_action_sequence import (
+    TelescopeActionSequence,
+)
+from tests.test_harness3.telescope_structure.telescope_wrapper import (
+    TelescopeWrapper,
+)
+from tests.test_harness3.utils.common_utils import JsonFactory
+
+
+class WaitAddedForSkb372(TelescopeAction):
+    """Wait added for SKB-372. TODO: remove this class."""
+
+    def _action(self):
+        time.sleep(5)
+
+    def expected_outcome(self):
+        return []
+
+
+class SubarrayObsStateResetterFactory:
+    """Factory to create `TelescopeAction`s to bring subarray in a obs state.
+
+    This factory is used to create `TelescopeAction`s to bring the subarray
+    in a certain obs state. The factory provides methods to create composite
+    actions that can move subarray to:
+
+    - Empty state
+    - Resourcing state
+    - Idle state
+    - Aborting state
+    - Aborted state
+    - Configuring state
+    - Ready state
+    - Scanning state
+
+    The starting state of the subarray is not considered while creating,
+    because all the actions are designed to reset the subarray to
+    `EMPTY` state first and then move to the target state.
+    """
+
+    def __init__(
+        self,
+        telescope: TelescopeWrapper,
+        assign_input: str | None = None,
+        configure_input: str | None = None,
+        scan_input: str | None = None,
+    ) -> None:
+        """Initialize with the telescope and (optional) JSON inputs.
+
+        :param telescope: The target telescope.
+        :param assign_input: The input JSON for the `AssignResources` command.
+        :param configure_input: The input JSON for the `Configure` command.
+        :param scan_input: The input JSON for the `Scan` command.
+        """
+        self.telescope = telescope
+
+        json_factory = JsonFactory()
+
+        self.assign_input = (
+            assign_input
+            or json_factory.create_assign_resources_configuration(
+                "assign_resources_mid"
+            )
+        )
+        self.configure_input = (
+            configure_input
+            or json_factory.create_subarray_configuration("configure_mid")
+        )
+        self.scan_input = (
+            scan_input
+            or json_factory.create_subarray_configuration("scan_mid")
+        )
+
+    def create_action_to_reset_subarray_to_empty(self) -> TelescopeAction:
+        """Create a `TelescopeAction` to reset the subarray to `EMPTY`.
+
+        :return: A `TelescopeAction` to reset the subarray to
+            the `ObsState.EMPTY` state.
+        """
+        return SubarrayClearObsState(self.telescope)
+
+    def create_action_to_reset_subarray_to_resourcing(self) -> TelescopeAction:
+        """Create a `TelescopeAction` to reset the subarray to `RESOURCING`.
+
+        :return: A `TelescopeAction` to reset the subarray to the
+            `ObsState.RESOURCING` state.
+        """
+        return TelescopeActionSequence(
+            self.telescope,
+            [
+                self.create_action_to_reset_subarray_to_empty(),
+                SubarrayExecuteTransition(
+                    self.telescope, "AssignResources", argin=self.assign_input
+                ),
+            ],
+        )
+
+    def create_action_to_reset_subarray_to_idle(self) -> TelescopeAction:
+        """Create a `TelescopeAction` to reset the subarray to the `IDLE`.
+
+        :return: A `TelescopeAction` to reset the subarray to the
+            `ObsState.IDLE` state.
+        """
+        return TelescopeActionSequence(
+            self.telescope,
+            [
+                self.create_action_to_reset_subarray_to_empty(),
+                SubarrayStoreResources(self.telescope, self.assign_input),
+            ],
+        )
+
+    def create_action_to_reset_subarray_to_aborting(self) -> TelescopeAction:
+        """Create a `TelescopeAction` to reset the subarray to `ABORTING`.
+
+        :return: A `TelescopeAction` to reset the subarray to
+            the `ObsState.ABORTING` state.
+        """
+        return TelescopeActionSequence(
+            self.telescope,
+            [
+                self.create_action_to_reset_subarray_to_idle(),
+                SubarrayExecuteTransition(self.telescope, "Abort", argin=None),
+            ],
+        )
+
+    def create_action_to_reset_subarray_to_aborted(self) -> TelescopeAction:
+        """Create a `TelescopeAction` to reset the subarray to `ABORTED`.
+
+        :return: A `TelescopeAction` to reset the subarray to the
+            `ObsState.ABORTED` state.
+        """
+        return TelescopeActionSequence(
+            self.telescope,
+            [
+                self.create_action_to_reset_subarray_to_idle(),
+                SubarrayAbort(self.telescope),
+            ],
+        )
+
+    def create_action_to_reset_subarray_to_configuring(
+        self,
+    ) -> TelescopeAction:
+        """Create a `TelescopeAction` to reset the subarray to `CONFIGURING`.
+
+        :return: A `TelescopeAction` to reset the subarray to
+            the `ObsState.CONFIGURING` state.
+        """
+        return TelescopeActionSequence(
+            self.telescope,
+            [
+                self.create_action_to_reset_subarray_to_idle(),
+                # TODO: manage wait_added_for_skb372()
+                WaitAddedForSkb372(self.telescope),
+                SubarrayExecuteTransition(
+                    self.telescope, "Configure", argin=self.configure_input
+                ),
+            ],
+        )
+
+    def create_action_to_reset_subarray_to_ready(self) -> TelescopeAction:
+        """Create a `TelescopeAction` to reset the subarray to `READY`.
+
+        :return: A `TelescopeAction` to reset the subarray to
+            the `ObsState.READY` state.
+        """
+        return TelescopeActionSequence(
+            self.telescope,
+            [
+                self.create_action_to_reset_subarray_to_idle(),
+                # TODO: manage wait_added_for_skb372()
+                WaitAddedForSkb372(self.telescope),
+                SubarrayStoreConfigurationData(
+                    self.telescope, self.configure_input
+                ),
+            ],
+        )
+
+    def create_action_to_reset_subarray_to_scanning(self) -> TelescopeAction:
+        """Create a `TelescopeAction` to reset the subarray to `SCANNING`.
+
+        :return: A `TelescopeAction` to reset the subarray to
+            the `ObsState.SCANNING` state.
+        """
+        return TelescopeActionSequence(
+            self.telescope,
+            [
+                self.create_action_to_reset_subarray_to_ready(),
+                SubarrayStoreScanData(self.telescope, self.scan_input),
+            ],
+        )
+
+    @property
+    def _map_state_to_method(
+        self,
+    ) -> dict[ObsState, Callable[[], TelescopeAction]]:
+        return {
+            ObsState.EMPTY: self.create_action_to_reset_subarray_to_empty,
+            ObsState.RESOURCING: self.create_action_to_reset_subarray_to_resourcing,  # pylint: disable=line-too-long # noqa: E501
+            ObsState.IDLE: self.create_action_to_reset_subarray_to_idle,
+            ObsState.ABORTING: self.create_action_to_reset_subarray_to_aborting,  # pylint: disable=line-too-long # noqa: E501
+            ObsState.ABORTED: self.create_action_to_reset_subarray_to_aborted,
+            ObsState.CONFIGURING: self.create_action_to_reset_subarray_to_configuring,  # pylint: disable=line-too-long # noqa: E501
+            ObsState.READY: self.create_action_to_reset_subarray_to_ready,
+            ObsState.SCANNING: self.create_action_to_reset_subarray_to_scanning,  # pylint: disable=line-too-long # noqa: E501
+        }
+
+    def create_action_to_reset_subarray_to_state(
+        self, target_state: ObsState
+    ) -> TelescopeAction:
+        """Create a `TelescopeAction` to reset the subarray to the given state.
+
+        :param target_state: The target state to which the subarray should
+            be reset.
+        :return: A `TelescopeAction` to reset the subarray to the given state.
+        """
+        return self._map_state_to_method[target_state]()

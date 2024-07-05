@@ -392,7 +392,9 @@ class TMCSubarrayNodeFacade:
             SubarrayRestart(self._telescope).execute()
         else:
             # self.force_change_of_obs_state("EMPTY")
-            ForceChangeOfObsState(self._telescope, self, "EMPTY").execute()
+            ForceChangeOfObsState(
+                self._telescope, self, ObsState.EMPTY
+            ).execute()
 
         # Move Subarray to OFF state
         # self.move_to_off()

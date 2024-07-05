@@ -105,7 +105,7 @@ def subarray_in_ready_obsstate(
     )
 
     subarray_node_facade.force_change_of_obs_state(
-        "READY",
+        ObsState.READY,
         assign_input_json=assign_input_json,
         configure_input_json=configure_input_json,
     )
