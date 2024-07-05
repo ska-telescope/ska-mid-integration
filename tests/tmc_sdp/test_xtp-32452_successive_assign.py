@@ -153,7 +153,7 @@ def check_obsstate_on_subarray(
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices.get("sdp_subarray"),
         "obsState",
-        ObsState.EMPTY,
+        ObsState.IDLE,
     )
 
     check_subarray_instance(central_node_mid.subarray_node, subarray_id)

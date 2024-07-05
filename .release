@@ -1,19 +1,19 @@
-release=0.21.0
-tag=0.21.0
+release=0.22.0
+tag=0.22.0
 tag_description=
 **Charts:**
-**1. ska-tmc-integration 0.20.0 - 0.21.0*
+**1. ska-tmc-integration 0.21.0 - 0.22.0*
 
-    **1.1 ska-tmc-mid - 0.20.0- 0.21.0:
+    **1.1 ska-tmc-mid - 0.21.0- 0.22.0:
         a. Improvement as per ADR-76 changes are done in Dish Leaf node and Subarray Node.
         b. Enabled ProgramTrackTable.
         c. Fixed CORBA issues in dish leaf node while execution of commands.
 
 release_notes=
 **Charts:**
-**1. ska-tmc-integration 0.20.0 - 0.21.0:**
+**1. ska-tmc-integration 0.21.0 - 0.22.0:**
 
-    **1.1 ska-tmc-mid - 0.20.0 - 0.21.0:
+    **1.1 ska-tmc-mid - 0.21.0 - 0.22.0:
         a. Improvement as per ADR-76 changes are done in Dish Leaf node and Subarray Node.
         b. Enabled ProgramTrackTable.
         c. Fixed CORBA issues in dish leaf node while execution of commands.

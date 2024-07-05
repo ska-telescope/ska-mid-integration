@@ -1,4 +1,6 @@
 """Test module for TMC-SDP EndScan functionality"""
+import json
+
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
@@ -77,6 +79,11 @@ def check_subarray_is_configured(
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
+    configure_json = json.loads(configure_input_json)
+    configure_json["tmc"]["scan_duration"] = 10.0
+    scan_input_json = prepare_json_args_for_commands(
+        "scan_mid", command_input_factory
+    )
 
     central_node_mid.set_subarray_id(subarray_id)
     event_recorder.subscribe_event(
@@ -87,12 +94,30 @@ def check_subarray_is_configured(
     )
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
 
-    # execute set of commands and bring SubarrayNode to SCANNING obsState
-    subarray_node.force_change_of_obs_state(
-        "SCANNING",
-        assign_input_json=assign_input_json,
-        configure_input_json=configure_input_json,
+    central_node_mid.store_resources(assign_input_json)
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.subarray_devices.get("sdp_subarray"),
+        "obsState",
+        ObsState.IDLE,
     )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.subarray_node,
+        "obsState",
+        ObsState.IDLE,
+    )
+    subarray_node.store_configuration_data(json.dumps(configure_json))
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices["sdp_subarray"],
+        "obsState",
+        ObsState.READY,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.READY,
+    )
+    subarray_node.store_scan_data(scan_input_json)
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["sdp_subarray"],

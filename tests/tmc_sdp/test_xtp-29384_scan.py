@@ -46,6 +46,8 @@ def check_subarray_is_configured(
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
+    configure_json = json.loads(configure_input_json)
+    configure_json["tmc"]["scan_duration"] = 10.0
     central_node_mid.set_subarray_id(subarray_id)
     event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
     event_recorder.subscribe_event(
@@ -83,7 +85,7 @@ def check_subarray_is_configured(
     subarray_node.force_change_of_obs_state(
         "READY",
         assign_input_json=assign_input_json,
-        configure_input_json=configure_input_json,
+        configure_input_json=json.dumps(configure_json),
     )
 
     assert event_recorder.has_change_event_occurred(
