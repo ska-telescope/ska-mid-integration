@@ -140,13 +140,13 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
 >>>>>>> 7ceda8b8 (SAH-1536: Update test case for xtp-42658)
 
 
-@when(parsers.parse("I assign {resources} to TMC subarray {subarray_id}"))
+@when(parsers.parse("I assign {dish_ids} to TMC subarray {subarray_id}"))
 def move_subarray_to_obsState_idle(
     subarray_node: SubarrayNodeWrapper,
     central_node_mid: CentralNodeWrapperMid,
     event_recorder: EventRecorder,
     command_input_factory: JsonFactory,
-    resources: list,
+    dish_ids: list,
     subarray_id: str,
 ):
     """
