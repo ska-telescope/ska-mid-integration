@@ -61,7 +61,6 @@ LOGGER = logging.getLogger(__name__)
 
 >>>>>>> 1de465a4 (SAH-1536: Update test case)
 
-@pytest.mark.skip
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-nnnn_unavailability_dish.feature",
