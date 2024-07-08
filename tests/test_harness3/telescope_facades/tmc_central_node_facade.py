@@ -23,11 +23,8 @@ from tests.test_harness3.telescope_actions.central_node.move_to_on import (
 from tests.test_harness3.telescope_actions.central_node.set_standby import (
     SetStandby,
 )
-from tests.test_harness3.telescope_actions.subarray.subarray_abort import (
-    SubarrayAbort,
-)
-from tests.test_harness3.telescope_actions.subarray.subarray_restart import (
-    SubarrayRestart,
+from tests.test_harness3.telescope_actions.subarray.force_change_of_obs_state import (  # pylint: disable=line-too-long # noqa E501
+    ForceChangeOfObsState,
 )
 from tests.test_harness3.telescope_structure.telescope_wrapper import (
     TelescopeWrapper,
@@ -224,18 +221,21 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
                 "release_resources_mid"
             )
             self.invoke_release_resources(release_input)
-        elif self._telescope.tmc.subarray_node.obsState in [
-            ObsState.RESOURCING,
-            ObsState.SCANNING,
-            ObsState.CONFIGURING,
-            ObsState.READY,
-            ObsState.IDLE,
-        ]:
-            LOGGER.info("Calling Abort and Restart on SubarrayNode")
-            SubarrayAbort(self._telescope).execute()
-            SubarrayRestart(self._telescope).execute()
-        elif self._telescope.tmc.subarray_node.obsState == ObsState.ABORTED:
-            SubarrayRestart(self._telescope).execute()
+
+        # elif self._telescope.tmc.subarray_node.obsState in [
+        #     ObsState.RESOURCING,
+        #     ObsState.SCANNING,
+        #     ObsState.CONFIGURING,
+        #     ObsState.READY,
+        #     ObsState.IDLE,
+        # ]:
+        #     LOGGER.info("Calling Abort and Restart on SubarrayNode")
+        #     SubarrayAbort(self._telescope).execute()
+        #     SubarrayRestart(self._telescope).execute()
+        # elif self._telescope.tmc.subarray_node.obsState == ObsState.ABORTED:
+        #     SubarrayRestart(self._telescope).execute()
+
+        ForceChangeOfObsState(self._telescope, ObsState.EMPTY).execute()
 
         # NOTE: temporarily moved here because of synchronization
         if self.telescope_state != "OFF":

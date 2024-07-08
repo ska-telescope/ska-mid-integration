@@ -318,10 +318,14 @@ class TMCSubarrayNodeFacade:
         for sim_device_fqdn in sim_device_fqdn_list:
             # NOTE: here self.etc are device names, not proxies...
             device = DeviceProxy(sim_device_fqdn)
-            device.ResetDelay()
-            device.SetDirectHealthState(HealthState.UNKNOWN)
-            device.SetDefective(json.dumps({"enabled": False}))
 
+            # this maybe is new
+            device.ResetDelay() 
+
+            device.SetDirectHealthState(HealthState.UNKNOWN)
+
+            # this maybe is new
+            device.SetDefective(json.dumps({"enabled": False})) 
     def _reset_dishes(self):
         """Reset Dish Devices"""
         # NOTE: maybe just if emulation_configuration.dish: ?
@@ -335,8 +339,12 @@ class TMCSubarrayNodeFacade:
             emulation_configuration.csp and emulation_configuration.dish
         ) or emulation_configuration.all_emulated():
             for dish_master in self._telescope.dishes.dish_master_list:
+
+                # this maybe is new
                 dish_master.SetDirectDishMode(DishMode.STANDBY_LP)
                 dish_master.SetDirectState(DevState.STANDBY)
+
+                # this maybe is new
                 dish_master.ResetDelay()
                 dish_master.SetDirectHealthState(HealthState.UNKNOWN)
 
@@ -379,21 +387,22 @@ class TMCSubarrayNodeFacade:
         self._telescope.reset_transitions_data()
 
         # NOTE: how is this different than SubarrayClearObsState?
-        if self.obs_state in ("RESOURCING", "CONFIGURING", "SCANNING"):
-            """Invoke Abort and Restart"""
-            LOGGER.info("Invoking Abort on Subarray")
-            # self.abort_subarray()
-            # self.restart_subarray()
-            SubarrayAbort(self._telescope).execute()
-            SubarrayRestart(self._telescope).execute()
-        elif self.obs_state == "ABORTED":
-            """Invoke Restart"""
-            LOGGER.info("Invoking Restart on Subarray")
-            # self.restart_subarray()
-            SubarrayRestart(self._telescope).execute()
-        else:
-            # self.force_change_of_obs_state("EMPTY")
-            ForceChangeOfObsState(self._telescope, ObsState.EMPTY).execute()
+        # if self.obs_state in ("RESOURCING", "CONFIGURING", "SCANNING"):
+        #     """Invoke Abort and Restart"""
+        #     LOGGER.info("Invoking Abort on Subarray")
+        #     # self.abort_subarray()
+        #     # self.restart_subarray()
+        #     SubarrayAbort(self._telescope).execute()
+        #     SubarrayRestart(self._telescope).execute()
+        # elif self.obs_state == "ABORTED":
+        #     """Invoke Restart"""
+        #     LOGGER.info("Invoking Restart on Subarray")
+        #     # self.restart_subarray()
+        #     SubarrayRestart(self._telescope).execute()
+        # else:
+        # self.force_change_of_obs_state("EMPTY")
+
+        ForceChangeOfObsState(self._telescope, ObsState.EMPTY).execute()
 
         # Move Subarray to OFF state
         # self.move_to_off()
