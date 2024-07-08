@@ -26,7 +26,6 @@ import json
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
-from tango import DevState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.constant import COMMAND_COMPLETED
@@ -717,6 +716,7 @@ def end_configuration_on_subarray(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "dishMode"
 =======
@@ -757,6 +757,9 @@ def end_configuration_on_subarray(
 >>>>>>> 2ee3ddf7 (SAH-1536: Enable skipped tmc-dish tests)
 =======
 >>>>>>> 81ad2993 (SAH-1536: Test tmc-dish long sequence tests)
+=======
+
+>>>>>>> 0029e631 (SAH-1536: Update test case for xtp-42658)
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",

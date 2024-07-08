@@ -5,6 +5,7 @@
 Scenario: TMC executes long sequence of commands successfully
     Given a Telescope consisting of TMC, DISH <dish_ids>, simulated CSP and simulated SDP
     And the Telescope is in ON state
+<<<<<<< HEAD
     And TMC subarray is in IDLE obsState
     When I configure the subarray <subarray_id> with <receiver_band_1>
     And I issue End command to the subarray <subarray_id>
@@ -21,6 +22,8 @@ Scenario: TMC executes long sequence of commands successfully
 >>>>>>> 4399fb08 (SAH-1536: disable test case)
 Scenario: TMC executes long sequence of commands successfully
     Given a telescope in OFF or STANDBY state
+=======
+>>>>>>> 7e55e6e5 (SAH-1536: Update test case for xtp-42658)
     When I assign <resources> to TMC subarray <subarray_id>
     And I configure the subarray <subarray_id> with receiver_band_1
     And I issue End command to the subarray <subarray_id>
