@@ -1,7 +1,8 @@
 # This BDD test performs TMC-Dish pairwise testing to verify long sequence of commands.
 @XTP-42658 @XTP-29778 @Team_SAHYADRI @tmc_dish
 Scenario: TMC executes long sequence of commands successfully
-    Given a telescope in OFF or STANDBY state
+    Given a Telescope consisting of TMC, DISH <dish_ids>, simulated CSP and simulated SDP
+    And the Telescope is in ON state
     When I assign <resources> to TMC subarray <subarray_id>
     And I configure the subarray <subarray_id> with receiver_band_1
     And I issue End command to the subarray <subarray_id>
