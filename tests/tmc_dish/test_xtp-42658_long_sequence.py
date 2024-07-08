@@ -191,8 +191,54 @@ def end_configuration_on_subarray(
     central_node_mid.set_subarray_id(subarray_id)
     pytest.command_result = subarray_node.end_observation()
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+<<<<<<< HEAD
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "dishMode"
+=======
+        logging.info(
+            "DISHMODE for Dish after end %s: %s",
+            dish_id,
+            central_node_mid.dish_master_dict[dish_id].dishMode,
+        )
+        logging.info(
+            "DISHMODE for DishLN after end %s: %s",
+            dish_id,
+            central_node_mid.dish_leaf_node_dict[dish_id].dishMode,
+        )
+        logging.info(
+            "pointingState for Dish after end %s: %s",
+            dish_id,
+            central_node_mid.dish_master_dict[dish_id].pointingState,
+        )
+        logging.info(
+            "pointingState for DishLN after end %s: %s",
+            dish_id,
+            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
+        )
+        # assert event_recorder.has_change_event_occurred(
+        #     central_node_mid.dish_master_dict[dish_id],
+        #     "dishMode",
+        #     DishMode.STANDBY_FP,
+        #     lookahead=10,
+        # )
+        # assert event_recorder.has_change_event_occurred(
+        #     central_node_mid.dish_leaf_node_dict[dish_id],
+        #     "dishMode",
+        #     DishMode.STANDBY_FP,
+        #     lookahead=10,
+        # )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "pointingState",
+            PointingState.READY,
+            lookahead=10,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "pointingState",
+            PointingState.READY,
+            lookahead=10,
+>>>>>>> 1a8aefae (SAH-1536: Test tmc-dish long sequence tests)
         )
 
         assert event_recorder.has_change_event_occurred(
