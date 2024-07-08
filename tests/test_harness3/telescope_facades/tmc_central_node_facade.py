@@ -2,7 +2,6 @@
 
 import json
 import logging
-import time
 from typing import Tuple
 
 from ska_control_model import ObsState, ResultCode
@@ -13,7 +12,18 @@ from tests.test_harness3.constant import (
     device_dict,  # TODO: find a way to handle this dependency
 )
 from tests.test_harness3.constant import DEFAULT_DISH_VCC_CONFIG
-from tests.test_harness3.helpers import generate_eb_pb_ids
+from tests.test_harness3.telescope_actions.central_node.central_node_load_dish_config import (  # pylint: disable=line-too-long # noqa E501
+    CentralNodeLoadDishConfig,
+)
+from tests.test_harness3.telescope_actions.central_node.central_node_perform_action import (  # pylint: disable=line-too-long # noqa E501
+    CentralNodePerformAction,
+)
+from tests.test_harness3.telescope_actions.central_node.central_node_release_resources import (  # pylint: disable=line-too-long # noqa E501
+    CentralNodeReleaseResources,
+)
+from tests.test_harness3.telescope_actions.central_node.central_node_store_resources import (  # pylint: disable=line-too-long # noqa E501
+    CentralNodeStoreResources,
+)
 from tests.test_harness3.telescope_actions.central_node.move_to_off import (
     MoveToOff,
 )
@@ -30,11 +40,6 @@ from tests.test_harness3.telescope_structure.telescope_wrapper import (
     TelescopeWrapper,
 )
 from tests.test_harness3.utils.common_utils import JsonFactory
-from tests.test_harness3.utils.sync_decorators import (
-    sync_assign_resources,
-    sync_load_dish_cfg,
-    sync_release_resources,
-)
 from tests.test_harness3.utils.wait_helpers import Waiter
 
 # SIMULATED_DEVICES_DICT, wait_csp_master_off,
@@ -111,32 +116,6 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
         SetStandby(self._telescope).execute()
 
     # -----------------------------------------------------------
-    # SUB-ARRAY ACTIONS
-
-    # def set_subarray_id(self, requested_subarray_id: str) -> None:
-    #     """This method creates subarray devices for the requested subarray
-    #     id"""
-    #     # TODO: separate in a TelescopeAction
-    #     # TODO: this is something that should stay in TMCSubarrayFacade
-    #     self._telescope.sdp.set_subarray_id(requested_subarray_id)
-    #     self._telescope.csp.set_subarray_id(requested_subarray_id)
-    #     self._telescope.tmc.set_subarray_id(requested_subarray_id)
-
-    # @sync_abort(device_dict=device_dict)
-    # def subarray_abort(self) -> Tuple[ResultCode, str]:
-    #     """Invoke Abort command on subarray Node"""
-    #     # TODO: separate in a TelescopeAction
-    #     # TODO: this is something that should stay in TMCSubarrayFacade
-    #     return self._telescope.tmc.subarray_abort()
-
-    # @sync_restart(device_dict=device_dict)
-    # def subarray_restart(self) -> Tuple[ResultCode, str]:
-    #     """Invoke Restart command on subarray Node"""
-    #     # TODO: separate in a TelescopeAction
-    #     # TODO: this is something that should stay in TMCSubarrayFacade
-    #     return self._telescope.tmc.subarray_restart()
-
-    # -----------------------------------------------------------
     # CENTRAL NODE ACTIONS
 
     def load_dish_vcc_configuration(
@@ -145,11 +124,9 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
         """Invoke LoadDishCfg command on central Node
         :param dish_vcc_config: Dish vcc configuration json string
         """
-        # TODO: separate in a TelescopeAction
-        result, message = self._telescope.tmc.central_node.LoadDishCfg(
-            dish_vcc_config
-        )
-        return result, message
+        return CentralNodeLoadDishConfig(
+            self._telescope, dish_vcc_config
+        ).execute()
 
     def perform_action(
         self, command_name: str, input_json: str
@@ -159,45 +136,31 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
             command_name (str): Name of command to execute
             input_json (str): Json send as input to execute command
         """
-        # TODO: separate in a TelescopeAction
-        result, message = self._telescope.tmc.central_node.command_inout(
-            command_name, input_json
-        )
-        return result, message
+        return CentralNodePerformAction(
+            self._telescope, command_name, input_json
+        ).execute()
 
-    # RESOURCE RELATED COMMANDS
-    # (still actions on CentralNode!)
-
-    @sync_assign_resources(device_dict=device_dict)
+    # @sync_assign_resources(device_dict=device_dict)
     def store_resources(self, assign_json: str) -> Tuple[ResultCode, str]:
         """Invoke Assign Resource command on central Node
-        Args:
-            assign_json (str): Assign resource input json
-        """
-        # TODO: separate in a TelescopeAction
-        input_json = json.loads(assign_json)
-        generate_eb_pb_ids(input_json)
-        result, message = self._telescope.tmc.central_node.AssignResources(
-            json.dumps(input_json)
-        )
-        LOGGER.info("Invoked AssignResources on CentralNode")
-        return result, message
 
-    @sync_release_resources(device_dict=device_dict, timeout=500)
+        :param assign_json: Assign resource input json
+        """
+        return CentralNodeStoreResources(
+            self._telescope, assign_json
+        ).execute()
+
+    # @sync_release_resources(device_dict=device_dict, timeout=500)
     def invoke_release_resources(
         self, input_string: str
     ) -> Tuple[ResultCode, str]:
         """Invoke Release Resource command on central Node
-        Args:
-            input_string (str): Release resource input json
-        """
-        # TODO: separate in a TelescopeAction
-        time.sleep(3)
 
-        result, message = self._telescope.tmc.central_node.ReleaseResources(
-            input_string
-        )
-        return result, message
+        :param input_string (str): Release resource input json
+        """
+        return CentralNodeReleaseResources(
+            self._telescope, input_string
+        ).execute()
 
     # -----------------------------------------------------------
     # TEARDOWN
@@ -220,7 +183,9 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
             release_input = json_factory.create_centralnode_configuration(
                 "release_resources_mid"
             )
-            self.invoke_release_resources(release_input)
+            CentralNodeReleaseResources(
+                self._telescope, release_input
+            ).execute()
 
         # elif self._telescope.tmc.subarray_node.obsState in [
         #     ObsState.RESOURCING,
@@ -256,15 +221,19 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
             )
             != DEFAULT_DISH_VCC_CONFIG
         ):
-            self._load_default_dish_vcc_config()
+            # self._load_default_dish_vcc_config()
+            # TODO: verify this works
+            CentralNodeLoadDishConfig(
+                self._telescope, json.dumps(DEFAULT_DISH_VCC_CONFIG)
+            ).execute()
 
-    @sync_load_dish_cfg(device_dict=device_dict)
-    def _load_default_dish_vcc_config(self):
-        """Load Default Dish Vcc config"""
-        result, message = self.load_dish_vcc_configuration(
-            json.dumps(DEFAULT_DISH_VCC_CONFIG)
-        )
-        return result, message
+    # @sync_load_dish_cfg(device_dict=device_dict)
+    # def _load_default_dish_vcc_config(self):
+    #     """Load Default Dish Vcc config"""
+    #     result, message = self.load_dish_vcc_configuration(
+    #         json.dumps(DEFAULT_DISH_VCC_CONFIG)
+    #     )
+    #     return result, message
 
     # -----------------------------------------------------------
     # CURRENTLY UNUSED (maybe)

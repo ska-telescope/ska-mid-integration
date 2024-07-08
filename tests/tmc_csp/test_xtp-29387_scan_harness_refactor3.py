@@ -138,6 +138,7 @@ def invoke_scan(
     )
 
     subarray_node_facade.store_scan_data(scan_input_json)
+    # assert False
 
 
 @then(parsers.parse("the CSP subarray transitions to ObsState SCANNING"))

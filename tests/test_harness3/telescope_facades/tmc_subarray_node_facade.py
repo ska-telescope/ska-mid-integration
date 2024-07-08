@@ -320,12 +320,13 @@ class TMCSubarrayNodeFacade:
             device = DeviceProxy(sim_device_fqdn)
 
             # this maybe is new
-            device.ResetDelay() 
+            device.ResetDelay()
 
             device.SetDirectHealthState(HealthState.UNKNOWN)
 
             # this maybe is new
-            device.SetDefective(json.dumps({"enabled": False})) 
+            device.SetDefective(json.dumps({"enabled": False}))
+
     def _reset_dishes(self):
         """Reset Dish Devices"""
         # NOTE: maybe just if emulation_configuration.dish: ?
