@@ -243,9 +243,7 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
 
         # reset HealthState.UNKNOWN in emulated devices
         # reset command calls and transitions in emulated devices
-        self._telescope.csp.tear_down()
-        self._telescope.sdp.tear_down()
-        self._telescope.dishes.tear_down()
+        self._telescope.tear_down()
 
         # if source dish vcc config is empty or not matching with default
         # dish vcc then load default dish vcc config

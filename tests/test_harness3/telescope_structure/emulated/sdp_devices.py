@@ -11,8 +11,14 @@ from tests.test_harness3.utils.emulated_teardown import (
 class EmulatedSDPDevices(SDPDevices):
     """A wrapper for an emulated SDP."""
 
-    def tear_down(self) -> None:
-        """Tear down the an emulated SDP."""
-        reset_health_state([self.sdp_master])
+    def clear_command_call(self) -> None:
+        """Clear the command call on the SDP."""
         clear_command_call([self.sdp_subarray])
+
+    def reset_transitions_data(self) -> None:
+        """Reset the transitions data on the SDP."""
         reset_transitions_data([self.sdp_subarray])
+
+    def reset_health_state(self) -> None:
+        """Reset the health state on the SDP."""
+        reset_health_state([self.sdp_master, self.sdp_subarray])

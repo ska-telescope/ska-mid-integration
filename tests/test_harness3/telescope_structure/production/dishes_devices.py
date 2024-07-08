@@ -36,6 +36,14 @@ class ProductionDishesDevices(DishesDevices):
         self.dish1_dev_class = dish1_info.class_name
         self.dish1_dev_server = dish1_info.ds_full_name
 
-    def tear_down(self):
-        """Tear down the production dishes does nothing."""
+    def clear_command_call(self):
+        """Clear the command call on the Dishes (not needed)."""
+        pass
+
+    def reset_transitions_data(self):
+        """Reset the transitions data on the Dishes (not needed)."""
+        pass
+
+    def reset_health_state(self):
+        """Reset the health state on the Dishes (not needed)."""
         pass

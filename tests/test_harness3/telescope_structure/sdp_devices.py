@@ -29,7 +29,23 @@ class SDPDevices(abc.ABC):
         subarray_id = str(subarray_id).zfill(2)
         self.sdp_subarray = DeviceProxy(f"mid-sdp/subarray/{subarray_id}")
 
-    @abc.abstractmethod
     def tear_down(self) -> None:
         """Tear down the SDP."""
+        self.reset_health_state()
+        self.clear_command_call()
+        self.reset_transitions_data()
+
+    @abc.abstractmethod
+    def clear_command_call(self) -> None:
+        """Clear the command call on the SDP (if needed)."""
+        pass
+
+    @abc.abstractmethod
+    def reset_transitions_data(self) -> None:
+        """Reset the transitions data on the SDP (if needed)."""
+        pass
+
+    @abc.abstractmethod
+    def reset_health_state(self) -> None:
+        """Reset the health state on the SDP (if needed)."""
         pass

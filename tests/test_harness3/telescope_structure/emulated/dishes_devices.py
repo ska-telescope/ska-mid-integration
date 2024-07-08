@@ -25,8 +25,14 @@ class EmulatedDishesDevices(DishesDevices):
         """
         pass
 
-    def tear_down(self) -> None:
-        """Tear down the emulated dishes."""
-        reset_health_state(self.dish_master_list)
+    def clear_command_call(self) -> None:
+        """Clear the command call on the Dishes."""
         clear_command_call(self.dish_master_list)
+
+    def reset_transitions_data(self) -> None:
+        """Reset the transitions data on the Dishes."""
         reset_transitions_data(self.dish_master_list)
+
+    def reset_health_state(self) -> None:
+        """Reset the health state on the Dishes."""
+        reset_health_state(self.dish_master_list)

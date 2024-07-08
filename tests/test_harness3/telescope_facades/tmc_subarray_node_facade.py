@@ -340,33 +340,33 @@ class TMCSubarrayNodeFacade:
                 dish_master.ResetDelay()
                 dish_master.SetDirectHealthState(HealthState.UNKNOWN)
 
-    def _clear_command_call_and_transition_data(self, clear_transition=False):
-        """Clears the command call data"""
-        # NOTE: this instead may be exactly a duplicate of the central node's
-        # _clear_command_call_and_transition_data method
+    # def _clear_command_call_and_transition_data(self, clear_transition=False): # pylint: disable=line-too-long # noqa: E501
+    #     """Clears the command call data"""
+    #     # NOTE: this instead may be exactly a duplicate of the central node's
+    #     # _clear_command_call_and_transition_data method
 
-        target_devices = []
+    #     target_devices = []
 
-        if emulation_configuration.csp:
-            target_devices.append(csp_configuration.csp_subarray1_name)
+    #     if emulation_configuration.csp:
+    #         target_devices.append(csp_configuration.csp_subarray1_name)
 
-        if emulation_configuration.sdp:
-            target_devices.append(sdp_configuration.sdp_subarray1_name)
+    #     if emulation_configuration.sdp:
+    #         target_devices.append(sdp_configuration.sdp_subarray1_name)
 
-        if emulation_configuration.dish:
-            # NOTE: why just two dishes?
-            target_devices.append(dishes_configuration.dish_master1_name)
-            target_devices.append(dishes_configuration.dish_master2_name)
+    #     if emulation_configuration.dish:
+    #         # NOTE: why just two dishes?
+    #         target_devices.append(dishes_configuration.dish_master1_name)
+    #         target_devices.append(dishes_configuration.dish_master2_name)
 
-        for target_device in target_devices:
-            device = DeviceProxy(target_device)
-            device.set_timeout_millis(5000)
-            device.ClearCommandCallInfo()
-            if clear_transition:
-                device.ResetTransitions()
+    #     for target_device in target_devices:
+    #         device = DeviceProxy(target_device)
+    #         device.set_timeout_millis(5000)
+    #         device.ClearCommandCallInfo()
+    #         if clear_transition:
+    #             device.ResetTransitions()
 
-        if emulation_configuration.all_production():
-            LOGGER.info("Devices deployed are real")
+    #     if emulation_configuration.all_production():
+    #         LOGGER.info("Devices deployed are real")
 
     def tear_down(self):
         """Tear down after each test run"""
@@ -375,7 +375,8 @@ class TMCSubarrayNodeFacade:
         # and make it an unique action that "resets" the whole telescope
 
         LOGGER.info("Calling Tear down for subarray")
-        self._clear_command_call_and_transition_data(clear_transition=True)
+        self._telescope.clear_command_call()
+        self._telescope.reset_transitions_data()
 
         # NOTE: how is this different than SubarrayClearObsState?
         if self.obs_state in ("RESOURCING", "CONFIGURING", "SCANNING"):
@@ -392,9 +393,7 @@ class TMCSubarrayNodeFacade:
             SubarrayRestart(self._telescope).execute()
         else:
             # self.force_change_of_obs_state("EMPTY")
-            ForceChangeOfObsState(
-                self._telescope, self, ObsState.EMPTY
-            ).execute()
+            ForceChangeOfObsState(self._telescope, ObsState.EMPTY).execute()
 
         # Move Subarray to OFF state
         # self.move_to_off()
@@ -419,7 +418,6 @@ class TMCSubarrayNodeFacade:
         """Force SubarrayNode obsState to provided obsState."""
         ForceChangeOfObsState(
             self._telescope,
-            self,
             dest_state_name,
             assign_input_json,
             configure_input_json,

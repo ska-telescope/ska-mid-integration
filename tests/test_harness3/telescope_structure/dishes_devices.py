@@ -48,7 +48,23 @@ class DishesDevices(abc.ABC):
             for key in sorted(self.dish_master_dict.keys())
         ]
 
-    @abc.abstractmethod
     def tear_down(self) -> None:
         """Tear down the dishes."""
+        self.reset_health_state()
+        self.clear_command_call()
+        self.reset_transitions_data()
+
+    @abc.abstractmethod
+    def clear_command_call(self) -> None:
+        """Clear the command call on the Dishes (if needed)."""
+        pass
+
+    @abc.abstractmethod
+    def reset_transitions_data(self) -> None:
+        """Reset the transitions data on the Dishes (if needed)."""
+        pass
+
+    @abc.abstractmethod
+    def reset_health_state(self) -> None:
+        """Reset the health state on the Dishes (if needed)."""
         pass

@@ -22,17 +22,14 @@ class EmulatedCSPDevices(CSPDevices):
     def move_to_off(self) -> None:
         self.csp_subarray.SetDirectState(DevState.OFF)
 
-    def tear_down(self) -> None:
-        # self.move_to_off()
-        # NOTE: reset health state just to csp_master?
-        # Why not to csp_subarray1?
-        reset_health_state([self.csp_master])
-
-        # NOTE: why just to csp_subarray1 and not to csp_master?
+    def clear_command_call(self) -> None:
+        """Clear the command call on the CSP."""
         clear_command_call([self.csp_subarray])
 
-        # NOTE: why just to csp_subarray1 and not to csp_master?
+    def reset_transitions_data(self) -> None:
+        """Reset the transitions data on the CSP."""
         reset_transitions_data([self.csp_subarray])
 
-        # NOTE: similar tear down operations are done in SubarrayNodeWrapper
-        # too. What is the difference between them? Can we unify them?
+    def reset_health_state(self) -> None:
+        """Reset the health state on the CSP."""
+        reset_health_state([self.csp_master, self.csp_subarray])
