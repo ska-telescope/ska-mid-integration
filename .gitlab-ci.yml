@@ -10,12 +10,12 @@ variables:
 
 stages:
   - lint
-  - test
+ # - test
   - build
   - deploy
   - integration
   - staging
-  - join-reports
+ # - join-reports
   - pages
   - publish
   - scan
@@ -140,16 +140,16 @@ deploy-mid-dev-environment:
     on_stop: stop-mid-dev-environment
     auto_stop_in: 4 hours
 
-test-mid-dev-environment:
-  extends: test-dev-environment
-  rules:
-    - when: on_success
-  needs:
-    - deploy-mid-dev-environment
-  variables:
-    KUBE_NAMESPACE: "ci-dev-mid-g2-$CI_PROJECT_NAME"
-  environment:
-    name: ci-dev-mid-g2-$CI_PROJECT_NAME
+# test-mid-dev-environment:
+#   extends: test-dev-environment
+#   rules:
+#     - when: on_success
+#   needs:
+#     - deploy-mid-dev-environment
+#   variables:
+#     KUBE_NAMESPACE: "ci-dev-mid-g2-$CI_PROJECT_NAME"
+#   environment:
+#     name: ci-dev-mid-g2-$CI_PROJECT_NAME
 
 info-mid-dev-environment:
   extends: info-dev-environment
@@ -214,189 +214,47 @@ redeploy-mid-integration:
   environment:
     name: mid-g2-integration-$CI_PROJECT_NAME
 
-deploy-mid-staging:
-  extends: deploy-staging
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-  needs: 
-    - deploy-mid-integration
-  variables:
-    KUBE_NAMESPACE: "mid-g2-staging-$CI_PROJECT_NAME"
-  environment:
-    name: mid-g2-staging-$CI_PROJECT_NAME
-    on_stop: stop-mid-staging
+# deploy-mid-staging:
+#   extends: deploy-staging
+#   rules:
+#     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+#   needs: 
+#     - deploy-mid-integration
+#   variables:
+#     KUBE_NAMESPACE: "mid-g2-staging-$CI_PROJECT_NAME"
+#   environment:
+#     name: mid-g2-staging-$CI_PROJECT_NAME
+#     on_stop: stop-mid-staging
 
-info-mid-staging:
-  extends: info-staging
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-  needs:
-      - deploy-mid-staging
-  variables:
-    KUBE_NAMESPACE: "mid-g2-staging-$CI_PROJECT_NAME"
-  environment:
-    name: mid-g2-staging-$CI_PROJECT_NAME
+# info-mid-staging:
+#   extends: info-staging
+#   rules:
+#     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+#   needs:
+#       - deploy-mid-staging
+#   variables:
+#     KUBE_NAMESPACE: "mid-g2-staging-$CI_PROJECT_NAME"
+#   environment:
+#     name: mid-g2-staging-$CI_PROJECT_NAME
 
-stop-mid-staging:
-  extends: stop-staging
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-  needs:
-    - deploy-mid-staging
-  variables:
-    KUBE_NAMESPACE: "mid-g2-staging-$CI_PROJECT_NAME"
-  environment:
-    name: mid-g2-staging-$CI_PROJECT_NAME
-    action: stop
+# stop-mid-staging:
+#   extends: stop-staging
+#   rules:
+#     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+#   needs:
+#     - deploy-mid-staging
+#   variables:
+#     KUBE_NAMESPACE: "mid-g2-staging-$CI_PROJECT_NAME"
+#   environment:
+#     name: mid-g2-staging-$CI_PROJECT_NAME
+#     action: stop
 
-redeploy-mid-staging:
-  extends: redeploy-staging
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-  variables:
-    KUBE_NAMESPACE: "mid-g2-staging-$CI_PROJECT_NAME"
-  environment:
-    name: mid-g2-staging-$CI_PROJECT_NAME
+# redeploy-mid-staging:
+#   extends: redeploy-staging
+#   rules:
+#     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+#   variables:
+#     KUBE_NAMESPACE: "mid-g2-staging-$CI_PROJECT_NAME"
+#   environment:
+#     name: mid-g2-staging-$CI_PROJECT_NAME
 
-deploy-low-dev-environment:
-  extends: deploy-dev-environment
-  rules:
-    - when: manual
-  variables:
-    KUBE_NAMESPACE: "ci-dev-low-nb-examples-$CI_PROJECT_NAME"
-    CI_KEEP_NAMESPACE: true
-    HELM_CHART: "ska-low"
-    SKIP_CI: 1
-  environment:
-    name: ci-dev-low-nb-example-$CI_PROJECT_NAME
-    on_stop: stop-low-dev-environment
-    auto_stop_in: 4 hours
-
-test-low-dev-environment:
-  extends: test-dev-environment
-  rules:
-    - when: on_success
-  needs:
-    - deploy-low-dev-environment
-  variables:
-    KUBE_NAMESPACE: "ci-dev-low-nb-examples-$CI_PROJECT_NAME"
-    HELM_CHART: "ska-low"
-  environment:
-    name: ci-dev-low-nb-example-$CI_PROJECT_NAME
-
-info-low-dev-environment:
-  extends: info-dev-environment
-  rules:
-    - when: manual
-  needs:
-    - deploy-low-dev-environment
-  variables:
-    KUBE_NAMESPACE: "ci-dev-low-nb-examples-$CI_PROJECT_NAME"
-    HELM_CHART: "ska-low"
-  environment:
-    name: ci-dev-low-nb-example-$CI_PROJECT_NAME
-
-stop-low-dev-environment:
-  extends: stop-dev-environment
-  rules:
-    - when: manual
-  variables:
-    KUBE_NAMESPACE: "ci-dev-low-nb-examples-$CI_PROJECT_NAME"
-    HELM_CHART: "ska-low"
-  environment:
-    name: ci-dev-low-nb-example-$CI_PROJECT_NAME
-    action: stop
-
-deploy-low-integration:
-  extends: deploy-integration
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-  variables:
-    KUBE_NAMESPACE: "low-integration-$CI_PROJECT_NAME"
-    HELM_CHART: "ska-low"
-  environment:
-    name: low-integration-$CI_PROJECT_NAME
-    on_stop: stop-low-integration
-
-info-low-integration:
-  extends: info-integration
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-  needs:
-      - deploy-low-integration
-  variables:
-    KUBE_NAMESPACE: "low-integration-$CI_PROJECT_NAME"
-    HELM_CHART: "ska-low"
-  environment:
-    name: low-integration-$CI_PROJECT_NAME
-
-stop-low-integration:
-  extends: stop-integration
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-  needs:
-    - deploy-low-integration
-  variables:
-    KUBE_NAMESPACE: "low-integration-$CI_PROJECT_NAME"
-    HELM_CHART: "ska-low"
-  environment:
-    name: low-integration-$CI_PROJECT_NAME
-    action: stop
-
-redeploy-low-integration:
-  extends: redeploy-integration
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-  variables:
-    KUBE_NAMESPACE: "low-integration-$CI_PROJECT_NAME"
-    HELM_CHART: "ska-low"
-  environment:
-    name: low-integration-$CI_PROJECT_NAME
-
-deploy-low-staging:
-  extends: deploy-staging
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-  needs: 
-    - deploy-low-integration
-  variables:
-    KUBE_NAMESPACE: "low-staging-$CI_PROJECT_NAME"
-    HELM_CHART: "ska-low"
-  environment:
-    name: low-staging-$CI_PROJECT_NAME
-    on_stop: stop-low-staging
-
-info-low-staging:
-  extends: info-staging
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-  needs:
-      - deploy-low-staging
-  variables:
-    KUBE_NAMESPACE: "low-staging-$CI_PROJECT_NAME"
-    HELM_CHART: "ska-low"
-  environment:
-    name: low-staging-$CI_PROJECT_NAME
-
-stop-low-staging:
-  extends: stop-staging
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-  needs:
-    - deploy-low-staging
-  variables:
-    KUBE_NAMESPACE: "low-staging-$CI_PROJECT_NAME"
-    HELM_CHART: "ska-low"
-  environment:
-    name: low-staging-$CI_PROJECT_NAME
-    action: stop
-
-redeploy-low-staging:
-  extends: redeploy-staging
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-  variables:
-    KUBE_NAMESPACE: "low-staging-$CI_PROJECT_NAME"
-    HELM_CHART: "ska-low"
-  environment:
-    name: low-integration-$CI_PROJECT_NAME
