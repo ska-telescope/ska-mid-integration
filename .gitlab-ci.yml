@@ -10,7 +10,7 @@ variables:
 
 stages:
   - lint
- # - test
+  - test
   - build
   - deploy
   - integration
@@ -140,16 +140,16 @@ deploy-mid-dev-environment:
     on_stop: stop-mid-dev-environment
     auto_stop_in: 4 hours
 
-# test-mid-dev-environment:
-#   extends: test-dev-environment
-#   rules:
-#     - when: on_success
-#   needs:
-#     - deploy-mid-dev-environment
-#   variables:
-#     KUBE_NAMESPACE: "ci-dev-mid-g2-$CI_PROJECT_NAME"
-#   environment:
-#     name: ci-dev-mid-g2-$CI_PROJECT_NAME
+test-mid-dev-environment:
+  extends: test-dev-environment
+  rules:
+    - when: on_success
+  needs:
+    - deploy-mid-dev-environment
+  variables:
+    KUBE_NAMESPACE: "ci-dev-mid-g2-$CI_PROJECT_NAME"
+  environment:
+    name: ci-dev-mid-g2-$CI_PROJECT_NAME
 
 info-mid-dev-environment:
   extends: info-dev-environment
