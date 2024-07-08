@@ -33,6 +33,8 @@ class TMCMid:
             f"dserver/{self.central_node.central_node.info().server_id}"
         )
         self.dish_leaf_node_server = ""
+        LOGGER.info("dish_name_1: %s", dish_name_1)
+        LOGGER.info("spfrx_fqdn: %s", spfrx_fqdn)
         self.spfrx_device = DeviceProxy(spfrx_fqdn)
         LOGGER.info(f"spfrx_device:{self.spfrx_device}")
         self.spfrx_server = DeviceProxy(
