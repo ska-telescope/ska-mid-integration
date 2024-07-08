@@ -1,7 +1,8 @@
 """TMC Class which contain method specific to TMC
 """
 import logging
-import os
+
+# import os
 import time
 
 from ska_ser_logging import configure_logging
@@ -14,11 +15,11 @@ from .central_node_mid import CentralNodeWrapperMid
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
-dish_name_1 = os.getenv("DISH_NAMESPACE_1")
-spfrx_fqdn = (
-    f"tango://tango-databaseds.{dish_name_1}.svc.cluster"
-    ".local:10000/mid-dish/simulator-spfrx/SKA001"
-)
+# dish_name_1 = os.getenv("DISH_NAMESPACE_1")
+# spfrx_fqdn = (
+#     f"tango://tango-databaseds.{dish_name_1}.svc.cluster"
+#     ".local:10000/mid-dish/simulator-spfrx/SKA001"
+# )
 
 
 class TMCMid:
@@ -33,14 +34,12 @@ class TMCMid:
             f"dserver/{self.central_node.central_node.info().server_id}"
         )
         self.dish_leaf_node_server = ""
-        LOGGER.info("dish_name_1: %s", dish_name_1)
-        LOGGER.info("spfrx_fqdn: %s", spfrx_fqdn)
-        self.spfrx_device = DeviceProxy(spfrx_fqdn)
-        LOGGER.info(f"spfrx_device:{self.spfrx_device}")
-        self.spfrx_server = DeviceProxy(
-            f"dserver/{self.spfrx_device.info().server_id}"
-        )
-        LOGGER.info(f"spfrx_server:{self.spfrx_server}")
+        # self.spfrx_device = DeviceProxy(spfrx_fqdn)
+        # LOGGER.info(f"spfrx_device:{self.spfrx_device}")
+        # self.spfrx_server = DeviceProxy(
+        #     f"dserver/{self.spfrx_device.info().server_id}"
+        # )
+        # LOGGER.info(f"spfrx_server:{self.spfrx_server}")
 
     @property
     def IsDishVccConfigSet(self):
