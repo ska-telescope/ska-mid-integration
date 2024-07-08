@@ -1,5 +1,7 @@
 """A wrapper for emulated dishes."""
 
+from tango import DevState
+
 from tests.test_harness3.telescope_config.components_config import (
     DishesConfiguration,
 )
@@ -8,9 +10,11 @@ from tests.test_harness3.telescope_structure.dishes_devices import (
 )
 from tests.test_harness3.utils.emulated_teardown import (
     clear_command_call,
+    reset_delay,
     reset_health_state,
     reset_transitions_data,
 )
+from tests.test_harness3.utils.enums import DishMode
 
 
 class EmulatedDishesDevices(DishesDevices):
@@ -25,6 +29,10 @@ class EmulatedDishesDevices(DishesDevices):
         """
         pass
 
+    def tear_down(self) -> None:
+        super().tear_down()
+        self.reset_attributes()
+
     def clear_command_call(self) -> None:
         """Clear the command call on the Dishes."""
         clear_command_call(self.dish_master_list)
@@ -36,3 +44,13 @@ class EmulatedDishesDevices(DishesDevices):
     def reset_health_state(self) -> None:
         """Reset the health state on the Dishes."""
         reset_health_state(self.dish_master_list)
+
+    def reset_attributes(self) -> None:
+        """Reset the attributes on the Dishes."""
+        for dish in self.dish_master_list:
+            dish.SetDirectDishMode(DishMode.STANDBY_LP)
+            dish.SetDirectState(DevState.STANDBY)
+
+    def reset_delay(self) -> None:
+        """Reset the delay on the Dishes."""
+        reset_delay(self.dish_master_list)

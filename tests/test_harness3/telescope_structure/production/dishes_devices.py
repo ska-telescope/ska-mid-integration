@@ -47,3 +47,11 @@ class ProductionDishesDevices(DishesDevices):
     def reset_health_state(self):
         """Reset the health state on the Dishes (not needed)."""
         pass
+
+    def reset_attributes(self):
+        """Reset the attributes on the Dishes (not needed)."""
+        pass
+
+    def reset_delay(self):
+        """Reset the delay on the Dishes (not needed)."""
+        pass

@@ -17,3 +17,7 @@ class ProductionSDPDevices(SDPDevices):
     def reset_health_state(self) -> None:
         """Reset the health state on the SDP (not needed)."""
         pass
+
+    def reset_delay(self) -> None:
+        """Reset the delay on the SDP (not needed)."""
+        pass

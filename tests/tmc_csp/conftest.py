@@ -39,6 +39,9 @@ from tests.test_harness3.telescope_facades.tmc_central_node_facade import (
 from tests.test_harness3.telescope_facades.tmc_subarray_node_facade import (
     TMCSubarrayNodeFacade,
 )
+from tests.test_harness3.telescope_init.teardown_telescope import (
+    TearDownTelescope,
+)
 from tests.test_harness3.telescope_init.telescope_structure_factory import (
     TelescopeStructureFactory,
 )
@@ -316,7 +319,9 @@ def subarray_node_facade2():
 def telescope_wrapper() -> TelescopeWrapper:
     """Create an unique test harness with proxies to all devices."""
     components_factory = TelescopeStructureFactory()
-    return components_factory.create_telescope_wrapper()
+    telescope = components_factory.create_telescope_wrapper()
+    yield telescope
+    TearDownTelescope(telescope).execute()
 
 
 @fixture
@@ -324,7 +329,6 @@ def central_node_facade(telescope_wrapper: TelescopeWrapper):
     """Create a facade to TMC central node and all its operations."""
     central_node_facade = TMCCentralNodeFacade(telescope_wrapper)
     yield central_node_facade
-    central_node_facade.tear_down()
 
 
 @fixture
@@ -332,7 +336,6 @@ def subarray_node_facade(telescope_wrapper: TelescopeWrapper):
     """Create a facade to TMC subarray node and all its operations."""
     subarray_node = TMCSubarrayNodeFacade(telescope_wrapper)
     yield subarray_node
-    subarray_node.tear_down()
 
 
 @fixture

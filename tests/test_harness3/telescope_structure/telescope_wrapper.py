@@ -22,12 +22,6 @@ class TelescopeWrapper:  # pylint: disable=too-many-public-methods
     csp: CSPDevices
     dishes: DishesDevices
 
-    def tear_down(self) -> None:
-        """Tear down the telescope."""
-        self.sdp.tear_down()
-        self.csp.tear_down()
-        self.dishes.tear_down()
-
     def clear_command_call(self) -> None:
         """Clear the command call on the telescope (if needed)."""
         self.sdp.clear_command_call()

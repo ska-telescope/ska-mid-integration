@@ -34,6 +34,7 @@ class SDPDevices(abc.ABC):
         self.reset_health_state()
         self.clear_command_call()
         self.reset_transitions_data()
+        self.reset_delay()
 
     @abc.abstractmethod
     def clear_command_call(self) -> None:
@@ -48,4 +49,9 @@ class SDPDevices(abc.ABC):
     @abc.abstractmethod
     def reset_health_state(self) -> None:
         """Reset the health state on the SDP (if needed)."""
+        pass
+
+    @abc.abstractmethod
+    def reset_delay(self) -> None:
+        """Reset the delay on the SDP (if needed)."""
         pass
