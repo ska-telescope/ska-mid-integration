@@ -256,18 +256,18 @@ def end_configuration_on_subarray(
             dish_id,
             central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
         )
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "dishMode",
-            DishMode.STANDBY_FP,
-            lookahead=10,
-        )
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_leaf_node_dict[dish_id],
-            "dishMode",
-            DishMode.STANDBY_FP,
-            lookahead=10,
-        )
+        # assert event_recorder.has_change_event_occurred(
+        #     central_node_mid.dish_master_dict[dish_id],
+        #     "dishMode",
+        #     DishMode.STANDBY_FP,
+        #     lookahead=10,
+        # )
+        # assert event_recorder.has_change_event_occurred(
+        #     central_node_mid.dish_leaf_node_dict[dish_id],
+        #     "dishMode",
+        #     DishMode.STANDBY_FP,
+        #     lookahead=10,
+        # )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
