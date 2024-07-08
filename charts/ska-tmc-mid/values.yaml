@@ -109,6 +109,7 @@ cspmasterleafnode:
     image: ska-tmc-cspleafnodes
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     tag: 0.18.3
 =======
     tag: 0.18.2-dev.c6ecc8970
@@ -116,6 +117,9 @@ cspmasterleafnode:
 =======
     tag: 0.18.2-dev.c8b09e149
 >>>>>>> 9dd53603 (SAH-1564: Update csp dev image)
+=======
+    tag: 0.19.1
+>>>>>>> c27b7d81 (SAH-1536: Use DishLeafNode Oci image)
     pullPolicy: IfNotPresent
 
 cspsubarrayleafnode:
@@ -124,6 +128,7 @@ cspsubarrayleafnode:
     image: ska-tmc-cspleafnodes
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     tag: 0.18.3
 =======
     tag: 0.18.2-dev.c6ecc8970
@@ -131,12 +136,16 @@ cspsubarrayleafnode:
 =======
     tag: 0.18.2-dev.c8b09e149
 >>>>>>> 9dd53603 (SAH-1564: Update csp dev image)
+=======
+    tag: 0.19.1
+>>>>>>> c27b7d81 (SAH-1536: Use DishLeafNode Oci image)
     pullPolicy: IfNotPresent
 
 dishleafnode:
   image:
-    registry: artefact.skao.int
+    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-dishleafnode
     image: ska-tmc-dishleafnode
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -292,6 +301,8 @@ dishleafnode:
 >>>>>>> 8bad01fb (SAH-1567: Update dishleafnode image)
 =======
 >>>>>>> c11c4194 (SAH-1564: Update tag for dishleafnode)
+=======
+>>>>>>> 1732882a (SAH-1536: Use DishLeafNode Oci image)
     tag: 0.14.3
 =======
     tag: 0.16.0-dev.c7f47ea7a
@@ -536,7 +547,13 @@ dishleafnode:
 =======
     tag: 0.16.0
 >>>>>>> c03fcc13 (SAH-1564: Update tag for dishleafnode)
+<<<<<<< HEAD
 >>>>>>> c11c4194 (SAH-1564: Update tag for dishleafnode)
+=======
+=======
+    tag: 0.16.1-dev.cfecf6908
+>>>>>>> c27b7d81 (SAH-1536: Use DishLeafNode Oci image)
+>>>>>>> 1732882a (SAH-1536: Use DishLeafNode Oci image)
     pullPolicy: IfNotPresent
 
 resources:
