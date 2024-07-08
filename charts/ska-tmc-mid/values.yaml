@@ -97,23 +97,23 @@ sdpleafnodes:
 
 cspmasterleafnode:
   image:
-    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-cspleafnodes
+    registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.18.2-dev.c8b09e149
+    tag: 0.19.1
     pullPolicy: IfNotPresent
 
 cspsubarrayleafnode:
   image:
-    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-cspleafnodes
+    registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.18.2-dev.c8b09e149
+    tag: 0.19.1
     pullPolicy: IfNotPresent
 
 dishleafnode:
   image:
-    registry: artefact.skao.int
+    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-dishleafnode
     image: ska-tmc-dishleafnode
-    tag: 0.16.0
+    tag: 0.16.1-dev.cfecf6908
     pullPolicy: IfNotPresent
 
 resources:
@@ -178,6 +178,12 @@ deviceServers:
   dishleafnode:
     enabled: true
     file: "data/dishleafnode.yaml"
+    resources:
+      limits:
+        memory: 2000Mi
+      requests:
+        cpu: 900m
+        memory: 1000Mi
 
   mocks:
     enabled: false
