@@ -3,7 +3,6 @@
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
-from tango import DevState
 
 from tests.resources.test_harness.helpers import (
     get_master_device_simulators,
@@ -36,22 +35,6 @@ def test_tmc_csp_abort_in_configuring(central_node_mid, simulator_factory):
     assert csp_master_sim.ping() > 0
 
 
-@given("the telescope is in ON state")
-def telescope_is_in_on_state(central_node_mid, event_recorder):
-    """
-    This method checks if the telescope is in ON state
-    """
-    central_node_mid.move_to_on()
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.ON,
-    )
-
-
 @given(
     parsers.parse(
         "the TMC subarray {subarray_id} and CSP subarray {subarray_id} "
@@ -76,10 +59,6 @@ def subarray_is_in_configuring_obsstate(
         "configure_mid", command_input_factory
     )
 
-    event_recorder.subscribe_event(
-        subarray_node.subarray_devices.get("csp_subarray"), "obsState"
-    )
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     event_recorder.subscribe_event(
         subarray_node.csp_subarray_leaf_node, "cspSubarrayObsState"
     )

@@ -1,17 +1,18 @@
-release=0.21.1
-tag=0.21.1
+release=0.22.1
+tag=0.22.1
 tag_description=
 **Charts:**
-**1. ska-tmc-integration 0.21.0 - 0.21.1*
+**1. ska-tmc-integration 0.22.0 - 0.22.1*
 
-    **1.1 ska-tmc-mid - 0.21.0- 0.21.1:
-        a.  Resolve skb-384
+    **1.1 ska-tmc-mid - 0.22.0- 0.22.1:
+        a. Resolve skb-384
 
 
 release_notes=
 **Charts:**
-**1. ska-tmc-integration 0.21.0 - 0.21.1:**
+**1. ska-tmc-integration 0.22.0 - 0.22.1:**
 
-    **1.1 ska-tmc-mid - 0.21.0- 0.21.1:
-         a.  Resolve skb-384
+    **1.1 ska-tmc-mid - 0.22.0 - 0.22.1:
+        a. Resolve skb-384.
+
 
