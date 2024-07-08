@@ -11,7 +11,6 @@ import json
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
-from tango import DevState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.constant import COMMAND_COMPLETED
@@ -176,6 +175,7 @@ def end_configuration_on_subarray(
     central_node_mid.set_subarray_id(subarray_id)
     pytest.command_result = subarray_node.execute_transition("End")
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
