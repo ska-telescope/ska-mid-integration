@@ -716,6 +716,7 @@ def end_configuration_on_subarray(
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "dishMode"
 =======
@@ -754,6 +755,8 @@ def end_configuration_on_subarray(
 =======
 
 >>>>>>> 2ee3ddf7 (SAH-1536: Enable skipped tmc-dish tests)
+=======
+>>>>>>> 81ad2993 (SAH-1536: Test tmc-dish long sequence tests)
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
