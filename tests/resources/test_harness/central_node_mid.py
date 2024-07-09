@@ -117,12 +117,38 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             self.dish1_dev_class = dish1_info.class_name
             self.dish1_dev_server = dish1_info.ds_full_name
 
+<<<<<<< HEAD
             # Get the spfrx1 device class and server
             spfrx1_info = self.dish1_db.get_device_info(
                 "mid-dish/simulator-spfrx/SKA001"
             )
             self.spfrx1_dev_class = spfrx1_info.class_name
             self.spfrx1_dev_server = spfrx1_info.ds_full_name
+=======
+            # Create database object for Dish1 sprfx TANGO DB
+            self.spfrx_fqdn = (
+                f"tango://tango-databaseds.{dish_fqdn001}.svc.cluster"
+                ".local:10000/mid-dish/simulator-spfrx/SKA001"
+            )
+            # spfrx_deviceproxy = DeviceProxy(spfrx_fqdn)
+            spfrx_tango_host = self.spfrx_fqdn.split("/")[2]
+            spfrx_host = spfrx_tango_host.split(":")[0]
+            spfrx_port = spfrx_tango_host.split(":")[1]
+            self.spfrx_db = Database(spfrx_host, spfrx_port)
+            LOGGER.info("spfrx database is %s :", self.spfrx_db)
+
+            # Get the Dish1 spfrx device class and server
+            dish1_spfrx_info = self.spfrx_db.get_device_info(
+                "mid-dish/simulator-spfrx/SKA001"
+            )
+            LOGGER.info("dish1_spfrx_info is %s :", dish1_spfrx_info)
+            self.dish1_spfrx_dev_class = dish1_spfrx_info.class_name
+            self.dish1_spfrx_dev_server = dish1_spfrx_info.ds_full_name
+            LOGGER.info("spfrx_dev_class is %s :", self.dish1_spfrx_dev_class)
+            LOGGER.info(
+                "spfrx_dev_server is %s :", self.dish1_spfrx_dev_server
+            )
+>>>>>>> 4a3d3a1e (SAH-1536: Add test case for tmc-dish unavailability)
 
         else:
             dish_fqdn001 = dish_master1

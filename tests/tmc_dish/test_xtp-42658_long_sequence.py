@@ -1383,6 +1383,7 @@ def check_tmc_subarray_scanning(
         lookahead=10,
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     )
 <<<<<<< HEAD
 =======
@@ -1395,3 +1396,6 @@ def check_tmc_subarray_scanning(
 =======
     )
 >>>>>>> e4547cde (SAH-1536: Update test case for xtp-42658)
+=======
+    )
+>>>>>>> 4a3d3a1e (SAH-1536: Add test case for tmc-dish unavailability)

@@ -7,6 +7,7 @@ Scenario: TMC executes long sequence of commands successfully
     And the Telescope is in ON state
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     And TMC subarray is in IDLE obsState
     When I configure the subarray <subarray_id> with <receiver_band_1>
     And I issue End command to the subarray <subarray_id>
@@ -29,6 +30,9 @@ Scenario: TMC executes long sequence of commands successfully
 =======
     When I assign <dish_ids> to TMC subarray <subarray_id>
 >>>>>>> b1798e1b (SAH-1536: Fix test case for xtp-42658)
+=======
+    And TMC subarray is in IDLE obsState
+>>>>>>> 4a3d3a1e (SAH-1536: Add test case for tmc-dish unavailability)
     And I configure the subarray <subarray_id> with receiver_band_1
     And I issue End command to the subarray <subarray_id>
     And I reconfigure subarray <subarray_id> with receiver_band 2
