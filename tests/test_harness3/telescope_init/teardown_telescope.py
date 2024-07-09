@@ -35,7 +35,7 @@ class TearDownTelescope(TelescopeAction):
 
     def _action(self):
         """Perform the action."""
-        # NOTE: temporarily moved here because of synchronization
+        # Tear down TMC
         Subarray_node_obsstate = self.telescope.tmc.subarray_node.obsState
         LOGGER.info(
             f"Calling tear down for CentralNode for SubarrayNode's \
@@ -59,13 +59,9 @@ class TearDownTelescope(TelescopeAction):
             MoveToOff(self.telescope).execute()
 
         # reset subarray too
+        # TODO: maybe TMCCentralNode and TMCSubarrayNode should be
+        # two different classes (?).
         SubarrayMoveToOff(self.telescope).execute()
-
-        # reset HealthState.UNKNOWN in emulated devices
-        # reset command calls and transitions in emulated devices
-        self.telescope.sdp.tear_down()
-        self.telescope.csp.tear_down()
-        self.telescope.dishes.tear_down()
 
         # if source dish vcc config is empty or not matching with default
         # dish vcc then load default dish vcc config
@@ -81,6 +77,14 @@ class TearDownTelescope(TelescopeAction):
             CentralNodeLoadDishConfig(
                 self.telescope, json.dumps(DEFAULT_DISH_VCC_CONFIG)
             ).execute()
+
+        # Reset other components
+
+        # reset HealthState.UNKNOWN in emulated devices
+        # reset command calls and transitions in emulated devices
+        self.telescope.sdp.tear_down()
+        self.telescope.csp.tear_down()
+        self.telescope.dishes.tear_down()
 
         assert check_subarray_obs_state("EMPTY")
 

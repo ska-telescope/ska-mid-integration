@@ -52,6 +52,11 @@ class ExpectedStateChange:
         return self.device
 
     def __str__(self) -> str:
+        if self.predicate is not None:
+            return (
+                f"Expected custom predicate {self.predicate} to be satisfied."
+            )
+
         return (
             f"Expected device.attribute {self._device_to_str()}"
             f".{self.attribute} to be {self.expected_value}"
