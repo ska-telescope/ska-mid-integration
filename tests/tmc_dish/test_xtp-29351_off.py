@@ -41,6 +41,13 @@ def check_tmc_and_dish_is_on(central_node_mid, event_recorder, dish_ids):
 
     central_node_mid.move_to_on()
 
+    for dish_id in dish_ids.split(","):
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
+        )
     event_recorder.subscribe_event(central_node_mid.csp_master, "State")
     event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
 
@@ -56,13 +63,6 @@ def check_tmc_and_dish_is_on(central_node_mid, event_recorder, dish_ids):
     )
 
     for dish_id in dish_ids.split(","):
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode"
-        )
-        event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
-        )
-
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",

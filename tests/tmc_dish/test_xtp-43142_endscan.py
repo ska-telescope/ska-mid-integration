@@ -39,6 +39,7 @@ def test_tmc_dish_endscan():
 def given_a_telescope(
     central_node_mid: CentralNodeWrapperMid,
     dish_ids: str,
+    event_recorder,
 ) -> None:
     """
     Given a TMC
@@ -48,6 +49,12 @@ def given_a_telescope(
     for dish_id in dish_ids.split(","):
         assert central_node_mid.dish_master_dict[dish_id].ping() > 0
         assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
+        )
 
 
 @given("the Telescope is in ON state")
@@ -69,12 +76,6 @@ def turn_on_telescope(
     central_node_mid.move_to_on()
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode"
-        )
-        event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
-        )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",

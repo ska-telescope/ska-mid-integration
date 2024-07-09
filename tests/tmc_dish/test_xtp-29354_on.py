@@ -51,6 +51,13 @@ def move_dish_to_on(central_node_mid, event_recorder):
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
+        )
 
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
@@ -70,13 +77,6 @@ def check_dish_is_on(central_node_mid, event_recorder, dish_ids):
     telescopeOn command on central node
     """
     for dish_id in dish_ids.split(","):
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode"
-        )
-        event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
-        )
-
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
