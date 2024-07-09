@@ -39,9 +39,6 @@ from tests.test_harness3.telescope_facades.tmc_central_node_facade import (
 from tests.test_harness3.telescope_facades.tmc_subarray_node_facade import (
     TMCSubarrayNodeFacade,
 )
-from tests.test_harness3.telescope_init.teardown_telescope import (
-    TearDownTelescope,
-)
 from tests.test_harness3.telescope_init.telescope_structure_factory import (
     TelescopeStructureFactory,
 )
@@ -321,7 +318,7 @@ def telescope_wrapper() -> TelescopeWrapper:
     components_factory = TelescopeStructureFactory()
     telescope = components_factory.create_telescope_wrapper()
     yield telescope
-    TearDownTelescope(telescope).execute()
+    telescope.tear_down()
 
 
 @fixture

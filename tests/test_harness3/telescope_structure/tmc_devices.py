@@ -1,8 +1,7 @@
 """A wrapper for the TMC component."""
 
-import logging
+import abc
 
-from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import HealthState
 from tango import DeviceProxy, DevState
 
@@ -13,11 +12,8 @@ from tests.test_harness3.telescope_config.components_config import (
 from tests.test_harness3.utils.common_utils import JsonFactory
 from tests.test_harness3.utils.enums import SubarrayObsState
 
-configure_logging(logging.DEBUG)
-LOGGER = logging.getLogger(__name__)
 
-
-class TMCDevices:
+class TMCDevices(abc.ABC):
     """A wrapper for the TMC component."""
 
     def __init__(self, tmc_configuration: TMCConfiguration):
@@ -194,36 +190,7 @@ class TMCDevices:
     # -----------------------------------------------------------
     # Teardown actions
 
-    # def tear_down(self):
-    #     """Teardown the TMC"""
-    #     self._reset_subarray_obs_state()
-    #     self._reset_telescope_state()
-
-    # def _reset_subarray_obs_state(self):
-    #     """Reset subarray obs state"""
-    #     Subarray_node_obsstate = self.subarray_node.obsState
-    #     LOGGER.info(
-    #         f"Calling tear down for CentralNode for SubarrayNode's \
-    #             {Subarray_node_obsstate} obsstate."
-    #     )
-
-    #     if self.subarray_node.obsState == ObsState.IDLE:
-    #         LOGGER.info("Calling Release Resource on centralnode")
-    #         self.invoke_release_resources(self.release_input)
-    #     elif self.subarray_node.obsState in [
-    #         ObsState.RESOURCING,
-    #         ObsState.SCANNING,
-    #         ObsState.CONFIGURING,
-    #         ObsState.READY,
-    #         ObsState.IDLE,
-    #     ]:
-    #         LOGGER.info("Calling Abort and Restart on SubarrayNode")
-    #         self.subarray_abort()
-    #         self.subarray_restart()
-    #     elif self.subarray_node.obsState == ObsState.ABORTED:
-    #         self.subarray_restart()
-
-    # def _reset_telescope_state(self) -> None:
-    #     """Reset telescope state"""
-    #     if self.telescope_state != "OFF":
-    #         self.move_central_node_to_off()
+    @abc.abstractmethod
+    def tear_down(self) -> None:
+        """Reset the TMC devices to their initial state."""
+        pass

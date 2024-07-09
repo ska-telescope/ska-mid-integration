@@ -1,28 +1,31 @@
 """Create real or emulated test harness components."""
+from tests.test_harness3.emulated_components.csp_devices import (
+    EmulatedCSPDevices,
+)
+from tests.test_harness3.emulated_components.dishes_devices import (
+    EmulatedDishesDevices,
+)
+from tests.test_harness3.emulated_components.sdp_devices import (
+    EmulatedSDPDevices,
+)
+from tests.test_harness3.production_components.csp_devices import (
+    ProductionCSPDevices,
+)
+from tests.test_harness3.production_components.dishes_devices import (
+    ProductionDishesDevices,
+)
+from tests.test_harness3.production_components.sdp_devices import (
+    ProductionSDPDevices,
+)
+from tests.test_harness3.production_components.tmc_devices import (
+    ProductionTMCDevices,
+)
 from tests.test_harness3.telescope_config.configuration_factory import (
     TestHarnessConfigurationFactory,
 )
 from tests.test_harness3.telescope_structure.csp_devices import CSPDevices
 from tests.test_harness3.telescope_structure.dishes_devices import (
     DishesDevices,
-)
-from tests.test_harness3.telescope_structure.emulated.csp_devices import (
-    EmulatedCSPDevices,
-)
-from tests.test_harness3.telescope_structure.emulated.dishes_devices import (
-    EmulatedDishesDevices,
-)
-from tests.test_harness3.telescope_structure.emulated.sdp_devices import (
-    EmulatedSDPDevices,
-)
-from tests.test_harness3.telescope_structure.production.csp_devices import (
-    ProductionCSPDevices,
-)
-from tests.test_harness3.telescope_structure.production.dishes_devices import (
-    ProductionDishesDevices,
-)
-from tests.test_harness3.telescope_structure.production.sdp_devices import (
-    ProductionSDPDevices,
 )
 from tests.test_harness3.telescope_structure.sdp_devices import SDPDevices
 from tests.test_harness3.telescope_structure.telescope_wrapper import (
@@ -58,19 +61,33 @@ class TelescopeStructureFactory:
         # TODO: could TelescopeWrapper and its components be singletons (?)
         # or the singleton may be achieved through fixtures
 
-        return TelescopeWrapper(
+        telescope = TelescopeWrapper(
             tmc=self.create_tmc_wrapper(),
             sdp=self.create_sdp_wrapper(),
             csp=self.create_csp_wrapper(),
             dishes=self.create_dishes_wrapper(),
         )
 
+        # NOTE: this is a bit weird. Maybe it could be refactored.
+        # Currently, it is needed to generate the correct actions during
+        # the tear down. An effective refactoring could be done:
+        # - making TelescopeWrapper a singleton
+        # - making each action automatically getting the correct single
+        #   instance of the telescope => when initializing each action,
+        #   the telescope instance shouldn't necessary be passed as a parameter
+        if isinstance(telescope.tmc, ProductionTMCDevices):
+            telescope.tmc.set_telescope(telescope)
+
+        return telescope
+
     def create_tmc_wrapper(self) -> TMCDevices:
         """Create a TMC wrapper.
 
         return: A TMC wrapper instance.
         """
-        return TMCDevices(self.config_factory.get_TMC_configuration())
+        return ProductionTMCDevices(
+            self.config_factory.get_TMC_configuration(),
+        )
 
     def create_sdp_wrapper(self) -> SDPDevices:
         """Create a SDP wrapper.

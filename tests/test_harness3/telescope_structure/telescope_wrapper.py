@@ -2,6 +2,7 @@
 
 from dataclasses import dataclass
 
+from tests.test_harness3.helpers import check_subarray_obs_state
 from tests.test_harness3.telescope_structure.csp_devices import CSPDevices
 from tests.test_harness3.telescope_structure.dishes_devices import (
     DishesDevices,
@@ -21,6 +22,14 @@ class TelescopeWrapper:  # pylint: disable=too-many-public-methods
     sdp: SDPDevices
     csp: CSPDevices
     dishes: DishesDevices
+
+    def tear_down(self) -> None:
+        """Tear down the entire telescope test structure."""
+        self.tmc.tear_down()
+        self.sdp.tear_down()
+        self.csp.tear_down()
+        self.dishes.tear_down()
+        assert check_subarray_obs_state("EMPTY")
 
     def clear_command_call(self) -> None:
         """Clear the command call on the telescope (if needed)."""
