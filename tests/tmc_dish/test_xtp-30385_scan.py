@@ -68,20 +68,9 @@ def turn_on_telescope(
     event_recorder: EventRecorder,
 ):
     """A method to put Telescope ON"""
-    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode"
-        )
-        event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
-        )
-
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
-
-    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
-    event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
 
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
@@ -90,6 +79,8 @@ def turn_on_telescope(
     )
     central_node_mid.move_to_on()
 
+    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
+    event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
     assert event_recorder.has_change_event_occurred(
         central_node_mid.csp_master,
         "State",
@@ -102,6 +93,13 @@ def turn_on_telescope(
     )
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
+        )
+
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
@@ -130,13 +128,6 @@ def check_subarray_obsState_ready(
     subarray_id: str,
 ):
     """Method to check subarray is in READY obsState"""
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-    event_recorder.subscribe_event(
-        subarray_node.subarray_node, "longRunningCommandResult"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "longRunningCommandResult"
-    )
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
@@ -147,10 +138,14 @@ def check_subarray_obsState_ready(
     central_node_mid.set_subarray_id(subarray_id)
     pytest.command_result = central_node_mid.store_resources(assign_input_json)
 
+    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
@@ -212,6 +207,10 @@ def check_dish_mode_and_pointing_state(
         "obsState",
         ObsState.READY,
         lookahead=10,
+    )
+
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
     )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
@@ -329,9 +328,7 @@ def check_subarray_obsstate_ready(
 ):
     """Checks if SubarrayNode's obsState attribute value is READY"""
     central_node_mid.set_subarray_id(int(subarray_id))
-    event_recorder.subscribe_event(
-        subarray_node.subarray_node, "longRunningCommandResult"
-    )
+
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
     )
