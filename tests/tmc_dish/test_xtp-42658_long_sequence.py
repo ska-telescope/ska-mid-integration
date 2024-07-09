@@ -1381,9 +1381,13 @@ def check_tmc_subarray_scanning(
         "obsState",
         ObsState.READY,
         lookahead=10,
+<<<<<<< HEAD
     )
 <<<<<<< HEAD
 =======
 >>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
 =======
 >>>>>>> 00483018 (SAH-1536: Update test case)
+=======
+    )
+>>>>>>> 7714cfbb (SAH-1536: Update test case for xtp-42658)
