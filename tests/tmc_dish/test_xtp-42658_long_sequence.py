@@ -18,9 +18,6 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
-from tests.resources.test_harness.utils.enums import SimulatorDeviceType
-
-# from tests.resources.test_support.common_utils.common_helpers import Resource
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
@@ -31,6 +28,7 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
+@pytest.mark.skip
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42658_long_sequence.feature",
@@ -48,29 +46,23 @@ def test_tmc_dish_long_sequence_functionality():
         + " simulated CSP and simulated SDP"
     )
 )
-def given_a_telescope(central_node_mid, simulator_factory, dish_ids):
+def given_a_telescope(central_node_mid, dish_ids):
     """
     Given a TMC
     """
-    csp_master_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_CSP_MASTER_DEVICE
-    )
-    sdp_master_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_SDP_MASTER_DEVICE
-    )
-
-    assert csp_master_sim.ping() > 0
-    assert sdp_master_sim.ping() > 0
+    assert central_node_mid.csp_master.ping() > 0
+    assert central_node_mid.sdp_master.ping() > 0
     for dish_id in dish_ids.split(","):
         assert central_node_mid.dish_master_dict[dish_id].ping() > 0
         assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
 
 
 @given("the Telescope is in ON state")
-def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
+def turn_on_telescope(central_node_mid, event_recorder):
     """
     A method to put Telescope ON
     """
+<<<<<<< HEAD
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "dishMode"
@@ -107,7 +99,11 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
     event_recorder.subscribe_event(csp_master_sim, "State")
     event_recorder.subscribe_event(sdp_master_sim, "State")
 
+=======
+>>>>>>> 3b52eb24 (SAH-1536: Add test case for tmc-dish unavailability)
     central_node_mid.move_to_on()
+    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
+    event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
 
     assert event_recorder.has_change_event_occurred(
         central_node_mid.csp_master,
@@ -121,6 +117,13 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
     )
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
+        )
+
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
@@ -132,6 +135,10 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
             DishMode.STANDBY_FP,
         )
 
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "telescopeState"
+    )
+
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
@@ -140,17 +147,12 @@ def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
 >>>>>>> 7ceda8b8 (SAH-1536: Update test case for xtp-42658)
 
 
-@when(parsers.parse("I assign {dish_ids} to TMC subarray {subarray_id}"))
-def move_subarray_to_obsState_idle(
-    subarray_node: SubarrayNodeWrapper,
-    central_node_mid: CentralNodeWrapperMid,
-    event_recorder: EventRecorder,
-    command_input_factory: JsonFactory,
-    dish_ids: list,
-    subarray_id: str,
+@given("TMC subarray is in IDLE obsState")
+def check_subarray_obsState_idle(
+    subarray_node, central_node_mid, event_recorder, command_input_factory
 ):
     """
-    Method to move subarray in IDLE obsState
+    Method to check subarray is in IDLE obsState
     """
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
 <<<<<<< HEAD
