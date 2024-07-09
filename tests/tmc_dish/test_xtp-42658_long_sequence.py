@@ -359,7 +359,6 @@ def reconfigure_subarray(
     )
     configure_input_json = json.loads(input_json)
     configure_input_json["dish"]["receiver_band"] = "2"
-    configure_input_json["csp"]["common"]["frequency_band"] = "2"
     central_node_mid.set_subarray_id(subarray_id)
     pytest.command_result = subarray_node.store_configuration_data(
         json.dumps(configure_input_json)
@@ -371,6 +370,7 @@ def reconfigure_subarray(
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "dishMode"
         )
+<<<<<<< HEAD
 
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
@@ -379,6 +379,28 @@ def reconfigure_subarray(
             lookahead=16,
         )
 
+=======
+        assert (
+            central_node_mid.dish_master_dict[dish_id].dishMode
+            == DishMode.OPERATE
+        )
+        assert (
+            central_node_mid.dish_leaf_node_dict[dish_id].dishMode
+            == DishMode.OPERATE
+        )
+        # assert event_recorder.has_change_event_occurred(
+        #     central_node_mid.dish_master_dict[dish_id],
+        #     "dishMode",
+        #     DishMode.OPERATE,
+        #     lookahead=10,
+        # )
+        # assert event_recorder.has_change_event_occurred(
+        #     central_node_mid.dish_leaf_node_dict[dish_id],
+        #     "dishMode",
+        #     DishMode.OPERATE,
+        #     lookahead=10,
+        # )
+>>>>>>> 752c8d76 (SAH-1536: Update test case for xtp-42658)
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
