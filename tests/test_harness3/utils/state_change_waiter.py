@@ -10,41 +10,67 @@ from tango import DeviceProxy
 
 
 @dataclass
-class ExpectedStateChange:
-    """An expected state change in a Tango device attribute.
+class ExpectedEvent:
+    """The description of an expected Tango event.
 
-    This class represents an expected state change in a Tango device,
-    as a partial outcome of a command execution. The expected state can be
-    defined in two ways:
-
-    1. by a device, an attribute, and an expected value;
-    2. by an arbitrary custom predicate.
-
-    If one of the two conditions is met, the state change is considered
-    occurred.
+    An event is described by a predicate, that given a ``ReceivedEvent``,
+    returns a boolean indicating whether the event matches the expected
+    conditions.
     """
 
-    device: DeviceProxy | str | None
+    predicate: Callable[[ReceivedEvent], bool]
+    """The predicate that defines the expected event."""
+
+    def __str__(self) -> str:
+        return f"Expected event defined as custom predicate: {self.predicate}"
+
+    def event_matches(self, event: ReceivedEvent) -> bool:
+        """Check if an event matches the expected event.
+
+        :param event: The event to check.
+        :return: True if the event matches the expected event,
+            False otherwise.
+        """
+        return self.predicate(event)
+
+
+@dataclass
+class ExpectedStateChange(ExpectedEvent):
+    """An expected state change in a Tango device attribute.
+
+    This class represents a special but very common case of an expected
+    event: a state change in a Tango device attribute. A state change
+    is described by:
+
+    - a device (or its name),
+    - an attribute (name),
+    - an expected value.
+    """
+
+    device: DeviceProxy | str
     """The Tango device or its name you expect to change state."""
 
-    attribute: str | None
+    attribute: str
     """The attribute (name) you expect to change state."""
 
-    expected_value: Any | None
+    expected_value: Any
     """The expected value of the attribute."""
 
-    predicate: Callable[[ReceivedEvent], bool] | None = None
-
-    def __post_init__(self):
-        if self.predicate is None and (
-            self.device is None
-            or self.attribute is None
-            or self.expected_value is None
-        ):
-            raise ValueError(
-                "You must provide either a predicate or a device, "
-                "an attribute, and an expected value."
-            )
+    def __init__(
+        self,
+        device: DeviceProxy | str,
+        attribute: str,
+        expected_value: Any,
+    ) -> None:
+        self.device = device
+        self.attribute = attribute
+        self.expected_value = expected_value
+        self.predicate = lambda event: (
+            event.has_device(self.device)
+            and event.has_attribute(self.attribute)
+            and event.attribute_value == self.expected_value
+        )
+        super().__init__(self.predicate)
 
     def _device_to_str(self) -> str:
         if isinstance(self.device, DeviceProxy):
@@ -52,30 +78,9 @@ class ExpectedStateChange:
         return self.device
 
     def __str__(self) -> str:
-        if self.predicate is not None:
-            return (
-                f"Expected custom predicate {self.predicate} to be satisfied."
-            )
-
         return (
             f"Expected device.attribute {self._device_to_str()}"
             f".{self.attribute} to be {self.expected_value}"
-        )
-
-    def event_matches_state_change(self, event: ReceivedEvent) -> bool:
-        """Check if an event matches the expected state change.
-
-        :param event: The event to check.
-        :return: True if the event matches the expected state change,
-            False otherwise.
-        """
-        if self.predicate is not None:
-            return self.predicate(event)
-
-        return (
-            event.has_device(self.device)
-            and event.has_attribute(self.attribute)
-            and event.attribute_value == self.expected_value
         )
 
 
@@ -105,11 +110,11 @@ class StateChangeWaiter:
 
     def __init__(self) -> None:
         self.event_tracer = TangoEventTracer()
-        self.pending_state_changes: list[ExpectedStateChange] = []
+        self.pending_state_changes: list[ExpectedEvent] = []
 
     def add_expected_state_changes(
         self,
-        state_changes: list[ExpectedStateChange],
+        state_changes: list[ExpectedEvent],
     ) -> None:
         """Add a list of expected state changes to wait for.
 
@@ -124,7 +129,7 @@ class StateChangeWaiter:
 
     def _is_state_change_occurred(
         self,
-        state_change: ExpectedStateChange,
+        state_change: ExpectedEvent,
     ) -> bool:
         """Check if a state change has already occurred in the event tracer.
 
@@ -132,7 +137,7 @@ class StateChangeWaiter:
         :return: True if the state change has occurred, False otherwise.
         """
         for event in self.event_tracer.events:
-            if state_change.event_matches_state_change(event):
+            if state_change.event_matches(event):
                 return True
 
         return False

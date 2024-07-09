@@ -22,7 +22,7 @@ class CentralNodeReleaseResources(TelescopeAction):
         )
         return result, message
 
-    def expected_outcome(self) -> list[ExpectedStateChange]:
+    def expected_outcome(self):
         return [
             ExpectedStateChange(
                 self.telescope.tmc.csp_subarray_leaf_node,

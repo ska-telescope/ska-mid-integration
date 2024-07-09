@@ -6,7 +6,7 @@ from tests.test_harness3.telescope_structure.telescope_wrapper import (
     TelescopeWrapper,
 )
 from tests.test_harness3.utils.state_change_waiter import (
-    ExpectedStateChange,
+    ExpectedEvent,
     StateChangeWaiter,
 )
 
@@ -54,7 +54,7 @@ class TelescopeAction(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def expected_outcome(self) -> list[ExpectedStateChange]:
+    def expected_outcome(self) -> list[ExpectedEvent]:
         """The expected outcome of the command."""
         pass
 

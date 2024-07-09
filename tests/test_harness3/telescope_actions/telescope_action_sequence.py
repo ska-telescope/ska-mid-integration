@@ -6,7 +6,6 @@ from tests.test_harness3.telescope_actions.telescope_action import (
 from tests.test_harness3.telescope_structure.telescope_wrapper import (
     TelescopeWrapper,
 )
-from tests.test_harness3.utils.state_change_waiter import ExpectedStateChange
 
 
 class TelescopeActionSequence(TelescopeAction):
@@ -39,5 +38,5 @@ class TelescopeActionSequence(TelescopeAction):
         for step in self.steps:
             step.execute()
 
-    def expected_outcome(self) -> list[ExpectedStateChange]:
+    def expected_outcome(self):
         return []

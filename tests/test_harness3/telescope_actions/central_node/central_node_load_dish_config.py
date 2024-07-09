@@ -7,7 +7,7 @@ from ska_tango_testing.integration.event import ReceivedEvent
 from tests.test_harness3.telescope_actions.telescope_action import (
     TelescopeAction,
 )
-from tests.test_harness3.utils.state_change_waiter import ExpectedStateChange
+from tests.test_harness3.utils.state_change_waiter import ExpectedEvent
 
 
 class CentralNodeLoadDishConfig(TelescopeAction):
@@ -39,11 +39,4 @@ class CentralNodeLoadDishConfig(TelescopeAction):
             )
 
         # TODO: be careful about this wait
-        return [
-            ExpectedStateChange(
-                device=None,
-                attribute=None,
-                expected_value=None,
-                predicate=state_change_predicate,
-            )
-        ]
+        return [ExpectedEvent(state_change_predicate)]
