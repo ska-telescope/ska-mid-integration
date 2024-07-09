@@ -1382,6 +1382,7 @@ def check_tmc_subarray_scanning(
         ObsState.READY,
         lookahead=10,
 <<<<<<< HEAD
+<<<<<<< HEAD
     )
 <<<<<<< HEAD
 =======
@@ -1391,3 +1392,6 @@ def check_tmc_subarray_scanning(
 =======
     )
 >>>>>>> 7714cfbb (SAH-1536: Update test case for xtp-42658)
+=======
+    )
+>>>>>>> e4547cde (SAH-1536: Update test case for xtp-42658)
