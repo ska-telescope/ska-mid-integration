@@ -5,7 +5,6 @@ from os.path import dirname, join
 
 from ska_control_model import ObsState
 
-from tests.conftest import TIMEOUT
 from tests.resources.test_harness.utils.wait_helpers import Waiter
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
@@ -221,7 +220,7 @@ def wait_for_device_status_ready(device_name: str) -> None:
     """
     the_waiter = Waiter()
     the_waiter.set_wait_for_specific_obsstate("READY", [device_name])
-    the_waiter.wait(TIMEOUT)
+    the_waiter.wait(800)
 
 
 def wait_for_device_status_scanning(device_name: str) -> None:
