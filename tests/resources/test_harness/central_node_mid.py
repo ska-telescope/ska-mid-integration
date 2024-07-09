@@ -109,10 +109,13 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 f"tango://tango-databaseds.{dish_fqdn001}.svc.cluster"
                 ".local:10000/mid-dish/simulator-spfrx/SKA001"
             )
-            # spfrx_deviceproxy = DeviceProxy(spfrx_fqdn)
+            spfrx_deviceproxy = DeviceProxy(self.spfrx_fqdn)
+            LOGGER.info("spfrx proxy created %s", spfrx_deviceproxy)
             spfrx_tango_host = self.spfrx_fqdn.split("/")[2]
             spfrx_host = spfrx_tango_host.split(":")[0]
             spfrx_port = spfrx_tango_host.split(":")[1]
+            LOGGER.info("spfrx port is %s :", spfrx_port)
+            LOGGER.info("spfrx port type is %s :", type(spfrx_port))
             self.spfrx_db = Database(spfrx_host, spfrx_port)
             LOGGER.info("spfrx database is %s :", self.spfrx_db)
 
