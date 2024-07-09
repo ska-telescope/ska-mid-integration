@@ -3,7 +3,7 @@
 Scenario: TMC executes long sequence of commands successfully
     Given a Telescope consisting of TMC, DISH <dish_ids>, simulated CSP and simulated SDP
     And the Telescope is in ON state
-    When I assign <dish_ids> to TMC subarray <subarray_id>
+    And TMC subarray is in IDLE obsState
     And I configure the subarray <subarray_id> with receiver_band_1
     And I issue End command to the subarray <subarray_id>
     And I reconfigure subarray <subarray_id> with receiver_band 2

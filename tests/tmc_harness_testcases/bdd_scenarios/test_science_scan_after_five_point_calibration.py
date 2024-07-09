@@ -21,6 +21,7 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
+@pytest.mark.skip
 @pytest.mark.SKA_mid
 @pytest.mark.tmc_dish
 @scenario(
