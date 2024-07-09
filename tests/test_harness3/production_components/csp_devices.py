@@ -41,18 +41,10 @@ class ProductionCSPDevices(CSPDevices):
         """Move to OFF for production test wrapper does nothing."""
         pass
 
+    def tear_down(self) -> None:
+        """Tear down the CSP (not needed)."""
+        pass
+
     def clear_command_call(self) -> None:
         """Clear the command call on the CSP (not needed)."""
-        pass
-
-    def reset_transitions_data(self) -> None:
-        """Reset the transitions data on the CSP (not needed)."""
-        pass
-
-    def reset_health_state(self) -> None:
-        """Reset the health state on the CSP (not needed)."""
-        pass
-
-    def reset_delay(self) -> None:
-        """Reset the delay on the CSP (not needed)."""
         pass

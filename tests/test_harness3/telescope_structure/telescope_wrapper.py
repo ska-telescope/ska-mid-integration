@@ -36,9 +36,3 @@ class TelescopeWrapper:  # pylint: disable=too-many-public-methods
         self.sdp.clear_command_call()
         self.csp.clear_command_call()
         self.dishes.clear_command_call()
-
-    def reset_transitions_data(self) -> None:
-        """Reset the transitions data on the telescope (if needed)."""
-        self.sdp.reset_transitions_data()
-        self.csp.reset_transitions_data()
-        self.dishes.reset_transitions_data()

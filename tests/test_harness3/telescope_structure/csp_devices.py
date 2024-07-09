@@ -32,31 +32,14 @@ class CSPDevices(abc.ABC):
         """Move the CSP to the OFF state."""
         pass
 
+    @abc.abstractmethod
     def tear_down(self) -> None:
-        """Tear down the CSP."""
-        self.reset_health_state()
-        self.clear_command_call()
-        self.reset_transitions_data()
-        self.reset_delay()
+        """Tear down the CSP (if needed)."""
+        pass
 
     @abc.abstractmethod
     def clear_command_call(self) -> None:
         """Clear the command call on the CSP (if needed)."""
-        pass
-
-    @abc.abstractmethod
-    def reset_transitions_data(self) -> None:
-        """Reset the transitions data on the CSP (if needed)."""
-        pass
-
-    @abc.abstractmethod
-    def reset_health_state(self) -> None:
-        """Reset the health state on the CSP (if needed)."""
-        pass
-
-    @abc.abstractmethod
-    def reset_delay(self) -> None:
-        """Reset the delay on the CSP (if needed)."""
         pass
 
     def set_subarray_id(self, subarray_id: str) -> None:
