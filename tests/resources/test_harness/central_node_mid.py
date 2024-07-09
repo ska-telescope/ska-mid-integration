@@ -109,7 +109,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             dish1_host = dish1_tango_host.split(":")[0]
             dish1_port = dish1_tango_host.split(":")[1]
             self.dish1_db = Database(dish1_host, dish1_port)
-
+            LOGGER.info(" dish database %s :", self.dish1_db)
             # Get the Dish1 device class and server
             dish1_info = self.dish1_db.get_device_info(
                 "mid-dish/dish-manager/SKA001"
@@ -126,19 +126,27 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             self.spfrx1_dev_server = spfrx1_info.ds_full_name
 =======
             # Create database object for Dish1 sprfx TANGO DB
+            LOGGER.info("dish_fqdn001 is %s", dish_fqdn001)
             self.spfrx_fqdn = (
-                f"tango://tango-databaseds.{dish_fqdn001}.svc.cluster"
+                f"{dish_fqdn001}.svc.cluster"
                 ".local:10000/mid-dish/simulator-spfrx/SKA001"
             )
-            spfrx_deviceproxy = DeviceProxy(self.spfrx_fqdn)
-            LOGGER.info("spfrx proxy created %s", spfrx_deviceproxy)
+            LOGGER.info("SPFRX fqdn is %s ", self.spfrx_fqdn)
+
             spfrx_tango_host = self.spfrx_fqdn.split("/")[2]
             spfrx_host = spfrx_tango_host.split(":")[0]
             spfrx_port = spfrx_tango_host.split(":")[1]
+            LOGGER.info("spfrx host is %s :", spfrx_host)
             LOGGER.info("spfrx port is %s :", spfrx_port)
-            LOGGER.info("spfrx port type is %s :", type(spfrx_port))
-            self.spfrx_db = Database(spfrx_host, spfrx_port)
+            LOGGER.info("dish001 port is %s :", dish1_host)
+
+            spfrx_deviceproxy = DeviceProxy(self.spfrx_fqdn)
+            LOGGER.info("spfrx proxy created %s", spfrx_deviceproxy)
+
+            self.spfrx_db = Database(dish1_host, int(spfrx_port))
             LOGGER.info("spfrx database is %s :", self.spfrx_db)
+
+            LOGGER.info("spfrx port type is %s :", type(spfrx_port))
 
             # Get the Dish1 spfrx device class and server
             dish1_spfrx_info = self.spfrx_db.get_device_info(
