@@ -3,10 +3,7 @@
 import logging
 
 from ska_ser_logging import configure_logging
-from ska_tango_base.control_model import HealthState
-from tango import DevState
 
-from tests.resources.test_support.common_utils.common_helpers import Resource
 from tests.test_harness3.telescope_actions.subarray.force_change_of_obs_state import (  # pylint: disable=line-too-long # noqa: E501
     ForceChangeOfObsState,
 )
@@ -16,8 +13,11 @@ from tests.test_harness3.telescope_actions.subarray.set_subarray_id import (
 from tests.test_harness3.telescope_actions.subarray.subarray_abort import (
     SubarrayAbort,
 )
-from tests.test_harness3.telescope_actions.subarray.subarray_clear_obs_state import (  # pylint: disable=line-too-long # noqa: E501
-    SubarrayClearObsState,
+from tests.test_harness3.telescope_actions.subarray.subarray_assign_resources import (  # pylint: disable=line-too-long # noqa: E501
+    SubarrayAssignResources,
+)
+from tests.test_harness3.telescope_actions.subarray.subarray_configure import (  # pylint: disable=line-too-long # noqa: E501
+    SubarrayConfigure,
 )
 from tests.test_harness3.telescope_actions.subarray.subarray_end_observation import (  # pylint: disable=line-too-long # noqa: E501
     SubarrayEndObservation,
@@ -37,20 +37,14 @@ from tests.test_harness3.telescope_actions.subarray.subarray_move_to_off import 
 from tests.test_harness3.telescope_actions.subarray.subarray_move_to_on import (  # pylint: disable=line-too-long # noqa: E501
     SubarrayMoveToOn,
 )
-from tests.test_harness3.telescope_actions.subarray.subarray_release_resources import (  # pylint: disable=line-too-long # noqa: E501
-    SubarrayReleaseResources,
+from tests.test_harness3.telescope_actions.subarray.subarray_release_all_resources import (  # pylint: disable=line-too-long # noqa: E501
+    SubarrayReleaseAllResources,
 )
 from tests.test_harness3.telescope_actions.subarray.subarray_restart import (
     SubarrayRestart,
 )
 from tests.test_harness3.telescope_actions.subarray.subarray_scan import (
     SubarrayScan,
-)
-from tests.test_harness3.telescope_actions.subarray.subarray_store_configuration_data import (  # pylint: disable=line-too-long # noqa: E501
-    SubarrayStoreConfigurationData,
-)
-from tests.test_harness3.telescope_actions.subarray.subarray_store_resources import (  # pylint: disable=line-too-long # noqa: E501
-    SubarrayStoreResources,
 )
 from tests.test_harness3.telescope_structure.telescope_wrapper import (
     TelescopeWrapper,
@@ -64,8 +58,6 @@ class TMCSubarrayNodeFacade:
     """Subarray Node class which implement methods required for test cases
     to test subarray node.
     """
-
-    # pylint: disable=too-many-public-methods
 
     def __init__(self, telescope: TelescopeWrapper) -> None:
         """Initialize the SubarrayNodeWrapper."""
@@ -97,43 +89,6 @@ class TMCSubarrayNodeFacade:
     # -----------------------------------------------------------
     # SUBARRAY PROPERTIES
 
-    @property
-    def state(self) -> DevState:
-        """TMC SubarrayNode operational state."""
-        return self._telescope.tmc.subarray_state
-
-    @state.setter
-    def state(self, value):
-        """Sets value for TMC subarrayNode operational state."""
-        self._telescope.tmc.subarray_state = value
-
-    @property
-    def obs_state(self):
-        """TMC SubarrayNode observation state."""
-        return self._telescope.tmc._subarray_obs_state
-
-    @obs_state.setter
-    def obs_state(self, value):
-        """Sets value for TMC subarrayNode observation state."""
-        self._telescope.tmc._subarray_obs_state = value
-
-    @property
-    def health_state(self) -> HealthState:
-        """Telescope health state representing overall health of telescope"""
-        self._health_state = Resource(self._telescope.tmc.subarray_node).get(
-            "healthState"
-        )
-        return self._health_state
-
-    @health_state.setter
-    def health_state(self, value):
-        """Telescope health state representing overall health of telescope
-
-        Args:
-            value (HealthState): telescope health state value
-        """
-        self._health_state = value
-
     def set_subarray_id(self, requested_subarray_id: str) -> None:
         """Create subarray devices for the requested subarray."""
         SetSubarrayId(requested_subarray_id).execute()
@@ -150,14 +105,17 @@ class TMCSubarrayNodeFacade:
         :return: result, message"""
         return SubarrayMoveToOff().execute()
 
+    # -----------------------------------------------------------
+    # Obs-state machine transitions
+
     # @sync_configure(device_dict=device_dict)
-    def store_configuration_data(self, input_string: str):
+    def configure(self, input_string: str):
         """Invoke configure command on subarray Node.
 
         :param input_string: input string as json
         :return: result, message
         """
-        return SubarrayStoreConfigurationData(input_string).execute()
+        return SubarrayConfigure(input_string).execute()
 
     # @sync_end(device_dict=device_dict)
     def end_observation(self):
@@ -168,7 +126,7 @@ class TMCSubarrayNodeFacade:
         return SubarrayEndObservation().execute()
 
     # @sync_endscan(device_dict=device_dict)
-    def remove_scan_data(self):
+    def end_scan(self):
         """Invoke EndScan command on subarray Node.
 
         :return: result, message
@@ -183,7 +141,7 @@ class TMCSubarrayNodeFacade:
         return SubarrayScan(input_string).execute()
 
     # @sync_abort(device_dict=device_dict)
-    def abort_subarray(self):
+    def abort(self):
         """Invoke Abort command on subarray Node.
 
         :return: result, message
@@ -191,7 +149,7 @@ class TMCSubarrayNodeFacade:
         return SubarrayAbort().execute()
 
     # @sync_restart(device_dict=device_dict)
-    def restart_subarray(self):
+    def restart(self):
         """Invoke Restart command on subarray Node.
 
         :return: result, message
@@ -199,23 +157,26 @@ class TMCSubarrayNodeFacade:
         return SubarrayRestart().execute()
 
     # @sync_assign_resources(device_dict)
-    def store_resources(self, assign_json: str):
+    def assign_resources(self, assign_json: str):
         """Invoke Assign Resource command on subarray Node
 
         :param assign_json: Assign resource input json
         :return: result, message
         """
-        return SubarrayStoreResources(assign_json).execute()
+        return SubarrayAssignResources(assign_json).execute()
 
     # @sync_release_resources(device_dict)
-    def release_resources_subarray(
+    def release_all_resources(
         self,
     ):
         """Invoke Release Resource command on subarray Node.
 
         :return: result, message
         """
-        return SubarrayReleaseResources().execute()
+        return SubarrayReleaseAllResources().execute()
+
+    # -----------------------------------------------------------
+    # Generic transitions
 
     def execute_transition(self, command_name: str, argin=None):
         """Execute provided command on subarray
@@ -226,10 +187,6 @@ class TMCSubarrayNodeFacade:
         :return: result, message
         """
         return SubarrayExecuteTransition(command_name, argin).execute()
-
-    def clear_all_data(self):
-        """Clear the observations and put the SubarrayNode in EMPTY."""
-        SubarrayClearObsState().execute()
 
     def force_change_of_obs_state(
         self,

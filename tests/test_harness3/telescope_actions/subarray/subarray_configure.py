@@ -14,7 +14,7 @@ from tests.test_harness3.utils.state_change_waiter import ExpectedStateChange
 LOGGER = logging.getLogger(__name__)
 
 
-class SubarrayStoreConfigurationData(TelescopeAction):
+class SubarrayConfigure(TelescopeAction):
     """Invoke configure command on subarray Node."""
 
     def __init__(self, configure_string: str):

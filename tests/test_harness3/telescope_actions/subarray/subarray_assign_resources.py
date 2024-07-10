@@ -14,7 +14,7 @@ from tests.test_harness3.utils.state_change_waiter import ExpectedStateChange
 LOGGER = logging.getLogger(__name__)
 
 
-class SubarrayStoreResources(TelescopeAction):
+class SubarrayAssignResources(TelescopeAction):
     """Invoke Assign Resource command on subarray Node."""
 
     def __init__(self, assign_json: str):

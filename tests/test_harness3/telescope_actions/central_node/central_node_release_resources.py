@@ -44,11 +44,9 @@ class CentralNodeReleaseResources(TelescopeAction):
             #     )
             # )
             ExpectedEvent(
-                lambda event: event.has_device(
-                    self.telescope.tmc.subarray_node
-                )
-                and event.has_attribute("assignedResources")
-                and event.attribute_value is None
+                device=self.telescope.tmc.subarray_node,
+                attribute="assignedResources",
+                predicate=lambda event: event.attribute_value is None,
             ),
             ExpectedStateChange(
                 self.telescope.csp.csp_subarray,
