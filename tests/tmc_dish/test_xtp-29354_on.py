@@ -5,7 +5,6 @@ import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from tango import DevState
 
-from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.enum import DishMode
 
 
@@ -32,22 +31,12 @@ def test_tmc_dish_startup_telescope():
         + " simulated CSP and simulated SDP"
     )
 )
-def given_a_telescope(
-    central_node_mid, simulator_factory, event_recorder, dish_ids
-):
+def given_a_telescope(central_node_mid, event_recorder, dish_ids):
     """
     Given a TMC
     """
-    csp_master_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_CSP_MASTER_DEVICE
-    )
-    sdp_master_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_SDP_MASTER_DEVICE
-    )
-    event_recorder.subscribe_event(csp_master_sim, "State")
-    event_recorder.subscribe_event(sdp_master_sim, "State")
-    assert csp_master_sim.ping() > 0
-    assert sdp_master_sim.ping() > 0
+    assert central_node_mid.csp_master.ping() > 0
+    assert central_node_mid.sdp_master.ping() > 0
     for dish_id in dish_ids.split(","):
         assert central_node_mid.dish_master_dict[dish_id].ping() > 0
         assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
@@ -58,6 +47,10 @@ def move_dish_to_on(central_node_mid, event_recorder):
     """
     A method to put Telescope ON
     """
+
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "telescopeState"
+    )
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "dishMode"
@@ -65,10 +58,6 @@ def move_dish_to_on(central_node_mid, event_recorder):
         event_recorder.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
         )
-
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
 
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
@@ -105,6 +94,9 @@ def check_telescope_state(central_node_mid, event_recorder):
     """
     Method to check if TMC central node is ON
     """
+    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
+    event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
+
     assert event_recorder.has_change_event_occurred(
         central_node_mid.csp_master,
         "State",
