@@ -22,10 +22,10 @@ class SubarrayClearObsState(TelescopeAction):
             "CONFIGURING",
             "SCANNING",
         ]:
-            SubarrayAbort(self.telescope).execute()
-            SubarrayRestart(self.telescope).execute()
+            SubarrayAbort().execute()
+            SubarrayRestart().execute()
         elif self.telescope.tmc.subarray_obs_state == "ABORTED":
-            SubarrayRestart(self.telescope).execute()
+            SubarrayRestart().execute()
 
     def expected_outcome(self):
         return []

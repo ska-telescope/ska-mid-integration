@@ -1,4 +1,5 @@
-"""Create real or emulated test harness components."""
+"""Create a telescope test structure according to the current configuration."""
+
 from tests.test_harness3.emulated_components.csp_devices import (
     EmulatedCSPDevices,
 )
@@ -35,7 +36,21 @@ from tests.test_harness3.telescope_structure.tmc_devices import TMCDevices
 
 
 class TelescopeStructureFactory:
-    """Given a configuration, create real or emulated test harness."""
+    """Create a telescope test structure according to the current config.
+
+    This factory is responsible for creating the correct instances of the
+    telescope test structure components, according to the current
+    configuration. It is able to create both production and emulated
+    components, depending on the configuration.
+
+    The factory is also responsible for initializing the components with the
+    correct configuration parameters.
+
+    This class initialize for the first time the telescope wrapper with the
+    correct sub-components, so everywhere else in the code, when needed
+    an unique instance of the telescope wrapper, it can be retrieved
+    using the constructor (see Singleton design pattern).
+    """
 
     def __init__(self):
         """Initialize the factory."""
@@ -45,39 +60,29 @@ class TelescopeStructureFactory:
     def _emulation_config(self):
         return self.config_factory.emulation_configuration
 
-    def create_telescope_wrapper(self) -> TelescopeWrapper:
-        """Create a central node wrapper (i.e., test harness entry point).
+    def init_telescope_test_structure(self) -> TelescopeWrapper:
+        """Initialize the telescope test structure.
+
+        Initialize the telescope test structure, creating the necessary
+        TelescopeWrapper instance and initializing it with the correct
+        sub-components (according to the current configuration).
 
         return: A central node wrapper instance.
         """
-        # TODO: add exaustive logging to describe what am I creating. This may
+        # TODO: add exhaustive logging to describe what am I creating. This may
         # include:
         # - which sub-components are intended to be used
         #   (production or emulated configuration)
         # - how are they configured (device names, etc.)
         # - what's the actual state of the system (some version information
         #   asked directly to the devices, etc.)
-
-        # TODO: could TelescopeWrapper and its components be singletons (?)
-        # or the singleton may be achieved through fixtures
-
-        telescope = TelescopeWrapper(
+        telescope = TelescopeWrapper()
+        telescope.set_up(
             tmc=self.create_tmc_wrapper(),
             sdp=self.create_sdp_wrapper(),
             csp=self.create_csp_wrapper(),
             dishes=self.create_dishes_wrapper(),
         )
-
-        # NOTE: this is a bit weird. Maybe it could be refactored.
-        # Currently, it is needed to generate the correct actions during
-        # the tear down. An effective refactoring could be done:
-        # - making TelescopeWrapper a singleton
-        # - making each action automatically getting the correct single
-        #   instance of the telescope => when initializing each action,
-        #   the telescope instance shouldn't necessary be passed as a parameter
-        if isinstance(telescope.tmc, ProductionTMCDevices):
-            telescope.tmc.set_telescope(telescope)
-
         return telescope
 
     def create_tmc_wrapper(self) -> TMCDevices:

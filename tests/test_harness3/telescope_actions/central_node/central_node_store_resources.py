@@ -19,8 +19,8 @@ class CentralNodeStoreResources(TelescopeAction):
 
     # NOTE: this is very similar to SubarrayAssignResources
 
-    def __init__(self, telescope, assign_json: str):
-        super().__init__(telescope)
+    def __init__(self, assign_json: str):
+        super().__init__()
         self.assign_json = assign_json
 
     def _action(self):

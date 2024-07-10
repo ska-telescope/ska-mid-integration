@@ -316,7 +316,7 @@ def subarray_node_facade2():
 def telescope_wrapper() -> TelescopeWrapper:
     """Create an unique test harness with proxies to all devices."""
     components_factory = TelescopeStructureFactory()
-    telescope = components_factory.create_telescope_wrapper()
+    telescope = components_factory.init_telescope_test_structure()
     yield telescope
     telescope.tear_down()
 

@@ -99,15 +99,15 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
 
     def move_to_on(self) -> None:
         """Move the telescope to ON state."""
-        MoveToOn(self._telescope).execute()
+        MoveToOn().execute()
 
     def move_to_off(self) -> None:
         """Move the telescope to OFF state."""
-        MoveToOff(self._telescope).execute()
+        MoveToOff().execute()
 
     def set_standby(self) -> None:
         """Set the telescope to STANDBY state."""
-        SetStandby(self._telescope).execute()
+        SetStandby().execute()
 
     # -----------------------------------------------------------
     # CENTRAL NODE ACTIONS
@@ -118,9 +118,7 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
         """Invoke LoadDishCfg command on central Node
         :param dish_vcc_config: Dish vcc configuration json string
         """
-        return CentralNodeLoadDishConfig(
-            self._telescope, dish_vcc_config
-        ).execute()
+        return CentralNodeLoadDishConfig(dish_vcc_config).execute()
 
     def perform_action(
         self, command_name: str, input_json: str
@@ -130,9 +128,7 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
             command_name (str): Name of command to execute
             input_json (str): Json send as input to execute command
         """
-        return CentralNodePerformAction(
-            self._telescope, command_name, input_json
-        ).execute()
+        return CentralNodePerformAction(command_name, input_json).execute()
 
     # @sync_assign_resources(device_dict=device_dict)
     def store_resources(self, assign_json: str) -> Tuple[ResultCode, str]:
@@ -140,9 +136,7 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
 
         :param assign_json: Assign resource input json
         """
-        return CentralNodeStoreResources(
-            self._telescope, assign_json
-        ).execute()
+        return CentralNodeStoreResources(assign_json).execute()
 
     # @sync_release_resources(device_dict=device_dict, timeout=500)
     def invoke_release_resources(
@@ -152,6 +146,4 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
 
         :param input_string (str): Release resource input json
         """
-        return CentralNodeReleaseResources(
-            self._telescope, input_string
-        ).execute()
+        return CentralNodeReleaseResources(input_string).execute()

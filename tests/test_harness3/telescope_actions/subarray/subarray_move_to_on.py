@@ -14,9 +14,6 @@ LOGGER = logging.getLogger(__name__)
 class SubarrayMoveToOn(TelescopeAction):
     """Invoke MoveToOn command on subarray Node."""
 
-    def __init__(self, telescope):
-        super().__init__(telescope)
-
     def _action(self):
         # TODO: why are we using strings instead of state enums?
         # which is the point where it's done a mapping between the two?

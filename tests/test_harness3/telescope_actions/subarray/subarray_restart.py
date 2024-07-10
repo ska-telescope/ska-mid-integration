@@ -15,9 +15,6 @@ LOGGER = logging.getLogger(__name__)
 class SubarrayRestart(TelescopeAction):
     """Invoke Restart command on subarray Node."""
 
-    def __init__(self, telescope):
-        super().__init__(telescope)
-
     def _action(self):
         result, message = self.telescope.tmc.subarray_node.Restart()
         LOGGER.info("Invoked Restart on SubarrayNode")

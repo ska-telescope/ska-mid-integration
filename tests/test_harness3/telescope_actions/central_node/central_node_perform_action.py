@@ -8,8 +8,8 @@ from tests.test_harness3.telescope_actions.telescope_action import (
 class CentralNodePerformAction(TelescopeAction):
     """A class for performing actions on the CentralNode."""
 
-    def __init__(self, telescope, command_name: str, input_json: str):
-        super().__init__(telescope)
+    def __init__(self, command_name: str, input_json: str):
+        super().__init__()
         self.command_name = command_name
         self.input_json = input_json
 

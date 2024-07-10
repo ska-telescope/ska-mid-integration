@@ -13,8 +13,8 @@ from tests.test_harness3.utils.state_change_waiter import ExpectedEvent
 class CentralNodeLoadDishConfig(TelescopeAction):
     """Invoke LoadDishCfg command on CentralNode."""
 
-    def __init__(self, telescope, dish_vcc_config: str):
-        super().__init__(telescope)
+    def __init__(self, dish_vcc_config: str):
+        super().__init__()
         self.dish_vcc_config = dish_vcc_config
 
     def _action(self):

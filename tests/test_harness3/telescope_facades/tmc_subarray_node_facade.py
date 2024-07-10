@@ -215,15 +215,15 @@ class TMCSubarrayNodeFacade:
 
     def set_subarray_id(self, requested_subarray_id: str) -> None:
         """Create subarray devices for the requested subarray."""
-        SetSubarrayId(self._telescope, requested_subarray_id).execute()
+        SetSubarrayId(requested_subarray_id).execute()
 
     def move_to_on(self):
         """Move subarray to ON state."""
-        SubarrayMoveToOn(self._telescope).execute()
+        SubarrayMoveToOn().execute()
 
     def move_to_off(self):
         """Move Subarray to OFF state."""
-        SubarrayMoveToOff(self._telescope).execute()
+        SubarrayMoveToOff().execute()
 
     # @sync_configure(device_dict=device_dict)
     def store_configuration_data(self, input_string: str):
@@ -232,7 +232,7 @@ class TMCSubarrayNodeFacade:
         :param input_string: input string as json
         :return: result, message
         """
-        SubarrayStoreConfigurationData(self._telescope, input_string).execute()
+        SubarrayStoreConfigurationData(input_string).execute()
 
     @sync_end(device_dict=device_dict)
     def end_observation(self):
@@ -252,17 +252,17 @@ class TMCSubarrayNodeFacade:
 
     def store_scan_data(self, input_string):
         """Invoke Scan command on subarray Node."""
-        SubarrayStoreScanData(self._telescope, input_string).execute()
+        SubarrayStoreScanData(input_string).execute()
 
     # @sync_abort(device_dict=device_dict)
     def abort_subarray(self):
         """Invoke Abort command on subarray Node."""
-        return SubarrayAbort(self._telescope).execute()
+        return SubarrayAbort().execute()
 
     # @sync_restart(device_dict=device_dict)
     def restart_subarray(self):
         """Invoke Restart command on subarray Node."""
-        return SubarrayRestart(self._telescope).execute()
+        return SubarrayRestart().execute()
 
     # @sync_assign_resources(device_dict)
     def store_resources(self, assign_json: str):
@@ -270,7 +270,7 @@ class TMCSubarrayNodeFacade:
         Args:
             assign_json (str): Assign resource input json
         """
-        SubarrayStoreResources(self._telescope, assign_json).execute()
+        SubarrayStoreResources(assign_json).execute()
 
     @sync_release_resources(device_dict)
     def release_resources_subarray(
@@ -290,15 +290,12 @@ class TMCSubarrayNodeFacade:
         Args:
             command_name (str): Name of command to execute
         """
-        # TODO: extract a TelescopeAction subclass or remove
-        SubarrayExecuteTransition(
-            self._telescope, command_name, argin
-        ).execute()
+        SubarrayExecuteTransition(command_name, argin).execute()
 
     def clear_all_data(self):
         """Method to clear the observations
         and put the SubarrayNode in EMPTY"""
-        SubarrayClearObsState(self._telescope).execute()
+        SubarrayClearObsState().execute()
 
     def force_change_of_obs_state(
         self,
@@ -309,7 +306,6 @@ class TMCSubarrayNodeFacade:
     ) -> None:
         """Force SubarrayNode obsState to provided obsState."""
         ForceChangeOfObsState(
-            self._telescope,
             dest_state_name,
             assign_input_json,
             configure_input_json,

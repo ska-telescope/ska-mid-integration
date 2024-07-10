@@ -12,8 +12,8 @@ LOGGER = logging.getLogger(__name__)
 class SubarrayStoreScanData(TelescopeAction):
     """Invoke Scan command on subarray Node."""
 
-    def __init__(self, telescope, input_string: str):
-        super().__init__(telescope)
+    def __init__(self, input_string: str):
+        super().__init__()
         self.input_string = input_string
 
     def _action(self):

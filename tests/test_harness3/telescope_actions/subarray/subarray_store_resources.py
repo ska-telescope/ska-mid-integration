@@ -17,8 +17,8 @@ LOGGER = logging.getLogger(__name__)
 class SubarrayStoreResources(TelescopeAction):
     """Invoke Assign Resource command on subarray Node."""
 
-    def __init__(self, telescope, assign_json: str):
-        super().__init__(telescope)
+    def __init__(self, assign_json: str):
+        super().__init__()
         self.assign_json = assign_json
 
     def _action(self):

@@ -12,8 +12,8 @@ from tests.test_harness3.utils.state_change_waiter import ExpectedStateChange
 class CentralNodeReleaseResources(TelescopeAction):
     """A class for releasing resources on the CentralNode."""
 
-    def __init__(self, telescope, input_string: str):
-        super().__init__(telescope)
+    def __init__(self, input_string: str):
+        super().__init__()
         self.input_string = input_string
 
     def _action(self):

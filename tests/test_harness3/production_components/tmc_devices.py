@@ -22,12 +22,6 @@ from tests.test_harness3.telescope_actions.subarray.force_change_of_obs_state im
 from tests.test_harness3.telescope_actions.subarray.subarray_move_to_off import (  # pylint: disable=line-too-long # noqa E501
     SubarrayMoveToOff,
 )
-from tests.test_harness3.telescope_config.components_config import (
-    TMCConfiguration,
-)
-from tests.test_harness3.telescope_structure.telescope_wrapper import (
-    TelescopeWrapper,
-)
 from tests.test_harness3.telescope_structure.tmc_devices import TMCDevices
 from tests.test_harness3.utils.common_utils import JsonFactory
 
@@ -37,21 +31,6 @@ LOGGER = logging.getLogger(__name__)
 
 class ProductionTMCDevices(TMCDevices):
     """Production wrapper for TMC devices."""
-
-    def __init__(
-        self,
-        tmc_configuration: TMCConfiguration,
-    ):
-        super().__init__(tmc_configuration)
-
-        # NOTE: even if it not technically circular, this dependency
-        # is a bit weird. Maybe it could be refactored. See init package
-        # for more details.
-        self._telescope: TelescopeWrapper = None
-
-    def set_telescope(self, telescope: TelescopeWrapper) -> None:
-        """Set the telescope wrapper."""
-        self._telescope = telescope
 
     def tear_down(self) -> None:
         """Tear down the TMC devices."""
@@ -67,20 +46,18 @@ class ProductionTMCDevices(TMCDevices):
             release_input = json_factory.create_centralnode_configuration(
                 "release_resources_mid"
             )
-            CentralNodeReleaseResources(
-                self._telescope, release_input
-            ).execute()
+            CentralNodeReleaseResources(release_input).execute()
 
-        ForceChangeOfObsState(self._telescope, ObsState.EMPTY).execute()
+        ForceChangeOfObsState(ObsState.EMPTY).execute()
 
         # NOTE: temporarily moved here because of synchronization
         if self.telescope_state != "OFF":
-            MoveToOff(self._telescope).execute()
+            MoveToOff().execute()
 
         # reset subarray too
         # TODO: maybe TMCCentralNode and TMCSubarrayNode should be
         # two different classes (?).
-        SubarrayMoveToOff(self._telescope).execute()
+        SubarrayMoveToOff().execute()
 
         # if source dish vcc config is empty or not matching with default
         # dish vcc then load default dish vcc config
@@ -92,5 +69,5 @@ class ProductionTMCDevices(TMCDevices):
             != DEFAULT_DISH_VCC_CONFIG
         ):
             CentralNodeLoadDishConfig(
-                self._telescope, json.dumps(DEFAULT_DISH_VCC_CONFIG)
+                json.dumps(DEFAULT_DISH_VCC_CONFIG)
             ).execute()

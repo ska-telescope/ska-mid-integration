@@ -68,20 +68,17 @@ class SubarrayObsStateResetterFactory:
 
     def __init__(
         self,
-        telescope: TelescopeWrapper,
         assign_input: str | None = None,
         configure_input: str | None = None,
         scan_input: str | None = None,
     ) -> None:
         """Initialize with the telescope and (optional) JSON inputs.
 
-        :param telescope: The target telescope.
         :param assign_input: The input JSON for the `AssignResources` command.
         :param configure_input: The input JSON for the `Configure` command.
         :param scan_input: The input JSON for the `Scan` command.
         """
-        self.telescope = telescope
-
+        self.telescope = TelescopeWrapper()
         json_factory = JsonFactory()
 
         self.assign_input = (
@@ -105,7 +102,7 @@ class SubarrayObsStateResetterFactory:
         :return: A `TelescopeAction` to reset the subarray to
             the `ObsState.EMPTY` state.
         """
-        return SubarrayClearObsState(self.telescope)
+        return SubarrayClearObsState()
 
     def create_action_to_reset_subarray_to_resourcing(self) -> TelescopeAction:
         """Create a `TelescopeAction` to reset the subarray to `RESOURCING`.
@@ -114,11 +111,10 @@ class SubarrayObsStateResetterFactory:
             `ObsState.RESOURCING` state.
         """
         return TelescopeActionSequence(
-            self.telescope,
             [
                 self.create_action_to_reset_subarray_to_empty(),
                 SubarrayExecuteTransition(
-                    self.telescope, "AssignResources", argin=self.assign_input
+                    "AssignResources", argin=self.assign_input
                 ),
             ],
         )
@@ -130,10 +126,9 @@ class SubarrayObsStateResetterFactory:
             `ObsState.IDLE` state.
         """
         return TelescopeActionSequence(
-            self.telescope,
             [
                 self.create_action_to_reset_subarray_to_empty(),
-                SubarrayStoreResources(self.telescope, self.assign_input),
+                SubarrayStoreResources(self.assign_input),
             ],
         )
 
@@ -144,10 +139,9 @@ class SubarrayObsStateResetterFactory:
             the `ObsState.ABORTING` state.
         """
         return TelescopeActionSequence(
-            self.telescope,
             [
                 self.create_action_to_reset_subarray_to_idle(),
-                SubarrayExecuteTransition(self.telescope, "Abort", argin=None),
+                SubarrayExecuteTransition("Abort", argin=None),
             ],
         )
 
@@ -158,10 +152,9 @@ class SubarrayObsStateResetterFactory:
             `ObsState.ABORTED` state.
         """
         return TelescopeActionSequence(
-            self.telescope,
             [
                 self.create_action_to_reset_subarray_to_idle(),
-                SubarrayAbort(self.telescope),
+                SubarrayAbort(),
             ],
         )
 
@@ -174,13 +167,12 @@ class SubarrayObsStateResetterFactory:
             the `ObsState.CONFIGURING` state.
         """
         return TelescopeActionSequence(
-            self.telescope,
             [
                 self.create_action_to_reset_subarray_to_idle(),
                 # TODO: manage wait_added_for_skb372()
-                WaitAddedForSkb372(self.telescope),
+                WaitAddedForSkb372(),
                 SubarrayExecuteTransition(
-                    self.telescope, "Configure", argin=self.configure_input
+                    "Configure", argin=self.configure_input
                 ),
             ],
         )
@@ -192,14 +184,11 @@ class SubarrayObsStateResetterFactory:
             the `ObsState.READY` state.
         """
         return TelescopeActionSequence(
-            self.telescope,
             [
                 self.create_action_to_reset_subarray_to_idle(),
                 # TODO: manage wait_added_for_skb372()
-                WaitAddedForSkb372(self.telescope),
-                SubarrayStoreConfigurationData(
-                    self.telescope, self.configure_input
-                ),
+                WaitAddedForSkb372(),
+                SubarrayStoreConfigurationData(self.configure_input),
             ],
         )
 
@@ -210,10 +199,9 @@ class SubarrayObsStateResetterFactory:
             the `ObsState.SCANNING` state.
         """
         return TelescopeActionSequence(
-            self.telescope,
             [
                 self.create_action_to_reset_subarray_to_ready(),
-                SubarrayStoreScanData(self.telescope, self.scan_input),
+                SubarrayStoreScanData(self.scan_input),
             ],
         )
 

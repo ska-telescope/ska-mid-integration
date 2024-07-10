@@ -17,14 +17,13 @@ class ForceChangeOfObsState(TelescopeAction):
 
     def __init__(
         self,
-        telescope,
         dest_state_name: str,
         assign_input_json: str | None = None,
         configure_input_json: str | None = None,
         scan_input_json: str | None = None,
     ):
         """Initialize the action with the target state."""
-        super().__init__(telescope)
+        super().__init__()
 
         self.dest_state_name = dest_state_name
         self.assign_input_json = assign_input_json
@@ -46,7 +45,6 @@ class ForceChangeOfObsState(TelescopeAction):
         # obs_state_resetter.reset()
 
         obs_state_resetter_action = SubarrayObsStateResetterFactory(
-            self.telescope,
             self.assign_input_json,
             self.configure_input_json,
             self.scan_input_json,

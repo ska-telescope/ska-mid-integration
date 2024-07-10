@@ -13,9 +13,6 @@ LOGGER = logging.getLogger(__name__)
 class SubarrayMoveToOff(TelescopeAction):
     """Invoke MoveToOff command on subarray Node."""
 
-    def __init__(self, telescope):
-        super().__init__(telescope)
-
     def _action(self):
         Resource(self.telescope.tmc.subarray_node).assert_attribute(
             "State"

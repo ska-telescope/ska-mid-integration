@@ -12,8 +12,8 @@ LOGGER = logging.getLogger(__name__)
 class SubarrayExecuteTransition(TelescopeAction):
     """Execute provided command on subarray Node."""
 
-    def __init__(self, telescope, command_name: str, argin=None):
-        super().__init__(telescope)
+    def __init__(self, command_name: str, argin=None):
+        super().__init__()
         self.command_name = command_name
         self.argin = argin
 

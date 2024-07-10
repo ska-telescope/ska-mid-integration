@@ -17,8 +17,8 @@ LOGGER = logging.getLogger(__name__)
 class SubarrayStoreConfigurationData(TelescopeAction):
     """Invoke configure command on subarray Node."""
 
-    def __init__(self, telescope, configure_string: str):
-        super().__init__(telescope)
+    def __init__(self, configure_string: str):
+        super().__init__()
         self.configure_string = configure_string
 
     def _action(self):

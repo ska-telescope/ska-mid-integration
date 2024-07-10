@@ -8,8 +8,8 @@ from tests.test_harness3.telescope_actions.telescope_action import (
 class SetSubarrayId(TelescopeAction):
     """Create subarray devices for the requested subarray."""
 
-    def __init__(self, telescope, subarray_id: int):
-        super().__init__(telescope)
+    def __init__(self, subarray_id: int):
+        super().__init__()
         self.subarray_id = subarray_id
 
     def _action(self):

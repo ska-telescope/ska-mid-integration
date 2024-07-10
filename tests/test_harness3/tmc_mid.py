@@ -19,7 +19,7 @@ class TMCMid:
         """Set all devices proxy required for TMC"""
         harness_factory = TelescopeStructureFactory()
         self.central_node: TMCCentralNodeFacade = (
-            harness_factory.create_telescope_wrapper()
+            harness_factory.init_telescope_test_structure()
         )
         self.csp_master_leaf_node = DeviceProxy(tmc_csp_master_leaf_node)
         self.csp_master_ln_server = DeviceProxy(

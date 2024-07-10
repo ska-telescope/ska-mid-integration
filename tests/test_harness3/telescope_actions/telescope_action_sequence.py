@@ -3,9 +3,6 @@
 from tests.test_harness3.telescope_actions.telescope_action import (
     TelescopeAction,
 )
-from tests.test_harness3.telescope_structure.telescope_wrapper import (
-    TelescopeWrapper,
-)
 
 
 class TelescopeActionSequence(TelescopeAction):
@@ -22,15 +19,13 @@ class TelescopeActionSequence(TelescopeAction):
 
     def __init__(
         self,
-        telescope: TelescopeWrapper,
         steps: list[TelescopeAction],
     ) -> None:
         """Initialize the action with the telescope and the steps.
 
-        :param telescope: The target telescope.
         :param steps: The list of sub-actions to be executed.
         """
-        super().__init__(telescope)
+        super().__init__()
         self.steps = steps
 
     def _action(self):

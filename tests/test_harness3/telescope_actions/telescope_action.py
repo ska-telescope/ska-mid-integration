@@ -43,9 +43,9 @@ class TelescopeAction(abc.ABC):
 
     COMMAND_TIMEOUT = 30
 
-    def __init__(self, telescope: TelescopeWrapper) -> None:
+    def __init__(self) -> None:
         super().__init__()
-        self.telescope = telescope
+        self.telescope = TelescopeWrapper()
         self._state_change_waiter = StateChangeWaiter()
 
     @abc.abstractmethod
