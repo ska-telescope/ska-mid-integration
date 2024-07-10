@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import time
 
 from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
@@ -411,6 +412,11 @@ class SubarrayNodeWrapper(object):
         if self.obs_state in ("RESOURCING", "CONFIGURING", "SCANNING"):
             """Invoke Abort and Restart"""
             LOGGER.info("Invoking Abort on Subarray")
+            # Waiting for few seconds as the SubarrayNode End command
+            # completion does not consider Dishes pointingState transition
+            # to READY
+            time.sleep(2)
+
             self.abort_subarray()
             self.restart_subarray()
         elif self.obs_state == "ABORTED":
