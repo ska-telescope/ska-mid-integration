@@ -137,7 +137,7 @@ def invoke_scan(
         "scan_mid", command_input_factory
     )
 
-    subarray_node_facade.store_scan_data(scan_input_json)
+    subarray_node_facade.scan(scan_input_json)
     # assert False
 
 

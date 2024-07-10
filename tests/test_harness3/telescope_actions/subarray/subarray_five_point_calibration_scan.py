@@ -23,7 +23,7 @@ class SubarrayFivePointCalibrationScan(TelescopeAction):
     partial configuration jsons and scan jsons provided as inputs.
     """
 
-    TIMEOUT = 50
+    TRACER_TIMEOUT = 50
 
     def __init__(
         self,
@@ -69,7 +69,7 @@ class SubarrayFivePointCalibrationScan(TelescopeAction):
             ).execute()
             assert_that(event_tracer).described_as(
                 f"In scan {i+1} Subarray obsState should reach CONFIGURING"
-            ).within_timeout(self.TIMEOUT).has_change_event_occurred(
+            ).within_timeout(self.TRACER_TIMEOUT).has_change_event_occurred(
                 self.telescope.tmc.subarray_node,
                 "obsState",
                 ObsState.CONFIGURING,
@@ -80,7 +80,7 @@ class SubarrayFivePointCalibrationScan(TelescopeAction):
             SubarrayExecuteTransition("Scan", scan[i]).execute()
             assert_that(event_tracer).described_as(
                 f"In scan {i+1} Subarray obsState should reach SCANNING"
-            ).within_timeout(self.TIMEOUT).has_change_event_occurred(
+            ).within_timeout(self.TRACER_TIMEOUT).has_change_event_occurred(
                 self.telescope.tmc.subarray_node,
                 "obsState",
                 ObsState.SCANNING,

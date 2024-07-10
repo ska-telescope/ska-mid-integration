@@ -9,7 +9,7 @@ from tests.test_harness3.telescope_actions.telescope_action import (
 LOGGER = logging.getLogger(__name__)
 
 
-class SubarrayStoreScanData(TelescopeAction):
+class SubarrayScan(TelescopeAction):
     """Invoke Scan command on subarray Node."""
 
     def __init__(self, input_string: str):

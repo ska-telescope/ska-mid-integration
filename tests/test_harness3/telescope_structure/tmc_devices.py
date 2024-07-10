@@ -58,9 +58,9 @@ class TMCDevices(abc.ABC):
         self._state = DevState.OFF
         self._subarray_state = DevState.OFF
         self._subarray_obs_state = SubarrayObsState.EMPTY
-        # NOTE: `state` is never used
 
         # initialize in advance the release resources input json
+        # TODO: why?
         json_factory = JsonFactory()
         self.release_input = json_factory.create_centralnode_configuration(
             "release_resources_mid"
@@ -68,6 +68,8 @@ class TMCDevices(abc.ABC):
 
     # -----------------------------------------------------------
     # CentralNode properties
+
+    # NOTE: get rid of things that return states as strings
 
     @property
     def state(self) -> DevState:

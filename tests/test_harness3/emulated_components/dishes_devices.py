@@ -17,6 +17,10 @@ from tests.test_harness3.utils.enums import DishMode
 class EmulatedDishesDevices(DishesDevices):
     """A wrapper for emulated dishes."""
 
+    def __init__(self, dishes_configuration: DishesConfiguration):
+        super().__init__(dishes_configuration)
+        self._setup_attributes()
+
     def _pre_init_dish_names(
         self, dishes_configuration: DishesConfiguration
     ) -> None:
@@ -42,4 +46,11 @@ class EmulatedDishesDevices(DishesDevices):
         """Reset the attributes on the Dishes."""
         for dish in self.dish_master_list:
             dish.SetDirectDishMode(DishMode.STANDBY_LP)
+            dish.SetDirectState(DevState.STANDBY)
+
+    def _setup_attributes(self) -> None:
+        """Set the attributes on the Dishes."""
+        for dish in self.dish_master_list:
+            # NOTE: why here STANDARD_FP and not STANDBY_LP?
+            dish.SetDirectDishMode(DishMode.STANDBY_FP)
             dish.SetDirectState(DevState.STANDBY)

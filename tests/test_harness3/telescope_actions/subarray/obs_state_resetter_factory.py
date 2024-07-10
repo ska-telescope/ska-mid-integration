@@ -5,9 +5,6 @@ from typing import Callable
 
 from ska_control_model import ObsState
 
-from tests.test_harness3.telescope_actions.subarray.store_scan_data import (
-    SubarrayStoreScanData,
-)
 from tests.test_harness3.telescope_actions.subarray.subarray_abort import (
     SubarrayAbort,
 )
@@ -16,6 +13,9 @@ from tests.test_harness3.telescope_actions.subarray.subarray_clear_obs_state imp
 )
 from tests.test_harness3.telescope_actions.subarray.subarray_execute_transition import (  # pylint: disable=line-too-long # noqa: E501
     SubarrayExecuteTransition,
+)
+from tests.test_harness3.telescope_actions.subarray.subarray_scan import (
+    SubarrayScan,
 )
 from tests.test_harness3.telescope_actions.subarray.subarray_store_configuration_data import (  # pylint: disable=line-too-long # noqa: E501
     SubarrayStoreConfigurationData,
@@ -201,7 +201,7 @@ class SubarrayObsStateResetterFactory:
         return TelescopeActionSequence(
             [
                 self.create_action_to_reset_subarray_to_ready(),
-                SubarrayStoreScanData(self.scan_input),
+                SubarrayScan(self.scan_input),
             ],
         )
 
