@@ -11,6 +11,9 @@ from tests.test_harness3.telescope_config.components_config import (
 from tests.test_harness3.telescope_config.emulation_config import (
     EmulationConfiguration,
 )
+from tests.test_harness3.telescope_config.other_config import (
+    OtherDevicesConfigurations,
+)
 
 
 class TestHarnessConfigurationFactory:
@@ -121,3 +124,14 @@ class TestHarnessConfigurationFactory:
             dish_master3_name=os.getenv(self.DISH_NAME_63_VARNAME),
             dish_master4_name=os.getenv(self.DISH_NAME_100_VARNAME),
         )
+
+    # -------------------------------
+    # Other Configurations
+
+    def get_other_configurations(self):
+        """Get the other configurations for the telescope.
+
+        These are the configurations that don't fit in the other specific
+        configuration classes.
+        """
+        return OtherDevicesConfigurations()

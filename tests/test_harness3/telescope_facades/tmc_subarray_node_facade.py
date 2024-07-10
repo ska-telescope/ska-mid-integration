@@ -2,15 +2,12 @@
 
 import logging
 
-import msgpack
-import msgpack_numpy
 from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import HealthState
-from tango import DeviceProxy, DevState
+from tango import DevState
 
 from tests.resources.test_support.common_utils.common_helpers import Resource
-from tests.test_harness3.constant import POINTING_OFFSETS, sdp_queue_connector
 from tests.test_harness3.helpers import (  # SIMULATED_DEVICES_DICT,
     check_subarray_obs_state,
     prepare_json_args_for_commands,
@@ -30,17 +27,30 @@ from tests.test_harness3.telescope_actions.subarray.subarray_abort import (
 from tests.test_harness3.telescope_actions.subarray.subarray_clear_obs_state import (  # pylint: disable=line-too-long # noqa: E501
     SubarrayClearObsState,
 )
+from tests.test_harness3.telescope_actions.subarray.subarray_end_observation import (  # pylint: disable=line-too-long # noqa: E501
+    SubarrayEndObservation,
+)
+from tests.test_harness3.telescope_actions.subarray.subarray_end_scan import (
+    SubarrayEndScan,
+)
 from tests.test_harness3.telescope_actions.subarray.subarray_execute_transition import (  # pylint: disable=line-too-long # noqa: E501
     SubarrayExecuteTransition,
 )
+from tests.test_harness3.telescope_actions.subarray.subarray_five_point_calibration_scan import SubarrayFivePointCalibrationScan
 from tests.test_harness3.telescope_actions.subarray.subarray_move_to_off import (  # pylint: disable=line-too-long # noqa: E501
     SubarrayMoveToOff,
 )
 from tests.test_harness3.telescope_actions.subarray.subarray_move_to_on import (  # pylint: disable=line-too-long # noqa: E501
     SubarrayMoveToOn,
 )
+from tests.test_harness3.telescope_actions.subarray.subarray_release_resources import (  # pylint: disable=line-too-long # noqa: E501
+    SubarrayReleaseResources,
+)
 from tests.test_harness3.telescope_actions.subarray.subarray_restart import (
     SubarrayRestart,
+)
+from tests.test_harness3.telescope_actions.subarray.subarray_simulate_receive_addresses import (  # pylint: disable=line-too-long # noqa: E501
+    SubarraySimulateReceiveAddresses,
 )
 from tests.test_harness3.telescope_actions.subarray.subarray_store_configuration_data import (  # pylint: disable=line-too-long # noqa: E501
     SubarrayStoreConfigurationData,
@@ -62,11 +72,6 @@ from tests.test_harness3.telescope_structure.telescope_wrapper import (
 )
 from tests.test_harness3.utils.constant import ABORTED, IDLE, ON, READY
 from tests.test_harness3.utils.enums import DishMode, SubarrayObsState
-from tests.test_harness3.utils.sync_decorators import (
-    sync_end,
-    sync_endscan,
-    sync_release_resources,
-)
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -219,11 +224,11 @@ class TMCSubarrayNodeFacade:
 
     def move_to_on(self):
         """Move subarray to ON state."""
-        SubarrayMoveToOn().execute()
+        return SubarrayMoveToOn().execute()
 
     def move_to_off(self):
         """Move Subarray to OFF state."""
-        SubarrayMoveToOff().execute()
+        return SubarrayMoveToOff().execute()
 
     # @sync_configure(device_dict=device_dict)
     def store_configuration_data(self, input_string: str):
@@ -232,27 +237,21 @@ class TMCSubarrayNodeFacade:
         :param input_string: input string as json
         :return: result, message
         """
-        SubarrayStoreConfigurationData(input_string).execute()
+        return SubarrayStoreConfigurationData(input_string).execute()
 
-    @sync_end(device_dict=device_dict)
+    # @sync_end(device_dict=device_dict)
     def end_observation(self):
         """Invoke End command on subarray Node."""
-        # TODO: extract a TelescopeAction subclass or remove
-        result, message = self._telescope.tmc.subarray_node.End()
-        LOGGER.info("Invoked End on SubarrayNode")
-        return result, message
+        return SubarrayEndObservation().execute()
 
-    @sync_endscan(device_dict=device_dict)
+    # @sync_endscan(device_dict=device_dict)
     def remove_scan_data(self):
         """Invoke EndScan command on subarray Node."""
-        # TODO: extract a TelescopeAction subclass or remove
-        result, message = self._telescope.tmc.subarray_node.EndScan()
-        LOGGER.info("Invoked EndScan on SubarrayNode")
-        return result, message
+        return SubarrayEndScan().execute()
 
     def store_scan_data(self, input_string):
         """Invoke Scan command on subarray Node."""
-        SubarrayStoreScanData(input_string).execute()
+        return SubarrayStoreScanData(input_string).execute()
 
     # @sync_abort(device_dict=device_dict)
     def abort_subarray(self):
@@ -267,30 +266,24 @@ class TMCSubarrayNodeFacade:
     # @sync_assign_resources(device_dict)
     def store_resources(self, assign_json: str):
         """Invoke Assign Resource command on subarray Node
-        Args:
-            assign_json (str): Assign resource input json
-        """
-        SubarrayStoreResources(assign_json).execute()
 
-    @sync_release_resources(device_dict)
+        :param assign_json: Assign resource input json
+        """
+        return SubarrayStoreResources(assign_json).execute()
+
+    # @sync_release_resources(device_dict)
     def release_resources_subarray(
         self,
     ):
         """Invoke Release Resource command on subarray Node."""
-        # TODO: extract a TelescopeAction subclass or remove
-        (
-            result,
-            message,
-        ) = self._telescope.tmc.subarray_node.ReleaseAllResources()
-        LOGGER.info("Invoked Release Resource on SubarrayNode")
-        return result, message
+        return SubarrayReleaseResources().execute()
 
     def execute_transition(self, command_name: str, argin=None):
         """Execute provided command on subarray
-        Args:
-            command_name (str): Name of command to execute
+
+        :param command_name: Name of command to execute
         """
-        SubarrayExecuteTransition(command_name, argin).execute()
+        return SubarrayExecuteTransition(command_name, argin).execute()
 
     def clear_all_data(self):
         """Method to clear the observations
@@ -316,17 +309,9 @@ class TMCSubarrayNodeFacade:
         """Sets the receive addresses attribute on SDP Subarray so an event can
         be simulated for Subarray Node to process.
         """
-        receive_addresses = prepare_json_args_for_commands(
-            "receive_addresses_mid", command_input_factory
-        )
-        sdp_sim.SetDirectreceiveAddresses(receive_addresses)
-
-        # Setting pointing offsets after encoding the data.
-        sdp_qc = DeviceProxy(sdp_queue_connector)
-        encoded_data = msgpack.packb(
-            POINTING_OFFSETS, default=msgpack_numpy.encode
-        )
-        sdp_qc.SetDirectPointingOffsets(("msgpack_numpy", encoded_data))
+        SubarraySimulateReceiveAddresses(
+            sdp_sim, command_input_factory
+        ).execute()
 
     def execute_five_point_calibration_scan(
         self,
@@ -343,108 +328,9 @@ class TMCSubarrayNodeFacade:
                 file names
             scan_jsons (list[str]): Scan json file names
         """
-        partial_configure_1 = prepare_json_args_for_commands(
-            partial_configure_jsons[0], command_input_factory
-        )
-        partial_configure_2 = prepare_json_args_for_commands(
-            partial_configure_jsons[1], command_input_factory
-        )
-        partial_configure_3 = prepare_json_args_for_commands(
-            partial_configure_jsons[2], command_input_factory
-        )
-        partial_configure_4 = prepare_json_args_for_commands(
-            partial_configure_jsons[3], command_input_factory
-        )
-
-        scan_1 = prepare_json_args_for_commands(
-            scan_jsons[0], command_input_factory
-        )
-        scan_2 = prepare_json_args_for_commands(
-            scan_jsons[1], command_input_factory
-        )
-        scan_3 = prepare_json_args_for_commands(
-            scan_jsons[2], command_input_factory
-        )
-        scan_4 = prepare_json_args_for_commands(
-            scan_jsons[3], command_input_factory
-        )
-
-        # Partial configure 1
-        self.execute_transition("Configure", partial_configure_1)
-        assert event_recorder.has_change_event_occurred(
-            self._telescope.tmc.subarray_node,
-            "obsState",
-            ObsState.CONFIGURING,
-            lookahead=15,
-        )
-        assert check_subarray_obs_state(obs_state="READY")
-
-        # Scan 1
-        self.execute_transition("Scan", scan_1)
-        assert event_recorder.has_change_event_occurred(
-            self._telescope.tmc.subarray_node,
-            "obsState",
-            ObsState.SCANNING,
-            lookahead=15,
-        )
-        assert check_subarray_obs_state(obs_state="READY")
-
-        # Partial configure 2
-        self.execute_transition("Configure", partial_configure_2)
-        assert event_recorder.has_change_event_occurred(
-            self._telescope.tmc.subarray_node,
-            "obsState",
-            ObsState.CONFIGURING,
-            lookahead=15,
-        )
-        assert check_subarray_obs_state(obs_state="READY")
-
-        # Scan 2
-        self.execute_transition("Scan", scan_2)
-        assert event_recorder.has_change_event_occurred(
-            self._telescope.tmc.subarray_node,
-            "obsState",
-            ObsState.SCANNING,
-            lookahead=15,
-        )
-        assert check_subarray_obs_state(obs_state="READY")
-
-        # Partial configure 3
-        self.execute_transition("Configure", partial_configure_3)
-        assert event_recorder.has_change_event_occurred(
-            self._telescope.tmc.subarray_node,
-            "obsState",
-            ObsState.CONFIGURING,
-            lookahead=15,
-        )
-        assert check_subarray_obs_state(obs_state="READY")
-
-        # Scan 3
-        self.execute_transition("Scan", scan_3)
-        assert event_recorder.has_change_event_occurred(
-            self._telescope.tmc.subarray_node,
-            "obsState",
-            ObsState.SCANNING,
-            lookahead=15,
-        )
-        assert check_subarray_obs_state(obs_state="READY")
-
-        # Partial configure 4
-        self.execute_transition("Configure", partial_configure_4)
-        assert event_recorder.has_change_event_occurred(
-            self._telescope.tmc.subarray_node,
-            "obsState",
-            ObsState.CONFIGURING,
-            lookahead=15,
-        )
-        assert check_subarray_obs_state(obs_state="READY")
-
-        # Scan 4
-        self.execute_transition("Scan", scan_4)
-        assert event_recorder.has_change_event_occurred(
-            self._telescope.tmc.subarray_node,
-            "obsState",
-            ObsState.SCANNING,
-            lookahead=15,
-        )
-        assert check_subarray_obs_state("READY")
+        SubarrayFivePointCalibrationScan(
+            partial_configure_jsons,
+            scan_jsons,
+            event_recorder,
+            command_input_factory,
+        ).execute()
