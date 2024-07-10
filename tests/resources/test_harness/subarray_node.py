@@ -434,6 +434,11 @@ class SubarrayNodeWrapper(object):
         ):
             """Invoke Abort and Restart"""
             LOGGER.info("Invoking Abort on Subarray")
+            # Waiting for few seconds as the SubarrayNode End command
+            # completion does not consider Dishes pointingState transition
+            # to READY
+            time.sleep(2)
+
             self.abort_subarray()
             self.restart_subarray()
         elif self.obs_state == "ABORTED":
