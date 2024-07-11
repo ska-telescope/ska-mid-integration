@@ -9,6 +9,7 @@ from pytest import fixture
 from pytest_bdd import given, parsers, then, when
 from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
+from ska_tango_testing.integration import TangoEventTracer
 from tango import DevState
 
 from tests.resources.test_harness.helpers import (
@@ -351,3 +352,13 @@ def sdp(telescope_wrapper: TelescopeWrapper):
 def dishes(telescope_wrapper: TelescopeWrapper):
     """Create a facade to dishes devices."""
     return DishesFacade(telescope_wrapper)
+
+
+# ----------------------------------------------------------
+# Tango event tracer
+
+
+@fixture
+def event_tracer() -> TangoEventTracer:
+    """Create an event tracer."""
+    return TangoEventTracer()
