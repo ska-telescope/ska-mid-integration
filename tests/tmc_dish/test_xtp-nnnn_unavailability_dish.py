@@ -23,8 +23,6 @@ from tests.resources.test_support.enum import DishMode
 
 LOGGER = logging.getLogger(__name__)
 
-spfrx_dev_name = os.getenv("SPFRX_NAME_1")
-
 
 @pytest.mark.tmc_dish
 @scenario(
@@ -35,6 +33,10 @@ def test_tmc_dish_unavailability_functionality():
     """
     Test case to verify TMC-DISH dish unavailability functionality
     """
+
+
+spfrx_dev_name = os.getenv("SPFRX_NAME_1")
+dish_name1 = os.getenv("DISH_NAME_1")
 
 
 @given(
@@ -137,21 +139,25 @@ def check_subarray_obsState_idle(
 def restart_the_dish_leaf_nodes(central_node_mid):
     """Restart the dish leaf nodes"""
 
-    LOGGER.info("dish1 device name is: %s", spfrx_dev_name)
-
-    check_spfrx_info = central_node_mid.dish1_db.get_device_info(
+    LOGGER.info("dish1 device name is: %s", dish_name1)
+    LOGGER.info("spfrx device name is : %s", spfrx_dev_name)
+    # check_spfrx_info = central_node_mid.dish1_db.get_device_info(
+    #     "mid-dish/simulator-spfrx/SKA001"
+    # )
+    # LOGGER.info("spfrx device info is: %s", check_spfrx_info)
+    # spfrx_exported = central_node_mid.dish1_db.get_device_exported(
+    #     "mid-dish/simulator-spfrx/SKA001"
+    # )
+    # LOGGER.info("spfrx device exported : %s", spfrx_exported)
+    # import tango
+    # spfrx_proxy = tango.DeviceProxy(spfrx_exported)
+    # LOGGER.info("spfrx device proxy : %s", spfrx_proxy)
+    # central_node_mid.dish1_db.delete_device(spfrx_proxy)
+    spfrx_fqdn = (
+        "tango://tango-databaseds.dish-lmc-1.svc.cluster.local:10000/"
         "mid-dish/simulator-spfrx/SKA001"
     )
-    LOGGER.info("spfrx device info is: %s", check_spfrx_info)
-    spfrx_exported = central_node_mid.dish1_db.get_device_exported(
-        "mid-dish/simulator-spfrx/SKA001"
-    )
-    LOGGER.info("spfrx device exported : %s", spfrx_exported)
-    import tango
-
-    spfrx_proxy = tango.DeviceProxy("mid-dish/simulator-spfrx/SKA001")
-    LOGGER.info("spfrx device proxy : %s", spfrx_proxy)
-    central_node_mid.dish1_db.delete_device(spfrx_proxy)
+    central_node_mid.dish1_db.delete_device(spfrx_fqdn)
     LOGGER.info("spfrx deleted")
     central_node_mid.dish1_admin_dev_proxy.RestartServer()
     # Added a wait for the completion of dish device deletion from TANGO
