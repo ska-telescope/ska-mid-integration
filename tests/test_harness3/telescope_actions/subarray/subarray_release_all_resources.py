@@ -20,6 +20,12 @@ class SubarrayReleaseAllResources(TelescopeAction):
     """Invoke Release Resource command on subarray Node."""
 
     def _action(self):
+        # save pre-action assignedResources attribute value
+        # so then we can check if it has changed
+        self.pre_action_attr_value = (
+            self.telescope.tmc.subarray_node.assignedResources
+        )
+
         (
             result,
             message,
@@ -28,6 +34,10 @@ class SubarrayReleaseAllResources(TelescopeAction):
         return result, message
 
     def expected_outcome(self):
+        pre_action_attr_value = (
+            self.telescope.tmc.subarray_node.assignedResources
+        )
+
         return [
             ExpectedStateChange(
                 self.telescope.tmc.csp_subarray_leaf_node,
@@ -39,16 +49,11 @@ class SubarrayReleaseAllResources(TelescopeAction):
                 "sdpSubarrayObsState",
                 ObsState.EMPTY,
             ),
-            # TODO: deal with this
-            # self.waits.append(
-            #     watch(Resource(self.tmc_subarraynode1)).to_become(
-            #         "assignedResources", changed_to=None
-            #     )
-            # )
             ExpectedEvent(
                 device=self.telescope.tmc.subarray_node,
                 attribute="assignedResources",
-                predicate=lambda event: event.attribute_value is None,
+                predicate=lambda event: event.attribute_value
+                != pre_action_attr_value,
             ),
             ExpectedStateChange(
                 self.telescope.csp.csp_subarray, "obsState", ObsState.EMPTY

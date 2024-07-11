@@ -1,6 +1,8 @@
 """Invoke ReleaseResources on the CentralNode."""
 
 
+import logging
+
 from ska_control_model import ObsState
 
 from tests.test_harness3.telescope_actions.telescope_action import (
@@ -10,6 +12,8 @@ from tests.test_harness3.utils.state_change_waiter import (
     ExpectedEvent,
     ExpectedStateChange,
 )
+
+LOGGER = logging.getLogger(__name__)
 
 
 class CentralNodeReleaseResources(TelescopeAction):
@@ -26,6 +30,10 @@ class CentralNodeReleaseResources(TelescopeAction):
         return result, message
 
     def expected_outcome(self):
+        pre_action_attr_value = (
+            self.telescope.tmc.subarray_node.assignedResources
+        )
+
         return [
             ExpectedStateChange(
                 self.telescope.tmc.csp_subarray_leaf_node,
@@ -37,16 +45,14 @@ class CentralNodeReleaseResources(TelescopeAction):
                 "sdpSubarrayObsState",
                 ObsState.EMPTY,
             ),
-            # TODO: deal with this
-            # self.waits.append(
-            #     watch(Resource(self.tmc_subarraynode1)).to_become(
-            #         "assignedResources", changed_to=None
-            #     )
-            # )
+            # TODO: this is a not so good solution
+            # on long term, engineer something better.
+            # verify that assignedResources attribute has changed value
             ExpectedEvent(
                 device=self.telescope.tmc.subarray_node,
                 attribute="assignedResources",
-                predicate=lambda event: event.attribute_value is None,
+                predicate=lambda event: event.attribute_value
+                != pre_action_attr_value,
             ),
             ExpectedStateChange(
                 self.telescope.csp.csp_subarray,

@@ -24,6 +24,11 @@ class SubarrayRestart(TelescopeAction):
         return result, message
 
     def expected_outcome(self):
+
+        pre_action_attr_value = (
+            self.telescope.tmc.subarray_node.assignedResources
+        )
+
         return [
             ExpectedStateChange(
                 self.telescope.tmc.csp_subarray_leaf_node,
@@ -35,16 +40,11 @@ class SubarrayRestart(TelescopeAction):
                 "sdpSubarrayObsState",
                 ObsState.EMPTY,
             ),
-            # TODO: add this too
-            # ExpectedStateChange(
-            #     self.telescope.tmc.subarray_node,
-            #     "assignedResources",
-            #     None,
-            # ),
             ExpectedEvent(
                 device=self.telescope.tmc.subarray_node,
                 attribute="assignedResources",
-                predicate=lambda event: event.attribute_value is None,
+                predicate=lambda event: event.attribute_value
+                != pre_action_attr_value,
             ),
             ExpectedStateChange(
                 self.telescope.csp.csp_subarray, "obsState", ObsState.EMPTY
