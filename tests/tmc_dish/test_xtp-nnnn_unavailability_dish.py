@@ -82,7 +82,7 @@ from tests.resources.test_support.enum import DishMode
 
 LOGGER = logging.getLogger(__name__)
 
-spfrx_dev_name = os.getenv("SPFRX_NAME_1P")
+spfrx_dev_name = os.getenv("SPFRX_NAME_1")
 
 
 >>>>>>> 455c6266 (SAH-1536: Implement unhappy path tests for tmc-dish pair)
