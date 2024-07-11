@@ -6,7 +6,7 @@ import logging
 from ska_control_model import ObsState
 
 from tests.test_harness3.helpers import generate_eb_pb_ids
-from tests.test_harness3.telescope_actions.state_change_waiter import (
+from tests.test_harness3.telescope_actions.expected_event import (
     ExpectedStateChange,
 )
 from tests.test_harness3.telescope_actions.telescope_action import (

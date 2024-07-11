@@ -2,9 +2,7 @@
 
 import json
 
-from tests.test_harness3.telescope_actions.state_change_waiter import (
-    ExpectedEvent,
-)
+from tests.test_harness3.telescope_actions.expected_event import ExpectedEvent
 from tests.test_harness3.telescope_actions.telescope_action import (
     TelescopeAction,
 )
