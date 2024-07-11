@@ -166,7 +166,7 @@ def restart_the_dish_leaf_nodes(central_node_mid):
     LOGGER.info("spfrx device exported : %s", spfrx_exported)
     import tango
 
-    spfrx_proxy = tango.DeviceProxy(spfrx_exported)
+    spfrx_proxy = tango.DeviceProxy("mid-dish/simulator-spfrx/SKA001")
     LOGGER.info("spfrx device proxy : %s", spfrx_proxy)
     central_node_mid.dish1_db.delete_device(spfrx_proxy)
     LOGGER.info("spfrx deleted")
