@@ -217,9 +217,6 @@ def wait_for_telescope_state_change(
 
     start_time = time.time()
     while time.time() - start_time < timeout_seconds:
-        LOGGER.info(
-            "CN Telescope State is: %s", centralnode_fqdn.telescopeState
-        )
         if centralnode_fqdn.telescopeState == target_state:
             return True
         time.sleep(1)
