@@ -23,7 +23,7 @@ from tests.resources.test_support.enum import DishMode
 
 LOGGER = logging.getLogger(__name__)
 
-spfrx_dev_name = os.getenv("SPFRX_NAME_1P")
+spfrx_dev_name = os.getenv("SPFRX_NAME_1")
 
 
 @pytest.mark.tmc_dish
