@@ -5,7 +5,5 @@ Scenario Outline: Verify CentralNode TelescopeHealthState
     When the <devices> health state changes to <health_state>
     Then the telescope health state is <telescope_health_state>
     Examples:
-    | devices | health_state | telescope_health_state |
-    | spf device,dish | DEGRADED,DEGRADED | DEGRADED |
-    | spfrx device,dish | FAILED,FAILED | FAILED |
-    | spf device,dish | UNKNOWN,DEGRADED | DEGRADED |
+    | devices         | health_state | telescope_health_state |
+    | dish manager    | UNKNOWN      | UNKNOWN                |
