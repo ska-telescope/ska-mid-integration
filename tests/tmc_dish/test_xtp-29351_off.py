@@ -4,7 +4,6 @@ import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from tango import DevState
 
-from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.enum import DishMode
 
 
@@ -31,26 +30,17 @@ def test_tmc_dish_shutdown_telescope():
         + " simulated CSP and simulated SDP is in ON state"
     )
 )
-def check_tmc_and_dish_is_on(
-    central_node_mid, event_recorder, simulator_factory, dish_ids
-):
+def check_tmc_and_dish_is_on(central_node_mid, event_recorder, dish_ids):
     """
     Given a TMC , DISH , simulated CSP and simulated in ON state
     """
+    assert central_node_mid.csp_master.ping() > 0
+    assert central_node_mid.sdp_master.ping() > 0
+    for dish_id in dish_ids.split(","):
+        assert central_node_mid.dish_master_dict[dish_id].ping() > 0
+        assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
 
-    csp_master_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_CSP_MASTER_DEVICE
-    )
-    sdp_master_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_SDP_MASTER_DEVICE
-    )
-
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
-
-    event_recorder.subscribe_event(csp_master_sim, "State")
-    event_recorder.subscribe_event(sdp_master_sim, "State")
+    central_node_mid.move_to_on()
 
     for dish_id in dish_ids.split(","):
         event_recorder.subscribe_event(
@@ -59,14 +49,9 @@ def check_tmc_and_dish_is_on(
         event_recorder.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
         )
+    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
+    event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
 
-    assert csp_master_sim.ping() > 0
-    assert sdp_master_sim.ping() > 0
-    for dish_id in dish_ids.split(","):
-        assert central_node_mid.dish_master_dict[dish_id].ping() > 0
-        assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
-
-    central_node_mid.move_to_on()
     assert event_recorder.has_change_event_occurred(
         central_node_mid.csp_master,
         "State",
@@ -89,6 +74,10 @@ def check_tmc_and_dish_is_on(
             "dishMode",
             DishMode.STANDBY_FP,
         )
+
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "telescopeState"
+    )
 
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
