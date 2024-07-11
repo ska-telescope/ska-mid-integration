@@ -5,11 +5,13 @@ import logging
 from ska_control_model import ObsState
 
 from tests.resources.test_support.enum import PointingState
+from tests.test_harness3.telescope_actions.state_change_waiter import (
+    ExpectedStateChange,
+)
 from tests.test_harness3.telescope_actions.telescope_action import (
     TelescopeAction,
 )
 from tests.test_harness3.utils.enums import DishMode
-from tests.test_harness3.utils.state_change_waiter import ExpectedStateChange
 
 LOGGER = logging.getLogger(__name__)
 

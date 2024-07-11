@@ -2,12 +2,12 @@
 
 import abc
 
-from tests.test_harness3.telescope_structure.telescope_wrapper import (
-    TelescopeWrapper,
-)
-from tests.test_harness3.utils.state_change_waiter import (
+from tests.test_harness3.telescope_actions.state_change_waiter import (
     ExpectedEvent,
     StateChangeWaiter,
+)
+from tests.test_harness3.telescope_structure.telescope_wrapper import (
+    TelescopeWrapper,
 )
 
 

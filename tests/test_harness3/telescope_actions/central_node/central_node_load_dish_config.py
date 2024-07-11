@@ -2,10 +2,12 @@
 
 import json
 
+from tests.test_harness3.telescope_actions.state_change_waiter import (
+    ExpectedEvent,
+)
 from tests.test_harness3.telescope_actions.telescope_action import (
     TelescopeAction,
 )
-from tests.test_harness3.utils.state_change_waiter import ExpectedEvent
 
 
 class CentralNodeLoadDishConfig(TelescopeAction):
