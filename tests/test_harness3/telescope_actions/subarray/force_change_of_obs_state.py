@@ -13,7 +13,27 @@ LOGGER = logging.getLogger(__name__)
 
 
 class ForceChangeOfObsState(TelescopeAction):
-    """Force the change of the ObsState in Subarray to a target state."""
+    """Force the change of the ObsState in Subarray to a target state.
+
+    This action is used to force the change of the ObsState in TMC Subarray,
+    regardless of the current state of the Subarray.
+    The action will move the state machine to the target state, by executing
+    the necessary steps to reach it (e.g. assign, configure, scan) in a
+    correct and consistent way.
+
+    This action has no termination condition, but you can custumize:
+
+    - the wait timeout of each of the steps, by calling the method
+        ``set_termination_condition_timeout(timeout)``.
+    - the termination condition policy of the last step, by calling the method
+        ``set_termination_condition_policy(True)`` (to ensure all
+        steps wait for the termination condition) or
+        ``set_termination_condition_policy(False)`` (to make the last step
+        not wait for the termination condition).
+
+    By default each step will keep the default wait termination condition
+    and each step will wait for its termination condition.
+    """
 
     def __init__(
         self,
@@ -38,6 +58,13 @@ class ForceChangeOfObsState(TelescopeAction):
             self.configure_input_json,
             self.scan_input_json,
         ).create_action_to_reset_subarray_to_state(self.dest_state_name)
+
+        obs_state_resetter_action.set_termination_condition_timeout(
+            self.termination_condition_timeout
+        )
+        obs_state_resetter_action.set_termination_condition_policy(
+            self.wait_termination_condition
+        )
 
         obs_state_resetter_action.execute()
 

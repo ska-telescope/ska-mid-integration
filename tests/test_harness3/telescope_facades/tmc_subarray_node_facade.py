@@ -89,98 +89,129 @@ class TMCSubarrayNodeFacade:
     # -----------------------------------------------------------
     # SUBARRAY PROPERTIES
 
-    def set_subarray_id(self, requested_subarray_id: str) -> None:
+    def set_subarray_id(
+        self,
+        requested_subarray_id: str,
+        wait_termination_condition: bool = True,
+    ) -> None:
         """Create subarray devices for the requested subarray."""
-        SetSubarrayId(requested_subarray_id).execute()
+        action = SetSubarrayId(requested_subarray_id)
+        action.set_termination_condition_policy(wait_termination_condition)
+        action.execute()
 
-    def move_to_on(self):
+    def move_to_on(self, wait_termination_condition: bool = True):
         """Move subarray to ON state.
 
         :return: result, message"""
-        return SubarrayMoveToOn().execute()
+        action = SubarrayMoveToOn()
+        action.set_termination_condition_policy(wait_termination_condition)
+        return action.execute()
 
-    def move_to_off(self):
+    def move_to_off(self, wait_termination_condition: bool = True):
         """Move Subarray to OFF state.
 
         :return: result, message"""
-        return SubarrayMoveToOff().execute()
+        action = SubarrayMoveToOff()
+        action.set_termination_condition_policy(wait_termination_condition)
+        return action.execute()
 
     # -----------------------------------------------------------
     # Obs-state machine transitions
 
     # @sync_configure(device_dict=device_dict)
-    def configure(self, input_string: str):
+    def configure(
+        self, input_string: str, wait_termination_condition: bool = True
+    ):
         """Invoke configure command on subarray Node.
 
         :param input_string: input string as json
         :return: result, message
         """
-        return SubarrayConfigure(input_string).execute()
+        action = SubarrayConfigure(input_string)
+        action.set_termination_condition_policy(wait_termination_condition)
+        return action.execute()
 
     # @sync_end(device_dict=device_dict)
-    def end_observation(self):
+    def end_observation(self, wait_termination_condition: bool = True):
         """Invoke End command on subarray Node.
 
         :return: result, message
         """
-        return SubarrayEndObservation().execute()
+        action = SubarrayEndObservation()
+        action.set_termination_condition_policy(wait_termination_condition)
+        return action.execute()
 
     # @sync_endscan(device_dict=device_dict)
-    def end_scan(self):
+    def end_scan(self, wait_termination_condition: bool = True):
         """Invoke EndScan command on subarray Node.
 
         :return: result, message
         """
-        return SubarrayEndScan().execute()
+        action = SubarrayEndScan()
+        action.set_termination_condition_policy(wait_termination_condition)
+        return action.execute()
 
     def scan(self, input_string, wait_termination_condition: bool = True):
         """Invoke Scan command on subarray Node.
 
         :return: result, message
         """
-        return SubarrayScan(input_string).execute(
-            wait_termination_condition=wait_termination_condition
-        )
+        action = SubarrayScan(input_string)
+        action.set_termination_condition_policy(wait_termination_condition)
+        return action.execute()
 
     # @sync_abort(device_dict=device_dict)
-    def abort(self):
+    def abort(self, wait_termination_condition: bool = True):
         """Invoke Abort command on subarray Node.
 
         :return: result, message
         """
-        return SubarrayAbort().execute()
+        action = SubarrayAbort()
+        action.set_termination_condition_policy(wait_termination_condition)
+        return action.execute()
 
     # @sync_restart(device_dict=device_dict)
-    def restart(self):
+    def restart(self, wait_termination_condition: bool = True):
         """Invoke Restart command on subarray Node.
 
         :return: result, message
         """
-        return SubarrayRestart().execute()
+        action = SubarrayRestart()
+        action.set_termination_condition_policy(wait_termination_condition)
+        return action.execute()
 
     # @sync_assign_resources(device_dict)
-    def assign_resources(self, assign_json: str):
+    def assign_resources(
+        self, assign_json: str, wait_termination_condition: bool = True
+    ):
         """Invoke Assign Resource command on subarray Node
 
         :param assign_json: Assign resource input json
         :return: result, message
         """
-        return SubarrayAssignResources(assign_json).execute()
+        action = SubarrayAssignResources(assign_json)
+        action.set_termination_condition_policy(wait_termination_condition)
+        return action.execute()
 
     # @sync_release_resources(device_dict)
-    def release_all_resources(
-        self,
-    ):
+    def release_all_resources(self, wait_termination_condition: bool = True):
         """Invoke Release Resource command on subarray Node.
 
         :return: result, message
         """
-        return SubarrayReleaseAllResources().execute()
+        action = SubarrayReleaseAllResources()
+        action.set_termination_condition_policy(wait_termination_condition)
+        return action.execute()
 
     # -----------------------------------------------------------
     # Generic transitions
 
-    def execute_transition(self, command_name: str, argin=None):
+    def execute_transition(
+        self,
+        command_name: str,
+        argin=None,
+        wait_termination_condition: bool = True,
+    ):
         """Execute provided command on subarray
 
         :param command_name: Name of command to execute
@@ -188,7 +219,9 @@ class TMCSubarrayNodeFacade:
 
         :return: result, message
         """
-        return SubarrayExecuteTransition(command_name, argin).execute()
+        action = SubarrayExecuteTransition(command_name, argin)
+        action.set_termination_condition_policy(wait_termination_condition)
+        return action.execute()
 
     def force_change_of_obs_state(
         self,
@@ -209,12 +242,14 @@ class TMCSubarrayNodeFacade:
         :param scan_input_json: Scan input json. If you leave it as None,
             it will use the default scan input json.
         """
-        ForceChangeOfObsState(
+        action = ForceChangeOfObsState(
             dest_state_name,
             assign_input_json,
             configure_input_json,
             scan_input_json,
-        ).execute(wait_termination_condition=wait_termination_condition)
+        )
+        action.set_termination_condition_policy(wait_termination_condition)
+        action.execute()
 
     def execute_five_point_calibration_scan(
         self,
@@ -222,6 +257,7 @@ class TMCSubarrayNodeFacade:
         scan_jsons: list[str],
         event_recorder,
         command_input_factory,
+        wait_termination_condition: bool = True,
     ) -> None:
         """Perform a five point calibration scan on Subarray Node using the
         partial configuration jsons and scan jsons provided as inputs.
@@ -229,9 +265,11 @@ class TMCSubarrayNodeFacade:
         :param partial_configure_jsons: Partial configuration json file names
         :param scan_jsons: Scan json file names
         """
-        SubarrayFivePointCalibrationScan(
+        action = SubarrayFivePointCalibrationScan(
             partial_configure_jsons,
             scan_jsons,
             event_recorder,
             command_input_factory,
-        ).execute()
+        )
+        action.set_termination_condition_policy(wait_termination_condition)
+        action.execute()

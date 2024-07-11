@@ -99,57 +99,70 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
 
     def move_to_on(self, wait_termination_condition: bool = True) -> None:
         """Move the telescope to ON state."""
-        MoveToOn().execute(
-            wait_termination_condition=wait_termination_condition
-        )
+        action = MoveToOn()
+        action.set_termination_condition_policy(wait_termination_condition)
+        action.execute()
 
     def move_to_off(self, wait_termination_condition: bool = True) -> None:
         """Move the telescope to OFF state."""
-        MoveToOff().execute(
-            wait_termination_condition=wait_termination_condition
-        )
+        action = MoveToOff()
+        action.set_termination_condition_policy(wait_termination_condition)
+        action.execute()
 
     def set_standby(self, wait_termination_condition: bool = True) -> None:
         """Set the telescope to STANDBY state."""
-        SetStandby().execute(
-            wait_termination_condition=wait_termination_condition
-        )
+        action = SetStandby()
+        action.set_termination_condition_policy(wait_termination_condition)
+        action.execute()
 
     # -----------------------------------------------------------
     # CENTRAL NODE ACTIONS
 
     def load_dish_vcc_configuration(
-        self, dish_vcc_config: str
+        self, dish_vcc_config: str, wait_termination_condition: bool = True
     ) -> Tuple[ResultCode, str]:
         """Invoke LoadDishCfg command on central Node
         :param dish_vcc_config: Dish vcc configuration json string
         """
-        return CentralNodeLoadDishConfig(dish_vcc_config).execute()
+        action = CentralNodeLoadDishConfig(dish_vcc_config)
+        action.set_termination_condition_policy(wait_termination_condition)
+        action.execute()
 
     def perform_action(
-        self, command_name: str, input_json: str
+        self,
+        command_name: str,
+        input_json: str,
+        wait_termination_condition: bool = True,
     ) -> Tuple[ResultCode, str]:
         """Execute provided command on centralnode
         Args:
             command_name (str): Name of command to execute
             input_json (str): Json send as input to execute command
         """
-        return CentralNodePerformAction(command_name, input_json).execute()
+        action = CentralNodePerformAction(command_name, input_json)
+        action.set_termination_condition_policy(wait_termination_condition)
+        action.execute()
 
     # @sync_assign_resources(device_dict=device_dict)
-    def store_resources(self, assign_json: str) -> Tuple[ResultCode, str]:
+    def store_resources(
+        self, assign_json: str, wait_termination_condition: bool = True
+    ) -> Tuple[ResultCode, str]:
         """Invoke Assign Resource command on central Node
 
         :param assign_json: Assign resource input json
         """
-        return CentralNodeStoreResources(assign_json).execute()
+        action = CentralNodeStoreResources(assign_json)
+        action.set_termination_condition_policy(wait_termination_condition)
+        action.execute()
 
     # @sync_release_resources(device_dict=device_dict, timeout=500)
     def invoke_release_resources(
-        self, input_string: str
+        self, input_string: str, wait_termination_condition: bool = True
     ) -> Tuple[ResultCode, str]:
         """Invoke Release Resource command on central Node
 
         :param input_string (str): Release resource input json
         """
-        return CentralNodeReleaseResources(input_string).execute()
+        action = CentralNodeReleaseResources(input_string)
+        action.set_termination_condition_policy(wait_termination_condition)
+        action.execute()
