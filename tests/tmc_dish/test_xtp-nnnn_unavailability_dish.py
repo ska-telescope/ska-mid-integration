@@ -2,6 +2,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 import logging
 import os
@@ -35,6 +36,17 @@ from tango import DevState
 from tango import DeviceProxy
 from tango.db import Database
 >>>>>>> 8ee2d95e (SAH-1536: Update test case)
+=======
+
+import logging
+import os
+import time
+
+import pytest
+from pytest_bdd import given, parsers, scenario, then, when
+from ska_tango_base.control_model import ObsState
+from tango import DevState
+>>>>>>> 455c6266 (SAH-1536: Implement unhappy path tests for tmc-dish pair)
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
@@ -43,6 +55,7 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_commands,
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
+<<<<<<< HEAD
 
 # from tests.resources.test_harness.tmc_mid import TMCMid
 from tests.resources.test_harness.utils.common_utils import JsonFactory
@@ -62,6 +75,17 @@ LOGGER = logging.getLogger(__name__)
 >>>>>>> 1de465a4 (SAH-1536: Update test case)
 
 @pytest.mark.skip
+=======
+from tests.resources.test_harness.utils.common_utils import JsonFactory
+from tests.resources.test_support.common_utils.result_code import ResultCode
+from tests.resources.test_support.enum import DishMode
+
+LOGGER = logging.getLogger(__name__)
+
+spfrx_dev_name = os.getenv("SPFRX_NAME_1P")
+
+
+>>>>>>> 455c6266 (SAH-1536: Implement unhappy path tests for tmc-dish pair)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-nnnn_unavailability_dish.feature",
@@ -75,10 +99,13 @@ def test_tmc_dish_unavailability_functionality():
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 spfrx_dev_name = os.getenv("SPFRX_NAME_1")
 dish_name1 = os.getenv("DISH_NAME_1")
 
 
+=======
+>>>>>>> 455c6266 (SAH-1536: Implement unhappy path tests for tmc-dish pair)
 @given(
     parsers.parse(
         "a Telescope consisting of TMC, DISH {dish_ids},"
@@ -89,6 +116,7 @@ def given_a_telescope(central_node_mid, dish_ids):
     """
     Given a TMC
     """
+<<<<<<< HEAD
 <<<<<<< HEAD
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
@@ -147,12 +175,17 @@ def check_telescope_in_initial_state(
         "telescopeState"
     ).equals(["OFF", "STANDBY"])
 =======
+=======
+>>>>>>> 455c6266 (SAH-1536: Implement unhappy path tests for tmc-dish pair)
     assert central_node_mid.csp_master.ping() > 0
     assert central_node_mid.sdp_master.ping() > 0
     for dish_id in dish_ids.split(","):
         assert central_node_mid.dish_master_dict[dish_id].ping() > 0
         assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
+<<<<<<< HEAD
 >>>>>>> 3b52eb24 (SAH-1536: Add test case for tmc-dish unavailability)
+=======
+>>>>>>> 455c6266 (SAH-1536: Implement unhappy path tests for tmc-dish pair)
 
 
 @given("the Telescope is in ON state")
@@ -160,6 +193,7 @@ def turn_on_telescope(central_node_mid, event_recorder):
     """
     A method to put Telescope ON
     """
+<<<<<<< HEAD
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     event_recorder.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
@@ -179,21 +213,48 @@ def turn_on_telescope(central_node_mid, event_recorder):
 >>>>>>> 927fa5a7 (SAH-1536: Updated test case)
 =======
 >>>>>>> 9a8a6eea (SAH-1536: Update test case)
+=======
+    central_node_mid.move_to_on()
+    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
+    event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.csp_master,
+        "State",
+        DevState.ON,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.sdp_master,
+        "State",
+        DevState.ON,
+    )
+
+>>>>>>> 455c6266 (SAH-1536: Implement unhappy path tests for tmc-dish pair)
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "dishMode"
         )
+<<<<<<< HEAD
+=======
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
+        )
+>>>>>>> 455c6266 (SAH-1536: Implement unhappy path tests for tmc-dish pair)
 
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.STANDBY_FP,
 <<<<<<< HEAD
+<<<<<<< HEAD
             lookahead=12,
         )
 <<<<<<< HEAD
 <<<<<<< HEAD
 =======
+=======
+        )
+>>>>>>> 455c6266 (SAH-1536: Implement unhappy path tests for tmc-dish pair)
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "dishMode",
@@ -204,6 +265,7 @@ def turn_on_telescope(central_node_mid, event_recorder):
         central_node_mid.central_node, "telescopeState"
     )
 
+<<<<<<< HEAD
 =======
 =======
 >>>>>>> 16a56ef7 (SAH-1536: Updated test case)
@@ -252,11 +314,14 @@ def turn_on_telescope(central_node_mid, event_recorder):
 =======
 
 >>>>>>> 0af5cb2f (SAH-1536: Update test case)
+=======
+>>>>>>> 455c6266 (SAH-1536: Implement unhappy path tests for tmc-dish pair)
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
         DevState.ON,
     )
+<<<<<<< HEAD
 =======
     Resource(central_node_mid.central_node).assert_attribute(
         "telescopeState"
@@ -265,6 +330,10 @@ def turn_on_telescope(central_node_mid, event_recorder):
 
 
 <<<<<<< HEAD
+=======
+
+
+>>>>>>> 455c6266 (SAH-1536: Implement unhappy path tests for tmc-dish pair)
 @given("TMC subarray is in IDLE obsState")
 def check_subarray_obsState_idle(
     subarray_node, central_node_mid, event_recorder, command_input_factory
@@ -273,6 +342,7 @@ def check_subarray_obsState_idle(
     Method to check subarray is in IDLE obsState
     """
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
+<<<<<<< HEAD
 >>>>>>> 3b52eb24 (SAH-1536: Add test case for tmc-dish unavailability)
 
 =======
@@ -306,6 +376,9 @@ def move_subarray_to_obsState_idle(
         )
 
 >>>>>>> 1de465a4 (SAH-1536: Update test case)
+=======
+
+>>>>>>> 455c6266 (SAH-1536: Implement unhappy path tests for tmc-dish pair)
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
@@ -316,6 +389,12 @@ def move_subarray_to_obsState_idle(
         "obsState",
         ObsState.IDLE,
     )
+<<<<<<< HEAD
+=======
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+>>>>>>> 455c6266 (SAH-1536: Implement unhappy path tests for tmc-dish pair)
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
@@ -324,6 +403,7 @@ def move_subarray_to_obsState_idle(
 
 
 @when("one of the dish subsystems CommunicationStatus is made NOT_ESTABLISHED")
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -353,11 +433,25 @@ def restart_the_dish_leaf_nodes():
         "mid-dish/simulator-spfrx/SKA001"
     )
     central_node_mid.dish1_db.delete_device(spfrx_fqdn)
+=======
+def restart_the_dish_leaf_nodes(central_node_mid):
+    """Restart the dish leaf nodes"""
+
+    LOGGER.info("dish1 device name is: %s", spfrx_dev_name)
+
+    check_spfrx_info = central_node_mid.dish1_db.get_device_info(
+        "mid-dish/simulator-spfrx/SKA001"
+    )
+    LOGGER.info("dish1 device info is: %s", check_spfrx_info)
+
+    central_node_mid.dish1_db.delete_device(spfrx_dev_name)
+>>>>>>> 455c6266 (SAH-1536: Implement unhappy path tests for tmc-dish pair)
     LOGGER.info("spfrx deleted")
     central_node_mid.dish1_admin_dev_proxy.RestartServer()
     # Added a wait for the completion of dish device deletion from TANGO
     # database and the dish device restart
     time.sleep(5)
+<<<<<<< HEAD
 =======
 def restart_the_dish_leaf_nodes(tmc_mid):
 =======
@@ -391,6 +485,11 @@ def restart_the_dish_leaf_nodes(tmc_mid: TMCMid):
 
 
 @when("I configure the subarray {subarray_id}")
+=======
+
+
+@when(parsers.parse("I configure the subarray {subarray_id}"))
+>>>>>>> 455c6266 (SAH-1536: Implement unhappy path tests for tmc-dish pair)
 def configure_subarray(
     subarray_node: SubarrayNodeWrapper,
     central_node_mid: CentralNodeWrapperMid,
@@ -404,16 +503,23 @@ def configure_subarray(
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
+<<<<<<< HEAD
+=======
+
+>>>>>>> 455c6266 (SAH-1536: Implement unhappy path tests for tmc-dish pair)
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
     central_node_mid.set_subarray_id(subarray_id)
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     pytest.command_result = subarray_node.store_configuration_data(
         configure_input_json
     )
 =======
+=======
+>>>>>>> 455c6266 (SAH-1536: Implement unhappy path tests for tmc-dish pair)
     pytest.command_result = subarray_node.execute_transition(
         "Configure", configure_input_json
     )
@@ -489,9 +595,12 @@ def subarray_is_in_configuring_obsState(
     #     lookahead=10,
     # )
     pass
+<<<<<<< HEAD
 >>>>>>> 3b52eb24 (SAH-1536: Add test case for tmc-dish unavailability)
 =======
     pytest.command_result = subarray_node.store_configuration_data(
         configure_input_json
     )
 >>>>>>> 05994d75 (SAH-1536: Implemented test case for unavailaity scenario)
+=======
+>>>>>>> 455c6266 (SAH-1536: Implement unhappy path tests for tmc-dish pair)

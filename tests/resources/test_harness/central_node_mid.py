@@ -118,6 +118,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             self.dish1_dev_server = dish1_info.ds_full_name
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             # Get the spfrx1 device class and server
             spfrx1_info = self.dish1_db.get_device_info(
                 "mid-dish/simulator-spfrx/SKA001"
@@ -161,6 +162,8 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             )
 >>>>>>> 4a3d3a1e (SAH-1536: Add test case for tmc-dish unavailability)
 
+=======
+>>>>>>> 6f5563f4 (SAH-1536: Implement unhappy path tests for tmc-dish pair)
         else:
             dish_fqdn001 = dish_master1
             dish_fqdn036 = dish_master2
