@@ -5,8 +5,8 @@ from pytest_bdd import given, scenario, then, when
 from ska_tango_testing.integration import TangoEventTracer, log_events
 from tango import DevState
 
-from tests.test_harness3.helpers import get_master_device_simulators
 from tests.test_harness3.telescope_facades.csp_facade import CSPFacade
+from tests.test_harness3.telescope_facades.dishes_facade import DishesFacade
 from tests.test_harness3.telescope_facades.sdp_facade import SDPFacade
 from tests.test_harness3.telescope_facades.tmc_central_node_facade import (
     TMCCentralNodeFacade,
@@ -45,87 +45,77 @@ def test_tmc_csp_telescope_standby_harness_refactor3():
 def given_the_sut(
     central_node_facade: TMCCentralNodeFacade,
     sdp: SDPFacade,
-    simulator_factory,
-    event_tracer: TangoEventTracer,
+    csp: CSPFacade,
+    dishes: DishesFacade,
 ):
-    """
-    Given a TMC
-
-    Args:
-        simulator_factory: fixture for SimulatorFactory class,
-        which provides simulated subarray and master devices
-    """
-    # Add dish 4 when SKB-266 is resolved
-    # NOTE: why need of "device simulators" when they are already
-    # embedded in the facade classes?
-    (
-        _,
-        sdp_master_sim,
-        dish_master_sim_1,
-        dish_master_sim_2,
-        dish_master_sim_3,
-        dish_master_sim_4,
-    ) = get_master_device_simulators(simulator_factory)
-
+    """Given a TMC."""
     assert central_node_facade.central_node.ping() > 0
+
     assert sdp.sdp_master.ping() > 0
     assert sdp.sdp_subarray.ping() > 0
 
-    # NOTE: why this?
-    assert sdp_master_sim.ping() > 0
-    assert dish_master_sim_1.ping() > 0
-    assert dish_master_sim_2.ping() > 0
-    assert dish_master_sim_3.ping() > 0
-    assert dish_master_sim_4.ping() > 0
+    assert csp.csp_master.ping() > 0
+    assert csp.csp_subarray.ping() > 0
 
-    event_tracer.subscribe_event(
-        central_node_facade.central_node, "telescopeState"
-    )
-    log_events({central_node_facade.central_node: ["telescopeState"]})
+    assert dishes.dish_master_list[0].ping() > 0
+    assert dishes.dish_master_list[1].ping() > 0
+    assert dishes.dish_master_list[2].ping() > 0
+    assert dishes.dish_master_list[3].ping() > 0
 
-    # NOTE: will ever the "ON" string match the DevState.ON?
-    if central_node_facade.telescope_state != "ON":
-        central_node_facade.move_to_on(wait_termination_condition=True)
+    # what about something like: central_node_facade.health_check() ?
 
 
 @given("telescope is in ON state")
 def check_telescope_state_is_on(
     central_node_facade: TMCCentralNodeFacade,
+):
+    """A method to check if telescopeState is on"""
+    central_node_facade.move_to_on(wait_termination_condition=True)
+
+
+@when("I switch off telescope")
+def move_sdp_to_off(
+    central_node_facade: TMCCentralNodeFacade,
     csp: CSPFacade,
     event_tracer: TangoEventTracer,
 ):
-    """A method to check if telescopeState is on"""
-    # TODO: remove this check
-    # assert_that(event_tracer).described_as(
-    #     "FAILED ASSERTION IN 'GIVEN' STEP: "
-    #     "TMC Central Node device "
-    #     f"({central_node_facade.central_node}) "
-    #     "telescopeState attribute value is supposed to be ON."
-    # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-    #     central_node_facade.central_node,
-    #     "telescopeState",
-    #     DevState.ON,
-    # )
-
+    """A method to put tmc to OFF"""
+    event_tracer.subscribe_event(
+        central_node_facade.central_node, "telescopeState"
+    )
     event_tracer.subscribe_event(csp.csp_master, "State")
     event_tracer.subscribe_event(csp.csp_subarray, "State")
     log_events(
         {
+            central_node_facade.central_node: ["telescopeState"],
             csp.csp_master: ["State"],
             csp.csp_subarray: ["State"],
         }
     )
 
-
-@when("I switch off telescope")
-def move_sdp_to_off(central_node_facade: TMCCentralNodeFacade):
-    """A method to put tmc to OFF"""
     central_node_facade.move_to_off(wait_termination_condition=False)
 
 
 @when("I standby the telescope")
-def move_sdp_to_standby(central_node_facade: TMCCentralNodeFacade):
+def move_sdp_to_standby(
+    central_node_facade: TMCCentralNodeFacade,
+    csp: CSPFacade,
+    event_tracer: TangoEventTracer,
+):
     """A method to put tmc to STANDBY"""
+    event_tracer.subscribe_event(
+        central_node_facade.central_node, "telescopeState"
+    )
+    event_tracer.subscribe_event(csp.csp_master, "State")
+    event_tracer.subscribe_event(csp.csp_subarray, "State")
+    log_events(
+        {
+            central_node_facade.central_node: ["telescopeState"],
+            csp.csp_master: ["State"],
+            csp.csp_subarray: ["State"],
+        }
+    )
+
     central_node_facade.set_standby(wait_termination_condition=False)
 
 

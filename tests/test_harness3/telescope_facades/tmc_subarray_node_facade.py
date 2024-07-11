@@ -139,7 +139,8 @@ class TMCSubarrayNodeFacade:
         :return: result, message
         """
         return SubarrayScan(input_string).execute(
-            wait_termination_condition=wait_termination_condition)
+            wait_termination_condition=wait_termination_condition
+        )
 
     # @sync_abort(device_dict=device_dict)
     def abort(self):
