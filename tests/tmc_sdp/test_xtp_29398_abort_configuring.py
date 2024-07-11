@@ -48,6 +48,7 @@ def subarray_is_in_configuring_obsstate(
         central_node_mid.central_node,
         "telescopeState",
         DevState.OFF,
+        lookahead=8,
     )
     logging.info(
         "Telescope State is: %s", central_node_mid.central_node.telescopeState
