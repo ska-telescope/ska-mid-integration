@@ -30,7 +30,7 @@ class SubarrayConfigure(TelescopeAction):
         LOGGER.info("Invoked Configure on SubarrayNode")
         return result, message
 
-    def expected_outcome(self):
+    def termination_condition(self):
         # TODO: should add this too?
         # if Resource(device_dict.get("tmc_subarraynode")) == "READY":
         #         invoked_from_ready = True

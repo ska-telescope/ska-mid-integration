@@ -24,7 +24,7 @@ class MoveToOff(TelescopeAction):
         self.telescope.tmc.central_node.TelescopeOff()
         self.telescope.csp.move_to_off()
 
-    def expected_outcome(self):
+    def termination_condition(self):
         res = [
             ExpectedStateChange(
                 self.telescope.sdp.sdp_subarray, "State", DevState.OFF

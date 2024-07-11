@@ -1,6 +1,7 @@
-"""A generic action executed over the SUT."""
+"""A generic action executed over the telescope and its subsystems."""
 
 import abc
+from typing import Any
 
 from tests.test_harness3.telescope_actions.state_change_waiter import (
     ExpectedEvent,
@@ -12,53 +13,110 @@ from tests.test_harness3.telescope_structure.telescope_wrapper import (
 
 
 class TelescopeAction(abc.ABC):
-    """A generic action executed over the SUT and its components.
+    """A generic action executed over the telescope and its subsystems.
 
-    An action over the SUT is a command made by:
+    An action is made by:
 
     - the action itself, which is the procedure that interacts
-        with SUT components (TMC, CSP, SDP, Dishes);
-    - a synchronization mechanism, which waits for the SUT components
-        to reach certain states after the action is performed (
-        i.e., the expected outcome).
+        with telescope subsystems (TMC, CSP, SDP, Dishes);
+    - a termination condition, which is a set
+        of expected events that should occur after the action is executed
+        and which define a successful completion of the action.
 
-    This class is a template for the actions that can be executed over
-    the SUT. To create a new action, you create a subclass of SUTAction
+    This class is a template for such actions.
+
+    To create a new action, you create a subclass of ``TelescopeAction``
     and you implement the abstract methods
-    :py:meth:`_action` and :py:meth:`expected_outcome` to define the
-    action and the expected outcome, respectively. To run an action,
-    you create an instance of it, you init it with the SUT components
-    and then you call its execute method.
+    :py:meth:`_action` and :py:meth:`termination_condition`.
+    You define your business logic in the
+    :py:meth:`_action` method and you define the termination condition
+    in the :py:meth:`termination_condition` method, as a list of
+    :py:class:`tests.test_harness3.telescope_actions.expected_events.ExpectedEvent`
+    instances (or subclasses).
 
-    SUTAction is an abstract class, partially inspired by the
-    https://refactoring.guru/design-patterns/command design pattern
-    (since it is an action described by a class), partially
-    by the https://refactoring.guru/design-patterns/template-method principle
-    (since it is an abstract class with a few template methods to define
-    to implement a concrete command).
-    """
+    To run an action, you call the method :py:meth:`execute`. The action
+    is executed and the termination condition is waited for until a timeout.
+    You can customize the timeout by calling the method
+    :py:meth:`change_timeout` before calling the :py:meth:`execute` method.
 
-    # TODO: deal action result
-    # TODO: fix documentation
+    If your action needs some parameters, you can override the
+    :py:meth:`__init__` method to accept them and store them as
+    instance attributes.
 
-    COMMAND_TIMEOUT = 30
+    The same action can potentially be executed multiple times.
+
+    This class is strongly inspired by the Command design pattern
+    (https://refactoring.guru/design-patterns/command), since it abstracts
+    a potentially complex action into a class, incapsulating and hiding
+    the execution details of the action itself, such as having available
+    a telescope instance and waiting for the termination condition to occur.
+    Since it leaves you some methods to implement (that will instead
+    be called by this class itself), it is also inspired
+    by the Template Method design pattern
+    (https://refactoring.guru/design-patterns/template-method).
+    """  # pylint: disable=line-too-long # noqa E501
+
+    DEFAULT_TERMINATION_CONDITION_TIMEOUT = 30
+    """The default timeout for the termination condition (in seconds)."""
 
     def __init__(self) -> None:
         super().__init__()
         self.telescope = TelescopeWrapper()
         self._state_change_waiter = StateChangeWaiter()
 
-    @abc.abstractmethod
-    def _action(self):
-        """The action executed by the command."""
-        pass
+        self.termination_condition_timeout = (
+            self.DEFAULT_TERMINATION_CONDITION_TIMEOUT
+        )
+
+    def set__termination_condition_timeout(self, timeout: int | float) -> None:
+        """Change the timeout for the termination condition.
+
+        The timeout is the maximum time to wait for the termination
+        condition to occur. You can change it at any time before
+        calling the :py:meth:`execute` method.
+
+        :param timeout: The new timeout for the termination condition
+            (in seconds).
+        """
+        self.termination_condition_timeout = timeout
 
     @abc.abstractmethod
-    def expected_outcome(self) -> list[ExpectedEvent]:
-        """The expected outcome of the command."""
+    def _action(self) -> Any | None:
+        """The action executed by the command.
+
+        Override this method to implement your business logic
+        (i.e., your interaction with the SUT components). Remember
+        you already have available the telescope instance
+        as ``self.telescope`` (which you can use to access all the
+        subsystems devices).
+
+        If you need to return something from the action, you can
+        do it. Else you can also return nothing.
+
+        :return: The result of the action (optional)
+        """
+        pass  # TODO: make this class be a generic to permit to
+        # specify the return type of the _action method
+
+    @abc.abstractmethod
+    def termination_condition(self) -> list[ExpectedEvent]:
+        """The termination condition of the action.
+
+        The termination condition is a list of expected events. Override
+        this method to define the expected events that should occur. Remember
+        that by default this method is called *BEFORE* the action is executed,
+        so you can use the telescope instance to access the devices
+        and get any information you need to define the termination condition.
+
+        :return: A list of expected events that define the termination
+            condition of the action. They should be instances of
+            :py:class:`tests.test_harness3.telescope_actions.expected_events.ExpectedEvent`
+            or subclasses, like the very useful
+            :py:class:`tests.test_harness3.telescope_actions.expected_events.ExpectedStateChange`.
+        """  # pylint: disable=line-too-long # noqa E501
         pass
 
-    def execute(self):
+    def execute(self) -> Any | None:
         """Execute the command.
 
         This method executes the command by performing the action
@@ -72,7 +130,7 @@ class TelescopeAction(abc.ABC):
         # Subscribe to the expected state changes
         self._state_change_waiter.reset()
         self._state_change_waiter.add_expected_state_changes(
-            self.expected_outcome()
+            self.termination_condition()
         )
 
         # Execute the action
@@ -80,6 +138,6 @@ class TelescopeAction(abc.ABC):
 
         # Wait for the expected state changes to occur within a timeout
         # or raise a TimeoutError
-        self._state_change_waiter.wait_all(self.COMMAND_TIMEOUT)
+        self._state_change_waiter.wait_all(self.termination_condition_timeout)
 
         return res

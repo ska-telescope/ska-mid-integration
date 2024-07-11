@@ -27,5 +27,5 @@ class SubarrayClearObsState(TelescopeAction):
         elif self.telescope.tmc.subarray_obs_state == "ABORTED":
             SubarrayRestart().execute()
 
-    def expected_outcome(self):
+    def termination_condition(self):
         return []

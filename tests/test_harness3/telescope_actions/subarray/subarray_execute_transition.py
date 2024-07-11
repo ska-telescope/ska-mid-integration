@@ -31,5 +31,5 @@ class SubarrayExecuteTransition(TelescopeAction):
         # what should be returned here?
         return None
 
-    def expected_outcome(self):
+    def termination_condition(self):
         return []

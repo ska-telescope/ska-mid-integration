@@ -23,7 +23,7 @@ class SubarrayEndScan(TelescopeAction):
         LOGGER.info("Invoked EndScan on SubarrayNode")
         return result, message
 
-    def expected_outcome(self):
+    def termination_condition(self):
         return [
             ExpectedStateChange(
                 self.telescope.tmc.csp_subarray_leaf_node,

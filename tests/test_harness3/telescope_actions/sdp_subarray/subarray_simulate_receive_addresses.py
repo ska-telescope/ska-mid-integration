@@ -47,5 +47,5 @@ class SubarraySimulateReceiveAddresses(TelescopeAction):
         )
         sdp_qc.SetDirectPointingOffsets(("msgpack_numpy", encoded_data))
 
-    def expected_outcome(self):
+    def termination_condition(self):
         return []

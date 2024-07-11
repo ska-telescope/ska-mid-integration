@@ -43,6 +43,6 @@ class ForceChangeOfObsState(TelescopeAction):
 
         self.telescope.clear_command_call()
 
-    def expected_outcome(self):
+    def termination_condition(self):
         """No expected outcome for this action."""
         return []

@@ -23,7 +23,7 @@ class CentralNodeLoadDishConfig(TelescopeAction):
         )
         return result, message
 
-    def expected_outcome(self):
+    def termination_condition(self):
         def _is_source_dish_cfg_changed(current_value, future_value):
             if not current_value and future_value:
                 return False

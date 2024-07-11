@@ -89,5 +89,5 @@ class SubarrayFivePointCalibrationScan(TelescopeAction):
 
             event_tracer.clear_events()
 
-    def expected_outcome(self):
+    def termination_condition(self):
         return []

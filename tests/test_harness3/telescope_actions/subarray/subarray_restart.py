@@ -23,7 +23,7 @@ class SubarrayRestart(TelescopeAction):
         LOGGER.info("Invoked Restart on SubarrayNode")
         return result, message
 
-    def expected_outcome(self):
+    def termination_condition(self):
 
         pre_action_attr_value = (
             self.telescope.tmc.subarray_node.assignedResources

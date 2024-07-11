@@ -21,5 +21,5 @@ class SubarrayMoveToOff(TelescopeAction):
         LOGGER.info("Invoked OFF on SubarrayNode")
         return (result, message)
 
-    def expected_outcome(self):
+    def termination_condition(self):
         return []

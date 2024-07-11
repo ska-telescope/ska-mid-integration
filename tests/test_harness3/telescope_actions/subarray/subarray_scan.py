@@ -23,6 +23,6 @@ class SubarrayScan(TelescopeAction):
         LOGGER.info("Invoked Scan on SubarrayNode")
         return result, message
 
-    def expected_outcome(self):
+    def termination_condition(self):
         """No expected outcome for this action."""
         return []

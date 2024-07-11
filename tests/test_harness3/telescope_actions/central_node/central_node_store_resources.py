@@ -45,7 +45,7 @@ class CentralNodeStoreResources(TelescopeAction):
         LOGGER.info("Invoked AssignResources on CentralNode")
         return result, message
 
-    def expected_outcome(self):
+    def termination_condition(self):
         return [
             ExpectedStateChange(
                 self.telescope.tmc.csp_subarray_leaf_node,

@@ -22,7 +22,7 @@ class SubarrayEndObservation(TelescopeAction):
         LOGGER.info("Invoked End on SubarrayNode")
         return result, message
 
-    def expected_outcome(self):
+    def termination_condition(self):
         return [
             ExpectedStateChange(
                 self.telescope.tmc.csp_subarray_leaf_node,

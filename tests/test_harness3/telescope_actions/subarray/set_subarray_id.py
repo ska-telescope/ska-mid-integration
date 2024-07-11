@@ -17,5 +17,5 @@ class SetSubarrayId(TelescopeAction):
         self.telescope.csp.set_subarray_id(self.subarray_id)
         self.telescope.tmc.set_subarray_id(self.subarray_id)
 
-    def expected_outcome(self):
+    def termination_condition(self):
         return []

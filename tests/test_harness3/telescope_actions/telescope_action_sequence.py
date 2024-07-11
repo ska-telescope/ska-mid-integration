@@ -33,5 +33,5 @@ class TelescopeActionSequence(TelescopeAction):
         for step in self.steps:
             step.execute()
 
-    def expected_outcome(self):
+    def termination_condition(self):
         return []

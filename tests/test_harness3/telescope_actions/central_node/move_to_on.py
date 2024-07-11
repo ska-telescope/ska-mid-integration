@@ -18,6 +18,6 @@ class MoveToOn(TelescopeAction):
         self.telescope.tmc.central_node.TelescopeOn()
         self.telescope.csp.move_to_on()
 
-    def expected_outcome(self):
+    def termination_condition(self):
         """No expected outcome for this action."""
         return []

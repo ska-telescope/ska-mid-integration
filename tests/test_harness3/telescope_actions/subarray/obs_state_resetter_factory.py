@@ -41,7 +41,7 @@ class WaitAddedForSkb372(TelescopeAction):
     def _action(self):
         time.sleep(5)
 
-    def expected_outcome(self):
+    def termination_condition(self):
         return []
 
 
