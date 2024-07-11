@@ -38,6 +38,9 @@ class TelescopeAction(abc.ABC):
     is executed and the termination condition is waited for until a timeout.
     You can customize the timeout by calling the method
     :py:meth:`change_timeout` before calling the :py:meth:`execute` method.
+    If you want, you can also execute the action without waiting for the
+    termination condition to occur by passing
+    ``wait_termination_condition=False``.
 
     If your action needs some parameters, you can override the
     :py:meth:`__init__` method to accept them and store them as
@@ -116,28 +119,43 @@ class TelescopeAction(abc.ABC):
         """  # pylint: disable=line-too-long # noqa E501
         pass
 
-    def execute(self) -> Any | None:
+    def execute(self, wait_termination_condition: bool = True) -> Any | None:
         """Execute the command.
 
         This method executes the command by performing the action
         and waiting for the expected outcome to occur. If the expected
         outcome does not occur within a timeout,
-        a TimeoutError is raised.
+        a TimeoutError is raised. Before calling this method, you can
+        customize the timeout for the termination condition by calling
+        the method :py:meth:`change_timeout` and passing the new timeout.
+        You can also execute the action without waiting for the
+        termination condition to occur by passing
+        ``wait_termination_condition=False``.
+
+        :param wait_termination_condition: If True, the method waits
+            for the expected outcome to occur. If False, the method
+            just executes the action and returns immediately. By default,
+            the termination condition is waited for.
 
         :raises TimeoutError: If the expected outcome does not occur
             within a timeout.
         """
-        # Subscribe to the expected state changes
-        self._state_change_waiter.reset()
-        self._state_change_waiter.add_expected_state_changes(
-            self.termination_condition()
-        )
+
+        if wait_termination_condition:
+            # Subscribe to the expected state changes
+            self._state_change_waiter.reset()
+            self._state_change_waiter.add_expected_state_changes(
+                self.termination_condition()
+            )
 
         # Execute the action
         res = self._action()
 
-        # Wait for the expected state changes to occur within a timeout
-        # or raise a TimeoutError
-        self._state_change_waiter.wait_all(self.termination_condition_timeout)
+        if wait_termination_condition:
+            # Wait for the expected state changes to occur within a timeout
+            # or raise a TimeoutError
+            self._state_change_waiter.wait_all(
+                self.termination_condition_timeout
+            )
 
         return res

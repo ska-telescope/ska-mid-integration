@@ -2,9 +2,15 @@
 
 import logging
 
+from tango import DevState
+
+from tests.test_harness3.telescope_actions.expected_event import (
+    ExpectedStateChange,
+)
 from tests.test_harness3.telescope_actions.telescope_action import (
     TelescopeAction,
 )
+from tests.test_harness3.utils.enums import DishMode
 
 LOGGER = logging.getLogger(__name__)
 
@@ -20,4 +26,29 @@ class MoveToOn(TelescopeAction):
 
     def termination_condition(self):
         """No expected outcome for this action."""
-        return []
+        res = [
+            ExpectedStateChange(
+                self.telescope.tmc.central_node,
+                "telescopeState",
+                DevState.ON,
+            ),
+            ExpectedStateChange(
+                self.telescope.sdp.sdp_subarray, "State", DevState.ON
+            ),
+            ExpectedStateChange(
+                self.telescope.sdp.sdp_master, "State", DevState.ON
+            ),
+            ExpectedStateChange(
+                self.telescope.csp.csp_subarray, "State", DevState.ON
+            ),
+            ExpectedStateChange(
+                self.telescope.csp.csp_master, "State", DevState.ON
+            ),
+        ]
+
+        res += [
+            ExpectedStateChange(dish, "dishMode", DishMode.STANDBY_FP)
+            for dish in self.telescope.dishes.dish_master_list
+        ]
+
+        return res

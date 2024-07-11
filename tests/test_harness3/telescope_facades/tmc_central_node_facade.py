@@ -97,17 +97,23 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
     # -----------------------------------------------------------
     # STATE ACTIONS
 
-    def move_to_on(self) -> None:
+    def move_to_on(self, wait_termination_condition: bool = True) -> None:
         """Move the telescope to ON state."""
-        MoveToOn().execute()
+        MoveToOn().execute(
+            wait_termination_condition=wait_termination_condition
+        )
 
-    def move_to_off(self) -> None:
+    def move_to_off(self, wait_termination_condition: bool = True) -> None:
         """Move the telescope to OFF state."""
-        MoveToOff().execute()
+        MoveToOff().execute(
+            wait_termination_condition=wait_termination_condition
+        )
 
-    def set_standby(self) -> None:
+    def set_standby(self, wait_termination_condition: bool = True) -> None:
         """Set the telescope to STANDBY state."""
-        SetStandby().execute()
+        SetStandby().execute(
+            wait_termination_condition=wait_termination_condition
+        )
 
     # -----------------------------------------------------------
     # CENTRAL NODE ACTIONS

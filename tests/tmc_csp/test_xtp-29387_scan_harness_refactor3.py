@@ -56,38 +56,38 @@ def given_a_telescope_in_on_state(
 
     # central_node_facade.csp_master.adminMode = 0
     # wait_csp_master_off()
-    central_node_facade.move_to_on()
+    central_node_facade.move_to_on(wait_termination_condition=True)
 
-    assert_that(event_tracer).described_as(
-        "FAILED ASSERTION IN 'GIVEN' STEP: "
-        "CSP Master device "
-        f"({csp.csp_master}) "
-        "State attribute value is supposed to be ON."
-    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        csp.csp_master,
-        "State",
-        DevState.ON,
-    )
-    assert_that(event_tracer).described_as(
-        "FAILED ASSERTION IN 'GIVEN' STEP: "
-        "CSP Subarray device "
-        f"({csp.csp_subarray}) "
-        "State attribute value is supposed to be ON."
-    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        csp.csp_subarray,
-        "State",
-        DevState.ON,
-    )
-    assert_that(event_tracer).described_as(
-        "FAILED ASSERTION IN 'GIVEN' STEP: "
-        "TMC Central Node device "
-        f"({central_node_facade.central_node}) "
-        "telescopeState attribute value is supposed to be ON."
-    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        central_node_facade.central_node,
-        "telescopeState",
-        DevState.ON,
-    )
+    # assert_that(event_tracer).described_as(
+    #     "FAILED ASSERTION IN 'GIVEN' STEP: "
+    #     "CSP Master device "
+    #     f"({csp.csp_master}) "
+    #     "State attribute value is supposed to be ON."
+    # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+    #     csp.csp_master,
+    #     "State",
+    #     DevState.ON,
+    # )
+    # assert_that(event_tracer).described_as(
+    #     "FAILED ASSERTION IN 'GIVEN' STEP: "
+    #     "CSP Subarray device "
+    #     f"({csp.csp_subarray}) "
+    #     "State attribute value is supposed to be ON."
+    # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+    #     csp.csp_subarray,
+    #     "State",
+    #     DevState.ON,
+    # )
+    # assert_that(event_tracer).described_as(
+    #     "FAILED ASSERTION IN 'GIVEN' STEP: "
+    #     "TMC Central Node device "
+    #     f"({central_node_facade.central_node}) "
+    #     "telescopeState attribute value is supposed to be ON."
+    # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+    #     central_node_facade.central_node,
+    #     "telescopeState",
+    #     DevState.ON,
+    # )
 
 
 @given(parsers.parse("TMC subarray {subarray_id} is in READY ObsState"))
@@ -122,28 +122,29 @@ def subarray_in_ready_obsstate(
         ObsState.READY,
         assign_input_json=assign_input_json,
         configure_input_json=configure_input_json,
+        wait_termination_condition=True,
     )
 
-    assert_that(event_tracer).described_as(
-        "FAILED ASSERTION IN 'GIVEN' STEP: "
-        "CSP Subarray device "
-        f"({csp.csp_subarray}) "
-        "ObsState attribute value is supposed to be READY."
-    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        csp.csp_subarray,
-        "obsState",
-        ObsState.READY,
-    )
-    assert_that(event_tracer).described_as(
-        "FAILED ASSERTION IN 'GIVEN' STEP: "
-        "TMC Subarray Node device "
-        f"({subarray_node_facade.subarray_node}) "
-        "ObsState attribute value is supposed to be READY."
-    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        subarray_node_facade.subarray_node,
-        "obsState",
-        ObsState.READY,
-    )
+    # assert_that(event_tracer).described_as(
+    #     "FAILED ASSERTION IN 'GIVEN' STEP: "
+    #     "CSP Subarray device "
+    #     f"({csp.csp_subarray}) "
+    #     "ObsState attribute value is supposed to be READY."
+    # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+    #     csp.csp_subarray,
+    #     "obsState",
+    #     ObsState.READY,
+    # )
+    # assert_that(event_tracer).described_as(
+    #     "FAILED ASSERTION IN 'GIVEN' STEP: "
+    #     "TMC Subarray Node device "
+    #     f"({subarray_node_facade.subarray_node}) "
+    #     "ObsState attribute value is supposed to be READY."
+    # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+    #     subarray_node_facade.subarray_node,
+    #     "obsState",
+    #     ObsState.READY,
+    # )
 
 
 @when(
@@ -157,7 +158,10 @@ def invoke_scan(
     scan_input_json = prepare_json_args_for_commands(
         "scan_mid", command_input_factory
     )
-    subarray_node_facade.scan(scan_input_json)
+    subarray_node_facade.scan(
+        scan_input_json, 
+        wait_termination_condition=False
+    )
     # assert False
 
 

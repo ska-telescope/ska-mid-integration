@@ -133,12 +133,13 @@ class TMCSubarrayNodeFacade:
         """
         return SubarrayEndScan().execute()
 
-    def scan(self, input_string):
+    def scan(self, input_string, wait_termination_condition: bool = True):
         """Invoke Scan command on subarray Node.
 
         :return: result, message
         """
-        return SubarrayScan(input_string).execute()
+        return SubarrayScan(input_string).execute(
+            wait_termination_condition=wait_termination_condition)
 
     # @sync_abort(device_dict=device_dict)
     def abort(self):
@@ -194,6 +195,7 @@ class TMCSubarrayNodeFacade:
         assign_input_json: str | None = None,
         configure_input_json: str | None = None,
         scan_input_json: str | None = None,
+        wait_termination_condition: bool = True,
     ) -> None:
         """Force SubarrayNode obsState to provided obsState.
 
@@ -211,7 +213,7 @@ class TMCSubarrayNodeFacade:
             assign_input_json,
             configure_input_json,
             scan_input_json,
-        ).execute()
+        ).execute(wait_termination_condition=wait_termination_condition)
 
     def execute_five_point_calibration_scan(
         self,

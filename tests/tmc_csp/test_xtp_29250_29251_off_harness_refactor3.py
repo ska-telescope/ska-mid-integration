@@ -85,7 +85,7 @@ def given_the_sut(
 
     # NOTE: will ever the "ON" string match the DevState.ON?
     if central_node_facade.telescope_state != "ON":
-        central_node_facade.move_to_on()
+        central_node_facade.move_to_on(wait_termination_condition=True)
 
 
 @given("telescope is in ON state")
@@ -95,16 +95,17 @@ def check_telescope_state_is_on(
     event_tracer: TangoEventTracer,
 ):
     """A method to check if telescopeState is on"""
-    assert_that(event_tracer).described_as(
-        "FAILED ASSERTION IN 'GIVEN' STEP: "
-        "TMC Central Node device "
-        f"({central_node_facade.central_node}) "
-        "telescopeState attribute value is supposed to be ON."
-    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        central_node_facade.central_node,
-        "telescopeState",
-        DevState.ON,
-    )
+    # TODO: remove this check
+    # assert_that(event_tracer).described_as(
+    #     "FAILED ASSERTION IN 'GIVEN' STEP: "
+    #     "TMC Central Node device "
+    #     f"({central_node_facade.central_node}) "
+    #     "telescopeState attribute value is supposed to be ON."
+    # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+    #     central_node_facade.central_node,
+    #     "telescopeState",
+    #     DevState.ON,
+    # )
 
     event_tracer.subscribe_event(csp.csp_master, "State")
     event_tracer.subscribe_event(csp.csp_subarray, "State")
@@ -119,13 +120,13 @@ def check_telescope_state_is_on(
 @when("I switch off telescope")
 def move_sdp_to_off(central_node_facade: TMCCentralNodeFacade):
     """A method to put tmc to OFF"""
-    central_node_facade.move_to_off()
+    central_node_facade.move_to_off(wait_termination_condition=False)
 
 
 @when("I standby the telescope")
 def move_sdp_to_standby(central_node_facade: TMCCentralNodeFacade):
     """A method to put tmc to STANDBY"""
-    central_node_facade.set_standby()
+    central_node_facade.set_standby(wait_termination_condition=False)
 
 
 @then("the CSP must go to OFF state")
