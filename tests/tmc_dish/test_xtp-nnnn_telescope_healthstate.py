@@ -1,34 +1,16 @@
 """Test case for verifying TMC TelescopeHealthState transition """
 
-import os
+
+import time
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
-
-# from ska_tango_base.control_model import ObsState
+from ska_tango_base.control_model import HealthState
 from tango import DevState
 
-# from tests.resources.test_harness.helpers import (
-#     get_device_simulator_with_given_name,
-# )
-from tests.resources.test_harness.simulator_factory import SimulatorFactory
-
-# from tests.resources.test_harness.helpers import (
-#     prepare_json_args_for_centralnode_commands,
-#     prepare_json_args_for_commands,
-# )
-# from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
-# from tests.resources.test_harness.utils.common_utils import JsonFactory
-# from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode
 
-# from tests.resources.test_harness.event_recorder import EventRecorder
 
-
-spfrx1_dev_name = os.getenv("SPFRX_NAME_1")
-
-
-@pytest.mark.skip
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-nnnn_telescope_healthstate.feature",
@@ -109,31 +91,19 @@ def turn_on_telescope(central_node_mid, event_recorder):
 
 
 @when(parsers.parse("the {devices} health state changes to {health_state}"))
-def set_simulator_devices_health_states(
-    devices: str, health_state: str, simulator_factory: SimulatorFactory
-):
-    """Method to set the health state of specified simulator devices.
+def set_simulator_devices_health_states(central_node_mid):
+    """Method to set the health state of specified simulator devices."""
 
-    Args:
-        devices (list): Names of the devices whose health state will change.
-        health_state (list): The new health states for the devices.
-        simulator_factory (SimulatorFactory): Fixture for SimulatorFactory
-          class.
-    """
-    pass
-    # # Split the devices string into individual devices
-    # devices_list = devices.split(",")
-    # health_state_list = health_state.split(",")
+    spfrx_fqdn = (
+        "tango://tango-databaseds.dish-lmc-1.svc.cluster.local:10000/"
+        "mid-dish/simulator-spfrx/SKA001"
+    )
+    central_node_mid.dish1_db.delete_device(spfrx_fqdn)
 
-    # sim_devices_list = get_device_simulator_with_given_name(
-    #     simulator_factory, devices_list
-    # )
-    # for sim_device, sim_health_state_val in list(
-    #     zip(sim_devices_list, health_state_list)
-    # ):
-    #     # Check if the device is not the SDP controller
-    #     if sim_device.dev_name not in [sdp_master]:
-    #      sim_device.SetDirectHealthState(HealthState[sim_health_state_val])
+    central_node_mid.dish1_admin_dev_proxy.RestartServer()
+    # Added a wait for the completion of dish device deletion from TANGO
+    # database and the dish device restart
+    time.sleep(5)
 
 
 @then(parsers.parse("the telescope health state is {telescope_health_state}"))
@@ -148,14 +118,14 @@ def check_telescope_health_state(
         event_recorder: A fixture for EventRecorder class_
         telescope_health_state (str): telescopehealthState value
     """
-    pass
-    # event_recorder.subscribe_event(
-    #     central_node_mid.central_node, "telescopeHealthState"
-    # )
 
-    # assert event_recorder.has_change_event_occurred(
-    #     central_node_mid.central_node,
-    #     "telescopeHealthState",
-    #     HealthState[telescope_health_state],
-    # ), f"Expected telescopeHealthState to be \
-    #     {HealthState[telescope_health_state]}"
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "telescopeHealthState"
+    )
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "telescopeHealthState",
+        HealthState[telescope_health_state],
+    ), f"Expected telescopeHealthState to be \
+        {HealthState[telescope_health_state]}"
