@@ -450,10 +450,14 @@ def restart_the_dish_leaf_nodes(central_node_mid):
     import tango
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     central_node_mid.dish1_db.delete_device(spfrx_dev_name)
 >>>>>>> 455c6266 (SAH-1536: Implement unhappy path tests for tmc-dish pair)
 =======
     spfrx_proxy = tango.DeviceProxy(spfrx_exported)
+=======
+    spfrx_proxy = tango.DeviceProxy("mid-dish/simulator-spfrx/SKA001")
+>>>>>>> 908672f3 (SAH-1536: Update tmc-dish unavailablity test)
     LOGGER.info("spfrx device proxy : %s", spfrx_proxy)
     central_node_mid.dish1_db.delete_device(spfrx_proxy)
 >>>>>>> a773fccd (SAH-1536: Update tmc-dish unavailablity test)
