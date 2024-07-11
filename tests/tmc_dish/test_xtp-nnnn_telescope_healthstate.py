@@ -25,7 +25,7 @@ def test_tmc_TMC_healthstate():
 
 @given(
     parsers.parse(
-        "a Telescope consisting of TMC, DISH {dish_ids},"
+        "a Telescope consisting of TMC, DISH,"
         + " simulated CSP and simulated SDP"
     )
 )
