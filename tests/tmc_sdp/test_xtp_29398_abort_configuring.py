@@ -1,5 +1,6 @@
 """Test TMC-SDP Abort functionality in Configuring obstate"""
 import json
+import logging
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -40,10 +41,16 @@ def subarray_is_in_configuring_obsstate(
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
+    logging.info(
+        "Telescope State is: %s", central_node_mid.central_node.telescopeState
+    )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
         DevState.OFF,
+    )
+    logging.info(
+        "Telescope State is: %s", central_node_mid.central_node.telescopeState
     )
     central_node_mid.set_subarray_id(subarray_id)
     central_node_mid.move_to_on()
@@ -52,6 +59,9 @@ def subarray_is_in_configuring_obsstate(
         central_node_mid.central_node,
         "telescopeState",
         DevState.ON,
+    )
+    logging.info(
+        "Telescope State is: %s", central_node_mid.central_node.telescopeState
     )
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
