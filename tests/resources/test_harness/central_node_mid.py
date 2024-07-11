@@ -106,41 +106,6 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             self.dish1_dev_class = dish1_info.class_name
             self.dish1_dev_server = dish1_info.ds_full_name
 
-            # Create database object for Dish1 sprfx TANGO DB
-            LOGGER.info("dish_fqdn001 is %s", dish_fqdn001)
-            self.spfrx_fqdn = (
-                f"{dish_fqdn001}.svc.cluster"
-                ".local:10000/mid-dish/simulator-spfrx/SKA001"
-            )
-            LOGGER.info("SPFRX fqdn is %s ", self.spfrx_fqdn)
-
-            spfrx_tango_host = self.spfrx_fqdn.split("/")[2]
-            spfrx_host = spfrx_tango_host.split(":")[0]
-            spfrx_port = spfrx_tango_host.split(":")[1]
-            LOGGER.info("spfrx host is %s :", spfrx_host)
-            LOGGER.info("spfrx port is %s :", spfrx_port)
-            LOGGER.info("dish001 port is %s :", dish1_host)
-
-            spfrx_deviceproxy = DeviceProxy(self.spfrx_fqdn)
-            LOGGER.info("spfrx proxy created %s", spfrx_deviceproxy)
-
-            self.spfrx_db = Database(dish1_host, int(spfrx_port))
-            LOGGER.info("spfrx database is %s :", self.spfrx_db)
-
-            LOGGER.info("spfrx port type is %s :", type(spfrx_port))
-
-            # Get the Dish1 spfrx device class and server
-            dish1_spfrx_info = self.spfrx_db.get_device_info(
-                "mid-dish/simulator-spfrx/SKA001"
-            )
-            LOGGER.info("dish1_spfrx_info is %s :", dish1_spfrx_info)
-            self.dish1_spfrx_dev_class = dish1_spfrx_info.class_name
-            self.dish1_spfrx_dev_server = dish1_spfrx_info.ds_full_name
-            LOGGER.info("spfrx_dev_class is %s :", self.dish1_spfrx_dev_class)
-            LOGGER.info(
-                "spfrx_dev_server is %s :", self.dish1_spfrx_dev_server
-            )
-
         else:
             dish_fqdn001 = dish_master1
             dish_fqdn036 = dish_master2
