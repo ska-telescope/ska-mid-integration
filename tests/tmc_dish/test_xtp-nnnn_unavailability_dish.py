@@ -442,10 +442,21 @@ def restart_the_dish_leaf_nodes(central_node_mid):
     check_spfrx_info = central_node_mid.dish1_db.get_device_info(
         "mid-dish/simulator-spfrx/SKA001"
     )
-    LOGGER.info("dish1 device info is: %s", check_spfrx_info)
+    LOGGER.info("spfrx device info is: %s", check_spfrx_info)
+    spfrx_exported = central_node_mid.dish1_db.get_device_exported(
+        "mid-dish/simulator-spfrx/SKA001"
+    )
+    LOGGER.info("spfrx device exported : %s", spfrx_exported)
+    import tango
 
+<<<<<<< HEAD
     central_node_mid.dish1_db.delete_device(spfrx_dev_name)
 >>>>>>> 455c6266 (SAH-1536: Implement unhappy path tests for tmc-dish pair)
+=======
+    spfrx_proxy = tango.DeviceProxy(spfrx_exported)
+    LOGGER.info("spfrx device proxy : %s", spfrx_proxy)
+    central_node_mid.dish1_db.delete_device(spfrx_proxy)
+>>>>>>> a773fccd (SAH-1536: Update tmc-dish unavailablity test)
     LOGGER.info("spfrx deleted")
     central_node_mid.dish1_admin_dev_proxy.RestartServer()
     # Added a wait for the completion of dish device deletion from TANGO
