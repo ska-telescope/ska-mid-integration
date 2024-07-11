@@ -7,6 +7,7 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from tango import DevState
 
+from tests.conftest import wait_for_telescope_state_change
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
@@ -44,12 +45,15 @@ def subarray_is_in_configuring_obsstate(
     logging.info(
         "Telescope State is: %s", central_node_mid.central_node.telescopeState
     )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.OFF,
-        lookahead=15,
+    wait_for_telescope_state_change(
+        DevState.OFF, central_node_mid.central_node, 500
     )
+    # assert event_recorder.has_change_event_occurred(
+    #     central_node_mid.central_node,
+    #     "telescopeState",
+    #     DevState.OFF,
+    #     lookahead=15,
+    # )
     logging.info(
         "Telescope State is: %s", central_node_mid.central_node.telescopeState
     )
