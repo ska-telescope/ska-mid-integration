@@ -31,7 +31,9 @@ from tests.test_harness2.sut_initialization.harness_components_factory import (
 from tests.test_harness2.sut_structure.sut_wrapper import (
     TelescopeWrapper as TelescopeWrapper2,
 )
-from tests.test_harness3.telescope_actions.subarray.set_subarray_id import SetSubarrayId
+from tests.test_harness3.telescope_actions.subarray.set_subarray_id import (
+    SetSubarrayId,
+)
 from tests.test_harness3.telescope_facades.csp_facade import CSPFacade
 from tests.test_harness3.telescope_facades.dishes_facade import DishesFacade
 from tests.test_harness3.telescope_facades.sdp_facade import SDPFacade
@@ -326,6 +328,7 @@ def telescope_wrapper() -> TelescopeWrapper:
     # teardown of the telescope structure. To run reset now I should
     # init subarray node (with SetSubarrayId), but to do that I need
     # to know subarray_id, which is a parameter of the Gherkin steps.
+
 
 @fixture
 def central_node_facade(telescope_wrapper: TelescopeWrapper):
