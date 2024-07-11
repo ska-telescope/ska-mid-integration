@@ -7,9 +7,6 @@ from ska_control_model import ResultCode
 from ska_ser_logging import configure_logging
 from tango import DeviceProxy, DevState
 
-from tests.test_harness3.constant import (
-    device_dict,  # TODO: find a way to handle this dependency
-)
 from tests.test_harness3.telescope_actions.central_node.central_node_load_dish_config import (  # pylint: disable=line-too-long # noqa E501
     CentralNodeLoadDishConfig,
 )
@@ -34,9 +31,6 @@ from tests.test_harness3.telescope_actions.central_node.set_standby import (
 from tests.test_harness3.telescope_structure.telescope_wrapper import (
     TelescopeWrapper,
 )
-from tests.test_harness3.utils.wait_helpers import Waiter
-
-# SIMULATED_DEVICES_DICT, wait_csp_master_off,
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -50,17 +44,6 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
 
     def __init__(self, telescope: TelescopeWrapper) -> None:
         self._telescope = telescope
-
-        # NOTE: todo: remove this bad dependency
-        device_dict["cbf_subarray1"] = "mid_csp_cbf/sub_elt/subarray_01"
-        device_dict["cbf_controller"] = "mid_csp_cbf/sub_elt/controller"
-        device_dict[
-            "dish_master_list"
-        ] = self._telescope.dishes.dish_master_list
-        device_dict[
-            "dish_leaf_node_list"
-        ] = self._telescope.tmc.dish_leaf_node_list
-        self.wait = Waiter(**device_dict)
 
     # -----------------------------------------------------------
     # CENTRAL NODE DEVICES
@@ -83,7 +66,6 @@ class TMCCentralNodeFacade:  # pylint: disable=too-many-public-methods
     # -----------------------------------------------------------
     # CENTRAL NODE PROPERTIES
 
-    # NOTE: same as for `state`
     @property
     def telescope_state(self) -> DevState:
         """Get telescope state representing overall state of telescope."""

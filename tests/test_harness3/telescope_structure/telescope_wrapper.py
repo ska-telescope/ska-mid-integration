@@ -177,3 +177,16 @@ class TelescopeWrapper:
         self.sdp.clear_command_call()
         self.csp.clear_command_call()
         self.dishes.clear_command_call()
+
+    def set_subarray_id(self, subarray_id: int) -> None:
+        """Create subarray devices for the requested subarray.
+
+        :param subarray_id: The Subarray ID to set.
+
+        :raises ValueError: If one or more sub-systems are missing.
+        """
+        self.fail_if_not_set_up()
+
+        self.sdp.set_subarray_id(subarray_id)
+        self.csp.set_subarray_id(subarray_id)
+        self.tmc.set_subarray_id(subarray_id)

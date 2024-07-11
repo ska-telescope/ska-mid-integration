@@ -7,9 +7,6 @@ from ska_ser_logging import configure_logging
 from tests.test_harness3.telescope_actions.subarray.force_change_of_obs_state import (  # pylint: disable=line-too-long # noqa: E501
     ForceChangeOfObsState,
 )
-from tests.test_harness3.telescope_actions.subarray.set_subarray_id import (
-    SetSubarrayId,
-)
 from tests.test_harness3.telescope_actions.subarray.subarray_abort import (
     SubarrayAbort,
 )
@@ -64,7 +61,7 @@ class TMCSubarrayNodeFacade:
         self._telescope = telescope
 
     # -----------------------------------------------------------
-    # SUBARRAY DEVICES
+    # Subarray devices
 
     @property
     def dish_leaf_node_list(self):
@@ -87,17 +84,14 @@ class TMCSubarrayNodeFacade:
         return self._telescope.tmc.sdp_master_leaf_node
 
     # -----------------------------------------------------------
-    # SUBARRAY PROPERTIES
+    # Setter for initializing subarray
 
-    def set_subarray_id(
-        self,
-        requested_subarray_id: str,
-        wait_termination_condition: bool = True,
-    ) -> None:
+    def set_subarray_id(self, requested_subarray_id: str) -> None:
         """Create subarray devices for the requested subarray."""
-        action = SetSubarrayId(requested_subarray_id)
-        action.set_termination_condition_policy(wait_termination_condition)
-        action.execute()
+        self._telescope.set_subarray_id(requested_subarray_id)
+
+    # -----------------------------------------------------------
+    # Actions over subarray telescope state
 
     def move_to_on(self, wait_termination_condition: bool = True):
         """Move subarray to ON state.
@@ -116,7 +110,7 @@ class TMCSubarrayNodeFacade:
         return action.execute()
 
     # -----------------------------------------------------------
-    # Obs-state machine transitions
+    # Actions over subarray obs state
 
     # @sync_configure(device_dict=device_dict)
     def configure(
@@ -204,7 +198,7 @@ class TMCSubarrayNodeFacade:
         return action.execute()
 
     # -----------------------------------------------------------
-    # Generic transitions
+    # Generic ob-state transitions actions
 
     def execute_transition(
         self,
