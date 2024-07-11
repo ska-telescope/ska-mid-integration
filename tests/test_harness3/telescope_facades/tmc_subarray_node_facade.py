@@ -52,12 +52,22 @@ LOGGER = logging.getLogger(__name__)
 
 
 class TMCSubarrayNodeFacade:
-    """Subarray Node class which implement methods required for test cases
-    to test subarray node.
+    """A facade to TMC Subarray Node device and its actions.
+
+    A facade to TMC sub-system, providing a simplified interface to the
+    subarray node devices and their actions. It contains:
+
+    - references to subarray node device,
+    - references to leaf devices to interact with CSP and SDP subarrays,
+    - an action to initialize the subarray setting the subarray ID,
+    - actions to move the subarray to ON and OFF states,
+    - actions to interact with the obs state of the subarray, making
+      individual state changes (through command calls) or forcing the
+      change of the obs state to a target state whatever the current state is,
+    - various other actions (e.g., five point calibration scan).
     """
 
     def __init__(self, telescope: TelescopeWrapper) -> None:
-        """Initialize the SubarrayNodeWrapper."""
         self._telescope = telescope
 
     # -----------------------------------------------------------
@@ -87,7 +97,10 @@ class TMCSubarrayNodeFacade:
     # Setter for initializing subarray
 
     def set_subarray_id(self, requested_subarray_id: str) -> None:
-        """Create subarray devices for the requested subarray."""
+        """Create subarray devices for the requested subarray.
+
+        :param requested_subarray_id: Subarray ID to set.
+        """
         self._telescope.set_subarray_id(requested_subarray_id)
 
     # -----------------------------------------------------------
@@ -96,7 +109,12 @@ class TMCSubarrayNodeFacade:
     def move_to_on(self, wait_termination_condition: bool = True):
         """Move subarray to ON state.
 
-        :return: result, message"""
+        :param wait_termination_condition: set to False if you don't want to
+            wait for the termination condition. By default the termination
+            condition is waited.
+
+        :return: result, message
+        """
         action = SubarrayMoveToOn()
         action.set_termination_condition_policy(wait_termination_condition)
         return action.execute()
@@ -104,7 +122,12 @@ class TMCSubarrayNodeFacade:
     def move_to_off(self, wait_termination_condition: bool = True):
         """Move Subarray to OFF state.
 
-        :return: result, message"""
+        :param wait_termination_condition: set to False if you don't want to
+            wait for the termination condition. By default the termination
+            condition is waited.
+
+        :return: result, message
+        """
         action = SubarrayMoveToOff()
         action.set_termination_condition_policy(wait_termination_condition)
         return action.execute()
@@ -118,7 +141,11 @@ class TMCSubarrayNodeFacade:
     ):
         """Invoke configure command on subarray Node.
 
-        :param input_string: input string as json
+        :param input_string: input string as json.
+        :param wait_termination_condition: set to False if you don't want to
+            wait for the termination condition. By default the termination
+            condition is waited.
+
         :return: result, message
         """
         action = SubarrayConfigure(input_string)
@@ -128,6 +155,10 @@ class TMCSubarrayNodeFacade:
     # @sync_end(device_dict=device_dict)
     def end_observation(self, wait_termination_condition: bool = True):
         """Invoke End command on subarray Node.
+
+        :param wait_termination_condition: set to False if you don't want to
+            wait for the termination condition. By default the termination
+            condition is waited.
 
         :return: result, message
         """
@@ -139,6 +170,10 @@ class TMCSubarrayNodeFacade:
     def end_scan(self, wait_termination_condition: bool = True):
         """Invoke EndScan command on subarray Node.
 
+        :param wait_termination_condition: set to False if you don't want to
+            wait for the termination condition. By default the termination
+            condition is waited.
+
         :return: result, message
         """
         action = SubarrayEndScan()
@@ -147,6 +182,10 @@ class TMCSubarrayNodeFacade:
 
     def scan(self, input_string, wait_termination_condition: bool = True):
         """Invoke Scan command on subarray Node.
+
+        :param wait_termination_condition: set to False if you don't want to
+            wait for the termination condition. By default the termination
+            condition is waited.
 
         :return: result, message
         """
@@ -158,6 +197,10 @@ class TMCSubarrayNodeFacade:
     def abort(self, wait_termination_condition: bool = True):
         """Invoke Abort command on subarray Node.
 
+        :param wait_termination_condition: set to False if you don't want to
+            wait for the termination condition. By default the termination
+            condition is waited.
+
         :return: result, message
         """
         action = SubarrayAbort()
@@ -167,6 +210,10 @@ class TMCSubarrayNodeFacade:
     # @sync_restart(device_dict=device_dict)
     def restart(self, wait_termination_condition: bool = True):
         """Invoke Restart command on subarray Node.
+
+        :param wait_termination_condition: set to False if you don't want to
+            wait for the termination condition. By default the termination
+            condition is waited.
 
         :return: result, message
         """
@@ -180,7 +227,11 @@ class TMCSubarrayNodeFacade:
     ):
         """Invoke Assign Resource command on subarray Node
 
-        :param assign_json: Assign resource input json
+        :param assign_json: Assign resource input json.
+        :param wait_termination_condition: set to False if you don't want to
+            wait for the termination condition. By default the termination
+            condition is waited.
+
         :return: result, message
         """
         action = SubarrayAssignResources(assign_json)
@@ -190,6 +241,10 @@ class TMCSubarrayNodeFacade:
     # @sync_release_resources(device_dict)
     def release_all_resources(self, wait_termination_condition: bool = True):
         """Invoke Release Resource command on subarray Node.
+
+        :param wait_termination_condition: set to False if you don't want to
+            wait for the termination condition. By default the termination
+            condition is waited.
 
         :return: result, message
         """
@@ -210,6 +265,9 @@ class TMCSubarrayNodeFacade:
 
         :param command_name: Name of command to execute
         :param argin: Input argument for command
+        :param wait_termination_condition: set to False if you don't want to
+            wait for the termination condition. By default the termination
+            condition is waited.
 
         :return: result, message
         """
@@ -235,6 +293,9 @@ class TMCSubarrayNodeFacade:
             it as None, it will use the default configure input json.
         :param scan_input_json: Scan input json. If you leave it as None,
             it will use the default scan input json.
+        :param wait_termination_condition: set to False if you don't want to
+            wait for the termination condition. By default the termination
+            condition is waited.
         """
         action = ForceChangeOfObsState(
             dest_state_name,
@@ -249,7 +310,6 @@ class TMCSubarrayNodeFacade:
         self,
         partial_configure_jsons: list[str],
         scan_jsons: list[str],
-        event_recorder,
         command_input_factory,
         wait_termination_condition: bool = True,
     ) -> None:
@@ -258,11 +318,14 @@ class TMCSubarrayNodeFacade:
 
         :param partial_configure_jsons: Partial configuration json file names
         :param scan_jsons: Scan json file names
+        :param command_input_factory: Command input factory
+        :param wait_termination_condition: set to False if you don't want to
+            wait for the termination condition. By default the termination
+            condition is waited.
         """
         action = SubarrayFivePointCalibrationScan(
             partial_configure_jsons,
             scan_jsons,
-            event_recorder,
             command_input_factory,
         )
         action.set_termination_condition_policy(wait_termination_condition)

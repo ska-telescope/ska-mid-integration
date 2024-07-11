@@ -16,7 +16,7 @@ from tests.test_harness3.telescope_actions.telescope_action import (
 LOGGER = logging.getLogger(__name__)
 
 
-class CentralNodeStoreResources(TelescopeAction):
+class CentralNodeAssignResources(TelescopeAction):
     """Invoke Assign Resource command on CentralNode."""
 
     # NOTE: this is very similar to SubarrayAssignResources

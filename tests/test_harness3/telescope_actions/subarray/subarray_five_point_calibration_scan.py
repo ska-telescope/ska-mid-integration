@@ -29,13 +29,11 @@ class SubarrayFivePointCalibrationScan(TelescopeAction):
         self,
         partial_configure_jsons: list[str],
         scan_jsons: list[str],
-        event_recorder,
         command_input_factory,
     ):
         super().__init__()
         self.partial_configure_jsons = partial_configure_jsons
         self.scan_configuration = scan_jsons
-        self.event_recorder = event_recorder
         self.command_input_factory = command_input_factory
 
     def _action(self):
