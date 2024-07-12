@@ -23,7 +23,7 @@ FILE_NAME?= alarm_rules.txt
 EXIT_AT_FAIL = true ## Flag for determining exit at failure. Set 'true' to exit at first failure.
 
 ifeq ($(EXIT_AT_FAIL),true)
-ADD_ARGS += -x
+ADD_ARGS += 
 endif
 
 # KUBE_NAMESPACE defines the Kubernetes Namespace that will be deployed to
