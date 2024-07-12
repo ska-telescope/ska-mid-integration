@@ -99,6 +99,7 @@ def set_simulator_devices_health_states(
     central_node_mid.dish1_db.delete_device(spfrx_fqdn)
     LOGGER.info("spfrx deleted")
     central_node_mid.dish1_admin_dev_proxy.RestartServer()
+    LOGGER.info("dish is restarted ")
     # Added a wait for the completion of dish device deletion from TANGO
     # database and the dish device restart
     time.sleep(5)
