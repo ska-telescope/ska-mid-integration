@@ -1,6 +1,5 @@
 """Test case for verifying TMC TelescopeHealthState transition """
-
-
+import logging
 import time
 
 import pytest
@@ -9,6 +8,8 @@ from ska_tango_base.control_model import HealthState
 from tango import DevState
 
 from tests.resources.test_support.enum import DishMode
+
+LOGGER = logging.getLogger(__name__)
 
 
 @pytest.mark.tmc_dish
@@ -23,13 +24,8 @@ def test_tmc_TMC_healthstate():
     """
 
 
-@given(
-    parsers.parse(
-        "a Telescope consisting of TMC, DISH,"
-        + " simulated CSP and simulated SDP"
-    )
-)
-def given_a_telescope(central_node_mid, dish_ids):
+@given("a Telescope consisting of TMC, DISH, simulated CSP and simulated SDP")
+def given_a_telescope(central_node_mid):
     """
     Given a TMC
     """
@@ -101,7 +97,7 @@ def set_simulator_devices_health_states(
         "mid-dish/simulator-spfrx/SKA001"
     )
     central_node_mid.dish1_db.delete_device(spfrx_fqdn)
-
+    LOGGER.info("spfrx deleted")
     central_node_mid.dish1_admin_dev_proxy.RestartServer()
     # Added a wait for the completion of dish device deletion from TANGO
     # database and the dish device restart
