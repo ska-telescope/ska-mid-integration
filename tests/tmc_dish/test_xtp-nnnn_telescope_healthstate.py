@@ -35,7 +35,7 @@ def given_a_telescope(central_node_mid, dish_ids):
     """
     assert central_node_mid.csp_master.ping() > 0
     assert central_node_mid.sdp_master.ping() > 0
-    for dish_id in dish_ids.split(","):
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         assert central_node_mid.dish_master_dict[dish_id].ping() > 0
         assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
 
@@ -91,7 +91,9 @@ def turn_on_telescope(central_node_mid, event_recorder):
 
 
 @when(parsers.parse("the {devices} health state changes to {health_state}"))
-def set_simulator_devices_health_states(central_node_mid):
+def set_simulator_devices_health_states(
+    central_node_mid, event_recorder, health_state
+):
     """Method to set the health state of specified simulator devices."""
 
     spfrx_fqdn = (
@@ -104,6 +106,17 @@ def set_simulator_devices_health_states(central_node_mid):
     # Added a wait for the completion of dish device deletion from TANGO
     # database and the dish device restart
     time.sleep(5)
+    # asserting dishmanager healthstate
+    event_recorder.subscribe_event(
+        central_node_mid.dish_master_dict["SKA001"], "telescopeHealthState"
+    )
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_master_dict["SKA001"],
+        "telescopeHealthState",
+        HealthState[health_state],
+    ), f"Expected telescopeHealthState to be \
+        {HealthState[health_state]}"
 
 
 @then(parsers.parse("the telescope health state is {telescope_health_state}"))
