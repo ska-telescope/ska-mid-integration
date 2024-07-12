@@ -104,14 +104,25 @@ def set_simulator_devices_health_states(
     time.sleep(5)
     # asserting dishmanager healthstate
     event_recorder.subscribe_event(
-        central_node_mid.dish_master_dict["SKA001"], "telescopeHealthState"
+        central_node_mid.dish_master_dict["SKA001"], "healthState"
     )
-
+    LOGGER.info("subscribed health state for dishmanager ")
     assert event_recorder.has_change_event_occurred(
         central_node_mid.dish_master_dict["SKA001"],
-        "telescopeHealthState",
+        "healthState",
         HealthState[health_state],
-    ), f"Expected telescopeHealthState to be \
+    ), f"Expected healthState to be \
+        {HealthState[health_state]}"
+
+    event_recorder.subscribe_event(
+        central_node_mid.dish_leaf_node_dict["SKA001"], "healthState"
+    )
+    LOGGER.info("subscribed health state for dishln ")
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.dish_leaf_node_dict["SKA001"],
+        "healthState",
+        HealthState[health_state],
+    ), f"Expected healthState to be \
         {HealthState[health_state]}"
 
 
