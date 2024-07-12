@@ -9,6 +9,9 @@ from tango import DevState
 
 from tests.resources.test_support.enum import DishMode
 
+# from tango.db import DbDevInfo
+
+
 LOGGER = logging.getLogger(__name__)
 
 
@@ -96,13 +99,24 @@ def set_simulator_devices_health_states(
         "tango://tango-databaseds.dish-lmc-1.svc.cluster.local:10000/"
         "mid-dish/simulator-spfrx/SKA001"
     )
+    import tango
+
+    spfrx_device_proxy = tango.DeviceProxy(spfrx_fqdn)
+    LOGGER.info("spfrx proxy %s ", spfrx_device_proxy)
     central_node_mid.dish1_db.delete_device(spfrx_fqdn)
     LOGGER.info("spfrx deleted")
-    central_node_mid.dish1_admin_dev_proxy.RestartServer()
-    LOGGER.info("dish is restarted ")
+
+    # Create Dish1 admin device proxy
+    spfrx1__admin_dev_name = spfrx_device_proxy.adm_name()
+    LOGGER.info("spfrx admin name is %s", spfrx1__admin_dev_name)
+    spfrx1_admin_dev_proxy = tango.DeviceProxy(spfrx1__admin_dev_name)
+    LOGGER.info("spfrx admin name proxy created")
+    spfrx1_admin_dev_proxy.RestartServer()
+    LOGGER.info("spfrx is restarted ")
     # Added a wait for the completion of dish device deletion from TANGO
     # database and the dish device restart
     time.sleep(5)
+
     # asserting dishmanager healthstate
     event_recorder.subscribe_event(
         central_node_mid.dish_master_dict["SKA001"], "healthState"
