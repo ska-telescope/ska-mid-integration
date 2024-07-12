@@ -310,7 +310,11 @@ def subarray_transitions_to_empty(subarray_node, subarray_id, event_recorder):
     )
 )
 def assign_resources_executed_on_subarray(
-    subarray_node, event_recorder, command_input_factory, subarray_id
+    subarray_node,
+    central_node_mid,
+    event_recorder,
+    command_input_factory,
+    subarray_id,
 ):
     """
     Check assignResources command is executed successfully
@@ -338,4 +342,18 @@ def assign_resources_executed_on_subarray(
         "obsState",
         ObsState.IDLE,
         lookahead=10,
+    )
+
+    release_input_json = prepare_json_args_for_centralnode_commands(
+        "release_resources_mid", command_input_factory
+    )
+
+    _, unique_id = central_node_mid.invoke_release_resources(
+        release_input_json
+    )
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (unique_id[0], str(ResultCode.OK.value)),
     )

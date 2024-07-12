@@ -31,6 +31,7 @@ from tests.resources.test_harness.constant import (
     tmc_sdp_master_leaf_node,
     tmc_subarraynode1,
 )
+from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     SIMULATED_DEVICES_DICT,
     generate_eb_pb_ids,
@@ -561,4 +562,15 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             or json.loads(self.csp_master_leaf_node.sourceDishVccConfig)
             != DEFAULT_DISH_VCC_CONFIG
         ):
-            self._load_default_dish_vcc_config()
+            _, unique_id = self._load_default_dish_vcc_config()
+            event_recorder = EventRecorder()
+            event_recorder.subscribe_event(
+                self.central_node, "longRunningCommandResult"
+            )
+            assert event_recorder.has_change_event_occurred(
+                self.central_node,
+                "longRunningCommandResult",
+                (unique_id[0], str(int(ResultCode.OK))),
+                lookahead=10,
+            )
+            event_recorder.clear_events()
