@@ -3,8 +3,9 @@ import json
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
-from ska_control_model import ObsState, ResultCode
+from ska_control_model import ObsState
 
+from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
 )
@@ -46,7 +47,7 @@ def subarray_in_idle_obsstate(
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+        (pytest.command_result[1][0], COMMAND_COMPLETED),
     )
 
 
