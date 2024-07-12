@@ -51,12 +51,7 @@ server:
           - name: "CommandTimeOut"
             values:
               - "50"
-          - name: "polled_attr"
-            values:
-              - "kValue"
-              - "3000"
-              - "kValueValidationResult"
-              - "3000"
+
   {{- end }}
 depends_on:
   - device: sys/database/2

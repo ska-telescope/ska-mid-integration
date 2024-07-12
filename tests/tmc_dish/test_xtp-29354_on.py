@@ -1,5 +1,6 @@
 """Test module for TMC-DISH On functionality"""
 
+import logging
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -59,6 +60,9 @@ def move_dish_to_on(central_node_mid, event_recorder):
             central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
         )
 
+    logging.info(
+        "Telescope State is: %s", central_node_mid.central_node.telescopeState
+    )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
