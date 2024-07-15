@@ -356,5 +356,5 @@ def assign_resources_executed_on_subarray(
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (unique_id[0], str(ResultCode.OK.value)),
+        (unique_id[0], COMMAND_COMPLETED),
     )

@@ -12,6 +12,7 @@ from tango.db import Database
 
 from tests.resources.test_harness.central_node import CentralNodeWrapper
 from tests.resources.test_harness.constant import (
+    COMMAND_COMPLETED,
     DEFAULT_DISH_VCC_CONFIG,
     centralnode,
     csp_master,
@@ -570,7 +571,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             assert event_recorder.has_change_event_occurred(
                 self.central_node,
                 "longRunningCommandResult",
-                (unique_id[0], str(int(ResultCode.OK))),
+                (unique_id[0], COMMAND_COMPLETED),
                 lookahead=10,
             )
             event_recorder.clear_events()
