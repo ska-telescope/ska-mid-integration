@@ -9,6 +9,7 @@ Scenario: TMC executes long sequence of commands successfully
 <<<<<<< HEAD
 <<<<<<< HEAD
     And TMC subarray is in IDLE obsState
+<<<<<<< HEAD
     When I configure the subarray <subarray_id> with <receiver_band_1>
     And I issue End command to the subarray <subarray_id>
     And I reconfigure subarray <subarray_id> with <receiver_band_2>
@@ -34,6 +35,9 @@ Scenario: TMC executes long sequence of commands successfully
     And TMC subarray is in IDLE obsState
 >>>>>>> 4a3d3a1e (SAH-1536: Add test case for tmc-dish unavailability)
     And I configure the subarray <subarray_id> with receiver_band_1
+=======
+    When I configure the subarray <subarray_id> with receiver_band_1
+>>>>>>> f73b56f9 (SAH-1536: Code cleanup)
     And I issue End command to the subarray <subarray_id>
     And I reconfigure subarray <subarray_id> with receiver_band 2
     And I issue scan command with <scan_id> on subarray
