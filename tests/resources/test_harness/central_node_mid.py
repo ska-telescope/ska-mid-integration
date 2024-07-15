@@ -97,7 +97,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             dish1_host = dish1_tango_host.split(":")[0]
             dish1_port = dish1_tango_host.split(":")[1]
             self.dish1_db = Database(dish1_host, dish1_port)
-
+            LOGGER.info(" dish database %s :", self.dish1_db)
             # Get the Dish1 device class and server
             dish1_info = self.dish1_db.get_device_info(
                 "mid-dish/dish-manager/SKA001"
