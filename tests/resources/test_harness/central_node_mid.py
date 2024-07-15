@@ -89,6 +89,15 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             dish_fqdn063 = REAL_DISH63_FQDN
             dish_fqdn100 = REAL_DISH100_FQDN
 
+            LOGGER.info("Dish Manager 1 FQDN is: %s: ", dish_fqdn001)
+            spfrx_fqdn = dish_fqdn001.replace(
+                "mid-dish/dish-manager/SKA001",
+                "mid-dish/simulator-spfrx/SKA001",
+            )
+            LOGGER.info("spfrx_fqdn 1 FQDN is: %s: ", spfrx_fqdn)
+            spfrx_proxy = DeviceProxy(spfrx_fqdn)
+            LOGGER.info("spfrx_proxy 1 FQDN is: %s: ", spfrx_proxy)
+
             # Create database object for TMC TANGO DB
             self.db = Database()
 
