@@ -110,6 +110,7 @@ class EventRecorder(object):
                 ].assert_change_event(attribute_value, lookahead=lookahead)
             except AssertionError:
                 device_name = device.dev_name()
+<<<<<<< HEAD
                 dish_prefix = ""
                 real_dish1_fqdn = os.getenv("DISH_NAME_1")
                 if ("dish-manager" in device_name) and (
@@ -127,6 +128,12 @@ class EventRecorder(object):
                 attr_value = attr_proxy.read().value
                 if attr_value == attribute_value:
                     return True
+=======
+                LOGGER.info("Device name is: %s", device_name)
+                full_attr_name = device_name + attribute_name
+                attr_proxy = AttributeProxy(full_attr_name)
+                LOGGER.info("Attribute value is: %s", attr_proxy.read())
+>>>>>>> 1cdae141 (SAH-1558: Fix the error in the test.)
                 return False
 
         raise AttributeNotSubscribed(
