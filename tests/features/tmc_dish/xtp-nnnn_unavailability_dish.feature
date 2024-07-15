@@ -7,10 +7,10 @@ Scenario: Dish manager reports the error when one of the subsystem is unavailabl
     And TMC subarray is in IDLE obsState
     When one of the dish subsystems CommunicationStatus is made NOT_ESTABLISHED
     And I configure the subarray <subarray_id>
-<<<<<<< HEAD
     Examples:
         | subarray_id |
         | 1           |
+<<<<<<< HEAD
 =======
     Then dish manager should throw the error and report to TMC
     And TMC should propagate the error to client
@@ -50,3 +50,5 @@ Scenario: Dish manager reports the error when one of the subsystem is unavailabl
         | 1            | SKA001,SKA036,SKA063,SKA100    |
 >>>>>>> 3b52eb24 (SAH-1536: Add test case for tmc-dish unavailability)
 >>>>>>> bfcbd823 (SAH-1536: Add test case for tmc-dish unavailability)
+=======
+>>>>>>> 650be63c (SAH-1536: Fix the error in the test.)
