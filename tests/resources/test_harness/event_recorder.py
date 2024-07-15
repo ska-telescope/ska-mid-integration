@@ -8,7 +8,7 @@ from ska_ser_logging import configure_logging
 from ska_tango_testing.mock.tango.event_callback import (
     MockTangoEventCallbackGroup,
 )
-from tango import EventType
+from tango import AttributeProxy, EventType
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -108,6 +108,11 @@ class EventRecorder(object):
                     callable_name
                 ].assert_change_event(attribute_value, lookahead=lookahead)
             except AssertionError:
+                device_name = device.dev_name()
+                LOGGER.info("Device name is: %s", device_name)
+                full_attr_name = device_name + attribute_name
+                attr_proxy = AttributeProxy(full_attr_name)
+                LOGGER.info("Attribute value is: %s", attr_proxy.read())
                 return False
 
         raise AttributeNotSubscribed(
