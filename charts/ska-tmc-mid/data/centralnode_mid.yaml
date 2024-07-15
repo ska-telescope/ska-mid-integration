@@ -114,12 +114,7 @@ server:
         - name: "CommandTimeOut"
           values:
             - "120"
-        - name: "polled_attr"
-          values:
-            - "isDishVccConfigSet"
-            - "3000"
-            - "DishVccValidationStatus"
-            - "3000"
+
 {{- else }}
 {{- fail "KValueValidRangeUpperLimit should be greater than KValueValidRangeLowerLimit" }}
 {{- end }}

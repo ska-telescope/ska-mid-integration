@@ -3,6 +3,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+[0.22.1]
+************
+* Resolve skb-384
+
 [0.22.0]
 ************
 * Integrate TMC-Dish Scan functionality implementation (REL-1295)
