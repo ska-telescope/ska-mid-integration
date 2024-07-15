@@ -89,17 +89,15 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             dish_fqdn063 = REAL_DISH63_FQDN
             dish_fqdn100 = REAL_DISH100_FQDN
 
-            LOGGER.info("Dish Manager 1 FQDN is: %s: ", dish_fqdn001)
+            # creating spfrx device fqdn
             self.spfrx_fqdn = dish_fqdn001.replace(
                 "mid-dish/dish-manager/SKA001",
                 "mid-dish/simulator-spfrx/SKA001",
             )
-            LOGGER.info("spfrx_fqdn 1 is: %s: ", self.spfrx_fqdn)
             spfrx_proxy = DeviceProxy(self.spfrx_fqdn)
-            LOGGER.info("spfrx_proxy 1 is: %s: ", spfrx_proxy)
+
             # Create Dish1 admin device proxy
             spfrx1_admin_dev_name = spfrx_proxy.adm_name()
-            LOGGER.info("spfrx admin name is %s", spfrx1_admin_dev_name)
             self.spfrx1_admin_dev_proxy = DeviceProxy(spfrx1_admin_dev_name)
 
             # Create database object for TMC TANGO DB
@@ -110,7 +108,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             dish1_host = dish1_tango_host.split(":")[0]
             dish1_port = dish1_tango_host.split(":")[1]
             self.dish1_db = Database(dish1_host, dish1_port)
-            LOGGER.info(" dish database %s :", self.dish1_db)
+
             # Get the Dish1 device class and server
             dish1_info = self.dish1_db.get_device_info(
                 "mid-dish/dish-manager/SKA001"
@@ -122,11 +120,8 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             spfrx1_info = self.dish1_db.get_device_info(
                 "mid-dish/simulator-spfrx/SKA001"
             )
-            LOGGER.info("spfrx device info is : %s", spfrx1_info)
             self.spfrx1_dev_class = spfrx1_info.class_name
-            LOGGER.info("spfrx device class is : %s", self.spfrx1_dev_class)
             self.spfrx1_dev_server = spfrx1_info.ds_full_name
-            LOGGER.info("spfrx server name is : %s", self.spfrx1_dev_server)
 
         else:
             dish_fqdn001 = dish_master1

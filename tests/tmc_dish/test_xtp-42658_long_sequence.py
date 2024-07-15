@@ -1,11 +1,9 @@
 """Test module for long sequence functionality"""
 
 import json
-import logging
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
-from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import ObsState
 from tango import DevState
 
@@ -21,11 +19,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
-configure_logging(logging.DEBUG)
-LOGGER = logging.getLogger(__name__)
 
-
-@pytest.mark.skip
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42658_long_sequence.feature",
@@ -168,26 +162,7 @@ def configure_subarray(
         event_recorder.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
         )
-        logging.info(
-            "DISHMODE for Dish after configure 1 %s: %s",
-            dish_id,
-            central_node_mid.dish_master_dict[dish_id].dishMode,
-        )
-        logging.info(
-            "DISHMODE for DishLN after configure 1 %s: %s",
-            dish_id,
-            central_node_mid.dish_leaf_node_dict[dish_id].dishMode,
-        )
-        logging.info(
-            "pointingState for Dish after configure 1 %s: %s",
-            dish_id,
-            central_node_mid.dish_master_dict[dish_id].pointingState,
-        )
-        logging.info(
-            "pointingState for DishLN after configure 1 %s: %s",
-            dish_id,
-            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
-        )
+
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
@@ -239,38 +214,7 @@ def end_configuration_on_subarray(
     # pytest.command_result = subarray_node.end_observation()
     pytest.command_result = subarray_node.execute_transition("End")
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        logging.info(
-            "DISHMODE for Dish after end %s: %s",
-            dish_id,
-            central_node_mid.dish_master_dict[dish_id].dishMode,
-        )
-        logging.info(
-            "DISHMODE for DishLN after end %s: %s",
-            dish_id,
-            central_node_mid.dish_leaf_node_dict[dish_id].dishMode,
-        )
-        logging.info(
-            "pointingState for Dish after end %s: %s",
-            dish_id,
-            central_node_mid.dish_master_dict[dish_id].pointingState,
-        )
-        logging.info(
-            "pointingState for DishLN after end %s: %s",
-            dish_id,
-            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
-        )
-        # assert event_recorder.has_change_event_occurred(
-        #     central_node_mid.dish_master_dict[dish_id],
-        #     "dishMode",
-        #     DishMode.STANDBY_FP,
-        #     lookahead=10,
-        # )
-        # assert event_recorder.has_change_event_occurred(
-        #     central_node_mid.dish_leaf_node_dict[dish_id],
-        #     "dishMode",
-        #     DishMode.STANDBY_FP,
-        #     lookahead=10,
-        # )
+
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
@@ -324,26 +268,7 @@ def reconfigure_subarray(
     )
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        logging.info(
-            "DISHMODE for Dish after configure 2 %s: %s",
-            dish_id,
-            central_node_mid.dish_master_dict[dish_id].dishMode,
-        )
-        logging.info(
-            "DISHMODE for DishLN after configure 2 %s: %s",
-            dish_id,
-            central_node_mid.dish_leaf_node_dict[dish_id].dishMode,
-        )
-        logging.info(
-            "pointingState for Dish after configure 2 %s: %s",
-            dish_id,
-            central_node_mid.dish_master_dict[dish_id].pointingState,
-        )
-        logging.info(
-            "pointingState for DishLN after configure 2 %s: %s",
-            dish_id,
-            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
-        )
+
         assert (
             central_node_mid.dish_master_dict[dish_id].dishMode
             == DishMode.OPERATE
@@ -352,18 +277,7 @@ def reconfigure_subarray(
             central_node_mid.dish_leaf_node_dict[dish_id].dishMode
             == DishMode.OPERATE
         )
-        # assert event_recorder.has_change_event_occurred(
-        #     central_node_mid.dish_master_dict[dish_id],
-        #     "dishMode",
-        #     DishMode.OPERATE,
-        #     lookahead=10,
-        # )
-        # assert event_recorder.has_change_event_occurred(
-        #     central_node_mid.dish_leaf_node_dict[dish_id],
-        #     "dishMode",
-        #     DishMode.OPERATE,
-        #     lookahead=10,
-        # )
+
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
@@ -417,26 +331,7 @@ def invoke_scan(
             "scanID",
             scan_id,
         )
-        logging.info(
-            "DISHMODE for Dish after scan %s: %s",
-            dish_id,
-            central_node_mid.dish_master_dict[dish_id].dishMode,
-        )
-        logging.info(
-            "DISHMODE for DishLN after scan%s: %s",
-            dish_id,
-            central_node_mid.dish_leaf_node_dict[dish_id].dishMode,
-        )
-        logging.info(
-            "pointingState for Dish after scan  %s: %s",
-            dish_id,
-            central_node_mid.dish_master_dict[dish_id].pointingState,
-        )
-        logging.info(
-            "pointingState for DishLN after scan %s: %s",
-            dish_id,
-            central_node_mid.dish_leaf_node_dict[dish_id].pointingState,
-        )
+
         assert (
             central_node_mid.dish_master_dict[dish_id].dishMode
             == DishMode.OPERATE
