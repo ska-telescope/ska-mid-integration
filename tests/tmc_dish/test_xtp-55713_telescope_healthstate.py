@@ -1,5 +1,4 @@
-"""Test case for verifying TMC TelescopeHealthState transition """
-import logging
+"""Test case for verifying TMC TelescopeHealthState transition"""
 import time
 
 import pytest
@@ -10,15 +9,10 @@ from tango.db import DbDevInfo
 
 from tests.resources.test_support.enum import DishMode
 
-# from tango.db import DbDevInfo
-
-
-LOGGER = logging.getLogger(__name__)
-
 
 @pytest.mark.tmc_dish
 @scenario(
-    "../features/tmc_dish/xtp-nnnn_telescope_healthstate.feature",
+    "../features/tmc_dish/xtp-55713_telescope_healthstate.feature",
     "Verify CentralNode TelescopeHealthState",
 )
 def test_tmc_TMC_healthstate():
@@ -30,8 +24,10 @@ def test_tmc_TMC_healthstate():
 
 @given("a Telescope consisting of TMC, DISH, simulated CSP and simulated SDP")
 def given_a_telescope(central_node_mid):
-    """
-    Given a TMC
+    """Given a TMC
+
+    Args:
+        central_node_mid : A fixture for CentralNode tango device class
     """
     assert central_node_mid.csp_master.ping() > 0
     assert central_node_mid.sdp_master.ping() > 0
@@ -42,8 +38,11 @@ def given_a_telescope(central_node_mid):
 
 @given("the Telescope is in ON state")
 def turn_on_telescope(central_node_mid, event_recorder):
-    """
-    A method to put Telescope ON
+    """A method to put Telescope ON
+
+    Args:
+        central_node_mid : A fixture for CentralNode tango device class
+        event_recorder: A fixture for EventRecorder class_
     """
     central_node_mid.move_to_on()
     event_recorder.subscribe_event(central_node_mid.csp_master, "State")
@@ -94,21 +93,24 @@ def turn_on_telescope(central_node_mid, event_recorder):
 def set_simulator_devices_health_states(
     central_node_mid, event_recorder, health_state
 ):
-    """Method to set the health state of specified simulator devices."""
-    check_spfrx1_info = central_node_mid.dish1_db.get_device_info(
-        "mid-dish/simulator-spfrx/SKA001"
-    )
-    LOGGER.info("spfrx1 device info is: %s", check_spfrx1_info)
+    """Method to set the health state of specified simulator devices.
 
+    Args:
+        central_node_mid : A fixture for CentralNode tango device class
+        event_recorder: A fixture for EventRecorder class_
+        health_state (str): healthState value
+    """
+    # transitioning dishmanger (SKA001) healthstate to UNKNOWN by deleting
+    # deleting spfrx device
     central_node_mid.dish1_db.delete_device(central_node_mid.spfrx_fqdn)
-    LOGGER.info("spfrx deleted")
 
     central_node_mid.spfrx1_admin_dev_proxy.RestartServer()
-    LOGGER.info("spfrx is restarted ")
+
     # Added a wait for the completion of dish device deletion from TANGO
     # database and the dish device restart
     time.sleep(5)
 
+<<<<<<< HEAD:tests/tmc_dish/test_xtp-nnnn_telescope_healthstate.py
 <<<<<<< HEAD
     # check_spfrx1_info = central_node_mid.dish1_db.get_device_info(
     #     "mid-dish/simulator-spfrx/SKA001"
@@ -122,10 +124,13 @@ def set_simulator_devices_health_states(
 >>>>>>> 5a5415f6 (SAH-1536: Fix the error in the test.)
 
     # asserting dishmanager healthstate
+=======
+    # asserting UNKOWN healthstate for dishmaster and dishleafnode
+>>>>>>> 2ee3ddf7 (SAH-1536: Enable skipped tmc-dish tests):tests/tmc_dish/test_xtp-55713_telescope_healthstate.py
     event_recorder.subscribe_event(
         central_node_mid.dish_master_dict["SKA001"], "healthState"
     )
-    LOGGER.info("subscribed health state for dishmanager ")
+
     assert event_recorder.has_change_event_occurred(
         central_node_mid.dish_master_dict["SKA001"],
         "healthState",
@@ -136,7 +141,7 @@ def set_simulator_devices_health_states(
     event_recorder.subscribe_event(
         central_node_mid.dish_leaf_node_dict["SKA001"], "healthState"
     )
-    LOGGER.info("subscribed health state for dishln ")
+
     assert event_recorder.has_change_event_occurred(
         central_node_mid.dish_leaf_node_dict["SKA001"],
         "healthState",
@@ -175,6 +180,4 @@ def check_telescope_health_state(
     dev_info._class = central_node_mid.spfrx1_dev_class
     dev_info.server = central_node_mid.spfrx1_dev_server
     central_node_mid.dish1_db.add_device(dev_info)
-    LOGGER.info("spfrx added again to database")
     central_node_mid.spfrx1_admin_dev_proxy.RestartServer()
-    LOGGER.info("restarted successfully!!")

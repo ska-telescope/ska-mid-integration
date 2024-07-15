@@ -2,11 +2,9 @@
 
 import ast
 import json
-import logging
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
-from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import ObsState
 from tango import DevState
 
@@ -21,14 +19,15 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
+<<<<<<< HEAD
 # import time
 
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
+=======
+>>>>>>> 2ee3ddf7 (SAH-1536: Enable skipped tmc-dish tests)
 
-
-@pytest.mark.skip
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42658_long_sequence.feature",
@@ -229,7 +228,11 @@ def configure_subarray(
             central_node_mid.dish_master_dict[dish_id], "pointingState"
         )
         event_recorder.subscribe_event(
+<<<<<<< HEAD
             central_node_mid.dish_master_dict[dish_id], "dishMode"
+=======
+            central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
+>>>>>>> 2ee3ddf7 (SAH-1536: Enable skipped tmc-dish tests)
         )
 
         assert event_recorder.has_change_event_occurred(
@@ -273,6 +276,7 @@ def end_configuration_on_subarray(
     pytest.command_result = subarray_node.end_observation()
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
 <<<<<<< HEAD
+<<<<<<< HEAD
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "dishMode"
 =======
@@ -308,6 +312,9 @@ def end_configuration_on_subarray(
         #     DishMode.STANDBY_FP,
         #     lookahead=10,
         # )
+=======
+
+>>>>>>> 2ee3ddf7 (SAH-1536: Enable skipped tmc-dish tests)
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
@@ -367,6 +374,7 @@ def reconfigure_subarray(
         json.dumps(configure_input_json)
     )
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+<<<<<<< HEAD
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "pointingState"
         )
@@ -383,6 +391,9 @@ def reconfigure_subarray(
         )
 
 =======
+=======
+
+>>>>>>> 2ee3ddf7 (SAH-1536: Enable skipped tmc-dish tests)
         assert (
             central_node_mid.dish_master_dict[dish_id].dishMode
             == DishMode.OPERATE
@@ -391,6 +402,7 @@ def reconfigure_subarray(
             central_node_mid.dish_leaf_node_dict[dish_id].dishMode
             == DishMode.OPERATE
         )
+<<<<<<< HEAD
         # assert event_recorder.has_change_event_occurred(
         #     central_node_mid.dish_master_dict[dish_id],
         #     "dishMode",
@@ -404,6 +416,9 @@ def reconfigure_subarray(
         #     lookahead=10,
         # )
 >>>>>>> 752c8d76 (SAH-1536: Update test case for xtp-42658)
+=======
+
+>>>>>>> 2ee3ddf7 (SAH-1536: Enable skipped tmc-dish tests)
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
