@@ -10,6 +10,9 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
+from tests.resources.test_harness.utils.common_utils import (
+    wait_added_for_skb372,
+)
 
 
 @pytest.mark.tmc_sdp
@@ -106,6 +109,8 @@ def check_subarray_is_configured(
         "obsState",
         ObsState.IDLE,
     )
+
+    wait_added_for_skb372()
     subarray_node.store_configuration_data(json.dumps(configure_json))
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["sdp_subarray"],
