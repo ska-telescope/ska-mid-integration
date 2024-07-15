@@ -1,6 +1,5 @@
 """TMC Class which contain method specific to TMC
 """
-
 import time
 
 from tango import DeviceProxy
@@ -40,7 +39,6 @@ class TMCMid:
 
     def RestartServer(self, server_type: str):
         """Restart server based on provided server type"""
-
         if server_type == "CSP_MLN":
             self.csp_master_ln_server.RestartServer()
         elif server_type == "CENTRAL_NODE":

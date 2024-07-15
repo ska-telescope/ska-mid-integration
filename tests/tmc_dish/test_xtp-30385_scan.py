@@ -277,9 +277,6 @@ def check_dish_mode_and_pointing_state_after_scan(
     Method to check dishMode and pointingState of DISH
     """
     for dish_id in dish_ids.split(","):
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "scanID"
-        )
         assert (
             central_node_mid.dish_master_dict[dish_id].dishMode
             == DishMode.OPERATE
