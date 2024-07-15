@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import time
 
 from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
@@ -317,12 +318,25 @@ class SubarrayNodeWrapper(object):
         Args:
             command_name (str): Name of command to execute
         """
-        if command_name is not None:
-            result, message = self.subarray_node.command_inout(
-                command_name, argin
-            )
-            LOGGER.info(f"Invoked {command_name} on SubarrayNode")
-            return result, message
+
+        retry = 0
+        while retry <= 3:
+            try:
+                if command_name is not None:
+                    result, message = self.subarray_node.command_inout(
+                        command_name, argin
+                    )
+                    LOGGER.info(f"Invoked {command_name} on SubarrayNode")
+                    return result, message
+
+            except Exception as e:
+                LOGGER.exception(
+                    "Exception occurred while executing command: %s", e
+                )
+                if retry == 2:
+                    raise Exception
+                retry += 1
+            time.sleep(0.1)
 
     def _reset_simulator_devices(self):
         """Reset Simulator devices to it's original state"""
