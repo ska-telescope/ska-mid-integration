@@ -94,28 +94,24 @@ def set_simulator_devices_health_states(
     central_node_mid, event_recorder, health_state
 ):
     """Method to set the health state of specified simulator devices."""
-
-    spfrx_fqdn = (
-        "tango://tango-databaseds.dish-lmc-1.svc.cluster.local:10000/"
+    check_spfrx1_info = central_node_mid.dish1_db.get_device_info(
         "mid-dish/simulator-spfrx/SKA001"
     )
-    import tango
+    LOGGER.info("spfrx1 device info is: %s", check_spfrx1_info)
 
-    spfrx_device_proxy = tango.DeviceProxy(spfrx_fqdn)
-    LOGGER.info("spfrx proxy %s ", spfrx_device_proxy)
-    central_node_mid.dish1_db.delete_device(spfrx_fqdn)
+    central_node_mid.dish1_db.delete_device(central_node_mid.spfrx_fqdn)
     LOGGER.info("spfrx deleted")
 
-    # Create Dish1 admin device proxy
-    spfrx1__admin_dev_name = spfrx_device_proxy.adm_name()
-    LOGGER.info("spfrx admin name is %s", spfrx1__admin_dev_name)
-    spfrx1_admin_dev_proxy = tango.DeviceProxy(spfrx1__admin_dev_name)
-    LOGGER.info("spfrx admin name proxy created")
-    spfrx1_admin_dev_proxy.RestartServer()
+    central_node_mid.spfrx1_admin_dev_proxy.RestartServer()
     LOGGER.info("spfrx is restarted ")
     # Added a wait for the completion of dish device deletion from TANGO
     # database and the dish device restart
     time.sleep(5)
+
+    check_spfrx1_info = central_node_mid.dish1_db.get_device_info(
+        "mid-dish/simulator-spfrx/SKA001"
+    )
+    LOGGER.info("spfrx1 device info is: %s", check_spfrx1_info)
 
     # asserting dishmanager healthstate
     event_recorder.subscribe_event(
