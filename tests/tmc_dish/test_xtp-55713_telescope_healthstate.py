@@ -181,3 +181,7 @@ def check_telescope_health_state(
     dev_info.server = central_node_mid.spfrx1_dev_server
     central_node_mid.dish1_db.add_device(dev_info)
     central_node_mid.spfrx1_admin_dev_proxy.RestartServer()
+    # When device restarts it can take around 15 sec to up again
+    # so wait for the spfrx1 device to start and dish1 dishMode
+    # to be in proper state
+    time.sleep(15)
