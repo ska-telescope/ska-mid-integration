@@ -91,6 +91,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             dish_fqdn100 = REAL_DISH100_FQDN
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             # creating spfrx device fqdn
             self.spfrx_fqdn = dish_fqdn001.replace(
                 "mid-dish/dish-manager/SKA001",
@@ -103,10 +104,14 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             self.spfrx1_admin_dev_proxy = DeviceProxy(spfrx1_admin_dev_name)
 =======
             LOGGER.info("Dish Manager 1 FQDN is: %s: ", dish_fqdn001)
+=======
+            # creating spfrx device fqdn
+>>>>>>> 6806ec97 (SAH-1536: Enable skipped tmc-dish tests)
             self.spfrx_fqdn = dish_fqdn001.replace(
                 "mid-dish/dish-manager/SKA001",
                 "mid-dish/simulator-spfrx/SKA001",
             )
+<<<<<<< HEAD
 <<<<<<< HEAD
             LOGGER.info("spfrx_fqdn 1 FQDN is: %s: ", spfrx_fqdn)
             spfrx_proxy = DeviceProxy(spfrx_fqdn)
@@ -114,11 +119,12 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
 >>>>>>> 2f62b3dd (SAH-1536: Fix the issue in tests.)
 =======
             LOGGER.info("spfrx_fqdn 1 is: %s: ", self.spfrx_fqdn)
+=======
+>>>>>>> 6806ec97 (SAH-1536: Enable skipped tmc-dish tests)
             spfrx_proxy = DeviceProxy(self.spfrx_fqdn)
-            LOGGER.info("spfrx_proxy 1 is: %s: ", spfrx_proxy)
+
             # Create Dish1 admin device proxy
             spfrx1_admin_dev_name = spfrx_proxy.adm_name()
-            LOGGER.info("spfrx admin name is %s", spfrx1_admin_dev_name)
             self.spfrx1_admin_dev_proxy = DeviceProxy(spfrx1_admin_dev_name)
 >>>>>>> 5a9b7253 (SAH-1536: Fix the error in the test.)
 
@@ -130,7 +136,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             dish1_host = dish1_tango_host.split(":")[0]
             dish1_port = dish1_tango_host.split(":")[1]
             self.dish1_db = Database(dish1_host, dish1_port)
-            LOGGER.info(" dish database %s :", self.dish1_db)
+
             # Get the Dish1 device class and server
             dish1_info = self.dish1_db.get_device_info(
                 "mid-dish/dish-manager/SKA001"
@@ -147,6 +153,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             spfrx1_info = self.dish1_db.get_device_info(
                 "mid-dish/simulator-spfrx/SKA001"
             )
+<<<<<<< HEAD
 <<<<<<< HEAD
             self.spfrx1_dev_class = spfrx1_info.class_name
             self.spfrx1_dev_server = spfrx1_info.ds_full_name
@@ -191,10 +198,10 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
 >>>>>>> 6f5563f4 (SAH-1536: Implement unhappy path tests for tmc-dish pair)
 =======
             LOGGER.info("spfrx device info is : %s", spfrx1_info)
+=======
+>>>>>>> 6806ec97 (SAH-1536: Enable skipped tmc-dish tests)
             self.spfrx1_dev_class = spfrx1_info.class_name
-            LOGGER.info("spfrx device class is : %s", self.spfrx1_dev_class)
             self.spfrx1_dev_server = spfrx1_info.ds_full_name
-            LOGGER.info("spfrx server name is : %s", self.spfrx1_dev_server)
 
 >>>>>>> 5ae40c93 (SAH-1536: Update healthstate test case for tmc-dish pair)
         else:

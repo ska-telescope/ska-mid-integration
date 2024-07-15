@@ -1384,6 +1384,7 @@ def check_tmc_subarray_scanning(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     )
 <<<<<<< HEAD
 =======
@@ -1399,3 +1400,6 @@ def check_tmc_subarray_scanning(
 =======
     )
 >>>>>>> 4a3d3a1e (SAH-1536: Add test case for tmc-dish unavailability)
+=======
+    )
+>>>>>>> 6806ec97 (SAH-1536: Enable skipped tmc-dish tests)
