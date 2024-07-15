@@ -140,10 +140,14 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 5ae40c93 (SAH-1536: Update healthstate test case for tmc-dish pair)
             # Get the spfrx1 device class and server
             spfrx1_info = self.dish1_db.get_device_info(
                 "mid-dish/simulator-spfrx/SKA001"
             )
+<<<<<<< HEAD
             self.spfrx1_dev_class = spfrx1_info.class_name
             self.spfrx1_dev_server = spfrx1_info.ds_full_name
 =======
@@ -185,6 +189,14 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
 
 =======
 >>>>>>> 6f5563f4 (SAH-1536: Implement unhappy path tests for tmc-dish pair)
+=======
+            LOGGER.info("spfrx device info is : %s", spfrx1_info)
+            self.spfrx1_dev_class = spfrx1_info.class_name
+            LOGGER.info("spfrx device class is : %s", self.spfrx1_dev_class)
+            self.spfrx1_dev_server = spfrx1_info.ds_full_name
+            LOGGER.info("spfrx server name is : %s", self.spfrx1_dev_server)
+
+>>>>>>> 5ae40c93 (SAH-1536: Update healthstate test case for tmc-dish pair)
         else:
             dish_fqdn001 = dish_master1
             dish_fqdn036 = dish_master2
