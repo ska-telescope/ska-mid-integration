@@ -6,6 +6,7 @@ import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import HealthState
 from tango import DevState
+from tango.db import DbDevInfo
 
 from tests.resources.test_support.enum import DishMode
 
@@ -160,3 +161,13 @@ def check_telescope_health_state(
         HealthState[telescope_health_state],
     ), f"Expected telescopeHealthState to be \
         {HealthState[telescope_health_state]}"
+
+    # Add Dish device back to DB
+    dev_info = DbDevInfo()
+    dev_info.name = central_node_mid.spfrx_fqdn
+    dev_info._class = central_node_mid.spfrx1_dev_class
+    dev_info.server = central_node_mid.spfrx1_dev_server
+    central_node_mid.dish1_db.add_device(dev_info)
+    LOGGER.info("spfrx added again to database")
+    central_node_mid.spfrx1_admin_dev_proxy.RestartServer()
+    LOGGER.info("restarted successfully!!")

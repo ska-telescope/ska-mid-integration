@@ -118,6 +118,16 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             self.dish1_dev_class = dish1_info.class_name
             self.dish1_dev_server = dish1_info.ds_full_name
 
+            # Get the spfrx1 device class and server
+            spfrx1_info = self.dish1_db.get_device_info(
+                "mid-dish/simulator-spfrx/SKA001"
+            )
+            LOGGER.info("spfrx device info is : %s", spfrx1_info)
+            self.spfrx1_dev_class = spfrx1_info.class_name
+            LOGGER.info("spfrx device class is : %s", self.spfrx1_dev_class)
+            self.spfrx1_dev_server = spfrx1_info.ds_full_name
+            LOGGER.info("spfrx server name is : %s", self.spfrx1_dev_server)
+
         else:
             dish_fqdn001 = dish_master1
             dish_fqdn036 = dish_master2
