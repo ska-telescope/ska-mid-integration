@@ -108,10 +108,17 @@ def set_simulator_devices_health_states(
     # database and the dish device restart
     time.sleep(5)
 
+<<<<<<< HEAD
     # check_spfrx1_info = central_node_mid.dish1_db.get_device_info(
     #     "mid-dish/simulator-spfrx/SKA001"
     # )
     # LOGGER.info("spfrx1 device info is: %s", check_spfrx1_info)
+=======
+    check_spfrx1_info = central_node_mid.dish1_db.get_device_info(
+        "mid-dish/simulator-spfrx/SKA001"
+    )
+    LOGGER.info("spfrx1 device info is: %s", check_spfrx1_info)
+>>>>>>> 5a5415f6 (SAH-1536: Fix the error in the test.)
 
     # asserting dishmanager healthstate
     event_recorder.subscribe_event(
