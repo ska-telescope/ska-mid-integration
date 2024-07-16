@@ -7,13 +7,6 @@ from tango import DeviceProxy
 from tests.test_harness3.telescope_config.components_config import (
     SDPConfiguration,
 )
-from tests.test_harness3.telescope_config.configuration_factory import (
-    TestHarnessConfigurationFactory,
-)
-
-emulation_configuration = (
-    TestHarnessConfigurationFactory().emulation_configuration
-)
 
 
 class SDPDevices(abc.ABC):

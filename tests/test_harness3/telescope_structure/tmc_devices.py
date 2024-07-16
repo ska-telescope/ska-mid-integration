@@ -2,14 +2,11 @@
 
 import abc
 
-from ska_tango_base.control_model import HealthState
-from tango import DeviceProxy, DevState
+from tango import DeviceProxy
 
-from tests.resources.test_support.common_utils.common_helpers import Resource
 from tests.test_harness3.telescope_config.components_config import (
     TMCConfiguration,
 )
-from tests.test_harness3.utils.common_utils import JsonFactory
 from tests.test_harness3.utils.enums import SubarrayObsState
 
 
@@ -55,42 +52,10 @@ class TMCDevices(abc.ABC):
             self.dish1_leaf_admin_dev_name
         )
 
-        self._state = DevState.OFF
-        self._subarray_state = DevState.OFF
         self._subarray_obs_state = SubarrayObsState.EMPTY
-
-        # initialize in advance the release resources input json
-        # TODO: why?
-        json_factory = JsonFactory()
-        self.release_input = json_factory.create_centralnode_configuration(
-            "release_resources_mid"
-        )
 
     # -----------------------------------------------------------
     # CentralNode properties
-
-    # NOTE: get rid of things that return states as strings
-
-    @property
-    def state(self) -> DevState:
-        """TMC CentralNode operational state"""
-        self._state = Resource(self.central_node).get("State")
-        return self._state
-
-    @state.setter
-    def state(self, value: DevState):
-        """Sets value for TMC CentralNode operational state
-
-        Args:
-            value (DevState): operational state value
-        """
-        # NOTE: what is the sense of this setter? If I will ever
-        # access it through the getter it will always use an updated
-        # value from the device. So, this setter is useless (unless
-        # you directly access `self._state`, but 1) it's never done and
-        # 2) it is an anti-pattern...). It may be something that ideally
-        # is used to change central_node state (?)
-        self._state = value
 
     @property
     def IsDishVccConfigSet(self):
@@ -101,73 +66,6 @@ class TMCDevices(abc.ABC):
     def DishVccValidationStatus(self):
         """Current dish vcc validation status of central node"""
         return self.central_node.DishVccValidationStatus
-
-    @property
-    def telescope_health_state(self) -> HealthState:
-        """Telescope health state representing overall health of telescope"""
-        self._telescope_health_state = Resource(self.central_node).get(
-            "telescopeHealthState"
-        )
-        return self._telescope_health_state
-
-    @telescope_health_state.setter
-    def telescope_health_state(self, value: HealthState) -> None:
-        """Telescope health state representing overall health of telescope
-
-        Args:
-            value (HealthState): telescope health state value
-        """
-        # NOTE: same as for `state`
-        self._telescope_health_state = value
-
-    # NOTE: same as for `state`
-    @property
-    def telescope_state(self) -> DevState:
-        """Telescope state representing overall state of telescope"""
-
-        self._telescope_state = Resource(self.central_node).get(
-            "telescopeState"
-        )
-        return self._telescope_state
-
-    @telescope_state.setter
-    def telescope_state(self, value: DevState) -> None:
-        """Telescope state representing overall state of telescope
-
-        Args:
-            value (DevState): telescope state value
-        """
-        # NOTE: this setter is never used + same as for `state`
-        self._telescope_state = value
-
-    # -----------------------------------------------------------
-    # Subarray node properties
-
-    @property
-    def subarray_state(self) -> DevState:
-        """TMC SubarrayNode operational state"""
-        self._subarray_state = Resource(self.subarray_node).get("State")
-        return self._subarray_state
-
-    @subarray_state.setter
-    def subarray_state(self, value):
-        """Sets value for TMC subarrayNode operational state
-
-        Args:
-            value (DevState): operational state value
-        """
-        self._subarray_state = value
-
-    @property
-    def subarray_obs_state(self):
-        """TMC SubarrayNode observation state."""
-        self._subarray_obs_state = Resource(self.subarray_node).get("obsState")
-        return self._subarray_obs_state
-
-    @subarray_obs_state.setter
-    def subarray_obs_state(self, value):
-        """Sets value for TMC subarrayNode observation state."""
-        self._subarray_obs_state = value
 
     # -----------------------------------------------------------
     # Subarray state actions

@@ -5,7 +5,7 @@ from typing import Tuple
 
 from ska_control_model import ResultCode
 from ska_ser_logging import configure_logging
-from tango import DeviceProxy, DevState
+from tango import DeviceProxy
 
 from tests.test_harness3.telescope_actions.central_node.central_node_assign_resources import (  # pylint: disable=line-too-long # noqa E501
     CentralNodeAssignResources,
@@ -70,19 +70,6 @@ class TMCCentralNodeFacade:
     def sdp_master_leaf_node(self) -> DeviceProxy:
         """The SDP master leaf node Tango device proxy."""
         return self._telescope.tmc.sdp_master_leaf_node
-
-    # -----------------------------------------------------------
-    # CENTRAL NODE PROPERTIES
-
-    @property
-    def telescope_state(self) -> DevState:
-        """Get telescope state representing overall state of telescope."""
-        self._telescope.tmc.telescope_state
-
-    @telescope_state.setter
-    def telescope_state(self, value: DevState) -> None:
-        """Set telescope state representing overall state of telescope."""
-        self._telescope.tmc.telescope_state = value
 
     # -----------------------------------------------------------
     # Central Node telescope state actions

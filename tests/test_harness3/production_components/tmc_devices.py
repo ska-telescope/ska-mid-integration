@@ -5,6 +5,7 @@ import logging
 
 from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
+from tango import DevState
 
 from tests.test_harness3.constant import DEFAULT_DISH_VCC_CONFIG
 from tests.test_harness3.telescope_actions.central_node.central_node_load_dish_config import (  # pylint: disable=line-too-long # noqa E501
@@ -51,7 +52,7 @@ class ProductionTMCDevices(TMCDevices):
         ForceChangeOfObsState(ObsState.EMPTY).execute()
 
         # NOTE: temporarily moved here because of synchronization
-        if self.telescope_state != "OFF":
+        if self.central_node.telescopeState != DevState.OFF:
             MoveToOff().execute()
 
         # reset subarray too

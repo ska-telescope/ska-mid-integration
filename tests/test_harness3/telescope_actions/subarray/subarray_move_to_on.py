@@ -2,7 +2,9 @@
 
 import logging
 
-from tests.resources.test_support.common_utils.common_helpers import Resource
+from assertpy import assert_that
+from tango import DevState
+
 from tests.test_harness3.telescope_actions.telescope_action import (
     TelescopeAction,
 )
@@ -17,10 +19,12 @@ class SubarrayMoveToOn(TelescopeAction):
     def _action(self):
         # TODO: why are we using strings instead of state enums?
         # which is the point where it's done a mapping between the two?
-        if self.telescope.tmc.subarray_state != "ON":
-            Resource(self.telescope.tmc.subarray_node).assert_attribute(
-                "State"
-            ).equals("OFF")
+        # if self.telescope.tmc.subarray_state != "ON":
+        if self.telescope.tmc.subarray_node.State != DevState.ON:
+            assert_that(self.telescope.tmc.subarray_node.State).described_as(
+                "FAILED ASSUMPTION: Subarray state is not either ON or OFF"
+            ).is_equal_to(DevState.OFF)
+
             result, message = self.telescope.tmc.subarray_node.On()
             LOGGER.info("Invoked ON on SubarrayNode")
             return (result, message)
