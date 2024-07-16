@@ -12,9 +12,14 @@ Scenario Outline: Verify CentralNode TelescopeHealthState
 =======
     Given a Telescope consisting of TMC, DISH, simulated CSP and simulated SDP
     And the Telescope is in ON state
-    When the <devices> health state changes to <health_state>
+    When the <device> health state changes to <health_state>
     Then the telescope health state is <telescope_health_state>
     Examples:
+<<<<<<< HEAD
     | devices         | health_state | telescope_health_state |
     | dish manager    | UNKNOWN      | UNKNOWN                |
 >>>>>>> 6806ec97 (SAH-1536: Enable skipped tmc-dish tests)
+=======
+    | device          | health_state | telescope_health_state |
+    | dish manager    | UNKNOWN      | UNKNOWN                |
+>>>>>>> 66bb27e6 (SAH-1536: Resolve review comments)
