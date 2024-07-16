@@ -12,7 +12,6 @@ import logging
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
-from tango import DevState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
@@ -35,81 +34,6 @@ def test_tmc_dish_long_sequence_functionality():
     """
     Test case to verify TMC-DISH long sequence functionality
     """
-
-
-@given(
-    parsers.parse(
-        "a Telescope consisting of TMC, DISH {dish_ids},"
-        + " simulated CSP and simulated SDP"
-    )
-)
-def given_a_telescope(central_node_mid, dish_ids):
-    """Given a TMC with DISH, CSP, and SDP
-
-    Args:
-        central_node_mid (CentralNode): A fixture for the CentralNode
-        tango device class.
-        dish_ids (str): A comma-separated string of dish IDs.
-
-    This function verifies the connection to the CSP and SDP masters,
-    and checks the connectivity of each dish's master and leaf node
-    by sending a ping command.
-    """
-    assert central_node_mid.csp_master.ping() > 0
-    assert central_node_mid.sdp_master.ping() > 0
-    for dish_id in dish_ids.split(","):
-        assert central_node_mid.dish_master_dict[dish_id].ping() > 0
-        assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
-
-
-@given("the Telescope is in ON state")
-def turn_on_telescope(central_node_mid, event_recorder):
-    """
-    A method to put Telescope ON
-    """
-    central_node_mid.move_to_on()
-    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
-    event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
-
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.csp_master,
-        "State",
-        DevState.ON,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.sdp_master,
-        "State",
-        DevState.ON,
-    )
-
-    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode"
-        )
-        event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
-        )
-
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "dishMode",
-            DishMode.STANDBY_FP,
-        )
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_leaf_node_dict[dish_id],
-            "dishMode",
-            DishMode.STANDBY_FP,
-        )
-
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
-
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.ON,
-    )
 
 
 @given("TMC subarray is in IDLE obsState")
@@ -386,7 +310,18 @@ def invoke_scan(
             central_node_mid.dish_leaf_node_dict[dish_id].pointingState
             == PointingState.TRACK
         )
-
+        logging.info(
+            "longRunningCommandResult for DishLN after scan %s",
+            central_node_mid.dish_leaf_node_dict[
+                dish_id
+            ].longRunningCommandResult,
+        )
+        logging.info(
+            "longRunningCommandResult for DISHmaster after scan %s",
+            central_node_mid.dish_master_dict[
+                dish_id
+            ].longRunningCommandResult,
+        )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "longRunningCommandResult",
