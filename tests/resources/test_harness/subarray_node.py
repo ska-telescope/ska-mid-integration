@@ -9,6 +9,7 @@ from ska_tango_base.control_model import HealthState
 from tango import DeviceProxy, DevState
 
 from tests.resources.test_harness.constant import (
+    COMMAND_COMPLETED,
     DISH_001_CALIBRATION_DATA,
     DISH_036_CALIBRATION_DATA,
     centralnode,
@@ -56,7 +57,6 @@ from tests.resources.test_harness.utils.sync_decorators import (
     sync_restart,
 )
 from tests.resources.test_support.common_utils.common_helpers import Resource
-from tests.resources.test_support.common_utils.result_code import ResultCode
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -551,7 +551,7 @@ class SubarrayNodeWrapper(object):
         assert event_recorder.has_change_event_occurred(
             self.subarray_node,
             "longRunningCommandResult",
-            (unique_id[0], str(int(ResultCode.OK))),
+            (unique_id[0], COMMAND_COMPLETED),
             lookahead=15,
         )
         assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
@@ -592,7 +592,7 @@ class SubarrayNodeWrapper(object):
         assert event_recorder.has_change_event_occurred(
             self.subarray_node,
             "longRunningCommandResult",
-            (unique_id[0], str(int(ResultCode.OK))),
+            (unique_id[0], COMMAND_COMPLETED),
             lookahead=15,
         )
         # assert sourceOffset gets populated as expected
@@ -633,7 +633,7 @@ class SubarrayNodeWrapper(object):
         assert event_recorder.has_change_event_occurred(
             self.subarray_node,
             "longRunningCommandResult",
-            (unique_id[0], str(int(ResultCode.OK))),
+            (unique_id[0], COMMAND_COMPLETED),
             lookahead=15,
         )
         # assert sourceOffset gets populated as expected
@@ -673,7 +673,7 @@ class SubarrayNodeWrapper(object):
         assert event_recorder.has_change_event_occurred(
             self.subarray_node,
             "longRunningCommandResult",
-            (unique_id[0], str(int(ResultCode.OK))),
+            (unique_id[0], COMMAND_COMPLETED),
             lookahead=15,
         )
         # assert sourceOffset gets populated as expected

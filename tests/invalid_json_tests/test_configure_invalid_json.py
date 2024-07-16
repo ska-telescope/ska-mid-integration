@@ -6,6 +6,7 @@ from pytest_bdd import given, parsers, scenario, then, when
 from tango import DeviceProxy, EventType
 
 from tests.conftest import LOGGER
+from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.common_utils.telescope_controls import (
     BaseTelescopeControl,
@@ -185,7 +186,7 @@ def tmc_accepts_next_commands(json_factory, change_event_callbacks):
             DEVICE_OBS_STATE_READY_INFO, "obsState"
         )
         change_event_callbacks["longRunningCommandResult"].assert_change_event(
-            (pytest.command_result[1][0], str(ResultCode.OK.value)),
+            (pytest.command_result[1][0], COMMAND_COMPLETED),
             lookahead=4,
         )
         # teardown
