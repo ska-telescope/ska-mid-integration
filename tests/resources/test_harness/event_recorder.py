@@ -101,6 +101,7 @@ class EventRecorder(object):
         Returns:
             bool: Change Event occurred True or False
         """
+        LOGGER.info("Input attribute value: %s", attribute_value)
         callable_name = self._generate_callable_name(device, attribute_name)
         change_event_callback = self.subscribed_events.get(callable_name, None)
         if change_event_callback:
@@ -134,7 +135,14 @@ class EventRecorder(object):
                 LOGGER.info("full_attr_name is: %s", full_attr_name)
                 attr_proxy = AttributeProxy(full_attr_name)
                 LOGGER.info("Attribute value is: %s", attr_proxy.read())
+<<<<<<< HEAD
 >>>>>>> 1cdae141 (SAH-1558: Fix the error in the test.)
+=======
+                attr_value = attr_proxy.read().value
+                LOGGER.info("attr value is: %s", attr_value)
+                if attr_value == attribute_value:
+                    return True
+>>>>>>> e2dc2929 (SAH-1558: Fix the error in the test.)
                 return False
 
         raise AttributeNotSubscribed(
