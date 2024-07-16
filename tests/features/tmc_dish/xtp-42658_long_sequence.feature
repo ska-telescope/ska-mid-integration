@@ -11,6 +11,7 @@ Scenario: TMC executes long sequence of commands successfully
     And TMC subarray is in IDLE obsState
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     When I configure the subarray <subarray_id> with <receiver_band_1>
     And I issue End command to the subarray <subarray_id>
     And I reconfigure subarray <subarray_id> with <receiver_band_2>
@@ -42,11 +43,15 @@ Scenario: TMC executes long sequence of commands successfully
 =======
     When I configure the subarray <subarray_id> with <receiver_band>
 >>>>>>> 66bb27e6 (SAH-1536: Resolve review comments)
+=======
+    When I configure the subarray <subarray_id> with <receiver_band_1>
+>>>>>>> 28428e7e (SAH-1536: Resolve review comments)
     And I issue End command to the subarray <subarray_id>
-    And I reconfigure subarray <subarray_id> with <receiver_band>
+    And I reconfigure subarray <subarray_id> with <receiver_band_2>
     And I issue scan command with <scan_id> on subarray
     Then tmc subarraynode reports SCANNING obsState
     Examples:
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -65,3 +70,7 @@ Scenario: TMC executes long sequence of commands successfully
         | subarray_id | dish_ids                     | scan_id |receiver_band|
         | 1           | SKA001,SKA036,SKA063,SKA100  |    1    |1,2          |
 >>>>>>> 66bb27e6 (SAH-1536: Resolve review comments)
+=======
+        | subarray_id | dish_ids                     | scan_id | receiver_band_1 | receiver_band_2 |
+        | 1           | SKA001,SKA036,SKA063,SKA100  |    1    |        1        |        2        |  
+>>>>>>> 28428e7e (SAH-1536: Resolve review comments)
