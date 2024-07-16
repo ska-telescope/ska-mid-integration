@@ -111,6 +111,8 @@ class EventRecorder(object):
             except AssertionError:
                 device_name = device.dev_name()
                 LOGGER.info("Device name is: %s", device_name)
+                device_fqdn = device.get_fqdn()
+                LOGGER.info("Device FQDN is: %s", device_fqdn)
                 full_attr_name = device_name + "/" + attribute_name
                 LOGGER.info("full_attr_name is: %s", full_attr_name)
                 attr_proxy = AttributeProxy(full_attr_name)
