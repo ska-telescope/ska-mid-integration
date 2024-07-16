@@ -6,7 +6,6 @@ import time
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
-from tango import DevState
 
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
@@ -34,60 +33,13 @@ def test_tmc_dish_successive_scan_with_different_scan_duration():
     """
 
 
-@given("a Telescope in ON state and TMC subarray in IDLE obsState")
-def turn_on_telescope(
-    central_node_mid,
-    event_recorder,
-    subarray_node,
-    command_input_factory,
+@given("TMC subarray is in IDLE obsState")
+def check_subarray_obsState_idle(
+    subarray_node, central_node_mid, event_recorder, command_input_factory
 ):
     """
-    A method to put Telescope ON
+    Method to check subarray is in IDLE obsState
     """
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
-
-    central_node_mid.move_to_on()
-
-    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode"
-        )
-        event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
-        )
-    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
-    event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
-
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.csp_master,
-        "State",
-        DevState.ON,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.sdp_master,
-        "State",
-        DevState.ON,
-    )
-
-    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "dishMode",
-            DishMode.STANDBY_FP,
-        )
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_leaf_node_dict[dish_id],
-            "dishMode",
-            DishMode.STANDBY_FP,
-        )
-
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.ON,
-    )
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
 
     assign_input_json = prepare_json_args_for_centralnode_commands(

@@ -3,7 +3,7 @@
 import logging
 
 import pytest
-from pytest_bdd import given, parsers, scenario, then, when
+from pytest_bdd import parsers, scenario, then, when
 from tango import DevState
 
 from tests.resources.test_support.enum import DishMode
@@ -24,23 +24,6 @@ def test_tmc_dish_startup_telescope():
         which provides simulated master devices
         - "event_recorder": fixture for EventRecorder class
     """
-
-
-@given(
-    parsers.parse(
-        "a Telescope consisting of TMC, DISH {dish_ids},"
-        + " simulated CSP and simulated SDP"
-    )
-)
-def given_a_telescope(central_node_mid, event_recorder, dish_ids):
-    """
-    Given a TMC
-    """
-    assert central_node_mid.csp_master.ping() > 0
-    assert central_node_mid.sdp_master.ping() > 0
-    for dish_id in dish_ids.split(","):
-        assert central_node_mid.dish_master_dict[dish_id].ping() > 0
-        assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
 
 
 @when("I start up the telescope")
