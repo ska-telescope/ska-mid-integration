@@ -112,6 +112,7 @@ class EventRecorder(object):
             except AssertionError:
                 device_name = device.dev_name()
 <<<<<<< HEAD
+<<<<<<< HEAD
                 dish_prefix = ""
                 real_dish1_fqdn = os.getenv("DISH_NAME_1")
                 if ("dish-manager" in device_name) and (
@@ -130,10 +131,22 @@ class EventRecorder(object):
                 if attr_value == attribute_value:
                     return True
 =======
+=======
+                dish_prefix = ""
+>>>>>>> a9c85647 (SAH-1558: Debug the errors in the tests.)
                 LOGGER.info("Device name is: %s", device_name)
-                device_fqdn = device.get_fqdn()
-                LOGGER.info("Device FQDN is: %s", device_fqdn)
-                full_attr_name = device_name + "/" + attribute_name
+                REAL_DISH1_FQDN = os.getenv("DISH_NAME_1")
+                logging.info("REAL_DISH1_FQDN: %s", REAL_DISH1_FQDN)
+                if "dish-lmc-1" not in REAL_DISH1_FQDN:
+                    # It is a real dish device
+                    dish_prefix = REAL_DISH1_FQDN.replace(
+                        "mid-dish/dish-manager/SKA001", ""
+                    )
+                    logging.info("dish_prefix: %s", dish_prefix)
+
+                full_attr_name = (
+                    dish_prefix + device_name + "/" + attribute_name
+                )
                 LOGGER.info("full_attr_name is: %s", full_attr_name)
                 attr_proxy = AttributeProxy(full_attr_name)
                 LOGGER.info("Attribute value is: %s", attr_proxy.read())
