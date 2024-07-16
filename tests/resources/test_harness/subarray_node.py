@@ -351,7 +351,7 @@ class SubarrayNodeWrapper(object):
             sim_device_fqdn_list = [self.sdp_subarray1]
         for sim_device_fqdn in sim_device_fqdn_list:
             device = DeviceProxy(sim_device_fqdn)
-            device.ResetDelay()
+            device.ResetDelayInfo()
             device.SetDirectHealthState(HealthState.UNKNOWN)
             device.SetDefective(json.dumps({"enabled": False}))
 
@@ -364,7 +364,7 @@ class SubarrayNodeWrapper(object):
             for dish_master in self.dish_master_list:
                 dish_master.SetDirectDishMode(DishMode.STANDBY_LP)
                 dish_master.SetDirectState(DevState.STANDBY)
-                dish_master.ResetDelay()
+                dish_master.ResetDelayInfo()
                 dish_master.SetDirectHealthState(HealthState.UNKNOWN)
 
     def _clear_command_call_and_transition_data(self, clear_transition=False):
