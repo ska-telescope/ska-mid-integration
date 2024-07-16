@@ -13,7 +13,6 @@ import logging
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
-from tango import DevState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
@@ -53,6 +52,7 @@ def test_tmc_dish_long_sequence_functionality():
     """
 
 
+<<<<<<< HEAD
 @given(
     parsers.parse(
         "a Telescope consisting of TMC, DISH {dish_ids},"
@@ -168,6 +168,8 @@ def turn_on_telescope(central_node_mid, event_recorder):
 >>>>>>> 7ceda8b8 (SAH-1536: Update test case for xtp-42658)
 
 
+=======
+>>>>>>> aca410a8 (SAH-1536: Resolve review comments)
 @given("TMC subarray is in IDLE obsState")
 def check_subarray_obsState_idle(
     subarray_node, central_node_mid, event_recorder, command_input_factory
@@ -542,7 +544,18 @@ def invoke_scan(
             central_node_mid.dish_leaf_node_dict[dish_id].pointingState
             == PointingState.TRACK
         )
-
+        logging.info(
+            "longRunningCommandResult for DishLN after scan %s",
+            central_node_mid.dish_leaf_node_dict[
+                dish_id
+            ].longRunningCommandResult,
+        )
+        logging.info(
+            "longRunningCommandResult for DISHmaster after scan %s",
+            central_node_mid.dish_master_dict[
+                dish_id
+            ].longRunningCommandResult,
+        )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "longRunningCommandResult",
