@@ -7,6 +7,7 @@ from ska_control_model import ObsState
 from tango import DevState
 
 from tests.resources.test_harness.constant import (
+    COMMAND_COMPLETED,
     DISH_001_CALIBRATION_DATA,
     DISH_036_CALIBRATION_DATA,
 )
@@ -17,7 +18,6 @@ from tests.resources.test_harness.helpers import (
     wait_and_validate_device_attribute_value,
 )
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
-from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
@@ -94,7 +94,7 @@ def a_subarray_after_five_point_calibration(
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (unique_id[0], str(int(ResultCode.OK))),
+        (unique_id[0], COMMAND_COMPLETED),
         lookahead=5,
     )
     subarray_node.simulate_receive_addresses_event(
