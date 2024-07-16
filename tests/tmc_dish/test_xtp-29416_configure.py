@@ -110,11 +110,16 @@ def test_tmc_dish_configure():
     """
 
 
+<<<<<<< HEAD
 @given("the TMC subarray is in IDLE obsState")
+=======
+@given(parsers.parse("TMC subarray {subarray_id}  is in IDLE obsState"))
+>>>>>>> 415d590c (SAH-1536: Resolve review comments)
 def subarray_is_in_idle_obsState(
     central_node_mid,
     subarray_node,
     event_recorder,
+<<<<<<< HEAD
     command_input_factory,
 ):
     """
@@ -126,7 +131,15 @@ def subarray_is_in_idle_obsState(
         event_recorder: Fixture for EventRecorder class
         command_input_factory: fixture for creating input required
         for command
+=======
+    subarray_id,
+    command_input_factory,
+):
     """
+    A method to check if telescope in is idle obsState.
+>>>>>>> 415d590c (SAH-1536: Resolve review comments)
+    """
+    central_node_mid.set_subarray_id(subarray_id)
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     event_recorder.subscribe_event(
         central_node_mid.subarray_devices.get("sdp_subarray"), "obsState"
