@@ -19,9 +19,12 @@ from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     LongRunningCommandResult,
 >>>>>>> 1232aef4 (SAH-1536: Resolve review comments)
+=======
+>>>>>>> 9e9e3c92 (SAH-1536: Resolve review comments)
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
@@ -489,7 +492,14 @@ def invoke_scan(
     scan_input_json = prepare_json_args_for_commands(
         "scan_mid", command_input_factory
     )
+<<<<<<< HEAD
     subarray_node.store_scan_data(scan_input_json)
+=======
+
+    pytest.command_result = subarray_node.execute_transition(
+        "Scan", scan_input_json
+    )
+>>>>>>> 9e9e3c92 (SAH-1536: Resolve review comments)
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
@@ -522,17 +532,16 @@ def invoke_scan(
             central_node_mid.dish_leaf_node_dict[dish_id].pointingState
             == PointingState.TRACK
         )
-        assert LongRunningCommandResult(
+
+        assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "longRunningCommandResult",
-            "_Scan",
-            "COMPLETED",
+            (pytest.command_result[1][0], str(ResultCode.OK.value)),
         )
-        assert LongRunningCommandResult(
+        assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "longRunningCommandResult",
-            "_Scan",
-            "COMPLETED",
+            (pytest.command_result[1][0], str(ResultCode.OK.value)),
         )
 >>>>>>> 1232aef4 (SAH-1536: Resolve review comments)
 
