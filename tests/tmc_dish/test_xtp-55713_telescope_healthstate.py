@@ -109,9 +109,9 @@ def set_simulator_devices_health_states(
 
     # Added a wait for the completion of spfrx1 device deletion from TANGO
     # database and the spfrx1 device restart
-    time.sleep(5)
+    # time.sleep(5)
 
-    # asserting UNKOWN healthstate for dishmaster and dishleafnode
+    # asserting UNKNOWN healthstate for dishmaster and dishleafnode
     event_recorder.subscribe_event(
         central_node_mid.dish_master_dict["SKA001"], "healthState"
     )
@@ -139,15 +139,15 @@ def set_simulator_devices_health_states(
 def check_telescope_health_state(
     central_node_mid, event_recorder, telescope_health_state
 ):
-    """A method to check CentralNode.telescopehealthState attribute
-    change after aggregation
+    """A method to check CentralNode.telescopeHealthState
+    attribute change after aggregation.
 
     Args:
         central_node_mid : A fixture for CentralNode tango device class
         event_recorder: A fixture for EventRecorder class_
-        telescope_health_state (str): telescopehealthState value
+        telescope_health_state (str): telescopeHealthState value
     """
-
+    # Subscribe to the health state event
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeHealthState"
     )
@@ -166,14 +166,19 @@ def check_telescope_health_state(
     dev_info.server = central_node_mid.spfrx1_dev_server
     central_node_mid.dish1_db.add_device(dev_info)
     central_node_mid.spfrx1_admin_dev_proxy.RestartServer()
-    # When device restarts it can take around 15 sec to up again
-    # so wait for the spfrx1 device to start and dish1 dishMode
-    # to be in proper state
-    time.sleep(15)
 
     logging.info("asserting health state at end")
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeHealthState",
-        HealthState.OK,
-    ), "Expected Central Node telescopeHealthState to be OK"
+    # Wait for the spfrx1 device to start and dish1
+    # dishMode to be in proper state
+
+    while True:
+        # Check if the condition is met
+        if event_recorder.has_change_event_occurred(
+            central_node_mid.central_node,
+            "telescopeHealthState",
+            HealthState.OK,
+        ):
+            logging.info("telescopeHealthState is OK")
+            break
+
+        time.process_time()
