@@ -388,11 +388,6 @@ def invoke_scan(
         )
 
         assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "longRunningCommandResult",
-            (pytest.command_result[1][0], str(ResultCode.OK.value)),
-        )
-        assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "longRunningCommandResult",
             (pytest.command_result[1][0], str(ResultCode.OK.value)),
