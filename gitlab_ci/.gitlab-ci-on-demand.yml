@@ -162,7 +162,7 @@ stop-on-demand-dish-lmc-063:
   stage: on-demand
   variables:
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-on-demand-dish-lmc-063"
-    DISH_HELM_RELEASE: "4.0."
+    DISH_HELM_RELEASE: "4.0.0"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
 
 on-demand-dish-lmc-dish100:
