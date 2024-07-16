@@ -7,7 +7,6 @@ through the expected states.
 """
 
 import json
-import logging
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -175,9 +174,7 @@ def configure_subarray(
         "configure_mid", command_input_factory
     )
     configure_input_json = json.loads(input_json)
-    logging.info("receiver band with split is %s", receiver_band.split(",")[0])
-    logging.info("receiver band without split is %s", receiver_band[0])
-    configure_input_json["dish"]["receiver_band"] = receiver_band.split(",")[0]
+    configure_input_json["dish"]["receiver_band"] = receiver_band[0]
     configure_input_json["csp"]["common"]["frequency_band"] = "1"
     central_node_mid.set_subarray_id(subarray_id)
     pytest.command_result = subarray_node.store_configuration_data(
@@ -288,7 +285,7 @@ def reconfigure_subarray(
         "configure_mid", command_input_factory
     )
     configure_input_json = json.loads(input_json)
-    configure_input_json["dish"]["receiver_band"] = receiver_band.split(",")[1]
+    configure_input_json["dish"]["receiver_band"] = receiver_band[1]
     configure_input_json["csp"]["common"]["frequency_band"] = "2"
     central_node_mid.set_subarray_id(subarray_id)
     pytest.command_result = subarray_node.store_configuration_data(
@@ -353,6 +350,14 @@ def invoke_scan(
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "scanID"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id],
+            "longRunningCommandResult",
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "longRunningCommandResult",
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
