@@ -8,6 +8,7 @@ through the expected states.
 
 import ast
 import json
+import logging
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -229,7 +230,7 @@ def check_subarray_obsState_idle(
 
 @when(
     parsers.parse(
-        "I configure the subarray {subarray_id} with {receiver_band}"
+        "I configure the subarray {subarray_id} with {receiver_band_1}"
     )
 )
 def configure_subarray(
@@ -238,7 +239,7 @@ def configure_subarray(
     event_recorder: EventRecorder,
     command_input_factory: JsonFactory,
     subarray_id: str,
-    receiver_band: str,
+    receiver_band_1: str,
 ):
     """
     A method to invoke first Configure command
@@ -250,7 +251,8 @@ def configure_subarray(
         "configure_mid", command_input_factory
     )
     configure_input_json = json.loads(input_json)
-    configure_input_json["dish"]["receiver_band"] = receiver_band[0]
+    logging.info("receiver band is %s", receiver_band_1)
+    configure_input_json["dish"]["receiver_band"] = receiver_band_1
     configure_input_json["csp"]["common"]["frequency_band"] = "1"
     central_node_mid.set_subarray_id(subarray_id)
     pytest.command_result = subarray_node.store_configuration_data(
@@ -385,7 +387,9 @@ def end_configuration_on_subarray(
 
 
 @when(
-    parsers.parse("I reconfigure subarray {subarray_id} with {receiver_band}")
+    parsers.parse(
+        "I reconfigure subarray {subarray_id} with {receiver_band_2}"
+    )
 )
 def reconfigure_subarray(
     subarray_node: SubarrayNodeWrapper,
@@ -393,7 +397,7 @@ def reconfigure_subarray(
     event_recorder: EventRecorder,
     command_input_factory: JsonFactory,
     subarray_id: str,
-    receiver_band: str,
+    receiver_band_2: str,
 ):
     """
     A method to invoke second Configure command
@@ -405,7 +409,7 @@ def reconfigure_subarray(
         "configure_mid", command_input_factory
     )
     configure_input_json = json.loads(input_json)
-    configure_input_json["dish"]["receiver_band"] = receiver_band[1]
+    configure_input_json["dish"]["receiver_band"] = receiver_band_2
     configure_input_json["csp"]["common"]["frequency_band"] = "2"
     central_node_mid.set_subarray_id(subarray_id)
     pytest.command_result = subarray_node.store_configuration_data(
