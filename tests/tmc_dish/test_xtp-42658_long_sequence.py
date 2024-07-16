@@ -1,6 +1,13 @@
-"""Test module for long sequence functionality"""
+"""Test module for long sequence functionality
+
+This module tests the TMC-DISH long sequence functionality, ensuring that
+a sequence of commands including configuration, scanning, and reconfiguration
+are executed successfully and the system transitions
+through the expected states.
+"""
 
 import json
+import logging
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -10,7 +17,7 @@ from tango import DevState
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
-    check_long_running_command_status,
+    LongRunningCommandResult,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
@@ -38,8 +45,16 @@ def test_tmc_dish_long_sequence_functionality():
     )
 )
 def given_a_telescope(central_node_mid, dish_ids):
-    """
-    Given a TMC
+    """Given a TMC with DISH, CSP, and SDP
+
+    Args:
+        central_node_mid (CentralNode): A fixture for the CentralNode
+        tango device class.
+        dish_ids (str): A comma-separated string of dish IDs.
+
+    This function verifies the connection to the CSP and SDP masters,
+    and checks the connectivity of each dish's master and leaf node
+    by sending a ping command.
     """
     assert central_node_mid.csp_master.ping() > 0
     assert central_node_mid.sdp_master.ping() > 0
@@ -103,7 +118,18 @@ def check_subarray_obsState_idle(
     subarray_node, central_node_mid, event_recorder, command_input_factory
 ):
     """
-    Method to check subarray is in IDLE obsState
+    Method to check if the TMC subarray is in IDLE obsState.
+
+    This function subscribes to the obsState event of the subarray node and
+    assigns resources to the central node. It verifies that the subarray
+    transitions to the IDLE obsState and that the longRunningCommandResult
+    indicates a successful execution with ResultCode.OK.
+
+    Args:
+        subarray_node : A fixture for SubarrayNode tango device class
+        central_node_mid : A fixture for CentralNode tango device class
+        event_recorder: A fixture for EventRecorder class
+        command_input_factory: A fixture for JsonFactory class
     """
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
 
@@ -129,7 +155,7 @@ def check_subarray_obsState_idle(
 
 @when(
     parsers.parse(
-        "I configure the subarray {subarray_id} with receiver_band_1"
+        "I configure the subarray {subarray_id} with {receiver_band}"
     )
 )
 def configure_subarray(
@@ -138,6 +164,7 @@ def configure_subarray(
     event_recorder: EventRecorder,
     command_input_factory: JsonFactory,
     subarray_id: str,
+    receiver_band: str,
 ):
     """
     A method to invoke first Configure command
@@ -149,7 +176,9 @@ def configure_subarray(
         "configure_mid", command_input_factory
     )
     configure_input_json = json.loads(input_json)
-    configure_input_json["dish"]["receiver_band"] = "1"
+    logging.info("receiver band with split is %s", receiver_band.split(",")[0])
+    logging.info("receiver band without split is %s", receiver_band[0])
+    configure_input_json["dish"]["receiver_band"] = receiver_band.split(",")[0]
     configure_input_json["csp"]["common"]["frequency_band"] = "1"
     central_node_mid.set_subarray_id(subarray_id)
     pytest.command_result = subarray_node.store_configuration_data(
@@ -211,7 +240,6 @@ def end_configuration_on_subarray(
     A method to invoke end command
     """
     central_node_mid.set_subarray_id(subarray_id)
-    # pytest.command_result = subarray_node.end_observation()
     pytest.command_result = subarray_node.execute_transition("End")
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
 
@@ -241,7 +269,7 @@ def end_configuration_on_subarray(
 
 
 @when(
-    parsers.parse("I reconfigure subarray {subarray_id} with receiver_band 2")
+    parsers.parse("I reconfigure subarray {subarray_id} with {receiver_band}")
 )
 def reconfigure_subarray(
     subarray_node: SubarrayNodeWrapper,
@@ -249,6 +277,7 @@ def reconfigure_subarray(
     event_recorder: EventRecorder,
     command_input_factory: JsonFactory,
     subarray_id: str,
+    receiver_band: str,
 ):
     """
     A method to invoke second Configure command
@@ -260,7 +289,7 @@ def reconfigure_subarray(
         "configure_mid", command_input_factory
     )
     configure_input_json = json.loads(input_json)
-    configure_input_json["dish"]["receiver_band"] = "2"
+    configure_input_json["dish"]["receiver_band"] = receiver_band.split(",")[1]
     configure_input_json["csp"]["common"]["frequency_band"] = "2"
     central_node_mid.set_subarray_id(subarray_id)
     pytest.command_result = subarray_node.store_configuration_data(
@@ -349,9 +378,15 @@ def invoke_scan(
             central_node_mid.dish_leaf_node_dict[dish_id].pointingState
             == PointingState.TRACK
         )
-        assert check_long_running_command_status(
+        assert LongRunningCommandResult(
             central_node_mid.dish_master_dict[dish_id],
-            "longRunningCommandStatus",
+            "longRunningCommandResult",
+            "_Scan",
+            "COMPLETED",
+        )
+        assert LongRunningCommandResult(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "longRunningCommandResult",
             "_Scan",
             "COMPLETED",
         )
@@ -367,4 +402,10 @@ def check_tmc_subarray_scanning(
         subarray_node.subarray_node,
         "obsState",
         ObsState.SCANNING,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.READY,
+        lookahead=10,
     )

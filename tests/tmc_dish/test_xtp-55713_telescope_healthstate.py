@@ -1,4 +1,5 @@
 """Test case for verifying TMC TelescopeHealthState transition"""
+import logging
 import time
 
 import pytest
@@ -89,7 +90,7 @@ def turn_on_telescope(central_node_mid, event_recorder):
     )
 
 
-@when(parsers.parse("the {devices} health state changes to {health_state}"))
+@when(parsers.parse("the {device} health state changes to {health_state}"))
 def set_simulator_devices_health_states(
     central_node_mid, event_recorder, health_state
 ):
@@ -106,8 +107,8 @@ def set_simulator_devices_health_states(
 
     central_node_mid.spfrx1_admin_dev_proxy.RestartServer()
 
-    # Added a wait for the completion of dish device deletion from TANGO
-    # database and the dish device restart
+    # Added a wait for the completion of spfrx1 device deletion from TANGO
+    # database and the spfrx1 device restart
     time.sleep(5)
 
     # asserting UNKOWN healthstate for dishmaster and dishleafnode
@@ -169,3 +170,10 @@ def check_telescope_health_state(
     # so wait for the spfrx1 device to start and dish1 dishMode
     # to be in proper state
     time.sleep(15)
+
+    logging.info("asserting health state at end")
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "telescopeHealthState",
+        HealthState.OK,
+    ), "Expected Central Node telescopeHealthState to be OK"
