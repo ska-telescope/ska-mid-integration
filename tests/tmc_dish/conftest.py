@@ -1,6 +1,9 @@
+<<<<<<< HEAD
 """Pytest BDD step implementations specific to TMC DISH-LMC integration
 tests."""
 
+=======
+>>>>>>> eb6f6125 (SAH-1536: Resolve review comments)
 from pytest_bdd import given, parsers
 from tango import DevState
 
@@ -16,10 +19,13 @@ from tests.resources.test_support.enum import DishMode
 def given_a_telescope(central_node_mid, dish_ids):
     """
     Given a TMC
+<<<<<<< HEAD
 
     Args:
         central_node_mid: Fixture for a TMC CentralNode wrapper class
         dish_ids (str): Comma-separated IDs of DISH components.
+=======
+>>>>>>> eb6f6125 (SAH-1536: Resolve review comments)
     """
     assert central_node_mid.csp_master.ping() > 0
     assert central_node_mid.sdp_master.ping() > 0
@@ -32,10 +38,13 @@ def given_a_telescope(central_node_mid, dish_ids):
 def turn_on_telescope(central_node_mid, event_recorder):
     """
     A method to put Telescope ON
+<<<<<<< HEAD
 
     Args:
         central_node_mid: Fixture for a TMC CentralNode wrapper class
         event_recorder: Fixture for EventRecorder class
+=======
+>>>>>>> eb6f6125 (SAH-1536: Resolve review comments)
     """
     central_node_mid.move_to_on()
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
@@ -45,12 +54,15 @@ def turn_on_telescope(central_node_mid, event_recorder):
         event_recorder.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
         )
+<<<<<<< HEAD
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "pointingState"
         )
         event_recorder.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
         )
+=======
+>>>>>>> eb6f6125 (SAH-1536: Resolve review comments)
     event_recorder.subscribe_event(central_node_mid.csp_master, "State")
     event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
 
@@ -75,7 +87,10 @@ def turn_on_telescope(central_node_mid, event_recorder):
             central_node_mid.dish_leaf_node_dict[dish_id],
             "dishMode",
             DishMode.STANDBY_FP,
+<<<<<<< HEAD
             lookahead=15,
+=======
+>>>>>>> eb6f6125 (SAH-1536: Resolve review comments)
         )
 
     event_recorder.subscribe_event(
