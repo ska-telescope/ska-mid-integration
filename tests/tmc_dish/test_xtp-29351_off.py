@@ -1,8 +1,5 @@
 """Test module for TMC-DISH Off functionality"""
 
-import logging
-import os
-
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from tango import DevState
@@ -36,12 +33,6 @@ def check_tmc_and_dish_is_on(central_node_mid, event_recorder, dish_ids):
     """
     Given a TMC , DISH , simulated CSP and simulated in ON state
     """
-    REAL_DISH1_FQDN = os.getenv("DISH_NAME_1")
-    logging.info("REAL_DISH1_FQDN: %s", REAL_DISH1_FQDN)
-    dish_prefix = REAL_DISH1_FQDN.replace("mid-dish/dish-manager/SKA001", "")
-    logging.info("dish_prefix: %s", dish_prefix)
-    assert 0
-
     assert central_node_mid.csp_master.ping() > 0
     assert central_node_mid.sdp_master.ping() > 0
     for dish_id in dish_ids.split(","):
