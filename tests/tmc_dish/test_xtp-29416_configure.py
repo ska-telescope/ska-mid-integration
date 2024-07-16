@@ -111,10 +111,14 @@ def test_tmc_dish_configure():
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 @given("the TMC subarray is in IDLE obsState")
 =======
 @given(parsers.parse("TMC subarray {subarray_id}  is in IDLE obsState"))
 >>>>>>> 415d590c (SAH-1536: Resolve review comments)
+=======
+@given("the TMC subarray is in IDLE obsState")
+>>>>>>> b87b3917 (SAH-1536: Resolve review comments)
 def subarray_is_in_idle_obsState(
     central_node_mid,
     subarray_node,

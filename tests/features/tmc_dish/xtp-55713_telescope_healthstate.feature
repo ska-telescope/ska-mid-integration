@@ -2,6 +2,7 @@
 @XTP-55713 @XTP-29778 @Team_SAHYADRI @tmc_dish
 Scenario Outline: Verify CentralNode TelescopeHealthState
 <<<<<<< HEAD
+<<<<<<< HEAD
     Given a Telescope consisting of TMC, DISH <dish_ids>, simulated CSP and simulated SDP
     And the Telescope is in ON state
     When the <device> health state changes to <health_state>
@@ -11,10 +12,14 @@ Scenario Outline: Verify CentralNode TelescopeHealthState
     | dish manager    | UNKNOWN      | UNKNOWN                |SKA001,SKA036,SKA063,SKA100        |
 =======
     Given a Telescope consisting of TMC, DISH, simulated CSP and simulated SDP
+=======
+    Given a Telescope consisting of TMC, DISH <dish_ids>, simulated CSP and simulated SDP
+>>>>>>> b87b3917 (SAH-1536: Resolve review comments)
     And the Telescope is in ON state
     When the <device> health state changes to <health_state>
     Then the telescope health state is <telescope_health_state>
     Examples:
+<<<<<<< HEAD
 <<<<<<< HEAD
     | devices         | health_state | telescope_health_state |
     | dish manager    | UNKNOWN      | UNKNOWN                |
@@ -23,3 +28,7 @@ Scenario Outline: Verify CentralNode TelescopeHealthState
     | device          | health_state | telescope_health_state |
     | dish manager    | UNKNOWN      | UNKNOWN                |
 >>>>>>> 66bb27e6 (SAH-1536: Resolve review comments)
+=======
+    | device          | health_state | telescope_health_state |dish_ids                           |
+    | dish manager    | UNKNOWN      | UNKNOWN                |SKA001,SKA036,SKA063,SKA100        |
+>>>>>>> b87b3917 (SAH-1536: Resolve review comments)
