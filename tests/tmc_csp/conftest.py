@@ -31,6 +31,7 @@ from tests.test_harness2.sut_initialization.harness_components_factory import (
 from tests.test_harness2.sut_structure.sut_wrapper import (
     TelescopeWrapper as TelescopeWrapper2,
 )
+from tests.test_harness3.common_utils.i_json_factory import IJsonFactory
 from tests.test_harness3.telescope_facades.csp_facade import CSPFacade
 from tests.test_harness3.telescope_facades.dishes_facade import DishesFacade
 from tests.test_harness3.telescope_facades.sdp_facade import SDPFacade
@@ -46,6 +47,7 @@ from tests.test_harness3.telescope_init.telescope_structure_factory import (
 from tests.test_harness3.telescope_structure.telescope_wrapper import (
     TelescopeWrapper,
 )
+from tests.various_utils.tmc_mid_json_factory import TMCMidJsonFactory
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -314,9 +316,15 @@ def subarray_node_facade2():
 
 
 @fixture
-def telescope_wrapper() -> TelescopeWrapper:
+def tmc_mid_json_factory() -> TMCMidJsonFactory:
+    """Return a custom json factory."""
+    return TMCMidJsonFactory()
+
+
+@fixture
+def telescope_wrapper(tmc_mid_json_factory: IJsonFactory) -> TelescopeWrapper:
     """Create an unique test harness with proxies to all devices."""
-    components_factory = TelescopeStructureFactory()
+    components_factory = TelescopeStructureFactory(tmc_mid_json_factory)
     telescope = components_factory.init_telescope_test_structure()
     yield telescope
     telescope.tear_down()

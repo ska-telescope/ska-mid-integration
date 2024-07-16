@@ -5,10 +5,7 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer, log_events
 
-from tests.test_harness3.helpers import (
-    prepare_json_args_for_centralnode_commands,
-    prepare_json_args_for_commands,
-)
+from tests.test_harness3.common_utils.i_json_factory import IJsonFactory
 from tests.test_harness3.telescope_facades.csp_facade import CSPFacade
 from tests.test_harness3.telescope_facades.tmc_central_node_facade import (
     TMCCentralNodeFacade,
@@ -16,7 +13,6 @@ from tests.test_harness3.telescope_facades.tmc_central_node_facade import (
 from tests.test_harness3.telescope_facades.tmc_subarray_node_facade import (
     TMCSubarrayNodeFacade,
 )
-from tests.test_harness3.utils.common_utils import JsonFactory
 
 ASSERTIONS_TIMEOUT = 60
 
@@ -63,7 +59,7 @@ def _setup_event_subscriptions(
 
 @given(parsers.parse("the subarray {subarray_id} is in the READY state"))
 def subarray_in_ready_state(
-    command_input_factory: JsonFactory,
+    tmc_mid_json_factory: IJsonFactory,
     subarray_node_facade: TMCSubarrayNodeFacade,
     central_node_facade: TMCCentralNodeFacade,
     csp: CSPFacade,
@@ -99,12 +95,15 @@ def subarray_in_ready_state(
     # Move subarray to READY state
     subarray_node_facade.force_change_of_obs_state(
         ObsState.READY,
-        assign_input_json=prepare_json_args_for_centralnode_commands(
-            "assign_resources_mid", command_input_factory
-        ),
-        configure_input_json=prepare_json_args_for_commands(
-            "configure_mid", command_input_factory
-        ),
+        # assign_input_json=prepare_json_args_for_centralnode_commands(
+        #     "assign_resources_mid", command_input_factory
+        # ),
+        # configure_input_json=prepare_json_args_for_commands(
+        #     "configure_mid", command_input_factory
+        # ),
+        assign_input_json=tmc_mid_json_factory.create_central_node_assign_resources_command_input(),  # pylint: disable=line-too-long # noqa: E501
+        configure_input_json=tmc_mid_json_factory.create_subarray_configure_command_input(),  # pylint: disable=line-too-long # noqa: E501
+        json_factory=tmc_mid_json_factory,
         # wait_termination=True,
         wait_termination_condition=True,
     )
@@ -116,7 +115,7 @@ def subarray_in_ready_state(
 @when(parsers.parse("the Scan command is sent to subarray {subarray_id}"))
 def send_scan_command(
     subarray_node_facade: TMCSubarrayNodeFacade,
-    command_input_factory: JsonFactory,
+    tmc_mid_json_factory: IJsonFactory,
 ):
     """Send the Scan command to the specified subarray.
 
@@ -128,9 +127,11 @@ def send_scan_command(
         command_input_factory: Factory for creating command inputs.
         subarray_id: ID of the subarray being tested.
     """
-    scan_input_json = prepare_json_args_for_commands(
-        "scan_mid", command_input_factory
-    )
+    # scan_input_json = prepare_json_args_for_commands(
+    #     "scan_mid", command_input_factory
+    # )
+
+    scan_input_json = tmc_mid_json_factory.create_subarray_scan_command_input()
 
     subarray_node_facade.scan(
         scan_input_json,

@@ -2,6 +2,9 @@
 
 import logging
 
+from ska_control_model import ObsState
+
+from tests.test_harness3.common_utils.i_json_factory import IJsonFactory
 from tests.test_harness3.telescope_actions.subarray.obs_state_resetter_factory import (  # pylint: disable=line-too-long # noqa: E501
     SubarrayObsStateResetterFactory,
 )
@@ -37,18 +40,40 @@ class ForceChangeOfObsState(TelescopeAction):
 
     def __init__(
         self,
-        dest_state_name: str,
+        dest_state_name: ObsState,
         assign_input_json: str | None = None,
         configure_input_json: str | None = None,
         scan_input_json: str | None = None,
+        json_factory: IJsonFactory | None = None,
     ):
-        """Initialize the action with the target state."""
+        """Initialize the action with the target state and the JSON inputs.
+
+        To init correctly this class you should provide:
+
+        - all the JSON inputs for the `AssignResources`, `Configure` and `Scan`
+            commands, or
+        - a JSON factory to create the default JSON inputs for these commands.
+
+        You can also provide just some inputs and the factory will create the
+        default JSON inputs for the rest. If not all inputs are provided
+        and the factory is not provided either, the creation will raise
+        a ValueError.
+
+        :param dest_state_name: The target state to reach.
+        :param assign_input_json: The input JSON for the
+            `AssignResources` command.
+        :param configure_input_json: The input JSON for
+            the `Configure` command.
+        :param scan_input_json: The input JSON for the `Scan` command.
+        :param json_factory: The factory to create the default JSON inputs.
+        """
         super().__init__()
 
         self.dest_state_name = dest_state_name
         self.assign_input_json = assign_input_json
         self.configure_input_json = configure_input_json
         self.scan_input_json = scan_input_json
+        self.json_factory = json_factory
 
     def _action(self):
         LOGGER.info("Forcing the change of ObsState in Subarray")
@@ -57,6 +82,7 @@ class ForceChangeOfObsState(TelescopeAction):
             self.assign_input_json,
             self.configure_input_json,
             self.scan_input_json,
+            self.json_factory,
         ).create_action_to_reset_subarray_to_state(self.dest_state_name)
 
         obs_state_resetter_action.set_termination_condition_timeout(

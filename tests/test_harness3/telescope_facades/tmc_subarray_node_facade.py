@@ -2,8 +2,10 @@
 
 import logging
 
+from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
 
+from tests.test_harness3.common_utils.i_json_factory import IJsonFactory
 from tests.test_harness3.telescope_actions.subarray.force_change_of_obs_state import (  # pylint: disable=line-too-long # noqa: E501
     ForceChangeOfObsState,
 )
@@ -277,16 +279,27 @@ class TMCSubarrayNodeFacade:
 
     def force_change_of_obs_state(
         self,
-        dest_state_name: str,
+        dest_state_name: ObsState,
         assign_input_json: str | None = None,
         configure_input_json: str | None = None,
         scan_input_json: str | None = None,
+        json_factory: IJsonFactory | None = None,
         wait_termination_condition: bool = True,
     ) -> None:
         """Force SubarrayNode obsState to provided obsState.
 
+        To init correctly this class you should provide:
+
+        - all the JSON inputs for the `AssignResources`, `Configure` and `Scan`
+            commands, or
+        - a JSON factory to create the default JSON inputs for these commands.
+
+        You can also provide just some inputs and the factory will create the
+        default JSON inputs for the rest. If not all inputs are provided
+        and the factory is not provided either, the creation will raise
+        a ValueError.
+
         :param dest_state_name: Name of the destination obsState.
-            TODO: replace with enum
         :param assign_input_json: Assign input json. If you leave it as None,
             it will use the default assign input json.
         :param configure_input_json: Configure input json. If you leave
@@ -302,6 +315,7 @@ class TMCSubarrayNodeFacade:
             assign_input_json,
             configure_input_json,
             scan_input_json,
+            json_factory,
         )
         action.set_termination_condition_policy(wait_termination_condition)
         action.execute()

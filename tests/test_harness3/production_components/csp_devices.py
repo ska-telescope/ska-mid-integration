@@ -1,6 +1,9 @@
 """A wrapper for a production CSP."""
 
-from tests.test_harness3.helpers import wait_csp_master_off
+from assertpy import assert_that
+from ska_tango_testing.integration import TangoEventTracer
+from tango import DevState
+
 from tests.test_harness3.telescope_config.components_config import (
     CSPConfiguration,
 )
@@ -25,17 +28,32 @@ class ProductionCSPDevices(CSPDevices):
         super().__init__(csp_configuration)
         self.all_production = all_production
 
+    WAIT_FOR_OFF_TIMEOUT = 50
+
     def move_to_on(self) -> None:
         if not self.all_production:
             # NOTE: in old code this line was BEFORE
             # self.central_node.TelescopeOn(). Empirically,
             # it seems the order not to matter, but I am not sure.
 
+            event_tracer = TangoEventTracer()
+            event_tracer.subscribe_event(self.csp_master, "State")
+
             # NOTE: why CSP should be in OFF state when I want the telescope
             # to be ON? It seems a contradiction.
             if self.csp_master.adminMode != 0:
                 self.csp_master.adminMode = 0
-            wait_csp_master_off()
+
+            # wait_csp_master_off()
+            assert_that(event_tracer).described_as(
+                "FAIL IN MoveToOn PROCEDURE: "
+                f"CSP master ({self.csp_master.dev_name()}) "
+                "is supposed to be in OFF state."
+            ).within_timeout(
+                self.WAIT_FOR_OFF_TIMEOUT
+            ).has_change_event_occurred(
+                self.csp_master, "State", DevState.OFF
+            )
 
     def move_to_off(self) -> None:
         """Move to OFF for production test wrapper does nothing."""

@@ -1,5 +1,6 @@
 """Create a telescope test structure according to the current configuration."""
 
+from tests.test_harness3.common_utils.i_json_factory import IJsonFactory
 from tests.test_harness3.emulated_components.csp_devices import (
     EmulatedCSPDevices,
 )
@@ -52,9 +53,10 @@ class TelescopeStructureFactory:
     using the constructor (see Singleton design pattern).
     """
 
-    def __init__(self):
+    def __init__(self, json_factory: IJsonFactory):
         """Initialize the factory."""
         self.config_factory = TestHarnessConfigurationFactory()
+        self.json_factory = json_factory
 
     @property
     def _emulation_config(self):
@@ -92,6 +94,7 @@ class TelescopeStructureFactory:
         """
         return ProductionTMCDevices(
             self.config_factory.get_TMC_configuration(),
+            self.json_factory,
         )
 
     def create_sdp_wrapper(self) -> SDPDevices:
