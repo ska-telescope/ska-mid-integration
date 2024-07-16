@@ -124,6 +124,7 @@ def subarray_is_in_idle_obsState(
     subarray_node,
     event_recorder,
 <<<<<<< HEAD
+<<<<<<< HEAD
     command_input_factory,
 ):
     """
@@ -137,13 +138,14 @@ def subarray_is_in_idle_obsState(
         for command
 =======
     subarray_id,
+=======
+>>>>>>> b112fb51 (SAH-1536: Resolve review comments)
     command_input_factory,
 ):
     """
     A method to check if telescope in is idle obsState.
 >>>>>>> 415d590c (SAH-1536: Resolve review comments)
     """
-    central_node_mid.set_subarray_id(subarray_id)
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     event_recorder.subscribe_event(
         central_node_mid.subarray_devices.get("sdp_subarray"), "obsState"
