@@ -1,5 +1,7 @@
 """Test module for TMC-DISH Off functionality"""
 
+import logging
+
 import pytest
 from pytest_bdd import parsers, scenario, then, when
 from tango import DevState
@@ -60,6 +62,9 @@ def test_tmc_dish_shutdown_telescope():
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> d683a756 (SAH-1558: Debug the errors in the tests.)
 =======
 @given(
     parsers.parse(
@@ -76,7 +81,28 @@ def check_tmc_and_dish_is_on(central_node_mid, event_recorder, dish_ids):
     for dish_id in dish_ids.split(","):
         assert central_node_mid.dish_master_dict[dish_id].ping() > 0
         assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
+<<<<<<< HEAD
 
+=======
+        logging.info(
+            "Dish Manager FQDN: %s",
+            central_node_mid.dish_master_dict[dish_id].get_fqdn(),
+        )
+        logging.info(
+            "Dish Manager Info: %s",
+            central_node_mid.dish_master_dict[dish_id].info(),
+        )
+        logging.info(
+            "Dish LN FQDN: %s",
+            central_node_mid.dish_leaf_node_dict[dish_id].get_fqdn(),
+        )
+        logging.info(
+            "Dish LN Info: %s",
+            central_node_mid.dish_leaf_node_dict[dish_id].info(),
+        )
+
+    assert 0
+>>>>>>> d683a756 (SAH-1558: Debug the errors in the tests.)
     central_node_mid.move_to_on()
 
     for dish_id in dish_ids.split(","):
@@ -124,8 +150,11 @@ def check_tmc_and_dish_is_on(central_node_mid, event_recorder, dish_ids):
 
 
 >>>>>>> 8db544db (SAH-1558: Debug the errors in the tests.)
+<<<<<<< HEAD
 =======
 >>>>>>> 415d590c (SAH-1536: Resolve review comments)
+=======
+>>>>>>> d683a756 (SAH-1558: Debug the errors in the tests.)
 @when("I switch off the telescope")
 def turn_off_telescope(central_node_mid):
     """
