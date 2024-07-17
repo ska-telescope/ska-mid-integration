@@ -34,6 +34,12 @@ def turn_on_telescope(central_node_mid, event_recorder):
         event_recorder.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
         )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "pointingState"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
+        )
     event_recorder.subscribe_event(central_node_mid.csp_master, "State")
     event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
 

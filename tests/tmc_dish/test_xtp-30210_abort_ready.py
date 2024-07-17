@@ -67,13 +67,6 @@ def subarray_is_in_ready_obsState(
     event_recorder.subscribe_event(
         subarray_node.subarray_devices.get("csp_subarray"), "obsState"
     )
-    for dish_id in dish_ids.split(","):
-        event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
-        )
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "pointingState"
-        )
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )

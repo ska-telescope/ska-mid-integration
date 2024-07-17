@@ -260,6 +260,7 @@ def configure_subarray(
         json.dumps(configure_input_json)
     )
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+<<<<<<< HEAD
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "pointingState"
         )
@@ -271,6 +272,8 @@ def configure_subarray(
 >>>>>>> 2ee3ddf7 (SAH-1536: Enable skipped tmc-dish tests)
         )
 
+=======
+>>>>>>> 3f2e08b9 (SAH-1536: Resolve review comments)
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
