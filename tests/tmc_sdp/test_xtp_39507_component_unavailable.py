@@ -128,7 +128,10 @@ def sdp_subarray_reports_unavailability(
         attribute_value=(pytest.unique_id[0], Anything),
     )
     assert "AssignResources" in pytest.assertion_data["attribute_value"][0]
-    assert exception_message in pytest.assertion_data["attribute_value"][1][1]
+    assert (
+        exception_message
+        in json.loads(pytest.assertion_data["attribute_value"][1])[1]
+    )
 
 
 @then("TMC should report the error to client")
@@ -146,7 +149,10 @@ def tmc_reports_unavailability_to_client(
         + " cannot start processing blocks.\n"
     )
     assert "AssignResources" in pytest.assertion_data["attribute_value"][0]
-    assert exception_message in pytest.assertion_data["attribute_value"][1][1]
+    assert (
+        exception_message
+        in json.loads(pytest.assertion_data["attribute_value"][1])[1]
+    )
 
 
 @then(parsers.parse("the TMC SubarrayNode {subarray_id} stuck in RESOURCING"))
