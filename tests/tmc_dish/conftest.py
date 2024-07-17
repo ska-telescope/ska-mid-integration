@@ -55,14 +55,20 @@ def turn_on_telescope(central_node_mid, event_recorder):
             central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
         )
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 3d70f9af (SAH-1536: Resolve review comments)
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "pointingState"
         )
         event_recorder.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
         )
+<<<<<<< HEAD
 =======
 >>>>>>> eb6f6125 (SAH-1536: Resolve review comments)
+=======
+>>>>>>> 3d70f9af (SAH-1536: Resolve review comments)
     event_recorder.subscribe_event(central_node_mid.csp_master, "State")
     event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
 
