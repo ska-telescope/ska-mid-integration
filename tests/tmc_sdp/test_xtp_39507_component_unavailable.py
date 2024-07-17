@@ -143,6 +143,7 @@ def tmc_reports_unavailability_to_client(
     """
     exception_message = (
         "Exception occurred on device:"
+        + "1721217660.907432_144787383731434_AssignResources"
         + " ska_mid/tm_subarray_node/1: Exception occurred on the"
         + " following devices: ska_mid/tm_leaf_node/sdp_subarray01:"
         + " The processing controller, helm deployer, or both are OFFLINE:"
