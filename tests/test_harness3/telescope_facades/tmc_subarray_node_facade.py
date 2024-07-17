@@ -95,6 +95,11 @@ class TMCSubarrayNodeFacade:
         """Return SDP Master Leaf Node Proxy"""
         return self._telescope.tmc.sdp_master_leaf_node
 
+    @property
+    def csp_subarray_leaf_node(self):
+        """Return CSP Subarray Leaf Node Proxy"""
+        return self._telescope.tmc.csp_subarray_leaf_node
+
     # -----------------------------------------------------------
     # Setter for initializing subarray
 

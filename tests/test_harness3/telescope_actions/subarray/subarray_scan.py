@@ -2,6 +2,11 @@
 
 import logging
 
+from ska_control_model import ObsState
+
+from tests.test_harness3.telescope_actions.expected_event import (
+    ExpectedStateChange,
+)
 from tests.test_harness3.telescope_actions.telescope_action import (
     TelescopeAction,
 )
@@ -25,4 +30,24 @@ class SubarrayScan(TelescopeAction):
 
     def termination_condition(self):
         """No expected outcome for this action."""
-        return []
+        return [
+            ExpectedStateChange(
+                self.telescope.tmc.csp_subarray_leaf_node,
+                "cspSubarrayObsState",
+                ObsState.SCANNING,
+            ),
+            ExpectedStateChange(
+                self.telescope.tmc.sdp_subarray_leaf_node,
+                "sdpSubarrayObsState",
+                ObsState.SCANNING,
+            ),
+            ExpectedStateChange(
+                self.telescope.csp.csp_subarray, "obsState", ObsState.SCANNING
+            ),
+            ExpectedStateChange(
+                self.telescope.sdp.sdp_subarray, "obsState", ObsState.SCANNING
+            ),
+            ExpectedStateChange(
+                self.telescope.tmc.subarray_node, "obsState", ObsState.SCANNING
+            ),
+        ]
