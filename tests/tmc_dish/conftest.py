@@ -20,12 +20,18 @@ def given_a_telescope(central_node_mid, dish_ids):
     """
     Given a TMC
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> c2cdab3f (SAH-1536: Debug test failure)
 
     Args:
         central_node_mid: Fixture for a TMC CentralNode wrapper class
         dish_ids (str): Comma-separated IDs of DISH components.
+<<<<<<< HEAD
 =======
 >>>>>>> eb6f6125 (SAH-1536: Resolve review comments)
+=======
+>>>>>>> c2cdab3f (SAH-1536: Debug test failure)
     """
     assert central_node_mid.csp_master.ping() > 0
     assert central_node_mid.sdp_master.ping() > 0
@@ -39,12 +45,18 @@ def turn_on_telescope(central_node_mid, event_recorder):
     """
     A method to put Telescope ON
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> c2cdab3f (SAH-1536: Debug test failure)
 
     Args:
         central_node_mid: Fixture for a TMC CentralNode wrapper class
         event_recorder: Fixture for EventRecorder class
+<<<<<<< HEAD
 =======
 >>>>>>> eb6f6125 (SAH-1536: Resolve review comments)
+=======
+>>>>>>> c2cdab3f (SAH-1536: Debug test failure)
     """
     central_node_mid.move_to_on()
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
