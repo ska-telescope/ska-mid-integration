@@ -5,10 +5,14 @@ a sequence of commands including configuration, scanning, and reconfiguration
 are executed successfully and the system transitions
 through the expected states.
 """
+<<<<<<< HEAD
 
 import ast
+=======
+>>>>>>> 98a5a250 (SAH-1536: Debug test failure)
 import json
 import logging
+import time
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -383,6 +387,7 @@ def end_configuration_on_subarray(
         "obsState",
         ObsState.IDLE,
     )
+
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
@@ -559,11 +564,28 @@ def invoke_scan(
             ].longRunningCommandResult,
         )
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+        time.sleep(10)
+        logging.info(
+            "longRunningCommandResult for DishLN after scan and sleep %s",
+            central_node_mid.dish_leaf_node_dict[
+                dish_id
+            ].longRunningCommandResult,
+        )
+        logging.info(
+            "longRunningCommandResult for DISHmaster after scan and sleep %s",
+            central_node_mid.dish_master_dict[
+                dish_id
+            ].longRunningCommandResult,
+        )
+>>>>>>> 98a5a250 (SAH-1536: Debug test failure)
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "longRunningCommandResult",
             (pytest.command_result[1][0], str(ResultCode.OK.value)),
         )
+<<<<<<< HEAD
 >>>>>>> 1232aef4 (SAH-1536: Resolve review comments)
 =======
         # assert event_recorder.has_change_event_occurred(
@@ -572,6 +594,8 @@ def invoke_scan(
         #     (pytest.command_result[1][0], str(ResultCode.OK.value)),
         # )
 >>>>>>> 1003daaa (SAH-1536: Resolve review comments)
+=======
+>>>>>>> 98a5a250 (SAH-1536: Debug test failure)
 
 
 @then("tmc subarraynode reports SCANNING obsState")
