@@ -109,13 +109,13 @@ def tmc_assign_resources_invoke(
 
 @then("SDP subarray report the unavailability of SDP Component")
 def sdp_subarray_reports_unavailability(
-    event_recorder: EventRecorder, subarray_node: SubarrayNodeWrapper
+    event_recorder: EventRecorder, central_node_mid: SubarrayNodeWrapper
 ):
     """
     Method to verify SDP subarray reports unavailability to TMC.
     """
     event_recorder.subscribe_event(
-        subarray_node.sdp_subarray_leaf_node,
+        central_node_mid.central_node,
         "longRunningCommandResult",
     )
     exception_message = (
@@ -123,7 +123,7 @@ def sdp_subarray_reports_unavailability(
         + "are OFFLINE: cannot start processing blocks."
     )
     pytest.assertion_data = event_recorder.has_change_event_occurred(
-        subarray_node.sdp_subarray_leaf_node,
+        central_node_mid.central_node,
         attribute_name="longRunningCommandResult",
         attribute_value=(pytest.unique_id[0], Anything),
     )
