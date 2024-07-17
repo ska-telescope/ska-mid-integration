@@ -131,6 +131,7 @@ def send(json_factory, unexpected_command, change_event_callbacks):
         ].assert_change_event(
             (pytest.command_result[1][0], Anything),
 <<<<<<< HEAD
+<<<<<<< HEAD
             lookahead=15,
         )
         expected_error = (
@@ -138,6 +139,9 @@ def send(json_factory, unexpected_command, change_event_callbacks):
         )
 =======
             lookahead=4,
+=======
+            lookahead=15,
+>>>>>>> b4388b46 (SAH-1564: Update test)
         )
         expected_error = (
             "AssignResources command not permitted in observation state"
