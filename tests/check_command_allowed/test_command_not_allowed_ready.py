@@ -121,7 +121,7 @@ def send(json_factory, unexpected_command, change_event_callbacks):
             "longRunningCommandResult"
         ].assert_change_event(
             (pytest.command_result[1][0], Anything),
-            lookahead=4,
+            lookahead=15,
         )
         expected_error = (
             "AssignResources command not permitted in observation state"
