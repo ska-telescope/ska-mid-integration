@@ -137,6 +137,7 @@ def sdp_subarray_reports_unavailability(
     assert (
         exception_message
         in json.loads(pytest.assertion_data["attribute_value"][1])[1]
+<<<<<<< HEAD
 =======
         subarray_node.sdp_subarray_leaf_node,
 =======
@@ -148,6 +149,9 @@ def sdp_subarray_reports_unavailability(
     )
     assert "AssignResources" in pytest.assertion_data["attribute_value"][0]
     assert exception_message in pytest.assertion_data["attribute_value"][1][1]
+=======
+    )
+>>>>>>> 2e524661 (SAH-1564: Update test case)
 
 
 @then("TMC should report the error to client")
@@ -165,13 +169,19 @@ def tmc_reports_unavailability_to_client(
     )
     assert "AssignResources" in pytest.assertion_data["attribute_value"][0]
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 2e524661 (SAH-1564: Update test case)
     assert (
         exception_message
         in json.loads(pytest.assertion_data["attribute_value"][1])[1]
     )
+<<<<<<< HEAD
 =======
     assert exception_message in pytest.assertion_data["attribute_value"][1][1]
 >>>>>>> ef69de99 (SAH-1564: Update test case)
+=======
+>>>>>>> 2e524661 (SAH-1564: Update test case)
 
 
 @then(parsers.parse("the TMC SubarrayNode {subarray_id} stuck in RESOURCING"))
