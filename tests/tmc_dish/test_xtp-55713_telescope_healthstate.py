@@ -33,10 +33,43 @@ def set_simulator_devices_health_states(
     """
     # transitioning dishmanger (SKA001) healthstate to UNKNOWN by deleting
     # deleting spfrx device
+    event_recorder.subscribe_event(
+        central_node_mid.dish_master_dict["SKA001"], "healthState"
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.dish_leaf_node_dict["SKA001"], "healthState"
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "telescopeHealthState"
+    )
+    logging.info(
+        "healthstate of dishmaster is before deleting spfrx  %s",
+        central_node_mid.dish_master_dict["SKA001"].healthstate,
+    )
+    logging.info(
+        "healthstate of dishln is before deleting spfrx %s",
+        central_node_mid.dish_leaf_node_dict["SKA001"].healthstate,
+    )
+    logging.info(
+        "telescopeHealthState of CN is before deleting spfrx %s",
+        central_node_mid.central_node.telescopeHealthState,
+    )
     central_node_mid.dish1_db.delete_device(central_node_mid.spfrx_fqdn)
 
     central_node_mid.spfrx1_admin_dev_proxy.RestartServer()
 
+    logging.info(
+        "healthstate of dishmaster is after deleting spfrx  %s",
+        central_node_mid.dish_master_dict["SKA001"].healthstate,
+    )
+    logging.info(
+        "healthstate of dishln is after deleting spfrx %s",
+        central_node_mid.dish_leaf_node_dict["SKA001"].healthstate,
+    )
+    logging.info(
+        "telescopeHealthState of CN is after deleting spfrx %s",
+        central_node_mid.central_node.telescopeHealthState,
+    )
     # Added a wait for the completion of spfrx1 device deletion from TANGO
     # database and the spfrx1 device restart
     # time.sleep(5)
@@ -100,15 +133,36 @@ def check_telescope_health_state(
     logging.info("asserting health state at end")
     # Wait for the spfrx1 device to start and dish1
     # dishMode to be in proper state
+    time.sleep(15)
 
-    while True:
-        # Check if the condition is met
-        if event_recorder.has_change_event_occurred(
-            central_node_mid.central_node,
-            "telescopeHealthState",
-            HealthState.OK,
-        ):
-            logging.info("telescopeHealthState is OK")
-            break
+    logging.info(
+        "healthstate of dishmaster is after adding back spfrx %s",
+        central_node_mid.dish_master_dict["SKA001"].healthstate,
+    )
+    logging.info(
+        "healthstate of dishln is after adding back spfrx %s",
+        central_node_mid.dish_leaf_node_dict["SKA001"].healthstate,
+    )
+    logging.info(
+        "telescopeHealthState of CN is after adding back spfrx %s",
+        central_node_mid.central_node.telescopeHealthState,
+    )
 
-        time.process_time()
+    central_node_mid.move_to_off()
+    assert central_node_mid.central_node.ping() > 0
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "telescopeHealthState",
+        HealthState.OK,
+    )
+    # while True:
+    #     # Check if the condition is met
+    #     if event_recorder.has_change_event_occurred(
+    #         central_node_mid.central_node,
+    #         "telescopeHealthState",
+    #         HealthState.OK,
+    #     ):
+    #         logging.info("telescopeHealthState is OK")
+    #         break
+
+    #     time.process_time()
