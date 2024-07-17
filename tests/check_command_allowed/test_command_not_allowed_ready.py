@@ -116,6 +116,7 @@ def send(json_factory, unexpected_command, change_event_callbacks):
         pytest.command_result = central_node.AssignResources(assign_json)
         LOGGER.info(f"pytest result: {pytest.command_result}")
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         central_node.subscribe_event(
             "longRunningCommandResult",
@@ -126,6 +127,14 @@ def send(json_factory, unexpected_command, change_event_callbacks):
         LOGGER.info(f"pytest result: {pytest.command_result}")
 
 >>>>>>> 4293f084 (SAH-1564: Update the test to check not allowed exception)
+=======
+
+        central_node.subscribe_event(
+            "longRunningCommandResult",
+            EventType.CHANGE_EVENT,
+            change_event_callbacks["longRunningCommandResult"],
+        )
+>>>>>>> edaa5467 (SAH-1564: Added missing subscription)
         assertion_data = change_event_callbacks[
             "longRunningCommandResult"
         ].assert_change_event(
