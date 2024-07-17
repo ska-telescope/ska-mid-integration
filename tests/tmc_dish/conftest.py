@@ -13,6 +13,10 @@ from tests.resources.test_support.enum import DishMode
 def given_a_telescope(central_node_mid, dish_ids):
     """
     Given a TMC
+
+    Args:
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        dish_ids (str): Comma-separated IDs of DISH components.
     """
     assert central_node_mid.csp_master.ping() > 0
     assert central_node_mid.sdp_master.ping() > 0
@@ -25,6 +29,10 @@ def given_a_telescope(central_node_mid, dish_ids):
 def turn_on_telescope(central_node_mid, event_recorder):
     """
     A method to put Telescope ON
+
+    Args:
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        event_recorder: Fixture for EventRecorder class
     """
     central_node_mid.move_to_on()
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
