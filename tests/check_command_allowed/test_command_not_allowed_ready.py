@@ -67,7 +67,7 @@ def given_tmc(json_factory):
 
 
 @given("the subarray is in READY obsState")
-def given_tmc_obsState(json_factory):
+def given_tmc_obsState(json_factory, change_event_callbacks):
     assign_json = json_factory("command_AssignResources")
     configure_json = json_factory("command_Configure")
     release_json = json_factory("command_ReleaseResources")
@@ -82,7 +82,7 @@ def given_tmc_obsState(json_factory):
         )
 
         # Invoke Configure() Command on TMC
-        tmc_helper.configure_subarray(
+        pytest.command_result = tmc_helper.configure_subarray(
             configure_json, **ON_OFF_DEVICE_COMMAND_DICT
         )
         LOGGER.info("Configure command is invoked successfully")
@@ -90,6 +90,10 @@ def given_tmc_obsState(json_factory):
         # Verify ObsState is READY
         assert telescope_control.is_in_valid_state(
             DEVICE_OBS_STATE_READY_INFO, "obsState"
+        )
+        change_event_callbacks["longRunningCommandResult"].assert_change_event(
+            (pytest.command_result[1][0], COMMAND_COMPLETED),
+            lookahead=4,
         )
     except Exception:
         tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
