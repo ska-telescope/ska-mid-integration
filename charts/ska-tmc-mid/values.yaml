@@ -107,14 +107,22 @@ cspmasterleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
+<<<<<<< HEAD
     tag: 0.18.3
+=======
+    tag: 0.18.2-dev.c6ecc8970
+>>>>>>> d952fb40 (SAH-1564: Update dev image of csp)
     pullPolicy: IfNotPresent
 
 cspsubarrayleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
+<<<<<<< HEAD
     tag: 0.18.3
+=======
+    tag: 0.18.2-dev.c6ecc8970
+>>>>>>> d952fb40 (SAH-1564: Update dev image of csp)
     pullPolicy: IfNotPresent
 
 dishleafnode:
