@@ -123,6 +123,7 @@ def sdp_subarray_reports_unavailability(
         + "are OFFLINE: cannot start processing blocks."
     )
     pytest.assertion_data = event_recorder.has_change_event_occurred(
+<<<<<<< HEAD
         central_node_mid.central_node,
         attribute_name="longRunningCommandResult",
         attribute_value=(pytest.unique_id[0], Anything),
@@ -131,7 +132,14 @@ def sdp_subarray_reports_unavailability(
     assert (
         exception_message
         in json.loads(pytest.assertion_data["attribute_value"][1])[1]
+=======
+        subarray_node.sdp_subarray_leaf_node,
+        attribute_name="longRunningCommandResult",
+        attribute_value=(pytest.unique_id[0], Anything),
+>>>>>>> ef69de99 (SAH-1564: Update test case)
     )
+    assert "AssignResources" in pytest.assertion_data["attribute_value"][0]
+    assert exception_message in pytest.assertion_data["attribute_value"][1][1]
 
 
 @then("TMC should report the error to client")
@@ -148,10 +156,14 @@ def tmc_reports_unavailability_to_client(
         + " cannot start processing blocks.\n"
     )
     assert "AssignResources" in pytest.assertion_data["attribute_value"][0]
+<<<<<<< HEAD
     assert (
         exception_message
         in json.loads(pytest.assertion_data["attribute_value"][1])[1]
     )
+=======
+    assert exception_message in pytest.assertion_data["attribute_value"][1][1]
+>>>>>>> ef69de99 (SAH-1564: Update test case)
 
 
 @then(parsers.parse("the TMC SubarrayNode {subarray_id} stuck in RESOURCING"))
