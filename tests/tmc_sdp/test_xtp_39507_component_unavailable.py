@@ -109,7 +109,11 @@ def tmc_assign_resources_invoke(
 
 @then("SDP subarray report the unavailability of SDP Component")
 def sdp_subarray_reports_unavailability(
+<<<<<<< HEAD
     event_recorder: EventRecorder, central_node_mid: CentralNodeWrapperMid
+=======
+    event_recorder: EventRecorder, central_node_mid: SubarrayNodeWrapper
+>>>>>>> 95b446f7 (SAH-1564: Update test case)
 ):
     """
     Method to verify SDP subarray reports unavailability to TMC.
@@ -124,6 +128,7 @@ def sdp_subarray_reports_unavailability(
     )
     pytest.assertion_data = event_recorder.has_change_event_occurred(
 <<<<<<< HEAD
+<<<<<<< HEAD
         central_node_mid.central_node,
         attribute_name="longRunningCommandResult",
         attribute_value=(pytest.unique_id[0], Anything),
@@ -134,6 +139,9 @@ def sdp_subarray_reports_unavailability(
         in json.loads(pytest.assertion_data["attribute_value"][1])[1]
 =======
         subarray_node.sdp_subarray_leaf_node,
+=======
+        central_node_mid.central_node,
+>>>>>>> 95b446f7 (SAH-1564: Update test case)
         attribute_name="longRunningCommandResult",
         attribute_value=(pytest.unique_id[0], Anything),
 >>>>>>> ef69de99 (SAH-1564: Update test case)
