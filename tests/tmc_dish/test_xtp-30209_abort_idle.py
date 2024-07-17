@@ -88,7 +88,7 @@ def abort_is_invoked(subarray_node):
 @then(
     parsers.parse("the DishMaster {dish_ids} remains in dishmode STANDBY-FP")
 )
-def check_dish_mode(central_node_mid, event_recorder, dish_ids):
+def check_dish_mode(central_node_mid, dish_ids):
     """
     Method to check dishMode.
     """
