@@ -7,7 +7,6 @@ through the expected states.
 """
 import json
 import logging
-import time
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -311,19 +310,6 @@ def invoke_scan(
         )
         logging.info(
             "longRunningCommandResult for DISHmaster after scan %s",
-            central_node_mid.dish_master_dict[
-                dish_id
-            ].longRunningCommandResult,
-        )
-        time.sleep(20)
-        logging.info(
-            "longRunningCommandResult for DishLN after scan and sleep %s",
-            central_node_mid.dish_leaf_node_dict[
-                dish_id
-            ].longRunningCommandResult,
-        )
-        logging.info(
-            "longRunningCommandResult for DISHmaster after scan and sleep %s",
             central_node_mid.dish_master_dict[
                 dish_id
             ].longRunningCommandResult,
