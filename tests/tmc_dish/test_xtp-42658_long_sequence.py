@@ -5,9 +5,9 @@ a sequence of commands including configuration, scanning, and reconfiguration
 are executed successfully and the system transitions
 through the expected states.
 """
-
 import json
 import logging
+import time
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -175,6 +175,7 @@ def end_configuration_on_subarray(
         "obsState",
         ObsState.IDLE,
     )
+
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
@@ -314,11 +315,24 @@ def invoke_scan(
                 dish_id
             ].longRunningCommandResult,
         )
-        # assert event_recorder.has_change_event_occurred(
-        #     central_node_mid.dish_leaf_node_dict[dish_id],
-        #     "longRunningCommandResult",
-        #     (pytest.command_result[1][0], str(ResultCode.OK.value)),
-        # )
+        time.sleep(10)
+        logging.info(
+            "longRunningCommandResult for DishLN after scan and sleep %s",
+            central_node_mid.dish_leaf_node_dict[
+                dish_id
+            ].longRunningCommandResult,
+        )
+        logging.info(
+            "longRunningCommandResult for DISHmaster after scan and sleep %s",
+            central_node_mid.dish_master_dict[
+                dish_id
+            ].longRunningCommandResult,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "longRunningCommandResult",
+            (pytest.command_result[1][0], str(ResultCode.OK.value)),
+        )
 
 
 @then("tmc subarraynode reports SCANNING obsState")

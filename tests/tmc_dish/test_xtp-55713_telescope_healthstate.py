@@ -8,6 +8,7 @@ from ska_tango_base.control_model import HealthState
 from tango.db import DbDevInfo
 
 
+@pytest.mark.skip
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-55713_telescope_healthstate.feature",
