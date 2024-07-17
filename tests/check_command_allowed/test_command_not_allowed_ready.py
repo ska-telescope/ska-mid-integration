@@ -115,8 +115,12 @@ def send(json_factory, unexpected_command, change_event_callbacks):
         tmc_helper.check_devices(DEVICE_LIST_FOR_CHECK_DEVICES)
         pytest.command_result = central_node.AssignResources(assign_json)
         LOGGER.info(f"pytest result: {pytest.command_result}")
-        LOGGER.info(f"pytest result: {pytest.command_result}")
 
+        central_node.subscribe_event(
+            "longRunningCommandResult",
+            EventType.CHANGE_EVENT,
+            change_event_callbacks["longRunningCommandResult"],
+        )
         assertion_data = change_event_callbacks[
             "longRunningCommandResult"
         ].assert_change_event(
