@@ -6,11 +6,11 @@ import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from ska_tango_base.control_model import HealthState
+from ska_tango_testing.mock.placeholders import Anything
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
-    check_for_device_command_event,
     generate_eb_pb_ids,
     get_master_device_simulators,
     prepare_json_args_for_centralnode_commands,
@@ -122,13 +122,13 @@ def sdp_subarray_reports_unavailability(
         "The processing controller, helm deployer, or both "
         + "are OFFLINE: cannot start processing blocks."
     )
-    assert check_for_device_command_event(
+    pytest.assertion_data = event_recorder.has_change_event_occurred(
         subarray_node.sdp_subarray_leaf_node,
-        "longRunningCommandResult",
-        exception_message,
-        event_recorder,
-        "AssignResources",
+        attribute_name="longRunningCommandResult",
+        attribute_value=(pytest.unique_id[0], Anything),
     )
+    assert "AssignResources" in pytest.assertion_data["attribute_value"][0]
+    assert exception_message in pytest.assertion_data["attribute_value"][1][1]
 
 
 @then("TMC should report the error to client")
@@ -145,17 +145,8 @@ def tmc_reports_unavailability_to_client(
         + " The processing controller, helm deployer, or both are OFFLINE:"
         + " cannot start processing blocks.\n"
     )
-    event_recorder.subscribe_event(
-        central_node_mid.central_node,
-        "longRunningCommandResult",
-    )
-    assert check_for_device_command_event(
-        central_node_mid.central_node,
-        "longRunningCommandResult",
-        exception_message,
-        event_recorder,
-        "AssignResources",
-    )
+    assert "AssignResources" in pytest.assertion_data["attribute_value"][0]
+    assert exception_message in pytest.assertion_data["attribute_value"][1][1]
 
 
 @then(parsers.parse("the TMC SubarrayNode {subarray_id} stuck in RESOURCING"))
