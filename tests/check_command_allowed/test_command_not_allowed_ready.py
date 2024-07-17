@@ -71,7 +71,7 @@ def given_tmc(json_factory):
 
 
 @given("the subarray is in READY obsState")
-def given_tmc_obsState(json_factory, change_event_callbacks):
+def given_tmc_obsState(json_factory):
     assign_json = json_factory("command_AssignResources")
     configure_json = json_factory("command_Configure")
     release_json = json_factory("command_ReleaseResources")
@@ -95,10 +95,6 @@ def given_tmc_obsState(json_factory, change_event_callbacks):
         assert telescope_control.is_in_valid_state(
             DEVICE_OBS_STATE_READY_INFO, "obsState"
         )
-        # change_event_callbacks["longRunningCommandResult"].assert_change_event(
-        #     (pytest.command_result[1][0], COMMAND_COMPLETED),
-        #     lookahead=4,
-        # )
     except Exception:
         tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
         LOGGER.info("Tear Down complete. Telescope is in Standby State")
@@ -119,21 +115,50 @@ def send(json_factory, unexpected_command, change_event_callbacks):
         tmc_helper.check_devices(DEVICE_LIST_FOR_CHECK_DEVICES)
         pytest.command_result = central_node.AssignResources(assign_json)
         LOGGER.info(f"pytest result: {pytest.command_result}")
+<<<<<<< HEAD
 
         central_node.subscribe_event(
             "longRunningCommandResult",
             EventType.CHANGE_EVENT,
             change_event_callbacks["longRunningCommandResult"],
         )
+=======
+        LOGGER.info(f"pytest result: {pytest.command_result}")
+
+>>>>>>> 4293f084 (SAH-1564: Update the test to check not allowed exception)
         assertion_data = change_event_callbacks[
             "longRunningCommandResult"
         ].assert_change_event(
             (pytest.command_result[1][0], Anything),
+<<<<<<< HEAD
             lookahead=15,
         )
         expected_error = (
             "AssignResources command not permitted in observation state"
         )
+=======
+            lookahead=4,
+        )
+        expected_error = (
+            "AssignResources command not permitted in observation state"
+        )
+        assert (
+            ResultCode.FAILED
+            == json.loads(assertion_data["attribute_value"][1])[0]
+        )
+        assert (
+            expected_error
+            in json.loads(assertion_data["attribute_value"][1])[1]
+        )
+
+    elif unexpected_command == "ReleaseResources":
+        with pytest.raises(Exception) as e:
+            LOGGER.info("Invoking ReleaseResources command on TMC CentralNode")
+            central_node = DeviceProxy(centralnode)
+            tmc_helper.check_devices(DEVICE_LIST_FOR_CHECK_DEVICES)
+            pytest.command_result = central_node.ReleaseResources(release_json)
+            LOGGER.info(f"pytest result: {pytest.command_result}")
+>>>>>>> 4293f084 (SAH-1564: Update the test to check not allowed exception)
         assert (
             ResultCode.REJECTED
             == json.loads(assertion_data["attribute_value"][1])[0]
