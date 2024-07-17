@@ -12,7 +12,6 @@ import ast
 >>>>>>> 98a5a250 (SAH-1536: Debug test failure)
 import json
 import logging
-import time
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -566,6 +565,7 @@ def invoke_scan(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         time.sleep(10)
 =======
@@ -584,6 +584,8 @@ def invoke_scan(
             ].longRunningCommandResult,
         )
 >>>>>>> 98a5a250 (SAH-1536: Debug test failure)
+=======
+>>>>>>> 3d6be7fc (SAH-1536: Debug test failure)
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "longRunningCommandResult",
