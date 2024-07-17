@@ -1,9 +1,13 @@
+import json
+
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
+from ska_tango_testing.mock.placeholders import Anything
 from tango import DeviceProxy, EventType
 
 from tests.conftest import LOGGER
 from tests.resources.test_harness.constant import COMMAND_COMPLETED
+from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.common_utils.telescope_controls import (
     BaseTelescopeControl,
 )
@@ -67,7 +71,7 @@ def given_tmc(json_factory):
 
 
 @given("the subarray is in READY obsState")
-def given_tmc_obsState(json_factory, change_event_callbacks):
+def given_tmc_obsState(json_factory):
     assign_json = json_factory("command_AssignResources")
     configure_json = json_factory("command_Configure")
     release_json = json_factory("command_ReleaseResources")
@@ -91,10 +95,6 @@ def given_tmc_obsState(json_factory, change_event_callbacks):
         assert telescope_control.is_in_valid_state(
             DEVICE_OBS_STATE_READY_INFO, "obsState"
         )
-        # change_event_callbacks["longRunningCommandResult"].assert_change_event(
-        #     (pytest.command_result[1][0], COMMAND_COMPLETED),
-        #     lookahead=4,
-        # )
     except Exception:
         tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
         LOGGER.info("Tear Down complete. Telescope is in Standby State")
@@ -105,21 +105,36 @@ def given_tmc_obsState(json_factory, change_event_callbacks):
         "{unexpected_command} command is invoked, TMC raises exception"
     )
 )
-def send(json_factory, unexpected_command):
+def send(json_factory, unexpected_command, change_event_callbacks):
     assign_json = json_factory("command_AssignResources")
     release_json = json_factory("command_ReleaseResources")
 
     if unexpected_command == "AssignResources":
-        with pytest.raises(Exception) as e:
-            LOGGER.info("Invoking AssignResources command on TMC CentralNode")
-            central_node = DeviceProxy(centralnode)
-            tmc_helper.check_devices(DEVICE_LIST_FOR_CHECK_DEVICES)
-            pytest.command_result = central_node.AssignResources(assign_json)
-            LOGGER.info(f"pytest result: {pytest.command_result}")
-        assert (
-            "AssignResources command not permitted in observation state"
-            in str(e.value)
+        LOGGER.info("Invoking AssignResources command on TMC CentralNode")
+        central_node = DeviceProxy(centralnode)
+        tmc_helper.check_devices(DEVICE_LIST_FOR_CHECK_DEVICES)
+        pytest.command_result = central_node.AssignResources(assign_json)
+        LOGGER.info(f"pytest result: {pytest.command_result}")
+        LOGGER.info(f"pytest result: {pytest.command_result}")
+
+        assertion_data = change_event_callbacks[
+            "longRunningCommandResult"
+        ].assert_change_event(
+            (pytest.command_result[1][0], Anything),
+            lookahead=4,
         )
+        expected_error = (
+            "AssignResources command not permitted in observation state"
+        )
+        assert (
+            ResultCode.FAILED
+            == json.loads(assertion_data["attribute_value"][1])[0]
+        )
+        assert (
+            expected_error
+            in json.loads(assertion_data["attribute_value"][1])[1]
+        )
+
     elif unexpected_command == "ReleaseResources":
         with pytest.raises(Exception) as e:
             LOGGER.info("Invoking ReleaseResources command on TMC CentralNode")
