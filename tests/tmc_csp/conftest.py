@@ -22,15 +22,6 @@ from tests.resources.test_harness.utils.common_utils import (
     check_scan_successful_csp,
 )
 from tests.resources.test_support.common_utils.result_code import ResultCode
-from tests.test_harness2.subarray_node import (
-    SubarrayNodeWrapper as SubarrayNodeWrapper2,
-)
-from tests.test_harness2.sut_initialization.harness_components_factory import (
-    HarnessComponentsFactory as HarnessComponentsFactory2,
-)
-from tests.test_harness2.sut_structure.sut_wrapper import (
-    TelescopeWrapper as TelescopeWrapper2,
-)
 from tests.test_harness3.common_utils.i_json_factory import IJsonFactory
 from tests.test_harness3.telescope_facades.csp_facade import CSPFacade
 from tests.test_harness3.telescope_facades.dishes_facade import DishesFacade
@@ -280,35 +271,6 @@ def reexecute_scan_command(
     check_scan_successful_csp(
         subarray_node, event_recorder, new_scan_id, unique_id
     )
-
-
-# ----------------------------------------------------------
-# New fixtures
-
-
-@fixture
-def test_harness() -> TelescopeWrapper2:
-    """Create an unique test harness with proxies to all devices."""
-    components_factory = HarnessComponentsFactory2()
-    test_harness = components_factory.create_telescope_wrapper()
-    yield test_harness
-    test_harness.tear_down()
-
-
-@fixture
-def sut(
-    test_harness: TelescopeWrapper2,
-) -> TelescopeWrapper2:
-    """Create a facade to TMC central node and all its operations."""
-    return test_harness
-
-
-@fixture
-def subarray_node_facade2():
-    """Create a facade to TMC subarray node and all its operations."""
-    subarray_node = SubarrayNodeWrapper2()
-    yield subarray_node
-    subarray_node.tear_down()
 
 
 # ----------------------------------------------------------
