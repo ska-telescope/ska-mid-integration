@@ -72,6 +72,7 @@ def turn_on_telescope(central_node_mid, event_recorder):
             central_node_mid.dish_leaf_node_dict[dish_id],
             "dishMode",
             DishMode.STANDBY_FP,
+            lookahead=15,
         )
 
     event_recorder.subscribe_event(
