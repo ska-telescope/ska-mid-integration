@@ -12,6 +12,7 @@ from tests.resources.test_support.enum import DishMode
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 # @pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
 @pytest.mark.skip
@@ -21,6 +22,9 @@ from tests.resources.test_support.enum import DishMode
 >>>>>>> a69408bc (SAH-1536: Test only xtp-42658)
 =======
 >>>>>>> 2ee3ddf7 (SAH-1536: Enable skipped tmc-dish tests)
+=======
+@pytest.mark.skip
+>>>>>>> c60c8729 (SAH-1536: Test only test case for long sequence)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29354_on.feature",
