@@ -133,7 +133,9 @@ class EventRecorder(object):
                 LOGGER.info("attr value is: %s", attr_value)
                 LOGGER.info("FLAG is: %s", attr_value == attribute_value)
                 if attr_value == attribute_value:
+                    LOGGER.info("Returning True")
                     return True
+                LOGGER.info("Returning False")
                 return False
 
         raise AttributeNotSubscribed(
