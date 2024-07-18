@@ -8,7 +8,6 @@ from tango import DeviceProxy, EventType
 
 from tests.conftest import LOGGER
 from tests.resources.test_harness.constant import COMMAND_COMPLETED
-from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.common_utils.telescope_controls import (
     BaseTelescopeControl,
 )
