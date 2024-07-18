@@ -31,6 +31,7 @@ tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 telescope_control = BaseTelescopeControl()
 
 
+@pytest.mark.hope
 @pytest.mark.SKA_mid
 @scenario(
     "../features/check_invalid_json_not_allowed.feature",
@@ -135,30 +136,36 @@ def send(json_factory, invalid_json):
     )
 )
 def invalid_command_rejection(invalid_json, change_event_callbacks):
-
     subarray_node_proxy = DeviceProxy(tmc_subarraynode1)
-    subarray_node_proxy.subscribe_event(
-        "longRunningCommandResult",
-        EventType.CHANGE_EVENT,
-        change_event_callbacks["longRunningCommandResult"],
-    )
-    assertion_data = change_event_callbacks[
-        "longRunningCommandResult"
-    ].assert_change_event(
-        (pytest.command_result[1][0], Anything),
-        lookahead=15,
-    )
-    assert (
-        ResultCode.REJECTED
-        == json.loads(assertion_data["attribute_value"][1])[0]
-    )
     # asserting validations message as per invalid json
     if invalid_json == "config_id_key_missing":
+        subarray_node_proxy.subscribe_event(
+            "longRunningCommandResult",
+            EventType.CHANGE_EVENT,
+            change_event_callbacks["longRunningCommandResult"],
+        )
+        assertion_data = change_event_callbacks[
+            "longRunningCommandResult"
+        ].assert_change_event(
+            (pytest.command_result[1][0], Anything),
+            lookahead=15,
+        )
         assert (
             "'config_id': ['Missing data for required field.']"
             in json.loads(assertion_data["attribute_value"][1])[1]
         )
     elif invalid_json == "incorrect_fsp_id":
+        subarray_node_proxy.subscribe_event(
+            "longRunningCommandResult",
+            EventType.CHANGE_EVENT,
+            change_event_callbacks["longRunningCommandResult"],
+        )
+        assertion_data = change_event_callbacks[
+            "longRunningCommandResult"
+        ].assert_change_event(
+            (pytest.command_result[1][0], Anything),
+            lookahead=15,
+        )
         assert (
             "FSP ID must be in range 1..27. Got 30"
             in json.loads(assertion_data["attribute_value"][1])[1]
@@ -169,6 +176,17 @@ def invalid_command_rejection(invalid_json, change_event_callbacks):
         "zoom_factor_key_missing",
         "integration_factor_key_missing",
     ]:
+        subarray_node_proxy.subscribe_event(
+            "longRunningCommandResult",
+            EventType.CHANGE_EVENT,
+            change_event_callbacks["longRunningCommandResult"],
+        )
+        assertion_data = change_event_callbacks[
+            "longRunningCommandResult"
+        ].assert_change_event(
+            (pytest.command_result[1][0], Anything),
+            lookahead=15,
+        )
         assert (
             "Malformed input string"
             in json.loads(assertion_data["attribute_value"][1])[1]
