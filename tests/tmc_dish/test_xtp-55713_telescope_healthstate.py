@@ -8,7 +8,10 @@ from ska_tango_base.control_model import HealthState
 from tango.db import DbDevInfo
 
 
-@pytest.mark.skip
+@pytest.mark.skip(
+    reason="Dish manager doesn't transition from UNKNOWN to any other \
+        state. SKB-443 raised for this bug"
+)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-55713_telescope_healthstate.feature",
