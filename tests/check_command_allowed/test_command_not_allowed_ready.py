@@ -166,7 +166,6 @@ def send(json_factory, unexpected_command, change_event_callbacks):
     elif unexpected_command == "EndScan":
         LOGGER.info("Invoking EndScan command on TMC SubarrayNode")
         tmc_helper.invoke_endscan_in_ready(**ON_OFF_DEVICE_COMMAND_DICT)
-        LOGGER.info("EndScan command failed with exception %s", e)
         assertion_data = change_event_callbacks[
             "longRunningCommandResult"
         ].assert_change_event(
