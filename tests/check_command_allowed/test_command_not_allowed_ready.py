@@ -228,6 +228,7 @@ def send(json_factory, unexpected_command, change_event_callbacks):
         LOGGER.info("Invoking EndScan command on TMC SubarrayNode")
         tmc_helper.invoke_endscan_in_ready(**ON_OFF_DEVICE_COMMAND_DICT)
 <<<<<<< HEAD
+<<<<<<< HEAD
         subarray_node = DeviceProxy(tmc_subarraynode1)
         subarray_node.subscribe_event(
             "longRunningCommandResult",
@@ -240,6 +241,8 @@ def send(json_factory, unexpected_command, change_event_callbacks):
             (Anything, Anything),
 =======
         LOGGER.info("EndScan command failed with exception %s", e)
+=======
+>>>>>>> ccadf610 (SAH-1564: Fix the assertion)
         assertion_data = change_event_callbacks[
             "longRunningCommandResult"
         ].assert_change_event(
