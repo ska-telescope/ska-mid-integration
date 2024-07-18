@@ -136,22 +136,21 @@ def send(json_factory, invalid_json):
 )
 def invalid_command_rejection(invalid_json, change_event_callbacks):
 
-    assert (
-        ResultCode.REJECTED
-        == json.loads(assertion_data["attribute_value"][1])[0]
-    )
     subarray_node_proxy = DeviceProxy(tmc_subarraynode1)
     subarray_node_proxy.subscribe_event(
         "longRunningCommandResult",
         EventType.CHANGE_EVENT,
         change_event_callbacks["longRunningCommandResult"],
     )
-
     assertion_data = change_event_callbacks[
         "longRunningCommandResult"
     ].assert_change_event(
         (Anything, Anything),
         lookahead=15,
+    )
+    assert (
+        ResultCode.REJECTED
+        == json.loads(assertion_data["attribute_value"][1])[0]
     )
     # asserting validations message as per invalid json
     if invalid_json == "config_id_key_missing":
