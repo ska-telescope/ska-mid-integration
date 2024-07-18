@@ -156,7 +156,7 @@ def send(json_factory, unexpected_command, change_event_callbacks):
             "AssignResources command not permitted in observation state"
         )
         assert (
-            ResultCode.FAILED
+            ResultCode.REJECTED
             == json.loads(assertion_data["attribute_value"][1])[0]
         )
         assert (
@@ -165,6 +165,7 @@ def send(json_factory, unexpected_command, change_event_callbacks):
         )
 
     elif unexpected_command == "ReleaseResources":
+<<<<<<< HEAD
         with pytest.raises(Exception) as e:
             LOGGER.info("Invoking ReleaseResources command on TMC CentralNode")
             central_node = DeviceProxy(centralnode)
@@ -198,6 +199,19 @@ def send(json_factory, unexpected_command, change_event_callbacks):
             (pytest.command_result[1][0], Anything),
             lookahead=15,
         )
+=======
+        LOGGER.info("Invoking ReleaseResources command on TMC CentralNode")
+        central_node = DeviceProxy(centralnode)
+        tmc_helper.check_devices(DEVICE_LIST_FOR_CHECK_DEVICES)
+        pytest.command_result = central_node.ReleaseResources(release_json)
+        LOGGER.info(f"pytest result: {pytest.command_result}")
+        assertion_data = change_event_callbacks[
+            "longRunningCommandResult"
+        ].assert_change_event(
+            (pytest.command_result[1][0], Anything),
+            lookahead=15,
+        )
+>>>>>>> 178cbdf5 (SAH-1564: Fix the assertion)
         expected_error = (
             "ReleaseResources command not permitted in observation state"
         )
@@ -213,6 +227,7 @@ def send(json_factory, unexpected_command, change_event_callbacks):
     elif unexpected_command == "EndScan":
         LOGGER.info("Invoking EndScan command on TMC SubarrayNode")
         tmc_helper.invoke_endscan_in_ready(**ON_OFF_DEVICE_COMMAND_DICT)
+<<<<<<< HEAD
         subarray_node = DeviceProxy(tmc_subarraynode1)
         subarray_node.subscribe_event(
             "longRunningCommandResult",
@@ -223,6 +238,13 @@ def send(json_factory, unexpected_command, change_event_callbacks):
             "longRunningCommandResult"
         ].assert_change_event(
             (Anything, Anything),
+=======
+        LOGGER.info("EndScan command failed with exception %s", e)
+        assertion_data = change_event_callbacks[
+            "longRunningCommandResult"
+        ].assert_change_event(
+            (pytest.command_result[1][0], Anything),
+>>>>>>> 178cbdf5 (SAH-1564: Fix the assertion)
             lookahead=15,
         )
         expected_error = "EndScan command not permitted in observation state"
