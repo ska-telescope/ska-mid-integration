@@ -26,7 +26,6 @@ class Resource:
 
     def get(self, attr):
         """Method for getting attributes"""
-        # start_time = time()
         time_spent = 0
         TIMEOUT = 30
         device_proxy = DeviceProxy(self.device_name)

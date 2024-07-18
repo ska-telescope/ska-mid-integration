@@ -101,7 +101,6 @@ class EventRecorder(object):
         Returns:
             bool: Change Event occurred True or False
         """
-        LOGGER.info("Input attribute value: %s", attribute_value)
         callable_name = self._generate_callable_name(device, attribute_name)
         change_event_callback = self.subscribed_events.get(callable_name, None)
         if change_event_callback:
@@ -112,30 +111,22 @@ class EventRecorder(object):
             except AssertionError:
                 device_name = device.dev_name()
                 dish_prefix = ""
-                LOGGER.info("Device name is: %s", device_name)
-                REAL_DISH1_FQDN = os.getenv("DISH_NAME_1")
-                logging.info("REAL_DISH1_FQDN: %s", REAL_DISH1_FQDN)
+                real_dish1_fqdn = os.getenv("DISH_NAME_1")
                 if ("dish-manager" in device_name) and (
-                    "dish-lmc-1" not in REAL_DISH1_FQDN
+                    "dish-lmc-1" not in real_dish1_fqdn
                 ):
-                    # It is a real dish device
-                    dish_prefix = REAL_DISH1_FQDN.replace(
+                    # It is a real dish device therefore need a full FQDN
+                    # for dish
+                    dish_prefix = real_dish1_fqdn.replace(
                         "mid-dish/dish-manager/SKA001", ""
                     )
-                logging.info("dish_prefix: %s", dish_prefix)
                 full_attr_name = (
                     dish_prefix + device_name + "/" + attribute_name
                 )
-                LOGGER.info("full_attr_name is: %s", full_attr_name)
                 attr_proxy = AttributeProxy(full_attr_name)
-                LOGGER.info("Attribute value is: %s", attr_proxy.read())
                 attr_value = attr_proxy.read().value
-                LOGGER.info("attr value is: %s", attr_value)
-                LOGGER.info("FLAG is: %s", attr_value == attribute_value)
                 if attr_value == attribute_value:
-                    LOGGER.info("Returning True")
                     return True
-                LOGGER.info("Returning False")
                 return False
 
         raise AttributeNotSubscribed(
