@@ -156,6 +156,7 @@ class EventRecorder(object):
 =======
                 attr_value = attr_proxy.read().value
                 LOGGER.info("attr value is: %s", attr_value)
+                LOGGER.info("FLAG is: %s", attr_value == attribute_value)
                 if attr_value == attribute_value:
                     return True
 >>>>>>> e2dc2929 (SAH-1558: Fix the error in the test.)
