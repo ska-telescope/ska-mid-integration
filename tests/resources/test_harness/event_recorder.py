@@ -158,8 +158,13 @@ class EventRecorder(object):
                 LOGGER.info("attr value is: %s", attr_value)
                 LOGGER.info("FLAG is: %s", attr_value == attribute_value)
                 if attr_value == attribute_value:
+                    LOGGER.info("Returning True")
                     return True
+<<<<<<< HEAD
 >>>>>>> e2dc2929 (SAH-1558: Fix the error in the test.)
+=======
+                LOGGER.info("Returning False")
+>>>>>>> ab7b1581 (SAH-1558: Fix the errors in the tests.)
                 return False
 
         raise AttributeNotSubscribed(
