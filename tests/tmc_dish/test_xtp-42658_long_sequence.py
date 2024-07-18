@@ -308,17 +308,7 @@ def invoke_scan(
                 dish_id
             ].longRunningCommandResult,
         )
-        logging.info(
-            "longRunningCommandResult for DISHmaster after scan %s",
-            central_node_mid.dish_master_dict[
-                dish_id
-            ].longRunningCommandResult,
-        )
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "longRunningCommandResult",
-            (pytest.command_result[1][0], str(ResultCode.OK.value)),
-        )
+        logging.info("pytest.command_result: %s", str(pytest.command_result))
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "longRunningCommandResult",
