@@ -106,9 +106,13 @@ def turn_on_telescope(central_node_mid, event_recorder):
             "dishMode",
             DishMode.STANDBY_FP,
 <<<<<<< HEAD
+<<<<<<< HEAD
             lookahead=15,
 =======
 >>>>>>> eb6f6125 (SAH-1536: Resolve review comments)
+=======
+            lookahead=15,
+>>>>>>> 54c62395 (SAH-1536: Increase lookahead for dishMode.StandbyFP event)
         )
 
     event_recorder.subscribe_event(
