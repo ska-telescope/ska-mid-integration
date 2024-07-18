@@ -145,6 +145,11 @@ def send(json_factory, unexpected_command, change_event_callbacks):
         tmc_helper.check_devices(DEVICE_LIST_FOR_CHECK_DEVICES)
         pytest.command_result = central_node.ReleaseResources(release_json)
         LOGGER.info(f"pytest result: {pytest.command_result}")
+        central_node.subscribe_event(
+            "longRunningCommandResult",
+            EventType.CHANGE_EVENT,
+            change_event_callbacks["longRunningCommandResult"],
+        )
         assertion_data = change_event_callbacks[
             "longRunningCommandResult"
         ].assert_change_event(
@@ -166,6 +171,12 @@ def send(json_factory, unexpected_command, change_event_callbacks):
     elif unexpected_command == "EndScan":
         LOGGER.info("Invoking EndScan command on TMC SubarrayNode")
         tmc_helper.invoke_endscan_in_ready(**ON_OFF_DEVICE_COMMAND_DICT)
+        subarray_node = DeviceProxy(tmc_subarraynode1)
+        subarray_node.subscribe_event(
+            "longRunningCommandResult",
+            EventType.CHANGE_EVENT,
+            change_event_callbacks["longRunningCommandResult"],
+        )
         assertion_data = change_event_callbacks[
             "longRunningCommandResult"
         ].assert_change_event(
