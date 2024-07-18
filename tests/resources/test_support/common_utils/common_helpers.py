@@ -27,9 +27,12 @@ class Resource:
     def get(self, attr):
         """Method for getting attributes"""
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
         # start_time = time()
 >>>>>>> 1cdae141 (SAH-1558: Fix the error in the test.)
+=======
+>>>>>>> 82679138 (SAH-1558: Fix the errors in the tests.)
         time_spent = 0
         TIMEOUT = 30
         device_proxy = DeviceProxy(self.device_name)

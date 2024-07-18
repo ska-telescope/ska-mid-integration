@@ -45,7 +45,6 @@ class Waiter:
     def set_wait_for_dish_ln(self, attribute_name, state_name):
         """Set wait for dish"""
         for dish_leaf_node in self.dish_leaf_node_list:
-            # if dish_leaf_node.dishMode != state_name:
             self.waits.append(
                 watch(Resource(dish_leaf_node)).to_become(
                     attribute_name, changed_to=state_name
@@ -55,7 +54,6 @@ class Waiter:
     def set_wait_for_dish_master(self, attribute_name, state_name):
         """Set wait for dish master"""
         for dish_master in self.dish_master_list:
-            # if dish_master.dishMode != state_name:
             self.waits.append(
                 watch(Resource(dish_master)).to_become(
                     attribute_name, changed_to=state_name
