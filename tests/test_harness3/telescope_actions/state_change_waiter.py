@@ -1,6 +1,5 @@
 """A tool to wait a set of state changes from multiple Tango devices."""
 
-import logging
 
 from ska_tango_testing.integration.tracer import TangoEventTracer
 
@@ -120,14 +119,14 @@ class StateChangeWaiter:
 
             raise TimeoutError(msg)
 
-        logging.info(
-            "All the expected state changes occurred. Report:"
-            "\n"
-            + "\n".join(
-                str(state_change)
-                for state_change in self.pending_state_changes
-            )
-        )
+        # logging.info(
+        #     "All the expected state changes occurred. Report:"
+        #     "\n"
+        #     + "\n".join(
+        #         str(state_change)
+        #         for state_change in self.pending_state_changes
+        #     )
+        # )
 
     def reset(self):
         """Clear the list of expected state changes."""

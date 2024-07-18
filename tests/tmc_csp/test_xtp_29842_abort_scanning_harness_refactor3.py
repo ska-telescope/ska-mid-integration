@@ -80,9 +80,25 @@ def subarray_is_in_scanning_obsstate(
 
 
 @when("I issued the Abort command to the TMC subarray")
-def abort_is_invoked(subarray_node_facade: TMCSubarrayNodeFacade):
+def abort_is_invoked(
+    subarray_node_facade: TMCSubarrayNodeFacade, event_tracer: TangoEventTracer
+):
     """This method invokes abort command on TMC subarray."""
     subarray_node_facade.abort(wait_termination_condition=False)
+
+    assert_that(event_tracer).described_as(
+        "FAILED ASSUMPTION: "
+        "TMC Subarray Node device "
+        f"({subarray_node_facade.subarray_node}) "
+        "Abort command invocation has been performed "
+        "after obsState is not anymore SCANNING, "
+        "because automatic ScanComplete transaction triggered."
+    ).hasnt_change_event_occurred(
+        subarray_node_facade.subarray_node,
+        "obsState",
+        ObsState.READY,
+        previous_value=ObsState.SCANNING,
+    )
 
 
 @then("the CSP subarray transitions to ObsState ABORTED")
@@ -93,11 +109,18 @@ def csp_subarray_is_in_aborted_obsstate(
     assert_that(event_tracer).described_as(
         "CSP Subarray device "
         f"({csp.csp_subarray}) "
-        "ObsState attribute value is supposed to be ABORTED."
+        "ObsState attribute value is supposed to move to ABORTING "
+        "and then to ABORTED."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         csp.csp_subarray,
         "obsState",
+        ObsState.ABORTING,
+        previous_value=ObsState.SCANNING,
+    ).has_change_event_occurred(
+        csp.csp_subarray,
+        "obsState",
         ObsState.ABORTED,
+        previous_value=ObsState.ABORTING,
     )
 
 
@@ -110,9 +133,16 @@ def tmc_subarray_is_in_aborted_obsstate(
     assert_that(event_tracer).described_as(
         "TMC Subarray Node device "
         f"({subarray_node_facade.subarray_node}) "
-        "ObsState attribute value is supposed to be ABORTED."
+        "ObsState attribute value is supposed to move to ABORTING "
+        "and then to ABORTED."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         subarray_node_facade.subarray_node,
         "obsState",
+        ObsState.ABORTING,
+        previous_value=ObsState.SCANNING,
+    ).has_change_event_occurred(
+        subarray_node_facade.subarray_node,
+        "obsState",
         ObsState.ABORTED,
+        previous_value=ObsState.ABORTING,
     )
