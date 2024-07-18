@@ -6,10 +6,7 @@ from assertpy import assert_that
 from ska_control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer
 
-from tests.test_harness3.helpers import (
-    check_subarray_obs_state,
-    prepare_json_args_for_commands,
-)
+from tests.test_harness3.helpers import prepare_json_args_for_commands
 from tests.test_harness3.telescope_actions.subarray.subarray_execute_transition import (  # pylint: disable=line-too-long # noqa E501
     SubarrayExecuteTransition,
 )
@@ -72,7 +69,14 @@ class SubarrayFivePointCalibrationScan(TelescopeAction):
                 "obsState",
                 ObsState.CONFIGURING,
             )
-            assert check_subarray_obs_state(obs_state="READY")
+            # assert check_subarray_obs_state(obs_state="READY")
+            assert_that(event_tracer).described_as(
+                f"In scan {i+1} Subarray obsState should reach READY"
+            ).within_timeout(self.TRACER_TIMEOUT).has_change_event_occurred(
+                self.telescope.tmc.subarray_node,
+                "obsState",
+                ObsState.READY,
+            )
 
             # Scan
             SubarrayExecuteTransition("Scan", scan[i]).execute()
@@ -83,7 +87,14 @@ class SubarrayFivePointCalibrationScan(TelescopeAction):
                 "obsState",
                 ObsState.SCANNING,
             )
-            assert check_subarray_obs_state(obs_state="READY")
+            # assert check_subarray_obs_state(obs_state="READY")
+            assert_that(event_tracer).described_as(
+                f"In scan {i+1} Subarray obsState should reach READY"
+            ).within_timeout(self.TRACER_TIMEOUT).has_change_event_occurred(
+                self.telescope.tmc.subarray_node,
+                "obsState",
+                ObsState.READY,
+            )
 
             event_tracer.clear_events()
 
