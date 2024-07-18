@@ -1387,6 +1387,7 @@ def check_tmc_subarray_scanning(
 <<<<<<< HEAD
     )
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 565fc8ed (SAH-1536: Add XTP numbers)
 =======
@@ -1403,3 +1404,6 @@ def check_tmc_subarray_scanning(
 =======
     )
 >>>>>>> 6806ec97 (SAH-1536: Enable skipped tmc-dish tests)
+=======
+    assert False
+>>>>>>> 2aea7bd6 (SAH-1536: Debug tmc-dish test failure)
