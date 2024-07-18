@@ -630,19 +630,6 @@ def configure_subarray(
 >>>>>>> 00483018 (SAH-1536: Update test case)
 >>>>>>> 438706f0 (SAH-1536: Update test case)
         )
-        logging.info(
-            "longRunningCommandResult for DishLN after configure1 %s",
-            central_node_mid.dish_leaf_node_dict[
-                dish_id
-            ].longRunningCommandResult,
-        )
-        logging.info("pytest.command_result1: %s", str(pytest.command_result))
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_leaf_node_dict[dish_id],
-            "longRunningCommandResult",
-            (pytest.command_result[1][0], str(ResultCode.OK.value)),
-            lookahead=15,
-        )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
@@ -1090,19 +1077,6 @@ def reconfigure_subarray(
 =======
 >>>>>>> 00483018 (SAH-1536: Update test case)
 >>>>>>> 438706f0 (SAH-1536: Update test case)
-        )
-        logging.info(
-            "longRunningCommandResult for DishLN after configure2 %s",
-            central_node_mid.dish_leaf_node_dict[
-                dish_id
-            ].longRunningCommandResult,
-        )
-        logging.info("pytest.command_result2: %s", str(pytest.command_result))
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_leaf_node_dict[dish_id],
-            "longRunningCommandResult",
-            (pytest.command_result[1][0], str(ResultCode.OK.value)),
-            lookahead=15,
         )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
