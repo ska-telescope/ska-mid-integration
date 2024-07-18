@@ -115,13 +115,14 @@ class EventRecorder(object):
                 LOGGER.info("Device name is: %s", device_name)
                 REAL_DISH1_FQDN = os.getenv("DISH_NAME_1")
                 logging.info("REAL_DISH1_FQDN: %s", REAL_DISH1_FQDN)
-                if "dish-lmc-1" not in REAL_DISH1_FQDN:
+                if ("dish-manager" in device_name) and (
+                    "dish-lmc-1" not in REAL_DISH1_FQDN
+                ):
                     # It is a real dish device
                     dish_prefix = REAL_DISH1_FQDN.replace(
                         "mid-dish/dish-manager/SKA001", ""
                     )
-                    logging.info("dish_prefix: %s", dish_prefix)
-
+                logging.info("dish_prefix: %s", dish_prefix)
                 full_attr_name = (
                     dish_prefix + device_name + "/" + attribute_name
                 )
