@@ -23,7 +23,7 @@ FILE_NAME?= alarm_rules.txt
 EXIT_AT_FAIL = true ## Flag for determining exit at failure. Set 'true' to exit at first failure.
 
 ifeq ($(EXIT_AT_FAIL),true)
-ADD_ARGS +=
+ADD_ARGS += 
 endif
 
 # KUBE_NAMESPACE defines the Kubernetes Namespace that will be deployed to
@@ -96,7 +96,7 @@ DISH_SIMULATION_ENABLED ?= true
 SDP_PROCCONTROL_REPLICAS ?= 1
 
 ifeq ($(MAKECMDGOALS),k8s-test)
-ADD_ARGS +=  --true-context
+ADD_ARGS +=  --true-context 
 MARK ?= $(shell echo $(TELESCOPE) | sed "s/-/_/g")
 endif
 
