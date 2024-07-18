@@ -15,11 +15,6 @@ from tests.resources.test_support.enum import DishMode
 def test_tmc_dish_shutdown_telescope():
     """
     Test case to verify TMC-DISH ShutDown functionality
-    Glossary:
-        - "central_node_mid": fixture for a TMC CentralNode under test
-        - "simulator_factory": fixture for SimulatorFactory class,
-        which provides simulated master devices
-        - "event_recorder": fixture for EventRecorder class
     """
 
 
@@ -27,6 +22,9 @@ def test_tmc_dish_shutdown_telescope():
 def turn_off_telescope(central_node_mid):
     """
     Invoke telescopeOff on TMC
+
+    Args:
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
     """
     central_node_mid.move_to_off()
 
@@ -37,6 +35,11 @@ def turn_off_telescope(central_node_mid):
 def check_dish_state(central_node_mid, event_recorder, dish_ids):
     """
     Method to check dishMode
+
+    Args:
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        event_recorder: Fixture for EventRecorder class
+        dish_ids (str): Comma-separated IDs of DISH components.
     """
     for dish_id in dish_ids.split(","):
         assert event_recorder.has_change_event_occurred(
@@ -55,6 +58,10 @@ def check_dish_state(central_node_mid, event_recorder, dish_ids):
 def check_telescopeOff_state(central_node_mid, event_recorder):
     """
     Method to check telescope is turned OFF
+
+    Args:
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        event_recorder: Fixture for EventRecorder class
     """
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,

@@ -19,12 +19,6 @@ from tests.resources.test_support.enum import DishMode
 def test_tmc_dish_abort_in_idle():
     """
     Test case to verify TMC-DISH Abort functionality in IDLE obsState
-
-    Glossary:
-        - "central_node_mid": fixture for a TMC CentralNode under test
-        - "simulator_factory": fixture for SimulatorFactory class,
-        which provides simulated master devices
-        - "event_recorder": fixture for EventRecorder class
     """
 
 
@@ -38,6 +32,14 @@ def subarray_is_in_idle_obsState(
 ):
     """
     A method to check if telescope in is idle obsState.
+
+    Args:
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        subarray_node: Fixture for a Subarray Node wrapper class
+        event_recorder: Fixture for EventRecorder class
+        subarray_id (str): Subarray ID
+        command_input_factory: fixture for creating input required
+        for command
     """
     central_node_mid.set_subarray_id(subarray_id)
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
@@ -81,6 +83,9 @@ def subarray_is_in_idle_obsState(
 def abort_is_invoked(subarray_node):
     """
     This method invokes abort command on tmc subarray.
+
+    Args:
+        subarray_id (str): Subarray ID
     """
     pytest.command_result = subarray_node.abort_subarray()
 
@@ -91,6 +96,10 @@ def abort_is_invoked(subarray_node):
 def check_dish_mode(central_node_mid, dish_ids):
     """
     Method to check dishMode.
+
+    Args:
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        dish_ids (str): Comma-separated IDs of DISH components.
     """
     for dish_id in dish_ids.split(","):
         assert (
@@ -107,6 +116,10 @@ def check_dish_mode(central_node_mid, dish_ids):
 def tmc_subarray_is_in_aborted_obsState(subarray_node, event_recorder):
     """
     Method to check if TMC subarray is in ABORTED obsState
+
+    Args:
+        subarray_node: Fixture for a Subarray Node wrapper class
+        event_recorder: Fixture for EventRecorder class
     """
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
