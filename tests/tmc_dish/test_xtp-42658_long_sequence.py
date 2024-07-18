@@ -5,8 +5,8 @@ a sequence of commands including configuration, scanning, and reconfiguration
 are executed successfully and the system transitions
 through the expected states.
 """
+
 import json
-import logging
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -90,6 +90,15 @@ def configure_subarray(
 ):
     """
     A method to invoke first Configure command
+
+    Args:
+        subarray_node: Fixture for a Subarray Node wrapper class
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        event_recorder: Fixture for EventRecorder class
+        command_input_factory: fixture for creating input required
+        for command
+        subarray_id (str): Subarray ID
+        receiver_band_1 (str): receiver band 1 for configure command
     """
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
@@ -133,19 +142,6 @@ def configure_subarray(
             PointingState.TRACK,
             lookahead=10,
         )
-        logging.info(
-            "longRunningCommandResult for dishmaster after configure1 %s",
-            central_node_mid.dish_master_dict[
-                dish_id
-            ].longRunningCommandResult,
-        )
-        logging.info("pytest.command_result1: %s", str(pytest.command_result))
-        # assert event_recorder.has_change_event_occurred(
-        #     central_node_mid.dish_leaf_node_dict[dish_id],
-        #     "longRunningCommandResult",
-        #     (pytest.command_result[1][0], str(ResultCode.OK.value)),
-        #     lookahead=15,
-        # )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
@@ -168,6 +164,12 @@ def end_configuration_on_subarray(
 ):
     """
     A method to invoke end command
+
+    Args:
+        subarray_node: Fixture for a Subarray Node wrapper class
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        event_recorder: Fixture for EventRecorder class
+        subarray_id (str): Subarray ID
     """
     central_node_mid.set_subarray_id(subarray_id)
     pytest.command_result = subarray_node.execute_transition("End")
@@ -214,6 +216,13 @@ def reconfigure_subarray(
 ):
     """
     A method to invoke second Configure command
+
+    Args:
+        subarray_node: Fixture for a Subarray Node wrapper class
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        event_recorder: Fixture for EventRecorder class
+        subarray_id (str): Subarray ID
+        receiver_band_1 (str): receiver band 1 for configure command
     """
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
@@ -255,19 +264,6 @@ def reconfigure_subarray(
             PointingState.TRACK,
             lookahead=10,
         )
-        logging.info(
-            "longRunningCommandResult for dishmaster after configure2 %s ",
-            central_node_mid.dish_master_dict[
-                dish_id
-            ].longRunningCommandResult,
-        )
-        logging.info("pytest.command_result2: %s", str(pytest.command_result))
-        # assert event_recorder.has_change_event_occurred(
-        #     central_node_mid.dish_leaf_node_dict[dish_id],
-        #     "longRunningCommandResult",
-        #     (pytest.command_result[1][0], str(ResultCode.OK.value)),
-        #     lookahead=15,
-        # )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
@@ -291,6 +287,14 @@ def invoke_scan(
 ):
     """
     A method to invoke Scan command
+
+    Args:
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        subarray_node: Fixture for a Subarray Node wrapper class
+        command_input_factory: fixture for creating input required
+        for command
+        event_recorder: Fixture for EventRecorder class
+        scan_id (str): scan id for DISH components
     """
     scan_input_json = prepare_json_args_for_commands(
         "scan_mid", command_input_factory
@@ -342,7 +346,12 @@ def check_tmc_subarray_scanning(
     subarray_node: SubarrayNodeWrapper,
     event_recorder: EventRecorder,
 ):
-    """Checks if SubarrayNode's obsState attribute value is SCANNING"""
+    """Checks if SubarrayNode's obsState attribute value is SCANNING
+
+    Args:
+        subarray_node: Fixture for a Subarray Node wrapper class
+        event_recorder: Fixture for EventRecorder class
+    """
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",

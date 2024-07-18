@@ -18,7 +18,6 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
-@pytest.mark.skip
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-43142_endscan.feature",
@@ -38,7 +37,17 @@ def move_subarray_obsState_to_scanning(
     central_node_mid: CentralNodeWrapperMid,
     subarray_id: str,
 ):
-    """Method to move subarray is in Scanning obsState"""
+    """
+    Method to move subarray is in Scanning obsState
+
+    Args:
+        subarray_node: Fixture for a Subarray Node wrapper class
+        command_input_factory: fixture for creating input required
+        for command
+        event_recorder: Fixture for EventRecorder class
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        subarray_id (str): Subarray ID
+    """
 
     central_node_mid.set_subarray_id(subarray_id)
     assign_input_json = prepare_json_args_for_centralnode_commands(
@@ -126,11 +135,14 @@ def move_subarray_obsState_to_scanning(
 )
 def check_dish_mode_and_pointing_state_after_scan(
     central_node_mid: CentralNodeWrapperMid,
-    event_recorder: EventRecorder,
     dish_ids: str,
 ):
     """
     Method to check dishMode and pointingState of DISH after scan command
+
+    Args:
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        dish_ids (str): Comma-separated IDs of DISH components.
     """
     for dish_id in dish_ids.split(","):
         assert (
@@ -162,6 +174,10 @@ def invoke_endscan(
 ):
     """
     A method to invoke EndScan command
+
+    Args:
+        subarray_node: Fixture for a Subarray Node wrapper class
+        subarray_id (str): Subarray ID
     """
     subarray_node.set_subarray_id(subarray_id)
     pytest.command_result = subarray_node.remove_scan_data()
@@ -175,6 +191,11 @@ def check_scan_id(
 ):
     """
     Method to check scan_id value of DISH
+
+    Args:
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        event_recorder: Fixture for EventRecorder class
+        dish_ids (str): Comma-separated IDs of DISH components.
     """
     for dish_id in dish_ids.split(","):
         event_recorder.subscribe_event(
@@ -195,11 +216,14 @@ def check_scan_id(
 )
 def check_dish_mode_and_pointing_state_after_endscan(
     central_node_mid: CentralNodeWrapperMid,
-    event_recorder: EventRecorder,
     dish_ids: str,
 ):
     """
     Method to check dishMode and pointingState of DISH after EndScan command.
+
+    Args:
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        dish_ids (str): Comma-separated IDs of DISH components.
     """
     for dish_id in dish_ids.split(","):
         assert (
@@ -226,7 +250,14 @@ def check_subarray_obsstate_ready(
     event_recorder: EventRecorder,
     subarray_id: str,
 ):
-    """Checks if SubarrayNode's obsState attribute value is READY"""
+    """
+    Checks if SubarrayNode's obsState attribute value is READY
+
+    Args:
+        subarray_node: Fixture for a Subarray Node wrapper class
+        event_recorder: Fixture for EventRecorder class
+        subarray_id (str): Subarray ID
+    """
     subarray_node.set_subarray_id(subarray_id)
 
     assert event_recorder.has_change_event_occurred(

@@ -12,7 +12,6 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
-@pytest.mark.skip
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-30211_abort_configuring.feature",
@@ -21,12 +20,6 @@ from tests.resources.test_support.enum import DishMode, PointingState
 def test_tmc_dish_abort_in_configuring():
     """
     Test case to verify TMC-DISH Abort functionality in CONFIGURING obsState
-
-    Glossary:
-        - "central_node_mid": fixture for a TMC CentralNode under test
-        - "simulator_factory": fixture for SimulatorFactory class,
-        which provides simulated master devices
-        - "event_recorder": fixture for EventRecorder class
     """
 
 
@@ -47,6 +40,15 @@ def subarray_is_in_configuring_obsState(
     """
     A method to check if telescope in is configuring obsState and
     DishMaster is in pointingState track
+
+    Args:
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        subarray_node: Fixture for a Subarray Node wrapper class
+        event_recorder: Fixture for EventRecorder class
+        subarray_id (str): Subarray ID
+        dish_ids (str): Comma-separated IDs of DISH components.
+        command_input_factory: fixture for creating input required
+        for command
     """
     subarray_node.set_subarray_id(subarray_id)
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
@@ -145,6 +147,9 @@ def subarray_is_in_configuring_obsState(
 def abort_is_invoked(subarray_node):
     """
     This method invokes abort command on tmc subarray.
+
+    Args:
+        subarray_node: Fixture for a Subarray Node wrapper class
     """
     pytest.command_result = subarray_node.abort_subarray()
 
@@ -160,6 +165,11 @@ def check_dish_mode_and_pointing_state(
 ):
     """
     Method to check dishMode and pointingState of DISH
+
+    Args:
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        event_recorder: Fixture for EventRecorder class
+        dish_ids (str): Comma-separated IDs of DISH components.
     """
     for dish_id in dish_ids.split(","):
         assert event_recorder.has_change_event_occurred(
@@ -192,6 +202,10 @@ def check_dish_mode_and_pointing_state(
 def tmc_subarray_is_in_aborted_obsState(subarray_node, event_recorder):
     """
     Method to check if TMC subarray is in ABORTED obsstate
+
+    Args:
+        subarray_node: Fixture for a Subarray Node wrapper class
+        event_recorder: Fixture for EventRecorder class
     """
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["sdp_subarray"],
