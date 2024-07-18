@@ -3,6 +3,7 @@ from copy import deepcopy
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
+from ska_tango_testing.mock.placeholders import Anything
 from tango import DeviceProxy, EventType
 
 from tests.conftest import LOGGER
@@ -134,6 +135,7 @@ def send(json_factory, invalid_json):
         "the TMC should reject the {invalid_json} with ResultCode.Rejected"
     )
 )
+<<<<<<< HEAD
 def invalid_command_rejection(invalid_json):
     assert pytest.command_result[0][0] == ResultCode.REJECTED
     # TODO: CDM v10.1.2 does not raise exception for missing config_id
@@ -145,11 +147,47 @@ def invalid_command_rejection(invalid_json):
     # asserting validations message as per invalid json
     if invalid_json in [
         "incorrect_fsp_id",
+=======
+def invalid_command_rejection(invalid_json, change_event_callbacks):
+
+    assert (
+        ResultCode.REJECTED
+        == json.loads(assertion_data["attribute_value"][1])[0]
+    )
+    subarray_node_proxy = DeviceProxy(tmc_subarraynode1)
+    subarray_node_proxy.subscribe_event(
+        "longRunningCommandResult",
+        EventType.CHANGE_EVENT,
+        change_event_callbacks["longRunningCommandResult"],
+    )
+
+    assertion_data = change_event_callbacks[
+        "longRunningCommandResult"
+    ].assert_change_event(
+        (Anything, Anything),
+        lookahead=15,
+    )
+    # asserting validations message as per invalid json
+    if invalid_json == "config_id_key_missing":
+        assert (
+            "'config_id': ['Missing data for required field.']"
+            in json.loads(assertion_data["attribute_value"][1])[1]
+        )
+    elif invalid_json == "incorrect_fsp_id":
+        assert (
+            "FSP ID must be in range 1..27. Got 30"
+            in json.loads(assertion_data["attribute_value"][1])[1]
+        )
+    elif invalid_json in [
+>>>>>>> f3f574e3 (SAH-1564: Update invalid json tests)
         "fsp_id_key_missing",
         "zoom_factor_key_missing",
         "integration_factor_key_missing",
     ]:
-        assert "Malformed input string" in pytest.command_result[1][0]
+        assert (
+            "Malformed input string"
+            in json.loads(assertion_data["attribute_value"][1])[1]
+        )
 
 
 @then("TMC subarray remains in IDLE obsState")
