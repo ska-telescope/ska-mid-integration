@@ -288,6 +288,19 @@ def configure_subarray(
             "pointingState",
             PointingState.TRACK,
         )
+        logging.info(
+            "longRunningCommandResult for DishLN after configure1 %s",
+            central_node_mid.dish_leaf_node_dict[
+                dish_id
+            ].longRunningCommandResult,
+        )
+        logging.info("pytest.command_result1: %s", str(pytest.command_result))
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "longRunningCommandResult",
+            (pytest.command_result[1][0], str(ResultCode.OK.value)),
+            lookahead=15,
+        )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
@@ -474,6 +487,19 @@ def reconfigure_subarray(
             "pointingState",
             PointingState.TRACK,
         )
+        logging.info(
+            "longRunningCommandResult for DishLN after configure2 %s",
+            central_node_mid.dish_leaf_node_dict[
+                dish_id
+            ].longRunningCommandResult,
+        )
+        logging.info("pytest.command_result2: %s", str(pytest.command_result))
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "longRunningCommandResult",
+            (pytest.command_result[1][0], str(ResultCode.OK.value)),
+            lookahead=15,
+        )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
@@ -550,6 +576,7 @@ def invoke_scan(
             central_node_mid.dish_leaf_node_dict[dish_id].pointingState
             == PointingState.TRACK
         )
+<<<<<<< HEAD
         logging.info(
             "longRunningCommandResult for DishLN after scan %s",
             central_node_mid.dish_leaf_node_dict[
@@ -612,6 +639,8 @@ def invoke_scan(
 >>>>>>> 1003daaa (SAH-1536: Resolve review comments)
 =======
 >>>>>>> 98a5a250 (SAH-1536: Debug test failure)
+=======
+>>>>>>> 0031d69e (SAH-1536: Test pipeline)
 
 
 @then("tmc subarraynode reports SCANNING obsState")
