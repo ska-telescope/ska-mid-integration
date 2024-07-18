@@ -1,13 +1,11 @@
 """Production wrapper for TMC devices."""
 
-import json
 import logging
 
 from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
 from tango import DevState
 
-from tests.test_harness3.common_utils.i_json_factory import IJsonFactory
 from tests.test_harness3.telescope_actions.central_node.central_node_load_dish_config import (  # pylint: disable=line-too-long # noqa E501
     CentralNodeLoadDishConfig,
 )
@@ -23,6 +21,10 @@ from tests.test_harness3.telescope_actions.subarray.force_change_of_obs_state im
 from tests.test_harness3.telescope_actions.subarray.subarray_move_to_off import (  # pylint: disable=line-too-long # noqa E501
     SubarrayMoveToOff,
 )
+from tests.test_harness3.telescope_inputs.json_input import JSONInput
+from tests.test_harness3.telescope_inputs.obs_state_commands_input import (
+    ObsStateCommandsInput,
+)
 from tests.test_harness3.telescope_structure.tmc_devices import TMCDevices
 
 configure_logging(logging.DEBUG)
@@ -35,15 +37,22 @@ class ProductionTMCDevices(TMCDevices):
     def __init__(
         self,
         tmc_configuration,
-        json_factory: IJsonFactory,
+        default_commands_input: ObsStateCommandsInput,
+        default_vcc_config_input: JSONInput,
     ):
         """Initialise the TMC wrapper.
 
         :param tmc_configuration: The TMC configuration.
-        :param json_factory: The JSON factory for various commands inputs.
+        :param default_commands_input: The default commands input. They
+            will be used to reset the TMC devices. Fill it with all
+            the inputs with suitable default values. If you don't some
+            steps of the tear down procedure may fail.
+        :param default_vcc_config_input: The default VCC config input. It
+            will be used to reset the VCC config.
         """
         super().__init__(tmc_configuration)
-        self.json_factory = json_factory
+        self.default_commands_input = default_commands_input
+        self.default_vcc_config_input = default_vcc_config_input
 
     def tear_down(self) -> None:
         """Tear down the TMC devices."""
@@ -60,11 +69,11 @@ class ProductionTMCDevices(TMCDevices):
             #     "release_resources_mid"
             # )
             CentralNodeReleaseResources(
-                self.json_factory.create_release_resources_command_input()
+                self.default_commands_input.release_input
             ).execute()
 
         ForceChangeOfObsState(
-            ObsState.EMPTY, json_factory=self.json_factory
+            ObsState.EMPTY, self.default_commands_input
         ).execute()
 
         # NOTE: temporarily moved here because of synchronization
@@ -80,12 +89,10 @@ class ProductionTMCDevices(TMCDevices):
         # dish vcc then load default dish vcc config
         # CSP_SIMULATION_ENABLED condition will be removed after testing
         # with real csp
-        if not self.csp_master_leaf_node.sourceDishVccConfig or json.loads(
-            self.csp_master_leaf_node.sourceDishVccConfig
-        ) != json.loads(
-            self.json_factory.create_default_vcc_config_command_input()
+        if (
+            not self.csp_master_leaf_node.sourceDishVccConfig
+            or not self.default_vcc_config_input.is_equal_to_json(
+                self.csp_master_leaf_node.sourceDishVccConfig
+            )
         ):
-            CentralNodeLoadDishConfig(
-                # json.dumps(DEFAULT_DISH_VCC_CONFIG)
-                self.json_factory.create_default_vcc_config_command_input()
-            ).execute()
+            CentralNodeLoadDishConfig(self.default_vcc_config_input).execute()

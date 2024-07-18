@@ -6,13 +6,13 @@ from assertpy import assert_that
 from ska_control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer
 
-from tests.test_harness3.helpers import prepare_json_args_for_commands
 from tests.test_harness3.telescope_actions.subarray.subarray_execute_transition import (  # pylint: disable=line-too-long # noqa E501
     SubarrayExecuteTransition,
 )
 from tests.test_harness3.telescope_actions.telescope_action import (
     TelescopeAction,
 )
+from tests.test_harness3.telescope_inputs.json_input import JSONInput
 
 
 class SubarrayFivePointCalibrationScan(TelescopeAction):
@@ -24,31 +24,28 @@ class SubarrayFivePointCalibrationScan(TelescopeAction):
 
     def __init__(
         self,
-        partial_configure_jsons: list[str],
-        scan_jsons: list[str],
-        command_input_factory,
+        partial_configure_inputs: list[JSONInput],
+        scan_inputs: list[JSONInput],
     ):
         super().__init__()
-        self.partial_configure_jsons = partial_configure_jsons
-        self.scan_configuration = scan_jsons
-        self.command_input_factory = command_input_factory
+        self.partial_configure_inputs = partial_configure_inputs
+        self.scan_inputs = scan_inputs
 
     def _action(self):
-
-        partial_configure = []
-        scan = []
-
-        for i in range(4):
-            partial_configure.append(
-                prepare_json_args_for_commands(
-                    self.partial_configure_jsons[i], self.command_input_factory
-                )
-            )
-            scan.append(
-                prepare_json_args_for_commands(
-                    self.scan_configuration[i], self.command_input_factory
-                )
-            )
+        # partial_configure = []
+        # scan = []
+        # for i in range(4):
+        #     partial_configure.append(
+        #         prepare_json_args_for_commands(
+        #             self.partial_configure_jsons[i],
+        #             self.command_input_factory
+        #         )
+        #     )
+        #     scan.append(
+        #         prepare_json_args_for_commands(
+        #             self.scan_configuration[i], self.command_input_factory
+        #         )
+        #     )
 
         event_tracer = TangoEventTracer()
         event_tracer.subscribe_event(
@@ -60,7 +57,7 @@ class SubarrayFivePointCalibrationScan(TelescopeAction):
 
             # Partial configure
             SubarrayExecuteTransition(
-                "Configure", partial_configure[i]
+                "Configure", self.partial_configure_inputs[i]
             ).execute()
             assert_that(event_tracer).described_as(
                 f"In scan {i+1} Subarray obsState should reach CONFIGURING"
@@ -79,7 +76,7 @@ class SubarrayFivePointCalibrationScan(TelescopeAction):
             )
 
             # Scan
-            SubarrayExecuteTransition("Scan", scan[i]).execute()
+            SubarrayExecuteTransition("Scan", self.scan_inputs[i]).execute()
             assert_that(event_tracer).described_as(
                 f"In scan {i+1} Subarray obsState should reach SCANNING"
             ).within_timeout(self.TRACER_TIMEOUT).has_change_event_occurred(

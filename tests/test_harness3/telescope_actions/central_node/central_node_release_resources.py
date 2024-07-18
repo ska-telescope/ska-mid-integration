@@ -12,6 +12,7 @@ from tests.test_harness3.telescope_actions.expected_event import (
 from tests.test_harness3.telescope_actions.telescope_action import (
     TelescopeAction,
 )
+from tests.test_harness3.telescope_inputs.json_input import JSONInput
 
 LOGGER = logging.getLogger(__name__)
 
@@ -19,13 +20,13 @@ LOGGER = logging.getLogger(__name__)
 class CentralNodeReleaseResources(TelescopeAction):
     """A class for releasing resources on the CentralNode."""
 
-    def __init__(self, input_string: str):
+    def __init__(self, release_input: JSONInput):
         super().__init__()
-        self.input_string = input_string
+        self.release_input = release_input
 
     def _action(self):
         result, message = self.telescope.tmc.central_node.ReleaseResources(
-            self.input_string
+            self.release_input.get_json_string()
         )
         return result, message
 

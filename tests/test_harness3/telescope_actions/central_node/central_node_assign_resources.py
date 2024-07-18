@@ -1,17 +1,19 @@
 """Invoke Assign Resource command on CentralNode."""
 
-import json
 import logging
 
 from ska_control_model import ObsState
 
-from tests.test_harness3.helpers import generate_eb_pb_ids
 from tests.test_harness3.telescope_actions.expected_event import (
     ExpectedStateChange,
 )
 from tests.test_harness3.telescope_actions.telescope_action import (
     TelescopeAction,
 )
+from tests.test_harness3.telescope_actions.utils.generate_eb_pb_ids import (
+    generate_eb_pb_ids,
+)
+from tests.test_harness3.telescope_inputs.json_input import JSONInput
 
 LOGGER = logging.getLogger(__name__)
 
@@ -21,9 +23,9 @@ class CentralNodeAssignResources(TelescopeAction):
 
     # NOTE: this is very similar to SubarrayAssignResources
 
-    def __init__(self, assign_json: str):
+    def __init__(self, assign_input: JSONInput):
         super().__init__()
-        self.assign_json = assign_json
+        self.assign_input = assign_input
 
     def _action(self):
         # NOTE: should I do this?
@@ -37,10 +39,9 @@ class CentralNodeAssignResources(TelescopeAction):
         # device.check_devices_obsState("EMPTY")
         # set_wait_for_obsstate = kwargs.get("set_wait_for_obsstate", True)
 
-        input_json = json.loads(self.assign_json)
-        generate_eb_pb_ids(input_json)
+        cmd_input = generate_eb_pb_ids(self.assign_input)
         result, message = self.telescope.tmc.central_node.AssignResources(
-            json.dumps(input_json)
+            cmd_input.get_json_string()
         )
         LOGGER.info("Invoked AssignResources on CentralNode")
         return result, message

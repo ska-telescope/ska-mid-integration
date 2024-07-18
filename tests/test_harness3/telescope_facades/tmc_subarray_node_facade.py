@@ -5,7 +5,6 @@ import logging
 from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
 
-from tests.test_harness3.common_utils.i_json_factory import IJsonFactory
 from tests.test_harness3.telescope_actions.subarray.force_change_of_obs_state import (  # pylint: disable=line-too-long # noqa: E501
     ForceChangeOfObsState,
 )
@@ -44,6 +43,10 @@ from tests.test_harness3.telescope_actions.subarray.subarray_restart import (
 )
 from tests.test_harness3.telescope_actions.subarray.subarray_scan import (
     SubarrayScan,
+)
+from tests.test_harness3.telescope_inputs.json_input import JSONInput
+from tests.test_harness3.telescope_inputs.obs_state_commands_input import (
+    ObsStateCommandsInput,
 )
 from tests.test_harness3.telescope_structure.telescope_wrapper import (
     TelescopeWrapper,
@@ -144,18 +147,20 @@ class TMCSubarrayNodeFacade:
 
     # @sync_configure(device_dict=device_dict)
     def configure(
-        self, input_string: str, wait_termination_condition: bool = True
+        self,
+        configure_input: JSONInput,
+        wait_termination_condition: bool = True,
     ):
         """Invoke configure command on subarray Node.
 
-        :param input_string: input string as json.
+        :param configure_input: json input for configure command.
         :param wait_termination_condition: set to False if you don't want to
             wait for the termination condition. By default the termination
             condition is waited.
 
         :return: result, message
         """
-        action = SubarrayConfigure(input_string)
+        action = SubarrayConfigure(configure_input)
         action.set_termination_condition_policy(wait_termination_condition)
         return action.execute()
 
@@ -187,16 +192,19 @@ class TMCSubarrayNodeFacade:
         action.set_termination_condition_policy(wait_termination_condition)
         return action.execute()
 
-    def scan(self, input_string, wait_termination_condition: bool = True):
+    def scan(
+        self, scan_input: JSONInput, wait_termination_condition: bool = True
+    ):
         """Invoke Scan command on subarray Node.
 
+        :param scan_input: json input for scan command.
         :param wait_termination_condition: set to False if you don't want to
             wait for the termination condition. By default the termination
             condition is waited.
 
         :return: result, message
         """
-        action = SubarrayScan(input_string)
+        action = SubarrayScan(scan_input)
         action.set_termination_condition_policy(wait_termination_condition)
         return action.execute()
 
@@ -230,18 +238,18 @@ class TMCSubarrayNodeFacade:
 
     # @sync_assign_resources(device_dict)
     def assign_resources(
-        self, assign_json: str, wait_termination_condition: bool = True
+        self, assign_input: JSONInput, wait_termination_condition: bool = True
     ):
         """Invoke Assign Resource command on subarray Node
 
-        :param assign_json: Assign resource input json.
+        :param assign_input: Assign resource input json.
         :param wait_termination_condition: set to False if you don't want to
             wait for the termination condition. By default the termination
             condition is waited.
 
         :return: result, message
         """
-        action = SubarrayAssignResources(assign_json)
+        action = SubarrayAssignResources(assign_input)
         action.set_termination_condition_policy(wait_termination_condition)
         return action.execute()
 
@@ -271,7 +279,8 @@ class TMCSubarrayNodeFacade:
         """Execute provided command on subarray
 
         :param command_name: Name of command to execute
-        :param argin: Input argument for command
+        :param argin: Input argument for command (as the data type you
+            would expect to pass to the Tango command)
         :param wait_termination_condition: set to False if you don't want to
             wait for the termination condition. By default the termination
             condition is waited.
@@ -285,67 +294,46 @@ class TMCSubarrayNodeFacade:
     def force_change_of_obs_state(
         self,
         dest_state_name: ObsState,
-        assign_input_json: str | None = None,
-        configure_input_json: str | None = None,
-        scan_input_json: str | None = None,
-        json_factory: IJsonFactory | None = None,
+        commands_inputs: ObsStateCommandsInput,
         wait_termination_condition: bool = True,
     ) -> None:
         """Force SubarrayNode obsState to provided obsState.
 
-        To init correctly this class you should provide:
-
-        - all the JSON inputs for the `AssignResources`, `Configure` and `Scan`
-            commands, or
-        - a JSON factory to create the default JSON inputs for these commands.
-
-        You can also provide just some inputs and the factory will create the
-        default JSON inputs for the rest. If not all inputs are provided
-        and the factory is not provided either, the creation will raise
-        a ValueError.
+        :param commands_inputs: The JSON inputs for the commands to bring
+            the subarray in a certain obs state. You can pass just the
+            JSON inputs you need, but if one of them is missing, you may
+            occur in an error.
 
         :param dest_state_name: Name of the destination obsState.
-        :param assign_input_json: Assign input json. If you leave it as None,
-            it will use the default assign input json.
-        :param configure_input_json: Configure input json. If you leave
-            it as None, it will use the default configure input json.
-        :param scan_input_json: Scan input json. If you leave it as None,
-            it will use the default scan input json.
+        :param commands_inputs: The JSON inputs for the commands to bring
+            the subarray in a certain obs state. You can pass just the
+            JSON inputs you need, but if one of them is missing, you may
+            occur in an error.
         :param wait_termination_condition: set to False if you don't want to
             wait for the termination condition. By default the termination
             condition is waited.
         """
-        action = ForceChangeOfObsState(
-            dest_state_name,
-            assign_input_json,
-            configure_input_json,
-            scan_input_json,
-            json_factory,
-        )
+        action = ForceChangeOfObsState(dest_state_name, commands_inputs)
         action.set_termination_condition_policy(wait_termination_condition)
         action.execute()
 
     def execute_five_point_calibration_scan(
         self,
-        partial_configure_jsons: list[str],
-        scan_jsons: list[str],
-        command_input_factory,
+        partial_configure_inputs: list[JSONInput],
+        scan_inputs: list[JSONInput],
         wait_termination_condition: bool = True,
     ) -> None:
         """Perform a five point calibration scan on Subarray Node using the
         partial configuration jsons and scan jsons provided as inputs.
 
-        :param partial_configure_jsons: Partial configuration json file names
-        :param scan_jsons: Scan json file names
-        :param command_input_factory: Command input factory
+        :param partial_configure_inputs: Partial Configure json inputs.
+        :param scan_jsons: Partial Scan json inputs.
         :param wait_termination_condition: set to False if you don't want to
             wait for the termination condition. By default the termination
             condition is waited.
         """
         action = SubarrayFivePointCalibrationScan(
-            partial_configure_jsons,
-            scan_jsons,
-            command_input_factory,
+            partial_configure_inputs, scan_inputs
         )
         action.set_termination_condition_policy(wait_termination_condition)
         action.execute()

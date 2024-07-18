@@ -11,6 +11,7 @@ from tests.test_harness3.telescope_actions.expected_event import (
 from tests.test_harness3.telescope_actions.telescope_action import (
     TelescopeAction,
 )
+from tests.test_harness3.telescope_inputs.json_input import JSONInput
 from tests.test_harness3.utils.enums import DishMode
 
 LOGGER = logging.getLogger(__name__)
@@ -19,13 +20,13 @@ LOGGER = logging.getLogger(__name__)
 class SubarrayConfigure(TelescopeAction):
     """Invoke configure command on subarray Node."""
 
-    def __init__(self, configure_string: str):
+    def __init__(self, configure_input: JSONInput):
         super().__init__()
-        self.configure_string = configure_string
+        self.configure_input = configure_input
 
     def _action(self):
         result, message = self.telescope.tmc.subarray_node.Configure(
-            self.configure_string
+            self.configure_input.get_json_string()
         )
         LOGGER.info("Invoked Configure on SubarrayNode")
         return result, message

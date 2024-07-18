@@ -22,7 +22,6 @@ from tests.resources.test_harness.utils.common_utils import (
     check_scan_successful_csp,
 )
 from tests.resources.test_support.common_utils.result_code import ResultCode
-from tests.test_harness3.common_utils.i_json_factory import IJsonFactory
 from tests.test_harness3.telescope_facades.csp_facade import CSPFacade
 from tests.test_harness3.telescope_facades.dishes_facade import DishesFacade
 from tests.test_harness3.telescope_facades.sdp_facade import SDPFacade
@@ -35,10 +34,19 @@ from tests.test_harness3.telescope_facades.tmc_subarray_node_facade import (
 from tests.test_harness3.telescope_init.telescope_structure_factory import (
     TelescopeStructureFactory,
 )
+from tests.test_harness3.telescope_inputs.obs_state_commands_input import (
+    ObsStateCommandsInput,
+)
 from tests.test_harness3.telescope_structure.telescope_wrapper import (
     TelescopeWrapper,
 )
-from tests.various_utils.tmc_mid_json_factory import TMCMidJsonFactory
+from tests.various_utils.default_json_inputs import (  # ASSIGN_SUBARRAY_INPUT,
+    ASSING_CENTRAL_NODE_INPUT,
+    CONFIGURE_SUBARRAY_INPUT,
+    DEFAULT_VCC_CONFIG_INPUT,
+    RELEASE_CENTRAL_NODE_INPUT,
+    SCAN_SUBARRAY_INPUT,
+)
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -278,15 +286,24 @@ def reexecute_scan_command(
 
 
 @fixture
-def tmc_mid_json_factory() -> TMCMidJsonFactory:
-    """Return a custom json factory."""
-    return TMCMidJsonFactory()
+def default_commands_inputs() -> ObsStateCommandsInput:
+    """Default JSON inputs for TMC commands."""
+    return ObsStateCommandsInput(
+        assign_input=ASSING_CENTRAL_NODE_INPUT,
+        configure_input=CONFIGURE_SUBARRAY_INPUT,
+        scan_input=SCAN_SUBARRAY_INPUT,
+        release_input=RELEASE_CENTRAL_NODE_INPUT,
+    )
 
 
 @fixture
-def telescope_wrapper(tmc_mid_json_factory: IJsonFactory) -> TelescopeWrapper:
+def telescope_wrapper(
+    default_commands_inputs: ObsStateCommandsInput,
+) -> TelescopeWrapper:
     """Create an unique test harness with proxies to all devices."""
-    components_factory = TelescopeStructureFactory(tmc_mid_json_factory)
+    components_factory = TelescopeStructureFactory(
+        default_commands_inputs, DEFAULT_VCC_CONFIG_INPUT
+    )
     telescope = components_factory.init_telescope_test_structure()
     yield telescope
     telescope.tear_down()

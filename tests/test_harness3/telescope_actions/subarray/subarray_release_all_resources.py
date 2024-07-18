@@ -20,12 +20,6 @@ class SubarrayReleaseAllResources(TelescopeAction):
     """Invoke Release Resource command on subarray Node."""
 
     def _action(self):
-        # save pre-action assignedResources attribute value
-        # so then we can check if it has changed
-        self.pre_action_attr_value = (
-            self.telescope.tmc.subarray_node.assignedResources
-        )
-
         (
             result,
             message,

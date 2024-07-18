@@ -1,6 +1,5 @@
 """Create a telescope test structure according to the current configuration."""
 
-from tests.test_harness3.common_utils.i_json_factory import IJsonFactory
 from tests.test_harness3.emulated_components.csp_devices import (
     EmulatedCSPDevices,
 )
@@ -24,6 +23,10 @@ from tests.test_harness3.production_components.tmc_devices import (
 )
 from tests.test_harness3.telescope_config.configuration_factory import (
     TestHarnessConfigurationFactory,
+)
+from tests.test_harness3.telescope_inputs.json_input import JSONInput
+from tests.test_harness3.telescope_inputs.obs_state_commands_input import (
+    ObsStateCommandsInput,
 )
 from tests.test_harness3.telescope_structure.csp_devices import CSPDevices
 from tests.test_harness3.telescope_structure.dishes_devices import (
@@ -53,10 +56,23 @@ class TelescopeStructureFactory:
     using the constructor (see Singleton design pattern).
     """
 
-    def __init__(self, json_factory: IJsonFactory):
-        """Initialize the factory."""
+    def __init__(
+        self,
+        default_commands_input: ObsStateCommandsInput,
+        default_vcc_config_input: JSONInput,
+    ):
+        """Initialize the factory.
+
+        :param default_commands_input: The default commands input. They
+            will be used to reset the TMC devices. Fill it with all the
+            inputs with suitable default values.
+            If you don't some steps of the tear down procedure may fail.
+        :param default_vcc_config_input: The default VCC config input. It
+            will be used to reset the VCC config.
+        """
         self.config_factory = TestHarnessConfigurationFactory()
-        self.json_factory = json_factory
+        self.default_commands_input = default_commands_input
+        self.default_vcc_config_input = default_vcc_config_input
 
     @property
     def _emulation_config(self):
@@ -94,7 +110,8 @@ class TelescopeStructureFactory:
         """
         return ProductionTMCDevices(
             self.config_factory.get_TMC_configuration(),
-            self.json_factory,
+            self.default_commands_input,
+            self.default_vcc_config_input,
         )
 
     def create_sdp_wrapper(self) -> SDPDevices:
