@@ -252,8 +252,12 @@ def send(json_factory, unexpected_command, change_event_callbacks):
         assertion_data = change_event_callbacks[
             "longRunningCommandResult"
         ].assert_change_event(
+<<<<<<< HEAD
             (pytest.command_result[1][0], Anything),
 >>>>>>> 178cbdf5 (SAH-1564: Fix the assertion)
+=======
+            (Anything, Anything),
+>>>>>>> 96d848ce (SAH-1564: Modify assertion)
             lookahead=15,
         )
         expected_error = "EndScan command not permitted in observation state"
