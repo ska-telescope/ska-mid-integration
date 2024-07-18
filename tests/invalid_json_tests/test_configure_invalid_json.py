@@ -159,7 +159,7 @@ def invalid_command_rejection(invalid_json, change_event_callbacks):
     assertion_data = change_event_callbacks[
         "longRunningCommandResult"
     ].assert_change_event(
-        (Anything, Anything),
+        (pytest.command_result[1][0], Anything),
         lookahead=15,
     )
     assert (
