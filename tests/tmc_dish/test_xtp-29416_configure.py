@@ -144,7 +144,17 @@ def subarray_is_in_idle_obsState(
 ):
     """
     A method to check if telescope in is idle obsState.
+<<<<<<< HEAD
 >>>>>>> 415d590c (SAH-1536: Resolve review comments)
+=======
+
+    Args:
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        subarray_node: Fixture for a Subarray Node wrapper class
+        event_recorder: Fixture for EventRecorder class
+        command_input_factory: fixture for creating input required
+        for command
+>>>>>>> 4cdcb54d (SAH-1536: Enable all the tmc-dish tests)
     """
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     event_recorder.subscribe_event(

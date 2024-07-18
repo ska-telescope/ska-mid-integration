@@ -18,6 +18,10 @@ from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.enum import DishMode, PointingState
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 4cdcb54d (SAH-1536: Enable all the tmc-dish tests)
 
 <<<<<<< HEAD
 <<<<<<< HEAD

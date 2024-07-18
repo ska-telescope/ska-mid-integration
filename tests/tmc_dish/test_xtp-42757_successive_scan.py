@@ -60,6 +60,9 @@ def check_subarray_obsState_idle(
     """
     Method to check subarray is in IDLE obsState
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 4cdcb54d (SAH-1536: Enable all the tmc-dish tests)
 
     Args:
         subarray_node: Fixture for a Subarray Node wrapper class
@@ -67,8 +70,11 @@ def check_subarray_obsState_idle(
         event_recorder: Fixture for EventRecorder class
         command_input_factory: fixture for creating input required
         for command
+<<<<<<< HEAD
 =======
 >>>>>>> 415d590c (SAH-1536: Resolve review comments)
+=======
+>>>>>>> 4cdcb54d (SAH-1536: Enable all the tmc-dish tests)
     """
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
 

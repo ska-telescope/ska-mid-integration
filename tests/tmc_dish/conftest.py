@@ -1,9 +1,15 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 """Pytest BDD step implementations specific to TMC DISH-LMC integration
 tests."""
 
 =======
 >>>>>>> eb6f6125 (SAH-1536: Resolve review comments)
+=======
+"""Pytest BDD step implementations specific to TMC DISH-LMC integration
+tests."""
+
+>>>>>>> 4cdcb54d (SAH-1536: Enable all the tmc-dish tests)
 from pytest_bdd import given, parsers
 from tango import DevState
 
