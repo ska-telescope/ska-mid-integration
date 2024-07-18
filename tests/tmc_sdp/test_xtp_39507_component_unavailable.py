@@ -110,10 +110,14 @@ def tmc_assign_resources_invoke(
 @then("SDP subarray report the unavailability of SDP Component")
 def sdp_subarray_reports_unavailability(
 <<<<<<< HEAD
+<<<<<<< HEAD
     event_recorder: EventRecorder, central_node_mid: CentralNodeWrapperMid
 =======
     event_recorder: EventRecorder, central_node_mid: SubarrayNodeWrapper
 >>>>>>> 95b446f7 (SAH-1564: Update test case)
+=======
+    event_recorder: EventRecorder, central_node_mid: CentralNodeWrapperMid
+>>>>>>> 68f2d607 (SAH-1564: Resolve review comment)
 ):
     """
     Method to verify SDP subarray reports unavailability to TMC.

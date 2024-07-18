@@ -11,6 +11,12 @@ maintainers:
 dependencies:
   - name: ska-tango-util
     version: 0.4.10
+<<<<<<< HEAD
+=======
+    repository: https://artefact.skao.int/repository/helm-internal
+  - name: ska-tango-base
+    version: 0.4.9
+>>>>>>> 68f2d607 (SAH-1564: Resolve review comment)
     repository: https://artefact.skao.int/repository/helm-internal
   - name: ska-tango-base
     version: 0.4.9
