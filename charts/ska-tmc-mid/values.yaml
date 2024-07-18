@@ -124,6 +124,7 @@ dishleafnode:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     tag: 0.16.0
 =======
     tag: 0.14.3-dev.c622c8bba
@@ -134,6 +135,9 @@ dishleafnode:
 =======
     tag: 0.14.4-dev.c1bd989d0
 >>>>>>> 3d6be7fc (SAH-1536: Debug test failure)
+=======
+    tag: 0.14.4-dev.c04bf1987
+>>>>>>> 1ed69682 (SAH-1536: Debug test failure)
     pullPolicy: IfNotPresent
 
 resources:
