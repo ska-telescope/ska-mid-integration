@@ -1,107 +1,105 @@
-# Default values for ska-mid-integration.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
+display: ":0"
+xauthority: "~/.Xauthority"
 
-replicaCount: 1
+global:
+  labels:
+    app: ska-mid-integration
+  minikube: false
+  operator: true
+  exposeAllDS: false
+  taranta_auth_enabled: false
+  taranta_dashboard_enabled: false
+  sub-system:
+    tango-base:
+      enabled: false
+    ska-tango-base:
+      enabled: false
+    ska-taranta:
+      enabled: false
+  retry:
+    - "--sleep=3"
+    - "--tries=100"
+  tango_host: databaseds:10000
+  device_server_port: 45450
+  cluster_domain: techops.internal.skao.int # check with Ugur what it should be? it should be just cloud- cluster.local is what dev teams use
+  dishes: ["001", "036","063", "100"]
+  namespace_dish: # these are used when TMC is deployed with Dish Leaf Nodes . To override the variable defined in TMC repo, this is useful from configurability
+    dish_names: ['mid-dish/dish-manager/SKA001','mid-dish/dish-manager/SKA036','mid-dish/dish-manager/SKA063','mid-dish/dish-manager/SKA100']
+  data-product-pvc-name: shared
 
-image:
-  repository: nginx
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
+#=== OSO ===#
+ska-oso-oet:
+  labels:
+    app: ska-mid-integration
+  system: TM-mid
+  telescope: SKA-mid
+  central_node: ska_mid/tm_central/central_node
+  subarray: ska_mid/tm_subarray_node
+  rest:
+    ingress:
+      enabled: false
+    oda:
+      backendType: rest
+      url: http://ska-db-oda-rest-test.button-dev-ska-db-oda:5000/button-dev-ska-db-oda/api/v1
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 2000m
+      memory: 1024Mi
 
-imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
 
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-  # Automatically mount a ServiceAccount's API credentials?
-  automount: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
+#=== SDP ===#
+ska-sdp:
+  labels:
+    app: ska-mid-integration
+  ska-tango-base:
+    enabled: false
+  lmc:
+    prefix: mid
+    nsubarray: 3
+  data-pvc:
+    create:
+      enabled: true
+      size: 20Gi
+      storageClassName: nfss1
 
-podAnnotations: {}
-podLabels: {}
 
-podSecurityContext: {}
-  # fsGroup: 2000
+#=== DISH ===#
+ska-dish-lmc:
+  ska-tango-base:
+    enabled: false
 
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+  ska-mid-dish-manager: 
+    enabled: true
+    ska-mid-dish-ds-manager:
+      enabled: true
 
-service:
-  type: ClusterIP
-  port: 80
+  ska-mid-dish-simulators:
+    enabled: true # dish simulator for other interfaces
+    deviceServers:
+      spfdevice:
+        enabled: true
+      spfrxdevice:
+        enabled: true
+    dsOpcuaSimulator:
+      enabled: true
 
-ingress:
-  enabled: false
-  className: ""
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: chart-example.local
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+#=== TMC MID ===#
+ska-tmc-mid:
+  enabled: true
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
-livenessProbe:
-  httpGet:
-    path: /
-    port: http
-readinessProbe:
-  httpGet:
-    path: /
-    port: http
-
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
-
-# Additional volumes on the output Deployment definition.
-volumes: []
-# - name: foo
-#   secret:
-#     secretName: mysecret
-#     optional: false
-
-# Additional volumeMounts on the output Deployment definition.
-volumeMounts: []
-# - name: foo
-#   mountPath: "/etc/foo"
-#   readOnly: true
-
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
+##tmc-mid
+tmc-mid: # check why it is separate
+  enabled: true
+  legacy_compatibility: true
+  telescope: SKA-mid
+  ska-tango-base:
+    enabled: false
+  deviceServers:
+    mocks:
+      enabled: false
+      dish: false
+      csp: false
+      sdp: false

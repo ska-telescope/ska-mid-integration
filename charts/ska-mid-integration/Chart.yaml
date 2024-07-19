@@ -1,24 +1,63 @@
 apiVersion: v2
 name: ska-mid-integration
-description: A Helm chart for Kubernetes
-
-# A chart can be either an 'application' or a 'library' chart.
-#
-# Application charts are a collection of templates that can be packaged into versioned archives
-# to be deployed.
-#
-# Library charts provide useful utilities or functions for the chart developer. They're included as
-# a dependency of application charts to inject those utilities and functions into the rendering
-# pipeline. Library charts do not define any templates and therefore cannot be deployed.
+description: A Helm chart for Kubernetes MVP Mid Notebooks
 type: application
-
-# This is the chart version. This version number should be incremented each time you make changes
-# to the chart and its templates, including the app version.
-# Versions are expected to follow Semantic Versioning (https://semver.org/)
 version: 0.1.0
-
-# This is the version number of the application being deployed. This version number should be
-# incremented each time you make changes to the application. Versions are not expected to
-# follow Semantic Versioning. They should reflect the version the application is using.
-# It is recommended to use it with quotes.
-appVersion: "1.16.0"
+appVersion: 0.1.0
+icon: https://www.skatelescope.org/wp-content/uploads/2016/07/09545_NEW_LOGO_2014.png
+dependencies:
+  - name: ska-tango-base
+    version: 0.4.10
+    repository: https://artefact.skao.int/repository/helm-internal
+  - name: ska-tango-util
+    version: 0.4.11
+    repository: https://artefact.skao.int/repository/helm-internal
+  - name: ska-sdp
+    version: 0.21.0
+    repository: https://artefact.skao.int/repository/helm-internal
+  - name: ska-tmc-mid
+    version: 0.21.0
+    repository: https://artefact.skao.int/repository/helm-internal
+    condition: ska-tmc-mid.enabled
+    alias: tmc-mid
+  - name: ska-dish-lmc
+    version: 3.3.0
+    repository: https://artefact.skao.int/repository/helm-internal
+  - name: ska-csp-lmc-mid
+    version: 0.21.0
+    repository: https://artefact.skao.int/repository/helm-internal
+  - name: ska-mid-cbf-mcs
+    version: 0.15.1
+    repository: https://artefact.skao.int/repository/helm-internal
+  - name: ska-mid-cbf-tmleafnode
+    version: 0.15.1
+    repository: https://artefact.skao.int/repository/helm-internal
+  # - name: ska-oso-oet
+  #   version: 6.1.0
+  #   repository: https://artefact.skao.int/repository/helm-internal
+  # - name: ska-db-oda
+  #   version: 5.0.0
+  #   repository: https://artefact.skao.int/repository/helm-internal
+  - name: ska-tango-taranta
+    version: 2.10.2
+    repository: https://artefact.skao.int/repository/helm-internal
+    condition: ska-taranta.enabled
+  - name: ska-tango-tangogql
+    version: 1.4.3
+    repository: https://artefact.skao.int/repository/helm-internal
+    condition: ska-taranta.enabled
+  - name: ska-tango-taranta-auth
+    version: 0.2.2
+    repository: https://artefact.skao.int/repository/helm-internal
+    condition: global.taranta_auth_enabled
+  - name: ska-tango-taranta-dashboard
+    version: 1.6.1
+    repository: https://artefact.skao.int/repository/helm-internal
+    condition: global.taranta_dashboard_enabled
+  - name: ska-tango-taranta-dashboard-pvc
+    version: 1.6.1
+    repository: https://artefact.skao.int/repository/helm-internal
+    condition: global.taranta_dashboard_enabled
+  - name: ska-ser-skuid
+    version: 3.3.3
+    repository: https://artefact.skao.int/repository/helm-internal

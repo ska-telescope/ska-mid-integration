@@ -1,4 +1,4 @@
-image: $SKA_K8S_TOOLS_BUILD_DEPLOY
+mkdrimage: $SKA_K8S_TOOLS_BUILD_DEPLOY
 
 default:
   tags:
@@ -10,14 +10,14 @@ variables:
 
 stages:
   - lint
-  - test
   - build
-  - deploy
+ # - test #BDD will come later, just python tests for now if required
+ # - deploy
   - integration
-  - staging
+ # - staging
  # - join-reports
   - pages
-  - publish
+  - publish  # might not need in our case
   - scan
 
 # Include CI templates
@@ -33,7 +33,7 @@ include:
 
 # Jupyter notebook linting and testing
   - project: 'ska-telescope/templates-repository'
-    file: 'gitlab-ci/includes/notebook.gitlab-ci.yml'
+    file: 'gitlab-ci/includes/notebook.gitlab-ci.yml' # this is for using jupyter notebooks
 
 # Helm Charts
   - project: 'ska-telescope/templates-repository'
@@ -53,14 +53,14 @@ include:
 
 # changelog release page
   - project: 'ska-telescope/templates-repository'
-    file: 'gitlab-ci/includes/release.gitlab-ci.yml'
+    file: 'gitlab-ci/includes/release.gitlab-ci.yml' 
 
 # deploy steps
   - project: 'ska-telescope/templates-repository'
-    file: 'gitlab-ci/includes/deploy.gitlab-ci.yml'
+    file: 'gitlab-ci/includes/deploy.gitlab-ci.yml' 
 
 notebook-lint:
-  allow_failure: true
+  allow_failure: true 
 
 notebook-test:
   rules:
