@@ -7,7 +7,6 @@ from tango import DeviceProxy
 from tests.test_harness3.telescope_config.components_config import (
     TMCConfiguration,
 )
-from tests.test_harness3.utils.enums import SubarrayObsState
 
 
 class TMCDevices(abc.ABC):
@@ -52,7 +51,9 @@ class TMCDevices(abc.ABC):
             self.dish1_leaf_admin_dev_name
         )
 
-        self._subarray_obs_state = SubarrayObsState.EMPTY
+        # Create (but not initialize) the subarray leaf nodes
+        self.csp_subarray_leaf_node: DeviceProxy | None = None
+        self.sdp_subarray_leaf_node: DeviceProxy | None = None
 
     # -----------------------------------------------------------
     # CentralNode properties
@@ -68,7 +69,11 @@ class TMCDevices(abc.ABC):
         return self.central_node.DishVccValidationStatus
 
     # -----------------------------------------------------------
-    # Subarray state actions
+    # Subarray init methods
+
+    def is_subarray_initialized(self) -> bool:
+        """Check if the subarray is initialized"""
+        return self.csp_subarray_leaf_node and self.sdp_subarray_leaf_node
 
     def set_subarray_id(self, subarray_id: int):
         """Set subarray ID"""

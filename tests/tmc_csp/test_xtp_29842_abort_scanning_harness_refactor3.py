@@ -5,13 +5,15 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer, log_events
 
-from tests.test_harness3.common_utils.i_json_factory import IJsonFactory
 from tests.test_harness3.telescope_facades.csp_facade import CSPFacade
 from tests.test_harness3.telescope_facades.tmc_central_node_facade import (
     TMCCentralNodeFacade,
 )
 from tests.test_harness3.telescope_facades.tmc_subarray_node_facade import (
     TMCSubarrayNodeFacade,
+)
+from tests.test_harness3.telescope_inputs.obs_state_commands_input import (
+    ObsStateCommandsInput,
 )
 
 ASSERTIONS_TIMEOUT = 60
@@ -43,27 +45,16 @@ def telescope_is_in_on_state(
 def subarray_is_in_scanning_obsstate(
     subarray_node_facade: TMCSubarrayNodeFacade,
     csp: CSPFacade,
-    tmc_mid_json_factory: IJsonFactory,
+    default_commands_inputs: ObsStateCommandsInput,
     event_tracer: TangoEventTracer,
     subarray_id: str,
 ):
     """A method to check if subarray is in SCANNING obsState."""
     subarray_node_facade.set_subarray_id(subarray_id)
 
-    assign_input_json = (
-        tmc_mid_json_factory.create_central_node_assign_resources_command_input()  # pylint: disable=line-too-long # noqa: E501
-    )
-    configure_input_json = (
-        tmc_mid_json_factory.create_subarray_configure_command_input()
-    )
-    scan_input_json = tmc_mid_json_factory.create_subarray_scan_command_input()
-
     subarray_node_facade.force_change_of_obs_state(
         ObsState.SCANNING,
-        assign_input_json=assign_input_json,
-        configure_input_json=configure_input_json,
-        scan_input_json=scan_input_json,
-        json_factory=tmc_mid_json_factory,
+        default_commands_inputs,
         wait_termination_condition=True,
     )
 

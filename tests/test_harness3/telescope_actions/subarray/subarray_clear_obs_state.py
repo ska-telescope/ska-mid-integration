@@ -36,17 +36,7 @@ class SubarrayClearObsState(TelescopeAction):
             SubarrayRestart().execute()
 
     def termination_condition(self):
-        return [
-            ExpectedStateChange(
-                self.telescope.tmc.csp_subarray_leaf_node,
-                "cspSubarrayObsState",
-                ObsState.EMPTY,
-            ),
-            ExpectedStateChange(
-                self.telescope.tmc.sdp_subarray_leaf_node,
-                "sdpSubarrayObsState",
-                ObsState.EMPTY,
-            ),
+        res = [
             ExpectedStateChange(
                 self.telescope.csp.csp_subarray, "obsState", ObsState.EMPTY
             ),
@@ -57,3 +47,22 @@ class SubarrayClearObsState(TelescopeAction):
                 self.telescope.tmc.subarray_node, "obsState", ObsState.EMPTY
             ),
         ]
+
+        # csp subarray leaf node may not be yet initialized
+        if self.telescope.tmc.is_subarray_initialized():
+            res.extend(
+                [
+                    ExpectedStateChange(
+                        self.telescope.tmc.csp_subarray_leaf_node,
+                        "cspSubarrayObsState",
+                        ObsState.EMPTY,
+                    ),
+                    ExpectedStateChange(
+                        self.telescope.tmc.sdp_subarray_leaf_node,
+                        "sdpSubarrayObsState",
+                        ObsState.EMPTY,
+                    ),
+                ]
+            )
+
+        return res

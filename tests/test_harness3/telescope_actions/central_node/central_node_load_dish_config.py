@@ -15,7 +15,8 @@ class CentralNodeLoadDishConfig(TelescopeAction):
         self.dish_vcc_config = dish_vcc_config
 
     def _action(self):
-        result, message = self.telescope.tmc.central_node.LoadDishConfig(
+        # AttributeError: LoadDishConfig. Did you mean: 'LoadDishCfg'?
+        result, message = self.telescope.tmc.central_node.LoadDishCfg(
             self.dish_vcc_config.get_json_string()
         )
         return result, message

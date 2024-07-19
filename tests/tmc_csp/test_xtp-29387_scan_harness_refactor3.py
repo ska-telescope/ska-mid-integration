@@ -5,7 +5,6 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer, log_events
 
-from tests.test_harness3.common_utils.i_json_factory import IJsonFactory
 from tests.test_harness3.telescope_facades.csp_facade import CSPFacade
 from tests.test_harness3.telescope_facades.tmc_central_node_facade import (
     TMCCentralNodeFacade,
@@ -13,6 +12,10 @@ from tests.test_harness3.telescope_facades.tmc_central_node_facade import (
 from tests.test_harness3.telescope_facades.tmc_subarray_node_facade import (
     TMCSubarrayNodeFacade,
 )
+from tests.test_harness3.telescope_inputs.obs_state_commands_input import (
+    ObsStateCommandsInput,
+)
+from tests.various_utils.file_json_input import FileJSONInput
 
 ASSERTIONS_TIMEOUT = 60
 
@@ -39,31 +42,15 @@ def given_a_telescope_in_on_state(
 @given(parsers.parse("TMC subarray {subarray_id} is in READY ObsState"))
 def subarray_in_ready_obsstate(
     subarray_node_facade: TMCSubarrayNodeFacade,
-    tmc_mid_json_factory: IJsonFactory,
+    default_commands_inputs: ObsStateCommandsInput,
     subarray_id: str,
 ) -> None:
     """Move TMC Subarray to READY obsstate."""
     subarray_node_facade.set_subarray_id(subarray_id)
 
-    # assign_input_json = prepare_json_args_for_centralnode_commands(
-    #     "assign_resources_mid", command_input_factory
-    # )
-    # configure_input_json = prepare_json_args_for_commands(
-    #     "configure_mid", command_input_factory
-    # )
-
-    assign_input_json = (
-        tmc_mid_json_factory.create_central_node_assign_resources_command_input()  # pylint: disable=line-too-long # noqa: E501
-    )
-    configure_input_json = (
-        tmc_mid_json_factory.create_subarray_configure_command_input()
-    )
-
     subarray_node_facade.force_change_of_obs_state(
         ObsState.READY,
-        assign_input_json=assign_input_json,
-        configure_input_json=configure_input_json,
-        json_factory=tmc_mid_json_factory,
+        commands_inputs=default_commands_inputs,
         wait_termination_condition=True,
     )
 
@@ -75,7 +62,6 @@ def invoke_scan(
     subarray_node_facade: TMCSubarrayNodeFacade,
     csp: CSPFacade,
     event_tracer: TangoEventTracer,
-    tmc_mid_json_factory: IJsonFactory,
 ):
     """Invokes Scan command on TMC"""
     event_tracer.subscribe_event(csp.csp_subarray, "obsState")
@@ -88,13 +74,8 @@ def invoke_scan(
             subarray_node_facade.subarray_node: ["obsState"],
         }
     )
-
-    # scan_input_json = prepare_json_args_for_commands(
-    #     "scan_mid", command_input_factory
-    # )
-    scan_input_json = tmc_mid_json_factory.create_subarray_scan_command_input()
     subarray_node_facade.scan(
-        scan_input_json, wait_termination_condition=False
+        FileJSONInput("subarray", "scan_mid"), wait_termination_condition=False
     )
 
 
