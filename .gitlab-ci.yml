@@ -78,22 +78,6 @@ k8s-test:
   rules:
     - when: never
 
-deploy-dev-environment:
-  rules:
-    - when: never
-
-test-dev-environment:
-  rules:
-    - when: never
-
-info-dev-environment:
-  rules:
-    - when: never
-
-stop-dev-environment:
-  rules:
-    - when: never
-
 deploy-integration:
   rules:
     - when: never
@@ -109,68 +93,6 @@ stop-integration:
 redeploy-integration:
   rules:
     - when: never
-
-deploy-staging:
-  rules:
-    - when: never
-
-info-staging:
-  rules:
-    - when: never
-
-stop-staging:
-  rules:
-    - when: never
-
-redeploy-staging:
-  rules:
-    - when: never
-
-
-deploy-mid-dev-environment:
-  extends: deploy-dev-environment
-  rules:
-    - when: manual
-  variables:
-    KUBE_NAMESPACE: "ci-dev-mid-g2-$CI_PROJECT_NAME"
-    CI_KEEP_NAMESPACE: true
-    SKIP_CI: 1
-  environment:
-    name: ci-dev-mid-g2-$CI_PROJECT_NAME
-    on_stop: stop-mid-dev-environment
-    auto_stop_in: 4 hours
-
-test-mid-dev-environment:
-  extends: test-dev-environment
-  rules:
-    - when: on_success
-  needs:
-    - deploy-mid-dev-environment
-  variables:
-    KUBE_NAMESPACE: "ci-dev-mid-g2-$CI_PROJECT_NAME"
-  environment:
-    name: ci-dev-mid-g2-$CI_PROJECT_NAME
-
-info-mid-dev-environment:
-  extends: info-dev-environment
-  rules:
-    - when: manual
-  needs:
-    - deploy-mid-dev-environment
-  variables:
-    KUBE_NAMESPACE: "ci-dev-mid-g2-$CI_PROJECT_NAME"
-  environment:
-    name: ci-dev-mid-g2-$CI_PROJECT_NAME
-
-stop-mid-dev-environment:
-  extends: stop-dev-environment
-  rules:
-    - when: manual
-  variables:
-    KUBE_NAMESPACE: "ci-dev-mid-g2-$CI_PROJECT_NAME"
-  environment:
-    name: ci-dev-mid-g2-$CI_PROJECT_NAME
-    action: stop
 
 deploy-mid-integration:
   extends: deploy-integration
@@ -214,47 +136,4 @@ redeploy-mid-integration:
   environment:
     name: mid-g2-integration-$CI_PROJECT_NAME
 
-# deploy-mid-staging:
-#   extends: deploy-staging
-#   rules:
-#     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-#   needs: 
-#     - deploy-mid-integration
-#   variables:
-#     KUBE_NAMESPACE: "mid-g2-staging-$CI_PROJECT_NAME"
-#   environment:
-#     name: mid-g2-staging-$CI_PROJECT_NAME
-#     on_stop: stop-mid-staging
-
-# info-mid-staging:
-#   extends: info-staging
-#   rules:
-#     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-#   needs:
-#       - deploy-mid-staging
-#   variables:
-#     KUBE_NAMESPACE: "mid-g2-staging-$CI_PROJECT_NAME"
-#   environment:
-#     name: mid-g2-staging-$CI_PROJECT_NAME
-
-# stop-mid-staging:
-#   extends: stop-staging
-#   rules:
-#     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-#   needs:
-#     - deploy-mid-staging
-#   variables:
-#     KUBE_NAMESPACE: "mid-g2-staging-$CI_PROJECT_NAME"
-#   environment:
-#     name: mid-g2-staging-$CI_PROJECT_NAME
-#     action: stop
-
-# redeploy-mid-staging:
-#   extends: redeploy-staging
-#   rules:
-#     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-#   variables:
-#     KUBE_NAMESPACE: "mid-g2-staging-$CI_PROJECT_NAME"
-#   environment:
-#     name: mid-g2-staging-$CI_PROJECT_NAME
 
