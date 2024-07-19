@@ -4,7 +4,6 @@ import logging
 
 from ska_control_model import ObsState
 
-from tests.resources.test_support.enum import PointingState
 from tests.test_harness3.telescope_actions.expected_event import (
     ExpectedStateChange,
 )
@@ -13,6 +12,7 @@ from tests.test_harness3.telescope_actions.telescope_action import (
 )
 from tests.test_harness3.telescope_inputs.dish_mode import DishMode
 from tests.test_harness3.telescope_inputs.json_input import JSONInput
+from tests.test_harness3.telescope_inputs.pointing_state import PointingState
 
 LOGGER = logging.getLogger(__name__)
 
