@@ -91,9 +91,7 @@ def send(json_factory, invalid_json):
         invalid_configure_json = json.loads(configure_json)
         if invalid_json == "config_id_key_missing":
             del invalid_configure_json["csp"]["common"]["config_id"]
-            LOGGER.info(
-                f"invalid_configure_json on TMC CentralNode: {invalid_configure_json}"
-            )
+            LOGGER.info(f"invalid_configure_json: {invalid_configure_json}")
             pytest.command_result = tmc_helper.configure_subarray(
                 json.dumps(invalid_configure_json), **device_params
             )
@@ -139,9 +137,7 @@ def send(json_factory, invalid_json):
 )
 def invalid_command_rejection(invalid_json, change_event_callbacks):
     # subarray_node_proxy = DeviceProxy(tmc_subarraynode1)
-    LOGGER.info(
-        f"pytest.command_result TMC CentralNode: {pytest.command_result}"
-    )
+    LOGGER.info(f"pytest.command_result: {pytest.command_result}")
     assert pytest.command_result[0][0] == ResultCode.REJECTED
     # asserting validations message as per invalid json
     if invalid_json == "config_id_key_missing":
