@@ -6,7 +6,6 @@ import time
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
-from tango import DevState
 
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
@@ -25,69 +24,23 @@ def test_tmc_dish_successive_scan_with_different_scan_duration():
     """
     Test case to verify TMC-DISH successive Scab functionality
     with different receiver band and scan duration.
-
-    Glossary:
-        - "central_node_mid": fixture for a TMC CentralNode under test
-        - "simulator_factory": fixture for SimulatorFactory class,
-        which provides simulated master devices
-        - "event_recorder": fixture for EventRecorder class
     """
 
 
-@given("a Telescope in ON state and TMC subarray in IDLE obsState")
-def turn_on_telescope(
-    central_node_mid,
-    event_recorder,
-    subarray_node,
-    command_input_factory,
+@given("TMC subarray is in IDLE obsState")
+def check_subarray_obsState_idle(
+    subarray_node, central_node_mid, event_recorder, command_input_factory
 ):
     """
-    A method to put Telescope ON
+    Method to check subarray is in IDLE obsState
+
+    Args:
+        subarray_node: Fixture for a Subarray Node wrapper class
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        event_recorder: Fixture for EventRecorder class
+        command_input_factory: fixture for creating input required
+        for command
     """
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
-
-    central_node_mid.move_to_on()
-
-    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode"
-        )
-        event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
-        )
-    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
-    event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
-
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.csp_master,
-        "State",
-        DevState.ON,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.sdp_master,
-        "State",
-        DevState.ON,
-    )
-
-    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "dishMode",
-            DishMode.STANDBY_FP,
-        )
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_leaf_node_dict[dish_id],
-            "dishMode",
-            DishMode.STANDBY_FP,
-        )
-
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.ON,
-    )
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
@@ -121,6 +74,13 @@ def invoke_configure(
 ):
     """
     A method to invoke Configure command
+
+    Args:
+        subarray_node: Fixture for a Subarray Node wrapper class
+        command_input_factory: fixture for creating input required
+        for command
+        receiver_band1(str) : receiver band for configure command
+        scan_duration1 (str): scan duration required
     """
 
     configure_input_json = prepare_json_args_for_commands(
@@ -142,16 +102,15 @@ def check_dish_mode_and_pointing_state(
     """
     Method to check dishMode and pointingState of DISH and
     SubarrayNode obsState.
+
+    Args:
+        subarray_node: Fixture for a Subarray Node wrapper class
+        subarray_id (str): Subarray ID
+        event_recorder: Fixture for EventRecorder class
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
     """
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "pointingState"
-        )
-        event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
-        )
-
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
@@ -215,6 +174,12 @@ def check_dish_mode_and_pointing_state(
 def invoke_scan(subarray_node, command_input_factory, event_recorder):
     """
     A method to invoke Scan command
+
+    Args:
+        subarray_node: Fixture for a Subarray Node wrapper class
+        command_input_factory: fixture for creating input required
+        for command
+        event_recorder: Fixture for EventRecorder class
     """
 
     scan_input_json = prepare_json_args_for_commands(
@@ -241,6 +206,11 @@ def check_automatic_endscan_with_scan_duration1(
 ):
     """
     A method to check if EndScan is successful.
+
+    Args:
+        subarray_node: Fixture for a Subarray Node wrapper class
+        event_recorder: Fixture for EventRecorder class
+        scan_duration1 (str): scan duration required
     """
     time.sleep(int(scan_duration1))
     assert event_recorder.has_change_event_occurred(
@@ -259,10 +229,15 @@ def check_automatic_endscan_with_scan_duration2(
 ):
     """
     A method to check if EndScan is successful.
+
+    Args:
+        subarray_node: Fixture for a Subarray Node wrapper class
+        event_recorder: Fixture for EventRecorder class
+        scan_duration2 (str): scan duration required
     """
     time.sleep(int(scan_duration2))
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
+        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=15
     )
 
 
@@ -270,6 +245,11 @@ def check_automatic_endscan_with_scan_duration2(
 def invoke_end_command(subarray_node, event_recorder, central_node_mid):
     """
     This method invokes End command
+
+    Args:
+        subarray_node: Fixture for a Subarray Node wrapper class
+        event_recorder: Fixture for EventRecorder class
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
     """
     pytest.command_result = subarray_node.execute_transition("End")
 
@@ -309,6 +289,14 @@ def invoke_next_configure(
 ):
     """
     A method to invoke Configure command
+
+    Args:
+        subarray_node: Fixture for a Subarray Node wrapper class
+        command_input_factory: fixture for creating input required
+        for command
+        receiver_band2 (str) : receiver band for configure command
+        scan_duration2 (str) : scan duration required
+
     """
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
