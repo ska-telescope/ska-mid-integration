@@ -573,6 +573,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
 
             else:
                 LOGGER.info("Calling Move to Off method")
+                LOGGER.info("Calling Move to Off method ........")
                 self.move_to_off()
             LOGGER.info("Called TelescopeOff command")
 
