@@ -3,6 +3,7 @@ from copy import deepcopy
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
+from ska_tango_base.executor import TaskStatus
 from tango import DeviceProxy, EventType
 
 from tests.conftest import LOGGER
@@ -161,7 +162,7 @@ def invalid_command_rejection(invalid_json):
 def invalid_command_rejection(invalid_json, change_event_callbacks):
     # subarray_node_proxy = DeviceProxy(tmc_subarraynode1)
     LOGGER.info(f"pytest.command_result: {pytest.command_result}")
-    assert pytest.command_result[0][0] == ResultCode.REJECTED
+    assert pytest.command_result[0][0] == TaskStatus.REJECTED
     # asserting validations message as per invalid json
     if invalid_json == "config_id_key_missing":
         # subarray_node_proxy.subscribe_event(
