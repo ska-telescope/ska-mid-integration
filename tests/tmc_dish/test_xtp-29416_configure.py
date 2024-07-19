@@ -51,7 +51,7 @@ def subarray_is_in_idle_obsState(
     command_input_factory,
 ):
     """
-    A method to check if telescope in is idle obsState.
+    A method to check if telescope in is idle obsState
 
     Args:
         central_node_mid: Fixture for a TMC CentralNode wrapper class
