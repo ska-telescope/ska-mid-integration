@@ -11,8 +11,8 @@ from tests.test_harness3.telescope_actions.expected_event import (
 from tests.test_harness3.telescope_actions.telescope_action import (
     TelescopeAction,
 )
+from tests.test_harness3.telescope_inputs.dish_mode import DishMode
 from tests.test_harness3.telescope_inputs.json_input import JSONInput
-from tests.test_harness3.utils.enums import DishMode
 
 LOGGER = logging.getLogger(__name__)
 

@@ -8,10 +8,10 @@ from tests.test_harness3.emulated_components.utils.teardown_helper import (
 from tests.test_harness3.telescope_config.components_config import (
     DishesConfiguration,
 )
+from tests.test_harness3.telescope_inputs.dish_mode import DishMode
 from tests.test_harness3.telescope_structure.dishes_devices import (
     DishesDevices,
 )
-from tests.test_harness3.utils.enums import DishMode
 
 
 class EmulatedDishesDevices(DishesDevices):
