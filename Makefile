@@ -104,6 +104,7 @@ endif
 # at the end. Will be debugged and fixed as a part of improvement.
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 PYTHON_VARS_AFTER_PYTEST ?= -m '$(MARK) $(ADDMARK)' $(ADD_ARGS) $(FILE) --count=$(COUNT) -x 
 =======
@@ -112,6 +113,9 @@ PYTHON_VARS_AFTER_PYTEST ?= -m '$(MARK) $(ADDMARK)' $(ADD_ARGS) $(FILE) --count=
 =======
 PYTHON_VARS_AFTER_PYTEST ?= -m '$(MARK) $(ADDMARK)' $(ADD_ARGS) $(FILE) --count=$(COUNT) -x 
 >>>>>>> df72de9d (SAH-1564: Revert exit at fail change)
+=======
+PYTHON_VARS_AFTER_PYTEST ?= -m '$(MARK) $(ADDMARK)' $(ADD_ARGS) $(FILE) --count=$(COUNT)
+>>>>>>> 1deb21a0 (SAH-1564: Refactor the negative scenarios)
 CUSTOM_VALUES1 ?=
 CUSTOM_VALUES2 ?=
 ifeq ($(CSP_SIMULATION_ENABLED),false)
