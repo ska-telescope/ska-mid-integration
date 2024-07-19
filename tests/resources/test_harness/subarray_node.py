@@ -439,7 +439,7 @@ class SubarrayNodeWrapper(object):
             # completion does not consider Dishes pointingState transition
             # to READY
             the_waiter = Waiter()
-            the_waiter.wait(80)
+            the_waiter.wait(5)
 
             self.abort_subarray()
             self.restart_subarray()
