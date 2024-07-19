@@ -442,34 +442,48 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
 
     def _reset_health_state_for_mock_devices(self) -> None:
         """Reset Mock devices"""
+        LOGGER.info("Calling HealthState reset method ...........")
+
         if SIMULATED_DEVICES_DICT["csp_and_sdp"]:
             for mock_device in [
                 self.sdp_master,
                 self.csp_master,
             ]:
-                device = DeviceProxy(mock_device)
-                device.SetDirectHealthState(HealthState.UNKNOWN)
+                LOGGER.info(
+                    "Calling HealthState reset method for CSP and SDP ....."
+                )
+                mock_device.SetDirectHealthState(HealthState.UNKNOWN)
         elif SIMULATED_DEVICES_DICT["csp_and_dish"]:
+            LOGGER.info(
+                "Calling HealthState reset method for CSP and Dish ....."
+            )
             self.csp_master.SetDirectHealthState(HealthState.UNKNOWN)
             for mock_device in self.dish_master_list:
                 mock_device.SetDirectHealthState(HealthState.UNKNOWN)
         elif SIMULATED_DEVICES_DICT["sdp_and_dish"]:
+            LOGGER.info(
+                "Calling HealthState reset method for SDP and Dish ....."
+            )
             self.sdp_master.SetDirectHealthState(HealthState.UNKNOWN)
             for mock_device in self.dish_master_list:
                 mock_device.SetDirectHealthState(HealthState.UNKNOWN)
         elif SIMULATED_DEVICES_DICT["sdp"]:
+            LOGGER.info("Calling HealthState reset method for SDP .....")
             self.sdp_master.SetDirectHealthState(HealthState.UNKNOWN)
         elif SIMULATED_DEVICES_DICT["all_mocks"]:
             for mock_device in [
                 self.sdp_master,
                 self.csp_master,
             ]:
-                device = DeviceProxy(mock_device)
-                device.SetDirectHealthState(HealthState.UNKNOWN)
+                LOGGER.info(
+                    "Calling HealthState reset method for CSP, SDP and Dish "
+                )
+                mock_device.SetDirectHealthState(HealthState.UNKNOWN)
             for mock_device in self.dish_master_list:
                 mock_device.SetDirectHealthState(HealthState.UNKNOWN)
         else:
             LOGGER.info("No devices to reset healthState")
+        LOGGER.info("HealthState resetted ...........")
 
     def perform_action(
         self, command_name: str, input_json: str
@@ -543,7 +557,9 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             self.subarray_abort()
             self.subarray_restart()
         elif self.subarray_node.obsState == ObsState.ABORTED:
+            LOGGER.info("Calling Restart on SubarrayNode")
             self.subarray_restart()
+        LOGGER.info("Telescope State: %s", self.telescope_state)
         if self.telescope_state != "OFF":
             if (SIMULATED_DEVICES_DICT["sdp"]) and not SIMULATED_DEVICES_DICT[
                 "all_mocks"
@@ -551,6 +567,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 LOGGER.info("Tear down is not required.")
 
             else:
+                LOGGER.info("Calling Move to Off method")
                 self.move_to_off()
         self._clear_command_call_and_transition_data(clear_transition=True)
         # if source dish vcc config is empty or not matching with default

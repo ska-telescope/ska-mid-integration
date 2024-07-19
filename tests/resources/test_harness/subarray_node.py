@@ -348,7 +348,10 @@ class SubarrayNodeWrapper(object):
             sim_device_fqdn_list = [self.sdp_subarray1, self.csp_subarray1]
         elif SIMULATED_DEVICES_DICT["csp_and_dish"]:
             sim_device_fqdn_list = [self.csp_subarray1]
-        elif SIMULATED_DEVICES_DICT["sdp_and_dish"]:
+        elif (
+            SIMULATED_DEVICES_DICT["sdp_and_dish"]
+            or SIMULATED_DEVICES_DICT["sdp"]
+        ):
             sim_device_fqdn_list = [self.sdp_subarray1]
         for sim_device_fqdn in sim_device_fqdn_list:
             device = DeviceProxy(sim_device_fqdn)
@@ -361,10 +364,11 @@ class SubarrayNodeWrapper(object):
         if (
             SIMULATED_DEVICES_DICT["csp_and_dish"]
             or SIMULATED_DEVICES_DICT["all_mocks"]
+            or SIMULATED_DEVICES_DICT["sdp_and_dish"]
         ):
             for dish_master in self.dish_master_list:
-                dish_master.SetDirectDishMode(DishMode.STANDBY_LP)
-                dish_master.SetDirectState(DevState.STANDBY)
+                # dish_master.SetDirectDishMode(DishMode.STANDBY_LP)
+                # dish_master.SetDirectState(DevState.STANDBY)
                 dish_master.ResetDelay()
                 dish_master.SetDirectHealthState(HealthState.UNKNOWN)
 
