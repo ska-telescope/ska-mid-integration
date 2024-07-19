@@ -3,11 +3,11 @@ from copy import deepcopy
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
-from ska_tango_testing.mock.placeholders import Anything
 from tango import DeviceProxy, EventType
 
 from tests.conftest import LOGGER
 from tests.resources.test_harness.constant import COMMAND_COMPLETED
+from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.common_utils.telescope_controls import (
     BaseTelescopeControl,
 )
@@ -89,6 +89,7 @@ def send(json_factory, invalid_json):
     try:
         configure_json = json_factory("command_Configure")
         invalid_configure_json = json.loads(configure_json)
+<<<<<<< HEAD
         # TODO: CDM v10.1.2 does not raise exception for missing config_id
         # if invalid_json == "config_id_key_missing":
         #     del invalid_configure_json["csp"]["common"]["config_id"]
@@ -96,6 +97,17 @@ def send(json_factory, invalid_json):
         #         json.dumps(invalid_configure_json), **device_params
         #     )
         if invalid_json == "fsp_id_key_missing":
+=======
+        if invalid_json == "config_id_key_missing":
+            del invalid_configure_json["csp"]["common"]["config_id"]
+            LOGGER.info(
+                f"invalid_configure_json on TMC CentralNode: {invalid_configure_json}"
+            )
+            pytest.command_result = tmc_helper.configure_subarray(
+                json.dumps(invalid_configure_json), **device_params
+            )
+        elif invalid_json == "fsp_id_key_missing":
+>>>>>>> c5abe860 (SAH-1564: Execute tests)
             del invalid_configure_json["csp"]["cbf"]["fsp"][0]["fsp_id"]
             pytest.command_result = tmc_helper.configure_subarray(
                 json.dumps(invalid_configure_json), **device_params
@@ -149,39 +161,44 @@ def invalid_command_rejection(invalid_json):
         "incorrect_fsp_id",
 =======
 def invalid_command_rejection(invalid_json, change_event_callbacks):
-    subarray_node_proxy = DeviceProxy(tmc_subarraynode1)
+    # subarray_node_proxy = DeviceProxy(tmc_subarraynode1)
+    LOGGER.info(
+        f"pytest.command_result TMC CentralNode: {pytest.command_result}"
+    )
+    assert pytest.command_result[0][0] == ResultCode.REJECTED
     # asserting validations message as per invalid json
     if invalid_json == "config_id_key_missing":
-        subarray_node_proxy.subscribe_event(
-            "longRunningCommandResult",
-            EventType.CHANGE_EVENT,
-            change_event_callbacks["longRunningCommandResult"],
-        )
-        assertion_data = change_event_callbacks[
-            "longRunningCommandResult"
-        ].assert_change_event(
-            (pytest.command_result[1][0], Anything),
-            lookahead=15,
-        )
+        # subarray_node_proxy.subscribe_event(
+        #     "longRunningCommandResult",
+        #     EventType.CHANGE_EVENT,
+        #     change_event_callbacks["longRunningCommandResult"],
+        # )
+        # assertion_data = change_event_callbacks[
+        #     "longRunningCommandResult"
+        # ].assert_change_event(
+        #     (pytest.command_result[1][0], Anything),
+        #     lookahead=15,
+        # )
+
         assert (
             "'config_id': ['Missing data for required field.']"
-            in json.loads(assertion_data["attribute_value"][1])[1]
+            in pytest.command_result[1][0]
         )
     elif invalid_json == "incorrect_fsp_id":
-        subarray_node_proxy.subscribe_event(
-            "longRunningCommandResult",
-            EventType.CHANGE_EVENT,
-            change_event_callbacks["longRunningCommandResult"],
-        )
-        assertion_data = change_event_callbacks[
-            "longRunningCommandResult"
-        ].assert_change_event(
-            (pytest.command_result[1][0], Anything),
-            lookahead=15,
-        )
+        # subarray_node_proxy.subscribe_event(
+        #     "longRunningCommandResult",
+        #     EventType.CHANGE_EVENT,
+        #     change_event_callbacks["longRunningCommandResult"],
+        # )
+        # assertion_data = change_event_callbacks[
+        #     "longRunningCommandResult"
+        # ].assert_change_event(
+        #     (pytest.command_result[1][0], Anything),
+        #     lookahead=15,
+        # )
         assert (
             "FSP ID must be in range 1..27. Got 30"
-            in json.loads(assertion_data["attribute_value"][1])[1]
+            in pytest.command_result[1][0]
         )
     elif invalid_json in [
 >>>>>>> f3f574e3 (SAH-1564: Update invalid json tests)
@@ -189,21 +206,18 @@ def invalid_command_rejection(invalid_json, change_event_callbacks):
         "zoom_factor_key_missing",
         "integration_factor_key_missing",
     ]:
-        subarray_node_proxy.subscribe_event(
-            "longRunningCommandResult",
-            EventType.CHANGE_EVENT,
-            change_event_callbacks["longRunningCommandResult"],
-        )
-        assertion_data = change_event_callbacks[
-            "longRunningCommandResult"
-        ].assert_change_event(
-            (pytest.command_result[1][0], Anything),
-            lookahead=15,
-        )
-        assert (
-            "Malformed input string"
-            in json.loads(assertion_data["attribute_value"][1])[1]
-        )
+        # subarray_node_proxy.subscribe_event(
+        #     "longRunningCommandResult",
+        #     EventType.CHANGE_EVENT,
+        #     change_event_callbacks["longRunningCommandResult"],
+        # )
+        # assertion_data = change_event_callbacks[
+        #     "longRunningCommandResult"
+        # ].assert_change_event(
+        #     (pytest.command_result[1][0], Anything),
+        #     lookahead=15,
+        # )
+        assert "Malformed input string" in pytest.command_result[1][0]
 
 
 @then("TMC subarray remains in IDLE obsState")
