@@ -28,7 +28,6 @@ from tests.test_harness3.constant import (
 )
 from tests.test_harness3.event_recorder import EventRecorder
 from tests.test_harness3.simulator_factory import SimulatorFactory
-from tests.test_harness3.utils.common_utils import JsonFactory
 from tests.test_harness3.utils.enums import SimulatorDeviceType
 from tests.test_harness3.utils.wait_helpers import Waiter, watch
 
@@ -178,45 +177,6 @@ def get_device_simulator_with_given_name(simulator_factory, devices):
                 )
             )
     return sim_device_proxy_list
-
-
-def prepare_json_args_for_commands(
-    args_for_command: str, command_input_factory: JsonFactory
-) -> str:
-    """This method return input json based on command args"""
-    if args_for_command is not None:
-        input_json = command_input_factory.create_subarray_configuration(
-            args_for_command
-        )
-    else:
-        input_json = None
-    return input_json
-
-
-def prepare_json_args_for_centralnode_commands(
-    args_for_command: str, command_input_factory: JsonFactory
-) -> str:
-    """This method return input json based on command args"""
-    if args_for_command is not None:
-        input_json = command_input_factory.create_centralnode_configuration(
-            args_for_command
-        )
-    else:
-        input_json = None
-    return input_json
-
-
-def prepare_schema_for_attribute_or_command(
-    args_for_command: str, command_input_factory: JsonFactory
-):
-    """This method return schema for requested command or attribute json."""
-    if args_for_command is not None:
-        input_json = command_input_factory.create_command_or_attribute_schema(
-            args_for_command
-        )
-    else:
-        input_json = None
-    return input_json
 
 
 def get_boolean_command_call_info(device: SimulatorFactory, command_name: str):

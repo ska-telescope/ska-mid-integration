@@ -6,7 +6,6 @@ import msgpack
 import msgpack_numpy
 from tango import DeviceProxy
 
-from tests.test_harness3.helpers import prepare_json_args_for_commands
 from tests.test_harness3.telescope_actions.telescope_action import (
     TelescopeAction,
 )
@@ -16,6 +15,7 @@ from tests.test_harness3.telescope_config.configuration_factory import (
 from tests.test_harness3.telescope_config.hardcoded_values import (
     HardcodedValues,
 )
+from tests.test_harness3.telescope_inputs.json_input import JSONInput
 
 
 class SubarraySimulateReceiveAddresses(TelescopeAction):
@@ -23,18 +23,20 @@ class SubarraySimulateReceiveAddresses(TelescopeAction):
     be simulated for Subarray Node to process.
     """
 
-    def __init__(self, sdp_sim, command_input_factory):
+    def __init__(
+        self,
+        sdp_sim,
+        receive_addresses_input: JSONInput,
+    ):
         super().__init__()
         self.sdp_sim = sdp_sim
-        self.command_input_factory = command_input_factory
+        self.receive_addresses_input = receive_addresses_input
 
     def _action(self):
-        receive_addresses = prepare_json_args_for_commands(
-            "receive_addresses_mid", self.command_input_factory
-        )
-
         # TODO: change with a ref to some SDP device
-        self.sdp_sim.SetDirectreceiveAddresses(receive_addresses)
+        self.sdp_sim.SetDirectreceiveAddresses(
+            self.receive_addresses_input.get_json_string()
+        )
 
         # Setting pointing offsets after encoding the data.
         sdp_qc = DeviceProxy(

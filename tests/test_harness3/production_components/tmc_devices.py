@@ -64,10 +64,6 @@ class ProductionTMCDevices(TMCDevices):
 
         if self.subarray_node.obsState == ObsState.IDLE:
             LOGGER.info("Calling Release Resource on centralnode")
-            # json_factory = JsonFactory()
-            # release_input = json_factory.create_centralnode_configuration(
-            #     "release_resources_mid"
-            # )
             CentralNodeReleaseResources(
                 self.default_commands_input.release_input
             ).execute()
