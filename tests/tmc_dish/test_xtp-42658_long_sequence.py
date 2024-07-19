@@ -367,4 +367,3 @@ def check_tmc_subarray_scanning(
         ObsState.READY,
         lookahead=10,
     )
-    assert False
