@@ -45,6 +45,11 @@ class Waiter:
     def set_wait_for_dish_ln(self, attribute_name, state_name):
         """Set wait for dish"""
         for dish_leaf_node in self.dish_leaf_node_list:
+            LOGGER.info(
+                "Dish LN %s DishMode %s",
+                dish_leaf_node.dev_name(),
+                dish_leaf_node.dishMode,
+            )
             self.waits.append(
                 watch(Resource(dish_leaf_node)).to_become(
                     attribute_name, changed_to=state_name
@@ -54,6 +59,11 @@ class Waiter:
     def set_wait_for_dish_master(self, attribute_name, state_name):
         """Set wait for dish master"""
         for dish_master in self.dish_master_list:
+            LOGGER.info(
+                "Dish Master %s DishMode %s",
+                dish_master.dev_name(),
+                dish_master.dishMode,
+            )
             self.waits.append(
                 watch(Resource(dish_master)).to_become(
                     attribute_name, changed_to=state_name
@@ -66,23 +76,29 @@ class Waiter:
                 "State", changed_to="OFF"
             )
         )
+        LOGGER.info("SDP SA is OFF")
         self.waits.append(
             watch(Resource(self.sdp_master)).to_become(
                 "State", changed_to="OFF"
             )
         )
+        LOGGER.info("SDP Master is OFF")
         self.waits.append(
             watch(Resource(self.csp_subarray1)).to_become(
                 "State", changed_to="OFF"
             )
         )
+        LOGGER.info("CSP SA is OFF")
         self.waits.append(
             watch(Resource(self.csp_master)).to_become(
                 "State", changed_to="OFF"
             )
         )
+        LOGGER.info("CSP Master is OFF")
+        LOGGER.info("Dish Master List: %s", self.dish_master_list)
         if self.dish_master_list:
             self.set_wait_for_dish_master("dishMode", "STANDBY_LP")
+        LOGGER.info("Dish LN List: %s", self.dish_leaf_node_list)
         if self.dish_leaf_node_list:
             self.set_wait_for_dish_ln("dishMode", "STANDBY_LP")
 
