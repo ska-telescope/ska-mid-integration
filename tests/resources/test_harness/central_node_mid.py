@@ -278,6 +278,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         self, clear_transition: bool = False
     ) -> None:
         """Clears the command call data"""
+        LOGGER.info("Caling clear command data method .......")
         if SIMULATED_DEVICES_DICT["all_mocks"]:
             for sim_device in [
                 csp_subarray1,
@@ -292,6 +293,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 device.ClearCommandCallInfo()
                 if clear_transition:
                     device.ResetTransitions()
+        LOGGER.info("clear command data method completed .......")
 
     def move_to_on(self) -> None:
         """
@@ -338,6 +340,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         put telescope in OFF state
 
         """
+        LOGGER.info("In move to off method ......")
         if SIMULATED_DEVICES_DICT["all_mocks"]:
             LOGGER.info("Invoking TelescopeOff() with all Mocks")
             self.central_node.TelescopeOff()
@@ -357,10 +360,12 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             LOGGER.info("Invoking TelescopeOff() on simulated sdp and dish")
             self.central_node.TelescopeOff()
         elif SIMULATED_DEVICES_DICT["sdp"]:
+            LOGGER.info("Invoking TelescopeOff() on simulated sdp")
             self.central_node.TelescopeOff()
         else:
             LOGGER.info("Invoke TelescopeOff() with all real sub-systems")
             self.central_node.TelescopeOff()
+        LOGGER.info("TelescopeOff invoked ......")
 
     @sync_set_to_standby(device_dict=device_dict)
     def set_standby(self) -> None:
@@ -569,16 +574,23 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             else:
                 LOGGER.info("Calling Move to Off method")
                 self.move_to_off()
+            LOGGER.info("Called TelescopeOff command")
+
         self._clear_command_call_and_transition_data(clear_transition=True)
         # if source dish vcc config is empty or not matching with default
         # dish vcc then load default dish vcc config
         # CSP_SIMULATION_ENABLED condition will be removed after testing
         # with real csp
+        LOGGER.info(
+            "SourceDishVccConfig: %s",
+            self.csp_master_leaf_node.sourceDishVccConfig,
+        )
         if (
             not self.csp_master_leaf_node.sourceDishVccConfig
             or json.loads(self.csp_master_leaf_node.sourceDishVccConfig)
             != DEFAULT_DISH_VCC_CONFIG
         ):
+            LOGGER.info("calling Load dish VCC Config")
             _, unique_id = self._load_default_dish_vcc_config()
             event_recorder = EventRecorder()
             event_recorder.subscribe_event(
