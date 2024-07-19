@@ -4,7 +4,6 @@ from assertpy import assert_that
 from ska_control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer
 
-# from tests.test_harness3.helpers import check_subarray_obs_state
 from tests.test_harness3.telescope_structure.csp_devices import CSPDevices
 from tests.test_harness3.telescope_structure.dishes_devices import (
     DishesDevices,
