@@ -98,8 +98,11 @@ def send(json_factory, invalid_json):
         # TODO: CDM v10.1.2 does not raise exception for missing config_id
         # if invalid_json == "config_id_key_missing":
         #     del invalid_configure_json["csp"]["common"]["config_id"]
+<<<<<<< HEAD
         #     LOGGER.info(f"invalid_configure_json: {invalid_configure_json}")
 >>>>>>> 9c8400cd (SAH-1564: Verify the behaviour with SA image)
+=======
+>>>>>>> 34dc07a5 (SAH-1564: Remove unnecessary statements)
         #     pytest.command_result = tmc_helper.configure_subarray(
         #         json.dumps(invalid_configure_json), **device_params
         #     )
@@ -156,6 +159,9 @@ def send(json_factory, invalid_json):
     )
 )
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 34dc07a5 (SAH-1564: Remove unnecessary statements)
 def invalid_command_rejection(invalid_json):
     assert pytest.command_result[0][0] == ResultCode.REJECTED
     # TODO: CDM v10.1.2 does not raise exception for missing config_id
