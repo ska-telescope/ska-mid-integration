@@ -11,7 +11,7 @@ variables:
 stages:
   - lint
   - build
- # - test #BDD will come later, just python tests for now if required
+  - test #BDD will come later, just python tests for now if required
  # - deploy
   - integration
  # - staging
