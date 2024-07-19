@@ -12,7 +12,7 @@ stages:
   - lint
   - build
   - test #BDD will come later, just python tests for now if required
- # - deploy
+  - deploy
   - integration
  # - staging
  # - join-reports
