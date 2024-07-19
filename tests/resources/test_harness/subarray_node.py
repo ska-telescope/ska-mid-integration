@@ -55,6 +55,7 @@ from tests.resources.test_harness.utils.sync_decorators import (
     sync_release_resources,
     sync_restart,
 )
+from tests.resources.test_harness.utils.wait_helpers import Waiter
 from tests.resources.test_support.common_utils.common_helpers import Resource
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
@@ -428,7 +429,8 @@ class SubarrayNodeWrapper(object):
             # Waiting for few seconds as the SubarrayNode End command
             # completion does not consider Dishes pointingState transition
             # to READY
-            time.sleep(2)
+            the_waiter = Waiter()
+            the_waiter.wait(80)
 
             self.abort_subarray()
             self.restart_subarray()
