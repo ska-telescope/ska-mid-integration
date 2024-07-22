@@ -371,12 +371,15 @@ class SubarrayNodeWrapper(object):
         ):
             for dish_master in self.dish_master_list:
 <<<<<<< HEAD
+<<<<<<< HEAD
                 dish_master.SetDirectDishMode(DishMode.STANDBY_LP)
                 dish_master.SetDirectState(DevState.STANDBY)
                 dish_master.ResetDelayInfo()
 =======
                 # dish_master.SetDirectDishMode(DishMode.STANDBY_LP)
                 # dish_master.SetDirectState(DevState.STANDBY)
+=======
+>>>>>>> b86fe9c1 (SAH-1558: Code cleanup.)
                 dish_master.ResetDelay()
 >>>>>>> 8e7e0be9 (SAH-1558: Fix the errors in the tests teardown.)
                 dish_master.SetDirectHealthState(HealthState.UNKNOWN)
