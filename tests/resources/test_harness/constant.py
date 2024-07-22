@@ -162,6 +162,15 @@ OBS_STATE_RESOURCING_STUCK_DEFECT = {
     "intermediate_state": ObsState.RESOURCING,
 }
 
+
+OBS_STATE_CONFIGURING_STUCK_DEFECT = {
+    "enabled": True,
+    "fault_type": FaultType.STUCK_IN_OBSTATE,
+    "error_message": "Device stuck in CONFIGURING obsState",
+    "result": ResultCode.FAILED,
+    "intermediate_state": ObsState.CONFIGURING,
+}
+
 INTERMEDIATE_OBSSTATE_EMPTY_DEFECT = {
     "enabled": True,
     "fault_type": FaultType.STUCK_IN_INTERMEDIATE_STATE,
