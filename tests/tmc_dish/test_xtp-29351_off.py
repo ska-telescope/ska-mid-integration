@@ -6,6 +6,7 @@ from tango import DevState
 
 from tests.resources.test_support.enum import DishMode
 
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -25,6 +26,9 @@ from tests.resources.test_support.enum import DishMode
 >>>>>>> c60c8729 (SAH-1536: Test only test case for long sequence)
 =======
 >>>>>>> 1fc6a549 (SAH-1536: Enable all the tmc-dish tests)
+=======
+@pytest.mark.skip
+>>>>>>> a58b1b2a (SAH-1564: Test pipline)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29351_off.feature",
