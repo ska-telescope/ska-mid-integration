@@ -89,6 +89,17 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             dish_fqdn063 = REAL_DISH63_FQDN
             dish_fqdn100 = REAL_DISH100_FQDN
 
+            # creating spfrx device fqdn
+            self.spfrx_fqdn = dish_fqdn001.replace(
+                "mid-dish/dish-manager/SKA001",
+                "mid-dish/simulator-spfrx/SKA001",
+            )
+            spfrx_proxy = DeviceProxy(self.spfrx_fqdn)
+
+            # Create Dish1 admin device proxy
+            spfrx1_admin_dev_name = spfrx_proxy.adm_name()
+            self.spfrx1_admin_dev_proxy = DeviceProxy(spfrx1_admin_dev_name)
+
             # Create database object for TMC TANGO DB
             self.db = Database()
 
@@ -104,6 +115,13 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             )
             self.dish1_dev_class = dish1_info.class_name
             self.dish1_dev_server = dish1_info.ds_full_name
+
+            # Get the spfrx1 device class and server
+            spfrx1_info = self.dish1_db.get_device_info(
+                "mid-dish/simulator-spfrx/SKA001"
+            )
+            self.spfrx1_dev_class = spfrx1_info.class_name
+            self.spfrx1_dev_server = spfrx1_info.ds_full_name
 
         else:
             dish_fqdn001 = dish_master1

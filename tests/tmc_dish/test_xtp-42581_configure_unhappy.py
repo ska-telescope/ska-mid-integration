@@ -5,7 +5,6 @@ import json
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
-from tango import DevState
 
 from tests.resources.test_harness.helpers import (
     check_long_running_command_status,
@@ -25,64 +24,7 @@ def test_tmc_dish_successive_configure_with_same_receiver_band():
     """
     Test case to verify TMC-DISH successive Configure functionality
     with same receiver band.
-
-    Glossary:
-        - "central_node_mid": fixture for a TMC CentralNode under test
-        - "simulator_factory": fixture for SimulatorFactory class,
-        which provides simulated master devices
-        - "event_recorder": fixture for EventRecorder class
     """
-
-
-@given("a Telescope in ON state")
-def turn_on_telescope(central_node_mid, event_recorder):
-    """
-    A method to put Telescope ON
-    """
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
-
-    central_node_mid.move_to_on()
-
-    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode"
-        )
-        event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
-        )
-    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
-    event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
-
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.csp_master,
-        "State",
-        DevState.ON,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.sdp_master,
-        "State",
-        DevState.ON,
-    )
-
-    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "dishMode",
-            DishMode.STANDBY_FP,
-        )
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_leaf_node_dict[dish_id],
-            "dishMode",
-            DishMode.STANDBY_FP,
-        )
-
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.ON,
-    )
 
 
 @given("the TMC subarray is in IDLE obsState")
@@ -91,6 +33,13 @@ def check_subarray_obsState_idle(
 ):
     """
     Method to check subarray is in IDLE obsState
+
+    Args:
+        subarray_node: Fixture for a Subarray Node wrapper class
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        event_recorder: Fixture for EventRecorder class
+        command_input_factory: fixture for creating input required
+        for command
     """
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
 
@@ -126,6 +75,13 @@ def invoke_configure(
 ):
     """
     A method to invoke Configure command
+
+    Args:
+        subarray_node: Fixture for a Subarray Node wrapper class
+        command_input_factory: fixture for creating input required
+        for command
+        receiver_band (str): receiver band for configure command
+        event_recorder: Fixture for EventRecorder class
     """
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
@@ -147,15 +103,13 @@ def check_dish_mode_and_pointing_state(
     """
     Method to check dishMode and pointingState of DISH and
     SubarrayNode obsState.
+
+    Args:
+        subarray_node: Fixture for a Subarray Node wrapper class
+        event_recorder: Fixture for EventRecorder class
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
     """
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "pointingState"
-        )
-        event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
-        )
-
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
@@ -227,6 +181,15 @@ def invoke_successive_configure(
 ):
     """
     A method to invoke Configure command
+
+    Args:
+
+        subarray_node: Fixture for a Subarray Node wrapper class
+        command_input_factory: fixture for creating input required
+        for command
+        receiver_band (str) : receiver_band for configure command
+        event_recorder: Fixture for EventRecorder class
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
     """
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
@@ -249,6 +212,12 @@ def invoke_successive_configure(
     )
 )
 def configure_command_rejection_by_dish(central_node_mid):
+    """
+    Method to assert rejection
+
+    Args:
+        central_node_mid : Fixture for a TMC CentralNode wrapper class
+    """
     # In order to complete this clause, error propagation for TMC-Dish
     # interface needs to be completed.
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
@@ -264,6 +233,10 @@ def configure_command_rejection_by_dish(central_node_mid):
 def check_dish_mode_and_pointing_state_again(subarray_node, event_recorder):
     """
     Method to check SubarrayNode obsState.
+
+    Args:
+        subarray_node: Fixture for a Subarray Node wrapper class
+        event_recorder: Fixture for EventRecorder class
     """
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
