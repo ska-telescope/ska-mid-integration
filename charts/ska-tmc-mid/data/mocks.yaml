@@ -1,7 +1,7 @@
 name: "mocks-{{.Release.Name}}"
 function: testing
 domain: mocks
-instances: ["01"]
+instances: ["01","02","03","04","05","06"]
 entrypoints:
   - name: "ska_tmc_common.test_helpers.helper_base_device.HelperBaseDevice"
   - name: "ska_tmc_common.test_helpers.helper_dish_device.HelperDishDevice"
@@ -21,24 +21,34 @@ server:
         - name: "HelperBaseDevice"
           devices:
           - name: "mid-sdp/control/0"
+    - name: "02"
+      classes:
         - name: "HelperSdpSubarray"
           devices:
           - name: "mid-sdp/subarray/01"
           - name: "mid-sdp/subarray/02"
+    - name: "03"
+      classes:
         - name: "HelperSdpQueueConnector"
           devices:
           - name: "mid-sdp/queueconnector/01"
         {{- end }}
         {{- if eq $isSimulatedCsp true }}
+     - name: "04"
+      classes:
         - name: "HelperCspMasterDevice"
           devices:
           - name: "mid-csp/control/0"
+    - name: "05"
+      classes:
         - name: "HelperSubArrayDevice"
           devices:
           - name: "mid-csp/subarray/01"
           - name: "mid-csp/subarray/02"
         {{- end }}
         {{- if eq $isSimulatedDish true }}
+    - name: "06"
+      classes: 
         - name: "HelperDishDevice"
           devices:
           {{- range .Values.global.dishes }}
