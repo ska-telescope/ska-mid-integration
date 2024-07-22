@@ -34,7 +34,11 @@ server:
           - name: "mid-sdp/queueconnector/01"
         {{- end }}
         {{- if eq $isSimulatedCsp true }}
+<<<<<<< HEAD
     - name: "04"
+=======
+     - name: "04"
+>>>>>>> b18c7f89 (SAH-1564: Resolved review comment)
       classes:
         - name: "HelperCspMasterDevice"
           devices:
@@ -48,7 +52,11 @@ server:
         {{- end }}
         {{- if eq $isSimulatedDish true }}
     - name: "06"
+<<<<<<< HEAD
       classes:
+=======
+      classes: 
+>>>>>>> b18c7f89 (SAH-1564: Resolved review comment)
         - name: "HelperDishDevice"
           devices:
           {{- range .Values.global.dishes }}
