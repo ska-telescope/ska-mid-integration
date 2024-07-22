@@ -61,6 +61,7 @@ def test_tmc_dish_shutdown_telescope():
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> d683a756 (SAH-1558: Debug the errors in the tests.)
 =======
@@ -157,6 +158,8 @@ def check_tmc_and_dish_is_on(central_node_mid, event_recorder, dish_ids):
 >>>>>>> 415d590c (SAH-1536: Resolve review comments)
 =======
 >>>>>>> d683a756 (SAH-1558: Debug the errors in the tests.)
+=======
+>>>>>>> 0480614a (SAH-1558: Code cleanup.)
 @when("I switch off the telescope")
 def turn_off_telescope(central_node_mid):
     """
