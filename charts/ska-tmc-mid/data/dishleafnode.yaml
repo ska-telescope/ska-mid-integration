@@ -51,12 +51,15 @@ server:
           - name: "CommandTimeOut"
             values:
               - "50"
+<<<<<<< HEAD
           - name: "TrackTableInAdvance"
             values:
 <<<<<<< HEAD
               - "6"
 =======
               - 60
+=======
+>>>>>>> edc2574d (SAH-1564: Use latest dev image of dishleafnode)
 
 
 >>>>>>> b9945c76 (SAH-1564: Update yaml file)
