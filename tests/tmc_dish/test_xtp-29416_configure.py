@@ -157,7 +157,7 @@ def check_dish_mode_and_pointing_state(
     """
     for dish_id in dish_ids.split(","):
         dish_client = central_node_mid.dish_master_dict[dish_id]
-        dish_client.Slew(181.235672347698, 30.309299188458)
+        dish_client.Slew([181.235672347698, 30.309299188458])
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "pointingState"
         )
