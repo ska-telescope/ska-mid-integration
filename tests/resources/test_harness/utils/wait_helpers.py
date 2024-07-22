@@ -66,11 +66,6 @@ class Waiter:
         """Set wait for dish master and dish leaf node"""
         for index in range(0, len(self.dish_master_list)):
             if self.dish_master_list[index].dishMode != state_name:
-                LOGGER.info(
-                    "Dish Master %s DishMode %s",
-                    self.dish_master_list[index].dev_name(),
-                    self.dish_master_list[index].dishMode,
-                )
                 self.waits.append(
                     watch(Resource(self.dish_master_list[index])).to_become(
                         attribute_name, changed_to=state_name
