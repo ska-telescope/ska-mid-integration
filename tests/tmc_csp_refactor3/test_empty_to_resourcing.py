@@ -1,136 +1,85 @@
-# Define a fixture to store things, like the starting state
+"""The TMC-CSP sub-arrays execute the transition from EMPTY to RESOURCING."""
+
+
 import pytest
+from assertpy import assert_that
+from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
-from ska_tango_testing.integration import log_events, TangoEventTracer
+from ska_tango_testing.integration import TangoEventTracer
 
 from tests.test_harness3.telescope_facades.csp_facade import CSPFacade
-from tests.test_harness3.telescope_facades.dishes_facade import DishesFacade
-from tests.test_harness3.telescope_facades.sdp_facade import SDPFacade
-from tests.test_harness3.telescope_facades.tmc_central_node_facade import TMCCentralNodeFacade
-from tests.test_harness3.telescope_facades.tmc_subarray_node_facade import TMCSubarrayNodeFacade
-from tests.test_harness3.telescope_init.telescope_structure_factory import TelescopeStructureFactory
-from tests.test_harness3.telescope_inputs.obs_state_commands_input import ObsStateCommandsInput
-from tests.test_harness3.telescope_structure.telescope_wrapper import TelescopeWrapper
-from tests.various_utils.default_json_inputs import ASSING_CENTRAL_NODE_INPUT, CONFIGURE_SUBARRAY_INPUT, DEFAULT_VCC_CONFIG_INPUT, RELEASE_CENTRAL_NODE_INPUT, SCAN_SUBARRAY_INPUT
+from tests.test_harness3.telescope_facades.tmc_subarray_node_facade import (
+    TMCSubarrayNodeFacade,
+)
+from tests.test_harness3.telescope_inputs.obs_state_commands_input import (
+    ObsStateCommandsInput,
+)
+from tests.various_utils.file_json_input import FileJSONInput
+
+ASSERTIONS_TIMEOUT = 60
 
 
-# ------------------------------------------------------------
-# Test Harness fixtures
+@pytest.mark.tmc_csp_refactor3
+@scenario(
+    "../features/obsstate_valid_single_transitions.feature",
+    "EMPTY to RESOURCING - CMD AssignResources (6)",
+)
+def test_empty_to_resourcing():
+    """Test EMPTY to RESOURCING transition."""
 
-# ----------------------------------------------------------
-# New fixtures (refactor 3)
+
+# The initial common Given steps are already defined in conftest.py
 
 
-@pytest.fixture
-def default_commands_inputs() -> ObsStateCommandsInput:
-    """Default JSON inputs for TMC commands."""
-    return ObsStateCommandsInput(
-        assign_input=ASSING_CENTRAL_NODE_INPUT,
-        configure_input=CONFIGURE_SUBARRAY_INPUT,
-        scan_input=SCAN_SUBARRAY_INPUT,
-        release_input=RELEASE_CENTRAL_NODE_INPUT,
+@given(parsers.parse("the subarray 001 is in the EMPTY state"))
+def subarray_in_empty_state(
+    context_fixt,
+    subarray_node_facade: TMCSubarrayNodeFacade,
+):
+    """Ensure the subarray is in the EMPTY state."""
+    context_fixt["starting_state"] = ObsState.EMPTY
+    subarray_node_facade.force_change_of_obs_state(
+        ObsState.EMPTY,
+        ObsStateCommandsInput(),
+        wait_termination=True,
     )
 
 
-@pytest.fixture
-def telescope_wrapper(
-    default_commands_inputs: ObsStateCommandsInput,
-) -> TelescopeWrapper:
-    """Create an unique test harness with proxies to all devices."""
-    components_factory = TelescopeStructureFactory(
-        default_commands_inputs, DEFAULT_VCC_CONFIG_INPUT
+@when(parsers.parse("the AssignResources command is sent to the subarray 001"))
+def send_assign_resources_command(
+    context_fixt,
+    subarray_node_facade: TMCSubarrayNodeFacade,
+):
+    """Send the AssignResources command to the subarray."""
+    context_fixt["trigger"] = "AssignResources"
+    subarray_node_facade.assign_resources(
+        FileJSONInput("subarray", "assign_resources_mid"),
+        wait_termination=False,
     )
-    telescope = components_factory.init_telescope_test_structure()
-    yield telescope
-    telescope.tear_down()
-
-    # NOTE: As the code is organized now, I cannot anticipate the
-    # teardown of the telescope structure. To run reset now I should
-    # init subarray node (with SetSubarrayId), but to do that I need
-    # to know subarray_id, which is a parameter of the Gherkin steps.
 
 
-@pytest.fixture
-def central_node_facade(telescope_wrapper: TelescopeWrapper):
-    """Create a facade to TMC central node and all its operations."""
-    central_node_facade = TMCCentralNodeFacade(telescope_wrapper)
-    yield central_node_facade
-
-
-@pytest.fixture
-def subarray_node_facade(telescope_wrapper: TelescopeWrapper):
-    """Create a facade to TMC subarray node and all its operations."""
-    subarray_node = TMCSubarrayNodeFacade(telescope_wrapper)
-    yield subarray_node
-
-
-@pytest.fixture
-def csp(telescope_wrapper: TelescopeWrapper):
-    """Create a facade to CSP devices."""
-    return CSPFacade(telescope_wrapper)
-
-
-@pytest.fixture
-def sdp(telescope_wrapper: TelescopeWrapper):
-    """Create a facade to SDP devices."""
-    return SDPFacade(telescope_wrapper)
-
-
-@pytest.fixture
-def dishes(telescope_wrapper: TelescopeWrapper):
-    """Create a facade to dishes devices."""
-    return DishesFacade(telescope_wrapper)
-
-
-# ----------------------------------------------------------
-# Tango event tracer
-
-
-@pytest.fixture
-def event_tracer() -> TangoEventTracer:
-    """Create an event tracer."""
-    return TangoEventTracer()
-
-
-
-# ------------------------------------------------------------
-# Other fixtures and common steps
-
-@pytest.fixture
-def context_fixt():
-    return {'starting_state':None,
-            'trigger':None,}
-
-TRANSIENT_STATES=[ObsState.ABORTING, ObsState.RESTARTING,
-                  ObsState.RESOURCING, ObsState.CONFIGURING,
-                  ObsState.SCANNING, ObsState.RESETTING,]
-
-def _setup_event_subscriptions(
+@then(
+    parsers.parse("the subarray 001 should transition to the RESOURCING state")
+)
+def verify_resourcing_state(
+    context_fixt,
     subarray_node_facade: TMCSubarrayNodeFacade,
     csp: CSPFacade,
     event_tracer: TangoEventTracer,
 ):
-    """Set up event subscriptions for the test.
-
-    Args:
-        subarray_node_facade: Facade for the TMC subarray node.
-        csp: Facade for the CSP.
-        event_tracer: Event tracer for capturing events.
-    """
-    event_tracer.subscribe_event(csp.csp_subarray, "obsState")
-    event_tracer.subscribe_event(
-        subarray_node_facade.subarray_node, "obsState"
+    """Verify that the subarray transitions to the RESOURCING state."""
+    assert_that(event_tracer).described_as(
+        f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
+        f" and CSP Subarray device ({csp.csp_subarray}) "
+        "ObsState attribute values should move to RESOURCING."
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        subarray_node_facade.subarray_node,
+        "obsState",
+        ObsState.RESOURCING,
+        previous_value=context_fixt["starting_state"],
+    ).has_change_event_occurred(
+        csp.csp_subarray,
+        "obsState",
+        ObsState.RESOURCING,
+        previous_value=context_fixt["starting_state"],
     )
-    log_events(
-        {
-            csp.csp_subarray: ["obsState"],
-            subarray_node_facade.subarray_node: ["obsState"],
-        }
-    )
-
-@given("the telescope is in ON state")
-def given_the_telescope_is_in_on_state(central_node_facade: TMCCentralNodeFacade):
-    """Ensure the telescope is in ON state."""
-
-
-

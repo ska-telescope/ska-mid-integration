@@ -192,9 +192,7 @@ class TMCSubarrayNodeFacade:
         action.set_termination_condition_policy(wait_termination)
         return action.execute()
 
-    def scan(
-        self, scan_input: JSONInput, wait_termination: bool = True
-    ):
+    def scan(self, scan_input: JSONInput, wait_termination: bool = True):
         """Invoke Scan command on subarray Node.
 
         :param scan_input: json input for scan command.
