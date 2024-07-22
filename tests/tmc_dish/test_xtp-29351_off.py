@@ -7,6 +7,7 @@ from tango import DevState
 from tests.resources.test_support.enum import DishMode
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -17,6 +18,9 @@ from tests.resources.test_support.enum import DishMode
 @pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
 >>>>>>> 254f9823 (SAH-1536: disable test case)
 =======
+=======
+
+>>>>>>> a90de43d (SAH-1564: Test pipline)
 @pytest.mark.skip
 >>>>>>> a69408bc (SAH-1536: Test only xtp-42658)
 =======
