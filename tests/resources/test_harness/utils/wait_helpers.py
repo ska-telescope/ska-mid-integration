@@ -67,6 +67,7 @@ class Waiter:
         for index in range(0, len(self.dish_master_list)):
             if self.dish_master_list[index].dishMode != state_name:
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                 LOGGER.info(
                     "Dish Master %s DishMode %s",
@@ -74,6 +75,8 @@ class Waiter:
                     self.dish_master_list[index].dishMode,
                 )
 >>>>>>> 0f5aba75 (SAH-1558: Debug the errors in the tests teardown.)
+=======
+>>>>>>> 1d7db950 (SAH-1558: Code cleanup.)
                 self.waits.append(
                     watch(Resource(self.dish_master_list[index])).to_become(
                         attribute_name, changed_to=state_name
