@@ -51,9 +51,6 @@ server:
           - name: "CommandTimeOut"
             values:
               - "50"
-          - name: "TrackTableInAdvance"
-            values:
-              - 60
 
 
   {{- end }}
