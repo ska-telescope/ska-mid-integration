@@ -33,7 +33,7 @@ def telescope_is_in_on_state(
     central_node_facade: TMCCentralNodeFacade,
 ):
     """Checks if the telescope is in ON state"""
-    central_node_facade.move_to_on(wait_termination_condition=True)
+    central_node_facade.move_to_on(wait_termination=True)
 
 
 @given(
@@ -55,7 +55,7 @@ def subarray_is_in_scanning_obsstate(
     subarray_node_facade.force_change_of_obs_state(
         ObsState.SCANNING,
         default_commands_inputs,
-        wait_termination_condition=True,
+        wait_termination=True,
     )
 
     event_tracer.subscribe_event(
@@ -75,7 +75,7 @@ def abort_is_invoked(
     subarray_node_facade: TMCSubarrayNodeFacade, event_tracer: TangoEventTracer
 ):
     """This method invokes abort command on TMC subarray."""
-    subarray_node_facade.abort(wait_termination_condition=False)
+    subarray_node_facade.abort(wait_termination=False)
 
     assert_that(event_tracer).described_as(
         "FAILED ASSUMPTION: "

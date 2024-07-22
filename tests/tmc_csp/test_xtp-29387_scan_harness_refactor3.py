@@ -36,7 +36,7 @@ def given_a_telescope_in_on_state(
     central_node_facade: TMCCentralNodeFacade,
 ):
     """Checks if CentralNode's telescopeState attribute value is on."""
-    central_node_facade.move_to_on(wait_termination_condition=True)
+    central_node_facade.move_to_on(wait_termination=True)
 
 
 @given(parsers.parse("TMC subarray {subarray_id} is in READY ObsState"))
@@ -51,7 +51,7 @@ def subarray_in_ready_obsstate(
     subarray_node_facade.force_change_of_obs_state(
         ObsState.READY,
         commands_inputs=default_commands_inputs,
-        wait_termination_condition=True,
+        wait_termination=True,
     )
 
 
@@ -75,7 +75,7 @@ def invoke_scan(
         }
     )
     subarray_node_facade.scan(
-        FileJSONInput("subarray", "scan_mid"), wait_termination_condition=False
+        FileJSONInput("subarray", "scan_mid"), wait_termination=False
     )
 
 

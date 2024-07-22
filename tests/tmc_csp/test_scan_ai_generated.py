@@ -89,7 +89,7 @@ def subarray_in_ready_state(
     # Move the telescope to ON state
     central_node_facade.move_to_on(
         # wait_termination=True,
-        wait_termination_condition=True,
+        wait_termination=True,
     )
 
     # Set subarray ID
@@ -99,7 +99,7 @@ def subarray_in_ready_state(
     subarray_node_facade.force_change_of_obs_state(
         ObsState.READY,
         default_commands_inputs,
-        wait_termination_condition=True,
+        wait_termination=True,
     )
 
     # Set up event subscriptions
@@ -122,7 +122,7 @@ def send_scan_command(
     """
     subarray_node_facade.scan(
         FileJSONInput("subarray", "scan_mid"),
-        wait_termination_condition=False,
+        wait_termination=False,
     )
 
 
@@ -190,8 +190,8 @@ def verify_scanning_state(
     # the subarrays to move to
     # the ABORTED state and then the EMPTY state
     # subarray_node_facade.abort_scan(subarray_id)
-    subarray_node_facade.abort(wait_termination_condition=True)
-    subarray_node_facade.restart(wait_termination_condition=True)
+    subarray_node_facade.abort(wait_termination=True)
+    subarray_node_facade.restart(wait_termination=True)
 
     assert_that(event_tracer).described_as(
         f"ASSUMPTION. \n"

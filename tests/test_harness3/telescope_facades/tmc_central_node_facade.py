@@ -74,90 +74,90 @@ class TMCCentralNodeFacade:
     # -----------------------------------------------------------
     # Central Node telescope state actions
 
-    def move_to_on(self, wait_termination_condition: bool = True) -> None:
+    def move_to_on(self, wait_termination: bool = True) -> None:
         """Move the telescope to ON state.
 
-        :param wait_termination_condition: set to False if you don't want to
+        :param wait_termination: set to False if you don't want to
             wait for the termination condition. By default the termination
             condition is waited.
         """
         action = MoveToOn()
-        action.set_termination_condition_policy(wait_termination_condition)
+        action.set_termination_condition_policy(wait_termination)
         action.execute()
 
-    def move_to_off(self, wait_termination_condition: bool = True) -> None:
+    def move_to_off(self, wait_termination: bool = True) -> None:
         """Move the telescope to OFF state.
 
-        :param wait_termination_condition: set to False if you don't want to
+        :param wait_termination: set to False if you don't want to
             wait for the termination condition. By default the termination
             condition is waited.
         """
         action = MoveToOff()
-        action.set_termination_condition_policy(wait_termination_condition)
+        action.set_termination_condition_policy(wait_termination)
         action.execute()
 
-    def set_standby(self, wait_termination_condition: bool = True) -> None:
+    def set_standby(self, wait_termination: bool = True) -> None:
         """Set the telescope to STANDBY state.
 
-        :param wait_termination_condition: set to False if you don't want to
+        :param wait_termination: set to False if you don't want to
             wait for the termination condition. By default the termination
             condition is waited.
         """
         action = SetStandby()
-        action.set_termination_condition_policy(wait_termination_condition)
+        action.set_termination_condition_policy(wait_termination)
         action.execute()
 
     # -----------------------------------------------------------
     # Central Node specific actions
 
     def load_dish_vcc_configuration(
-        self, dish_vcc_config: str, wait_termination_condition: bool = True
+        self, dish_vcc_config: str, wait_termination: bool = True
     ) -> Tuple[ResultCode, str]:
         """Invoke LoadDishCfg command on central Node.
 
         :param dish_vcc_config: Dish vcc configuration json string.
-        :param wait_termination_condition: set to False if you don't want to
+        :param wait_termination: set to False if you don't want to
             wait for the termination condition. By default the termination
             condition is waited.
 
         :return: result, message
         """
         action = CentralNodeLoadDishConfig(dish_vcc_config)
-        action.set_termination_condition_policy(wait_termination_condition)
+        action.set_termination_condition_policy(wait_termination)
         return action.execute()
 
     # @sync_assign_resources(device_dict=device_dict)
     def assign_resources(
-        self, assign_json: str, wait_termination_condition: bool = True
+        self, assign_json: str, wait_termination: bool = True
     ) -> Tuple[ResultCode, str]:
         """Invoke Assign Resource command on central Node.
 
         :param assign_json: Assign resource input json.
-        :param wait_termination_condition: set to False if you don't want to
+        :param wait_termination: set to False if you don't want to
             wait for the termination condition. By default the termination
             condition is waited.
 
         :return: result, message
         """
         action = CentralNodeAssignResources(assign_json)
-        action.set_termination_condition_policy(wait_termination_condition)
+        action.set_termination_condition_policy(wait_termination)
         action.execute()
 
     # @sync_release_resources(device_dict=device_dict, timeout=500)
     def release_resources(
-        self, input_string: str, wait_termination_condition: bool = True
+        self, input_string: str, wait_termination: bool = True
     ) -> Tuple[ResultCode, str]:
         """Invoke Release Resource command on central Node.
 
         :param input_string: Release resource input json.
-        :param wait_termination_condition: set to False if you don't want to
+        :param wait_termination: set to False if you don't want to
             wait for the termination condition. By default the termination
             condition is waited.
 
         :return: result, message
         """
         action = CentralNodeReleaseResources(input_string)
-        action.set_termination_condition_policy(wait_termination_condition)
+        action.set_termination_condition_policy(wait_termination)
         action.execute()
 
     # -----------------------------------------------------------
@@ -167,16 +167,16 @@ class TMCCentralNodeFacade:
         self,
         command_name: str,
         input_json: str,
-        wait_termination_condition: bool = True,
+        wait_termination: bool = True,
     ) -> Tuple[ResultCode, str]:
         """Execute provided command on central node.
 
         :param command_name: Name of command to execute.
         :param input_json: Json send as input to execute command.
-        :param wait_termination_condition: set to False if you don't want to
+        :param wait_termination: set to False if you don't want to
             wait for the termination condition. By default the termination
             condition is waited.
         """
         action = CentralNodePerformAction(command_name, input_json)
-        action.set_termination_condition_policy(wait_termination_condition)
+        action.set_termination_condition_policy(wait_termination)
         action.execute()

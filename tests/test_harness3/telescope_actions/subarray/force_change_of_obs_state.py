@@ -69,7 +69,7 @@ class ForceChangeOfObsState(TelescopeAction):
             self.termination_condition_timeout
         )
         obs_state_resetter_action.set_termination_condition_policy(
-            self.wait_termination_condition
+            self.wait_termination
         )
 
         obs_state_resetter_action.execute()

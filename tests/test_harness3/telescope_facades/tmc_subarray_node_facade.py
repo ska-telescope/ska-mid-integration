@@ -116,30 +116,30 @@ class TMCSubarrayNodeFacade:
     # -----------------------------------------------------------
     # Actions over subarray telescope state
 
-    def move_to_on(self, wait_termination_condition: bool = True):
+    def move_to_on(self, wait_termination: bool = True):
         """Move subarray to ON state.
 
-        :param wait_termination_condition: set to False if you don't want to
+        :param wait_termination: set to False if you don't want to
             wait for the termination condition. By default the termination
             condition is waited.
 
         :return: result, message
         """
         action = SubarrayMoveToOn()
-        action.set_termination_condition_policy(wait_termination_condition)
+        action.set_termination_condition_policy(wait_termination)
         return action.execute()
 
-    def move_to_off(self, wait_termination_condition: bool = True):
+    def move_to_off(self, wait_termination: bool = True):
         """Move Subarray to OFF state.
 
-        :param wait_termination_condition: set to False if you don't want to
+        :param wait_termination: set to False if you don't want to
             wait for the termination condition. By default the termination
             condition is waited.
 
         :return: result, message
         """
         action = SubarrayMoveToOff()
-        action.set_termination_condition_policy(wait_termination_condition)
+        action.set_termination_condition_policy(wait_termination)
         return action.execute()
 
     # -----------------------------------------------------------
@@ -149,122 +149,122 @@ class TMCSubarrayNodeFacade:
     def configure(
         self,
         configure_input: JSONInput,
-        wait_termination_condition: bool = True,
+        wait_termination: bool = True,
     ):
         """Invoke configure command on subarray Node.
 
         :param configure_input: json input for configure command.
-        :param wait_termination_condition: set to False if you don't want to
+        :param wait_termination: set to False if you don't want to
             wait for the termination condition. By default the termination
             condition is waited.
 
         :return: result, message
         """
         action = SubarrayConfigure(configure_input)
-        action.set_termination_condition_policy(wait_termination_condition)
+        action.set_termination_condition_policy(wait_termination)
         return action.execute()
 
     # @sync_end(device_dict=device_dict)
-    def end_observation(self, wait_termination_condition: bool = True):
+    def end_observation(self, wait_termination: bool = True):
         """Invoke End command on subarray Node.
 
-        :param wait_termination_condition: set to False if you don't want to
+        :param wait_termination: set to False if you don't want to
             wait for the termination condition. By default the termination
             condition is waited.
 
         :return: result, message
         """
         action = SubarrayEndObservation()
-        action.set_termination_condition_policy(wait_termination_condition)
+        action.set_termination_condition_policy(wait_termination)
         return action.execute()
 
     # @sync_endscan(device_dict=device_dict)
-    def end_scan(self, wait_termination_condition: bool = True):
+    def end_scan(self, wait_termination: bool = True):
         """Invoke EndScan command on subarray Node.
 
-        :param wait_termination_condition: set to False if you don't want to
+        :param wait_termination: set to False if you don't want to
             wait for the termination condition. By default the termination
             condition is waited.
 
         :return: result, message
         """
         action = SubarrayEndScan()
-        action.set_termination_condition_policy(wait_termination_condition)
+        action.set_termination_condition_policy(wait_termination)
         return action.execute()
 
     def scan(
-        self, scan_input: JSONInput, wait_termination_condition: bool = True
+        self, scan_input: JSONInput, wait_termination: bool = True
     ):
         """Invoke Scan command on subarray Node.
 
         :param scan_input: json input for scan command.
-        :param wait_termination_condition: set to False if you don't want to
+        :param wait_termination: set to False if you don't want to
             wait for the termination condition. By default the termination
             condition is waited.
 
         :return: result, message
         """
         action = SubarrayScan(scan_input)
-        action.set_termination_condition_policy(wait_termination_condition)
+        action.set_termination_condition_policy(wait_termination)
         return action.execute()
 
     # @sync_abort(device_dict=device_dict)
-    def abort(self, wait_termination_condition: bool = True):
+    def abort(self, wait_termination: bool = True):
         """Invoke Abort command on subarray Node.
 
-        :param wait_termination_condition: set to False if you don't want to
+        :param wait_termination: set to False if you don't want to
             wait for the termination condition. By default the termination
             condition is waited.
 
         :return: result, message
         """
         action = SubarrayAbort()
-        action.set_termination_condition_policy(wait_termination_condition)
+        action.set_termination_condition_policy(wait_termination)
         return action.execute()
 
     # @sync_restart(device_dict=device_dict)
-    def restart(self, wait_termination_condition: bool = True):
+    def restart(self, wait_termination: bool = True):
         """Invoke Restart command on subarray Node.
 
-        :param wait_termination_condition: set to False if you don't want to
+        :param wait_termination: set to False if you don't want to
             wait for the termination condition. By default the termination
             condition is waited.
 
         :return: result, message
         """
         action = SubarrayRestart()
-        action.set_termination_condition_policy(wait_termination_condition)
+        action.set_termination_condition_policy(wait_termination)
         return action.execute()
 
     # @sync_assign_resources(device_dict)
     def assign_resources(
-        self, assign_input: JSONInput, wait_termination_condition: bool = True
+        self, assign_input: JSONInput, wait_termination: bool = True
     ):
         """Invoke Assign Resource command on subarray Node
 
         :param assign_input: Assign resource input json.
-        :param wait_termination_condition: set to False if you don't want to
+        :param wait_termination: set to False if you don't want to
             wait for the termination condition. By default the termination
             condition is waited.
 
         :return: result, message
         """
         action = SubarrayAssignResources(assign_input)
-        action.set_termination_condition_policy(wait_termination_condition)
+        action.set_termination_condition_policy(wait_termination)
         return action.execute()
 
     # @sync_release_resources(device_dict)
-    def release_all_resources(self, wait_termination_condition: bool = True):
+    def release_all_resources(self, wait_termination: bool = True):
         """Invoke Release Resource command on subarray Node.
 
-        :param wait_termination_condition: set to False if you don't want to
+        :param wait_termination: set to False if you don't want to
             wait for the termination condition. By default the termination
             condition is waited.
 
         :return: result, message
         """
         action = SubarrayReleaseAllResources()
-        action.set_termination_condition_policy(wait_termination_condition)
+        action.set_termination_condition_policy(wait_termination)
         return action.execute()
 
     # -----------------------------------------------------------
@@ -274,28 +274,28 @@ class TMCSubarrayNodeFacade:
         self,
         command_name: str,
         argin=None,
-        wait_termination_condition: bool = True,
+        wait_termination: bool = True,
     ):
         """Execute provided command on subarray
 
         :param command_name: Name of command to execute
         :param argin: Input argument for command (as the data type you
             would expect to pass to the Tango command)
-        :param wait_termination_condition: set to False if you don't want to
+        :param wait_termination: set to False if you don't want to
             wait for the termination condition. By default the termination
             condition is waited.
 
         :return: result, message
         """
         action = SubarrayExecuteTransition(command_name, argin)
-        action.set_termination_condition_policy(wait_termination_condition)
+        action.set_termination_condition_policy(wait_termination)
         return action.execute()
 
     def force_change_of_obs_state(
         self,
         dest_state_name: ObsState,
         commands_inputs: ObsStateCommandsInput,
-        wait_termination_condition: bool = True,
+        wait_termination: bool = True,
     ) -> None:
         """Force SubarrayNode obsState to provided obsState.
 
@@ -309,31 +309,31 @@ class TMCSubarrayNodeFacade:
             the subarray in a certain obs state. You can pass just the
             JSON inputs you need, but if one of them is missing, you may
             occur in an error.
-        :param wait_termination_condition: set to False if you don't want to
+        :param wait_termination: set to False if you don't want to
             wait for the termination condition. By default the termination
             condition is waited.
         """
         action = ForceChangeOfObsState(dest_state_name, commands_inputs)
-        action.set_termination_condition_policy(wait_termination_condition)
+        action.set_termination_condition_policy(wait_termination)
         action.execute()
 
     def execute_five_point_calibration_scan(
         self,
         partial_configure_inputs: list[JSONInput],
         scan_inputs: list[JSONInput],
-        wait_termination_condition: bool = True,
+        wait_termination: bool = True,
     ) -> None:
         """Perform a five point calibration scan on Subarray Node using the
         partial configuration jsons and scan jsons provided as inputs.
 
         :param partial_configure_inputs: Partial Configure json inputs.
         :param scan_jsons: Partial Scan json inputs.
-        :param wait_termination_condition: set to False if you don't want to
+        :param wait_termination: set to False if you don't want to
             wait for the termination condition. By default the termination
             condition is waited.
         """
         action = SubarrayFivePointCalibrationScan(
             partial_configure_inputs, scan_inputs
         )
-        action.set_termination_condition_policy(wait_termination_condition)
+        action.set_termination_condition_policy(wait_termination)
         action.execute()

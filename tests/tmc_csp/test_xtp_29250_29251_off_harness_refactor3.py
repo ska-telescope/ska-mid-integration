@@ -70,7 +70,7 @@ def check_telescope_state_is_on(
     central_node_facade: TMCCentralNodeFacade,
 ):
     """A method to check if telescopeState is on"""
-    central_node_facade.move_to_on(wait_termination_condition=True)
+    central_node_facade.move_to_on(wait_termination=True)
 
 
 @when("I switch off telescope")
@@ -93,7 +93,7 @@ def move_sdp_to_off(
         }
     )
 
-    central_node_facade.move_to_off(wait_termination_condition=False)
+    central_node_facade.move_to_off(wait_termination=False)
 
 
 @when("I standby the telescope")
@@ -116,7 +116,7 @@ def move_sdp_to_standby(
         }
     )
 
-    central_node_facade.set_standby(wait_termination_condition=False)
+    central_node_facade.set_standby(wait_termination=False)
 
 
 @then("the CSP must go to OFF state")
