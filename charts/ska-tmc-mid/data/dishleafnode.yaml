@@ -53,7 +53,13 @@ server:
               - "50"
           - name: "TrackTableInAdvance"
             values:
+<<<<<<< HEAD
               - "6"
+=======
+              - 60
+
+
+>>>>>>> b9945c76 (SAH-1564: Update yaml file)
   {{- end }}
 depends_on:
   - device: sys/database/2
