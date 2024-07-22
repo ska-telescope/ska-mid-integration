@@ -367,8 +367,6 @@ class SubarrayNodeWrapper(object):
             or SIMULATED_DEVICES_DICT["sdp_and_dish"]
         ):
             for dish_master in self.dish_master_list:
-                # dish_master.SetDirectDishMode(DishMode.STANDBY_LP)
-                # dish_master.SetDirectState(DevState.STANDBY)
                 dish_master.ResetDelay()
                 dish_master.SetDirectHealthState(HealthState.UNKNOWN)
 
