@@ -197,13 +197,6 @@ class SubarrayNodeWrapper(object):
         self._obs_state = Resource(self.tmc_subarraynode1).get("obsState")
         return self._obs_state
 
-    @property
-    def sdp_subarray_ln_obs_state(self):
-        """SDP Subarray leaf node observation state"""
-        self._sdp_subarray_ln_obs_state = Resource(
-            self.sdp_subarray_leaf_node
-        ).get("sdpSubarrayObsState")
-        return self._sdp_subarray_ln_obs_state
 
     @obs_state.setter
     def obs_state(self, value):
