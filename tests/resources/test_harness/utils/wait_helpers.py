@@ -111,6 +111,7 @@ class Waiter:
         )
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if self.dish_master_list and self.dish_leaf_node_list:
             self.set_wait_for_dish("dishMode", "STANDBY_LP")
 =======
@@ -135,6 +136,14 @@ class Waiter:
         if self.dish_master_list and self.dish_leaf_node_list:
             self.set_wait_for_dish("dishMode", "STANDBY_LP")
 >>>>>>> 0480614a (SAH-1558: Code cleanup.)
+=======
+        # TODO: Add a dish leaf node check in case of TelescopeOff command.
+        # Currently it is removed as the dishLN dishMode watch statement for
+        # STANDBY_LP value remains stuck if the dishLN is already in STANDBY_LP
+        # and the test job times out.
+        if self.dish_master_list:
+            self.set_wait_for_dish_master("dishMode", "STANDBY_LP")
+>>>>>>> d17da1e6 (SAH-1558: Execute tests.)
 
     def set_wait_for_going_to_standby(self):
         self.waits.append(
