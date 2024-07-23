@@ -1,8 +1,5 @@
 """Test module for TMC-DISH Configure functionality"""
 
-
-import json
-
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
@@ -154,7 +151,7 @@ def check_dish_mode_and_pointing_state(
             lookahead=10,
         )
         dish_client = central_node_mid.dish_master_dict[dish_id]
-        dish_client.Slew(json.dumps([181.235672347698, 30.309299188458]))
+        dish_client.Slew([181.235672347698, 30.309299188458])
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
