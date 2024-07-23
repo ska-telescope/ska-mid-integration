@@ -1,8 +1,8 @@
-"""Test module to verify timeout error propogation from Csp Subarray"""
+"""Test module to verify timeout error propogation from SDP Subarray"""
 import json
 
 import pytest
-from pytest_bdd import parsers, scenario, then, when
+from pytest_bdd import scenario, then, when
 from ska_tango_testing.mock.placeholders import Anything
 
 from tests.resources.test_harness.constant import (
@@ -37,7 +37,7 @@ def test_sdp_subarray_configure_timeout_and_error_propagation():
 # @given("TMC subarray is in ObsState IDLE")
 
 
-@when(" SDP subarray is set defective with timeout")
+@when("SDP subarray is set defective with timeout")
 def set_sdp_subarray_defective(simulator_factory):
     """A method to set defect, obsState CONFIGURING
     stuck for SDP Subarray
@@ -53,14 +53,14 @@ def set_sdp_subarray_defective(simulator_factory):
     pytest.sdp_sim.SetDefective(json.dumps(OBS_STATE_CONFIGURING_STUCK_DEFECT))
 
 
-@then(parsers.parse("I issue the Configure command to the TMC subarray"))
+@then("I issue the Configure command to the TMC subarray")
 def invoke_configure(
     subarray_node: SubarrayNodeWrapper,
     command_input_factory: JsonFactory,
     event_recorder: EventRecorder,
 ) -> None:
     """
-    Invokes Configure command and checks whether subarray is in ObsState READY
+    Invokes Configure command
     """
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
@@ -82,7 +82,7 @@ def check_timeout_error(subarray_node, event_recorder):
 
     Args:
         subarray_node : A fixture for SubarrayNode tango device class
-        event_recorder: A fixture for EventRecorder class_
+        event_recorder: A fixture for EventRecorder class
     """
     assertion_data = event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,

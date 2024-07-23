@@ -2,7 +2,7 @@
 import json
 
 import pytest
-from pytest_bdd import parsers, scenario, then, when
+from pytest_bdd import scenario, then, when
 from ska_tango_testing.mock.placeholders import Anything
 
 from tests.resources.test_harness.constant import (
