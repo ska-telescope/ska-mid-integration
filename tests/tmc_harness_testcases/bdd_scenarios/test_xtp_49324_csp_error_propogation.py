@@ -19,7 +19,8 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 @pytest.mark.configure
 @pytest.mark.SKA_mid
 @scenario(
-    "../features/test_harness/xtp_49324.feature",
+    "../features/test_harness/xtp_49324_csp_subarray_"
+    + "error_propogation.feature",
     "Verify timeout error propogation with defective CSP Subarray",
 )
 def test_csp_subarray_configure_timeout_and_error_propagation_csp():
