@@ -76,7 +76,7 @@ def invoke_configure(
     input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    pytest.result, pytest.unique_id = subarray_node.execute_transition(
+    pytest.command_result = subarray_node.execute_transition(
         "Configure", argin=input_json
     )
 
