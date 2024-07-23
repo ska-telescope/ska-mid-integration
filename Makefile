@@ -97,7 +97,7 @@ SDP_PROCCONTROL_REPLICAS ?= 1
 
 ifeq ($(MAKECMDGOALS),k8s-test)
 ADD_ARGS +=  --true-context -x
-MARK ?= $(shell echo $(TELESCOPE) | sed "s/-/_/g") and configure
+MARK ?= $(shell echo $(TELESCOPE) | sed "s/-/_/g")
 endif
 
 # EXIT_AT_FAIL option isn't functioning correctly, so the option -x is added

@@ -52,7 +52,7 @@ def set_csp_subarray_defective(simulator_factory):
     pytest.csp_sim.SetDefective(json.dumps(OBS_STATE_CONFIGURING_STUCK_DEFECT))
 
 
-@then("I issue the Configure command to the TMC subarray")
+@when("I issue the Configure command to the TMC subarray")
 def invoke_configure(
     subarray_node: SubarrayNodeWrapper,
     command_input_factory: JsonFactory,

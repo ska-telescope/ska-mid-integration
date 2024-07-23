@@ -1,7 +1,7 @@
 Feature: Default
 
 	
-	@XTP-49327 @Team_SAHYADRI
+	@XTP-49327 @Team_SAHYADRI @configure
 	Scenario: Verify timeout error propogation with defective SDP Subarray
 		Given the telescope is in ON state
 		And TMC subarray is in ObsState IDLE
