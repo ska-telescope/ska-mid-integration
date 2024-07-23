@@ -22,7 +22,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 
 
 @pytest.mark.SKA_mid
-@pytest.mark.tmc_dish
+# @pytest.mark.tmc_dish
 @scenario(
     "../features/test_harness/science_scan_after_calibration_scan.feature",
     "TMC Behavior During a Five-Point Calibration Scan",
