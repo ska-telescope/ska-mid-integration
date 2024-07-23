@@ -246,8 +246,8 @@ def invoke_configure(
         "configure_mid", command_input_factory
     )
     config_json = json.loads(configure_input_json)
-    config_json["pointing"]["target"]["ra"] = json.loads(dl.actual_pointing)[1]
-    config_json["pointing"]["target"]["dec"] = json.loads(dl.actualPointing)[2]
+    config_json["pointing"]["target"]["ra"] = json.loads(dl.actualpointing)[1]
+    config_json["pointing"]["target"]["dec"] = json.loads(dl.actualpointing)[2]
     central_node_mid.set_subarray_id(subarray_id)
     pytest.command_result = subarray_node.execute_transition(
         "Configure", json.dumps(config_json)
