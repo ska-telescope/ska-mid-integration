@@ -5,15 +5,13 @@ import pytest
 from pytest_bdd import given, scenario, then, when
 from ska_tango_testing.mock.placeholders import Anything
 
-from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.constant import (
     COMMAND_NOT_ALLOWED_DEFECT,
     RESET_DEFECT,
     tmc_sdp_subarray_leaf_node,
 )
-from tests.resources.test_harness.helpers import (
-    prepare_json_args_for_centralnode_commands,
-)
+from tests.resources.test_harness.helpers import prepare_json_args_for_commands
+from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
@@ -51,39 +49,55 @@ def set_sdp_subarray_defective(simulator_factory):
     pytest.sdp_sim.SetDefective(json.dumps(COMMAND_NOT_ALLOWED_DEFECT))
 
 
-@when("I issue the AssignResources command from TMC CentralNode")
+# @when("I issue the Configure command from TMC SubarrayNode")
+# def invoke_configure(
+#     central_node_mid: CentralNodeWrapperMid,
+#     command_input_factory: JsonFactory,
+# ) -> None:
+#     """
+#     Invokes AssignResources command
+#     """
+#     assign_input_json = prepare_json_args_for_centralnode_commands(
+#         "assign_resources_mid", command_input_factory
+#     )
+#     pytest.command_result = central_node_mid.perform_action(
+#         "AssignResources", assign_input_json
+#     )
+
+
+@when("I issue the Configure command from TMC SubarrayNode")
 def invoke_configure(
-    central_node_mid: CentralNodeWrapperMid,
+    subarray_node: SubarrayNodeWrapper,
     command_input_factory: JsonFactory,
 ) -> None:
     """
-    Invokes AssignResources command
+    Invokes Configure command
     """
-    assign_input_json = prepare_json_args_for_centralnode_commands(
-        "assign_resources_mid", command_input_factory
+    configure_input_json = prepare_json_args_for_commands(
+        "configure_mid", command_input_factory
     )
-    pytest.command_result = central_node_mid.perform_action(
-        "AssignResources", assign_input_json
+    pytest.command_result = subarray_node.perform_action(
+        "Configure", configure_input_json
     )
 
 
 @then(
-    "CommandNotAllowed exception is propagated to TMC CentralNode "
+    "CommandNotAllowed exception is propagated to TMC Subarraynode "
     + "on longRunningCommandResult"
 )
-def check_timeout_error(central_node_mid, event_recorder):
-    """A method to check CentralMode.longRunningCommandResult attribute
+def check_timeout_error(subarray_node, event_recorder):
+    """A method to check SubarrayNode.longRunningCommandResult attribute
     change for exception
 
     Args:
-        central_node_mid : A fixture for CentralNodeMid tango device class
+        subarray_node : A fixture for SubarrayNode tango device class
         event_recorder: A fixture for EventRecorder class
     """
     event_recorder.subscribe_event(
-        central_node_mid.central_node, "longRunningCommandResult"
+        subarray_node.subarray_node, "longRunningCommandResult"
     )
     assertion_data = event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
+        subarray_node.subarray_node,
         "longRunningCommandResult",
         (pytest.command_result[1][0], Anything),
         lookahead=15,

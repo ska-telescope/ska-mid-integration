@@ -121,23 +121,27 @@ def sync_abort(device_dict, timeout=900):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             the_waiter = Waiter(**device_dict)
-            if Resource(device_dict.get("sdp_subarray")).assert_attribute(
-                "obsState"
-            ).equals("EMPTY") and Resource(
-                device_dict.get("sdp_subarray_leaf_node")
-            ).assert_attribute(
-                "sdpSubarrayObsState"
-            ).equals(
-                "EMPTY"
-            ):
-                the_waiter.set_wait_for_aborted_with_sdp_empty()
-            else:
-                the_waiter.set_wait_for_aborted()
+            the_waiter.set_wait_for_aborted()
             result = func(*args, **kwargs)
             the_waiter.wait(timeout)
             return result
 
         return wrapper
+
+    return decorator_sync_abort
+
+    # def sync_abort_with_sdp_empty(device_dict, timeout=900):
+    #     # define as a decorator
+    #     def decorator_sync_abort(func):
+    #         @functools.wraps(func)
+    #         def wrapper(*args, **kwargs):
+    #             the_waiter = Waiter(**device_dict)
+    #             the_waiter.set_wait_for_aborted_with_sdp_empty()
+    #             result = func(*args, **kwargs)
+    #             the_waiter.wait(timeout)
+    #             return result
+
+    #         return wrapper
 
     return decorator_sync_abort
 

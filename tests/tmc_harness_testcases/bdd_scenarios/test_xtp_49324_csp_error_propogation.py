@@ -38,7 +38,7 @@ def test_csp_subarray_configure_error_propagation():
 # @given("TMC subarray is in ObsState IDLE")
 
 
-@when("CSP subarray is set defective with timeout")
+@when("CSP subarray is set defective")
 def set_csp_subarray_defective(simulator_factory):
     """A method to set defect on simulated
     CSP Subarray
