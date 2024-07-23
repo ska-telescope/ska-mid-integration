@@ -136,7 +136,7 @@ def invoke_configure(
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
-    dl = central_node_mid.dish_master_dict["001"]
+    dl = central_node_mid.dish_leaf_node_list[0]
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
@@ -185,8 +185,8 @@ def check_dish_mode_and_pointing_state(
             DishMode.OPERATE,
             lookahead=10,
         )
-        dish_client = central_node_mid.dish_master_dict[dish_id]
-        dish_client.Slew([181.235672347698, 30.309299188458])
+        # dish_client = central_node_mid.dish_master_dict[dish_id]
+        # dish_client.Slew([181.235672347698, 30.309299188458])
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
