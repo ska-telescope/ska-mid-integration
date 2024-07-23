@@ -112,6 +112,7 @@ class Waiter:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         if self.dish_master_list and self.dish_leaf_node_list:
             self.set_wait_for_dish("dishMode", "STANDBY_LP")
 =======
@@ -144,6 +145,10 @@ class Waiter:
         if self.dish_master_list:
             self.set_wait_for_dish_master("dishMode", "STANDBY_LP")
 >>>>>>> d17da1e6 (SAH-1558: Execute tests.)
+=======
+        if self.dish_master_list and self.dish_leaf_node_list:
+            self.set_wait_for_dish("dishMode", "STANDBY_LP")
+>>>>>>> 9c57062a (SAH-1558: Execute tests.)
 
     def set_wait_for_going_to_standby(self):
         self.waits.append(
