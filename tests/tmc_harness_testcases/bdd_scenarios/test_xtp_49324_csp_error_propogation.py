@@ -21,12 +21,12 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 @scenario(
     "../features/test_harness/xtp_49324_csp_subarray_"
     + "error_propogation.feature",
-    "Verify timeout error propogation with defective CSP Subarray",
+    "Verify error propogation with defective CSP Subarray",
 )
-def test_csp_subarray_configure_timeout_and_error_propagation_csp():
+def test_csp_subarray_configure_error_propagation():
     """
     Test case to verify error propogation for
-    timeout occured on Csp Subarray
+    defective Csp Subarray
     """
 
 
@@ -40,7 +40,8 @@ def test_csp_subarray_configure_timeout_and_error_propagation_csp():
 
 @when("CSP subarray is set defective with timeout")
 def set_csp_subarray_defective(simulator_factory):
-    """A method to set HealthState value for the simulator devices
+    """A method to set defect on simulated
+    CSP Subarray
 
     Args:
         simulator_factory: fixture for SimulatorFactory class,
