@@ -1,6 +1,7 @@
 """Test module for TMC-CSP Obsstate transitions functionality."""
 import pytest
-from pytest_bdd import given, when, scenario, parsers, then
+from assertpy import assert_that
+from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer
 
@@ -16,9 +17,6 @@ from tests.test_harness3.telescope_facades.tmc_subarray_node_facade import (
     TMCSubarrayNodeFacade,
 )
 from tests.test_harness3.utils.common_utils import JsonFactory
-
-
-from assertpy import assert_that
 
 ASSERTIONS_TIMEOUT = 60
 

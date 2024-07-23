@@ -12,6 +12,8 @@ Scenario: EMPTY to RESOURCING - CMD AssignResources (6)
   Given the subarray 001 is in the EMPTY state
   When the AssignResources command is sent to the subarray 001
   Then the subarray 001 should transition to the RESOURCING state
+  Then the subarray 001 should transition to the IDLE state
+  Then the central node longRunningCommand should be terminated
 
 Scenario: RESOURCING to ABORTING - CMD Abort (12)
   Given the subarray 001 is in the RESOURCING state
@@ -22,6 +24,8 @@ Scenario: IDLE to CONFIGURING - CMD Configure (16)
   Given the subarray 001 is in the IDLE state
   When the Configure command is sent to the subarray 001
   Then the subarray 001 should transition to the CONFIGURING state
+  Then the subarray 001 should transition to the READY state
+
 
 Scenario: IDLE to RESOURCING - CMD ReleaseResources (17)
   Given the subarray 001 is in the IDLE state

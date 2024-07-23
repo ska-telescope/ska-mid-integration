@@ -1,7 +1,9 @@
 """A JSON input based on a file contained in the test data folder."""
 
 import os
+from typing import Any
 
+from tests.test_harness3.telescope_inputs.dict_json_input import DictJSONInput
 from tests.test_harness3.telescope_inputs.json_input import JSONInput
 
 
@@ -44,3 +46,10 @@ class FileJSONInput(JSONInput):
         with open(self.filename(), "r") as file:
             json_string = file.read()
         return json_string
+
+    def set_attribute_value(
+        self, attr_name: str, attr_value: Any
+    ) -> "DictJSONInput":
+        new_json_dict = self.get_json_dict()
+        new_json_dict[attr_name] = attr_value
+        return DictJSONInput(new_json_dict)

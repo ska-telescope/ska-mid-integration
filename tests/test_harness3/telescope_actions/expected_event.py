@@ -113,4 +113,12 @@ class ExpectedStateChange(ExpectedEvent):
         )
 
     def _condition_to_str(self) -> str:
-        return "to have the value " + str(self.expected_value)
+        return (
+            f"to have the value {str(self.expected_value)}"
+            f" (attribute's current value: {self._read_attribute()})"
+        )
+
+    def _read_attribute(self) -> Any:
+        if isinstance(self.device, DeviceProxy):
+            return self.device.read_attribute(self.attribute).value
+        return DeviceProxy(self.device).read_attribute(self.attribute).value

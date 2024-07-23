@@ -28,6 +28,7 @@ from tests.test_harness3.telescope_actions.central_node.move_to_on import (
 from tests.test_harness3.telescope_actions.central_node.set_standby import (
     SetStandby,
 )
+from tests.test_harness3.telescope_inputs.json_input import JSONInput
 from tests.test_harness3.telescope_structure.telescope_wrapper import (
     TelescopeWrapper,
 )
@@ -141,7 +142,7 @@ class TMCCentralNodeFacade:
         """
         action = CentralNodeAssignResources(assign_json)
         action.set_termination_condition_policy(wait_termination)
-        action.execute()
+        return action.execute()
 
     # @sync_release_resources(device_dict=device_dict, timeout=500)
     def release_resources(
@@ -158,7 +159,7 @@ class TMCCentralNodeFacade:
         """
         action = CentralNodeReleaseResources(input_string)
         action.set_termination_condition_policy(wait_termination)
-        action.execute()
+        return action.execute()
 
     # -----------------------------------------------------------
     # Generic action
@@ -166,7 +167,7 @@ class TMCCentralNodeFacade:
     def perform_action(
         self,
         command_name: str,
-        input_json: str,
+        input_json: JSONInput,
         wait_termination: bool = True,
     ) -> Tuple[ResultCode, str]:
         """Execute provided command on central node.
@@ -179,4 +180,4 @@ class TMCCentralNodeFacade:
         """
         action = CentralNodePerformAction(command_name, input_json)
         action.set_termination_condition_policy(wait_termination)
-        action.execute()
+        return action.execute()

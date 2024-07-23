@@ -29,11 +29,18 @@ class SubarrayClearObsState(TelescopeAction):
         ]:
             SubarrayAbort().execute()
             SubarrayRestart().execute()
+
+        # NOTE: if the subarray is in ABORTING state,
+        # it would be good to wait for it to transition to ABORTED
+        # so Restart can be called safely
+
         elif self.telescope.tmc.subarray_node.obsState in [
             ObsState.ABORTED,
-            ObsState.ABORTING,
         ]:
             SubarrayRestart().execute()
+
+        # NOTE: if the subarray is in RESETTING state,
+        # it would be good to wait for it to transition to EMPTY
 
     def termination_condition(self):
         res = [

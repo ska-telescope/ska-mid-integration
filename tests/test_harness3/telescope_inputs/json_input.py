@@ -2,6 +2,7 @@
 
 import abc
 import json
+from typing import Any
 
 
 class JSONInput(abc.ABC):
@@ -22,11 +23,25 @@ class JSONInput(abc.ABC):
     - get the JSON string representation of the input with the ``__str__`` and
         ``__repr__`` methods;
     - check if two JSON inputs are equal with the ``__eq__`` method.
+
+    You have also to implement the ``set_attribute_value`` method to permit
+    the creation of a new JSON input with an attribute value set.
     """
 
     @abc.abstractmethod
     def get_json_string(self) -> str:
         """Return the JSON string representation of the input."""
+        pass
+
+    @abc.abstractmethod
+    def set_attribute_value(
+        self, attr_name: str, attr_value: Any
+    ) -> "JSONInput":
+        """Create a new JSON input with an attribute value set.
+
+        :param attr_name: the name of the attribute to set
+        :param attr_value: the value to set for the attribute
+        """
         pass
 
     def get_json_dict(self) -> dict:

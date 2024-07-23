@@ -4,10 +4,14 @@
 import pytest
 from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
-from ska_control_model import ObsState
-from ska_tango_testing.integration import TangoEventTracer
+from ska_control_model import ObsState, ResultCode
+from ska_tango_testing.integration import TangoEventTracer, log_events
 
 from tests.test_harness3.telescope_facades.csp_facade import CSPFacade
+from tests.test_harness3.telescope_facades.sdp_facade import SDPFacade
+from tests.test_harness3.telescope_facades.tmc_central_node_facade import (
+    TMCCentralNodeFacade,
+)
 from tests.test_harness3.telescope_facades.tmc_subarray_node_facade import (
     TMCSubarrayNodeFacade,
 )
@@ -16,7 +20,7 @@ from tests.test_harness3.telescope_inputs.obs_state_commands_input import (
 )
 from tests.various_utils.file_json_input import FileJSONInput
 
-ASSERTIONS_TIMEOUT = 60
+ASSERTIONS_TIMEOUT = 30
 
 
 @pytest.mark.tmc_csp_refactor3
@@ -34,7 +38,10 @@ def test_empty_to_resourcing():
 @given(parsers.parse("the subarray 001 is in the EMPTY state"))
 def subarray_in_empty_state(
     context_fixt,
+    event_tracer: TangoEventTracer,
+    central_node_facade: TMCCentralNodeFacade,
     subarray_node_facade: TMCSubarrayNodeFacade,
+    sdp: SDPFacade,
 ):
     """Ensure the subarray is in the EMPTY state."""
     context_fixt["starting_state"] = ObsState.EMPTY
@@ -44,17 +51,40 @@ def subarray_in_empty_state(
         wait_termination=True,
     )
 
+    event_tracer.subscribe_event(sdp.sdp_subarray, "obsState")
+    event_tracer.subscribe_event(
+        central_node_facade.central_node, "longRunningCommandResult"
+    )
+    log_events(
+        {
+            sdp.sdp_subarray: ["obsState"],
+            central_node_facade.central_node: ["longRunningCommandResult"],
+        }
+    )
+
 
 @when(parsers.parse("the AssignResources command is sent to the subarray 001"))
 def send_assign_resources_command(
     context_fixt,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    central_node_facade: TMCCentralNodeFacade,
 ):
     """Send the AssignResources command to the subarray."""
     context_fixt["trigger"] = "AssignResources"
-    subarray_node_facade.assign_resources(
-        FileJSONInput("subarray", "assign_resources_mid"),
-        wait_termination=False,
+
+    json_input = FileJSONInput("centralnode", "assign_resources_mid")
+    json_input = json_input.set_attribute_value("subarray_id", 1)
+
+    # context_fixt["command_result"] = subarray_node_facade.assign_resources(
+    #     json_input, wait_termination=False,
+    # )
+    # context_fixt["command_result"] = central_node_facade.perform_action(
+    #     "AssignResources",
+    #     json_input,
+    #     wait_termination=True,
+    # )
+    context_fixt["command_result"] = central_node_facade.assign_resources(
+        json_input,
+        wait_termination=True,
     )
 
 
@@ -65,6 +95,7 @@ def verify_resourcing_state(
     context_fixt,
     subarray_node_facade: TMCSubarrayNodeFacade,
     csp: CSPFacade,
+    sdp: SDPFacade,
     event_tracer: TangoEventTracer,
 ):
     """Verify that the subarray transitions to the RESOURCING state."""
@@ -82,4 +113,64 @@ def verify_resourcing_state(
         "obsState",
         ObsState.RESOURCING,
         previous_value=context_fixt["starting_state"],
+    ).has_change_event_occurred(
+        sdp.sdp_subarray,
+        "obsState",
+        ObsState.RESOURCING,
+        previous_value=context_fixt["starting_state"],
+    )
+    # time.sleep(1)
+
+    context_fixt["starting_state"] = ObsState.RESOURCING
+
+
+@then(parsers.parse("the subarray 001 should transition to the IDLE state"))
+def verify_idle_state(
+    context_fixt,
+    subarray_node_facade: TMCSubarrayNodeFacade,
+    csp: CSPFacade,
+    sdp: SDPFacade,
+    event_tracer: TangoEventTracer,
+):
+    """Verify that the subarray transitions to the IDLE state."""
+    assert_that(event_tracer).described_as(
+        f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
+        f" and CSP Subarray device ({csp.csp_subarray}) "
+        "ObsState attribute values should move to IDLE."
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        subarray_node_facade.subarray_node,
+        "obsState",
+        ObsState.IDLE,
+        previous_value=context_fixt["starting_state"],
+    ).has_change_event_occurred(
+        csp.csp_subarray,
+        "obsState",
+        ObsState.IDLE,
+        previous_value=context_fixt["starting_state"],
+    ).has_change_event_occurred(
+        sdp.sdp_subarray,
+        "obsState",
+        ObsState.IDLE,
+        previous_value=context_fixt["starting_state"],
+    )
+
+
+@then(
+    parsers.parse("the central node longRunningCommand should be terminated")
+)
+def verify_long_running_command_result(
+    context_fixt,
+    central_node_facade: TMCCentralNodeFacade,
+    event_tracer: TangoEventTracer,
+):
+    """Verify that the longRunningCommand is terminated."""
+    command_result = context_fixt["command_result"]
+    assert_that(event_tracer).described_as(
+        "Central Node "
+        f"({central_node_facade.central_node}) "
+        "longRunningCommand should be terminated."
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        central_node_facade.central_node,
+        "longRunningCommandResult",
+        (command_result[1][0], str(ResultCode.OK.value)),
     )
