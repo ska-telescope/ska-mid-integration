@@ -121,7 +121,13 @@ def sync_abort(device_dict, timeout=900):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             the_waiter = Waiter(**device_dict)
-            the_waiter.set_wait_for_aborted()
+            if (
+                Resource(device_dict.get("sdp_subarray_leaf_node"))
+                and Resource(device_dict.get("sdp_subarray")) == "EMPTY"
+            ):
+                the_waiter.set_wait_for_aborted()
+            else:
+                the_waiter.set_wait_for_aborted()
             result = func(*args, **kwargs)
             the_waiter.wait(timeout)
             return result
