@@ -91,7 +91,7 @@ k8s-test:
     SUBARRAY_COUNT: 2
     COUNT: 1
     KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA'
-    ADDMARK: "and configure"
+    ADDMARK: ""
   before_script:
     - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
