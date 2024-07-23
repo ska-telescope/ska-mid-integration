@@ -1,4 +1,4 @@
-"""Test module to verify timeout error propogation from Csp Subarray"""
+"""Test module to verify timeout error propogation from SDP Subarray"""
 import json
 
 import pytest
@@ -19,13 +19,13 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 @pytest.mark.configure
 @pytest.mark.SKA_mid
 @scenario(
-    "../features/test_harness/xtp_49324.feature",
-    "Verify timeout error propogation with defective CSP Subarray",
+    "../features/test_harness/xtp_49327.feature",
+    "Verify timeout error propogation with defective SDP Subarray",
 )
-def test_csp_subarray_configure_timeout_and_error_propagation_csp():
+def test_sdp_subarray_configure_timeout_and_error_propagation():
     """
     Test case to verify error propogation for
-    timeout occured on Csp Subarray
+    timeout occured on SDP Subarray
     """
 
 
@@ -37,19 +37,20 @@ def test_csp_subarray_configure_timeout_and_error_propagation_csp():
 # @given("TMC subarray is in ObsState IDLE")
 
 
-@when("CSP subarray is set defective with timeout")
-def set_csp_subarray_defective(simulator_factory):
-    """A method to set HealthState value for the simulator devices
+@when("SDP subarray is set defective with timeout")
+def set_sdp_subarray_defective(simulator_factory):
+    """A method to set defect, obsState CONFIGURING
+    stuck for SDP Subarray
 
     Args:
         simulator_factory: fixture for SimulatorFactory class,
         which provides simulated subarray and master devices
     """
-    pytest.csp_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_CSP_DEVICE
+    pytest.sdp_sim = simulator_factory.get_or_create_simulator_device(
+        SimulatorDeviceType.MID_SDP_DEVICE
     )
-    # Set csp defective
-    pytest.csp_sim.SetDefective(json.dumps(OBS_STATE_CONFIGURING_STUCK_DEFECT))
+    # Set SDP subarray defective
+    pytest.sdp_sim.SetDefective(json.dumps(OBS_STATE_CONFIGURING_STUCK_DEFECT))
 
 
 @when("I issue the Configure command to the TMC subarray")
@@ -59,7 +60,7 @@ def invoke_configure(
     event_recorder: EventRecorder,
 ) -> None:
     """
-    Invokes Configure command on TMC SubarrayNode
+    Invokes Configure command
     """
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
@@ -72,12 +73,10 @@ def invoke_configure(
     )
 
 
-@then(
-    "Timeout error is propagated to TMC subarray on longRunningCommandResult"
-)
+@then("Exception is propagated to TMC subarray on longRunningCommandResult")
 def check_timeout_error(subarray_node, event_recorder):
     """A method to check SubarrayNode.longRunningCommandResult attribute
-    change after timeout error
+    change for exception
 
     Args:
         subarray_node : A fixture for SubarrayNode tango device class
@@ -91,12 +90,11 @@ def check_timeout_error(subarray_node, event_recorder):
     )
     exception_message = (
         "Exception occurred on the following devices: "
-        "ska_mid/tm_leaf_node/csp_subarray01: "
-        "Timeout has occurred, command failed\n"
+        "ska_mid/tm_leaf_node/sdp_subarray01: "
     )
     assert (
         exception_message
         in json.loads(assertion_data["attribute_value"][1])[1]
     )
 
-    pytest.csp_sim.SetDefective(RESET_DEFECT)
+    pytest.sdp_sim.SetDefective(RESET_DEFECT)

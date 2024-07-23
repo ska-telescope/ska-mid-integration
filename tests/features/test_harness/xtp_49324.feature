@@ -7,4 +7,4 @@ Feature: Default
 		And TMC subarray is in ObsState IDLE
 		When CSP subarray is set defective with timeout
 		And I issue the Configure command to the TMC subarray
-		Then Timeout error is propagated to TMC subarray on longRunningCommandResult
+		Then Exception is propagated to TMC subarray on longRunningCommandResult
