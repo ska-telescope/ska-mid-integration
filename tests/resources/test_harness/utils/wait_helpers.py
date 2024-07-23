@@ -311,49 +311,49 @@ class Waiter:
         )
 
     def set_wait_for_aborted(self):
-        self.waits.append(
-            watch(Resource(self.tmc_csp_subarray_leaf_node)).to_become(
-                "cspSubarrayObsState", changed_to="ABORTED"
-            )
-        )
-        self.waits.append(
-            watch(Resource(self.tmc_sdp_subarray_leaf_node)).to_become(
-                "sdpSubarrayObsState", changed_to="ABORTED"
-            )
-        )
-        self.waits.append(
-            watch(Resource(self.csp_subarray1)).to_become(
-                "obsState", changed_to="ABORTED"
-            )
-        )
-        self.waits.append(
-            watch(Resource(self.sdp_subarray1)).to_become(
-                "obsState", changed_to="ABORTED"
-            )
-        )
+        # self.waits.append(
+        #     watch(Resource(self.tmc_csp_subarray_leaf_node)).to_become(
+        #         "cspSubarrayObsState", changed_to="ABORTED"
+        #     )
+        # )
+        # self.waits.append(
+        #     watch(Resource(self.tmc_sdp_subarray_leaf_node)).to_become(
+        #         "sdpSubarrayObsState", changed_to="ABORTED"
+        #     )
+        # )
+        # self.waits.append(
+        #     watch(Resource(self.csp_subarray1)).to_become(
+        #         "obsState", changed_to="ABORTED"
+        #     )
+        # )
+        # self.waits.append(
+        #     watch(Resource(self.sdp_subarray1)).to_become(
+        #         "obsState", changed_to="ABORTED"
+        #     )
+        # )
         self.waits.append(
             watch(Resource(self.tmc_subarraynode1)).to_become(
                 "obsState", changed_to="ABORTED"
             )
         )
 
-    def set_wait_for_aborted_with_sdp_empty(self):
-        self.waits.append(
-            watch(Resource(self.tmc_csp_subarray_leaf_node)).to_become(
-                "cspSubarrayObsState", changed_to="ABORTED"
-            )
-        )
+    # def set_wait_for_aborted_with_sdp_empty(self):
+    #     self.waits.append(
+    #         watch(Resource(self.tmc_csp_subarray_leaf_node)).to_become(
+    #             "cspSubarrayObsState", changed_to="ABORTED"
+    #         )
+    #     )
 
-        self.waits.append(
-            watch(Resource(self.csp_subarray1)).to_become(
-                "obsState", changed_to="ABORTED"
-            )
-        )
-        self.waits.append(
-            watch(Resource(self.tmc_subarraynode1)).to_become(
-                "obsState", changed_to="ABORTED"
-            )
-        )
+    #     self.waits.append(
+    #         watch(Resource(self.csp_subarray1)).to_become(
+    #             "obsState", changed_to="ABORTED"
+    #         )
+    #     )
+    #     self.waits.append(
+    #         watch(Resource(self.tmc_subarraynode1)).to_become(
+    #             "obsState", changed_to="ABORTED"
+    #         )
+    #     )
 
     def set_wait_for_ready(self):
         self.waits.append(
