@@ -18,7 +18,6 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 
-@pytest.mark.skip
 @pytest.mark.configure
 @pytest.mark.SKA_mid
 @scenario(
