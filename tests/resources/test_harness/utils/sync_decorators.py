@@ -125,7 +125,7 @@ def sync_abort(device_dict, timeout=900):
                 Resource(device_dict.get("sdp_subarray_leaf_node"))
                 and Resource(device_dict.get("sdp_subarray")) == "EMPTY"
             ):
-                the_waiter.set_wait_for_aborted()
+                the_waiter.set_wait_for_aborted_with_sdp_empty()
             else:
                 the_waiter.set_wait_for_aborted()
             result = func(*args, **kwargs)
