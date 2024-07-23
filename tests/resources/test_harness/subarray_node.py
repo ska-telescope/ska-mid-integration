@@ -197,7 +197,6 @@ class SubarrayNodeWrapper(object):
         self._obs_state = Resource(self.tmc_subarraynode1).get("obsState")
         return self._obs_state
 
-
     @obs_state.setter
     def obs_state(self, value):
         """Sets value for TMC subarrayNode observation state
