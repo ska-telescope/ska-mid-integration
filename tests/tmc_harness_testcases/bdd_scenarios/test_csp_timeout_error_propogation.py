@@ -20,7 +20,7 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp_49324.feature",
-    "test_configure_timeout_and_error_propagation_csp",
+    "Verify timeout error propogation with defective CSP Subarray",
 )
 def test_csp_subarray_configure_timeout_and_error_propagation_csp():
     """
@@ -37,7 +37,7 @@ def test_csp_subarray_configure_timeout_and_error_propagation_csp():
 # @given("TMC subarray is in ObsState IDLE")
 
 
-@when(" CSP subarray is set defective with timeout")
+@when("CSP subarray is set defective with timeout")
 def set_csp_subarray_defective(simulator_factory):
     """A method to set HealthState value for the simulator devices
 
@@ -52,14 +52,14 @@ def set_csp_subarray_defective(simulator_factory):
     pytest.csp_sim.SetDefective(json.dumps(OBS_STATE_CONFIGURING_STUCK_DEFECT))
 
 
-@then(parsers.parse("I issue the Configure command to the TMC subarray"))
+@then("I issue the Configure command to the TMC subarray")
 def invoke_configure(
     subarray_node: SubarrayNodeWrapper,
     command_input_factory: JsonFactory,
     event_recorder: EventRecorder,
 ) -> None:
     """
-    Invokes Configure command and checks whether subarray is in ObsState READY
+    Invokes Configure command on TMC SubarrayNode
     """
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
@@ -81,7 +81,7 @@ def check_timeout_error(subarray_node, event_recorder):
 
     Args:
         subarray_node : A fixture for SubarrayNode tango device class
-        event_recorder: A fixture for EventRecorder class_
+        event_recorder: A fixture for EventRecorder class
     """
     assertion_data = event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,

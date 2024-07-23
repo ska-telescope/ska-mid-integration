@@ -20,7 +20,7 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp_49327.feature",
-    "test_configure_timeout_and_error_propagation_sdp",
+    "Verify timeout error propogation with defective SDP Subarray",
 )
 def test_sdp_subarray_configure_timeout_and_error_propagation():
     """
