@@ -1,5 +1,7 @@
 """Test module for TMC-DISH Configure functionality"""
 
+import json
+
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
@@ -12,6 +14,7 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -35,6 +38,12 @@ from tests.resources.test_support.enum import DishMode, PointingState
 =======
 @pytest.mark.skip(reason="Dish pointingstate issue")
 >>>>>>> 14801d0e (SAH-1567: Pull changes of sah-1564 branch.)
+=======
+@pytest.mark.skip(reason="Dish pointingstate issue")
+=======
+@pytest.mark.VV
+>>>>>>> c200e56a (SAH-1564: Update test case)
+>>>>>>> 8b15e00b (SAH-1564: Update test case)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29416_configure.feature",
@@ -127,13 +136,16 @@ def invoke_configure(
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
-
+    dl = central_node_mid.dish_master_dict["001"]
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
+    config_json = json.loads(configure_input_json)
+    config_json["pointing"]["target"]["ra"] = json.loads(dl.actual_pointing)[1]
+    config_json["pointing"]["target"]["dec"] = json.loads(dl.actualPointing)[2]
     central_node_mid.set_subarray_id(subarray_id)
     pytest.command_result = subarray_node.execute_transition(
-        "Configure", configure_input_json
+        "Configure", json.dumps(config_json)
     )
 
 
