@@ -98,8 +98,12 @@ class Waiter:
                 "State", changed_to="OFF"
             )
         )
-        if self.dish_master_list and self.dish_leaf_node_list:
-            self.set_wait_for_dish("dishMode", "STANDBY_LP")
+        # TODO: Add a dish leaf node check in case of TelescopeOff command.
+        # Currently it is removed as the dishLN dishMode watch statement for
+        # STANDBY_LP value remains stuck if the dishLN is already in STANDBY_LP
+        # and the test job times out.
+        if self.dish_master_list:
+            self.set_wait_for_dish_master("dishMode", "STANDBY_LP")
 
     def set_wait_for_going_to_standby(self):
         self.waits.append(
