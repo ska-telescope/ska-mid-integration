@@ -130,6 +130,7 @@ dishleafnode:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     tag: 0.16.0
 =======
     tag: 0.14.3-dev.c622c8bba
@@ -156,11 +157,19 @@ dishleafnode:
     tag: 0.14.3
 >>>>>>> 0c5f78cf (SAH-1567: Rever changes)
 =======
+=======
+>>>>>>> 8ac35da0 (SAH-1564: Revert change)
     tag: 0.14.3
 =======
     tag: 0.16.0-dev.c7f47ea7a
 >>>>>>> 036c5536 (SAH-1564: Use latest dev image of dishleafnode)
+<<<<<<< HEAD
 >>>>>>> 9be382b0 (SAH-1564: Use latest dev image of dishleafnode)
+=======
+=======
+    tag: 0.15.0
+>>>>>>> 3cd6910a (SAH-1564: Revert change)
+>>>>>>> 8ac35da0 (SAH-1564: Revert change)
     pullPolicy: IfNotPresent
 
 resources:
