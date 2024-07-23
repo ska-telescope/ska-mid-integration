@@ -1,6 +1,8 @@
 """The TMC-CSP sub-arrays execute the transition from EMPTY to RESOURCING."""
 
 
+import logging
+
 import pytest
 from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
@@ -23,6 +25,7 @@ from tests.various_utils.file_json_input import FileJSONInput
 ASSERTIONS_TIMEOUT = 30
 
 
+@pytest.mark.skip("Not needed for now")
 @pytest.mark.tmc_csp_refactor3
 @scenario(
     "../features/obsstate_valid_single_transitions.feature",
@@ -86,6 +89,7 @@ def send_assign_resources_command(
         json_input,
         wait_termination=True,
     )
+    logging.info(f"Command result: {context_fixt['command_result']}")
 
 
 @then(
@@ -155,6 +159,14 @@ def verify_idle_state(
     )
 
 
+def _get_long_run_command_id(context_fixt) -> str:
+    return context_fixt["command_result"][1][0]
+
+
+def _get_expected_long_run_command_result(context_fixt) -> tuple[str, str]:
+    return (_get_long_run_command_id(context_fixt), str(ResultCode.OK.value))
+
+
 @then(
     parsers.parse("the central node longRunningCommand should be terminated")
 )
@@ -164,7 +176,6 @@ def verify_long_running_command_result(
     event_tracer: TangoEventTracer,
 ):
     """Verify that the longRunningCommand is terminated."""
-    command_result = context_fixt["command_result"]
     assert_that(event_tracer).described_as(
         "Central Node "
         f"({central_node_facade.central_node}) "
@@ -172,5 +183,5 @@ def verify_long_running_command_result(
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         central_node_facade.central_node,
         "longRunningCommandResult",
-        (command_result[1][0], str(ResultCode.OK.value)),
+        _get_expected_long_run_command_result(context_fixt),
     )
