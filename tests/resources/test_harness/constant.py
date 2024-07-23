@@ -246,6 +246,15 @@ COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE = {
     "target_obsstates": [ObsState.RESOURCING, ObsState.IDLE],
 }
 
+COMMAND_NOT_ALLOWED_DEFECT = json.dumps(
+    {
+        "enabled": True,
+        "fault_type": FaultType.COMMAND_NOT_ALLOWED,
+        "error_message": "Command is not allowed",
+        "result": ResultCode.FAILED,
+    }
+)
+
 
 device_dict = {
     "csp_master": csp_master,

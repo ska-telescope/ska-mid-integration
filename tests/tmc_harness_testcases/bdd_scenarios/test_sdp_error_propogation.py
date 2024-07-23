@@ -2,16 +2,18 @@
 import json
 
 import pytest
-from pytest_bdd import scenario, then, when
+from pytest_bdd import given, scenario, then, when
 from ska_tango_testing.mock.placeholders import Anything
 
+from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.constant import (
-    OBS_STATE_CONFIGURING_STUCK_DEFECT,
+    COMMAND_NOT_ALLOWED_DEFECT,
     RESET_DEFECT,
+    tmc_sdp_subarray_leaf_node,
 )
-from tests.resources.test_harness.event_recorder import EventRecorder
-from tests.resources.test_harness.helpers import prepare_json_args_for_commands
-from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
+from tests.resources.test_harness.helpers import (
+    prepare_json_args_for_centralnode_commands,
+)
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
@@ -20,12 +22,11 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp_49327.feature",
-    "Verify timeout error propogation with defective SDP Subarray",
+    "Verify CommandNotAllowed error propogation with defective SDP Subarray",
 )
 def test_sdp_subarray_configure_timeout_and_error_propagation():
     """
-    Test case to verify error propogation for
-    timeout occured on SDP Subarray
+    Test case to verify CommandNotAllowed error propogation
     """
 
 
@@ -33,14 +34,10 @@ def test_sdp_subarray_configure_timeout_and_error_propagation():
 # @given("the telescope is in ON state")
 
 
-# from conftest.py
-# @given("TMC subarray is in ObsState IDLE")
-
-
-@when("SDP subarray is set defective with timeout")
+@given("SDP subarray is set with command not allowed defect")
 def set_sdp_subarray_defective(simulator_factory):
-    """A method to set defect, obsState CONFIGURING
-    stuck for SDP Subarray
+    """A method to set command not allowed defect
+    for SDP Subarray
 
     Args:
         simulator_factory: fixture for SimulatorFactory class,
@@ -50,47 +47,51 @@ def set_sdp_subarray_defective(simulator_factory):
         SimulatorDeviceType.MID_SDP_DEVICE
     )
     # Set SDP subarray defective
-    pytest.sdp_sim.SetDefective(json.dumps(OBS_STATE_CONFIGURING_STUCK_DEFECT))
+    pytest.sdp_sim.SetDefective(json.dumps(COMMAND_NOT_ALLOWED_DEFECT))
 
 
-@when("I issue the Configure command to the TMC subarray")
+@when("I issue the AssignResources command from TMC CentralNode")
 def invoke_configure(
-    subarray_node: SubarrayNodeWrapper,
+    central_node_mid: CentralNodeWrapperMid,
     command_input_factory: JsonFactory,
-    event_recorder: EventRecorder,
 ) -> None:
     """
-    Invokes Configure command
+    Invokes AssignResources command
     """
-    event_recorder.subscribe_event(
-        subarray_node.subarray_node, "longRunningCommandResult"
+    assign_input_json = prepare_json_args_for_centralnode_commands(
+        "assign_resources_mid", command_input_factory
     )
-    configure_input_json = prepare_json_args_for_commands(
-        "configure_mid", command_input_factory
-    )
-    pytest.command_result = subarray_node.execute_transition(
-        "Configure", argin=configure_input_json
+    pytest.command_result = central_node_mid.perform_action(
+        "AssignResources", assign_input_json
     )
 
 
-@then("Exception is propagated to TMC subarray on longRunningCommandResult")
-def check_timeout_error(subarray_node, event_recorder):
-    """A method to check SubarrayNode.longRunningCommandResult attribute
+@then(
+    "CommandNotAllowed exception is propagated to TMC CentralNode "
+    + "on longRunningCommandResult"
+)
+def check_timeout_error(central_node_mid, event_recorder):
+    """A method to check CentralMode.longRunningCommandResult attribute
     change for exception
 
     Args:
-        subarray_node : A fixture for SubarrayNode tango device class
+        central_node_mid : A fixture for CentralNodeMid tango device class
         event_recorder: A fixture for EventRecorder class
     """
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
     assertion_data = event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
+        central_node_mid.central_node,
         "longRunningCommandResult",
         (pytest.command_result[1][0], Anything),
         lookahead=15,
     )
     exception_message = (
-        "Exception occurred on the following devices: "
-        "ska_mid/tm_leaf_node/sdp_subarray01: "
+        "Exception occurred on the following devices:"
+        + f" {tmc_sdp_subarray_leaf_node}:"
+        " ska_tmc_common.exceptions.CommandNotAllowed:"
+        " Command is not allowed\n\n"
     )
     assert (
         exception_message
