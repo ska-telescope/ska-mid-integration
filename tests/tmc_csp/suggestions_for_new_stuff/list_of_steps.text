@@ -1,0 +1,62 @@
+# Grouped Steps for Subarray State Transition Scenarios
+
+## Background Steps:
+- Given the telescope is in ON state
+- Given the subarray 1 can be used
+
+## Given Steps (Initial States):
+- Given the subarray 1 is in the EMPTY state
+- Given the subarray 1 is in the RESOURCING state
+- Given the subarray 1 is in the IDLE state
+- Given the subarray 1 is in the CONFIGURING state
+- Given the subarray 1 is in the READY state
+- Given the subarray 1 is in the SCANNING state
+- Given the subarray 1 is in the ABORTING state
+- Given the subarray 1 is in the ABORTED state
+- Given the subarray 1 is in the RESTARTING state
+- Given the subarray 1 is in the OBS_FAULT state
+
+## When Steps (Commands):
+- When the AssignResources command is sent to the subarray 1
+- When the Abort command is sent to the subarray 1
+- When the Configure command is sent to the subarray 1
+- When the ReleaseResources command is sent to the subarray 1
+- When the Scan command is sent to the subarray 1
+- When the End command is sent to the subarray 1
+- When the EndScan command is sent to the subarray 1
+- When the Restart command is sent to the subarray 1
+
+## When Steps (Automatic Events):
+- When the automatic Observation Fault event occurs on the subarray 1
+- When the automatic Assigned event occurs on the subarray 1
+- When the automatic Released event occurs on the subarray 1
+- When the automatic All released event occurs on the subarray 1
+- When the automatic Ready event occurs on the subarray 1
+- When the automatic ScanComplete event occurs on the subarray 1
+- When the automatic Abort complete event occurs on the subarray 1
+- When the automatic Restart Complete event occurs on the subarray 1
+
+## Then Steps (State Transitions):
+- Then the subarray 1 should transition to the RESOURCING state
+- Then the subarray 1 should transition to the ABORTING state
+- Then the subarray 1 should transition to the CONFIGURING state
+- Then the subarray 1 should transition to the IDLE state
+- Then the subarray 1 should transition to the SCANNING state
+- Then the subarray 1 should transition to the READY state
+- Then the subarray 1 should transition to the RESTARTING state
+- Then the subarray 1 should transition to the OBS_FAULT state
+- Then the subarray 1 should transition to the EMPTY state
+- Then the subarray 1 should transition to the ABORTED state
+
+## Then Steps (Invalid Commands):
+- Then the subarray 1 should remain in the EMPTY state
+- Then the subarray 1 should remain in the RESOURCING state
+- Then the subarray 1 should remain in the IDLE state
+- Then the subarray 1 should remain in the CONFIGURING state
+- Then the subarray 1 should remain in the READY state
+- Then the subarray 1 should remain in the SCANNING state
+- Then the subarray 1 should remain in the ABORTING state
+- Then the subarray 1 should remain in the ABORTED state
+- Then the subarray 1 should remain in the RESTARTING state
+- Then the subarray 1 should remain in the OBS_FAULT state
+- And the subarray 1 should report an invalid command error
