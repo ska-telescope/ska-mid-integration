@@ -19,6 +19,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 # @pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
 @pytest.mark.skip
@@ -37,11 +38,18 @@ from tests.resources.test_support.enum import DishMode, PointingState
 @pytest.mark.skip(reason="Dish pointingstate issue")
 >>>>>>> 14801d0e (SAH-1567: Pull changes of sah-1564 branch.)
 =======
+=======
+>>>>>>> babb9759 (SAH-1564: Revert change)
 @pytest.mark.skip(reason="Dish pointingstate issue")
 =======
 @pytest.mark.VV
 >>>>>>> c200e56a (SAH-1564: Update test case)
+<<<<<<< HEAD
 >>>>>>> 8b15e00b (SAH-1564: Update test case)
+=======
+=======
+>>>>>>> 8de9c640 (SAH-1564: Revert change)
+>>>>>>> babb9759 (SAH-1564: Revert change)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29416_configure.feature",
@@ -179,8 +187,6 @@ def check_dish_mode_and_pointing_state(
             DishMode.OPERATE,
             lookahead=10,
         )
-        # dish_client = central_node_mid.dish_master_dict[dish_id]
-        # dish_client.Slew([181.235672347698, 30.309299188458])
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
