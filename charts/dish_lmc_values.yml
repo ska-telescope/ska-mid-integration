@@ -15,10 +15,14 @@ ska-mid-dish-manager:
 
 ska-mid-dish-simulators:
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> e7a4acf0 (SAH-1564: Update yml file)
   dishsimulators:
     image:
       registry: artefact.skao.int
       image: ska-mid-dish-simulators
+<<<<<<< HEAD
       tag: 3.1.2
       pullPolicy: IfNotPresent
 =======
@@ -28,6 +32,10 @@ ska-mid-dish-simulators:
     tag: 3.1.1
     pullPolicy: IfNotPresent
 >>>>>>> 08d72979 (SAH-1564: Update dislmc yml file)
+=======
+      tag: 3.1.1
+      pullPolicy: IfNotPresent
+>>>>>>> e7a4acf0 (SAH-1564: Update yml file)
   labels:
     app: ska-tmc-integration
   enabled: true
