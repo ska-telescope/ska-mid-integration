@@ -15,7 +15,11 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
+<<<<<<< HEAD
 @pytest.mark.skip(reason="Dish pointingstate issue")
+=======
+@pytest.mark.skip
+>>>>>>> 763893e8 (SAH-1564: Update test case)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42581_configure_unhappy.feature",
