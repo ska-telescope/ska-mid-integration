@@ -37,8 +37,10 @@ ASSERTIONS_TIMEOUT = 30
 def test_resourcing_to_aborting():
     """Test RESOURCING to ABORTING transition."""
 
+
 @pytest.mark.skip(
-    "It fails because SDP (emulated) doesn't transition IDLE -> ABORTING, "
+    reason="It fails because SDP (emulated) does not transition "
+    "IDLE -> ABORTING -> ABORTED, "
     "but instead it passes directly IDLE -> ABORTED."
 )
 @pytest.mark.tmc_csp_refactor3
@@ -49,49 +51,50 @@ def test_resourcing_to_aborting():
 def test_idle_to_aborting():
     """Test IDLE to ABORTING transition."""
 
-# AssertionError: [Both TMC Subarray Node device 
-# (SubarrayNodeMid(ska_mid/tm_subarray_node/1)) and CSP Subarray device 
-# (HelperCspSubarray(mid-csp/subarray/01)) ObsState attribute 
-# values should move to ABORTING.] Expected to find an event matching 
+
+# AssertionError: [Both TMC Subarray Node device
+# (SubarrayNodeMid(ska_mid/tm_subarray_node/1)) and CSP Subarray device
+# (HelperCspSubarray(mid-csp/subarray/01)) ObsState attribute
+# values should move to ABORTING.] Expected to find an event matching
 # the predicate within 30 seconds, but none was found.
-#           
+#
 # Events captured by TANGO_TRACER:
-# ReceivedEvent(device_name='ska_mid/tm_subarray_node/1', 
-#   attribute_name='obsstate', attribute_value=0, 
+# ReceivedEvent(device_name='ska_mid/tm_subarray_node/1',
+#   attribute_name='obsstate', attribute_value=0,
 #   reception_time=2024-07-24 07:55:51.925970)
-# ReceivedEvent(device_name='mid-csp/subarray/01', attribute_name='obsstate', 
+# ReceivedEvent(device_name='mid-csp/subarray/01', attribute_name='obsstate',
 #   attribute_value=0, reception_time=2024-07-24 07:55:51.928176)
-# ReceivedEvent(device_name='mid-sdp/subarray/01', attribute_name='obsstate', 
+# ReceivedEvent(device_name='mid-sdp/subarray/01', attribute_name='obsstate',
 #   attribute_value=0, reception_time=2024-07-24 07:55:51.930251)
-# ReceivedEvent(device_name='ska_mid/tm_subarray_node/1', 
-#   attribute_name='obsstate', attribute_value=1, 
+# ReceivedEvent(device_name='ska_mid/tm_subarray_node/1',
+#   attribute_name='obsstate', attribute_value=1,
 #   reception_time=2024-07-24 07:55:51.955643)
-# ReceivedEvent(device_name='mid-csp/subarray/01', attribute_name='obsstate', 
+# ReceivedEvent(device_name='mid-csp/subarray/01', attribute_name='obsstate',
 #   attribute_value=1, reception_time=2024-07-24 07:55:51.986716)
-# ReceivedEvent(device_name='mid-sdp/subarray/01', attribute_name='obsstate', 
+# ReceivedEvent(device_name='mid-sdp/subarray/01', attribute_name='obsstate',
 #   attribute_value=1, reception_time=2024-07-24 07:55:51.993106)
-# ReceivedEvent(device_name='mid-csp/subarray/01', attribute_name='obsstate', 
+# ReceivedEvent(device_name='mid-csp/subarray/01', attribute_name='obsstate',
 #   attribute_value=2, reception_time=2024-07-24 07:55:53.987608)
-# ReceivedEvent(device_name='mid-sdp/subarray/01', attribute_name='obsstate', 
+# ReceivedEvent(device_name='mid-sdp/subarray/01', attribute_name='obsstate',
 #   attribute_value=2, reception_time=2024-07-24 07:55:53.993935)
-# ReceivedEvent(device_name='ska_mid/tm_subarray_node/1', 
-#   attribute_name='obsstate', attribute_value=2, 
+# ReceivedEvent(device_name='ska_mid/tm_subarray_node/1',
+#   attribute_name='obsstate', attribute_value=2,
 #   reception_time=2024-07-24 07:55:54.265215)
-# ReceivedEvent(device_name='ska_mid/tm_subarray_node/1', 
-#   attribute_name='obsstate', attribute_value=6, 
+# ReceivedEvent(device_name='ska_mid/tm_subarray_node/1',
+#   attribute_name='obsstate', attribute_value=6,
 #   reception_time=2024-07-24 07:55:54.273116)
-# ReceivedEvent(device_name='mid-csp/subarray/01', attribute_name='obsstate', 
+# ReceivedEvent(device_name='mid-csp/subarray/01', attribute_name='obsstate',
 #   attribute_value=6, reception_time=2024-07-24 07:55:54.299966)
-# ReceivedEvent(device_name='mid-csp/subarray/01', attribute_name='obsstate', 
+# ReceivedEvent(device_name='mid-csp/subarray/01', attribute_name='obsstate',
 #   attribute_value=7, reception_time=2024-07-24 07:55:56.300670)
-# ReceivedEvent(device_name='mid-sdp/subarray/01', attribute_name='obsstate', 
+# ReceivedEvent(device_name='mid-sdp/subarray/01', attribute_name='obsstate',
 #   attribute_value=7, reception_time=2024-07-24 07:55:56.313426)
-# ReceivedEvent(device_name='ska_mid/tm_subarray_node/1', 
-#   attribute_name='obsstate', attribute_value=7, 
+# ReceivedEvent(device_name='ska_mid/tm_subarray_node/1',
+#   attribute_name='obsstate', attribute_value=7,
 #   reception_time=2024-07-24 07:56:05.670537)
-#           
-# TANGO_TRACER Query arguments: device_name='mid-sdp/subarray/01', 
-#   attribute_name='obsState', attribute_value=6, previous_value=2, 
+#
+# TANGO_TRACER Query arguments: device_name='mid-sdp/subarray/01',
+#   attribute_name='obsState', attribute_value=6, previous_value=2,
 # Query start time: 2024-07-24 07:55:54.300073
 # Query end time: 2024-07-24 07:56:24.300304
 
@@ -110,9 +113,11 @@ def test_idle_to_aborting():
 def test_configuring_to_aborting():
     """Test CONFIGURING to ABORTING transition."""
 
+
 @pytest.mark.skip(
-    "It fails because SDP (emulated) doesn't transition IDLE -> ABORTING, "
-    "but instead it passes directly IDLE -> ABORTED."
+    reason="It fails because SDP (emulated) does not transition "
+    "READY -> ABORTING -> ABORTED, "
+    "but instead it passes directly READY -> ABORTED."
 )
 @pytest.mark.tmc_csp_refactor3
 @scenario(
