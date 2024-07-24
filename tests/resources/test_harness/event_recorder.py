@@ -1,6 +1,7 @@
 """Implement Event checker class which can be used to validate events
 """
 import logging
+import time
 from typing import Any
 
 from ska_ser_logging import configure_logging
@@ -43,11 +44,37 @@ class EventRecorder(object):
             callable_name,
             timeout=timeout,
         )
-        event_id = device.subscribe_event(
-            attribute_name,
-            EventType.CHANGE_EVENT,
-            attribute_change_event_callback[callable_name],
-        )
+
+        # This approach ensures that the subscription to the event is
+        # attempted multiple times if it fails initially due to transient
+        # issues, while also logging any persistent issues that might
+        # require further investigation. Adjustments can be made to the
+        # wait time (time.sleep(...))
+        # based on specific requirements or characteristics of the
+        # environment in which the code runs.
+
+        start_time = time.time()
+        TIMEOUT = 30
+
+        while time.time() - start_time < TIMEOUT:
+            try:
+                event_id = device.subscribe_event(
+                    attribute_name,
+                    EventType.CHANGE_EVENT,
+                    attribute_change_event_callback[callable_name],
+                )
+                break
+
+            except Exception:
+                time.sleep(1)
+        else:
+            LOGGER.info(
+                "Timeout of %d seconds reached - %s", TIMEOUT, Exception
+            )
+            raise Exception
+
+        # ----------------------------------------------------------
+
         self.subscribed_devices.append((device, event_id))
 
         if callable_name not in self.subscribed_events:

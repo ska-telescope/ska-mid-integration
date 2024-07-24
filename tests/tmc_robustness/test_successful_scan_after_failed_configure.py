@@ -31,9 +31,6 @@ tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 telescope_control = BaseTelescopeControl()
 
 
-@pytest.mark.skip(
-    reason="Scan functionality is broken. It will fixed in SAH-1498"
-)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_failed_configure.feature",
@@ -202,9 +199,6 @@ def teardown_the_tmc(json_factory):
     )
 
 
-@pytest.mark.skip(
-    reason="Scan functionality is broken. It will fixed in SAH-1498"
-)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_failed_configure.feature",
@@ -245,7 +239,7 @@ def invoke_configure_with_unassigned_resources(
 def invalid_command_rejection_with_unassigned_resources():
     # asserting error message and result code received from subarray
     assert (
-        "{'dish': {'receiver_band': ['Must be one of: 1, 2, 5a, 5b.']}}"  # noqa: E501
+        "Invalid input for receiver_band! Currently allowed [1,2]"  # noqa: E501
         in pytest.command_result[1][0]
     )
     assert pytest.command_result[0][0] == ResultCode.REJECTED

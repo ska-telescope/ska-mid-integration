@@ -28,10 +28,7 @@ server:
         - name: "DishVccInitTimeout"
           values:
             - "250"
-        - name: "polled_attr"
-          values:
-            - "sourceDishVccConfig"
-            - "3000"
+
 depends_on:
   - device: sys/database/2
 image:

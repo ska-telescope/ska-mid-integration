@@ -1,16 +1,13 @@
 """Test TMC-DISH Abort functionality in Ready obsState"""
 
-
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
-from tango import DevState
 
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
-from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
@@ -23,101 +20,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 def test_tmc_dish_abort_in_ready():
     """
     Test case to verify TMC-DISH Abort functionality in READY obsState
-
-    Glossary:
-        - "central_node_mid": fixture for a TMC CentralNode under test
-        - "simulator_factory": fixture for SimulatorFactory class,
-        which provides simulated master devices
-        - "event_recorder": fixture for EventRecorder class
     """
-
-
-@given(
-    parsers.parse(
-        "a Telescope consisting of TMC, DISH {dish_ids},"
-        + " simulated CSP and simulated SDP"
-    )
-)
-def given_a_telescope(
-    central_node_mid, simulator_factory, event_recorder, dish_ids
-):
-    """
-    Given a TMC
-    """
-    csp_master_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_CSP_MASTER_DEVICE
-    )
-    sdp_master_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_SDP_MASTER_DEVICE
-    )
-
-    assert csp_master_sim.ping() > 0
-    assert sdp_master_sim.ping() > 0
-    for dish_id in dish_ids.split(","):
-        assert central_node_mid.dish_master_dict[dish_id].ping() > 0
-        assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
-
-
-@given("the Telescope is in ON state")
-def turn_on_telescope(central_node_mid, event_recorder, simulator_factory):
-    """A method to put Telescope ON"""
-    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode"
-        )
-        event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
-        )
-
-    csp_master_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_CSP_MASTER_DEVICE
-    )
-    sdp_master_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_SDP_MASTER_DEVICE
-    )
-
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
-
-    event_recorder.subscribe_event(csp_master_sim, "State")
-    event_recorder.subscribe_event(sdp_master_sim, "State")
-
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.OFF,
-    )
-    central_node_mid.move_to_on()
-
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.csp_master,
-        "State",
-        DevState.ON,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.sdp_master,
-        "State",
-        DevState.ON,
-    )
-
-    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "dishMode",
-            DishMode.STANDBY_FP,
-        )
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_leaf_node_dict[dish_id],
-            "dishMode",
-            DishMode.STANDBY_FP,
-        )
-
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.ON,
-    )
 
 
 @given(
@@ -137,6 +40,15 @@ def subarray_is_in_ready_obsState(
     """
     A method to check if telescope in is ready obsState and
     DishMaster is in pointingState track
+
+    Args:
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        subarray_node: Fixture for a Subarray Node wrapper class
+        event_recorder: Fixture for EventRecorder class
+        subarray_id (str): Subarray ID
+        dish_ids (str): Comma-separated IDs of DISH components.
+        command_input_factory: fixture for creating input required
+        for command
     """
     subarray_node.set_subarray_id(subarray_id)
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
@@ -146,13 +58,6 @@ def subarray_is_in_ready_obsState(
     event_recorder.subscribe_event(
         subarray_node.subarray_devices.get("csp_subarray"), "obsState"
     )
-    for dish_id in dish_ids.split(","):
-        event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
-        )
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "pointingState"
-        )
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
@@ -236,6 +141,9 @@ def subarray_is_in_ready_obsState(
 def abort_is_invoked(subarray_node):
     """
     This method invokes abort command on tmc subarray.
+
+    Args:
+        subarray_node: Fixture for a Subarray Node wrapper class
     """
     pytest.command_result = subarray_node.abort_subarray()
 
@@ -243,7 +151,7 @@ def abort_is_invoked(subarray_node):
 @then(
     parsers.parse(
         "the DishMaster {dish_ids} transitions to dishMode"
-        + " OPERATE and pointingState READY"
+        + " STANDBY-FP and pointingState READY"
     )
 )
 def check_dish_mode_and_pointing_state(
@@ -251,16 +159,13 @@ def check_dish_mode_and_pointing_state(
 ):
     """
     Method to check dishMode and pointingState of DISH
+
+    Args:
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        event_recorder: Fixture for EventRecorder class
+        dish_ids (str): Comma-separated IDs of DISH components.
     """
     for dish_id in dish_ids.split(","):
-        assert (
-            central_node_mid.dish_master_dict[dish_id].dishMode
-            == DishMode.OPERATE
-        )
-        assert (
-            central_node_mid.dish_leaf_node_dict[dish_id].dishMode
-            == DishMode.OPERATE
-        )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
@@ -273,14 +178,28 @@ def check_dish_mode_and_pointing_state(
             PointingState.READY,
             lookahead=10,
         )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+            lookahead=10,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+            lookahead=10,
+        )
 
 
 @then("the TMC subarray transitions to obsState ABORTED")
-def tmc_subarray_is_in_aborted_obsState(
-    subarray_node, event_recorder, subarray_id
-):
+def tmc_subarray_is_in_aborted_obsState(subarray_node, event_recorder):
     """
     Method to check if TMC subarray is in ABORTED obsstate
+
+    Args:
+        subarray_node: Fixture for a Subarray Node wrapper class
+        event_recorder: Fixture for EventRecorder class
     """
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["sdp_subarray"],

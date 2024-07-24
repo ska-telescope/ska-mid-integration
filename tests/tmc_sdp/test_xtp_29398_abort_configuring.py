@@ -1,11 +1,13 @@
 """Test TMC-SDP Abort functionality in Configuring obstate"""
 import json
+import logging
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from tango import DevState
 
+from tests.conftest import wait_for_telescope_state_change
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
@@ -37,8 +39,19 @@ def subarray_is_in_configuring_obsstate(
     subarray_id,
 ):
     """ "A method to check if telescope in is CONFIGURING obsSstate."""
+    logging.info(
+        "Telescope State is: %s", central_node_mid.central_node.telescopeState
+    )
+    wait_for_telescope_state_change(
+        DevState.OFF, central_node_mid.central_node, 500
+    )
+    logging.info(
+        "Telescope State is: %s", central_node_mid.central_node.telescopeState
+    )
     central_node_mid.set_subarray_id(subarray_id)
+
     central_node_mid.move_to_on()
+
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
@@ -46,6 +59,9 @@ def subarray_is_in_configuring_obsstate(
         central_node_mid.central_node,
         "telescopeState",
         DevState.ON,
+    )
+    logging.info(
+        "Telescope State is: %s", central_node_mid.central_node.telescopeState
     )
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
@@ -55,11 +71,15 @@ def subarray_is_in_configuring_obsstate(
     # Subarray
     assign_str["sdp"]["processing_blocks"][0]["parameters"][
         "time-to-ready"
-    ] = 2
+    ] = 3
 
     central_node_mid.store_resources(json.dumps(assign_str))
     event_recorder.subscribe_event(
         subarray_node.subarray_devices.get("sdp_subarray"), "obsState"
+    )
+
+    event_recorder.subscribe_event(
+        subarray_node.subarray_devices.get("csp_subarray"), "obsState"
     )
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     assert event_recorder.has_change_event_occurred(
@@ -76,8 +96,17 @@ def subarray_is_in_configuring_obsstate(
         "configure_mid", command_input_factory
     )
     subarray_node.execute_transition("Configure", input_json)
+
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["sdp_subarray"],
+        "obsState",
+        ObsState.CONFIGURING,
+    )
+    event_recorder.subscribe_event(
+        subarray_node.subarray_devices.get("csp_subarray"), "obsState"
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices["csp_subarray"],
         "obsState",
         ObsState.CONFIGURING,
     )

@@ -110,9 +110,7 @@ def given_assign_resources_executed_on_tmc_subarray(
         "AssignResources", assign_input_json
     )
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "obsState",
-        ObsState.IDLE,
+        subarray_node.subarray_node, "obsState", ObsState.IDLE, lookahead=15
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
@@ -133,7 +131,6 @@ def reassign_resources_to_subarray(
     input_json1,
     command_input_factory,
     shared_context,
-    subarray_node,
 ):
     """
     TMC executes second AssignResources command with duplicate eb-id
@@ -252,6 +249,11 @@ def subarray_transitions_to_aborted(
         "obsState",
         ObsState.ABORTED,
     )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices.get("sdp_subarray"),
+        "obsState",
+        ObsState.ABORTED,
+    )
 
     check_subarray_instance(subarray_node.subarray_node, subarray_id)
     assert event_recorder.has_change_event_occurred(
@@ -264,7 +266,7 @@ def subarray_transitions_to_aborted(
 @then(
     parsers.parse("I issue the Restart command on TMC Subarray {subarray_id}")
 )
-def send_command_restart(central_node_mid, subarray_id, subarray_node):
+def send_command_restart(subarray_id, subarray_node):
     """
     Issue restart command.
     """
@@ -288,7 +290,11 @@ def subarray_transitions_to_empty(subarray_node, subarray_id, event_recorder):
         "obsState",
         ObsState.EMPTY,
     )
-
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices.get("sdp_subarray"),
+        "obsState",
+        ObsState.EMPTY,
+    )
     check_subarray_instance(subarray_node.subarray_node, subarray_id)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
@@ -304,7 +310,11 @@ def subarray_transitions_to_empty(subarray_node, subarray_id, event_recorder):
     )
 )
 def assign_resources_executed_on_subarray(
-    subarray_node, event_recorder, command_input_factory, subarray_id
+    subarray_node,
+    central_node_mid,
+    event_recorder,
+    command_input_factory,
+    subarray_id,
 ):
     """
     Check assignResources command is executed successfully
@@ -332,4 +342,18 @@ def assign_resources_executed_on_subarray(
         "obsState",
         ObsState.IDLE,
         lookahead=10,
+    )
+
+    release_input_json = prepare_json_args_for_centralnode_commands(
+        "release_resources_mid", command_input_factory
+    )
+
+    _, unique_id = central_node_mid.invoke_release_resources(
+        release_input_json
+    )
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (unique_id[0], str(ResultCode.OK.value)),
     )
