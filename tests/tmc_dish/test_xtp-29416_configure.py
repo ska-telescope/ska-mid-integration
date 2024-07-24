@@ -3,6 +3,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 import json
@@ -14,6 +15,8 @@ import json
 import json
 
 >>>>>>> 9bc2f1ff (SAH-1564: Update test case)
+=======
+>>>>>>> bb6de9aa (SAH-1564: Use a latest chart of 4.1.0)
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
@@ -236,21 +239,21 @@ def invoke_configure(
     )
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     dl = central_node_mid.dish_master_dict["001"]
 >>>>>>> 9bc2f1ff (SAH-1564: Update test case)
 =======
     dl = central_node_mid.dish_leaf_node_list[0]
 >>>>>>> fbf39958 (SAH-1564: Update test and use dev image)
+=======
+>>>>>>> bb6de9aa (SAH-1564: Use a latest chart of 4.1.0)
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    config_json = json.loads(configure_input_json)
-    config_json["pointing"]["target"]["ra"] = json.loads(dl.actualpointing)[1]
-    config_json["pointing"]["target"]["dec"] = json.loads(dl.actualpointing)[2]
     central_node_mid.set_subarray_id(subarray_id)
     pytest.command_result = subarray_node.execute_transition(
-        "Configure", json.dumps(config_json)
+        "Configure", configure_input_json
     )
 
 
