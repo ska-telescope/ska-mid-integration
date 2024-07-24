@@ -102,7 +102,8 @@ endif
 
 # EXIT_AT_FAIL option isn't functioning correctly, so the option -x is added
 # at the end. Will be debugged and fixed as a part of improvement.
-PYTHON_VARS_AFTER_PYTEST ?= -m '$(MARK) $(ADDMARK)' $(ADD_ARGS) $(FILE) --count=$(COUNT)
+
+PYTHON_VARS_AFTER_PYTEST ?= -m '$(MARK) $(ADDMARK)' $(ADD_ARGS) $(FILE) --count=$(COUNT) -x 
 CUSTOM_VALUES1 ?=
 CUSTOM_VALUES2 ?=
 ifeq ($(CSP_SIMULATION_ENABLED),false)
@@ -131,7 +132,7 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set ska-tango-base.jive.enabled=$(JIVE) \
 	--set global.exposeAllDS=false \
 	--set global.cluster_domain=$(CLUSTER_DOMAIN) \
-	--set global.operator=false \
+	--set global.operator=true \
 	--set ska-taranta.enabled=$(TARANTA_ENABLED)\
 	--set global.namespace_dish.dish_names[0]="$(DISH_NAME_1)"\
 	--set global.namespace_dish.dish_names[1]="$(DISH_NAME_36)"\
