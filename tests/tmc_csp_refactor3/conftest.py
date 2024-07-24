@@ -2,6 +2,8 @@
 
 
 # Define a fixture to store things, like the starting state
+from dataclasses import dataclass
+
 import pytest
 from pytest_bdd import given
 from ska_control_model import ObsState
@@ -115,22 +117,35 @@ def event_tracer() -> TangoEventTracer:
 # Other fixtures and common steps
 
 
+@dataclass
+class StateChangesContextData:
+    """A class to store the state changes during the test."""
+
+    starting_state: ObsState | None = None
+    """The state of the system before the WHEN step."""
+
+    expected_next_state: ObsState | None = None
+    """The expected state to be reached if no WHEN step is executed."""
+
+    def is_starting_state_transient(self) -> bool:
+        """Check if the starting state is transient."""
+        return self.starting_state != self.expected_next_state
+
+
 @pytest.fixture
-def context_fixt() -> dict:
+def context_fixt() -> StateChangesContextData:
     """A collection of variables shared between steps.
 
     The shared variables are the following:
 
-    - starting_state: The state of the subarray before performing the
-        "when" step action. It has as a type the ObsState enumeration.
-    - trigger: The action that triggers the transition. It is a string.
+    - previous_state: the previous state of the subarray.
+    - expected_next_state: the expected next state of the subarray (specified
+        only if the previous st
+    - trigger: the trigger that caused the state change.
 
-    :return: A dictionary with the shared variables.
+    :return: the shared variables.
     """
-    return {
-        "starting_state": None,
-        "trigger": None,
-    }
+    return StateChangesContextData()
 
 
 TRANSIENT_STATES = [

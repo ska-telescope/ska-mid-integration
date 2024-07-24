@@ -267,15 +267,6 @@ def subarray_in_obs_fault_state(context_fixt,
         wait_termination_condition=True,
     )
 
-
-
-
-
-
-
-
-
-
 @when(parsers.parse("the AssignResources command is sent to the subarray {subarray_id}"))
 def send_assign_resources_command(context_fixt,
     subarray_id: str,
