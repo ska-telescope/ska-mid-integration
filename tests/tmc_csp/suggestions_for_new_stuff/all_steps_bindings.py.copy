@@ -1,4 +1,7 @@
 """Test module for TMC-CSP Obsstate transitions functionality."""
+
+# pylint: skip-file
+
 import pytest
 from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when

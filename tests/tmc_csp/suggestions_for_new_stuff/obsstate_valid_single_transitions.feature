@@ -5,7 +5,7 @@ Each scenario represents a single transition triggered by a command (CMD).
 Operational states and transitions are also excluded.
 
 Background:
-  Given the telescope is turned ON
+  Given the telescope is in ON state
   Given the subarray 001 can be used
 
 Scenario: EMPTY to RESOURCING - CMD AssignResources (6)
