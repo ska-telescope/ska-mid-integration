@@ -143,6 +143,15 @@ def test_scanning_to_aborting():
     """Test SCANNING to ABORTING transition."""
 
 
+@pytest.mark.tmc_csp_refactor3
+@scenario(
+    "../tmc_csp_refactor3/features/abort_reset.feature",
+    "ABORTED to RESTARTING - CMD Restart (40)",
+)
+def test_aborted_to_restarting():
+    """Test ABORTED to RESTARTING transition."""
+
+
 # ----------------------------------------------------------
 # Given Steps
 
@@ -229,6 +238,27 @@ def subarray_in_scanning_state(
     )
 
 
+@given(parsers.parse("the subarray 001 is in the ABORTED state"))
+def subarray_in_aborted_state(
+    context_fixt,
+    # subarray_id: str,
+    subarray_node_facade: TMCSubarrayNodeFacade,
+    default_commands_inputs: ObsStateCommandsInput,
+):
+    """Ensure the subarray is in the ABORTED state."""
+    context_fixt["starting_state"] = ObsState.ABORTED
+
+    # move to a state where the Abort command can be sent
+    subarray_node_facade.force_change_of_obs_state(
+        ObsState.IDLE,
+        default_commands_inputs,
+        wait_termination=True,
+    )
+
+    # send the Abort command
+    subarray_node_facade.abort(wait_termination=True)
+
+
 # ----------------------------------------------------------
 # (Common) When Step
 
@@ -261,6 +291,17 @@ def send_abort_command(
             ObsState.ABORTING,
             previous_value=starting_state,
         )
+
+
+@when(parsers.parse("the Restart command is sent to the subarray 001"))
+def send_restart_command(
+    context_fixt,
+    # subarray_id: str,
+    subarray_node_facade: TMCSubarrayNodeFacade,
+):
+    """Send the Restart command to the subarray."""
+    context_fixt["trigger"] = "Restart"
+    subarray_node_facade.restart(wait_termination=False)
 
 
 # ----------------------------------------------------------
@@ -333,3 +374,66 @@ def verify_aborted_state(
     )
 
     context_fixt["starting_state"] = ObsState.ABORTED
+
+
+@then(
+    parsers.parse("the subarray 001 should transition to the RESTARTING state")
+)
+def verify_restarting_state(
+    context_fixt,
+    subarray_node_facade: TMCSubarrayNodeFacade,
+    csp: CSPFacade,
+    sdp: SDPFacade,
+    event_tracer: TangoEventTracer,
+):
+    """Verify that the subarray transitions to the RESTARTING state."""
+    assert_that(event_tracer).described_as(
+        f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
+        f" and CSP Subarray device ({csp.csp_subarray}) "
+        "ObsState attribute values should move to RESTARTING."
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        subarray_node_facade.subarray_node,
+        "obsState",
+        ObsState.RESTARTING,
+        previous_value=context_fixt["starting_state"],
+    ).has_change_event_occurred(
+        csp.csp_subarray,
+        "obsState",
+        ObsState.RESTARTING,
+        previous_value=context_fixt["starting_state"],
+    ).has_change_event_occurred(
+        sdp.sdp_subarray,
+        "obsState",
+        ObsState.RESTARTING,
+        previous_value=context_fixt["starting_state"],
+    )
+
+    context_fixt["starting_state"] = ObsState.RESTARTING
+
+
+@then(parsers.parse("the subarray 001 should transition to the EMPTY state"))
+def verify_empty_state(
+    context_fixt,
+    # subarray_id: str,
+    subarray_node_facade: TMCSubarrayNodeFacade,
+    csp: CSPFacade,
+    event_tracer: TangoEventTracer,
+):
+    """Verify that the subarray transitions to the EMPTY state."""
+    assert_that(event_tracer).described_as(
+        f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
+        f" and CSP Subarray device ({csp.csp_subarray}) "
+        "ObsState attribute values should move to EMPTY."
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        subarray_node_facade.subarray_node,
+        "obsState",
+        ObsState.EMPTY,
+        previous_value=context_fixt["starting_state"],
+    ).has_change_event_occurred(
+        csp.csp_subarray,
+        "obsState",
+        ObsState.EMPTY,
+        previous_value=context_fixt["starting_state"],
+    )
+
+    context_fixt["starting_state"] = ObsState.EMPTY
