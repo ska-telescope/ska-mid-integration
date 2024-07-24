@@ -116,25 +116,16 @@ def execute_first_configure_command(
     """ "A method to invoke first configure command"""
 
     check_subarray_instance(subarray_node.subarray_node, subarray_id)
-    event_recorder.subscribe_event(
-        subarray_node.subarray_node, "longRunningCommandResult"
-    )
     configure_json = prepare_json_args_for_commands(
         input_json1, command_input_factory
     )
-    _, unique_id = subarray_node.execute_transition(
+    _, pytest.unique_id = subarray_node.execute_transition(
         "Configure", argin=configure_json
     )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["csp_subarray"],
         "obsState",
         ObsState.CONFIGURING,
-    )
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "longRunningCommandResult",
-        (unique_id[0], str(int(ResultCode.OK))),
-        lookahead=5,
     )
 
 
@@ -173,6 +164,12 @@ def check_subarray_is_in_ready_obsstate(
         "obsState",
         ObsState.READY,
     )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.unique_id[0], str(int(ResultCode.OK))),
+        lookahead=5,
+    )
 
 
 @when(
@@ -194,7 +191,9 @@ def execute_second_configure_command(
     configure_json = prepare_json_args_for_commands(
         input_json2, command_input_factory
     )
-    subarray_node.execute_transition("Configure", argin=configure_json)
+    _, pytest.unique_id = subarray_node.execute_transition(
+        "Configure", argin=configure_json
+    )
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["csp_subarray"],

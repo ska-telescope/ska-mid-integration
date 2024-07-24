@@ -314,7 +314,7 @@ def sync_scan(timeout=800):
                 device.check_devices_obsState("READY")
                 scan_wait = WaitForScan(**kwargs)
                 result = func(*args, **kwargs)
-                scan_wait.wait(timeout)
+                scan_wait.wait(timeout=TIMEOUT)
             else:
                 the_waiter = Waiter(**kwargs)
                 result = func(*args, **kwargs)

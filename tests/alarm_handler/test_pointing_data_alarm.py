@@ -5,6 +5,7 @@ from numpy import nan as NaN
 from pytest_bdd import given, scenario, then, when
 from tango import DeviceProxy
 
+from tests.resources.test_harness.helpers import retry_tango_command
 from tests.resources.test_support.constant import alarm_handler1
 
 
@@ -57,7 +58,7 @@ def test_load_alarm():
         "(ska_mid/tm_leaf_node/d0001/lastPointingData.quality == ATTR_ALARM);"
         "priority=log;message=NaN found in received pointing calibration"
     )
-    alarm_handler.Load(alarm_formula)
+    assert retry_tango_command(alarm_handler, "Load", alarm_formula)
     alarm_list = alarm_handler.alarmList
     assert ("nan_found_in_received_pointing_calibration") in alarm_list
     alarm_handler.Remove("nan_found_in_received_pointing_calibration")

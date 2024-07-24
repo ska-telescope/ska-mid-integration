@@ -1,4 +1,6 @@
 """Test TMC-SDP Abort functionality in IDLE obstate"""
+import logging
+
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
@@ -26,14 +28,29 @@ def telescope_is_in_on_state(central_node_mid, event_recorder):
     """
     This method checks if the telescope is in ON state
     """
-    central_node_mid.move_to_on()
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
+    )
+    logging.info(
+        "Telescope State is: %s", central_node_mid.central_node.telescopeState
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
+        DevState.OFF,
+    )
+    logging.info(
+        "Telescope State is: %s", central_node_mid.central_node.telescopeState
+    )
+    central_node_mid.move_to_on()
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "telescopeState",
         DevState.ON,
+    )
+    logging.info(
+        "Telescope State is: %s", central_node_mid.central_node.telescopeState
     )
 
 

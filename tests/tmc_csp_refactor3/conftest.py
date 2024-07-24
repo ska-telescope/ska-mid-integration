@@ -146,6 +146,7 @@ TRANSIENT_STATES = [
 def _setup_event_subscriptions(
     subarray_node_facade: TMCSubarrayNodeFacade,
     csp: CSPFacade,
+    sdp: SDPFacade,
     event_tracer: TangoEventTracer,
 ):
     """Set up event subscriptions for the test.
@@ -155,14 +156,22 @@ def _setup_event_subscriptions(
         csp: Facade for the CSP.
         event_tracer: Event tracer for capturing events.
     """
-    event_tracer.subscribe_event(csp.csp_subarray, "obsState")
     event_tracer.subscribe_event(
         subarray_node_facade.subarray_node, "obsState"
     )
+    # event_tracer.subscribe_event(
+    #     subarray_node_facade.csp_subarray_leaf_node, "cspSubarrayObsState"
+    # )
+    # event_tracer.subscribe_event(
+    #     subarray_node_facade.sdp_subarray_leaf_node, "sdpSubarrayObsState"
+    # )
+    event_tracer.subscribe_event(csp.csp_subarray, "obsState")
+    event_tracer.subscribe_event(sdp.sdp_subarray, "obsState")
     log_events(
         {
-            csp.csp_subarray: ["obsState"],
             subarray_node_facade.subarray_node: ["obsState"],
+            csp.csp_subarray: ["obsState"],
+            sdp.sdp_subarray: ["obsState"],
         }
     )
 
@@ -179,8 +188,9 @@ def given_the_telescope_is_in_on_state(
 def subarray_can_be_used(
     subarray_node_facade: TMCSubarrayNodeFacade,
     csp: CSPFacade,
+    sdp: SDPFacade,
     event_tracer: TangoEventTracer,
 ):
     """Set up the subarray (and the subscriptions) to be used in the test."""
     subarray_node_facade.set_subarray_id(1)
-    _setup_event_subscriptions(subarray_node_facade, csp, event_tracer)
+    _setup_event_subscriptions(subarray_node_facade, csp, sdp, event_tracer)

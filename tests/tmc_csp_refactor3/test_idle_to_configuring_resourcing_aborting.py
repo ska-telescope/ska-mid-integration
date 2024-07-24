@@ -21,31 +21,38 @@ ASSERTIONS_TIMEOUT = 60
 # ----------------------------------------------------------
 # IDLE -> X transitions scenarios
 
-# @pytest.mark.tmc_csp_refactor3
-# @scenario(
-#     "../features/obsstate_valid_single_transitions.feature",
-#     "IDLE to CONFIGURING - CMD Configure (16)",
-# )
-# def test_idle_to_configuring():
-#     """Test IDLE to CONFIGURING transition."""
 
-# @pytest.mark.tmc_csp_refactor3
-# @scenario(
-#     "../features/obsstate_valid_single_transitions.feature",
-#     "IDLE to RESOURCING - CMD ReleaseResources (17)",
-# )
-# def test_idle_to_resourcing_through_release():
-#     """Test IDLE to RESOURCING transition (through ReleaseResources)."""
-
-# @pytest.mark.tmc_csp_refactor3
-# @scenario(
-#     "../features/obsstate_valid_single_transitions.feature",
-#     "IDLE to RESOURCING - CMD AssignResources (18)",
-# )
-# def test_idle_to_resourcing_through_assign():
-#     """Test IDLE to RESOURCING transition (through AssignResources)."""
+@pytest.mark.skip("Not needed for now")
+@pytest.mark.tmc_csp_refactor3
+@scenario(
+    "../features/obsstate_valid_single_transitions.feature",
+    "IDLE to CONFIGURING - CMD Configure (16)",
+)
+def test_idle_to_configuring():
+    """Test IDLE to CONFIGURING transition."""
 
 
+@pytest.mark.skip("Not needed for now")
+@pytest.mark.tmc_csp_refactor3
+@scenario(
+    "../features/obsstate_valid_single_transitions.feature",
+    "IDLE to RESOURCING - CMD ReleaseResources (17)",
+)
+def test_idle_to_resourcing_through_release():
+    """Test IDLE to RESOURCING transition (through ReleaseResources)."""
+
+
+@pytest.mark.skip("Not needed for now")
+@pytest.mark.tmc_csp_refactor3
+@scenario(
+    "../features/obsstate_valid_single_transitions.feature",
+    "IDLE to RESOURCING - CMD AssignResources (18)",
+)
+def test_idle_to_resourcing_through_assign():
+    """Test IDLE to RESOURCING transition (through AssignResources)."""
+
+
+@pytest.mark.skip("Not needed for now")
 @pytest.mark.tmc_csp_refactor3
 @scenario(
     "../features/obsstate_valid_single_transitions.feature",
@@ -167,44 +174,44 @@ def verify_configuring_state(
     )
 
 
-@then(
-    parsers.parse("the subarray 001 should transition to the ABORTING state")
-)
-def verify_aborting_state(
-    context_fixt,
-    subarray_node_facade: TMCSubarrayNodeFacade,
-    csp: CSPFacade,
-    event_tracer: TangoEventTracer,
-):
-    """Verify that the subarray transitions to the ABORTING state."""
-    assert_that(event_tracer).described_as(
-        f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
-        f" and CSP Subarray device ({csp.csp_subarray}) "
-        "ObsState attribute values should move to ABORTING."
-    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        subarray_node_facade.subarray_node,
-        "obsState",
-        ObsState.ABORTING,
-        previous_value=context_fixt["starting_state"],
-    ).has_change_event_occurred(
-        csp.csp_subarray,
-        "obsState",
-        ObsState.ABORTING,
-        previous_value=context_fixt["starting_state"],
-    )
+# @then(
+#     parsers.parse("the subarray 001 should transition to the ABORTING state")
+# )
+# def verify_aborting_state(
+#     context_fixt,
+#     subarray_node_facade: TMCSubarrayNodeFacade,
+#     csp: CSPFacade,
+#     event_tracer: TangoEventTracer,
+# ):
+#     """Verify that the subarray transitions to the ABORTING state."""
+#     assert_that(event_tracer).described_as(
+#         f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})" # pylint: disable=line-too-long # noqa E501
+#         f" and CSP Subarray device ({csp.csp_subarray}) "
+#         "ObsState attribute values should move to ABORTING."
+#     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+#         subarray_node_facade.subarray_node,
+#         "obsState",
+#         ObsState.ABORTING,
+#         previous_value=context_fixt["starting_state"],
+#     ).has_change_event_occurred(
+#         csp.csp_subarray,
+#         "obsState",
+#         ObsState.ABORTING,
+#         previous_value=context_fixt["starting_state"],
+#     )
 
-    assert_that(event_tracer).described_as(
-        f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
-        f" and CSP Subarray device ({csp.csp_subarray}) "
-        "ObsState attribute values should move to ABORTED."
-    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        subarray_node_facade.subarray_node,
-        "obsState",
-        ObsState.ABORTED,
-        previous_value=context_fixt["starting_state"],
-    ).has_change_event_occurred(
-        csp.csp_subarray,
-        "obsState",
-        ObsState.ABORTED,
-        previous_value=context_fixt["starting_state"],
-    )
+#     assert_that(event_tracer).described_as(
+#         f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})" # pylint: disable=line-too-long # noqa E501
+#         f" and CSP Subarray device ({csp.csp_subarray}) "
+#         "ObsState attribute values should move to ABORTED."
+#     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+#         subarray_node_facade.subarray_node,
+#         "obsState",
+#         ObsState.ABORTED,
+#         previous_value=context_fixt["starting_state"],
+#     ).has_change_event_occurred(
+#         csp.csp_subarray,
+#         "obsState",
+#         ObsState.ABORTED,
+#         previous_value=context_fixt["starting_state"],
+#     )

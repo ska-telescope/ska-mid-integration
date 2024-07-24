@@ -31,6 +31,7 @@ from tests.resources.test_harness.constant import (
     tmc_sdp_master_leaf_node,
     tmc_subarraynode1,
 )
+from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     SIMULATED_DEVICES_DICT,
     generate_eb_pb_ids,
@@ -88,6 +89,17 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             dish_fqdn063 = REAL_DISH63_FQDN
             dish_fqdn100 = REAL_DISH100_FQDN
 
+            # creating spfrx device fqdn
+            self.spfrx_fqdn = dish_fqdn001.replace(
+                "mid-dish/dish-manager/SKA001",
+                "mid-dish/simulator-spfrx/SKA001",
+            )
+            spfrx_proxy = DeviceProxy(self.spfrx_fqdn)
+
+            # Create Dish1 admin device proxy
+            spfrx1_admin_dev_name = spfrx_proxy.adm_name()
+            self.spfrx1_admin_dev_proxy = DeviceProxy(spfrx1_admin_dev_name)
+
             # Create database object for TMC TANGO DB
             self.db = Database()
 
@@ -103,6 +115,13 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             )
             self.dish1_dev_class = dish1_info.class_name
             self.dish1_dev_server = dish1_info.ds_full_name
+
+            # Get the spfrx1 device class and server
+            spfrx1_info = self.dish1_db.get_device_info(
+                "mid-dish/simulator-spfrx/SKA001"
+            )
+            self.spfrx1_dev_class = spfrx1_info.class_name
+            self.spfrx1_dev_server = spfrx1_info.ds_full_name
 
         else:
             dish_fqdn001 = dish_master1
@@ -561,4 +580,15 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             or json.loads(self.csp_master_leaf_node.sourceDishVccConfig)
             != DEFAULT_DISH_VCC_CONFIG
         ):
-            self._load_default_dish_vcc_config()
+            _, unique_id = self._load_default_dish_vcc_config()
+            event_recorder = EventRecorder()
+            event_recorder.subscribe_event(
+                self.central_node, "longRunningCommandResult"
+            )
+            assert event_recorder.has_change_event_occurred(
+                self.central_node,
+                "longRunningCommandResult",
+                (unique_id[0], str(int(ResultCode.OK))),
+                lookahead=10,
+            )
+            event_recorder.clear_events()

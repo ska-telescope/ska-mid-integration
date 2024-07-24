@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import time
 
 from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
@@ -99,13 +100,13 @@ class SubarrayNodeWrapper(object):
         super().__init__()
         self.tmc_subarraynode1 = tmc_subarraynode1
         self.subarray_node = DeviceProxy(self.tmc_subarraynode1)
+        self.subarray_node.set_timeout_millis(5000)
         self.csp_subarray_leaf_node = DeviceProxy(tmc_csp_subarray_leaf_node)
         self.sdp_subarray_leaf_node = DeviceProxy(tmc_sdp_subarray_leaf_node)
         self.dish_leaf_node_list = [
             DeviceProxy(tmc_dish_leaf_node1),
             DeviceProxy(tmc_dish_leaf_node2),
         ]
-        self.subarray_node.set_timeout_millis(5000)
         for dish_leaf_node in self.dish_leaf_node_list:
             dish_leaf_node.set_timeout_millis(5000)
 
@@ -160,7 +161,6 @@ class SubarrayNodeWrapper(object):
         self.sdp_subarray1 = sdp_subarray1
         device_dict["dish_master_list"] = self.dish_master_list
         device_dict["dish_leaf_node_list"] = self.dish_leaf_node_list
-        self.subarray_node.set_timeout_millis(5000)
 
     def _setup(self):
         """ """
@@ -318,12 +318,25 @@ class SubarrayNodeWrapper(object):
         Args:
             command_name (str): Name of command to execute
         """
-        if command_name is not None:
-            result, message = self.subarray_node.command_inout(
-                command_name, argin
-            )
-            LOGGER.info(f"Invoked {command_name} on SubarrayNode")
-            return result, message
+
+        retry = 0
+        while retry <= 3:
+            try:
+                if command_name is not None:
+                    result, message = self.subarray_node.command_inout(
+                        command_name, argin
+                    )
+                    LOGGER.info(f"Invoked {command_name} on SubarrayNode")
+                    return result, message
+
+            except Exception as e:
+                LOGGER.exception(
+                    "Exception occurred while executing command: %s", e
+                )
+                if retry == 2:
+                    raise Exception
+                retry += 1
+            time.sleep(0.1)
 
     def _reset_simulator_devices(self):
         """Reset Simulator devices to it's original state"""

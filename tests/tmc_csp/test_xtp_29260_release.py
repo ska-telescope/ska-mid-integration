@@ -4,7 +4,6 @@ import json
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState, ResultCode
-from tango import DevState
 
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
@@ -22,45 +21,12 @@ def test_releaseresources_command():
     testing."""
 
 
-@given("the telescope is in ON state")
-def given_a_telescope_in_on_state(central_node_mid, event_recorder):
-    """Checks if CentralNode's telescopeState attribute value is on."""
-
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
-    central_node_mid.move_to_on()
-    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
-    event_recorder.subscribe_event(
-        central_node_mid.subarray_devices["csp_subarray"], "State"
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "longRunningCommandResult"
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.csp_master,
-        "State",
-        DevState.ON,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.subarray_devices["csp_subarray"],
-        "State",
-        DevState.ON,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.ON,
-    )
-
-
 @given(parsers.parse("TMC subarray {subarray_id} is in IDLE ObsState"))
 def subarray_in_idle_obsstate(
     central_node_mid, event_recorder, subarray_id, command_input_factory
 ):
     """Checks if SubarrayNode's obsState attribute value is IDLE"""
     central_node_mid.set_subarray_id(subarray_id)
-    event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
@@ -68,9 +34,6 @@ def subarray_in_idle_obsstate(
     assign_input["subarray_id"] = int(subarray_id)
     pytest.command_result = central_node_mid.perform_action(
         "AssignResources", json.dumps(assign_input)
-    )
-    event_recorder.subscribe_event(
-        central_node_mid.subarray_devices["csp_subarray"], "obsState"
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_devices["csp_subarray"],
@@ -84,7 +47,6 @@ def subarray_in_idle_obsstate(
         central_node_mid.central_node,
         "longRunningCommandResult",
         (pytest.command_result[1][0], str(ResultCode.OK.value)),
-        lookahead=5,
     )
 
 

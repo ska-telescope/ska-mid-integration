@@ -29,12 +29,17 @@ def telescope_in_on_state(
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
-    central_node_mid.move_to_off()
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.OFF,
-    )
+
+    if not (
+        central_node_mid.central_node.read_attribute("telescopeState")
+        == DevState.OFF
+    ):
+        central_node_mid.move_to_off()
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.central_node,
+            "telescopeState",
+            DevState.OFF,
+        )
 
 
 @when("TMC subarray in ObsState IDLE")

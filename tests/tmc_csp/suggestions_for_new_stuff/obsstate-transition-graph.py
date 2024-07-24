@@ -1,3 +1,6 @@
+# pylint: skip-file
+# flake8: noqa
+
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
