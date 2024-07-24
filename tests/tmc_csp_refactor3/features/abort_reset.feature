@@ -25,31 +25,31 @@ Background:
   Given the telescope is in ON state
   Given the subarray 001 can be used
 
-Scenario: RESOURCING to ABORTING - CMD Abort (12)
+Scenario: RESOURCING to ABORTING to ABORTED - CMD Abort (12)
   Given the subarray 001 is in the RESOURCING state
   When the Abort command is sent to the subarray 001
   Then the subarray 001 should transition to the ABORTING state
   Then the subarray 001 should transition to the ABORTED state
 
-Scenario: IDLE to ABORTING - CMD Abort (19)
+Scenario: IDLE to ABORTING to ABORTED - CMD Abort (19)
   Given the subarray 001 is in the IDLE state
   When the Abort command is sent to the subarray 001
   Then the subarray 001 should transition to the ABORTING state
   Then the subarray 001 should transition to the ABORTED state
 
-Scenario: CONFIGURING to ABORTING - CMD Abort (25)
+Scenario: CONFIGURING to ABORTING to ABORTED - CMD Abort (25)
   Given the subarray 001 is in the CONFIGURING state
   When the Abort command is sent to the subarray 001
   Then the subarray 001 should transition to the ABORTING state
   Then the subarray 001 should transition to the ABORTED state
 
-Scenario: READY to ABORTING - CMD Abort (28)
+Scenario: READY to ABORTING to ABORTED - CMD Abort (28)
   Given the subarray 001 is in the READY state
   When the Abort command is sent to the subarray 001
   Then the subarray 001 should transition to the ABORTING state
   Then the subarray 001 should transition to the ABORTED state
 
-Scenario: SCANNING to ABORTING - CMD Abort (34)
+Scenario: SCANNING to ABORTING to ABORTED - CMD Abort (34)
   Given the subarray 001 is in the SCANNING state
   When the Abort command is sent to the subarray 001
   Then the subarray 001 should transition to the ABORTING state

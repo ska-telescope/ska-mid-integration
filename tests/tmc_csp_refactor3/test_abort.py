@@ -1,4 +1,24 @@
-"""Verify the Abort command works as expected from all appropriate states."""
+"""Verify the Abort command works as expected from all appropriate states.
+
+The purpose of these scenarios is to verify that the subarray obsState
+can be successfully aborted and restarted from any state, ensuring so
+that a tear down procedure to reset the subarray to a known EMPTY state is
+feasible.
+
+The states that permit the Abort command are:
+- RESOURCING
+- IDLE
+- CONFIGURING
+- READY
+- SCANNING
+
+The Abort command is expected to transition the subarray to the ABORTING.
+
+After the subarray is in the ABORTING state, the subsequent expected
+transition is the automatic transition to the ABORTED state. After that, 
+the Restarted command can be called, and it will transition the subarray 
+to the RESTARTING state, and then to the EMPTY state.
+"""
 
 
 import pytest
@@ -32,10 +52,10 @@ ASSERTIONS_TIMEOUT = 30
 @pytest.mark.tmc_csp_refactor3
 @scenario(
     "../tmc_csp_refactor3/features/abort_reset.feature",
-    "RESOURCING to ABORTING - CMD Abort (12)",
+    "RESOURCING to ABORTING to ABORTED - CMD Abort (12)",
 )
-def test_resourcing_to_aborting():
-    """Test RESOURCING to ABORTING transition."""
+def test_resourcing_to_aborting_to_aborted():
+    """Test RESOURCING to ABORTING to ABORTED transitions."""
 
 
 @pytest.mark.skip(
@@ -46,10 +66,10 @@ def test_resourcing_to_aborting():
 @pytest.mark.tmc_csp_refactor3
 @scenario(
     "../tmc_csp_refactor3/features/abort_reset.feature",
-    "IDLE to ABORTING - CMD Abort (19)",
+    "IDLE to ABORTING to ABORTED - CMD Abort (19)",
 )
-def test_idle_to_aborting():
-    """Test IDLE to ABORTING transition."""
+def test_idle_to_aborting_to_aborted():
+    """Test IDLE to ABORTING to ABORTED transitions."""
 
 
 # AssertionError: [Both TMC Subarray Node device
@@ -108,10 +128,10 @@ def test_idle_to_aborting():
 @pytest.mark.tmc_csp_refactor3
 @scenario(
     "../tmc_csp_refactor3/features/abort_reset.feature",
-    "CONFIGURING to ABORTING - CMD Abort (25)",
+    "CONFIGURING to ABORTING to ABORTED - CMD Abort (25)",
 )
-def test_configuring_to_aborting():
-    """Test CONFIGURING to ABORTING transition."""
+def test_configuring_to_aborting_to_aborted():
+    """Test CONFIGURING to ABORTING to ABORTED transitions."""
 
 
 @pytest.mark.skip(
@@ -122,10 +142,10 @@ def test_configuring_to_aborting():
 @pytest.mark.tmc_csp_refactor3
 @scenario(
     "../tmc_csp_refactor3/features/abort_reset.feature",
-    "READY to ABORTING - CMD Abort (28)",
+    "READY to ABORTING to ABORTED - CMD Abort (28)",
 )
-def test_ready_to_aborting():
-    """Test READY to ABORTING transition."""
+def test_ready_to_aborting_to_aborted():
+    """Test READY to ABORTING to ABORTED transitions."""
 
 
 @pytest.mark.skip(
@@ -137,10 +157,10 @@ def test_ready_to_aborting():
 @pytest.mark.tmc_csp_refactor3
 @scenario(
     "../tmc_csp_refactor3/features/abort_reset.feature",
-    "SCANNING to ABORTING - CMD Abort (34)",
+    "SCANNING to ABORTING to ABORTED - CMD Abort (34)",
 )
-def test_scanning_to_aborting():
-    """Test SCANNING to ABORTING transition."""
+def test_scanning_to_aborting_to_aborted():
+    """Test SCANNING to ABORTING to ABORTED transitions."""
 
 
 @pytest.mark.tmc_csp_refactor3
