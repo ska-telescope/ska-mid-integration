@@ -3,10 +3,10 @@
 from enum import Enum
 from typing import Any
 
-from ska_tango_testing.integration import TangoEventTracer
-from ska_tango_testing.integration.event import ReceivedEvent
-from ska_tango_testing.integration.assertions import ANY_VALUE
 import ska_tango_testing.integration.assertions
+from ska_tango_testing.integration import TangoEventTracer
+from ska_tango_testing.integration.assertions import ANY_VALUE
+from ska_tango_testing.integration.event import ReceivedEvent
 
 
 class TypedReceivedEvent(ReceivedEvent):
@@ -138,6 +138,7 @@ class TypedTangoEventTracer(TangoEventTracer):
 # Temporary trick to print the correct enum label in the assertion
 # error too
 
+
 def _print_passed_event_args(
     device_name: str | None = ANY_VALUE,
     attribute_name: str | None = ANY_VALUE,
@@ -172,11 +173,10 @@ def _print_passed_event_args(
 
     return res
 
+
 # Force this function to be used in the assertion error message
 # (instead of the default one)
 
 ska_tango_testing.integration.assertions._print_passed_event_args = (
     _print_passed_event_args
 )
-
-
