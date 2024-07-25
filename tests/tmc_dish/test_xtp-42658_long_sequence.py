@@ -510,8 +510,6 @@ def configure_subarray(
 <<<<<<< HEAD
     configure_input_json["dish"]["receiver_band"] = receiver_band_1
     configure_input_json["csp"]["common"]["frequency_band"] = "1"
-    configure_input_json["pointing"]["target"]["ra"] = "21:10:47.92"
-    configure_input_json["pointing"]["target"]["dec"] = "-88:55:22.9"
     central_node_mid.set_subarray_id(subarray_id)
     pytest.command_result = subarray_node.store_configuration_data(
         json.dumps(configure_input_json)
@@ -905,6 +903,8 @@ def reconfigure_subarray(
 <<<<<<< HEAD
     configure_input_json["dish"]["receiver_band"] = receiver_band_2
     configure_input_json["csp"]["common"]["frequency_band"] = "2"
+    configure_input_json["pointing"]["target"]["ra"] = "25:10:47.92"
+    configure_input_json["pointing"]["target"]["dec"] = "-80:55:22.9"
     central_node_mid.set_subarray_id(subarray_id)
     pytest.command_result = subarray_node.execute_transition(
         "Configure", json.dumps(configure_input_json)
