@@ -20,8 +20,9 @@ ska-mid-dish-simulators:
 >>>>>>> e7a4acf0 (SAH-1564: Update yml file)
   dishsimulators:
     image:
-      registry: artefact.skao.int
+      registry: registry.gitlab.com/ska-telescope/ska-mid-dish-simulators
       image: ska-mid-dish-simulators
+<<<<<<< HEAD
 <<<<<<< HEAD
       tag: 3.1.2
       pullPolicy: IfNotPresent
@@ -34,6 +35,9 @@ ska-mid-dish-simulators:
 >>>>>>> 08d72979 (SAH-1564: Update dislmc yml file)
 =======
       tag: 3.1.1
+=======
+      tag: 3.1.1-dev.c6a0cac56
+>>>>>>> f68ddbb7 (SAH-1564: Use dev image of dish)
       pullPolicy: IfNotPresent
 >>>>>>> e7a4acf0 (SAH-1564: Update yml file)
   labels:
