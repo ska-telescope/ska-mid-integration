@@ -497,15 +497,34 @@ def reconfigure_subarray(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "longRunningCommandResult",
         )
+<<<<<<< HEAD
 >>>>>>> d6082288 (SAH-1536: Update tmc-dish long sequence test)
         assert (
             central_node_mid.dish_master_dict[dish_id].dishMode
             == DishMode.OPERATE
+=======
+        # assert (
+        #     central_node_mid.dish_master_dict[dish_id].dishMode
+        #     == DishMode.OPERATE
+        # )
+        # assert (
+        #     central_node_mid.dish_leaf_node_dict[dish_id].dishMode
+        #     == DishMode.OPERATE
+        # )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.OPERATE,
+            lookahead=10,
+>>>>>>> 54f35f81 (SAH-1564: Update test case)
         )
-        assert (
-            central_node_mid.dish_leaf_node_dict[dish_id].dishMode
-            == DishMode.OPERATE
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "dishMode",
+            DishMode.OPERATE,
+            lookahead=10,
         )
+<<<<<<< HEAD
 <<<<<<< HEAD
         # assert event_recorder.has_change_event_occurred(
         #     central_node_mid.dish_master_dict[dish_id],
@@ -523,6 +542,8 @@ def reconfigure_subarray(
 =======
 
 >>>>>>> 2ee3ddf7 (SAH-1536: Enable skipped tmc-dish tests)
+=======
+>>>>>>> 54f35f81 (SAH-1564: Update test case)
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
