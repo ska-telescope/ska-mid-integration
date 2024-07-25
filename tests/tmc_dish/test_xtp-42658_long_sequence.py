@@ -906,10 +906,14 @@ def reconfigure_subarray(
     central_node_mid.set_subarray_id(subarray_id)
     pytest.command_result = subarray_node.execute_transition(
 <<<<<<< HEAD
+<<<<<<< HEAD
         "Configure", json.dumps(configure_input_json)
 =======
         "Configure", configure_input_json
 >>>>>>> 8018f5ec (SAH-1564: Update test case)
+=======
+        "Configure", json.dumps(configure_input_json)
+>>>>>>> 1fdb796b (SAH-1564: Update test case)
     )
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
 <<<<<<< HEAD
