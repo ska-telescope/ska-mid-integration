@@ -43,11 +43,11 @@ ASSERTIONS_TIMEOUT = 30
 # Scenario Definition
 
 
-@pytest.mark.skip(
-    "It fails because CSP and/or SDP may not actually abort "
-    "but continue with IDLE. NOTE: both CSP and SDP are emulated "
-    "when trying that, so that may be the reason (?)"
-)
+# @pytest.mark.skip(
+#     "It fails because CSP and/or SDP may not actually abort "
+#     "but continue with IDLE. NOTE: both CSP and SDP are emulated "
+#     "when trying that, so that may be the reason (?)"
+# )
 @pytest.mark.tmc_csp_refactor3
 @scenario(
     "../tmc_csp_refactor3/features/abort_reset.feature",

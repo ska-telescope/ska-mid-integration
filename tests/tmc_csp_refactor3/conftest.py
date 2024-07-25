@@ -7,7 +7,7 @@ from dataclasses import dataclass
 import pytest
 from pytest_bdd import given
 from ska_control_model import ObsState
-from ska_tango_testing.integration import TangoEventTracer, log_events
+from ska_tango_testing.integration import TangoEventTracer  # , log_events
 
 from tests.test_harness3.telescope_facades.csp_facade import CSPFacade
 from tests.test_harness3.telescope_facades.dishes_facade import DishesFacade
@@ -27,6 +27,8 @@ from tests.test_harness3.telescope_inputs.obs_state_commands_input import (
 from tests.test_harness3.telescope_structure.telescope_wrapper import (
     TelescopeWrapper,
 )
+from tests.tmc_csp_refactor3.utils.typed_logger import log_events
+from tests.tmc_csp_refactor3.utils.typed_tracer import TypedTangoEventTracer
 from tests.various_utils.default_json_inputs import (
     ASSING_CENTRAL_NODE_INPUT,
     CONFIGURE_SUBARRAY_INPUT,
@@ -108,9 +110,9 @@ def dishes(telescope_wrapper: TelescopeWrapper):
 
 
 @pytest.fixture
-def event_tracer() -> TangoEventTracer:
+def event_tracer() -> TypedTangoEventTracer:
     """Create an event tracer."""
-    return TangoEventTracer()
+    return TypedTangoEventTracer()
 
 
 # ------------------------------------------------------------
@@ -162,7 +164,7 @@ def _setup_event_subscriptions(
     subarray_node_facade: TMCSubarrayNodeFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
-    event_tracer: TangoEventTracer,
+    event_tracer: TypedTangoEventTracer,
 ):
     """Set up event subscriptions for the test.
 
@@ -171,6 +173,8 @@ def _setup_event_subscriptions(
         csp: Facade for the CSP.
         event_tracer: Event tracer for capturing events.
     """
+    event_tracer.associate_attribute_to_enum("obsState", ObsState)
+
     event_tracer.subscribe_event(
         subarray_node_facade.subarray_node, "obsState"
     )
@@ -187,7 +191,8 @@ def _setup_event_subscriptions(
             subarray_node_facade.subarray_node: ["obsState"],
             csp.csp_subarray: ["obsState"],
             sdp.sdp_subarray: ["obsState"],
-        }
+        },
+        attribute_enum_map={"obsState": ObsState},
     )
 
 
