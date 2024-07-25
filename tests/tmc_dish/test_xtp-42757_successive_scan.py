@@ -18,6 +18,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 @pytest.mark.skip(reason="Dish pointingstate issue")
 =======
 @pytest.mark.skip
@@ -27,6 +28,8 @@ from tests.resources.test_support.enum import DishMode, PointingState
 =======
 @pytest.mark.MM
 >>>>>>> e96d445e (SAH-1564: Testing integration test case)
+=======
+>>>>>>> 7e974b16 (SAH-1564: Update test case for dish side)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42757_successive_scan.feature",
