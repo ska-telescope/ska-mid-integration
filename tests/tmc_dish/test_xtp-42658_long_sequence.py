@@ -48,10 +48,14 @@ LOGGER = logging.getLogger(__name__)
 >>>>>>> 2ee3ddf7 (SAH-1536: Enable skipped tmc-dish tests)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 @pytest.mark.skip(reason="Dish pointingstate issue")
 =======
 @pytest.mark.skip
 >>>>>>> cbe762ab (SAH-1564: Test pipline)
+=======
+@pytest.mark.MM
+>>>>>>> f5031dbd (SAH-1564: Test pipline)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42658_long_sequence.feature",
