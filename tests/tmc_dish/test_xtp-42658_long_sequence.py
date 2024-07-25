@@ -51,6 +51,7 @@ LOGGER = logging.getLogger(__name__)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 @pytest.mark.skip(reason="Dish pointingstate issue")
 =======
 @pytest.mark.skip
@@ -74,6 +75,8 @@ LOGGER = logging.getLogger(__name__)
 >>>>>>> 1f674c3b (SAH-1564: Update test case)
 =======
 >>>>>>> 9ef7f822 (SAH-1564: Test pipline)
+=======
+>>>>>>> 4c515ef0 (SAH-1564: Update test case)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42658_long_sequence.feature",
@@ -479,8 +482,8 @@ def reconfigure_subarray(
     configure_input_json["dish"]["receiver_band"] = receiver_band_2
     configure_input_json["csp"]["common"]["frequency_band"] = "2"
     central_node_mid.set_subarray_id(subarray_id)
-    pytest.command_result = subarray_node.store_configuration_data(
-        json.dumps(configure_input_json)
+    pytest.command_result = subarray_node.execute_transition(
+        "Configure", configure_input_json
     )
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
 <<<<<<< HEAD
