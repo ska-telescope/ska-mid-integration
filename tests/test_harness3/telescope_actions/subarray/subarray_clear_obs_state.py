@@ -8,6 +8,9 @@ from tests.test_harness3.telescope_actions.expected_event import (
 from tests.test_harness3.telescope_actions.subarray.subarray_abort import (
     SubarrayAbort,
 )
+from tests.test_harness3.telescope_actions.subarray.subarray_force_abort import (  # pylint: disable=line-too-long # noqa E501
+    SubarrayForceAbort,
+)
 from tests.test_harness3.telescope_actions.subarray.subarray_restart import (
     SubarrayRestart,
 )
@@ -19,6 +22,12 @@ from tests.test_harness3.telescope_actions.telescope_action import (
 class SubarrayClearObsState(TelescopeAction):
     """Clear TMC subarray obs state, putting it into the "EMPTY" state."""
 
+    def __init__(self) -> None:
+        super().__init__()
+        # set a longer timeout for this action
+        # (since some actions may take longer to complete)
+        self.set_termination_condition_timeout(60)
+
     def _action(self):
         if self.telescope.tmc.subarray_node.obsState in [
             ObsState.IDLE,
@@ -28,21 +37,18 @@ class SubarrayClearObsState(TelescopeAction):
             ObsState.SCANNING,
         ]:
             SubarrayAbort().execute()
-            SubarrayRestart().execute()
 
-        # NOTE: if the subarray is in ABORTING state,
-        # it would be good to wait for it to transition to ABORTED
-        # so Restart can be called safely
+        # if there is an ongoing broken abort, ensure it ends before proceeding
+        if self.telescope.tmc.subarray_node.obsState == ObsState.ABORTING:
+            SubarrayForceAbort().execute()
 
-        elif self.telescope.tmc.subarray_node.obsState in [
+        if self.telescope.tmc.subarray_node.obsState in [
             ObsState.ABORTED,
         ]:
             SubarrayRestart().execute()
 
-        # NOTE: if the subarray is in RESETTING state,
-        # it would be good to wait for it to transition to EMPTY
-
     def termination_condition(self):
+        # ensure final state is empty
         res = [
             ExpectedStateChange(
                 self.telescope.csp.csp_subarray, "obsState", ObsState.EMPTY
