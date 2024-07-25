@@ -1,9 +1,12 @@
 """Extend TangoEventTracer to display event values as enums labels."""
 
 from enum import Enum
+from typing import Any
 
 from ska_tango_testing.integration import TangoEventTracer
 from ska_tango_testing.integration.event import ReceivedEvent
+from ska_tango_testing.integration.assertions import ANY_VALUE
+import ska_tango_testing.integration.assertions
 
 
 class TypedReceivedEvent(ReceivedEvent):
@@ -130,3 +133,50 @@ class TypedTangoEventTracer(TangoEventTracer):
         # try to convert the event to a TypedReceivedEvent
         # add the event to the list (as you would normally do)
         super()._add_event(self._event_enum_map.get_typed_event(event))
+
+
+# Temporary trick to print the correct enum label in the assertion
+# error too
+
+def _print_passed_event_args(
+    device_name: str | None = ANY_VALUE,
+    attribute_name: str | None = ANY_VALUE,
+    attribute_value: Any | None = ANY_VALUE,
+    previous_value: Any | None = ANY_VALUE,
+) -> str:
+    """Print the arguments passed to the event query.
+
+    Helper method to print the arguments passed to the event query in a
+    human-readable format.
+
+    :param device_name: The device name to match. If not provided, it will
+        match any device name.
+    :param attribute_name: The attribute name to match. If not provided,
+        it will match any attribute name.
+    :param attribute_value: The current value to match. If not provided,
+        it will match any current value.
+    :param previous_value: The previous value to match. If not provided,
+        it will match any previous value.
+
+    :return: The string representation of the passed arguments.
+    """
+    res = ""
+    if device_name is not ANY_VALUE:
+        res += f"device_name='{device_name}', "
+    if attribute_name is not ANY_VALUE:
+        res += f"attribute_name='{attribute_name}', "
+    if attribute_value is not ANY_VALUE:
+        res += f"attribute_value={str(attribute_value)}, "
+    if previous_value is not ANY_VALUE:
+        res += f"previous_value={previous_value}, "
+
+    return res
+
+# Force this function to be used in the assertion error message
+# (instead of the default one)
+
+ska_tango_testing.integration.assertions._print_passed_event_args = (
+    _print_passed_event_args
+)
+
+
