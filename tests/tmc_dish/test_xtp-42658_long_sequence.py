@@ -49,6 +49,7 @@ LOGGER = logging.getLogger(__name__)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 @pytest.mark.skip(reason="Dish pointingstate issue")
 =======
 @pytest.mark.skip
@@ -56,6 +57,12 @@ LOGGER = logging.getLogger(__name__)
 =======
 @pytest.mark.MM
 >>>>>>> f5031dbd (SAH-1564: Test pipline)
+=======
+@pytest.mark.skip(
+    reason="Please refer "
+    + "https://skao.slack.com/archives/C0625UVDVC6/p1721905870133719"
+)
+>>>>>>> d6a4e9e3 (SAH-1564: Test pipline)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42658_long_sequence.feature",
@@ -280,11 +287,8 @@ def configure_subarray(
     configure_input_json["dish"]["receiver_band"] = receiver_band_1
     configure_input_json["csp"]["common"]["frequency_band"] = "1"
     central_node_mid.set_subarray_id(subarray_id)
-    # pytest.command_result = subarray_node.store_configuration_data(
-    #     json.dumps(configure_input_json)
-    # )
-    pytest.command_result = subarray_node.execute_transition(
-        "Configure", json.dumps(configure_input_json)
+    pytest.command_result = subarray_node.store_configuration_data(
+        json.dumps(configure_input_json)
     )
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
 <<<<<<< HEAD
@@ -464,11 +468,8 @@ def reconfigure_subarray(
     configure_input_json["dish"]["receiver_band"] = receiver_band_2
     configure_input_json["csp"]["common"]["frequency_band"] = "2"
     central_node_mid.set_subarray_id(subarray_id)
-    # pytest.command_result = subarray_node.store_configuration_data(
-    #     json.dumps(configure_input_json)
-    # )
-    pytest.command_result = subarray_node.execute_transition(
-        "Configure", json.dumps(configure_input_json)
+    pytest.command_result = subarray_node.store_configuration_data(
+        json.dumps(configure_input_json)
     )
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
 <<<<<<< HEAD
@@ -498,6 +499,7 @@ def reconfigure_subarray(
             "longRunningCommandResult",
         )
 <<<<<<< HEAD
+<<<<<<< HEAD
 >>>>>>> d6082288 (SAH-1536: Update tmc-dish long sequence test)
         assert (
             central_node_mid.dish_master_dict[dish_id].dishMode
@@ -511,6 +513,8 @@ def reconfigure_subarray(
         #     central_node_mid.dish_leaf_node_dict[dish_id].dishMode
         #     == DishMode.OPERATE
         # )
+=======
+>>>>>>> 5f723990 (SAH-1564: Test pipline)
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
