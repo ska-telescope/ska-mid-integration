@@ -1,9 +1,12 @@
 """A tool to wait a set of state changes from multiple Tango devices."""
 
 
-from ska_tango_testing.integration.tracer import TangoEventTracer
+from ska_control_model import ObsState
 
 from tests.test_harness3.telescope_actions.expected_event import ExpectedEvent
+from tests.tmc_csp_refactor3.utils.typed_tracer import TypedTangoEventTracer
+
+# from ska_tango_testing.integration.tracer import TangoEventTracer
 
 
 class StateChangeWaiter:
@@ -31,7 +34,14 @@ class StateChangeWaiter:
     """
 
     def __init__(self) -> None:
-        self.event_tracer = TangoEventTracer()
+        self.event_tracer = TypedTangoEventTracer()
+        self.event_tracer.associate_attribute_to_enum("obsState", ObsState)
+        self.event_tracer.associate_attribute_to_enum(
+            "cspSubarrayObsState", ObsState
+        )
+        self.event_tracer.associate_attribute_to_enum(
+            "sdpSubarrayObsState", ObsState
+        )
         self.pending_state_changes: list[ExpectedEvent] = []
 
     def add_expected_state_changes(
