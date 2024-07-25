@@ -548,9 +548,11 @@ class SubarrayNodeWrapper(object):
         )
 
         # Partial configure 1
+        LOGGER.info("Firsr configure")
         _, unique_id = self.execute_transition(
             "Configure", partial_configure_1
         )
+        LOGGER.info(f"unique_id:{unique_id}")
         assert event_recorder.has_change_event_occurred(
             self.subarray_node,
             "obsState",
@@ -563,7 +565,6 @@ class SubarrayNodeWrapper(object):
             (unique_id[0], COMMAND_COMPLETED),
             lookahead=15,
         )
-        assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
 
         # assert sourceOffset gets populated as expected
         ca_offset, ie_offset = (
@@ -577,8 +578,10 @@ class SubarrayNodeWrapper(object):
                 f"{[ca_offset, ie_offset]}",
                 is_list=True,
             )
+        assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
 
         # Scan 1
+        LOGGER.info("First scan")
         self.execute_transition("Scan", scan_1)
         assert event_recorder.has_change_event_occurred(
             self.subarray_node,
@@ -589,6 +592,7 @@ class SubarrayNodeWrapper(object):
         assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
 
         # Partial configure 2
+        LOGGER.info("Second configure")
         _, unique_id = self.execute_transition(
             "Configure", partial_configure_2
         )
