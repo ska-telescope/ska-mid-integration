@@ -50,6 +50,7 @@ LOGGER = logging.getLogger(__name__)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 @pytest.mark.skip(reason="Dish pointingstate issue")
 =======
 @pytest.mark.skip
@@ -63,6 +64,13 @@ LOGGER = logging.getLogger(__name__)
     + "https://skao.slack.com/archives/C0625UVDVC6/p1721905870133719"
 )
 >>>>>>> d6a4e9e3 (SAH-1564: Test pipline)
+=======
+# @pytest.mark.skip(
+#     reason="Please refer "
+#     + "https://skao.slack.com/archives/C0625UVDVC6/p1721905870133719"
+# )
+@pytest.mark.MM
+>>>>>>> 1f674c3b (SAH-1564: Update test case)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42658_long_sequence.feature",
@@ -286,6 +294,8 @@ def configure_subarray(
     configure_input_json = json.loads(input_json)
     configure_input_json["dish"]["receiver_band"] = receiver_band_1
     configure_input_json["csp"]["common"]["frequency_band"] = "1"
+    configure_input_json["pointing"]["target"]["ra"] = "21:10:47.92"
+    configure_input_json["pointing"]["target"]["dec"] = "-88:55:22.9"
     central_node_mid.set_subarray_id(subarray_id)
     pytest.command_result = subarray_node.store_configuration_data(
         json.dumps(configure_input_json)
