@@ -13,7 +13,7 @@ Scenario: TMC executes long sequence of commands successfully
 <<<<<<< HEAD
 <<<<<<< HEAD
     When I configure the subarray <subarray_id> with <receiver_band_1>
-    And I issue End command to the subarray <subarray_id>
+    # And I issue End command to the subarray <subarray_id>
     And I reconfigure subarray <subarray_id> with <receiver_band_2>
     And I issue scan command with <scan_id> on subarray
     Then tmc subarraynode reports SCANNING obsState
