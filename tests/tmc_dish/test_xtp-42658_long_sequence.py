@@ -69,8 +69,11 @@ LOGGER = logging.getLogger(__name__)
 #     reason="Please refer "
 #     + "https://skao.slack.com/archives/C0625UVDVC6/p1721905870133719"
 # )
+<<<<<<< HEAD
 @pytest.mark.MM
 >>>>>>> 1f674c3b (SAH-1564: Update test case)
+=======
+>>>>>>> 9ef7f822 (SAH-1564: Test pipline)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42658_long_sequence.feature",
