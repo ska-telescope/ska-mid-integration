@@ -19,10 +19,13 @@ from tests.resources.test_support.enum import DishMode, PointingState
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 @pytest.mark.skip(reason="Dish pointingstate issue")
 =======
 @pytest.mark.MM
 >>>>>>> 6726778a (SAH-1564: Test pipline)
+=======
+>>>>>>> e96d445e (SAH-1564: Testing integration test case)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-43142_endscan.feature",
