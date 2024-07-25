@@ -18,7 +18,11 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
+<<<<<<< HEAD
 @pytest.mark.skip(reason="Dish pointingstate issue")
+=======
+@pytest.mark.MM
+>>>>>>> 6726778a (SAH-1564: Test pipline)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-43142_endscan.feature",

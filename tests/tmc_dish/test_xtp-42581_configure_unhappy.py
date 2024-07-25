@@ -17,6 +17,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 @pytest.mark.skip(reason="Dish pointingstate issue")
 =======
 @pytest.mark.skip
@@ -24,6 +25,9 @@ from tests.resources.test_support.enum import DishMode, PointingState
 =======
 @pytest.mark.MM
 >>>>>>> d6a4e9e3 (SAH-1564: Test pipline)
+=======
+@pytest.mark.skip
+>>>>>>> 6726778a (SAH-1564: Test pipline)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42581_configure_unhappy.feature",
