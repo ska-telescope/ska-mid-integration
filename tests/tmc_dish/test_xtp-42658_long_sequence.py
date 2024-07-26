@@ -566,6 +566,16 @@ def reconfigure_subarray(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
+<<<<<<< HEAD
+=======
+            lookahead=15,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "pointingState",
+            PointingState.TRACK,
+            lookahead=10,
+>>>>>>> a1513bbc (SAH-1564: code cleanup)
         )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
