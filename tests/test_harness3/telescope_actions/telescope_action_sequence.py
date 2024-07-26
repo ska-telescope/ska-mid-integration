@@ -27,6 +27,9 @@ class TelescopeActionSequence(TelescopeAction):
     make all the steps to wait for the termination condition. If you need,
     you can set the termination condition policy for each step by calling
     the method on each of them (you can access them through :py:attr:`steps`).
+
+    This is inspired by the Composite design pattern
+    (https://refactoring.guru/design-patterns/composite)
     """
 
     def __init__(

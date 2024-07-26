@@ -18,11 +18,11 @@ class StateChangeWaiter:
     and then calling the `wait_all` method to wait for all the state
     changes to occur (or for a timeout to occur). If all the state
     changes occur before the timeout, the execution continues, else
-    it will be raised an exception.
+    it will raise an exception.
 
     An instance of this class can be shared among multiple classes, so
     you can separate the responsibility of knowing what conditions
-    to wait foreach group of devices (e.g., a TMC class may know what
+    to wait for each group of devices (e.g., a TMC class may know what
     to wait for the TMC devices, and a CSP class may know what to wait
     for the CSP devices, etc.) and also move the `wait_all` call in a
     common orchestrator class (that doesn't need to know the details
@@ -31,6 +31,11 @@ class StateChangeWaiter:
     Calling the method `reset` you will clear the list of expected
     state changes, so you can reuse the same instance for multiple
     actions.
+
+    TODO: explain the abstract state and protocol of this class: it has a tracer and incrementally a list of events
+    to wait for. The tracer subscribes to such events.
+
+    TODO: worth covering with unit tests
     """
 
     def __init__(self) -> None:
