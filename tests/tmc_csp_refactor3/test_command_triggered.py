@@ -54,7 +54,12 @@ def test_idle_to_configuring_to_ready():
     """Test IDLE to CONFIGURING to READY transitions."""
 
 
-@pytest.mark.skip(reason="Not implemented yet.")
+@pytest.mark.xfail(
+    reason="Without a time.sleep after the telescope reached the IDLE state, "
+    "the test fails. But the test should pass without the time.sleep "
+    "since if a subarray is in IDLE state, by design it should be able "
+    "to receive the Configure command."
+)
 @pytest.mark.tmc_csp_refactor3
 @scenario(
     "../tmc_csp_refactor3/features/command_triggered.feature",
@@ -153,12 +158,6 @@ def send_configure_command(
     context_fixt.when_action_name = "Configure"
 
     json_input = FileJSONInput("subarray", "configure_mid")
-
-    # NOTE: The following line makes the test work,
-    # but it is not correct since a subarray that is in IDLE state
-    # state should be able to receive the Configure command.
-
-    # time.sleep(5)
 
     context_fixt.when_action_result = subarray_node_facade.configure(
         json_input,
