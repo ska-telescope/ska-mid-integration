@@ -3,6 +3,15 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+[0.23.0]
+************
+* TMC Mid release with base class version 1.0.0
+* Updated centralnode: 0.16.2
+* Updated subarraynode: 0.21.1
+* Updated cspleafnodes: 0.18.3
+* Updated sdpleafnodes: 0.16.1
+* Updated dishleafnode: 0.16.1 
+
 [0.22.1]
 ************
 * Resolve skb-384
