@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from typing import Any
 
 import pytest
-from pytest_bdd import given
+from pytest_bdd import given, parsers
 from ska_control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer  # , log_events
 
@@ -40,9 +40,6 @@ from tests.various_utils.default_json_inputs import (
 
 # ------------------------------------------------------------
 # Test Harness fixtures
-
-# ----------------------------------------------------------
-# New fixtures (refactor 3)
 
 
 @pytest.fixture
@@ -208,8 +205,9 @@ def given_the_telescope_is_in_on_state(
     central_node_facade.move_to_on(wait_termination=True)
 
 
-@given("the subarray 001 can be used")
+@given(parsers.parse("the subarray {subarray_id} can be used"))
 def subarray_can_be_used(
+    subarray_id: str,
     central_node_facade: TMCCentralNodeFacade,
     subarray_node_facade: TMCSubarrayNodeFacade,
     csp: CSPFacade,
@@ -217,7 +215,7 @@ def subarray_can_be_used(
     event_tracer: TangoEventTracer,
 ):
     """Set up the subarray (and the subscriptions) to be used in the test."""
-    subarray_node_facade.set_subarray_id(1)
+    subarray_node_facade.set_subarray_id(subarray_id)
     _setup_event_subscriptions(
         central_node_facade, subarray_node_facade, csp, sdp, event_tracer
     )

@@ -26,11 +26,12 @@ from tests.various_utils.file_json_input import FileJSONInput
 
 ASSERTIONS_TIMEOUT = 30
 
+#
 
-# @pytest.mark.skip("Not needed for now")
+
 @pytest.mark.tmc_csp_refactor3
 @scenario(
-    "../features/obsstate_valid_single_transitions.feature",
+    "../tmc_csp_refactor3/features/command_triggered.feature",
     "EMPTY to RESOURCING - CMD AssignResources (6)",
 )
 def test_empty_to_resourcing_to_idle():
