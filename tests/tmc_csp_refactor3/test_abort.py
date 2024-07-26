@@ -193,7 +193,7 @@ def test_aborted_to_restarting():
 # Given Steps
 
 
-@given(parsers.parse("the subarray 001 is in the RESOURCING state"))
+@given(parsers.parse("the subarray {subarray} is in the RESOURCING state"))
 def subarray_in_resourcing_state(
     context_fixt: SubarrayTestContextData,
     # subarray_id: str,
@@ -211,7 +211,7 @@ def subarray_in_resourcing_state(
     )
 
 
-@given(parsers.parse("the subarray 001 is in the IDLE state"))
+@given(parsers.parse("the subarray {subarray} is in the IDLE state"))
 def subarray_in_idle_state(
     context_fixt: SubarrayTestContextData,
     # subarray_id: str,
@@ -228,7 +228,7 @@ def subarray_in_idle_state(
     )
 
 
-@given(parsers.parse("the subarray 001 is in the CONFIGURING state"))
+@given(parsers.parse("the subarray {subarray} is in the CONFIGURING state"))
 def subarray_in_configuring_state(
     context_fixt: SubarrayTestContextData,
     # subarray_id: str,
@@ -246,7 +246,7 @@ def subarray_in_configuring_state(
     )
 
 
-@given(parsers.parse("the subarray 001 is in the READY state"))
+@given(parsers.parse("the subarray {subarray} is in the READY state"))
 def subarray_in_ready_state(
     context_fixt: SubarrayTestContextData,
     # subarray_id: str,
@@ -263,7 +263,7 @@ def subarray_in_ready_state(
     )
 
 
-@given(parsers.parse("the subarray 001 is in the SCANNING state"))
+@given(parsers.parse("the subarray {subarray} is in the SCANNING state"))
 def subarray_in_scanning_state(
     context_fixt: SubarrayTestContextData,
     # subarray_id: str,
@@ -281,7 +281,7 @@ def subarray_in_scanning_state(
     )
 
 
-@given(parsers.parse("the subarray 001 is in the ABORTED state"))
+@given(parsers.parse("the subarray {subarray} is in the ABORTED state"))
 def subarray_in_aborted_state(
     context_fixt: SubarrayTestContextData,
     # subarray_id: str,
@@ -306,7 +306,7 @@ def subarray_in_aborted_state(
 # (Common) When Step
 
 
-@when(parsers.parse("the Abort command is sent to the subarray 001"))
+@when(parsers.parse("the Abort command is sent to the subarray {subarray}"))
 def send_abort_command(
     context_fixt: SubarrayTestContextData,
     # subarray_id: str,
@@ -334,7 +334,7 @@ def send_abort_command(
         )
 
 
-@when(parsers.parse("the Restart command is sent to the subarray 001"))
+@when(parsers.parse("the Restart command is sent to the subarray {subarray}"))
 def send_restart_command(
     context_fixt: SubarrayTestContextData,
     # subarray_id: str,
@@ -349,7 +349,9 @@ def send_restart_command(
 
 
 @then(
-    parsers.parse("the subarray 001 should transition to the ABORTING state")
+    parsers.parse(
+        "the subarray {subarray} should transition to the ABORTING state"
+    )
 )
 def verify_aborting_state(
     context_fixt: SubarrayTestContextData,
@@ -395,7 +397,11 @@ def verify_aborting_state(
     verify_device_received_command(sdp.sdp_subarray, "Abort")
 
 
-@then(parsers.parse("the subarray 001 should transition to the ABORTED state"))
+@then(
+    parsers.parse(
+        "the subarray {subarray} should transition to the ABORTED state"
+    )
+)
 def verify_aborted_state(
     context_fixt,
     subarray_node_facade: TMCSubarrayNodeFacade,
@@ -430,7 +436,9 @@ def verify_aborted_state(
 
 
 @then(
-    parsers.parse("the subarray 001 should transition to the RESTARTING state")
+    parsers.parse(
+        "the subarray {subarray} should transition to the RESTARTING state"
+    )
 )
 def verify_restarting_state(
     context_fixt: SubarrayTestContextData,
@@ -468,7 +476,11 @@ def verify_restarting_state(
     verify_device_received_command(sdp.sdp_subarray, "Aborted")
 
 
-@then(parsers.parse("the subarray 001 should transition to the EMPTY state"))
+@then(
+    parsers.parse(
+        "the subarray {subarray} should transition to the EMPTY state"
+    )
+)
 def verify_empty_state(
     context_fixt,
     # subarray_id: str,

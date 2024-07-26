@@ -40,13 +40,10 @@ def test_empty_to_resourcing_to_idle():
 # The initial common Given steps are already defined in conftest.py
 
 
-@given(parsers.parse("the subarray 001 is in the EMPTY state"))
+@given(parsers.parse("the subarray {subarray} is in the EMPTY state"))
 def subarray_in_empty_state(
     context_fixt: SubarrayTestContextData,
-    event_tracer: TangoEventTracer,
-    central_node_facade: TMCCentralNodeFacade,
     subarray_node_facade: TMCSubarrayNodeFacade,
-    sdp: SDPFacade,
 ):
     """Ensure the subarray is in the EMPTY state."""
     context_fixt.starting_state = ObsState.EMPTY
@@ -58,7 +55,11 @@ def subarray_in_empty_state(
     )
 
 
-@when(parsers.parse("the AssignResources command is sent to the subarray 001"))
+@when(
+    parsers.parse(
+        "the AssignResources command is sent to the subarray {subarray}"
+    )
+)
 def send_assign_resources_command(
     context_fixt: SubarrayTestContextData,
     central_node_facade: TMCCentralNodeFacade,
@@ -76,7 +77,9 @@ def send_assign_resources_command(
 
 
 @then(
-    parsers.parse("the subarray 001 should transition to the RESOURCING state")
+    parsers.parse(
+        "the subarray {subarray} should transition to the RESOURCING state"
+    )
 )
 def verify_resourcing_state(
     context_fixt: SubarrayTestContextData,
@@ -119,7 +122,11 @@ def verify_resourcing_state(
     context_fixt.starting_state = ObsState.RESOURCING
 
 
-@then(parsers.parse("the subarray 001 should transition to the IDLE state"))
+@then(
+    parsers.parse(
+        "the subarray {subarray} should transition to the IDLE state"
+    )
+)
 def verify_idle_state(
     context_fixt: SubarrayTestContextData,
     subarray_node_facade: TMCSubarrayNodeFacade,
