@@ -52,6 +52,7 @@ LOGGER = logging.getLogger(__name__)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 @pytest.mark.skip(reason="Dish pointingstate issue")
 =======
 @pytest.mark.skip
@@ -77,6 +78,9 @@ LOGGER = logging.getLogger(__name__)
 >>>>>>> 9ef7f822 (SAH-1564: Test pipline)
 =======
 >>>>>>> 4c515ef0 (SAH-1564: Update test case)
+=======
+@pytest.mark.skip
+>>>>>>> 78cca956 (SAH-1564: Update tag related changes)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42658_long_sequence.feature",
