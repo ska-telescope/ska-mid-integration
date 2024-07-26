@@ -61,8 +61,11 @@ server:
 =======
 >>>>>>> edc2574d (SAH-1564: Use latest dev image of dishleafnode)
 
+<<<<<<< HEAD
 
 >>>>>>> b9945c76 (SAH-1564: Update yaml file)
+=======
+>>>>>>> fba4c450 (SAH-1564: code cleanup)
   {{- end }}
 depends_on:
   - device: sys/database/2
