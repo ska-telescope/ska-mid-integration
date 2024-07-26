@@ -15,9 +15,11 @@ import ast
 
 >>>>>>> 1fc6a549 (SAH-1536: Enable all the tmc-dish tests)
 import json
+import logging
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
+from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import ObsState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
@@ -39,6 +41,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.enum import DishMode, PointingState
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 # import time
 
 
@@ -46,6 +49,11 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 =======
 >>>>>>> 2ee3ddf7 (SAH-1536: Enable skipped tmc-dish tests)
+=======
+configure_logging(logging.DEBUG)
+LOGGER = logging.getLogger(__name__)
+
+>>>>>>> f295f999 (SAH-1564: Update test case)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -500,6 +508,7 @@ def reconfigure_subarray(
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "pointingState"
         )
@@ -520,6 +529,9 @@ def reconfigure_subarray(
 
 >>>>>>> 2ee3ddf7 (SAH-1536: Enable skipped tmc-dish tests)
 =======
+=======
+        LOGGER.info("current dish id: %s", dish_id)
+>>>>>>> f295f999 (SAH-1564: Update test case)
         event_recorder.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "longRunningCommandResult",
