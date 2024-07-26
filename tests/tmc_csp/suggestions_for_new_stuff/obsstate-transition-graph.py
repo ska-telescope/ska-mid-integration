@@ -230,9 +230,6 @@ def draw_curved_edge(
 merged_graph = create_merged_graph()
 
 
-
-
-
 class StateGraphAnalyzer:
     """MISSION: implement the following methods to analyze a state graph:
     - print_transitions(): prints all individual transitions in the graph
@@ -307,7 +304,6 @@ class StateGraphAnalyzer:
             if self.graph.has_edge(node, node)
         ]
 
-
     def print_consecutive_transition_pairs(self):
         """
         Prints a numbered list of pairs of consecutive transitions in the graph.
@@ -317,17 +313,33 @@ class StateGraphAnalyzer:
         transition_pairs = []
         for start_state in self.graph.nodes():
             for mid_state, data1 in self.graph[start_state].items():
-                data1=data1[0]
+                data1 = data1[0]
                 for end_state, data2 in self.graph[mid_state].items():
-                    data2=data2[0]
+                    data2 = data2[0]
                     if start_state != end_state:  # Avoid cycles
                         print(data1)
-                        trigger1 = compute_edge_label(data1["label"], data1["type"])
-                        trigger2 = compute_edge_label(data2["label"], data2["type"])
-                        transition_pairs.append((start_state, mid_state, end_state, trigger1, trigger2))
+                        trigger1 = compute_edge_label(
+                            data1["label"], data1["type"]
+                        )
+                        trigger2 = compute_edge_label(
+                            data2["label"], data2["type"]
+                        )
+                        transition_pairs.append(
+                            (
+                                start_state,
+                                mid_state,
+                                end_state,
+                                trigger1,
+                                trigger2,
+                            )
+                        )
 
-        for i, (start, mid, end, trigger1, trigger2) in enumerate(transition_pairs, 1):
-            print(f"{i}. {start} --> ({trigger1}) --> {mid} --> ({trigger2}) --> {end}")
+        for i, (start, mid, end, trigger1, trigger2) in enumerate(
+            transition_pairs, 1
+        ):
+            print(
+                f"{i}. {start} --> ({trigger1}) --> {mid} --> ({trigger2}) --> {end}"
+            )
 
     def get_path_between_states(self, start_state, end_state):
         """
@@ -355,13 +367,13 @@ class StateGraphAnalyzer:
 
         # Create an empty DataFrame to store the transition matrix
         matrix = pd.DataFrame(index=nodes, columns=nodes)
-        matrix = matrix.fillna('')
+        matrix = matrix.fillna("")
 
         # Populate the matrix
         for edge in G.edges(data=True):
             source, target, data = edge
-            label = data.get('label', '')
-            edge_type = data.get('type', '')
+            label = data.get("label", "")
+            edge_type = data.get("type", "")
 
             # Combine label and type information
             info = f"{label} ({edge_type})"
@@ -379,6 +391,8 @@ class StateGraphAnalyzer:
         print("# FSM Transition Matrix")
         print()
         print(markdown_table)
+
+
 analyzer = StateGraphAnalyzer(merged_graph)
 
 print("All transitions:")
@@ -389,6 +403,7 @@ print("\n\n\nAll consecutive pairs of transitions:")
 analyzer.print_consecutive_transition_pairs()
 
 analyzer.print_transition_matrix()
+
 
 def plot_graph(graph):
     global data
@@ -430,13 +445,20 @@ def plot_graph(graph):
 
         # Unidirectional edge
         draw_curved_edge(
-            ax, pos[n1], pos[n2], label, edge_type, connectionstyle="arc3,rad=0.3"
+            ax,
+            pos[n1],
+            pos[n2],
+            label,
+            edge_type,
+            connectionstyle="arc3,rad=0.3",
         )
     # Draw labels
     nx.draw_networkx_labels(
         graph, pos, font_size=15, font_weight="bold", ax=ax
     )
-    plt.title("Merged Operational and Observational State Machine", fontsize=20)
+    plt.title(
+        "Merged Operational and Observational State Machine", fontsize=20
+    )
     plt.axis("off")
     plt.tight_layout()
     plt.show()
@@ -447,10 +469,10 @@ def plot_graph(graph):
 # what follows are examples of the sequence based specification method
 # here we are assuming 2 interacting subarrays
 
+
 class Subarray:
     def __init__(self):
-        """graph (nx.MultiDiGraph): The state graph
-        """
+        """graph (nx.MultiDiGraph): The state graph"""
         self.graph = create_merged_graph()
         self.initial_state = "INIT"
 
@@ -458,7 +480,9 @@ class Subarray:
         """
         Returns a list of all possible triggers (commands and events) in the graph.
         """
-        return list(set(data["label"] for _, _, data in self.graph.edges(data=True)))
+        return list(
+            set(data["label"] for _, _, data in self.graph.edges(data=True))
+        )
 
     def simulate_transition(self, current_state, trigger):
         """
@@ -481,7 +505,7 @@ class Subarray:
             (end_state, data)
             for end_state, edge_data in self.graph[current_state].items()
             for data in edge_data.values()
-            if data['label'] == trigger
+            if data["label"] == trigger
         ]
 
         # If no valid transition found for the given trigger
@@ -495,22 +519,27 @@ class Subarray:
         response = random.choices(
             ["SUCCESS", "TIMEOUT", "ERROR"],
             weights=[0.8, 0.1, 0.1],  # 80% SUCCESS, 10% TIMEOUT, 10% ERROR
-            k=1
+            k=1,
         )[0]
 
         return (response, next_state)
 
+
 from collections import Counter
-from typing import List, Tuple, Dict, Callable
+from typing import Callable, Dict, List, Tuple
 
 # Type aliases
 Stimulus = str
 Response = str
 State = str
 
-def generate_random_sequence(max_length: int, stimuli: List[Stimulus]) -> List[Stimulus]:
+
+def generate_random_sequence(
+    max_length: int, stimuli: List[Stimulus]
+) -> List[Stimulus]:
     length = random.randint(1, max_length)
     return [random.choice(stimuli) for _ in range(length)]
+
 
 def sequence_based_specification(
     num_tests: int,
@@ -519,18 +548,30 @@ def sequence_based_specification(
     fsm2_fsm: Subarray,
     initial_fsm1_state: State,
     initial_fsm2_state: State,
-    stimuli: List[Stimulus]
-) -> List[Tuple[List[Stimulus], List[Tuple[Stimulus, Response, State, Response, State]]]]:
+    stimuli: List[Stimulus],
+) -> List[
+    Tuple[
+        List[Stimulus], List[Tuple[Stimulus, Response, State, Response, State]]
+    ]
+]:
     sequences = []
 
-    def process_stimulus(stim: Stimulus, s_state: State, r_state: State) -> Tuple[Stimulus, Response, State, Response, State]:
+    def process_stimulus(
+        stim: Stimulus, s_state: State, r_state: State
+    ) -> Tuple[Stimulus, Response, State, Response, State]:
         s_response, new_s_state = fsm1_fsm.simulate_transition(s_state, stim)
         r_response, new_r_state = fsm2_fsm.simulate_transition(r_state, stim)
         return (stim, s_response, new_s_state, r_response, new_r_state)
 
     for length in range(1, max_sequence_length + 1):
         new_sequences = []
-        for seq in [[],] if length == 1 else sequences:
+        for seq in (
+            [
+                [],
+            ]
+            if length == 1
+            else sequences
+        ):
             for stimulus in stimuli:
                 print(seq)
                 print(stimulus)
@@ -566,7 +607,15 @@ def sequence_based_specification(
 
     return sequences
 
-def analyze_results(sequences: List[Tuple[List[Stimulus], List[Tuple[Stimulus, Response, State, Response, State]]]]) -> None:
+
+def analyze_results(
+    sequences: List[
+        Tuple[
+            List[Stimulus],
+            List[Tuple[Stimulus, Response, State, Response, State]],
+        ]
+    ]
+) -> None:
     state_transitions = Counter()
     response_pairs = Counter()
     stimuli_distribution = Counter()
@@ -579,16 +628,27 @@ def analyze_results(sequences: List[Tuple[List[Stimulus], List[Tuple[Stimulus, R
             stimuli_distribution[stimulus] += 1
 
     print("State Transition Frequencies:")
-    for (sender_state, receiver_state), count in state_transitions.most_common():
-        print(f"  Sender: {sender_state}, Receiver: {receiver_state} - Count: {count}")
+    for (
+        sender_state,
+        receiver_state,
+    ), count in state_transitions.most_common():
+        print(
+            f"  Sender: {sender_state}, Receiver: {receiver_state} - Count: {count}"
+        )
 
     print("\nResponse Pair Frequencies:")
-    for (sender_response, receiver_response), count in response_pairs.most_common():
-        print(f"  Sender: {sender_response}, Receiver: {receiver_response} - Count: {count}")
+    for (
+        sender_response,
+        receiver_response,
+    ), count in response_pairs.most_common():
+        print(
+            f"  Sender: {sender_response}, Receiver: {receiver_response} - Count: {count}"
+        )
 
     print("\nStimuli Distribution:")
     for stimulus, count in stimuli_distribution.most_common():
         print(f"  {stimulus}: {count}")
+
 
 SA1 = Subarray()
 SA2 = Subarray()
@@ -599,7 +659,7 @@ test_results = sequence_based_specification(
     fsm2_fsm=SA2,
     initial_fsm1_state=SA1.initial_state,
     initial_fsm2_state=SA2.initial_state,
-    stimuli=SA1.get_possible_triggers()
+    stimuli=SA1.get_possible_triggers(),
 )
 
 analyze_results(test_results)

@@ -3,6 +3,7 @@
 
 # Define a fixture to store things, like the starting state
 from dataclasses import dataclass
+from typing import Any
 
 import pytest
 from pytest_bdd import given
@@ -120,22 +121,35 @@ def event_tracer() -> TypedTangoEventTracer:
 
 
 @dataclass
-class StateChangesContextData:
-    """A class to store the state changes during the test."""
+class SubarrayTestContextData:
+    """A class to store shared variables between steps."""
 
     starting_state: ObsState | None = None
     """The state of the system before the WHEN step."""
 
     expected_next_state: ObsState | None = None
-    """The expected state to be reached if no WHEN step is executed."""
+    """The expected state to be reached if no WHEN step is executed.
+
+    It is meaningful when the starting state is transient and so it will
+    automatically change to another state (different both from the starting
+    state and the expected next state).
+
+    Leave empty if the starting state is not transient.
+    """
+
+    when_action_result: Any | None = None
+    """The result of the WHEN step command."""
+
+    when_action_name: str | None = None
+    """The name of the Tango command executed in the WHEN step."""
 
     def is_starting_state_transient(self) -> bool:
         """Check if the starting state is transient."""
-        return self.starting_state != self.expected_next_state
+        return self.expected_next_state is not None
 
 
 @pytest.fixture
-def context_fixt() -> StateChangesContextData:
+def context_fixt() -> SubarrayTestContextData:
     """A collection of variables shared between steps.
 
     The shared variables are the following:
@@ -147,20 +161,11 @@ def context_fixt() -> StateChangesContextData:
 
     :return: the shared variables.
     """
-    return StateChangesContextData()
-
-
-TRANSIENT_STATES = [
-    ObsState.ABORTING,
-    ObsState.RESTARTING,
-    ObsState.RESOURCING,
-    ObsState.CONFIGURING,
-    ObsState.SCANNING,
-    ObsState.RESETTING,
-]
+    return SubarrayTestContextData()
 
 
 def _setup_event_subscriptions(
+    central_node_facade: TMCCentralNodeFacade,
     subarray_node_facade: TMCSubarrayNodeFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
@@ -178,19 +183,18 @@ def _setup_event_subscriptions(
     event_tracer.subscribe_event(
         subarray_node_facade.subarray_node, "obsState"
     )
-    # event_tracer.subscribe_event(
-    #     subarray_node_facade.csp_subarray_leaf_node, "cspSubarrayObsState"
-    # )
-    # event_tracer.subscribe_event(
-    #     subarray_node_facade.sdp_subarray_leaf_node, "sdpSubarrayObsState"
-    # )
     event_tracer.subscribe_event(csp.csp_subarray, "obsState")
     event_tracer.subscribe_event(sdp.sdp_subarray, "obsState")
+    event_tracer.subscribe_event(
+        central_node_facade.central_node, "longRunningCommandResult"
+    )
+
     log_events(
         {
             subarray_node_facade.subarray_node: ["obsState"],
             csp.csp_subarray: ["obsState"],
             sdp.sdp_subarray: ["obsState"],
+            central_node_facade.central_node: ["longRunningCommandResult"],
         },
         attribute_enum_map={"obsState": ObsState},
     )
@@ -206,6 +210,7 @@ def given_the_telescope_is_in_on_state(
 
 @given("the subarray 001 can be used")
 def subarray_can_be_used(
+    central_node_facade: TMCCentralNodeFacade,
     subarray_node_facade: TMCSubarrayNodeFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
@@ -213,4 +218,6 @@ def subarray_can_be_used(
 ):
     """Set up the subarray (and the subscriptions) to be used in the test."""
     subarray_node_facade.set_subarray_id(1)
-    _setup_event_subscriptions(subarray_node_facade, csp, sdp, event_tracer)
+    _setup_event_subscriptions(
+        central_node_facade, subarray_node_facade, csp, sdp, event_tracer
+    )

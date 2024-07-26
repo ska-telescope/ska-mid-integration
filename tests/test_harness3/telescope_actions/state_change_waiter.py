@@ -32,7 +32,8 @@ class StateChangeWaiter:
     state changes, so you can reuse the same instance for multiple
     actions.
 
-    TODO: explain the abstract state and protocol of this class: it has a tracer and incrementally a list of events
+    TODO: explain the abstract state and protocol of this class:
+    it has a tracer and incrementally a list of events
     to wait for. The tracer subscribes to such events.
 
     TODO: worth covering with unit tests
