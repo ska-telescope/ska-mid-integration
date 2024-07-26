@@ -222,7 +222,7 @@ def subarray_can_be_used(
     event_tracer: TangoEventTracer,
 ):
     """Set up the subarray (and the subscriptions) to be used in the test."""
-    subarray_node_facade.set_subarray_id(subarray_id)
+    subarray_node_facade.set_subarray_id(int(subarray_id))
     _setup_event_subscriptions(
         central_node_facade, subarray_node_facade, csp, sdp, event_tracer
     )

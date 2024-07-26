@@ -33,10 +33,10 @@ ASSERTIONS_TIMEOUT = 30
 @pytest.mark.tmc_csp_refactor3
 @scenario(
     "../tmc_csp_refactor3/features/command_triggered.feature",
-    "EMPTY to RESOURCING - CMD AssignResources (6)",
+    "EMPTY to RESOURCING to IDLE - CMD AssignResources (6)",
 )
 def test_empty_to_resourcing_to_idle():
-    """Test EMPTY to RESOURCING transition."""
+    """Test EMPTY to RESOURCING to IDLE transitions."""
 
 
 @pytest.mark.xfail(
@@ -48,10 +48,30 @@ def test_empty_to_resourcing_to_idle():
 @pytest.mark.tmc_csp_refactor3
 @scenario(
     "../tmc_csp_refactor3/features/command_triggered.feature",
-    "IDLE to CONFIGURING - CMD Configure (16)",
+    "IDLE to CONFIGURING to READY - CMD Configure (16)",
 )
 def test_idle_to_configuring_to_ready():
-    """Test IDLE to CONFIGURING transition."""
+    """Test IDLE to CONFIGURING to READY transitions."""
+
+
+@pytest.mark.skip(reason="Not implemented yet.")
+@pytest.mark.tmc_csp_refactor3
+@scenario(
+    "../tmc_csp_refactor3/features/command_triggered.feature",
+    "IDLE to RESOURCING to IDLE - CMD AssignResources (18)",
+)
+def test_idle_to_resourcing_to_idle():
+    """Test IDLE to RESOURCING to IDLE transitions."""
+
+
+@pytest.mark.skip(reason="Not implemented yed.")
+@pytest.mark.tmc_csp_refactor3
+@scenario(
+    "../tmc_csp_refactor3/features/command_triggered.feature",
+    "IDLE to RESOURCING to EMPTY - CMD ReleaseResources (17)",
+)
+def test_idle_to_resourcing_to_empty():
+    """Test IDLE to RESOURCING to EMPTY transitions."""
 
 
 # ------------------------------------------------------------
