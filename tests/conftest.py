@@ -1,7 +1,6 @@
 # pylint: disable=unused-argument
 
-import pytest
-import tango
+import tango # type: ignore
 
 
 def pytest_sessionstart(session):
