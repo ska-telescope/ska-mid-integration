@@ -60,6 +60,7 @@ LOGGER = logging.getLogger(__name__)
 >>>>>>> cbe762ab (SAH-1564: Test pipline)
 =======
 @pytest.mark.MM
+<<<<<<< HEAD
 >>>>>>> f5031dbd (SAH-1564: Test pipline)
 =======
 @pytest.mark.skip(
@@ -85,6 +86,9 @@ LOGGER = logging.getLogger(__name__)
 =======
 @pytest.mark.MM
 >>>>>>> 64506083 (SAH-1564: Test long sequance test case)
+=======
+@pytest.mark.repeat(5)
+>>>>>>> c87169cc (SAH-1564: check test case)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42658_long_sequence.feature",
