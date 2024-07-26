@@ -43,7 +43,7 @@ def test_empty_to_resourcing_to_idle():
     reason="Without a time.sleep after the telescope reached the IDLE state, "
     "the test fails. But the test should pass without the time.sleep "
     "since if a subarray is in IDLE state, by design it should be able "
-    "to receive the Configure command."
+    "to receive the Configure command at any time."
 )
 @pytest.mark.tmc_csp_refactor3
 @scenario(
@@ -58,7 +58,7 @@ def test_idle_to_configuring_to_ready():
     reason="Without a time.sleep after the telescope reached the IDLE state, "
     "the test fails. But the test should pass without the time.sleep "
     "since if a subarray is in IDLE state, by design it should be able "
-    "to receive the Configure command."
+    "to receive the Configure command at any time."
 )
 @pytest.mark.tmc_csp_refactor3
 @scenario(

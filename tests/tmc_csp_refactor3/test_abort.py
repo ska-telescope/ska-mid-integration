@@ -106,6 +106,8 @@ def test_idle_to_aborting_to_aborted():
 # NOTE: it works but just because we don't assume anymore SDP
 # should transition to ABORTING state, but directly to ABORTED!
 
+# TODO: check the emulator of the SDP and see if it can be fixed
+
 # AssertionError: [Both TMC Subarray Node device
 # (SubarrayNodeMid(ska_mid/tm_subarray_node/1)) and CSP Subarray device
 # (HelperCspSubarray(mid-csp/subarray/01)) ObsState attribute
@@ -230,7 +232,8 @@ def send_abort_command(
     """Send the Abort command to the subarray."""
     subarray_node_facade.abort(wait_termination=False)
 
-    if context_fixt.is_starting_state_transient():
+    if context_fixt.is_starting_state_transient(): # TODO: it is not a responsibility of the context fixture to know if a state is transional or not.
+        # move this to a SA wrapper
         assert_that(event_tracer).described_as(
             "FAILED ASSUMPTION: "
             "TMC Subarray Node device "
@@ -285,7 +288,8 @@ def verify_aborting_state(
         "obsState",
         ObsState.ABORTING,
         previous_value=context_fixt.starting_state,
-    ).has_change_event_occurred(
+    ).has_change_event_occurred(# TODO: even though it does not seem so, these 2 chained assertions require 2 separate
+        # timeouts. We should instead use a single timeout for both.
         csp.csp_subarray,
         "obsState",
         ObsState.ABORTING,
@@ -299,6 +303,14 @@ def verify_aborting_state(
     # cannot be verified for CSP and SDP, because it may have changed to
     # another state in the meantime. But we still want to guarantee
     # ABORTING is reached.
+
+    # TODO: Not clear why the previous value is not verified for CSP and SDP.
+    # let's forget about the SDP which is emulated - we will deal with it later
+    # but using the tracer we should be able to capture a sequence of transitions. There will be 2 change-events,
+    # one for the first transition and one for the second.
+    # GB agrees that it is questionable if we have to test that the CSP.SA evolves along the prescribed path.
+    # But I would say yes, we need to make sure that the CSP.SA evolves as expected because that might affect how
+    # the TMC.SA evolves.
 
     # The previous value can and should instead be verified for TMC
     # (since we already have an assertion that checks the command have

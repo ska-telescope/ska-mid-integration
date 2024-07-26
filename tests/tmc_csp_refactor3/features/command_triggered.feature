@@ -16,6 +16,7 @@ Scenario: EMPTY to RESOURCING to IDLE - CMD AssignResources (6)
   Then the subarray 1 should transition to the RESOURCING state
   Then the subarray 1 should transition to the IDLE state
   Then the central node longRunningCommand should be terminated
+  # TODO we send the command to the subarray and check the LRC of the central node?
 
 Scenario: IDLE to CONFIGURING to READY - CMD Configure (16)
   Given the subarray 1 is in the IDLE state
