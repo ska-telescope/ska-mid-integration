@@ -193,94 +193,6 @@ def test_aborted_to_restarting():
 # Given Steps
 
 
-@given(parsers.parse("the subarray {subarray} is in the RESOURCING state"))
-def subarray_in_resourcing_state(
-    context_fixt: SubarrayTestContextData,
-    # subarray_id: str,
-    subarray_node_facade: TMCSubarrayNodeFacade,
-    default_commands_inputs: ObsStateCommandsInput,
-):
-    """Ensure the subarray is in the RESOURCING state."""
-    context_fixt.starting_state = ObsState.RESOURCING
-    context_fixt.expected_next_state = ObsState.IDLE
-
-    subarray_node_facade.force_change_of_obs_state(
-        ObsState.RESOURCING,
-        default_commands_inputs,
-        wait_termination=True,
-    )
-
-
-@given(parsers.parse("the subarray {subarray} is in the IDLE state"))
-def subarray_in_idle_state(
-    context_fixt: SubarrayTestContextData,
-    # subarray_id: str,
-    subarray_node_facade: TMCSubarrayNodeFacade,
-    default_commands_inputs: ObsStateCommandsInput,
-):
-    """Ensure the subarray is in the IDLE state."""
-    context_fixt.starting_state = ObsState.IDLE
-
-    subarray_node_facade.force_change_of_obs_state(
-        ObsState.IDLE,
-        default_commands_inputs,
-        wait_termination=True,
-    )
-
-
-@given(parsers.parse("the subarray {subarray} is in the CONFIGURING state"))
-def subarray_in_configuring_state(
-    context_fixt: SubarrayTestContextData,
-    # subarray_id: str,
-    subarray_node_facade: TMCSubarrayNodeFacade,
-    default_commands_inputs: ObsStateCommandsInput,
-):
-    """Ensure the subarray is in the CONFIGURING state."""
-    context_fixt.starting_state = ObsState.CONFIGURING
-    context_fixt.expected_next_state = ObsState.READY
-
-    subarray_node_facade.force_change_of_obs_state(
-        ObsState.CONFIGURING,
-        default_commands_inputs,
-        wait_termination=True,
-    )
-
-
-@given(parsers.parse("the subarray {subarray} is in the READY state"))
-def subarray_in_ready_state(
-    context_fixt: SubarrayTestContextData,
-    # subarray_id: str,
-    subarray_node_facade: TMCSubarrayNodeFacade,
-    default_commands_inputs: ObsStateCommandsInput,
-):
-    """Ensure the subarray is in the READY state."""
-    context_fixt.starting_state = ObsState.READY
-
-    subarray_node_facade.force_change_of_obs_state(
-        ObsState.READY,
-        default_commands_inputs,
-        wait_termination=True,
-    )
-
-
-@given(parsers.parse("the subarray {subarray} is in the SCANNING state"))
-def subarray_in_scanning_state(
-    context_fixt: SubarrayTestContextData,
-    # subarray_id: str,
-    subarray_node_facade: TMCSubarrayNodeFacade,
-    default_commands_inputs: ObsStateCommandsInput,
-):
-    """Ensure the subarray is in the SCANNING state."""
-    context_fixt.starting_state = ObsState.SCANNING
-    context_fixt.expected_next_state = ObsState.READY
-
-    subarray_node_facade.force_change_of_obs_state(
-        ObsState.SCANNING,
-        default_commands_inputs,
-        wait_termination=True,
-    )
-
-
 @given(parsers.parse("the subarray {subarray} is in the ABORTED state"))
 def subarray_in_aborted_state(
     context_fixt: SubarrayTestContextData,
@@ -471,6 +383,8 @@ def verify_restarting_state(
         previous_value=ObsState.ABORTED,
     )
 
+    context_fixt.starting_state = ObsState.RESTARTING
+
     # for the emulated device (SDP) we verify the correct
     # Tango command has been called as expected
     verify_device_received_command(sdp.sdp_subarray, "Aborted")
@@ -495,20 +409,20 @@ def verify_empty_state(
         f", CSP Subarray device ({csp.csp_subarray}) "
         f"and SDP Subarray device ({sdp.sdp_subarray}) "
         "ObsState attribute values should move "
-        "from RESTARTING to EMPTY."
+        f"from {context_fixt.starting_state} to EMPTY."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         subarray_node_facade.subarray_node,
         "obsState",
         ObsState.EMPTY,
-        previous_value=ObsState.RESTARTING,
+        previous_value=context_fixt.starting_state,
     ).has_change_event_occurred(
         csp.csp_subarray,
         "obsState",
         ObsState.EMPTY,
-        previous_value=ObsState.RESTARTING,
+        previous_value=context_fixt.starting_state,
     ).has_change_event_occurred(
         sdp.sdp_subarray,
         "obsState",
         ObsState.EMPTY,
-        previous_value=ObsState.RESTARTING,
+        previous_value=context_fixt.starting_state,
     )

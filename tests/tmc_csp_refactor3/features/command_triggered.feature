@@ -22,5 +22,19 @@ Scenario: IDLE to CONFIGURING - CMD Configure (16)
   When the Configure command is sent to the subarray 1
   Then the subarray 1 should transition to the CONFIGURING state
   Then the subarray 1 should transition to the READY state
+  Then the subarray 1 longRunningCommand should be terminated
+
+Scenario: IDLE to RESOURCING - CMD AssignResources (18)
+  Given the subarray 1 is in the IDLE state
+  When the AssignResources command is sent to the subarray 1
+  Then the subarray 1 should transition to the RESOURCING state
+  Then the subarray 1 should transition to the IDLE state
   Then the central node longRunningCommand should be terminated
+
+Scenario: IDLE to RESOURCING - CMD ReleaseResources (17)
+  Given the subarray 1 is in the IDLE state
+  When the ReleaseResources command is sent to the subarray 1
+  Then the subarray 1 should transition to the RESOURCING state
+  Then the subarray 1 should transition to the EMPTY state
+
 

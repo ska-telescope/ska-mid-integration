@@ -37,6 +37,7 @@ from tests.various_utils.default_json_inputs import (
     RELEASE_CENTRAL_NODE_INPUT,
     SCAN_SUBARRAY_INPUT,
 )
+from tests.various_utils.file_json_input import FileJSONInput
 
 # ------------------------------------------------------------
 # Test Harness fixtures
@@ -185,10 +186,16 @@ def _setup_event_subscriptions(
     event_tracer.subscribe_event(
         central_node_facade.central_node, "longRunningCommandResult"
     )
+    event_tracer.subscribe_event(
+        subarray_node_facade.subarray_node, "longRunningCommandResult"
+    )
 
     log_events(
         {
-            subarray_node_facade.subarray_node: ["obsState"],
+            subarray_node_facade.subarray_node: [
+                "obsState",
+                "longRunningCommandResult",
+            ],
             csp.csp_subarray: ["obsState"],
             sdp.sdp_subarray: ["obsState"],
             central_node_facade.central_node: ["longRunningCommandResult"],
@@ -218,4 +225,117 @@ def subarray_can_be_used(
     subarray_node_facade.set_subarray_id(subarray_id)
     _setup_event_subscriptions(
         central_node_facade, subarray_node_facade, csp, sdp, event_tracer
+    )
+
+
+@given(parsers.parse("the subarray {subarray} is in the RESOURCING state"))
+def subarray_in_resourcing_state(
+    context_fixt: SubarrayTestContextData,
+    # subarray_id: str,
+    subarray_node_facade: TMCSubarrayNodeFacade,
+    default_commands_inputs: ObsStateCommandsInput,
+):
+    """Ensure the subarray is in the RESOURCING state."""
+    context_fixt.starting_state = ObsState.RESOURCING
+    context_fixt.expected_next_state = ObsState.IDLE
+
+    subarray_node_facade.force_change_of_obs_state(
+        ObsState.RESOURCING,
+        default_commands_inputs,
+        wait_termination=True,
+    )
+
+
+@given(parsers.parse("the subarray {subarray} is in the IDLE state"))
+def subarray_in_idle_state(
+    context_fixt: SubarrayTestContextData,
+    # subarray_id: str,
+    subarray_node_facade: TMCSubarrayNodeFacade,
+    central_node_facade: TMCCentralNodeFacade,
+    default_commands_inputs: ObsStateCommandsInput,
+):
+    """Ensure the subarray is in the IDLE state."""
+    context_fixt.starting_state = ObsState.IDLE
+
+    subarray_node_facade.force_change_of_obs_state(
+        ObsState.EMPTY,
+        default_commands_inputs,
+        wait_termination=True,
+    )
+
+    json_input = FileJSONInput("centralnode", "assign_resources_mid")
+    json_input = json_input.set_attribute_value("subarray_id", 1)
+
+    context_fixt.when_action_result = central_node_facade.assign_resources(
+        json_input,
+        wait_termination=True,
+    )
+
+    # NOTE: Do not use force change of obs state here, because currently
+    # for moving to IDLE it uses a wrong command, called on subarray node
+    # instead of on central node.
+
+    # TODO: fix the above issue and use the following line instead:
+    # subarray_node_facade.force_change_of_obs_state(
+    #     ObsState.IDLE,
+    #     default_commands_inputs,
+    #     wait_termination=True,
+    # )
+
+    # NOTE: we could consider foreach TelescopeAction that moves to
+    # a transient state and then to a quiescent state, to permit to choose
+    # if the termination condition should be the transient state or the
+    # quiescent state.
+
+
+@given(parsers.parse("the subarray {subarray} is in the CONFIGURING state"))
+def subarray_in_configuring_state(
+    context_fixt: SubarrayTestContextData,
+    # subarray_id: str,
+    subarray_node_facade: TMCSubarrayNodeFacade,
+    default_commands_inputs: ObsStateCommandsInput,
+):
+    """Ensure the subarray is in the CONFIGURING state."""
+    context_fixt.starting_state = ObsState.CONFIGURING
+    context_fixt.expected_next_state = ObsState.READY
+
+    subarray_node_facade.force_change_of_obs_state(
+        ObsState.CONFIGURING,
+        default_commands_inputs,
+        wait_termination=True,
+    )
+
+
+@given(parsers.parse("the subarray {subarray} is in the READY state"))
+def subarray_in_ready_state(
+    context_fixt: SubarrayTestContextData,
+    # subarray_id: str,
+    subarray_node_facade: TMCSubarrayNodeFacade,
+    default_commands_inputs: ObsStateCommandsInput,
+):
+    """Ensure the subarray is in the READY state."""
+    context_fixt.starting_state = ObsState.READY
+
+    subarray_node_facade.force_change_of_obs_state(
+        ObsState.READY,
+        default_commands_inputs,
+        wait_termination=True,
+    )
+
+
+@given(parsers.parse("the subarray {subarray} is in the SCANNING state"))
+def subarray_in_scanning_state(
+    context_fixt: SubarrayTestContextData,
+    # subarray_id: str,
+    subarray_node_facade: TMCSubarrayNodeFacade,
+    default_commands_inputs: ObsStateCommandsInput,
+):
+    """Ensure the subarray is in the SCANNING state."""
+    context_fixt.starting_state = ObsState.SCANNING
+    context_fixt.expected_next_state = ObsState.READY
+
+    subarray_node_facade.force_change_of_obs_state(
+        ObsState.SCANNING,
+        default_commands_inputs,
+        wait_termination=True,
     )
