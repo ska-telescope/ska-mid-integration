@@ -53,7 +53,7 @@ server:
               - "50"
           - name: "TrackTableInAdvance"
             values:
-              - "5"
+              - "6"
   {{- end }}
 depends_on:
   - device: sys/database/2
