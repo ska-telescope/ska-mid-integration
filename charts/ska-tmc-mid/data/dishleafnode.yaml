@@ -51,7 +51,9 @@ server:
           - name: "CommandTimeOut"
             values:
               - "50"
-
+          - name: "TrackTableInAdvance"
+            values:
+              - "30"
   {{- end }}
 depends_on:
   - device: sys/database/2
