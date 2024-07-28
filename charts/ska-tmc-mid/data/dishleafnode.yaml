@@ -57,6 +57,7 @@ server:
             values:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
               - "6"
 =======
               - 60
@@ -80,6 +81,9 @@ server:
 =======
               - "10"
 >>>>>>> 18c52962 (SAH-1564: Update track table value)
+=======
+              - "5"
+>>>>>>> c1c63a8b (SAH-1564: UPdate yaml file)
   {{- end }}
 depends_on:
   - device: sys/database/2
