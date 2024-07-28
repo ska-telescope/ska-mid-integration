@@ -137,6 +137,7 @@ dishleafnode:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     tag: 0.16.0
 =======
     tag: 0.14.3-dev.c622c8bba
@@ -177,6 +178,8 @@ dishleafnode:
 >>>>>>> 5283c485 (SAH-1564: Update values.yaml)
 =======
 >>>>>>> 27475245 (SAH-1564: use dev image of dishleafnode)
+=======
+>>>>>>> 25abf9ea (SAH-1564: Update dev image of dishleafnode)
     tag: 0.14.3
 =======
     tag: 0.16.0-dev.c7f47ea7a
@@ -223,7 +226,13 @@ dishleafnode:
 =======
     tag: 0.16.1-dev.cfea5b8bc
 >>>>>>> 2bf83c0b (SAH-1564: use dev image of dishleafnode)
+<<<<<<< HEAD
 >>>>>>> 27475245 (SAH-1564: use dev image of dishleafnode)
+=======
+=======
+    tag: 0.16.1-dev.c6bc59589
+>>>>>>> f7ae2452 (SAH-1564: Update dev image of dishleafnode)
+>>>>>>> 25abf9ea (SAH-1564: Update dev image of dishleafnode)
     pullPolicy: IfNotPresent
 
 resources:
