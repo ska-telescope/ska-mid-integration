@@ -56,6 +56,7 @@ server:
           - name: "TrackTableInAdvance"
             values:
 <<<<<<< HEAD
+<<<<<<< HEAD
               - "6"
 =======
               - 60
@@ -76,6 +77,9 @@ server:
 =======
               - "12"
 >>>>>>> 84767653 (SAH-1564: Update yaml file)
+=======
+              - "10"
+>>>>>>> 18c52962 (SAH-1564: Update track table value)
   {{- end }}
 depends_on:
   - device: sys/database/2
