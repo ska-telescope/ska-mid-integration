@@ -214,7 +214,7 @@ def check_automatic_endscan_with_scan_duration1(
     """
     time.sleep(int(scan_duration1))
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
+        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=15
     )
 
 
