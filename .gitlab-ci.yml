@@ -72,6 +72,10 @@ include:
 # - project: 'ska-telescope/templates-repository'
 #   file: 'gitlab-ci/includes/xray-publish.gitlab-ci.yml'
 
+# https://skao.slack.com/archives/CEMF9HXUZ/p1722252553476609
+python-lint:
+  image: artefact.skao.int/ska-tango-images-pytango-builder:9.3.35
+
 - local: '/gitlab_ci/.gitlab-ci-on-demand.yml'
 - local: '/gitlab_ci/.gitlab-ci-dish.yml'
 - local: '/gitlab_ci/.gitlab-ci-csp-dish.yml'
