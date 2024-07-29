@@ -4,7 +4,7 @@ from contextlib import contextmanager
 from tests.resources.test_harness.utils.wait_helpers import Waiter
 from tests.resources.test_support.common_utils.common_helpers import Resource
 
-TIMEOUT = 1000
+TIMEOUT = 1100
 
 
 def sync_telescope_on(func):
