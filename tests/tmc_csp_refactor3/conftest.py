@@ -111,6 +111,8 @@ def dishes(telescope_wrapper: TelescopeWrapper):
 @pytest.fixture
 def event_tracer() -> TypedTangoEventTracer:
     """Create an event tracer."""
+    
+
     return TypedTangoEventTracer()
 
 
