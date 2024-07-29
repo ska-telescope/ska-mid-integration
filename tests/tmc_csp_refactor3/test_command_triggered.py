@@ -69,7 +69,12 @@ def test_idle_to_resourcing_to_idle():
     """Test IDLE to RESOURCING to IDLE transitions."""
 
 
-@pytest.mark.skip(reason="Not implemented yed.")
+@pytest.mark.xfail(
+    reason="Without a time.sleep after the telescope reached the IDLE state, "
+    "the test fails. But the test should pass without the time.sleep "
+    "since if a subarray is in IDLE state, by design it should be able "
+    "to receive the Configure command."
+)
 @pytest.mark.tmc_csp_refactor3
 @scenario(
     "../tmc_csp_refactor3/features/command_triggered.feature",
