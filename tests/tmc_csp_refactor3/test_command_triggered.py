@@ -84,6 +84,49 @@ def test_idle_to_resourcing_to_empty():
     """Test IDLE to RESOURCING to EMPTY transitions."""
 
 
+@pytest.mark.tmc_csp_refactor3
+@scenario(
+    "../tmc_csp_refactor3/features/subarray_commands.feature",
+    "READY to SCANNING to READY- CMD Scan (9)",
+)
+def test_ready_to_scanning_to_ready():
+    """Test READY to SCANNING to READY transitions."""
+
+
+@pytest.mark.tmc_csp_refactor3
+@scenario(
+    "../tmc_csp_refactor3/features/subarray_commands.feature",
+    "READY to IDLE - CMD End (10)",
+)
+def test_ready_to_idle():
+    """Test READY to IDLE transitions."""
+
+
+@pytest.mark.xfail(
+    reason="Without a time.sleep after the telescope reached the READY state, "
+    "the test fails. But the test should pass without the time.sleep "
+    "since if a subarray is in READY state, by design it should be able "
+    "to receive the Configure command."
+)
+@pytest.mark.tmc_csp_refactor3
+@scenario(
+    "../tmc_csp_refactor3/features/subarray_commands.feature",
+    "READY to CONFIGURING to READY - CMD Configure (13)",
+)
+def test_ready_to_configuring_to_ready():
+    """Test READY to CONFIGURING to READY transitions."""
+
+
+@pytest.mark.tmc_csp_refactor3
+@scenario(
+    "../tmc_csp_refactor3/features/subarray_commands.feature",
+    "SCANNING to READY - CMD End Scan (17)",
+)
+def test_scanning_to_ready():
+    """Test SCANNING to READY transitions."""
+    pass
+
+
 # ------------------------------------------------------------
 # Given steps
 
@@ -127,7 +170,7 @@ def send_assign_resources_command(
 
     context_fixt.when_action_result = central_node_facade.assign_resources(
         json_input,
-        wait_termination=True,
+        wait_termination=False,
     )
 
 
@@ -148,7 +191,7 @@ def send_release_resources_command(
 
     context_fixt.when_action_result = central_node_facade.release_resources(
         json_input,
-        wait_termination=True,
+        wait_termination=False,
     )
 
 
@@ -166,7 +209,49 @@ def send_configure_command(
 
     context_fixt.when_action_result = subarray_node_facade.configure(
         json_input,
-        wait_termination=True,
+        wait_termination=False,
+    )
+
+
+@when(parsers.parse("the Scan command is sent to the subarray {subarray}"))
+def send_scan_command(
+    context_fixt: SubarrayTestContextData,
+    subarray_node_facade: TMCSubarrayNodeFacade,
+):
+    """Send the Scan command to the subarray."""
+    context_fixt.when_action_name = "Scan"
+
+    json_input = FileJSONInput("subarray", "scan_mid")
+
+    context_fixt.when_action_result = subarray_node_facade.scan(
+        json_input,
+        wait_termination=False,
+    )
+
+
+@when(parsers.parse("the End command is sent to the subarray {subarray}"))
+def send_end_command(
+    context_fixt: SubarrayTestContextData,
+    subarray_node_facade: TMCSubarrayNodeFacade,
+):
+    """Send the End command to the subarray."""
+    context_fixt.when_action_name = "End"
+
+    context_fixt.when_action_result = subarray_node_facade.end_observation(
+        wait_termination=False,
+    )
+
+
+@when(parsers.parse("the EndScan command is sent to the subarray {subarray}"))
+def send_end_scan_command(
+    context_fixt: SubarrayTestContextData,
+    subarray_node_facade: TMCSubarrayNodeFacade,
+):
+    """Send the EndScan command to the subarray."""
+    context_fixt.when_action_name = "EndScan"
+
+    context_fixt.when_action_result = subarray_node_facade.end_scan(
+        wait_termination=False,
     )
 
 
@@ -373,6 +458,46 @@ def verify_ready_state(
 
     # override the starting state for the next step
     context_fixt.starting_state = ObsState.READY
+
+
+@then(
+    parsers.parse(
+        "the subarray {subarray} should transition to the SCANNING state"
+    )
+)
+def verify_scanning_state(
+    context_fixt: SubarrayTestContextData,
+    subarray_node_facade: TMCSubarrayNodeFacade,
+    csp: CSPFacade,
+    sdp: SDPFacade,
+    event_tracer: TangoEventTracer,
+):
+    """Verify that the subarray transitions to the SCANNING state."""
+    assert_that(event_tracer).described_as(
+        f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
+        f", CSP Subarray device ({csp.csp_subarray}) "
+        f"and SDP Subarray device ({sdp.sdp_subarray}) "
+        "ObsState attribute values should move "
+        f"from {str(context_fixt.starting_state)} to SCANNING."
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        subarray_node_facade.subarray_node,
+        "obsState",
+        ObsState.SCANNING,
+        previous_value=context_fixt.starting_state,
+    ).has_change_event_occurred(
+        csp.csp_subarray,
+        "obsState",
+        ObsState.SCANNING,
+        previous_value=context_fixt.starting_state,
+    ).has_change_event_occurred(
+        sdp.sdp_subarray,
+        "obsState",
+        ObsState.SCANNING,
+        previous_value=context_fixt.starting_state,
+    )
+
+    # override the starting state for the next step
+    context_fixt.starting_state = ObsState.SCANNING
 
 
 def _get_long_run_command_id(context_fixt: SubarrayTestContextData) -> str:

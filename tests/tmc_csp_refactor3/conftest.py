@@ -291,6 +291,8 @@ def subarray_in_idle_state(
     # but it is not correct since a subarray that is in IDLE state
     # state should be able to receive the
     # Configure, AssignResources, ... commands.
+    # (instead occasionally it fails for a sort of timeout error in the
+    # Tango command reception)
 
     # time.sleep(5)
 
@@ -328,6 +330,15 @@ def subarray_in_ready_state(
         default_commands_inputs,
         wait_termination=True,
     )
+
+    # NOTE: The following line makes a few more tests pass,
+    # but it is not correct since a subarray that is in READY state
+    # state should be able to receive the
+    # Configure command
+    # (instead occasionally it fails for a sort of timeout error in the
+    # Tango command reception)
+
+    # time.sleep(5)
 
 
 @given(parsers.parse("the subarray {subarray} is in the SCANNING state"))

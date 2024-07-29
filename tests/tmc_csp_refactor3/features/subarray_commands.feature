@@ -45,3 +45,27 @@ Feature: test subarray command triggered transitions
     Then the subarray 1 should transition to the RESOURCING state
     Then the subarray 1 should transition to the EMPTY state
 
+  Scenario: READY to SCANNING to READY- CMD Scan (9)
+    Given the subarray 1 is in the READY state
+    When the Scan command is sent to the subarray 1
+    Then the subarray 1 should transition to the SCANNING state
+    Then the subarray 1 should transition to the READY state
+    Then the subarray 1 longRunningCommand should be terminated
+
+  Scenario: READY to IDLE - CMD End (10)
+    Given the subarray 1 is in the READY state
+    When the End command is sent to the subarray 1
+    Then the subarray 1 should transition to the IDLE state
+
+  Scenario: READY to CONFIGURING to READY - CMD Configure (13)
+    Given the subarray 1 is in the READY state
+    When the Configure command is sent to the subarray 1
+    Then the subarray 1 should transition to the CONFIGURING state
+    Then the subarray 1 should transition to the READY state
+    Then the subarray 1 longRunningCommand should be terminated
+
+  Scenario: SCANNING to READY - CMD End Scan (17)
+    Given the subarray 1 is in the SCANNING state
+    When the Endscan command is sent to the subarray 1
+    Then the subarray 1 should transition to the READY state
+
