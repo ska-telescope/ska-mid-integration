@@ -372,6 +372,7 @@ class SubarrayNodeWrapper(object):
             for dish_master in self.dish_master_list:
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 dish_master.SetDirectDishMode(DishMode.STANDBY_LP)
                 dish_master.SetDirectState(DevState.STANDBY)
                 dish_master.ResetDelayInfo()
@@ -382,6 +383,9 @@ class SubarrayNodeWrapper(object):
 >>>>>>> b86fe9c1 (SAH-1558: Code cleanup.)
                 dish_master.ResetDelay()
 >>>>>>> 8e7e0be9 (SAH-1558: Fix the errors in the tests teardown.)
+=======
+                dish_master.SetDelay()
+>>>>>>> 4ddc7bb5 (SAH-1564: Update test cases)
                 dish_master.SetDirectHealthState(HealthState.UNKNOWN)
 
     def _clear_command_call_and_transition_data(self, clear_transition=False):
