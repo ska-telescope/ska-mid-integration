@@ -2096,38 +2096,18 @@ url = "https://artefact.skao.int/repository/pypi-internal/simple"
 reference = "ska-nexus"
 
 [[package]]
-name = "ska-integration-test-harness"
-version = "0.1.0"
-description = "For now, a test harness for TMC-CSP integration tests. In future, a generic test harness integration testing an arbitrary combination of production or emulated SKA subsystems."
-optional = false
-python-versions = "^3.10"
-files = []
-develop = false
-
-[package.dependencies]
-assertpy = "^1.1"
-msgpack-numpy = "^0.4.8"
-pytango = "^9.4.2"
-ska-control-model = "^0.3.1"
-ska-ser-logging = "^0.4.1"
-ska-tango-testing = "^0.7.1"
-
-[package.source]
-type = "git"
-url = "https://gitlab.com/ska-telescope/ska-integration-test-harness.git"
-reference = "omcpt-39-init-test-harness-repo"
-resolved_reference = "aab21b2c011a2aeb3e592cbbc73be813d16c45cc"
-
-[[package]]
 name = "ska-ser-logging"
-version = "0.4.3"
+version = "0.4.1+0a677a67"
 description = "Square Kilometre Array logging configuration library"
 optional = false
-python-versions = ">=3.10,<4.0"
+python-versions = ">=3.5"
 files = [
-    {file = "ska_ser_logging-0.4.3-py3-none-any.whl", hash = "sha256:06a337e4e726f36d24b86087ec106fbb9e65be4566fe328eb56f56f2310322f8"},
-    {file = "ska_ser_logging-0.4.3.tar.gz", hash = "sha256:a94aa51db54ad2a88af4c320c850c766c1733d9f8534381dd67f993e8e4f5d11"},
+    {file = "ska_ser_logging-0.4.1+0a677a67-py3-none-any.whl", hash = "sha256:8b2bf14e9981966c22503b6b6477b6386dec1def1f71295579f0686d55b83841"},
+    {file = "ska_ser_logging-0.4.1+0a677a67.tar.gz", hash = "sha256:558622000db39668d3a35b6986af9d70dac36635826636ef2c07f816a149a06d"},
 ]
+
+[package.extras]
+dev = ["black", "isort", "prospector[with-pyroma]"]
 
 [package.source]
 type = "legacy"
@@ -2724,4 +2704,4 @@ reference = "PyPI-public"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "755eadaa850e00fa86510db95dd24103e80c27e78eb03c22084749ceeb9b4eaa"
+content-hash = "662fa3bb53601ab0c683a94732d71fb8c1ab5f2d69435f596689cd7f2dbaf7a5"
