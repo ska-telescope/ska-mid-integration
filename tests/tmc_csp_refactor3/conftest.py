@@ -1,6 +1,8 @@
 """Configurations needed for the tests using the new harness."""
 
 
+import logging
+
 # Define a fixture to store things, like the starting state
 from dataclasses import dataclass
 from typing import Any
@@ -8,6 +10,7 @@ from typing import Any
 import pytest
 from pytest_bdd import given, parsers
 from ska_control_model import ObsState
+from ska_integration_test_harness.dummy import hello_world
 from ska_tango_testing.integration import TangoEventTracer  # , log_events
 
 from tests.test_harness3.telescope_facades.csp_facade import CSPFacade
@@ -111,8 +114,7 @@ def dishes(telescope_wrapper: TelescopeWrapper):
 @pytest.fixture
 def event_tracer() -> TypedTangoEventTracer:
     """Create an event tracer."""
-    
-
+    logging.info(hello_world())
     return TypedTangoEventTracer()
 
 
