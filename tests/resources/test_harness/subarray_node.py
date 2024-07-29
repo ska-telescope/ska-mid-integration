@@ -375,6 +375,7 @@ class SubarrayNodeWrapper(object):
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
                 dish_master.SetDirectDishMode(DishMode.STANDBY_LP)
                 dish_master.SetDirectState(DevState.STANDBY)
                 dish_master.ResetDelayInfo()
@@ -394,6 +395,9 @@ class SubarrayNodeWrapper(object):
 =======
                 dish_master.SetDelay()
 >>>>>>> 51b5d971 (SAH-1564: Update attribute name)
+=======
+                dish_master.SetDelay(30)
+>>>>>>> 70ba7a7c (SAH-1564: Update SN file)
                 dish_master.SetDirectHealthState(HealthState.UNKNOWN)
 
     def _clear_command_call_and_transition_data(self, clear_transition=False):
