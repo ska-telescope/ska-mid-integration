@@ -1,4 +1,4 @@
-@XTP-49344 @SKA_mid
+@XTP-49344 @SKA_mid @Team_SAHYADRI
 Scenario: TMC behavior when subarray stuck in obsState RESOURCING
     Given Telescope is in on state
     And TMC subarray <subarray_id> busy in assigning resources
