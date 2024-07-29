@@ -32,7 +32,7 @@ ASSERTIONS_TIMEOUT = 30
 
 @pytest.mark.tmc_csp_refactor3
 @scenario(
-    "../tmc_csp_refactor3/features/command_triggered.feature",
+    "features/subarray_commands.feature",
     "EMPTY to RESOURCING to IDLE - CMD AssignResources (6)",
 )
 def test_empty_to_resourcing_to_idle():
@@ -43,11 +43,11 @@ def test_empty_to_resourcing_to_idle():
     reason="Without a time.sleep after the telescope reached the IDLE state, "
     "the test fails. But the test should pass without the time.sleep "
     "since if a subarray is in IDLE state, by design it should be able "
-    "to receive the Configure command."
+    "to receive the Configure command at any time."
 )
 @pytest.mark.tmc_csp_refactor3
 @scenario(
-    "../tmc_csp_refactor3/features/command_triggered.feature",
+    "features/subarray_commands.feature",
     "IDLE to CONFIGURING to READY - CMD Configure (16)",
 )
 def test_idle_to_configuring_to_ready():
@@ -58,11 +58,11 @@ def test_idle_to_configuring_to_ready():
     reason="Without a time.sleep after the telescope reached the IDLE state, "
     "the test fails. But the test should pass without the time.sleep "
     "since if a subarray is in IDLE state, by design it should be able "
-    "to receive the Configure command."
+    "to receive the Configure command at any time."
 )
 @pytest.mark.tmc_csp_refactor3
 @scenario(
-    "../tmc_csp_refactor3/features/command_triggered.feature",
+    "features/subarray_commands.feature",
     "IDLE to RESOURCING to IDLE - CMD AssignResources (18)",
 )
 def test_idle_to_resourcing_to_idle():
@@ -77,7 +77,7 @@ def test_idle_to_resourcing_to_idle():
 )
 @pytest.mark.tmc_csp_refactor3
 @scenario(
-    "../tmc_csp_refactor3/features/command_triggered.feature",
+    "features/subarray_commands.feature",
     "IDLE to RESOURCING to EMPTY - CMD ReleaseResources (17)",
 )
 def test_idle_to_resourcing_to_empty():
