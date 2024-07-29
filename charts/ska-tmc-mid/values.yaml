@@ -306,6 +306,12 @@ deviceServers:
   dishleafnode:
     enabled: true
     file: "data/dishleafnode.yaml"
+    resources:
+      limits:
+        memory: 2000Mi
+      requests:
+        cpu: 900m
+        memory: 1000Mi
 
   mocks:
     enabled: false
