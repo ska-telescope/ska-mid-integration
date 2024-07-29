@@ -15,11 +15,9 @@ import ast
 
 >>>>>>> 1fc6a549 (SAH-1536: Enable all the tmc-dish tests)
 import json
-import logging
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
-from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import ObsState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
@@ -42,6 +40,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # import time
 
 
@@ -54,6 +53,8 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 >>>>>>> f295f999 (SAH-1564: Update test case)
+=======
+>>>>>>> 8f21d375 (SAH-1564: code cleanup)
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -512,6 +513,7 @@ def reconfigure_subarray(
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "pointingState"
         )
@@ -535,6 +537,8 @@ def reconfigure_subarray(
 =======
         LOGGER.info("current dish id: %s", dish_id)
 >>>>>>> f295f999 (SAH-1564: Update test case)
+=======
+>>>>>>> 8f21d375 (SAH-1564: code cleanup)
         event_recorder.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "longRunningCommandResult",
