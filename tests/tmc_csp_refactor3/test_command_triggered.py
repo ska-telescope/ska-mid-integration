@@ -32,7 +32,7 @@ ASSERTIONS_TIMEOUT = 30
 
 @pytest.mark.tmc_csp_refactor3
 @scenario(
-    "features/subarray_commands.feature",
+    "../tmc_csp_refactor3/features/subarray_commands.feature",
     "EMPTY to RESOURCING to IDLE - CMD AssignResources (6)",
 )
 def test_empty_to_resourcing_to_idle():
@@ -47,7 +47,7 @@ def test_empty_to_resourcing_to_idle():
 )
 @pytest.mark.tmc_csp_refactor3
 @scenario(
-    "features/subarray_commands.feature",
+    "../tmc_csp_refactor3/features/subarray_commands.feature",
     "IDLE to CONFIGURING to READY - CMD Configure (16)",
 )
 def test_idle_to_configuring_to_ready():
@@ -62,7 +62,7 @@ def test_idle_to_configuring_to_ready():
 )
 @pytest.mark.tmc_csp_refactor3
 @scenario(
-    "features/subarray_commands.feature",
+    "../tmc_csp_refactor3/features/subarray_commands.feature",
     "IDLE to RESOURCING to IDLE - CMD AssignResources (18)",
 )
 def test_idle_to_resourcing_to_idle():
@@ -77,7 +77,7 @@ def test_idle_to_resourcing_to_idle():
 )
 @pytest.mark.tmc_csp_refactor3
 @scenario(
-    "features/subarray_commands.feature",
+    "../tmc_csp_refactor3/features/subarray_commands.feature",
     "IDLE to RESOURCING to EMPTY - CMD ReleaseResources (17)",
 )
 def test_idle_to_resourcing_to_empty():

@@ -52,7 +52,7 @@ ASSERTIONS_TIMEOUT = 30
 )
 @pytest.mark.tmc_csp_refactor3
 @scenario(
-    "features/abort_restart_subarray.feature",
+    "../tmc_csp_refactor3/features/abort_restart_subarray.feature",
     "RESOURCING to ABORTING to ABORTED - CMD Abort",
 )
 def test_resourcing_to_aborting_to_aborted():
@@ -96,7 +96,7 @@ def test_resourcing_to_aborting_to_aborted():
 
 @pytest.mark.tmc_csp_refactor3
 @scenario(
-    "features/abort_restart_subarray.feature",
+    "../tmc_csp_refactor3/features/abort_restart_subarray.feature",
     "IDLE to ABORTING to ABORTED - CMD Abort",
 )
 def test_idle_to_aborting_to_aborted():
@@ -157,7 +157,7 @@ def test_idle_to_aborting_to_aborted():
 
 @pytest.mark.tmc_csp_refactor3
 @scenario(
-    "features/abort_restart_subarray.feature",
+    "../tmc_csp_refactor3/features/abort_restart_subarray.feature",
     "CONFIGURING to ABORTING to ABORTED - CMD Abort",
 )
 def test_configuring_to_aborting_to_aborted():
@@ -166,7 +166,7 @@ def test_configuring_to_aborting_to_aborted():
 
 @pytest.mark.tmc_csp_refactor3
 @scenario(
-    "features/abort_restart_subarray.feature",
+    "../tmc_csp_refactor3/features/abort_restart_subarray.feature",
     "READY to ABORTING to ABORTED - CMD Abort",
 )
 def test_ready_to_aborting_to_aborted():
@@ -175,7 +175,7 @@ def test_ready_to_aborting_to_aborted():
 
 @pytest.mark.tmc_csp_refactor3
 @scenario(
-    "features/abort_restart_subarray.feature",
+    "../tmc_csp_refactor3/features/abort_restart_subarray.feature",
     "SCANNING to ABORTING to ABORTED - CMD Abort",
 )
 def test_scanning_to_aborting_to_aborted():
@@ -184,7 +184,7 @@ def test_scanning_to_aborting_to_aborted():
 
 @pytest.mark.tmc_csp_refactor3
 @scenario(
-    "features/abort_restart_subarray.feature",
+    "../tmc_csp_refactor3/features/abort_restart_subarray.feature",
     "ABORTED to RESTARTING to EMPTY - CMD Restart",
 )
 def test_aborted_to_restarting():
