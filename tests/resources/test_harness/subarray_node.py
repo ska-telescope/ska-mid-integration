@@ -355,7 +355,7 @@ class SubarrayNodeWrapper(object):
             sim_device_fqdn_list = [self.sdp_subarray1]
         for sim_device_fqdn in sim_device_fqdn_list:
             device = DeviceProxy(sim_device_fqdn)
-            device.ResetDelayInfo()
+            device.SetDelayInfo()
             device.SetDirectHealthState(HealthState.UNKNOWN)
             device.SetDefective(json.dumps({"enabled": False}))
 
