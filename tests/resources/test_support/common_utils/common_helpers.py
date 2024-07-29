@@ -3,7 +3,7 @@ import logging
 import signal
 import threading
 from datetime import datetime
-from time import sleep, time
+from time import sleep
 
 from numpy import ndarray
 from ska_ser_logging import configure_logging
@@ -26,12 +26,12 @@ class Resource:
 
     def get(self, attr):
         """Method for getting attributes"""
-        start_time = time()
+        time_spent = 0
         TIMEOUT = 30
         device_proxy = DeviceProxy(self.device_name)
         device_proxy.set_timeout_millis(5000)
 
-        while time() - start_time < TIMEOUT:
+        while time_spent < TIMEOUT:
             try:
 
                 attrs = device_proxy.get_attribute_list()
@@ -50,8 +50,8 @@ class Resource:
                     return tuple(value)
                 return getattr(device_proxy, attr)
             except Exception:
-
                 sleep(1)
+                time_spent = +1
 
         LOGGER.info("Timeout of %d seconds reached - %s", TIMEOUT, Exception)
         raise Exception

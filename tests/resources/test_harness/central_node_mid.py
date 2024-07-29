@@ -375,6 +375,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             LOGGER.info("Invoking TelescopeOff() on simulated sdp and dish")
             self.central_node.TelescopeOff()
         elif SIMULATED_DEVICES_DICT["sdp"]:
+            LOGGER.info("Invoking TelescopeOff() on simulated sdp")
             self.central_node.TelescopeOff()
         else:
             LOGGER.info("Invoke TelescopeOff() with all real sub-systems")
@@ -465,8 +466,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 self.sdp_master,
                 self.csp_master,
             ]:
-                device = DeviceProxy(mock_device)
-                device.SetDirectHealthState(HealthState.UNKNOWN)
+                mock_device.SetDirectHealthState(HealthState.UNKNOWN)
         elif SIMULATED_DEVICES_DICT["csp_and_dish"]:
             self.csp_master.SetDirectHealthState(HealthState.UNKNOWN)
             for mock_device in self.dish_master_list:
@@ -482,8 +482,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 self.sdp_master,
                 self.csp_master,
             ]:
-                device = DeviceProxy(mock_device)
-                device.SetDirectHealthState(HealthState.UNKNOWN)
+                mock_device.SetDirectHealthState(HealthState.UNKNOWN)
             for mock_device in self.dish_master_list:
                 mock_device.SetDirectHealthState(HealthState.UNKNOWN)
         else:
@@ -570,6 +569,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
 
             else:
                 self.move_to_off()
+
         self._clear_command_call_and_transition_data(clear_transition=True)
         # if source dish vcc config is empty or not matching with default
         # dish vcc then load default dish vcc config

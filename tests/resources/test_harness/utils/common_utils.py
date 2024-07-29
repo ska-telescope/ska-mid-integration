@@ -239,6 +239,8 @@ def wait_added_for_skb372():
     """
     Waits for few seocnds
     """
+    # TODO: Remove this method call from the tests once new SubarrayNode
+    # aggregation is intgerated in tmc-mid integration repository
     time.sleep(4)
 
 
