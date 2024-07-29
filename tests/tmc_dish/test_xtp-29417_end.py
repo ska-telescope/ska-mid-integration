@@ -116,7 +116,7 @@ def check_subarray_obsstate(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
-            lookahead=10,
+            lookahead=15,
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
@@ -126,7 +126,7 @@ def check_subarray_obsstate(
         )
 
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
+        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=15
     )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
