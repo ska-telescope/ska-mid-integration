@@ -16,6 +16,7 @@ from tests.resources.test_support.enum import DishMode
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 # @pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
 @pytest.mark.skip
@@ -30,6 +31,9 @@ from tests.resources.test_support.enum import DishMode
 >>>>>>> c60c8729 (SAH-1536: Test only test case for long sequence)
 =======
 >>>>>>> 1fc6a549 (SAH-1536: Enable all the tmc-dish tests)
+=======
+@pytest.mark.skip
+>>>>>>> efe6d5dd (SAH-1564: Run only long sequence test for tmc-dish interface)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-30209_abort_idle.feature",
