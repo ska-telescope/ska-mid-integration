@@ -23,6 +23,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 # @pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
 @pytest.mark.skip
@@ -55,6 +56,14 @@ from tests.resources.test_support.enum import DishMode, PointingState
 =======
 >>>>>>> 53d94e03 (SAH-1564: Enable tmc-dish bdd tests)
 >>>>>>> abc41c54 (SAH-1564: Enable tmc-dish bdd tests)
+=======
+@pytest.mark.skip(reason="Dish pointingstate issue")
+=======
+>>>>>>> 53d94e03 (SAH-1564: Enable tmc-dish bdd tests)
+=======
+@pytest.mark.skip
+>>>>>>> 3559c04b (SAH-1564: Test pipeline)
+>>>>>>> 719a97b3 (SAH-1564: Test pipeline)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29417_end.feature",
