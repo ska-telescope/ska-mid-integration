@@ -54,13 +54,13 @@ def set_cluster(
         telescope_annotation = ""
     else:
         telescope_annotation = f"-{telescope}"
-    os.environ["TANGO_HOST"] = (
-        f"{database_name}.{namespace}{telescope_annotation}.svc.{facility_name}:{db_port}"
-    )
+    os.environ[
+        "TANGO_HOST"
+    ] = f"{database_name}.{namespace}{telescope_annotation}.svc.{facility_name}:{db_port}"
     if helm_release:
-        os.environ["SKUID_URL"] = (
-            f"ska-ser-skuid-{helm_release}-svc.{namespace}{telescope_annotation}.svc.{facility_name}:9870"
-        )
+        os.environ[
+            "SKUID_URL"
+        ] = f"ska-ser-skuid-{helm_release}-svc.{namespace}{telescope_annotation}.svc.{facility_name}:9870"
     if polling:
         os.environ["USE_POLLING"] = "True"
     env["database_name"] = database_name
@@ -100,9 +100,9 @@ def set_oda_url(
         "stfc": "techops.internal.skao.int",
         "itf": "miditf.internal.skao.int",
     }.get(facility)
-    os.environ["ODA_URL"] = (
-        f"http://ingress-nginx-controller-lb-stfc-techops-production-cicd.ingress-nginx.svc.{facility_name}/{namespace}/oda/api/v5"
-    )
+    os.environ[
+        "ODA_URL"
+    ] = f"http://ingress-nginx-controller-lb-stfc-techops-production-cicd.ingress-nginx.svc.{facility_name}/{namespace}/oda/api/v5"
 
 
 # ======== UNUSED FUNCTIONS ================#
