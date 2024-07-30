@@ -14,6 +14,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -73,6 +74,9 @@ from tests.resources.test_support.enum import DishMode, PointingState
 =======
 
 >>>>>>> 7d538b96 (SAH-1564: Fix formatting)
+=======
+
+>>>>>>> 3da6e036 (SAH-1564: Fix formatting)
 @pytest.mark.skip
 >>>>>>> 3559c04b (SAH-1564: Test pipeline)
 <<<<<<< HEAD
