@@ -5,19 +5,19 @@ import pytest
 from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState, ResultCode
-from ska_tango_testing.integration import TangoEventTracer
-
-from tests.test_harness3.telescope_facades.csp_facade import CSPFacade
-from tests.test_harness3.telescope_facades.sdp_facade import SDPFacade
-from tests.test_harness3.telescope_facades.tmc_central_node_facade import (
+from ska_integration_test_harness.facades.csp_facade import CSPFacade
+from ska_integration_test_harness.facades.sdp_facade import SDPFacade
+from ska_integration_test_harness.facades.tmc_central_node_facade import (
     TMCCentralNodeFacade,
 )
-from tests.test_harness3.telescope_facades.tmc_subarray_node_facade import (
+from ska_integration_test_harness.facades.tmc_subarray_node_facade import (
     TMCSubarrayNodeFacade,
 )
-from tests.test_harness3.telescope_inputs.obs_state_commands_input import (
+from ska_integration_test_harness.inputs.obs_state_commands_input import (
     ObsStateCommandsInput,
 )
+from ska_tango_testing.integration import TangoEventTracer
+
 from tests.tmc_csp_refactor3.conftest import SubarrayTestContextData
 from tests.tmc_csp_refactor3.utils.verify_command_call import (
     verify_device_received_command,

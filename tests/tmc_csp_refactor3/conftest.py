@@ -10,29 +10,31 @@ from typing import Any
 import pytest
 from pytest_bdd import given, parsers
 from ska_control_model import ObsState
+from ska_integration_test_harness.common_utils.typed_logger import log_events
+from ska_integration_test_harness.common_utils.typed_tracer import (
+    TypedTangoEventTracer,
+)
 from ska_integration_test_harness.dummy import hello_world
-from ska_tango_testing.integration import TangoEventTracer  # , log_events
-
-from tests.test_harness3.telescope_facades.csp_facade import CSPFacade
-from tests.test_harness3.telescope_facades.dishes_facade import DishesFacade
-from tests.test_harness3.telescope_facades.sdp_facade import SDPFacade
-from tests.test_harness3.telescope_facades.tmc_central_node_facade import (
+from ska_integration_test_harness.facades.csp_facade import CSPFacade
+from ska_integration_test_harness.facades.dishes_facade import DishesFacade
+from ska_integration_test_harness.facades.sdp_facade import SDPFacade
+from ska_integration_test_harness.facades.tmc_central_node_facade import (
     TMCCentralNodeFacade,
 )
-from tests.test_harness3.telescope_facades.tmc_subarray_node_facade import (
+from ska_integration_test_harness.facades.tmc_subarray_node_facade import (
     TMCSubarrayNodeFacade,
 )
-from tests.test_harness3.telescope_init.telescope_structure_factory import (
+from ska_integration_test_harness.init.telescope_structure_factory import (
     TelescopeStructureFactory,
 )
-from tests.test_harness3.telescope_inputs.obs_state_commands_input import (
+from ska_integration_test_harness.inputs.obs_state_commands_input import (
     ObsStateCommandsInput,
 )
-from tests.test_harness3.telescope_structure.telescope_wrapper import (
+from ska_integration_test_harness.structure.telescope_wrapper import (
     TelescopeWrapper,
 )
-from tests.tmc_csp_refactor3.utils.typed_logger import log_events
-from tests.tmc_csp_refactor3.utils.typed_tracer import TypedTangoEventTracer
+from ska_tango_testing.integration import TangoEventTracer  # , log_events
+
 from tests.various_utils.default_json_inputs import (
     ASSING_CENTRAL_NODE_INPUT,
     CONFIGURE_SUBARRAY_INPUT,
