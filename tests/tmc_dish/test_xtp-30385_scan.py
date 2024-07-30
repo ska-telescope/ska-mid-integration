@@ -19,7 +19,10 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
+<<<<<<< HEAD
 @pytest.mark.skip(reason="Dish pointingstate issue")
+=======
+>>>>>>> e50805e3 (SAH-1564: Enable tmc-dish bdd tests)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-30385_scan.feature",
