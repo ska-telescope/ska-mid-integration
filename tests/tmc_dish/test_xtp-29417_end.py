@@ -12,6 +12,7 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_support.enum import DishMode, PointingState
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -65,6 +66,9 @@ from tests.resources.test_support.enum import DishMode, PointingState
 =======
 >>>>>>> 53d94e03 (SAH-1564: Enable tmc-dish bdd tests)
 =======
+=======
+
+>>>>>>> 7d538b96 (SAH-1564: Fix formatting)
 @pytest.mark.skip
 >>>>>>> 3559c04b (SAH-1564: Test pipeline)
 <<<<<<< HEAD
