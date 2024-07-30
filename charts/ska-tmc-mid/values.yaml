@@ -142,6 +142,7 @@ dishleafnode:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     tag: 0.16.0
 =======
     tag: 0.14.3-dev.c622c8bba
@@ -192,6 +193,8 @@ dishleafnode:
 >>>>>>> 1985ef6e (SAH-1567: Utilise ska-tmc-dishleafnode v.0.16.3)
 =======
 >>>>>>> f616da48 (SAH-1564: Update DishLeafNode image version)
+=======
+>>>>>>> 2e7818ed (SAH-1564: Update dishleafnode dev image version)
     tag: 0.14.3
 =======
     tag: 0.16.0-dev.c7f47ea7a
@@ -268,7 +271,13 @@ dishleafnode:
 =======
     tag: 0.16.1-dev.c124ad629
 >>>>>>> 223fd19e (SAH-1564: Update DishLeafNode image version)
+<<<<<<< HEAD
 >>>>>>> f616da48 (SAH-1564: Update DishLeafNode image version)
+=======
+=======
+    tag: 0.16.1-dev.c13780c4c
+>>>>>>> 55739d88 (SAH-1564: Update dishleafnode dev image version)
+>>>>>>> 2e7818ed (SAH-1564: Update dishleafnode dev image version)
     pullPolicy: IfNotPresent
 
 resources:
