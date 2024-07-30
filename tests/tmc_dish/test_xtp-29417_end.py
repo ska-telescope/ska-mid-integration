@@ -11,6 +11,7 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_support.enum import DishMode, PointingState
 
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -71,7 +72,13 @@ from tests.resources.test_support.enum import DishMode, PointingState
 =======
 =======
 >>>>>>> 00333f43 (SAH-1564: Enable tmc-dish end() test)
+<<<<<<< HEAD
 >>>>>>> 50cdf777 (SAH-1564: Enable tmc-dish end() test)
+=======
+=======
+@pytest.mark.skip
+>>>>>>> b3b25b5b (SAH-1564: Disable tmc-dish end() test case)
+>>>>>>> e4343ae2 (SAH-1564: Disable tmc-dish end() test case)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29417_end.feature",
@@ -185,8 +192,7 @@ def invoke_end(central_node_mid, subarray_node, subarray_id, event_recorder):
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
-    # pytest.command_result = subarray_node.execute_transition("End")
-    pytest.command_result = subarray_node.subarray_node.End()
+    pytest.command_result = subarray_node.execute_transition("End")
 
 
 @then(
