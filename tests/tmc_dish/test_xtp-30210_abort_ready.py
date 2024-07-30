@@ -18,6 +18,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 # @pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
 @pytest.mark.skip
@@ -35,6 +36,8 @@ from tests.resources.test_support.enum import DishMode, PointingState
 =======
 @pytest.mark.skip(reason="Dish pointingstate issue")
 >>>>>>> 14801d0e (SAH-1567: Pull changes of sah-1564 branch.)
+=======
+>>>>>>> 5f8704fa (SAH-1567: Enable test cases)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-30210_abort_ready.feature",

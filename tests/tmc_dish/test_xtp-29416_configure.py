@@ -20,6 +20,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 # @pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
 @pytest.mark.skip
@@ -40,6 +41,8 @@ from tests.resources.test_support.enum import DishMode, PointingState
 =======
 =======
 >>>>>>> babb9759 (SAH-1564: Revert change)
+=======
+>>>>>>> 5f8704fa (SAH-1567: Enable test cases)
 @pytest.mark.skip(reason="Dish pointingstate issue")
 =======
 @pytest.mark.VV
@@ -49,7 +52,12 @@ from tests.resources.test_support.enum import DishMode, PointingState
 =======
 =======
 >>>>>>> 8de9c640 (SAH-1564: Revert change)
+<<<<<<< HEAD
 >>>>>>> babb9759 (SAH-1564: Revert change)
+=======
+=======
+>>>>>>> cdd8cab6 (SAH-1567: Enable test cases)
+>>>>>>> 5f8704fa (SAH-1567: Enable test cases)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29416_configure.feature",
