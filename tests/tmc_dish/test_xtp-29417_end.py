@@ -185,7 +185,8 @@ def invoke_end(central_node_mid, subarray_node, subarray_id, event_recorder):
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
-    pytest.command_result = subarray_node.execute_transition("End")
+    # pytest.command_result = subarray_node.execute_transition("End")
+    pytest.command_result = subarray_node.end_observation()
 
 
 @then(
