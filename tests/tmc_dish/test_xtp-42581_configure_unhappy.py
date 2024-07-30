@@ -19,6 +19,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 @pytest.mark.skip(reason="Dish pointingstate issue")
 =======
 @pytest.mark.skip
@@ -31,6 +32,9 @@ from tests.resources.test_support.enum import DishMode, PointingState
 >>>>>>> 6726778a (SAH-1564: Test pipline)
 =======
 >>>>>>> e50805e3 (SAH-1564: Enable tmc-dish bdd tests)
+=======
+@pytest.mark.skip
+>>>>>>> d9ba66d7 (SAH-1564: Test pipeline)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42581_configure_unhappy.feature",
