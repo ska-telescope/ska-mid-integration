@@ -74,7 +74,7 @@ ska-dish-lmc:
   ska-mid-dish-manager: 
     enabled: true
     ska-mid-dish-ds-manager:
-      enabled: true
+      enabled: false
 
   ska-mid-dish-simulators:
     enabled: true # dish simulator for other interfaces
