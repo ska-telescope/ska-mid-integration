@@ -1,10 +1,12 @@
 """Test module to verify SKB-413"""
 import ast
 import json
+import logging
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
+from ska_ser_logging import configure_logging
 from ska_telmodel.schema import validate as telmodel_validate
 
 from tests.conftest import MID_DELAY_JSON, MID_DELAYMODEL_VERSION
@@ -20,6 +22,9 @@ from tests.resources.test_harness.utils.common_utils import (
     JsonFactory,
     wait_added_for_skb372,
 )
+
+configure_logging(logging.DEBUG)
+LOGGER = logging.getLogger(__name__)
 
 
 @pytest.mark.skb_413
@@ -112,6 +117,8 @@ def check_delay_model(
     generated_delay_model = (
         subarray_node.csp_subarray_leaf_node.read_attribute("delayModel").value
     )
+    LOGGER.info(generated_delay_model)
+    LOGGER.info(type(generated_delay_model))
     generated_delay_model_json = json.loads(generated_delay_model)
     assert generated_delay_model_json != json.dumps(MID_DELAY_JSON)
     telmodel_validate(
