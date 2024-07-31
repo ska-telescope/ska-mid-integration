@@ -10,6 +10,18 @@ Feature: test subarray command triggered transitions
   a transitional one, followed by the transition to the subsequent
   quiescent state).
 
+
+  Relevant transitions (taken from list_of_transitions.text):
+
+  @Transition("6. EMPTY --> (CMD: AssignResources) --> RESOURCING")
+  @Transition("16. IDLE --> (CMD: Configure) --> CONFIGURING")
+  @Transition("17. IDLE --> (CMD: ReleaseResources) --> RESOURCING")
+  @Transition("18. IDLE --> (CMD: AssignResources) --> RESOURCING")
+  @Transition("26. READY --> (CMD: Scan) --> SCANNING")
+  @Transition("27. READY --> (CMD: End) --> IDLE")
+  @Transition("29. READY --> (CMD: Configure) --> CONFIGURING")
+  @Transition("32. SCANNING --> (CMD: EndScan) --> READY")
+
   Background:
     Given the telescope is in ON state
     Given the subarray 1 can be used
