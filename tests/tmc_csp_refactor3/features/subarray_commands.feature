@@ -14,13 +14,18 @@ Feature: test subarray command triggered transitions
   Relevant transitions (taken from list_of_transitions.text):
 
   @Transition("6. EMPTY --> (CMD: AssignResources) --> RESOURCING")
-  @Transition("16. IDLE --> (CMD: Configure) --> CONFIGURING")
   @Transition("17. IDLE --> (CMD: ReleaseResources) --> RESOURCING")
   @Transition("18. IDLE --> (CMD: AssignResources) --> RESOURCING")
+  @Transition("10. RESOURCING --> (AUTO: Assigned) --> IDLE")
+  @Transition("11. RESOURCING --> (AUTO: Released) --> IDLE")
+  @Transition("13. RESOURCING --> (AUTO: All released) --> EMPTY")
   @Transition("26. READY --> (CMD: Scan) --> SCANNING")
-  @Transition("27. READY --> (CMD: End) --> IDLE")
-  @Transition("29. READY --> (CMD: Configure) --> CONFIGURING")
+  @Transition("33. SCANNING --> (AUTO: ScanComplete) --> READY")
   @Transition("32. SCANNING --> (CMD: EndScan) --> READY")
+  @Transition("27. READY --> (CMD: End) --> IDLE")
+  @Transition("16. IDLE --> (CMD: Configure) --> CONFIGURING")
+  @Transition("29. READY --> (CMD: Configure) --> CONFIGURING")
+  @Transition("22. CONFIGURING --> (AUTO: Ready) --> READY
 
   Background:
     Given the telescope is in ON state
