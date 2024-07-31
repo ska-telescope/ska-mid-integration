@@ -148,6 +148,7 @@ dishleafnode:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     tag: 0.16.0
 =======
     tag: 0.14.3-dev.c622c8bba
@@ -210,6 +211,8 @@ dishleafnode:
 >>>>>>> a963c0f9 (SAH-1564: Dishleafnode dev image with lock while reading tracktable)
 =======
 >>>>>>> 9878b06e (SAH-1564: Dishleafnode dev image with flag to determine if tracktable is provided)
+=======
+>>>>>>> 9b3be757 (SAH-1564: Dishleafnode dev image with flag to determine if tracktable is provided)
     tag: 0.14.3
 =======
     tag: 0.16.0-dev.c7f47ea7a
@@ -322,7 +325,13 @@ dishleafnode:
 =======
     tag: 0.16.1-dev.ca4625283
 >>>>>>> d3470848 (SAH-1564: Dishleafnode dev image with flag to determine if tracktable is provided)
+<<<<<<< HEAD
 >>>>>>> 9878b06e (SAH-1564: Dishleafnode dev image with flag to determine if tracktable is provided)
+=======
+=======
+    tag: 0.16.1-dev.cf964b7f9
+>>>>>>> 579d39ec (SAH-1564: Dishleafnode dev image with flag to determine if tracktable is provided)
+>>>>>>> 9b3be757 (SAH-1564: Dishleafnode dev image with flag to determine if tracktable is provided)
     pullPolicy: IfNotPresent
 
 resources:
