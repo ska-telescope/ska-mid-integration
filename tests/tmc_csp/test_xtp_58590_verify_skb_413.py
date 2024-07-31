@@ -4,11 +4,12 @@ import json
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
-from ska_control_model import ObsState, ResultCode
+from ska_control_model import ObsState
 from ska_telmodel.schema import validate as telmodel_validate
 
 from tests.conftest import MID_DELAY_JSON, MID_DELAYMODEL_VERSION
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
+from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
@@ -65,7 +66,7 @@ def move_subarray_node_to_idle_obsstate(
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+        (pytest.command_result[1][0], COMMAND_COMPLETED),
     )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
@@ -137,5 +138,5 @@ def check_tmc_subarray_in_ready_obsstate(
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+        (pytest.command_result[1][0], COMMAND_COMPLETED),
     )
