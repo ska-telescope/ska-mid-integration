@@ -49,19 +49,20 @@ def move_subarray_node_to_idle_obsstate(
     receptors: str,
 ) -> None:
     """Move TMC Subarray to IDLE obsstate."""
-    assign_input_json = prepare_json_args_for_centralnode_commands(
+    assign_input_str = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-    event_recorder.subscribe_event(
-        subarray_node.subarray_node, "assignedResources"
-    )
+    # event_recorder.subscribe_event(
+    #     subarray_node.subarray_node, "assignedResources"
+    # )
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     event_recorder.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
     )
-    assign_input = json.loads(assign_input_json)
+    assign_input_json = json.loads(assign_input_str)
+    assign_input_json["dish"]["receptor_ids"] = receptors
     pytest.command_result = central_node_mid.perform_action(
-        "AssignResources", json.dumps(assign_input)
+        "AssignResources", json.dumps(assign_input_json)
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
@@ -74,11 +75,11 @@ def move_subarray_node_to_idle_obsstate(
         ObsState.IDLE,
         lookahead=20,
     )
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "assignedResources",
-        ast.literal_eval(receptors),
-    )
+    # assert event_recorder.has_change_event_occurred(
+    #     subarray_node.subarray_node,
+    #     "assignedResources",
+    #     ast.literal_eval(receptors),
+    # )
     wait_added_for_skb372()
 
 

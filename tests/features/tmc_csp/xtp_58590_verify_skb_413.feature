@@ -10,4 +10,4 @@ Feature: Default
 		And the TMC subarray transitions to ObsState READY
 		Examples:
 		    | receptors            |
-		    | ('SKA063', 'SKA100') |
+		    | ['SKA063', 'SKA100'] |
