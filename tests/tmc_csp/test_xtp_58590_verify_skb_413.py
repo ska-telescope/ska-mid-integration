@@ -60,7 +60,9 @@ def move_subarray_node_to_idle_obsstate(
         central_node_mid.central_node, "longRunningCommandResult"
     )
     assign_input_json = json.loads(assign_input_str)
-    assign_input_json["dish"]["receptor_ids"] = receptors
+    # Converting string to list
+    receptors_ids_list = ast.literal_eval(receptors)
+    assign_input_json["dish"]["receptor_ids"] = receptors_ids_list
     pytest.command_result = central_node_mid.perform_action(
         "AssignResources", json.dumps(assign_input_json)
     )
