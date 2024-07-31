@@ -5,7 +5,7 @@ k8s-test-mid-with-csp:
     TELESCOPE: 'SKA-mid'
     KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-csp-mid'
     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-csp-mid"
-    MARK: 'tmc_csp'
+    MARK: 'skb_413'
     CSP_SIMULATION_ENABLED: 'false'
   environment:
     name: test/$CI_COMMIT_REF_SLUG
