@@ -95,8 +95,8 @@ def invoke_configure_command(
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
-    pytest.command_result = subarray_node.store_configuration_data(
-        configure_input_json
+    pytest.command_result = subarray_node.execute_transition(
+        "Configure", argin=configure_input_json
     )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
