@@ -14,7 +14,7 @@ from ska_integration_test_harness.common_utils.typed_logger import log_events
 from ska_integration_test_harness.common_utils.typed_tracer import (
     TypedTangoEventTracer,
 )
-from ska_integration_test_harness.dummy import hello_world
+from ska_integration_test_harness.dummy import dummy_version
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
 from ska_integration_test_harness.facades.dishes_facade import DishesFacade
 from ska_integration_test_harness.facades.sdp_facade import SDPFacade
@@ -64,6 +64,7 @@ def telescope_wrapper(
     default_commands_inputs: ObsStateCommandsInput,
 ) -> TelescopeWrapper:
     """Create an unique test harness with proxies to all devices."""
+    logging.info("Test harness verision: %s", dummy_version())
     components_factory = TelescopeStructureFactory(
         default_commands_inputs, DEFAULT_VCC_CONFIG_INPUT
     )
@@ -116,7 +117,6 @@ def dishes(telescope_wrapper: TelescopeWrapper):
 @pytest.fixture
 def event_tracer() -> TypedTangoEventTracer:
     """Create an event tracer."""
-    logging.info(hello_world())
     return TypedTangoEventTracer()
 
 

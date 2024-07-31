@@ -2120,7 +2120,7 @@ ska-tango-testing = "^0.7.1"
 type = "git"
 url = "https://gitlab.com/ska-telescope/ska-integration-test-harness.git"
 reference = "omcpt-39-init-test-harness-repo"
-resolved_reference = "4b2d6501cca3bfaa795a77bb47cd28b9d58d0f1e"
+resolved_reference = "dc347804f0b615aa3741238dad3a11a4143e082b"
 
 [[package]]
 name = "ska-ser-logging"
@@ -2731,4 +2731,4 @@ reference = "PyPI-public"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "4a95e39fbe367792951911fa9e5e6fed52c087c8ad2641f4ea72cc104691e539"
+content-hash = "7a34faa87c25e514b44daef072be949d88058366e82a0871b8a99de0b3dfa3fb"
