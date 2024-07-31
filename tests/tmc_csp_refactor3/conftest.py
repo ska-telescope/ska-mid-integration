@@ -302,6 +302,29 @@ def subarray_in_idle_state(
 
     # time.sleep(5)
 
+    # NOTE: it fails also if I verify this!
+    # assert_that(subarray_node_facade.subarray_node.obsState).is_equal_to(
+    #     ObsState.IDLE
+    # )
+    # assert_that(
+    #     subarray_node_facade.csp_subarray_leaf_node.cspSubarrayObsState
+    # ).is_equal_to(ObsState.IDLE)
+    # assert_that(
+    #     subarray_node_facade.sdp_subarray_leaf_node.sdpSubarrayObsState
+    # ).is_equal_to(ObsState.IDLE)
+    # assert_that(csp.csp_subarray.obsState).is_equal_to(ObsState.IDLE)
+    # assert_that(sdp.sdp_subarray.obsState).is_equal_to(ObsState.IDLE)
+    # assert_that(event_tracer).described_as(
+    #     "Central Node "
+    #     f"({central_node_facade.central_node}) "
+    #     "longRunningCommand should be terminated."
+    # ).within_timeout(30).has_change_event_occurred(
+    #     central_node_facade.central_node,
+    #     "longRunningCommandResult",
+    #     # _get_expected_long_run_command_result(context_fixt),
+    #     (res[1][0], str(ResultCode.OK.value))
+    # )
+
 
 @given(parsers.parse("the subarray {subarray} is in the CONFIGURING state"))
 def subarray_in_configuring_state(
