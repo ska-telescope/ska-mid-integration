@@ -57,9 +57,6 @@ def move_subarray_node_to_idle_obsstate(
     assign_input_str = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-    # event_recorder.subscribe_event(
-    #     subarray_node.subarray_node, "assignedResources"
-    # )
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     event_recorder.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
@@ -82,11 +79,6 @@ def move_subarray_node_to_idle_obsstate(
         ObsState.IDLE,
         lookahead=20,
     )
-    # assert event_recorder.has_change_event_occurred(
-    #     subarray_node.subarray_node,
-    #     "assignedResources",
-    #     ast.literal_eval(receptors),
-    # )
     wait_added_for_skb372()
 
 
