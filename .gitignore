@@ -36,3 +36,10 @@ charts/**/charts
 charts/**/Chart.lock
 .vscode
 manifests.yaml
+
+pyvenv.cfg
+bin/**/*
+lib/**/*
+lib64
+lib64/**/*
+share/**/*

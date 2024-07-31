@@ -14,8 +14,7 @@ stages:
   - test #BDD will come later, just python tests for now if required
   - deploy
   - integration
-  - staging
- # - join-reports
+  - staging # - join-reports
   - pages
   - publish  # might not need in our case
   - scan
@@ -70,6 +69,10 @@ python-gemnasium-scan:
   rules:
     - when: never
 
+python-test: 
+  rules:
+    - when: never
+
 stop-k8s-test: 
   rules:
     - when: never
@@ -99,9 +102,9 @@ deploy-mid-integration:
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   variables:
-    KUBE_NAMESPACE: "mid-g2-integration-$CI_PROJECT_NAME"
+    KUBE_NAMESPACE: "integration-ska-mid"
   environment:
-    name: mid-g2-integration-$CI_PROJECT_NAME
+    name: integration-ska-mid
     on_stop: stop-mid-integration
 
 info-mid-integration:
@@ -111,9 +114,9 @@ info-mid-integration:
   needs:
     - deploy-mid-integration
   variables:
-    KUBE_NAMESPACE: "mid-g2-integration-$CI_PROJECT_NAME"
+    KUBE_NAMESPACE: "integration-ska-mid"
   environment:
-    name: mid-g2-integration-$CI_PROJECT_NAME
+    name: integration-ska-mid
 
 stop-mid-integration:
   extends: stop-integration
@@ -122,9 +125,9 @@ stop-mid-integration:
   needs:
     - deploy-mid-integration
   variables:
-    KUBE_NAMESPACE: "mid-g2-integration-$CI_PROJECT_NAME"
+    KUBE_NAMESPACE: "integration-ska-mid"
   environment:
-    name: mid-g2-integration-$CI_PROJECT_NAME
+    name: integration-ska-mid
     action: stop
 
 redeploy-mid-integration:
@@ -132,8 +135,8 @@ redeploy-mid-integration:
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   variables:
-    KUBE_NAMESPACE: "mid-g2-integration-$CI_PROJECT_NAME"
+    KUBE_NAMESPACE: "integration-ska-mid"
   environment:
-    name: mid-g2-integration-$CI_PROJECT_NAME
+    name: integration-ska-mid
 
 
