@@ -161,6 +161,7 @@ dishleafnode:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     tag: 0.16.0
 =======
     tag: 0.14.3-dev.c622c8bba
@@ -249,6 +250,8 @@ dishleafnode:
 >>>>>>> 32ac5c38 (SAH-1564: Use dishleafnode dev image)
 =======
 >>>>>>> b4d9e9f4 (SAH-1564: Add logs in track process)
+=======
+>>>>>>> a1de7843 (SAH-1564: Add logs in track process)
     tag: 0.14.3
 =======
     tag: 0.16.0-dev.c7f47ea7a
@@ -439,7 +442,13 @@ dishleafnode:
 =======
     tag: 0.16.2-dev.cd452e419
 >>>>>>> 80735c5f (SAH-1564: Add logs in track process)
+<<<<<<< HEAD
 >>>>>>> b4d9e9f4 (SAH-1564: Add logs in track process)
+=======
+=======
+    tag: 0.16.2-dev.c7116b26a
+>>>>>>> 28e358b0 (SAH-1564: Add logs in track process)
+>>>>>>> a1de7843 (SAH-1564: Add logs in track process)
     pullPolicy: IfNotPresent
 
 resources:
