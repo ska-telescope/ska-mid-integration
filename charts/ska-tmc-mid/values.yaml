@@ -158,6 +158,7 @@ dishleafnode:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     tag: 0.16.0
 =======
     tag: 0.14.3-dev.c622c8bba
@@ -240,6 +241,8 @@ dishleafnode:
 >>>>>>> e9e90f75 (SAH-1564: Update Dishleafnode dev image)
 =======
 >>>>>>> 8641d26d (SAH-1564: Update dishleafnode dev image)
+=======
+>>>>>>> e78041ae (SAH-1564: Update dishleafnode dev image)
     tag: 0.14.3
 =======
     tag: 0.16.0-dev.c7f47ea7a
@@ -412,7 +415,13 @@ dishleafnode:
 =======
     tag: 0.16.2-dev.caec67a99
 >>>>>>> 4eb2c01b (SAH-1564: Update dishleafnode dev image)
+<<<<<<< HEAD
 >>>>>>> 8641d26d (SAH-1564: Update dishleafnode dev image)
+=======
+=======
+    tag: 0.16.2-dev.c1bc04990
+>>>>>>> c86ee5b9 (SAH-1564: Update dishleafnode dev image)
+>>>>>>> e78041ae (SAH-1564: Update dishleafnode dev image)
     pullPolicy: IfNotPresent
 
 resources:
