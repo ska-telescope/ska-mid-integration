@@ -1,4 +1,7 @@
-# Flattened state machine for operational and observation state diagram
+Flattened state machine for operational and observation state diagram
+
+This is the source of truth for the obsstate transitions
+to be tested
 
 1. INIT --> (AUTO: Initialised) --> OFF
 2. INIT --> (AUTO: fatal error) --> OP_FAULT
