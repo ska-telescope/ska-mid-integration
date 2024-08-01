@@ -12,6 +12,7 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_support.enum import DishMode, PointingState
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -59,6 +60,9 @@ from tests.resources.test_support.enum import DishMode, PointingState
 >>>>>>> 0ad6c34c (SAH-1564: Enable TMC - Dish Abort tests)
 =======
 =======
+=======
+
+>>>>>>> 1cf6b1bc (SAH-1574: Fix formatting)
 @pytest.mark.skip(reason="Test being fix in SAH-1564")
 >>>>>>> 00483018 (SAH-1536: Update test case)
 >>>>>>> 438706f0 (SAH-1536: Update test case)

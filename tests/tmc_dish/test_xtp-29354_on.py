@@ -10,6 +10,7 @@ from tests.resources.test_support.enum import DishMode
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -47,6 +48,9 @@ from tests.resources.test_support.enum import DishMode
 =======
 >>>>>>> bb18efd6 (SAH-1567: Code cleanup)
 =======
+=======
+
+>>>>>>> a59f0d05 (SAH-1574: Fix formatting)
 @pytest.mark.skip(reason="Test being fix in SAH-1564")
 >>>>>>> 438706f0 (SAH-1536: Update test case)
 @pytest.mark.tmc_dish

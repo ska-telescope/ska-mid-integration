@@ -15,6 +15,7 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_support.enum import DishMode, PointingState
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -23,6 +24,9 @@ from tests.resources.test_support.enum import DishMode, PointingState
 <<<<<<< HEAD
 @pytest.mark.skip(reason="Dish pointingstate issue")
 =======
+=======
+
+>>>>>>> 1cf6b1bc (SAH-1574: Fix formatting)
 @pytest.mark.skip
 >>>>>>> 763893e8 (SAH-1564: Update test case)
 =======
