@@ -13,7 +13,7 @@ Feature: test subarray command triggered transitions
 
   Relevant transitions (taken from list_of_transitions.text):
 
-  @Transition("6. EMPTY --> (CMD: AssignResources) --> RESOURCING")
+  @CoversTransition("obsstate", "6. EMPTY --> (CMD: AssignResources) --> RESOURCING")
   @Transition("17. IDLE --> (CMD: ReleaseResources) --> RESOURCING")
   @Transition("18. IDLE --> (CMD: AssignResources) --> RESOURCING")
   @Transition("10. RESOURCING --> (AUTO: Assigned) --> IDLE")
@@ -35,18 +35,10 @@ Feature: test subarray command triggered transitions
   @Transition("10. RESOURCING --> (AUTO: Assigned) --> IDLE")
   Scenario: EMPTY to RESOURCING to IDLE - CMD AssignResources
     Given the subarray 1 is in the EMPTY state
-    # TODO for the transition involving RESOURCING
-    # where the complete state of things is not explicit
-    # we need to specify the event that triggers the second transition
-    # GB changed the step name to include the event
     When the AssignResources command is sent to the subarray 1 and the Assigned event is induced
     Then the subarray 1 should transition to the RESOURCING state
-    Then the subarray 1 should transition to the IDLE state
-    Then the central node longRunningCommand should be terminated
-  # TODO we send the command to the subarray and
-  #  check the LRC of the central node?
-  # TODO rewrite the last step as
-  # Then the longRunningCommand successfully completes
+    And the subarray 1 should transition to the IDLE state
+    And the central node reports a longRunningCommand  successful completion
 
   @Transition("16. IDLE --> (CMD: Configure) --> CONFIGURING")
   @Transition("22. CONFIGURING --> (AUTO: Ready) --> READY")
@@ -54,14 +46,14 @@ Feature: test subarray command triggered transitions
     Given the subarray 1 is in the IDLE state
     When the Configure command is sent to the subarray 1
     Then the subarray 1 should transition to the CONFIGURING state
-    Then the subarray 1 should transition to the READY state
-    Then the subarray 1 longRunningCommand should be terminated
+    And the subarray 1 should transition to the READY state
+    And the subarray 1 longRunningCommand should be terminated
 
   @Transition("18. IDLE --> (CMD: AssignResources) --> RESOURCING")
   @Transition("10. RESOURCING --> (AUTO: Assigned) --> IDLE")
   Scenario: IDLE to RESOURCING to IDLE - CMD AssignResources
     Given the subarray 1 is in the IDLE state
-    When the AssignResources command is sent to the subarray 1 and the Assigned event is induced
+    When the AssignResources command is sent to the subarray 1 to assign additional resources
     Then the subarray 1 should transition to the RESOURCING state
     Then the subarray 1 should transition to the IDLE state
     Then the central node longRunningCommand should be terminated
