@@ -164,6 +164,7 @@ dishleafnode:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     tag: 0.16.0
 =======
     tag: 0.14.3-dev.c622c8bba
@@ -258,6 +259,8 @@ dishleafnode:
 >>>>>>> b0543761 (SAH-1564: Handle track process termination)
 =======
 >>>>>>> 87b0ac0d (SAH-1564: Test pipeline)
+=======
+>>>>>>> a7fb3f04 (SAH-1564: DishLeafNode dev image with Code cleanup)
     tag: 0.14.3
 =======
     tag: 0.16.0-dev.c7f47ea7a
@@ -466,7 +469,13 @@ dishleafnode:
 =======
     tag: 0.16.2-dev.ca0d340b0
 >>>>>>> 3e872ec6 (SAH-1564: Test pipeline)
+<<<<<<< HEAD
 >>>>>>> 87b0ac0d (SAH-1564: Test pipeline)
+=======
+=======
+    tag: 0.16.2-dev.ca276c8f3
+>>>>>>> 6f16d883 (SAH-1564: DishLeafNode dev image with Code cleanup)
+>>>>>>> a7fb3f04 (SAH-1564: DishLeafNode dev image with Code cleanup)
     pullPolicy: IfNotPresent
 
 resources:
