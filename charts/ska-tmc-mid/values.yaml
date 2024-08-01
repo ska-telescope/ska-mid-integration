@@ -163,6 +163,7 @@ dishleafnode:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     tag: 0.16.0
 =======
     tag: 0.14.3-dev.c622c8bba
@@ -255,6 +256,8 @@ dishleafnode:
 >>>>>>> a1de7843 (SAH-1564: Add logs in track process)
 =======
 >>>>>>> b0543761 (SAH-1564: Handle track process termination)
+=======
+>>>>>>> 87b0ac0d (SAH-1564: Test pipeline)
     tag: 0.14.3
 =======
     tag: 0.16.0-dev.c7f47ea7a
@@ -457,7 +460,13 @@ dishleafnode:
 =======
     tag: 0.16.2-dev.c27f82e79
 >>>>>>> 8408e7fe (SAH-1564: Handle track process termination)
+<<<<<<< HEAD
 >>>>>>> b0543761 (SAH-1564: Handle track process termination)
+=======
+=======
+    tag: 0.16.2-dev.ca0d340b0
+>>>>>>> 3e872ec6 (SAH-1564: Test pipeline)
+>>>>>>> 87b0ac0d (SAH-1564: Test pipeline)
     pullPolicy: IfNotPresent
 
 resources:
