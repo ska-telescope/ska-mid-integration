@@ -16,7 +16,6 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
-@pytest.mark.skip(reason="Test being fix in SAH-1564")
 @pytest.mark.tmc_csp_dish
 @pytest.mark.SKA_mid
 @scenario(
@@ -87,7 +86,6 @@ def validate_central_node_dish_vcc_config(tmc_mid):
     )
 
 
-@pytest.mark.skip(reason="Test being fix in SAH-1564")
 @pytest.mark.tmc_csp_dish
 @pytest.mark.SKA_mid
 @scenario(
@@ -128,7 +126,6 @@ def validate_dish_vcc_config_flag(tmc_mid):
     )
 
 
-@pytest.mark.skip(reason="Test being fix in SAH-1564")
 @pytest.mark.tmc_csp_dish
 @pytest.mark.SKA_mid
 @scenario(
@@ -257,7 +254,6 @@ def validate_dish_vcc_config_after_central_node_and_csp_mln_restart(
     assert tmc_mid.dish_leaf_node_list[3].kValue == 101
 
 
-@pytest.mark.skip(reason="Test being fix in SAH-1564")
 @pytest.mark.tmc_csp_dish
 @pytest.mark.SKA_mid
 @scenario(
