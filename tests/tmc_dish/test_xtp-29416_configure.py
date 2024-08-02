@@ -22,6 +22,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 # @pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
 @pytest.mark.skip
@@ -46,6 +47,8 @@ from tests.resources.test_support.enum import DishMode, PointingState
 >>>>>>> 5f8704fa (SAH-1567: Enable test cases)
 =======
 >>>>>>> efe6d5dd (SAH-1564: Run only long sequence test for tmc-dish interface)
+=======
+>>>>>>> bb18efd6 (SAH-1567: Code cleanup)
 @pytest.mark.skip(reason="Dish pointingstate issue")
 =======
 @pytest.mark.VV
@@ -66,7 +69,12 @@ from tests.resources.test_support.enum import DishMode, PointingState
 =======
 @pytest.mark.skip
 >>>>>>> 22caffec (SAH-1564: Run only long sequence test for tmc-dish interface)
+<<<<<<< HEAD
 >>>>>>> efe6d5dd (SAH-1564: Run only long sequence test for tmc-dish interface)
+=======
+=======
+>>>>>>> e9646403 (SAH-1567: Code cleanup)
+>>>>>>> bb18efd6 (SAH-1567: Code cleanup)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29416_configure.feature",
