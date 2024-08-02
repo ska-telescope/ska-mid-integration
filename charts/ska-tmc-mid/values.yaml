@@ -119,8 +119,9 @@ cspsubarrayleafnode:
 
 dishleafnode:
   image:
-    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-dishleafnode
+    registry: artefact.skao.int
     image: ska-tmc-dishleafnode
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -186,6 +187,8 @@ dishleafnode:
 >>>>>>> 10c95317 (SAH-1564: Use dishleafnode dev image)
 =======
 >>>>>>> e43a8009 (SAH-1567: Utilise latest dishleafnode devimage)
+=======
+>>>>>>> 1985ef6e (SAH-1567: Utilise ska-tmc-dishleafnode v.0.16.3)
     tag: 0.14.3
 =======
     tag: 0.16.0-dev.c7f47ea7a
@@ -250,7 +253,13 @@ dishleafnode:
 =======
     tag: 0.16.1-dev.c124ad629
 >>>>>>> 37e50773 (SAH-1567: Utilise latest dishleafnode devimage)
+<<<<<<< HEAD
 >>>>>>> e43a8009 (SAH-1567: Utilise latest dishleafnode devimage)
+=======
+=======
+    tag: 0.16.3
+>>>>>>> dc58de0e (SAH-1567: Utilise ska-tmc-dishleafnode v.0.16.3)
+>>>>>>> 1985ef6e (SAH-1567: Utilise ska-tmc-dishleafnode v.0.16.3)
     pullPolicy: IfNotPresent
 
 resources:
