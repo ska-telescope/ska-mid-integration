@@ -139,7 +139,20 @@ def subarray_in_empty_state(
     context_fixt: SubarrayTestContextData,
     subarray_node_facade: TMCSubarrayNodeFacade,
 ):
-    """Ensure the subarray is in the EMPTY state."""
+    """
+        Set the specified subarray to the EMPTY state.
+
+        This step uses the TMCSubarrayNodeFacade to force the subarray's
+        ObsState to EMPTY. It does this by calling the force_change_of_obs_state
+        method, which bypasses normal state transition checks. The method is
+        invoked with ObsState.EMPTY and an empty ObsStateCommandsInput,
+        ensuring a direct transition regardless of the current state.
+        The operation waits for completion.
+
+        The step also updates the starting_state in the test context data
+        to reflect this EMPTY state, which can be useful for test assertions
+        or subsequent test steps.
+        """
     context_fixt.starting_state = ObsState.EMPTY
 
     subarray_node_facade.force_change_of_obs_state(
@@ -163,7 +176,12 @@ def send_assign_resources_command(
     context_fixt: SubarrayTestContextData,
     central_node_facade: TMCCentralNodeFacade,
 ):
-    """Send the AssignResources command to the subarray."""
+    """Send the AssignResources command to the subarray.
+
+    This step uses the central_node_facade to send an AssignResources command
+    to the specified subarray. It uses a pre-defined JSON input file,
+    modifies the subarray_id, and sends the command without waiting for
+    termination. The action result is stored in the context fixture."""
     context_fixt.when_action_name = "AssignResources"
 
     json_input = FileJSONInput("centralnode", "assign_resources_mid")
@@ -185,7 +203,14 @@ def send_assign_additional_resources_command(
     context_fixt: SubarrayTestContextData,
     central_node_facade: TMCCentralNodeFacade,
 ):
-    """Send the AssignResources command to the subarray."""
+    """
+    Send the AssignResources command to assign additional resources.
+
+    This step is similar to the basic AssignResources command, but it's
+    intended to assign additional resources to the subarray. Currently,
+    it uses the same input as the basic command, but this is noted as
+    needing to be changed in the future.
+    """
     context_fixt.when_action_name = "AssignResources"
 
     # TODO: change this input to assign additional resources
@@ -208,7 +233,14 @@ def send_release_resources_command(
     context_fixt: SubarrayTestContextData,
     central_node_facade: TMCCentralNodeFacade,
 ):
-    """Send the ReleaseResources command to the subarray."""
+    """
+    Send the ReleaseResources command to the subarray.
+
+    This step uses the central_node_facade to send a ReleaseResources
+    command to the specified subarray. It uses a pre-defined JSON input
+    file, modifies the subarray_id, and sends the command without waiting
+    for termination. The action result is stored in the context fixture.
+    """
     context_fixt.when_action_name = "ReleaseResources"
 
     json_input = FileJSONInput("centralnode", "release_resources_mid")
@@ -227,7 +259,14 @@ def send_configure_command(
     context_fixt: SubarrayTestContextData,
     subarray_node_facade: TMCSubarrayNodeFacade,
 ):
-    """Send the Configure command to the subarray."""
+    """
+    Send the Configure command to the subarray.
+
+    This step uses the subarray_node_facade to send a Configure command
+    to the specified subarray. It uses a pre-defined JSON input file and
+    sends the command without waiting for termination. The action result
+    is stored in the context fixture.
+    """
     context_fixt.when_action_name = "Configure"
 
     json_input = FileJSONInput("subarray", "configure_mid")
@@ -243,7 +282,14 @@ def send_scan_command(
     context_fixt: SubarrayTestContextData,
     subarray_node_facade: TMCSubarrayNodeFacade,
 ):
-    """Send the Scan command to the subarray."""
+    """
+    Send the Scan command to the subarray.
+
+    This step uses the subarray_node_facade to send a Scan command to the
+    specified subarray. It uses a pre-defined JSON input file and sends
+    the command without waiting for termination. The action result is
+    stored in the context fixture.
+    """
     context_fixt.when_action_name = "Scan"
 
     json_input = FileJSONInput("subarray", "scan_mid")
@@ -259,7 +305,13 @@ def send_end_command(
     context_fixt: SubarrayTestContextData,
     subarray_node_facade: TMCSubarrayNodeFacade,
 ):
-    """Send the End command to the subarray."""
+    """
+    Send the End command to the subarray.
+
+    This step uses the subarray_node_facade to send an End command to the
+    specified subarray. It sends the command without waiting for termination
+    and stores the action result in the context fixture.
+    """
     context_fixt.when_action_name = "End"
 
     context_fixt.when_action_result = subarray_node_facade.end_observation(
@@ -272,7 +324,13 @@ def send_end_scan_command(
     context_fixt: SubarrayTestContextData,
     subarray_node_facade: TMCSubarrayNodeFacade,
 ):
-    """Send the EndScan command to the subarray."""
+    """
+    Send the EndScan command to the subarray.
+
+    This step uses the subarray_node_facade to send an EndScan command to
+    the specified subarray. It sends the command without waiting for
+    termination and stores the action result in the context fixture.
+    """
     context_fixt.when_action_name = "EndScan"
 
     context_fixt.when_action_result = subarray_node_facade.end_scan(
@@ -296,7 +354,16 @@ def verify_resourcing_state(
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
 ):
-    """Verify that the subarray transitions to the RESOURCING state."""
+    """
+    Verify the subarray's transition to the RESOURCING state.
+
+    This step checks that the ObsState attribute of the TMC Subarray Node,
+    CSP Subarray, and SDP Subarray devices all transition from the starting
+    state to the RESOURCING state. It uses the event_tracer to assert that
+    these state changes occur within a specified timeout. For the SDP device,
+    it also verifies that the correct Tango command was received. Finally,
+    it updates the starting state in the context fixture for subsequent steps.
+    """
     assert_that(event_tracer).described_as(
         f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
         f", CSP Subarray device ({csp.csp_subarray}) "
@@ -342,7 +409,14 @@ def verify_idle_state(
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
 ):
-    """Verify that the subarray transitions to the IDLE state."""
+    """
+    Verify the subarray's transition to the IDLE state.
+
+    This step checks that the ObsState attribute of the TMC Subarray Node,
+    CSP Subarray, and SDP Subarray devices all transition from the starting
+    state to the IDLE state. It uses the event_tracer to assert that these
+    state changes occur within a specified timeout.
+    """
     assert_that(event_tracer).described_as(
         f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
         f", CSP Subarray device ({csp.csp_subarray}) "
@@ -380,7 +454,14 @@ def verify_empty_state(
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
 ):
-    """Verify that the subarray transitions to the EMPTY state."""
+    """
+    Verify the subarray's transition to the EMPTY state.
+
+    This step checks that the ObsState attribute of the TMC Subarray Node,
+    CSP Subarray, and SDP Subarray devices all transition from the starting
+    state to the EMPTY state. It uses the event_tracer to assert that these
+    state changes occur within a specified timeout.
+    """
     assert_that(event_tracer).described_as(
         f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
         f", CSP Subarray device ({csp.csp_subarray}) "
@@ -417,7 +498,15 @@ def verify_configuring_state(
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
 ):
-    """Verify that the subarray transitions to the CONFIGURING state."""
+    """
+    Verify the subarray's transition to the CONFIGURING state.
+
+    This step checks that the ObsState attribute of the TMC Subarray Node,
+    CSP Subarray, and SDP Subarray devices all transition from the starting
+    state to the CONFIGURING state. It uses the event_tracer to assert that
+    these state changes occur within a specified timeout. After verification,
+    it updates the starting state in the context fixture for subsequent steps.
+    """
     assert_that(event_tracer).described_as(
         f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
         f", CSP Subarray device ({csp.csp_subarray}) "
@@ -457,7 +546,15 @@ def verify_ready_state(
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
 ):
-    """Verify that the subarray transitions to the READY state."""
+    """
+    Verify the subarray's transition to the READY state.
+
+    This step checks that the ObsState attribute of the TMC Subarray Node,
+    CSP Subarray, and SDP Subarray devices all transition from the starting
+    state to the READY state. It uses the event_tracer to assert that these
+    state changes occur within a specified timeout. After verification, it
+    updates the starting state in the context fixture for subsequent steps.
+    """
     assert_that(event_tracer).described_as(
         f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
         f", CSP Subarray device ({csp.csp_subarray}) "
@@ -497,7 +594,15 @@ def verify_scanning_state(
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
 ):
-    """Verify that the subarray transitions to the SCANNING state."""
+    """
+    Verify the subarray's transition to the SCANNING state.
+
+    This step checks that the ObsState attribute of the TMC Subarray Node,
+    CSP Subarray, and SDP Subarray devices all transition from the starting
+    state to the SCANNING state. It uses the event_tracer to assert that these
+    state changes occur within a specified timeout. After verification, it
+    updates the starting state in the context fixture for subsequent steps.
+    """
     assert_that(event_tracer).described_as(
         f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
         f", CSP Subarray device ({csp.csp_subarray}) "
@@ -543,7 +648,14 @@ def verify_long_running_command_result_on_central_node(
     central_node_facade: TMCCentralNodeFacade,
     event_tracer: TangoEventTracer,
 ):
-    """Verify that the longRunningCommand is terminated."""
+    """
+    Verify the successful completion of a longRunningCommand on the central node.
+
+    This step checks that the TMC Central Node reports a successful completion
+    of a longRunningCommand. It uses the event_tracer to assert that a change
+    event occurred on the longRunningCommandResult attribute within a specified
+    timeout. The expected result is derived from the context fixture.
+    """
     assert_that(event_tracer).described_as(
         "TMC Central Node "
         f"({central_node_facade.central_node}) "
@@ -567,7 +679,14 @@ def verify_long_running_command_result_on_subarray(
     subarray_node_facade: TMCSubarrayNodeFacade,
     event_tracer: TangoEventTracer,
 ):
-    """Verify that the longRunningCommand is terminated."""
+    """
+    Verify the successful completion of a longRunningCommand on the subarray.
+
+    This step checks that the TMC Subarray Node reports a successful completion
+    of a longRunningCommand. It uses the event_tracer to assert that a change
+    event occurred on the longRunningCommandResult attribute within a specified
+    timeout. The expected result is derived from the context fixture.
+    """
     assert_that(event_tracer).described_as(
         "TMC Subarray Node "
         f"({subarray_node_facade.subarray_node}) "
