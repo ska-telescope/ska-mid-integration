@@ -70,7 +70,7 @@ def move_subarray_node_to_ready_obsstate(
 @when(parsers.parse("I issue End command to TMC subarray {subarray_id}"))
 def invoke_end_command(subarray_node: SubarrayNodeWrapper) -> None:
     """Invoke End command."""
-    subarray_node.execute_transition("End")
+    subarray_node.end_observation()
 
 
 @then(parsers.parse("the CSP subarray transitions to ObsState IDLE"))
