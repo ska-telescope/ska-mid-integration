@@ -1,7 +1,7 @@
 Feature: SKB-413
 
 	
-	@XTP-29583 @XTP-58590 @Team_SAHYADRI
+	@XTP-28347 @XTP-29583 @XTP-58590 @Team_SAHYADRI
 	Scenario: Verify SKB-413 with TMC as entrypoint
 		Given the telescope is in ON state
 		And TMC SubarrayNode is in ObsState IDLE with assigned receptors <receptors>
