@@ -2,7 +2,6 @@
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
-from tango import DevState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
@@ -10,6 +9,7 @@ from tests.resources.test_harness.helpers import (
     get_device_simulators,
     prepare_json_args_for_centralnode_commands,
 )
+from tests.resources.test_harness.simulator_factory import SimulatorFactory
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 
@@ -26,20 +26,8 @@ def test_recover_subarray_stuck_in_resourcing() -> None:
     """
 
 
-@given("Telescope is in on state")
-def check_telescope_is_in_on_state(
-    central_node_mid: CentralNodeWrapperMid, event_recorder: EventRecorder
-) -> None:
-    """Ensure telescope is in ON state."""
-    central_node_mid.move_to_on()
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.ON,
-    )
+# from conftest.py
+# @given("the telescope is in ON state")
 
 
 @given(parsers.parse("TMC subarray {subarray_id} busy in assigning resources"))
@@ -66,7 +54,7 @@ def telescope_is_in_resourcing_obsstate(
 
 @given("SDP subarray raised error goes back to obsState EMPTY")
 def sdp_subarray_stuck_is_in_empty(
-    event_recorder: EventRecorder, simulator_factory: JsonFactory
+    event_recorder: EventRecorder, simulator_factory: SimulatorFactory
 ):
     "Method to check SDP subarray is in EMPTY."
     _, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
@@ -80,7 +68,7 @@ def sdp_subarray_stuck_is_in_empty(
 
 @given("CSP subarray transitioned to obsState IDLE")
 def csp_subarray_is_in_idle(
-    event_recorder: EventRecorder, simulator_factory: JsonFactory
+    event_recorder: EventRecorder, simulator_factory: SimulatorFactory
 ):
     "Method to check CSP subarray is in IDLE."
     csp_sim, _, _, _, _, _ = get_device_simulators(simulator_factory)
@@ -121,7 +109,7 @@ def invoke_abort(subarray_node: SubarrayNodeWrapper, subarray_id: str):
 
 @then("the CSP subarray and SDP subarray transitions to ObsState ABORTED")
 def sdp_csp_subarray_is_in_aborted_obsstate(
-    event_recorder: EventRecorder, simulator_factory: JsonFactory
+    event_recorder: EventRecorder, simulator_factory: SimulatorFactory
 ):
     """
     Method to check SDP subarray and CSP subarray is in ABORTED obsstate

@@ -11,9 +11,11 @@ from tests.resources.test_harness.constant import (
     RESET_DEFECT,
     tmc_sdp_subarray_leaf_node,
 )
+from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
 )
+from tests.resources.test_harness.simulator_factory import SimulatorFactory
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
@@ -24,7 +26,7 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
     + "error_propogation.feature",
     "Verify CommandNotAllowed error propogation with defective SDP Subarray",
 )
-def test_sdp_subarray_configure_timeout_and_error_propagation():
+def test_sdp_subarray_assign_resources_error_propagation():
     """
     Test case to verify CommandNotAllowed error propogation
     """
@@ -35,7 +37,7 @@ def test_sdp_subarray_configure_timeout_and_error_propagation():
 
 
 @given("SDP subarray is set with command not allowed defect")
-def set_sdp_subarray_defective(simulator_factory):
+def set_sdp_subarray_defective(simulator_factory: SimulatorFactory):
     """A method to set command not allowed defect
     for SDP Subarray
 
@@ -70,7 +72,9 @@ def invoke_assign_resources(
     "CommandNotAllowed exception is propagated to TMC CentralNode "
     + "on longRunningCommandResult"
 )
-def check_timeout_error(central_node_mid, event_recorder):
+def check_timeout_error(
+    central_node_mid: CentralNodeWrapperMid, event_recorder: EventRecorder
+):
     """A method to check CentralMode.longRunningCommandResult attribute
     change for exception
 

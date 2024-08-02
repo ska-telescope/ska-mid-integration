@@ -8,9 +8,11 @@ from ska_tango_testing.mock.placeholders import Anything
 from tests.resources.test_harness.constant import (
     OBS_STATE_CONFIGURING_STUCK_DEFECT,
     RESET_DEFECT,
+    tmc_csp_subarray_leaf_node,
 )
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import prepare_json_args_for_commands
+from tests.resources.test_harness.simulator_factory import SimulatorFactory
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
@@ -38,7 +40,7 @@ def test_csp_subarray_configure_error_propagation():
 
 
 @when("CSP subarray is set defective")
-def set_csp_subarray_defective(simulator_factory):
+def set_csp_subarray_defective(simulator_factory: SimulatorFactory):
     """A method to set defect on simulated
     CSP Subarray
 
@@ -74,7 +76,9 @@ def invoke_configure(
 
 
 @then("Exception is propagated to TMC subarray on longRunningCommandResult")
-def check_timeout_error(subarray_node, event_recorder):
+def check_timeout_error(
+    subarray_node: SubarrayNodeWrapper, event_recorder: EventRecorder
+):
     """A method to check SubarrayNode.longRunningCommandResult attribute
     change for exception
 
@@ -90,7 +94,7 @@ def check_timeout_error(subarray_node, event_recorder):
     )
     exception_message = (
         "Exception occurred on the following devices: "
-        "ska_mid/tm_leaf_node/csp_subarray01: "
+        + f"{tmc_csp_subarray_leaf_node}:"
     )
     assert (
         exception_message
