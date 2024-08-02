@@ -165,6 +165,7 @@ dishleafnode:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     tag: 0.16.0
 =======
     tag: 0.14.3-dev.c622c8bba
@@ -261,6 +262,8 @@ dishleafnode:
 >>>>>>> 87b0ac0d (SAH-1564: Test pipeline)
 =======
 >>>>>>> a7fb3f04 (SAH-1564: DishLeafNode dev image with Code cleanup)
+=======
+>>>>>>> 768cf03e (SAH-1564: Update DishLeafNode image with code cleanup)
     tag: 0.14.3
 =======
     tag: 0.16.0-dev.c7f47ea7a
@@ -475,7 +478,13 @@ dishleafnode:
 =======
     tag: 0.16.2-dev.ca276c8f3
 >>>>>>> 6f16d883 (SAH-1564: DishLeafNode dev image with Code cleanup)
+<<<<<<< HEAD
 >>>>>>> a7fb3f04 (SAH-1564: DishLeafNode dev image with Code cleanup)
+=======
+=======
+    tag: 0.16.3-dev.ce7a47c80
+>>>>>>> 00e40f01 (SAH-1564: Update DishLeafNode image with code cleanup)
+>>>>>>> 768cf03e (SAH-1564: Update DishLeafNode image with code cleanup)
     pullPolicy: IfNotPresent
 
 resources:
