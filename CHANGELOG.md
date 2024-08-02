@@ -6,7 +6,7 @@ Added
 [0.23.0]
 ************
 * Utilised base class v1.0.0 and pytango 9.5.0 on TMC nodes
-    * Utilised ska-tmc-common v0.19.0 for tango helper devices
+    * Utilised ska-tmc-common v0.17.6 for tango helper devices
     * Implemented queue according to support base classes v1.0.0
     * Refactored command allowed method to put commands in queue
     * Implemented command allowed methods for observation specific commands to allow/reject the queued  task, ResultCode.NOT_ALLOWED/ResultCode.REJECTED
