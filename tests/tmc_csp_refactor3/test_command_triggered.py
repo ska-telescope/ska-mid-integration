@@ -33,7 +33,7 @@ ASSERTIONS_TIMEOUT = 30
 @pytest.mark.tmc_csp_refactor3
 @scenario(
     "../tmc_csp_refactor3/features/subarray_commands.feature",
-    "EMPTY to RESOURCING to IDLE - CMD AssignResources (6)",
+    "EMPTY to RESOURCING to IDLE - CMD AssignResources",
 )
 def test_empty_to_resourcing_to_idle():
     """Test EMPTY to RESOURCING to IDLE transitions."""
@@ -48,7 +48,7 @@ def test_empty_to_resourcing_to_idle():
 @pytest.mark.tmc_csp_refactor3
 @scenario(
     "../tmc_csp_refactor3/features/subarray_commands.feature",
-    "IDLE to CONFIGURING to READY - CMD Configure (16)",
+    "IDLE to CONFIGURING to READY - CMD Configure",
 )
 def test_idle_to_configuring_to_ready():
     """Test IDLE to CONFIGURING to READY transitions."""
@@ -63,7 +63,7 @@ def test_idle_to_configuring_to_ready():
 @pytest.mark.tmc_csp_refactor3
 @scenario(
     "../tmc_csp_refactor3/features/subarray_commands.feature",
-    "IDLE to RESOURCING to IDLE - CMD AssignResources (18)",
+    "IDLE to RESOURCING to IDLE - CMD AssignResources",
 )
 def test_idle_to_resourcing_to_idle():
     """Test IDLE to RESOURCING to IDLE transitions."""
@@ -78,7 +78,7 @@ def test_idle_to_resourcing_to_idle():
 @pytest.mark.tmc_csp_refactor3
 @scenario(
     "../tmc_csp_refactor3/features/subarray_commands.feature",
-    "IDLE to RESOURCING to EMPTY - CMD ReleaseResources (17)",
+    "IDLE to RESOURCING to EMPTY - CMD ReleaseResources",
 )
 def test_idle_to_resourcing_to_empty():
     """Test IDLE to RESOURCING to EMPTY transitions."""
@@ -87,7 +87,7 @@ def test_idle_to_resourcing_to_empty():
 @pytest.mark.tmc_csp_refactor3
 @scenario(
     "../tmc_csp_refactor3/features/subarray_commands.feature",
-    "READY to SCANNING to READY- CMD Scan (9)",
+    "READY to SCANNING to READY- CMD Scan",
 )
 def test_ready_to_scanning_to_ready():
     """Test READY to SCANNING to READY transitions."""
@@ -96,7 +96,7 @@ def test_ready_to_scanning_to_ready():
 @pytest.mark.tmc_csp_refactor3
 @scenario(
     "../tmc_csp_refactor3/features/subarray_commands.feature",
-    "READY to IDLE - CMD End (10)",
+    "READY to IDLE - CMD End",
 )
 def test_ready_to_idle():
     """Test READY to IDLE transitions."""
@@ -111,7 +111,7 @@ def test_ready_to_idle():
 @pytest.mark.tmc_csp_refactor3
 @scenario(
     "../tmc_csp_refactor3/features/subarray_commands.feature",
-    "READY to CONFIGURING to READY - CMD Configure (13)",
+    "READY to CONFIGURING to READY - CMD Configure",
 )
 def test_ready_to_configuring_to_ready():
     """Test READY to CONFIGURING to READY transitions."""
@@ -120,7 +120,7 @@ def test_ready_to_configuring_to_ready():
 @pytest.mark.tmc_csp_refactor3
 @scenario(
     "../tmc_csp_refactor3/features/subarray_commands.feature",
-    "SCANNING to READY - CMD End Scan (17)",
+    "SCANNING to READY - CMD End Scan",
 )
 def test_scanning_to_ready():
     """Test SCANNING to READY transitions."""
@@ -155,7 +155,8 @@ def subarray_in_empty_state(
 
 @when(
     parsers.parse(
-        "the AssignResources command is sent to the subarray {subarray}"
+        "the AssignResources command is sent to the subarray {subarray} "
+        "and the Assigned event is induced"
     )
 )
 def send_assign_resources_command(
@@ -176,7 +177,31 @@ def send_assign_resources_command(
 
 @when(
     parsers.parse(
-        "the ReleaseResources command is sent to the subarray {subarray}"
+        "the AssignResources command is sent to the subarray {subarray} "
+        "to assign additional resources"
+    )
+)
+def send_assign_additional_resources_command(
+    context_fixt: SubarrayTestContextData,
+    central_node_facade: TMCCentralNodeFacade,
+):
+    """Send the AssignResources command to the subarray."""
+    context_fixt.when_action_name = "AssignResources"
+
+    # TODO: change this input to assign additional resources
+    json_input = FileJSONInput("centralnode", "assign_resources_mid")
+    json_input = json_input.set_attribute_value("subarray_id", 1)
+
+    context_fixt.when_action_result = central_node_facade.assign_resources(
+        json_input,
+        wait_termination=False,
+    )
+
+
+@when(
+    parsers.parse(
+        "the ReleaseResources command is sent to the subarray {subarray} "
+        "and the All released event is induced"
     )
 )
 def send_release_resources_command(
@@ -509,7 +534,9 @@ def _get_expected_long_run_command_result(context_fixt) -> tuple[str, str]:
 
 
 @then(
-    parsers.parse("the central node longRunningCommand should be terminated")
+    parsers.parse(
+        "the central node reports a longRunningCommand successful completion"
+    )
 )
 def verify_long_running_command_result_on_central_node(
     context_fixt,
@@ -518,9 +545,10 @@ def verify_long_running_command_result_on_central_node(
 ):
     """Verify that the longRunningCommand is terminated."""
     assert_that(event_tracer).described_as(
-        "Central Node "
+        "TMC Central Node "
         f"({central_node_facade.central_node}) "
-        "longRunningCommand should be terminated."
+        "is expected to report a"
+        "longRunningCommand successful completion."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         central_node_facade.central_node,
         "longRunningCommandResult",
@@ -530,7 +558,8 @@ def verify_long_running_command_result_on_central_node(
 
 @then(
     parsers.parse(
-        "the subarray {subarray} longRunningCommand should be terminated"
+        "the subarray {subarray} reports "
+        "a longRunningCommand successful completion"
     )
 )
 def verify_long_running_command_result_on_subarray(
@@ -542,7 +571,8 @@ def verify_long_running_command_result_on_subarray(
     assert_that(event_tracer).described_as(
         "TMC Subarray Node "
         f"({subarray_node_facade.subarray_node}) "
-        "longRunningCommand should be terminated."
+        "is expected to report a"
+        "longRunningCommand successful completion."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         subarray_node_facade.subarray_node,
         "longRunningCommandResult",

@@ -25,7 +25,7 @@ Feature: test subarray command triggered transitions
   @Transition("27. READY --> (CMD: End) --> IDLE")
   @Transition("16. IDLE --> (CMD: Configure) --> CONFIGURING")
   @Transition("29. READY --> (CMD: Configure) --> CONFIGURING")
-  @Transition("22. CONFIGURING --> (AUTO: Ready) --> READY
+  @Transition("22. CONFIGURING --> (AUTO: Ready) --> READY")
 
   Background:
     Given the telescope is in ON state
@@ -38,7 +38,7 @@ Feature: test subarray command triggered transitions
     When the AssignResources command is sent to the subarray 1 and the Assigned event is induced
     Then the subarray 1 should transition to the RESOURCING state
     And the subarray 1 should transition to the IDLE state
-    And the central node reports a longRunningCommand  successful completion
+    And the central node reports a longRunningCommand successful completion
 
   @Transition("16. IDLE --> (CMD: Configure) --> CONFIGURING")
   @Transition("22. CONFIGURING --> (AUTO: Ready) --> READY")
@@ -47,7 +47,7 @@ Feature: test subarray command triggered transitions
     When the Configure command is sent to the subarray 1
     Then the subarray 1 should transition to the CONFIGURING state
     And the subarray 1 should transition to the READY state
-    And the subarray 1 longRunningCommand should be terminated
+    And the subarray 1 reports a longRunningCommand successful completion
 
   @Transition("18. IDLE --> (CMD: AssignResources) --> RESOURCING")
   @Transition("10. RESOURCING --> (AUTO: Assigned) --> IDLE")
@@ -56,7 +56,7 @@ Feature: test subarray command triggered transitions
     When the AssignResources command is sent to the subarray 1 to assign additional resources
     Then the subarray 1 should transition to the RESOURCING state
     Then the subarray 1 should transition to the IDLE state
-    Then the central node longRunningCommand should be terminated
+    Then the central node reports a longRunningCommand successful completion
 
   @Transition("17. IDLE --> (CMD: ReleaseResources) --> RESOURCING")
   @Transition("13. RESOURCING --> (AUTO: All released) --> EMPTY")
@@ -65,7 +65,7 @@ Feature: test subarray command triggered transitions
     When the ReleaseResources command is sent to the subarray 1 and the All released event is induced
     Then the subarray 1 should transition to the RESOURCING state
     Then the subarray 1 should transition to the EMPTY state
-    Then the central node longRunningCommand should be terminated
+    Then the central node reports a longRunningCommand successful completion
     Then the subarray 1 should transition to the RESOURCING state
     Then the subarray 1 should transition to the EMPTY state
 
@@ -76,7 +76,7 @@ Feature: test subarray command triggered transitions
     When the Scan command is sent to the subarray 1
     Then the subarray 1 should transition to the SCANNING state
     Then the subarray 1 should transition to the READY state
-    Then the subarray 1 longRunningCommand should be terminated
+    Then the subarray 1 reports a longRunningCommand successful completion
 
   @Transition("27. READY --> (CMD: End) --> IDLE")
   Scenario: READY to IDLE - CMD End
@@ -86,15 +86,15 @@ Feature: test subarray command triggered transitions
 
   @Transition("29. READY --> (CMD: Configure) --> CONFIGURING")
   @Transition("22. CONFIGURING --> (AUTO: Ready) --> READY")
-  Scenario: READY to CONFIGURING to READY - CMD Configure (13)
+  Scenario: READY to CONFIGURING to READY - CMD Configure
     Given the subarray 1 is in the READY state
     When the Configure command is sent to the subarray 1
     Then the subarray 1 should transition to the CONFIGURING state
     Then the subarray 1 should transition to the READY state
-    Then the subarray 1 longRunningCommand should be terminated
+    Then the subarray 1 reports a longRunningCommand successful completion
 
   @Transition("32. SCANNING --> (CMD: EndScan) --> READY")
-  Scenario: SCANNING to READY - CMD End Scan (17)
+  Scenario: SCANNING to READY - CMD End Scan
     Given the subarray 1 is in the SCANNING state
     When the Endscan command is sent to the subarray 1
     Then the subarray 1 should transition to the READY state

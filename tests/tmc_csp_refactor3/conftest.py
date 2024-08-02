@@ -203,7 +203,7 @@ def _setup_event_subscriptions(
                 "longRunningCommandResult",
             ],
             csp.csp_subarray: ["obsState"],
-            sdp.sdp_subarray: ["obsState"],
+            sdp.sdp_subarray: ["obsState", "commandCallInfo"],
             central_node_facade.central_node: ["longRunningCommandResult"],
         },
         attribute_enum_map={"obsState": ObsState},
@@ -317,7 +317,7 @@ def subarray_in_idle_state(
     # assert_that(event_tracer).described_as(
     #     "Central Node "
     #     f"({central_node_facade.central_node}) "
-    #     "longRunningCommand should be terminated."
+    #     "longRunningCommand successful completion."
     # ).within_timeout(30).has_change_event_occurred(
     #     central_node_facade.central_node,
     #     "longRunningCommandResult",
