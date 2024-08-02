@@ -19,6 +19,7 @@ from tests.resources.test_support.enum import DishMode
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 @pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
 >>>>>>> 254f9823 (SAH-1536: disable test case)
@@ -51,6 +52,8 @@ from tests.resources.test_support.enum import DishMode
 >>>>>>> a59f0d05 (SAH-1574: Fix formatting)
 @pytest.mark.skip(reason="Test being fix in SAH-1564")
 >>>>>>> 438706f0 (SAH-1536: Update test case)
+=======
+>>>>>>> 6839a417 (SAH-1574: Enable dish on-off tests)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29351_off.feature",
