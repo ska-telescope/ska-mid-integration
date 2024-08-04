@@ -202,7 +202,14 @@ def subarray_in_aborted_state(
     subarray_node_facade: TMCSubarrayNodeFacade,
     default_commands_inputs: ObsStateCommandsInput,
 ):
-    """Ensure the subarray is in the ABORTED state."""
+    """
+    Ensure the subarray is in the ABORTED state.
+
+    This step performs the following actions:
+    1. Sets the starting_state in the test context to ABORTED.
+    2. Forces the subarray to the IDLE state to ensure it's in a state where Abort can be sent.
+    3. Sends the Abort command to transition the subarray to the ABORTED state.
+"""
     context_fixt.starting_state = ObsState.ABORTED
 
     # move to a state where the Abort command can be sent
@@ -229,7 +236,13 @@ def send_abort_command(
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
 ):
-    """Send the Abort command to the subarray."""
+    """
+    Send the Abort command to the subarray.
+
+    This step sends the Abort command without waiting for termination. If the starting
+    state is transient, it verifies that the expected state transition hasn't occurred
+    prematurely.
+"""
     subarray_node_facade.abort(wait_termination=False)
 
     if (
@@ -258,7 +271,11 @@ def send_restart_command(
     # subarray_id: str,
     subarray_node_facade: TMCSubarrayNodeFacade,
 ):
-    """Send the Restart command to the subarray."""
+    """
+    Send the Restart command to the subarray.
+
+    This step sends the Restart command without waiting for termination.
+    """
     subarray_node_facade.restart(wait_termination=False)
 
 
@@ -278,7 +295,13 @@ def verify_aborting_state(
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
 ):
-    """Verify that the subarray transitions to the ABORTING state."""
+    """
+    Verify that the subarray transitions to the ABORTING state.
+
+    This step checks that the TMC Subarray Node, CSP Subarray, and SDP Subarray
+    devices transition to the ABORTING state within the specified timeout. It verifies
+    the previous state for the TMC Subarray Node.
+    """
     assert_that(event_tracer).described_as(
         f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
         f", CSP Subarray device ({csp.csp_subarray}) "
@@ -341,7 +364,12 @@ def verify_aborted_state(
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
 ):
-    """Verify that the subarray transitions to the ABORTED state."""
+    """
+    Verify that the subarray transitions to the ABORTED state.
+
+    This step checks that all relevant devices (TMC, CSP, SDP) transition from
+    ABORTING to ABORTED state within the specified timeout.
+    """
     assert_that(event_tracer).described_as(
         f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
         f", CSP Subarray device ({csp.csp_subarray}) "
@@ -379,7 +407,15 @@ def verify_restarting_state(
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
 ):
-    """Verify that the subarray transitions to the RESTARTING state."""
+    """
+    Verify that the subarray transitions to the RESTARTING state.
+
+    This step performs the following actions:
+    1. Checks that all relevant devices transition from ABORTED to RESTARTING state
+       within the specified timeout.
+    2. Updates the starting state in the test context to RESTARTING.
+    3. Verifies that the correct Tango command (Aborted) was received by the SDP emulator.
+"""
     assert_that(event_tracer).described_as(
         f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
         f", CSP Subarray device ({csp.csp_subarray}) "
@@ -423,7 +459,13 @@ def verify_empty_state(
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
 ):
-    """Verify that the subarray transitions to the EMPTY state."""
+    """
+    Verify that the subarray transitions to the EMPTY state.
+
+    This step checks that all relevant devices (TMC, CSP, SDP) transition from
+    the previous state (stored in the test context) to the EMPTY state within
+    the specified timeout.
+"""
     assert_that(event_tracer).described_as(
         f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
         f", CSP Subarray device ({csp.csp_subarray}) "
