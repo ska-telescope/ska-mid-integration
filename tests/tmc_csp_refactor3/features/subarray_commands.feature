@@ -14,18 +14,18 @@ Feature: test subarray command triggered transitions
   Relevant transitions (taken from list_of_transitions.text):
 
   @CoversTransition("obsstate", "6. EMPTY --> (CMD: AssignResources) --> RESOURCING")
-  @Transition("17. IDLE --> (CMD: ReleaseResources) --> RESOURCING")
-  @Transition("18. IDLE --> (CMD: AssignResources) --> RESOURCING")
-  @Transition("10. RESOURCING --> (AUTO: Assigned) --> IDLE")
-  @Transition("11. RESOURCING --> (AUTO: Released) --> IDLE")
-  @Transition("13. RESOURCING --> (AUTO: All released) --> EMPTY")
-  @Transition("26. READY --> (CMD: Scan) --> SCANNING")
-  @Transition("33. SCANNING --> (AUTO: ScanComplete) --> READY")
-  @Transition("32. SCANNING --> (CMD: EndScan) --> READY")
-  @Transition("27. READY --> (CMD: End) --> IDLE")
-  @Transition("16. IDLE --> (CMD: Configure) --> CONFIGURING")
-  @Transition("29. READY --> (CMD: Configure) --> CONFIGURING")
-  @Transition("22. CONFIGURING --> (AUTO: Ready) --> READY")
+  @CoversTransition("obsstate", "17. IDLE --> (CMD: ReleaseResources) --> RESOURCING")
+  @CoversTransition("obsstate", "18. IDLE --> (CMD: AssignResources) --> RESOURCING")
+  @CoversTransition("obsstate", "10. RESOURCING --> (AUTO: Assigned) --> IDLE")
+  @CoversTransition("obsstate", "11. RESOURCING --> (AUTO: Released) --> IDLE")
+  @CoversTransition("obsstate", "13. RESOURCING --> (AUTO: All released) --> EMPTY")
+  @CoversTransition("obsstate", "26. READY --> (CMD: Scan) --> SCANNING")
+  @CoversTransition("obsstate", "33. SCANNING --> (AUTO: ScanComplete) --> READY")
+  @CoversTransition("obsstate", "32. SCANNING --> (CMD: EndScan) --> READY")
+  @CoversTransition("obsstate", "27. READY --> (CMD: End) --> IDLE")
+  @CoversTransition("obsstate", "16. IDLE --> (CMD: Configure) --> CONFIGURING")
+  @CoversTransition("obsstate", "29. READY --> (CMD: Configure) --> CONFIGURING")
+  @CoversTransition("obsstate", "22. CONFIGURING --> (AUTO: Ready) --> READY")
 
   Background:
     Given the telescope is in ON state
