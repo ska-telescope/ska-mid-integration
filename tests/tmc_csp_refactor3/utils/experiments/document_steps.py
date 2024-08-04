@@ -325,7 +325,6 @@ class FileScanner:
             args = [arg.arg for arg in node.args.args]
             return f"def {node.name}({', '.join(args)}):"
 
-
 class FolderProcessor:
     """Class to process a folder of Python and feature files."""
 
@@ -377,6 +376,112 @@ class FolderProcessor:
                     except Exception as e:
                         print(f"Error processing feature file {relative_path}: {str(e)}")
 
+        # Run post-processor to create index file
+        PostProcessor.create_index_file(output_folder)
+
+class PostProcessor:
+    """Class to post-process generated markdown files and create an index."""
+
+    @staticmethod
+    def create_index_file(output_folder: str) -> None:
+        """Create a top-level index file pointing to all feature and step files, including subfolder structure."""
+        feature_files = []
+        step_files = []
+
+        for root, _, files in os.walk(output_folder):
+            for file in files:
+                if file.endswith('.md') and file != "index.md":
+                    file_path = os.path.join(root, file)
+                    relative_path = os.path.relpath(file_path, output_folder)
+                    if relative_path.startswith('features'):
+                        feature_files.append(relative_path)
+                    elif relative_path.startswith('steps'):
+                        step_files.append(relative_path)
+
+        index_content = "# Test Documentation Index\n\n"
+        index_content += f"Last updated on: {datetime.now().strftime('%d %B %Y %H:%M:%S')}\n\n"
+
+        if feature_files:
+            index_content += "## Feature Files\n\n"
+            index_content += PostProcessor._generate_nested_list(sorted(feature_files), 'features')
+            index_content += "\n"
+
+        if step_files:
+            index_content += "## Step Files\n\n"
+            index_content += PostProcessor._generate_nested_list(sorted(step_files), 'steps')
+
+        index_file_path = os.path.join(output_folder, "index.md")
+        with open(index_file_path, 'w') as index_file:
+            index_file.write(index_content)
+        print(f"Created index file: {index_file_path}")
+
+    @staticmethod
+    def _generate_nested_list(files: List[str], root_folder: str) -> str:
+        """Generate a nested list of files, preserving folder structure."""
+        nested_dict = {}
+        for file in files:
+            parts = file.split(os.sep)
+            current_dict = nested_dict
+            for part in parts[1:-1]:  # Skip root folder and filename
+                if part not in current_dict:
+                    current_dict[part] = {}
+                current_dict = current_dict[part]
+            current_dict[parts[-1]] = file
+
+        return PostProcessor._dict_to_md_list(nested_dict, 0, root_folder)
+
+    @staticmethod
+    def _dict_to_md_list(d: Dict, level: int, root_folder: str) -> str:
+        """Recursively convert nested dictionary to Markdown list."""
+        result = ""
+        indent = "  " * level
+        for key, value in d.items():
+            if isinstance(value, dict):
+                result += f"{indent}- {key}/\n"
+                result += PostProcessor._dict_to_md_list(value, level + 1, root_folder)
+            else:
+                result += f"{indent}- [{key}]({value})\n"
+        return result
+class PostProcessor2:
+    """Class to post-process generated markdown files and create an index."""
+
+    @staticmethod
+    def create_index_file(output_folder: str) -> None:
+        """Create a top-level index file pointing to all feature and step files."""
+        feature_files = []
+        step_files = []
+
+        for root, _, files in os.walk(output_folder):
+            for file in files:
+                if file.endswith('.md'):
+                    file_path = os.path.join(root, file)
+                    relative_path = os.path.relpath(file_path, output_folder)
+                    if relative_path.startswith('features'):
+                        feature_files.append(relative_path)
+                    elif relative_path.startswith('steps'):
+                        step_files.append(relative_path)
+
+        index_content = "# Test Documentation Index\n\n"
+        index_content += f"Last updated on: {datetime.now().strftime('%d %B %Y %H:%M:%S')}\n\n"
+
+        if feature_files:
+            index_content += "## Feature Files\n\n"
+            for file in sorted(feature_files):
+                file_name = os.path.basename(file)
+                index_content += f"- [{file_name}]({file})\n"
+            index_content += "\n"
+
+        if step_files:
+            index_content += "## Step Files\n\n"
+            for file in sorted(step_files):
+                file_name = os.path.basename(file)
+                index_content += f"- [{file_name}]({file})\n"
+
+        index_file_path = os.path.join(output_folder, "index.md")
+        with open(index_file_path, 'w') as index_file:
+            index_file.write(index_content)
+        print(f"Created index file: {index_file_path}")
+
 def main():
     parser = argparse.ArgumentParser(description="Generate markdown from test steps and feature files in a folder.")
     parser.add_argument("input_folder", help="Path to the input folder containing Python and feature files")
@@ -384,7 +489,6 @@ def main():
     args = parser.parse_args()
 
     FolderProcessor.process_folder(args.input_folder, args.output_folder)
-
 
 if __name__ == "__main__":
     main()
