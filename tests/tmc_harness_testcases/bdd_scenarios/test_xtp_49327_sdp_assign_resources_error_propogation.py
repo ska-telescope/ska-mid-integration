@@ -101,5 +101,5 @@ def check_timeout_error(
         exception_message
         in json.loads(assertion_data["attribute_value"][1])[1]
     )
-
+    # Reset SDP subarray defect
     pytest.sdp_sim.SetDefective(RESET_DEFECT)
