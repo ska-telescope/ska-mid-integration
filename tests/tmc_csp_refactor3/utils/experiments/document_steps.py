@@ -1,6 +1,7 @@
 import argparse
 import ast
 import os
+from abc import ABC, abstractmethod
 from typing import Dict, List, Tuple, Optional
 from datetime import datetime
 
@@ -256,7 +257,7 @@ class FileScanner:
             return [], {}
 
 
-    class StepVisitor(ast.NodeVisitor):
+    class StepVisitor2(ast.NodeVisitor):
         """Visitor class to extract steps and scenarios from AST."""
 
         def __init__(self):
@@ -325,7 +326,158 @@ class FileScanner:
             args = [arg.arg for arg in node.args.args]
             return f"def {node.name}({', '.join(args)}):"
 
-class FolderProcessor:
+
+
+    class StepVisitor(ast.NodeVisitor):
+        """Visitor class to extract steps and scenarios from AST."""
+
+        def __init__(self):
+            self.steps: List[Dict[str, str]] = []
+            self.scenarios: Dict[str, str] = {}
+
+        def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
+            """
+            Visit a function definition in the AST.
+
+            Pre-conditions:
+            - node is an instance of ast.FunctionDef
+
+            Post-conditions:
+            - If the function is decorated with 'given', 'when', or 'then', a step is added to self.steps
+            - If the function is decorated with 'scenario', an entry is added to self.scenarios
+            """
+            assert isinstance(node, ast.FunctionDef), "Node must be a FunctionDef"
+
+            initial_steps_count = len(self.steps)
+            initial_scenarios_count = len(self.scenarios)
+
+            for decorator in node.decorator_list:
+                if isinstance(decorator, ast.Call) and isinstance(decorator.func, ast.Name):
+                    if decorator.func.id in ['given', 'when', 'then']:
+                        self._process_step(node, decorator)
+                    elif decorator.func.id == 'scenario':
+                        self._process_scenario(node, decorator)
+
+            assert len(self.steps) >= initial_steps_count, "Steps should not decrease"
+            assert len(self.scenarios) >= initial_scenarios_count, "Scenarios should not decrease"
+
+        def _process_step(self, node: ast.FunctionDef, decorator: ast.Call) -> None:
+            """
+            Process a step decorator.
+
+            Pre-conditions:
+            - node is an instance of ast.FunctionDef
+            - decorator is an instance of ast.Call
+
+            Post-conditions:
+            - If a valid step name is extracted, a new step is added to self.steps
+            - If no valid step name is extracted, a warning is printed
+            """
+            assert isinstance(node, ast.FunctionDef), "Node must be a FunctionDef"
+            assert isinstance(decorator, ast.Call), "Decorator must be a Call"
+
+            initial_steps_count = len(self.steps)
+
+            step_type = decorator.func.id
+            step_name = self._extract_step_name(decorator)
+            if step_name is not None:
+                self.steps.append({
+                    'type': step_type,
+                    'name': step_name,
+                    'function': node.name,
+                    'signature': self._get_signature(node),
+                    'docstring': ast.get_docstring(node),
+                })
+            else:
+                print(f"Warning: Could not extract step name for function {node.name}")
+
+            assert len(self.steps) >= initial_steps_count, "Steps should not decrease"
+
+        def _extract_step_name(self, decorator: ast.Call) -> Optional[str]:
+            """
+            Extract the step name from a decorator.
+
+            Pre-conditions:
+            - decorator is an instance of ast.Call
+
+            Post-conditions:
+            - Returns a string if a valid step name is found, None otherwise
+            """
+            assert isinstance(decorator, ast.Call), "Decorator must be a Call"
+
+            if decorator.args:
+                if isinstance(decorator.args[0], ast.Str):
+                    return decorator.args[0].s
+                elif isinstance(decorator.args[0], ast.Call):
+                    if decorator.args[0].args and isinstance(decorator.args[0].args[0], ast.Str):
+                        return decorator.args[0].args[0].s
+            elif decorator.keywords:
+                for keyword in decorator.keywords:
+                    if keyword.arg in ['text', 'name'] and isinstance(keyword.value, ast.Str):
+                        return keyword.value.s
+            return None
+
+        def _process_scenario(self, node: ast.FunctionDef, decorator: ast.Call) -> None:
+            """
+            Process a scenario decorator.
+
+            Pre-conditions:
+            - node is an instance of ast.FunctionDef
+            - decorator is an instance of ast.Call
+
+            Post-conditions:
+            - If a valid scenario name is extracted, a new entry is added to self.scenarios
+            - If no valid scenario name is extracted, a warning is printed
+            """
+            assert isinstance(node, ast.FunctionDef), "Node must be a FunctionDef"
+            assert isinstance(decorator, ast.Call), "Decorator must be a Call"
+
+            initial_scenarios_count = len(self.scenarios)
+
+            scenario_name = self._extract_scenario_name(decorator)
+            if scenario_name is not None:
+                self.scenarios[node.name] = scenario_name
+            else:
+                print(f"Warning: Could not extract scenario name for function {node.name}")
+
+            assert len(self.scenarios) >= initial_scenarios_count, "Scenarios should not decrease"
+
+        def _extract_scenario_name(self, decorator: ast.Call) -> Optional[str]:
+            """
+            Extract the scenario name from a decorator.
+
+            Pre-conditions:
+            - decorator is an instance of ast.Call
+
+            Post-conditions:
+            - Returns a string if a valid scenario name is found, None otherwise
+            """
+            assert isinstance(decorator, ast.Call), "Decorator must be a Call"
+
+            if len(decorator.args) >= 2 and isinstance(decorator.args[1], ast.Str):
+                return decorator.args[1].s
+            for keyword in decorator.keywords:
+                if keyword.arg == 'name' and isinstance(keyword.value, ast.Str):
+                    return keyword.value.s
+            return None
+
+        @staticmethod
+        def _get_signature(node: ast.FunctionDef) -> str:
+            """
+            Get the signature of a function.
+
+            Pre-conditions:
+            - node is an instance of ast.FunctionDef
+
+            Post-conditions:
+            - Returns a string representation of the function signature
+            """
+            assert isinstance(node, ast.FunctionDef), "Node must be a FunctionDef"
+
+            args = [arg.arg for arg in node.args.args]
+            return f"def {node.name}({', '.join(args)}):"
+
+class FolderProcessor2:
     """Class to process a folder of Python and feature files."""
 
     @staticmethod
@@ -378,6 +530,102 @@ class FolderProcessor:
 
         # Run post-processor to create index file
         PostProcessor.create_index_file(output_folder)
+
+
+class FileHandler(ABC):
+    @abstractmethod
+    def process_file(self, input_path: str, output_path: str, repo_root: str) -> None:
+        pass
+
+class PythonFileHandler(FileHandler):
+    def process_file(self, input_path: str, output_path: str, repo_root: str) -> None:
+        relative_path = os.path.relpath(input_path, repo_root)
+        steps, scenarios = FileScanner.parse_file(input_path)
+
+        if steps or scenarios:
+            markdown_content = MarkdownFormatter.generate_markdown(relative_path, steps, scenarios)
+            MarkdownFormatter.write_markdown(markdown_content, output_path)
+            print(f"Processed Python file: {relative_path}")
+        else:
+            print(f"No steps or scenarios found in {relative_path}. Skipping.")
+
+class FeatureFileHandler(FileHandler):
+    def process_file(self, input_path: str, output_path: str, repo_root: str) -> None:
+        relative_path = os.path.relpath(input_path, repo_root)
+        try:
+            with open(input_path, 'r') as feature_file:
+                feature_content = feature_file.read()
+            markdown_content = MarkdownFormatter.format_feature_file(feature_content)
+            MarkdownFormatter.write_markdown(markdown_content, output_path)
+            print(f"Processed feature file: {relative_path}")
+        except Exception as e:
+            print(f"Error processing feature file {relative_path}: {str(e)}")
+
+class FolderProcessor:
+    """Class to process a folder of Python and feature files."""
+
+    def __init__(self):
+        self.file_handlers: Dict[str, FileHandler] = {
+            '.py': PythonFileHandler(),
+            '.feature': FeatureFileHandler()
+        }
+
+    @staticmethod
+    def find_repository_root(path: str) -> str:
+        """
+        Find the root of the repository by looking for .git folder.
+
+        Pre-conditions:
+        - path is a valid string representing a file system path
+
+        Post-conditions:
+        - Returns a string representing the repository root or the original path if no .git folder is found
+        """
+        current_path = os.path.abspath(path)
+        while current_path != '/':
+            if os.path.exists(os.path.join(current_path, '.git')):
+                return current_path
+            current_path = os.path.dirname(current_path)
+        return path  # If no .git folder found, return the original path
+
+    def process_folder(self, input_folder: str, output_folder: str) -> None:
+        """
+        Process all Python and feature files in the given folder.
+
+        Pre-conditions:
+        - input_folder is a valid string representing an existing folder
+        - output_folder is a valid string representing a writable folder path
+
+        Post-conditions:
+        - All eligible files in input_folder are processed and corresponding markdown files are created in output_folder
+        - An index file is created in the output_folder
+        """
+        self._ensure_output_folder_exists(output_folder)
+        repo_root = self.find_repository_root(input_folder)
+        print(f"Repository root: {repo_root}")
+
+        for root, _, files in os.walk(input_folder):
+            for filename in files:
+                self._process_file(root, filename, output_folder, repo_root)
+
+        PostProcessor.create_index_file(output_folder)
+
+    @staticmethod
+    def _ensure_output_folder_exists(output_folder: str) -> None:
+        """Ensure the output folder exists, creating it if necessary."""
+        if not os.path.exists(output_folder):
+            os.makedirs(output_folder)
+
+    def _process_file(self, root: str, filename: str, output_folder: str, repo_root: str) -> None:
+        """Process a single file based on its extension."""
+        input_path = os.path.join(root, filename)
+        file_extension = os.path.splitext(filename)[1]
+
+        if file_extension in self.file_handlers:
+            subfolder = 'steps' if file_extension == '.py' else 'features'
+            relative_path = os.path.relpath(input_path, repo_root)
+            output_path = os.path.join(output_folder, subfolder, f"{os.path.splitext(relative_path)[0]}.md")
+            self.file_handlers[file_extension].process_file(input_path, output_path, repo_root)
 
 class PostProcessor:
     """Class to post-process generated markdown files and create an index."""
@@ -442,45 +690,7 @@ class PostProcessor:
             else:
                 result += f"{indent}- [{key}]({value})\n"
         return result
-class PostProcessor2:
-    """Class to post-process generated markdown files and create an index."""
 
-    @staticmethod
-    def create_index_file(output_folder: str) -> None:
-        """Create a top-level index file pointing to all feature and step files."""
-        feature_files = []
-        step_files = []
-
-        for root, _, files in os.walk(output_folder):
-            for file in files:
-                if file.endswith('.md'):
-                    file_path = os.path.join(root, file)
-                    relative_path = os.path.relpath(file_path, output_folder)
-                    if relative_path.startswith('features'):
-                        feature_files.append(relative_path)
-                    elif relative_path.startswith('steps'):
-                        step_files.append(relative_path)
-
-        index_content = "# Test Documentation Index\n\n"
-        index_content += f"Last updated on: {datetime.now().strftime('%d %B %Y %H:%M:%S')}\n\n"
-
-        if feature_files:
-            index_content += "## Feature Files\n\n"
-            for file in sorted(feature_files):
-                file_name = os.path.basename(file)
-                index_content += f"- [{file_name}]({file})\n"
-            index_content += "\n"
-
-        if step_files:
-            index_content += "## Step Files\n\n"
-            for file in sorted(step_files):
-                file_name = os.path.basename(file)
-                index_content += f"- [{file_name}]({file})\n"
-
-        index_file_path = os.path.join(output_folder, "index.md")
-        with open(index_file_path, 'w') as index_file:
-            index_file.write(index_content)
-        print(f"Created index file: {index_file_path}")
 
 def main():
     parser = argparse.ArgumentParser(description="Generate markdown from test steps and feature files in a folder.")
@@ -488,7 +698,7 @@ def main():
     parser.add_argument("output_folder", help="Path to the output folder for markdown files")
     args = parser.parse_args()
 
-    FolderProcessor.process_folder(args.input_folder, args.output_folder)
+    FolderProcessor().process_folder(args.input_folder, args.output_folder)
 
 if __name__ == "__main__":
     main()
