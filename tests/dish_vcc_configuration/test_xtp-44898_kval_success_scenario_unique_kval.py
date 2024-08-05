@@ -2,12 +2,12 @@ import pytest
 from pytest_bdd import scenario, when
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
+from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
 )
 from tests.resources.test_harness.utils.common_utils import JsonFactory
-from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
 @pytest.mark.SKA_mid
@@ -54,6 +54,6 @@ def invoke_load_dish_cfg(
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (unique_id[0], str(int(ResultCode.OK))),
+        (unique_id[0], COMMAND_COMPLETED),
         lookahead=5,
     )

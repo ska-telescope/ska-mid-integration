@@ -51,7 +51,9 @@ server:
           - name: "CommandTimeOut"
             values:
               - "50"
-
+          - name: "TrackTableInAdvance"
+            values:
+              - "6"
   {{- end }}
 depends_on:
   - device: sys/database/2
@@ -60,3 +62,9 @@ image:
   image: "{{.Values.dishleafnode.image.image}}"
   tag: "{{.Values.dishleafnode.image.tag}}"
   pullPolicy: "{{.Values.dishleafnode.image.pullPolicy}}"
+resources:
+  limits:
+    memory: "{{.Values.deviceServers.dishleafnode.resources.limits.memory}}"
+  requests:
+    cpu: "{{.Values.deviceServers.dishleafnode.resources.requests.cpu}}"
+    memory: "{{.Values.deviceServers.dishleafnode.resources.requests.memory}}"

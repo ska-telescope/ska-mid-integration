@@ -86,7 +86,7 @@ def invoke_configure_one(
         configure_json = json_factory("command_Configure")
         release_json = json_factory("command_ReleaseResources")
         configure_json = json.loads(configure_json)
-        del configure_json["csp"]["common"]["config_id"]
+        del configure_json["csp"]["cbf"]["fsp"][0]["integration_factor"]
         subarray_node = DeviceProxy(tmc_subarraynode1)
         pytest.command_result = subarray_node.Configure(
             json.dumps(configure_json)
@@ -100,10 +100,7 @@ def invoke_configure_one(
 @then(parsers.parse("the subarray {subarray_id} returns an error message"))
 def invalid_command_rejection():
     # asserting error message and result code received from subarray
-    assert (
-        "{'csp': {'common': {'config_id': ['Missing data for required field.']}}}"  # noqa: E501
-        in pytest.command_result[1][0]
-    )
+    assert "Malformed input string" in pytest.command_result[1][0]
     assert pytest.command_result[0][0] == ResultCode.REJECTED
 
 
@@ -239,7 +236,7 @@ def invoke_configure_with_unassigned_resources(
 def invalid_command_rejection_with_unassigned_resources():
     # asserting error message and result code received from subarray
     assert (
-        "Invalid input for receiver_band! Currently allowed [1,2]"  # noqa: E501
+        "Malformed input string. Please check the JSON format."  # noqa: E501
         in pytest.command_result[1][0]
     )
     assert pytest.command_result[0][0] == ResultCode.REJECTED

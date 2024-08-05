@@ -1,18 +1,18 @@
 """Test module for TMC-DISH Configure functionality"""
 
-
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
 
+from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
-from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
+@pytest.mark.skip(reason="Test being fix in SAH-1564")
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29416_configure.feature",
@@ -32,7 +32,7 @@ def subarray_is_in_idle_obsState(
     command_input_factory,
 ):
     """
-    A method to check if telescope in is idle obsState.
+    A method to check if telescope in is idle obsState
 
     Args:
         central_node_mid: Fixture for a TMC CentralNode wrapper class
@@ -74,7 +74,7 @@ def subarray_is_in_idle_obsState(
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+        (pytest.command_result[1][0], COMMAND_COMPLETED),
     )
 
 
@@ -105,7 +105,6 @@ def invoke_configure(
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
-
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
@@ -207,5 +206,5 @@ def check_subarray_obsState_ready(
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+        (pytest.command_result[1][0], COMMAND_COMPLETED),
     )

@@ -1,8 +1,12 @@
+import json
+
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
+from ska_tango_testing.mock.placeholders import Anything
 from tango import DeviceProxy, EventType
 
 from tests.conftest import LOGGER
+from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.common_utils.telescope_controls import (
     BaseTelescopeControl,
@@ -101,39 +105,92 @@ def given_tmc_obsState(json_factory):
         "{unexpected_command} command is invoked, TMC raises exception"
     )
 )
-def send(json_factory, unexpected_command):
+def send(json_factory, unexpected_command, change_event_callbacks):
     assign_json = json_factory("command_AssignResources")
     release_json = json_factory("command_ReleaseResources")
 
     if unexpected_command == "AssignResources":
-        with pytest.raises(Exception) as e:
-            LOGGER.info("Invoking AssignResources command on TMC CentralNode")
-            central_node = DeviceProxy(centralnode)
-            tmc_helper.check_devices(DEVICE_LIST_FOR_CHECK_DEVICES)
-            pytest.command_result = central_node.AssignResources(assign_json)
-            LOGGER.info(f"pytest result: {pytest.command_result}")
-        assert (
+        LOGGER.info("Invoking AssignResources command on TMC CentralNode")
+        central_node = DeviceProxy(centralnode)
+        tmc_helper.check_devices(DEVICE_LIST_FOR_CHECK_DEVICES)
+        pytest.command_result = central_node.AssignResources(assign_json)
+        LOGGER.info(f"pytest result: {pytest.command_result}")
+
+        central_node.subscribe_event(
+            "longRunningCommandResult",
+            EventType.CHANGE_EVENT,
+            change_event_callbacks["longRunningCommandResult"],
+        )
+        assertion_data = change_event_callbacks[
+            "longRunningCommandResult"
+        ].assert_change_event(
+            (pytest.command_result[1][0], Anything),
+            lookahead=15,
+        )
+        expected_error = (
             "AssignResources command not permitted in observation state"
-            in str(e.value)
         )
-    elif unexpected_command == "ReleaseResources":
-        with pytest.raises(Exception) as e:
-            LOGGER.info("Invoking ReleaseResources command on TMC CentralNode")
-            central_node = DeviceProxy(centralnode)
-            tmc_helper.check_devices(DEVICE_LIST_FOR_CHECK_DEVICES)
-            pytest.command_result = central_node.ReleaseResources(release_json)
-            LOGGER.info(f"pytest result: {pytest.command_result}")
         assert (
-            "ReleaseResources command not permitted in observation state"
-            in str(e.value)
+            ResultCode.REJECTED
+            == json.loads(assertion_data["attribute_value"][1])[0]
         )
+        assert (
+            expected_error
+            in json.loads(assertion_data["attribute_value"][1])[1]
+        )
+
+    elif unexpected_command == "ReleaseResources":
+        LOGGER.info("Invoking ReleaseResources command on TMC CentralNode")
+        central_node = DeviceProxy(centralnode)
+        tmc_helper.check_devices(DEVICE_LIST_FOR_CHECK_DEVICES)
+        pytest.command_result = central_node.ReleaseResources(release_json)
+        LOGGER.info(f"pytest result: {pytest.command_result}")
+        central_node.subscribe_event(
+            "longRunningCommandResult",
+            EventType.CHANGE_EVENT,
+            change_event_callbacks["longRunningCommandResult"],
+        )
+        assertion_data = change_event_callbacks[
+            "longRunningCommandResult"
+        ].assert_change_event(
+            (pytest.command_result[1][0], Anything),
+            lookahead=15,
+        )
+        expected_error = (
+            "ReleaseResources command not permitted in observation state"
+        )
+        assert (
+            ResultCode.REJECTED
+            == json.loads(assertion_data["attribute_value"][1])[0]
+        )
+        assert (
+            expected_error
+            in json.loads(assertion_data["attribute_value"][1])[1]
+        )
+
     elif unexpected_command == "EndScan":
-        with pytest.raises(Exception) as e:
-            LOGGER.info("Invoking EndScan command on TMC SubarrayNode")
-            tmc_helper.invoke_endscan_in_ready(**ON_OFF_DEVICE_COMMAND_DICT)
-        LOGGER.info("EndScan command failed with exception %s", e)
-        assert "EndScan command not permitted in observation state" in str(
-            e.value
+        LOGGER.info("Invoking EndScan command on TMC SubarrayNode")
+        tmc_helper.invoke_endscan_in_ready(**ON_OFF_DEVICE_COMMAND_DICT)
+        subarray_node = DeviceProxy(tmc_subarraynode1)
+        subarray_node.subscribe_event(
+            "longRunningCommandResult",
+            EventType.CHANGE_EVENT,
+            change_event_callbacks["longRunningCommandResult"],
+        )
+        assertion_data = change_event_callbacks[
+            "longRunningCommandResult"
+        ].assert_change_event(
+            (Anything, Anything),
+            lookahead=15,
+        )
+        expected_error = "EndScan command not permitted in observation state"
+        assert (
+            ResultCode.REJECTED
+            == json.loads(assertion_data["attribute_value"][1])[0]
+        )
+        assert (
+            expected_error
+            in json.loads(assertion_data["attribute_value"][1])[1]
         )
 
 
@@ -172,7 +229,7 @@ def tmc_accepts_next_commands(
             change_event_callbacks[
                 "longRunningCommandResult"
             ].assert_change_event(
-                (pytest.command_result[1][0], str(ResultCode.OK.value)),
+                (pytest.command_result[1][0], COMMAND_COMPLETED),
                 lookahead=4,
             )
             LOGGER.info("Tear down")

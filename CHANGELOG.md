@@ -3,6 +3,23 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+[0.23.0]
+************
+* Utilised base class v1.0.0 and pytango 9.5.0 on TMC nodes
+    * Utilised ska-tmc-common v0.17.6 for tango helper devices
+    * Implemented queue according to support base classes v1.0.0
+    * Refactored command allowed method to put commands in queue
+    * Implemented command allowed methods for observation specific commands to allow/reject the queued  task, ResultCode.NOT_ALLOWED/ResultCode.REJECTED
+    * Refactored error propogation implementation on SubarrayNode, CentralNode and tmc leaf nodes to handle longrunningcommandresult attribute new format in case of raised exceptions
+    * Refactored error propogation implementation to handle longrunningcommandresult event for ResultCode.NOT_ALLOWED, ResultCode.REJECTED and ResultCode.FAILED
+    * Refactored all the integration tests(pairwise and with mocks) for TMC Mid according to longrunningcommandresult attribute value
+
+* Utilised cspsubarrayleafnode v0.19.1 with fixed SKB-413: Mid Delay Model code pointing to wrong dishes
+    * Implemented antenna parameters objects to generate according to mid_json layout
+    * Corrected Mid Delay Model to point to SKA or MKT dish according to assigned receptors
+
+* Utilise dishleafnode: 0.16.3 Patch release for SKB-419 fix from branch SAH-1566
+
 [0.22.1]
 ************
 * Resolve skb-384

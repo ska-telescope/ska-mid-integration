@@ -9,6 +9,7 @@ from ska_control_model import ObsState
 from tango import DevState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
+from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     check_subarray_instance,
@@ -16,7 +17,6 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
-from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
 @pytest.mark.tmc_csp
@@ -130,7 +130,7 @@ def check_subarray_is_in_empty_obsstate(
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+        (pytest.command_result[1][0], COMMAND_COMPLETED),
     )
 
 
@@ -191,5 +191,5 @@ def check_subarray_is_in_idle_obsstate(
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+        (pytest.command_result[1][0], COMMAND_COMPLETED),
     )

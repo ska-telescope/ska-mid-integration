@@ -1,11 +1,11 @@
 name: "mocks-{{.Release.Name}}"
 function: testing
 domain: mocks
-instances: ["01"]
+instances: ["01","02","03","04","05","06"]
 entrypoints:
   - name: "ska_tmc_common.test_helpers.helper_base_device.HelperBaseDevice"
   - name: "ska_tmc_common.test_helpers.helper_dish_device.HelperDishDevice"
-  - name: "ska_tmc_common.test_helpers.helper_csp_subarray.HelperCspSubarray"
+  - name: "ska_tmc_common.test_helpers.helper_subarray_device.HelperSubArrayDevice"
   - name: "ska_tmc_common.test_helpers.helper_csp_master_device.HelperCspMasterDevice"
   - name: "ska_tmc_common.test_helpers.helper_sdp_subarray.HelperSdpSubarray"
   - name: "ska_tmc_common.test_helpers.helper_sdp_queue_connector_device.HelperSdpQueueConnector"
@@ -15,30 +15,40 @@ server:
   {{- $isSimulatedDish := .Values.deviceServers.mocks.dish }}
   {{- $isSimulatedCsp := .Values.deviceServers.mocks.csp }}
   {{- $isSimulatedSdp := .Values.deviceServers.mocks.sdp }}
+  {{- if eq $isSimulatedSdp true }}
     - name: "01"
-      classes:
-        {{- if eq $isSimulatedSdp true }}
+      classes:    
         - name: "HelperBaseDevice"
           devices:
           - name: "mid-sdp/control/0"
+    - name: "02"
+      classes:
         - name: "HelperSdpSubarray"
           devices:
           - name: "mid-sdp/subarray/01"
           - name: "mid-sdp/subarray/02"
+    - name: "03"
+      classes:
         - name: "HelperSdpQueueConnector"
           devices:
           - name: "mid-sdp/queueconnector/01"
         {{- end }}
         {{- if eq $isSimulatedCsp true }}
+    - name: "04"
+      classes:
         - name: "HelperCspMasterDevice"
           devices:
           - name: "mid-csp/control/0"
-        - name: "HelperCspSubarray"
+    - name: "05"
+      classes:
+        - name: "HelperSubArrayDevice"
           devices:
           - name: "mid-csp/subarray/01"
           - name: "mid-csp/subarray/02"
         {{- end }}
         {{- if eq $isSimulatedDish true }}
+    - name: "06"
+      classes:
         - name: "HelperDishDevice"
           devices:
           {{- range .Values.global.dishes }}
@@ -48,7 +58,7 @@ server:
 depends_on:
   - device: sys/database/2
 image:
-  registry: "{{.Values.dishleafnode.image.registry}}"
-  image: "{{.Values.dishleafnode.image.image}}"
-  tag: "{{.Values.dishleafnode.image.tag}}"
-  pullPolicy: "{{.Values.dishleafnode.image.pullPolicy}}"
+  registry: "{{.Values.centralnode.image.registry}}"
+  image: "{{.Values.centralnode.image.image}}"
+  tag: "{{.Values.centralnode.image.tag}}"
+  pullPolicy: "{{.Values.centralnode.image.pullPolicy}}"

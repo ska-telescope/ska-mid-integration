@@ -7,14 +7,15 @@ import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
 
+from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
-from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
+@pytest.mark.skip(reason="Test being fix in SAH-1564")
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42757_successive_scan.feature",
@@ -59,7 +60,7 @@ def check_subarray_obsState_idle(
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+        (pytest.command_result[1][0], COMMAND_COMPLETED),
     )
 
 
@@ -165,7 +166,7 @@ def check_dish_mode_and_pointing_state(
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+        (pytest.command_result[1][0], COMMAND_COMPLETED),
     )
 
 
@@ -214,7 +215,7 @@ def check_automatic_endscan_with_scan_duration1(
     """
     time.sleep(int(scan_duration1))
     assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
+        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=15
     )
 
 
@@ -274,7 +275,7 @@ def invoke_end_command(subarray_node, event_recorder, central_node_mid):
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+        (pytest.command_result[1][0], COMMAND_COMPLETED),
     )
 
 

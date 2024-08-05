@@ -6,11 +6,11 @@ import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from ska_tango_base.control_model import HealthState
+from ska_tango_testing.mock.placeholders import Anything
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
-    check_for_device_command_event,
     generate_eb_pb_ids,
     get_master_device_simulators,
     prepare_json_args_for_centralnode_commands,
@@ -109,25 +109,28 @@ def tmc_assign_resources_invoke(
 
 @then("SDP subarray report the unavailability of SDP Component")
 def sdp_subarray_reports_unavailability(
-    event_recorder: EventRecorder, subarray_node: SubarrayNodeWrapper
+    event_recorder: EventRecorder, central_node_mid: CentralNodeWrapperMid
 ):
     """
     Method to verify SDP subarray reports unavailability to TMC.
     """
     event_recorder.subscribe_event(
-        subarray_node.sdp_subarray_leaf_node,
+        central_node_mid.central_node,
         "longRunningCommandResult",
     )
     exception_message = (
         "The processing controller, helm deployer, or both "
         + "are OFFLINE: cannot start processing blocks."
     )
-    assert check_for_device_command_event(
-        subarray_node.sdp_subarray_leaf_node,
-        "longRunningCommandResult",
-        exception_message,
-        event_recorder,
-        "AssignResources",
+    pytest.assertion_data = event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        attribute_name="longRunningCommandResult",
+        attribute_value=(pytest.unique_id[0], Anything),
+    )
+    assert "AssignResources" in pytest.assertion_data["attribute_value"][0]
+    assert (
+        exception_message
+        in json.loads(pytest.assertion_data["attribute_value"][1])[1]
     )
 
 
@@ -139,22 +142,15 @@ def tmc_reports_unavailability_to_client(
     Method to verify TMC subarray reports unavailability to client.
     """
     exception_message = (
-        "Exception occurred on device:"
-        + " ska_mid/tm_subarray_node/1: Exception occurred on the"
+        " ska_mid/tm_subarray_node/1: Exception occurred on the"
         + " following devices: ska_mid/tm_leaf_node/sdp_subarray01:"
         + " The processing controller, helm deployer, or both are OFFLINE:"
         + " cannot start processing blocks.\n"
     )
-    event_recorder.subscribe_event(
-        central_node_mid.central_node,
-        "longRunningCommandResult",
-    )
-    assert check_for_device_command_event(
-        central_node_mid.central_node,
-        "longRunningCommandResult",
-        exception_message,
-        event_recorder,
-        "AssignResources",
+    assert "AssignResources" in pytest.assertion_data["attribute_value"][0]
+    assert (
+        exception_message
+        in json.loads(pytest.assertion_data["attribute_value"][1])[1]
     )
 
 

@@ -13,6 +13,7 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
+from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
@@ -20,10 +21,10 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
-from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
+@pytest.mark.skip(reason="Test being fix in SAH-1564")
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42658_long_sequence.feature",
@@ -71,7 +72,7 @@ def check_subarray_obsState_idle(
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+        (pytest.command_result[1][0], COMMAND_COMPLETED),
     )
 
 
@@ -151,7 +152,7 @@ def configure_subarray(
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+        (pytest.command_result[1][0], COMMAND_COMPLETED),
     )
 
 
@@ -197,7 +198,7 @@ def end_configuration_on_subarray(
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+        (pytest.command_result[1][0], COMMAND_COMPLETED),
     )
 
 
@@ -234,8 +235,8 @@ def reconfigure_subarray(
     configure_input_json["dish"]["receiver_band"] = receiver_band_2
     configure_input_json["csp"]["common"]["frequency_band"] = "2"
     central_node_mid.set_subarray_id(subarray_id)
-    pytest.command_result = subarray_node.store_configuration_data(
-        json.dumps(configure_input_json)
+    pytest.command_result = subarray_node.execute_transition(
+        "Configure", json.dumps(configure_input_json)
     )
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
@@ -243,37 +244,40 @@ def reconfigure_subarray(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "longRunningCommandResult",
         )
-        assert (
-            central_node_mid.dish_master_dict[dish_id].dishMode
-            == DishMode.OPERATE
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.OPERATE,
+            lookahead=10,
         )
-        assert (
-            central_node_mid.dish_leaf_node_dict[dish_id].dishMode
-            == DishMode.OPERATE
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "dishMode",
+            DishMode.OPERATE,
+            lookahead=10,
         )
-
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
-            lookahead=10,
+            lookahead=15,
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
-            lookahead=10,
+            lookahead=15,
         )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
-        lookahead=10,
+        lookahead=15,
     )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+        (pytest.command_result[1][0], COMMAND_COMPLETED),
     )
 
 

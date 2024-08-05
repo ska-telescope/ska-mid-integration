@@ -3,6 +3,7 @@ from pytest_bdd import scenario, then, when
 from ska_tango_base.control_model import HealthState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
+from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     check_for_device_command_event,
@@ -57,7 +58,7 @@ def invoke_load_dish_cfg(
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (unique_id[0], str(int(ResultCode.OK))),
+        (unique_id[0], COMMAND_COMPLETED),
         lookahead=5,
     )
 

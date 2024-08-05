@@ -5,8 +5,8 @@ from os.path import dirname, join
 
 from ska_control_model import ObsState
 
+from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.utils.wait_helpers import Waiter
-from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
 def get_subarray_input_json(slug):
@@ -172,7 +172,7 @@ def check_scan_successful(
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
-        (unique_id[0], str(int(ResultCode.OK))),
+        (unique_id[0], COMMAND_COMPLETED),
         lookahead=20,
     )
 
@@ -206,7 +206,7 @@ def check_configure_successful(
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
-        (unique_id[0], str(int(ResultCode.OK))),
+        (unique_id[0], COMMAND_COMPLETED),
         lookahead=20,
     )
 
@@ -304,7 +304,7 @@ def check_scan_successful_csp(
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
-        (unique_id[0], str(int(ResultCode.OK))),
+        (unique_id[0], COMMAND_COMPLETED),
         lookahead=10,
     )
 
@@ -332,7 +332,7 @@ def check_configure_successful_csp(
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
-        (unique_id[0], str(int(ResultCode.OK))),
+        (unique_id[0], COMMAND_COMPLETED),
         lookahead=10,
     )
 
