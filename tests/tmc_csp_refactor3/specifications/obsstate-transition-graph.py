@@ -340,7 +340,6 @@ class StateGraphAnalyzer:
                 f"{i}. {start} --> ({trigger1}) --> {mid} --> ({trigger2}) --> {end}"
             )
 
-
     def print_transition_matrix(self):
         G = self.graph
         # Get all nodes in the graph
@@ -443,6 +442,7 @@ def plot_graph(graph):
     plt.axis("off")
     plt.tight_layout()
     plt.show()
+
 
 # uncomment this to plot the graph
 # plot_graph(merged_graph)

@@ -2,12 +2,15 @@ import argparse
 import ast
 import os
 from abc import ABC, abstractmethod
-from typing import Dict, List, Tuple, Optional
 from datetime import datetime
+from typing import Dict, List, Optional, Tuple
 
-# This script is used to generate markdown files from Python files containing test steps and scenarios.
-# The script scans the Python files and extracts the test steps and scenarios using AST.
-# It then generates a markdown file with the extracted information for each input file.
+# This script is used to generate markdown files
+# from Python files containing test steps and scenarios.
+# The script scans the Python files and extracts the test steps
+# and scenarios using AST.
+# It then generates a markdown file with the extracted information
+# for each input file.
 # Use the script as follows:
 # python document_steps.py <input_folder> <output_folder>
 
@@ -102,8 +105,8 @@ from datetime import datetime
 #         │     ├── ...
 #         ├── tmc_robustness
 #         │ ├── AssignResources_Failure_Handling_tests
-#         │ │ ├── test_assign_resources_handling_on_csp_obsstate_empty_failure.md
-#         │ │ ├── test_assign_resources_handling_on_csp_obsstate_resourcing_failure.md
+#         │ │ ├── test_assign_resources_handling_on_csp_obsstate_empty_failure.md  # pylint: disable=line-too-long # noqa E501
+#         │ │ ├── test_assign_resources_handling_on_csp_obsstate_resourcing_failure.md  # pylint: disable=line-too-long # noqa E501
 #         │ │ ├── ...
 #         │ ├── Configure_failure_handling_tests
 #         │ │ ├── test_configure_handling_on_csp_obstate_configuring.md
@@ -120,19 +123,14 @@ from datetime import datetime
 
 #
 
-import argparse
-import ast
-import os
-import re
-from typing import Dict, List, Tuple, Optional
-from datetime import datetime
-
 
 class MarkdownFormatter:
     """Class for managing the output and MD formatting."""
 
     @staticmethod
-    def generate_markdown(filepath: str, steps: List[Dict], scenarios: Dict[str, str]) -> str:
+    def generate_markdown(
+        filepath: str, steps: List[Dict], scenarios: Dict[str, str]
+    ) -> str:
         """Generate markdown content from steps and scenarios."""
         current_time = datetime.now().strftime("%d %B %Y %H:%M:%S")
         markdown = f"# Test Steps and Scenarios from {filepath}\n\n"
@@ -147,9 +145,13 @@ class MarkdownFormatter:
         if steps:
             markdown += "## Steps\n\n"
             for step in steps:
-                markdown += f"### {step['type'].capitalize()}: {step['name']}\n\n"
+                markdown += (
+                    f"### {step['type'].capitalize()}: {step['name']}\n\n"
+                )
                 markdown += f"**Function:** `{step['function']}`\n\n"
-                markdown += f"**Signature:**\n```python\n{step['signature']}\n```\n\n"
+                markdown += (
+                    f"**Signature:**\n```python\n{step['signature']}\n```\n\n"
+                )
                 markdown += f"**Description:**\n{step['docstring']}\n\n"
                 markdown += "---\n\n"
         else:
@@ -161,41 +163,55 @@ class MarkdownFormatter:
     def write_markdown(content: str, output_file: str) -> None:
         """Write markdown content to a file."""
         os.makedirs(os.path.dirname(output_file), exist_ok=True)
-        with open(output_file, 'w') as file:
+        with open(output_file, "w") as file:
             file.write(content)
         print(f"Markdown file '{output_file}' has been generated.")
-        print(f"Last updated on: {datetime.now().strftime('%d %B %Y %H:%M:%S')}")
+        print(
+            f"Last updated on: {datetime.now().strftime('%d %B %Y %H:%M:%S')}"
+        )
 
     @staticmethod
     def format_feature_file(content: str) -> str:
         """Format feature file content as Markdown."""
         markdown = "# Feature\n\n"
-        lines = content.split('\n')
+        lines = content.split("\n")
         in_scenario = False
         in_example = False
         example_table = []
 
         for line in lines:
             stripped_line = line.strip()
-            if stripped_line.startswith('Feature:'):
+            if stripped_line.startswith("Feature:"):
                 markdown += f"## {stripped_line}\n\n"
-            elif stripped_line.startswith('Scenario:') or stripped_line.startswith('Scenario Outline:'):
+            elif stripped_line.startswith(
+                "Scenario:"
+            ) or stripped_line.startswith("Scenario Outline:"):
                 if in_example:
-                    markdown += MarkdownFormatter._format_example_table(example_table)
+                    markdown += MarkdownFormatter._format_example_table(
+                        example_table
+                    )
                     example_table = []
                     in_example = False
                 in_scenario = True
                 markdown += f"### {stripped_line}\n\n"
-            elif stripped_line.startswith('Given ') or stripped_line.startswith('When ') or stripped_line.startswith('Then ') or stripped_line.startswith('And ') or stripped_line.startswith('But '):
+            elif (
+                stripped_line.startswith("Given ")
+                or stripped_line.startswith("When ")
+                or stripped_line.startswith("Then ")
+                or stripped_line.startswith("And ")
+                or stripped_line.startswith("But ")
+            ):
                 markdown += f"- {stripped_line}\n"
-            elif stripped_line.startswith('Examples:'):
+            elif stripped_line.startswith("Examples:"):
                 in_example = True
                 markdown += f"#### {stripped_line}\n\n"
-            elif in_example and '|' in stripped_line:
+            elif in_example and "|" in stripped_line:
                 example_table.append(stripped_line)
-            elif stripped_line == '' and in_scenario:
+            elif stripped_line == "" and in_scenario:
                 if in_example:
-                    markdown += MarkdownFormatter._format_example_table(example_table)
+                    markdown += MarkdownFormatter._format_example_table(
+                        example_table
+                    )
                     example_table = []
                     in_example = False
                 in_scenario = False
@@ -216,25 +232,43 @@ class MarkdownFormatter:
             return ""
 
         # Strip leading and trailing pipes and spaces
-        cleaned_lines = [line.strip().strip('|').strip() for line in table_lines]
+        cleaned_lines = [
+            line.strip().strip("|").strip() for line in table_lines
+        ]
 
         # Split each line into cells
-        table_data = [line.split('|') for line in cleaned_lines]
+        table_data = [line.split("|") for line in cleaned_lines]
 
         # Strip spaces from each cell
         table_data = [[cell.strip() for cell in row] for row in table_data]
 
         # Find the maximum width for each column
-        col_widths = [max(len(cell) for cell in col) for col in zip(*table_data)]
+        col_widths = [
+            max(len(cell) for cell in col) for col in zip(*table_data)
+        ]
 
         # Generate the formatted table
-        formatted_table = "| " + " | ".join(cell.ljust(width) for cell, width in zip(table_data[0], col_widths)) + " |\n"
-        formatted_table += "| " + " | ".join("-" * width for width in col_widths) + " |\n"
+        formatted_table = (
+            "| "
+            + " | ".join(
+                cell.ljust(width)
+                for cell, width in zip(table_data[0], col_widths)
+            )
+            + " |\n"
+        )
+        formatted_table += (
+            "| " + " | ".join("-" * width for width in col_widths) + " |\n"
+        )
         for row in table_data[1:]:
-            formatted_table += "| " + " | ".join(cell.ljust(width) for cell, width in zip(row, col_widths)) + " |\n"
+            formatted_table += (
+                "| "
+                + " | ".join(
+                    cell.ljust(width) for cell, width in zip(row, col_widths)
+                )
+                + " |\n"
+            )
 
         return formatted_table + "\n"
-
 
 
 class StepVisitor(ast.NodeVisitor):
@@ -252,8 +286,10 @@ class StepVisitor(ast.NodeVisitor):
         - node is an instance of ast.FunctionDef
 
         Post-conditions:
-        - If the function is decorated with 'given', 'when', or 'then', a step is added to self.steps
-        - If the function is decorated with 'scenario', an entry is added to self.scenarios
+        - If the function is decorated with 'given', 'when', or 'then',
+          a step is added to self.steps
+        - If the function is decorated with 'scenario', an entry is added
+          to self.scenarios
         """
         assert isinstance(node, ast.FunctionDef), "Node must be a FunctionDef"
 
@@ -261,16 +297,24 @@ class StepVisitor(ast.NodeVisitor):
         initial_scenarios_count = len(self.scenarios)
 
         for decorator in node.decorator_list:
-            if isinstance(decorator, ast.Call) and isinstance(decorator.func, ast.Name):
-                if decorator.func.id in ['given', 'when', 'then']:
+            if isinstance(decorator, ast.Call) and isinstance(
+                decorator.func, ast.Name
+            ):
+                if decorator.func.id in ["given", "when", "then"]:
                     self._process_step(node, decorator)
-                elif decorator.func.id == 'scenario':
+                elif decorator.func.id == "scenario":
                     self._process_scenario(node, decorator)
 
-        assert len(self.steps) >= initial_steps_count, "Steps should not decrease"
-        assert len(self.scenarios) >= initial_scenarios_count, "Scenarios should not decrease"
+        assert (
+            len(self.steps) >= initial_steps_count
+        ), "Steps should not decrease"
+        assert (
+            len(self.scenarios) >= initial_scenarios_count
+        ), "Scenarios should not decrease"
 
-    def _process_step(self, node: ast.FunctionDef, decorator: ast.Call) -> None:
+    def _process_step(
+        self, node: ast.FunctionDef, decorator: ast.Call
+    ) -> None:
         """
         Process a step decorator.
 
@@ -290,17 +334,24 @@ class StepVisitor(ast.NodeVisitor):
         step_type = decorator.func.id
         step_name = self._extract_step_name(decorator)
         if step_name is not None:
-            self.steps.append({
-                'type': step_type,
-                'name': step_name,
-                'function': node.name,
-                'signature': self._get_signature(node),
-                'docstring': ast.get_docstring(node),
-            })
+            self.steps.append(
+                {
+                    "type": step_type,
+                    "name": step_name,
+                    "function": node.name,
+                    "signature": self._get_signature(node),
+                    "docstring": ast.get_docstring(node),
+                }
+            )
         else:
-            print(f"Warning: Could not extract step name for function {node.name}")
+            print(
+                "Warning: Could not extract step name "
+                f"for function {node.name}"
+            )
 
-        assert len(self.steps) >= initial_steps_count, "Steps should not decrease"
+        assert (
+            len(self.steps) >= initial_steps_count
+        ), "Steps should not decrease"
 
     def _extract_step_name(self, decorator: ast.Call) -> Optional[str]:
         """
@@ -318,15 +369,21 @@ class StepVisitor(ast.NodeVisitor):
             if isinstance(decorator.args[0], ast.Str):
                 return decorator.args[0].s
             elif isinstance(decorator.args[0], ast.Call):
-                if decorator.args[0].args and isinstance(decorator.args[0].args[0], ast.Str):
+                if decorator.args[0].args and isinstance(
+                    decorator.args[0].args[0], ast.Str
+                ):
                     return decorator.args[0].args[0].s
         elif decorator.keywords:
             for keyword in decorator.keywords:
-                if keyword.arg in ['text', 'name'] and isinstance(keyword.value, ast.Str):
+                if keyword.arg in ["text", "name"] and isinstance(
+                    keyword.value, ast.Str
+                ):
                     return keyword.value.s
         return None
 
-    def _process_scenario(self, node: ast.FunctionDef, decorator: ast.Call) -> None:
+    def _process_scenario(
+        self, node: ast.FunctionDef, decorator: ast.Call
+    ) -> None:
         """
         Process a scenario decorator.
 
@@ -335,7 +392,8 @@ class StepVisitor(ast.NodeVisitor):
         - decorator is an instance of ast.Call
 
         Post-conditions:
-        - If a valid scenario name is extracted, a new entry is added to self.scenarios
+        - If a valid scenario name is extracted, a new entry is added
+          to self.scenarios
         - If no valid scenario name is extracted, a warning is printed
         """
         assert isinstance(node, ast.FunctionDef), "Node must be a FunctionDef"
@@ -347,9 +405,14 @@ class StepVisitor(ast.NodeVisitor):
         if scenario_name is not None:
             self.scenarios[node.name] = scenario_name
         else:
-            print(f"Warning: Could not extract scenario name for function {node.name}")
+            print(
+                "Warning: Could not extract scenario name "
+                f"for function {node.name}"
+            )
 
-        assert len(self.scenarios) >= initial_scenarios_count, "Scenarios should not decrease"
+        assert (
+            len(self.scenarios) >= initial_scenarios_count
+        ), "Scenarios should not decrease"
 
     def _extract_scenario_name(self, decorator: ast.Call) -> Optional[str]:
         """
@@ -366,7 +429,7 @@ class StepVisitor(ast.NodeVisitor):
         if len(decorator.args) >= 2 and isinstance(decorator.args[1], ast.Str):
             return decorator.args[1].s
         for keyword in decorator.keywords:
-            if keyword.arg == 'name' and isinstance(keyword.value, ast.Str):
+            if keyword.arg == "name" and isinstance(keyword.value, ast.Str):
                 return keyword.value.s
         return None
 
@@ -386,6 +449,7 @@ class StepVisitor(ast.NodeVisitor):
         args = [arg.arg for arg in node.args.args]
         return f"def {node.name}({', '.join(args)}):"
 
+
 class FileScanner:
     """Class to scan the file and extract steps and scenarios."""
 
@@ -393,7 +457,7 @@ class FileScanner:
     def parse_file(filename: str) -> Tuple[List[Dict], Dict[str, str]]:
         """Parse the given file and return steps and scenarios."""
         try:
-            with open(filename, 'r') as file:
+            with open(filename, "r") as file:
                 content = file.read()
             tree = ast.parse(content)
             visitor = StepVisitor()
@@ -414,8 +478,8 @@ class FolderProcessor2:
     def find_repository_root(path: str) -> str:
         """Find the root of the repository by looking for .git folder."""
         current_path = os.path.abspath(path)
-        while current_path != '/':
-            if os.path.exists(os.path.join(current_path, '.git')):
+        while current_path != "/":
+            if os.path.exists(os.path.join(current_path, ".git")):
                 return current_path
             current_path = os.path.dirname(current_path)
         return path  # If no .git folder found, return the original path
@@ -434,29 +498,53 @@ class FolderProcessor2:
                 input_path = os.path.join(root, filename)
                 relative_path = os.path.relpath(input_path, repo_root)
 
-                if filename.endswith('.py'):
+                if filename.endswith(".py"):
                     # Place Python step files in the 'steps' subfolder
-                    output_path = os.path.join(output_folder, 'steps', f"{os.path.splitext(relative_path)[0]}.md")
+                    output_path = os.path.join(
+                        output_folder,
+                        "steps",
+                        f"{os.path.splitext(relative_path)[0]}.md",
+                    )
                     steps, scenarios = FileScanner.parse_file(input_path)
 
                     if steps or scenarios:
-                        markdown_content = MarkdownFormatter.generate_markdown(relative_path, steps, scenarios)
-                        MarkdownFormatter.write_markdown(markdown_content, output_path)
+                        markdown_content = MarkdownFormatter.generate_markdown(
+                            relative_path, steps, scenarios
+                        )
+                        MarkdownFormatter.write_markdown(
+                            markdown_content, output_path
+                        )
                         print(f"Processed Python file: {relative_path}")
                     else:
-                        print(f"No steps or scenarios found in {relative_path}. Skipping.")
+                        print(
+                            "No steps or scenarios found "
+                            f"in {relative_path}. Skipping."
+                        )
 
-                elif filename.endswith('.feature'):
+                elif filename.endswith(".feature"):
                     # Place feature files in the 'features' subfolder
-                    output_path = os.path.join(output_folder, 'features', f"{os.path.splitext(relative_path)[0]}.md")
+                    output_path = os.path.join(
+                        output_folder,
+                        "features",
+                        f"{os.path.splitext(relative_path)[0]}.md",
+                    )
                     try:
-                        with open(input_path, 'r') as feature_file:
+                        with open(input_path, "r") as feature_file:
                             feature_content = feature_file.read()
-                        markdown_content = MarkdownFormatter.format_feature_file(feature_content)
-                        MarkdownFormatter.write_markdown(markdown_content, output_path)
+                        markdown_content = (
+                            MarkdownFormatter.format_feature_file(
+                                feature_content
+                            )
+                        )
+                        MarkdownFormatter.write_markdown(
+                            markdown_content, output_path
+                        )
                         print(f"Processed feature file: {relative_path}")
                     except Exception as e:
-                        print(f"Error processing feature file {relative_path}: {str(e)}")
+                        print(
+                            "Error processing feature file "
+                            f"{relative_path}: {str(e)}"
+                        )
 
         # Run post-processor to create index file
         PostProcessor.create_index_file(output_folder)
@@ -464,40 +552,53 @@ class FolderProcessor2:
 
 class FileHandler(ABC):
     @abstractmethod
-    def process_file(self, input_path: str, output_path: str, repo_root: str) -> None:
+    def process_file(
+        self, input_path: str, output_path: str, repo_root: str
+    ) -> None:
         pass
 
+
 class PythonFileHandler(FileHandler):
-    def process_file(self, input_path: str, output_path: str, repo_root: str) -> None:
+    def process_file(
+        self, input_path: str, output_path: str, repo_root: str
+    ) -> None:
         relative_path = os.path.relpath(input_path, repo_root)
         steps, scenarios = FileScanner.parse_file(input_path)
 
         if steps or scenarios:
-            markdown_content = MarkdownFormatter.generate_markdown(relative_path, steps, scenarios)
+            markdown_content = MarkdownFormatter.generate_markdown(
+                relative_path, steps, scenarios
+            )
             MarkdownFormatter.write_markdown(markdown_content, output_path)
             print(f"Processed Python file: {relative_path}")
         else:
             print(f"No steps or scenarios found in {relative_path}. Skipping.")
 
+
 class FeatureFileHandler(FileHandler):
-    def process_file(self, input_path: str, output_path: str, repo_root: str) -> None:
+    def process_file(
+        self, input_path: str, output_path: str, repo_root: str
+    ) -> None:
         relative_path = os.path.relpath(input_path, repo_root)
         try:
-            with open(input_path, 'r') as feature_file:
+            with open(input_path, "r") as feature_file:
                 feature_content = feature_file.read()
-            markdown_content = MarkdownFormatter.format_feature_file(feature_content)
+            markdown_content = MarkdownFormatter.format_feature_file(
+                feature_content
+            )
             MarkdownFormatter.write_markdown(markdown_content, output_path)
             print(f"Processed feature file: {relative_path}")
         except Exception as e:
             print(f"Error processing feature file {relative_path}: {str(e)}")
+
 
 class FolderProcessor:
     """Class to process a folder of Python and feature files."""
 
     def __init__(self):
         self.file_handlers: Dict[str, FileHandler] = {
-            '.py': PythonFileHandler(),
-            '.feature': FeatureFileHandler()
+            ".py": PythonFileHandler(),
+            ".feature": FeatureFileHandler(),
         }
 
     @staticmethod
@@ -509,11 +610,12 @@ class FolderProcessor:
         - path is a valid string representing a file system path
 
         Post-conditions:
-        - Returns a string representing the repository root or the original path if no .git folder is found
+        - Returns a string representing the repository root or the original
+          path if no .git folder is found
         """
         current_path = os.path.abspath(path)
-        while current_path != '/':
-            if os.path.exists(os.path.join(current_path, '.git')):
+        while current_path != "/":
+            if os.path.exists(os.path.join(current_path, ".git")):
                 return current_path
             current_path = os.path.dirname(current_path)
         return path  # If no .git folder found, return the original path
@@ -527,7 +629,8 @@ class FolderProcessor:
         - output_folder is a valid string representing a writable folder path
 
         Post-conditions:
-        - All eligible files in input_folder are processed and corresponding markdown files are created in output_folder
+        - All eligible files in input_folder are processed and
+            corresponding markdown files are created in output_folder
         - An index file is created in the output_folder
         """
         self._ensure_output_folder_exists(output_folder)
@@ -546,50 +649,66 @@ class FolderProcessor:
         if not os.path.exists(output_folder):
             os.makedirs(output_folder)
 
-    def _process_file(self, root: str, filename: str, output_folder: str, repo_root: str) -> None:
+    def _process_file(
+        self, root: str, filename: str, output_folder: str, repo_root: str
+    ) -> None:
         """Process a single file based on its extension."""
         input_path = os.path.join(root, filename)
         file_extension = os.path.splitext(filename)[1]
 
         if file_extension in self.file_handlers:
-            subfolder = 'steps' if file_extension == '.py' else 'features'
+            subfolder = "steps" if file_extension == ".py" else "features"
             relative_path = os.path.relpath(input_path, repo_root)
-            output_path = os.path.join(output_folder, subfolder, f"{os.path.splitext(relative_path)[0]}.md")
-            self.file_handlers[file_extension].process_file(input_path, output_path, repo_root)
+            output_path = os.path.join(
+                output_folder,
+                subfolder,
+                f"{os.path.splitext(relative_path)[0]}.md",
+            )
+            self.file_handlers[file_extension].process_file(
+                input_path, output_path, repo_root
+            )
+
 
 class PostProcessor:
     """Class to post-process generated markdown files and create an index."""
 
     @staticmethod
     def create_index_file(output_folder: str) -> None:
-        """Create a top-level index file pointing to all feature and step files, including subfolder structure."""
+        """Create a top-level index file pointing to all feature
+        and step files, including subfolder structure.
+        """
         feature_files = []
         step_files = []
 
         for root, _, files in os.walk(output_folder):
             for file in files:
-                if file.endswith('.md') and file != "index.md":
+                if file.endswith(".md") and file != "index.md":
                     file_path = os.path.join(root, file)
                     relative_path = os.path.relpath(file_path, output_folder)
-                    if relative_path.startswith('features'):
+                    if relative_path.startswith("features"):
                         feature_files.append(relative_path)
-                    elif relative_path.startswith('steps'):
+                    elif relative_path.startswith("steps"):
                         step_files.append(relative_path)
 
         index_content = "# Test Documentation Index\n\n"
-        index_content += f"Last updated on: {datetime.now().strftime('%d %B %Y %H:%M:%S')}\n\n"
+        index_content += "Last updated on: "
+        index_content += f"{datetime.now().strftime('%d %B %Y %H:%M:%S')}\n\n"
 
         if feature_files:
             index_content += "## Feature Files\n\n"
-            index_content += PostProcessor._generate_nested_list(sorted(feature_files), 'features')
+            index_content += PostProcessor._generate_nested_list(
+                sorted(feature_files), "features"
+            )
             index_content += "\n"
 
         if step_files:
             index_content += "## Step Files\n\n"
-            index_content += PostProcessor._generate_nested_list(sorted(step_files), 'steps')
+            index_content += PostProcessor._generate_nested_list(
+                sorted(step_files), "steps"
+            )
 
         index_file_path = os.path.join(output_folder, "index.md")
-        with open(index_file_path, 'w') as index_file:
+        with open(index_file_path, "w") as index_file:
             index_file.write(index_content)
         print(f"Created index file: {index_file_path}")
 
@@ -616,19 +735,29 @@ class PostProcessor:
         for key, value in d.items():
             if isinstance(value, dict):
                 result += f"{indent}- {key}/\n"
-                result += PostProcessor._dict_to_md_list(value, level + 1, root_folder)
+                result += PostProcessor._dict_to_md_list(
+                    value, level + 1, root_folder
+                )
             else:
                 result += f"{indent}- [{key}]({value})\n"
         return result
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Generate markdown from test steps and feature files in a folder.")
-    parser.add_argument("input_folder", help="Path to the input folder containing Python and feature files")
-    parser.add_argument("output_folder", help="Path to the output folder for markdown files")
+    parser = argparse.ArgumentParser(
+        description="Generate markdown from test steps and feature files in a folder."  # pylint: disable=line-too-long # noqa E501
+    )
+    parser.add_argument(
+        "input_folder",
+        help="Path to the input folder containing Python and feature files",
+    )
+    parser.add_argument(
+        "output_folder", help="Path to the output folder for markdown files"
+    )
     args = parser.parse_args()
 
     FolderProcessor().process_folder(args.input_folder, args.output_folder)
+
 
 if __name__ == "__main__":
     main()

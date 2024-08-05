@@ -1,44 +1,52 @@
-import pytest
-from unittest.mock import mock_open, patch
-from datetime import datetime
-from ..document_steps import MarkdownFormatter, FileScanner, StepVisitor, PythonFileHandler, FeatureFileHandler
-from ..document_steps import FolderProcessor, PostProcessor
+import ast
+from unittest.mock import Mock, mock_open, patch
 
+import pytest
 from assertpy import assert_that
 
-class TestMarkdownFormatter:
+from ..document_steps import (
+    FeatureFileHandler,
+    FileScanner,
+    FolderProcessor,
+    MarkdownFormatter,
+    PostProcessor,
+    PythonFileHandler,
+    StepVisitor,
+)
 
+
+class TestMarkdownFormatter:
     @pytest.fixture
     def sample_steps(self):
         return [
             {
-                'type': 'given',
-                'name': 'the system is in a stable state',
-                'function': 'given_stable_system',
-                'signature': 'def given_stable_system():',
-                'docstring': 'Ensure the system is in a stable state before the test.'
+                "type": "given",
+                "name": "the system is in a stable state",
+                "function": "given_stable_system",
+                "signature": "def given_stable_system():",
+                "docstring": "Ensure the system is in a stable state before the test.",  # pylint: disable=line-too-long # noqa E501
             },
             {
-                'type': 'when',
-                'name': 'the user performs action X',
-                'function': 'when_user_performs_x',
-                'signature': 'def when_user_performs_x(action):',
-                'docstring': 'Simulate the user performing action X.'
+                "type": "when",
+                "name": "the user performs action X",
+                "function": "when_user_performs_x",
+                "signature": "def when_user_performs_x(action):",
+                "docstring": "Simulate the user performing action X.",
             },
             {
-                'type': 'then',
-                'name': 'the system should respond with Y',
-                'function': 'then_system_responds_y',
-                'signature': 'def then_system_responds_y(expected_response):',
-                'docstring': 'Verify that the system responds with Y.'
-            }
+                "type": "then",
+                "name": "the system should respond with Y",
+                "function": "then_system_responds_y",
+                "signature": "def then_system_responds_y(expected_response):",
+                "docstring": "Verify that the system responds with Y.",
+            },
         ]
 
     @pytest.fixture
     def sample_scenarios(self):
         return {
-            'test_scenario_1': 'User performs action X and system responds',
-            'test_scenario_2': 'System handles invalid input gracefully'
+            "test_scenario_1": "User performs action X and system responds",
+            "test_scenario_2": "System handles invalid input gracefully",
         }
 
     @pytest.fixture
@@ -64,7 +72,9 @@ class TestMarkdownFormatter:
 
     def test_generate_markdown(self, sample_steps, sample_scenarios):
         filepath = "test/path/to/file.py"
-        markdown = MarkdownFormatter.generate_markdown(filepath, sample_steps, sample_scenarios)
+        markdown = MarkdownFormatter.generate_markdown(
+            filepath, sample_steps, sample_scenarios
+        )
 
         assert_that(markdown).contains(
             "# Test Steps and Scenarios from test/path/to/file.py",
@@ -78,7 +88,7 @@ class TestMarkdownFormatter:
             "### Then: the system should respond with Y",
             "**Function:** `given_stable_system`",
             "**Signature:**\n```python\ndef given_stable_system():\n```",
-            "Ensure the system is in a stable state before the test."
+            "Ensure the system is in a stable state before the test.",
         )
 
     def test_write_markdown(self):
@@ -95,14 +105,20 @@ class TestMarkdownFormatter:
         assert_that(mock_makedirs.call_args[1]).is_equal_to({"exist_ok": True})
 
         assert_that(mock_open_function.call_count).is_equal_to(1)
-        assert_that(mock_open_function.call_args[0][0]).is_equal_to(output_file)
-        assert_that(mock_open_function.call_args[0][1]).is_equal_to('w')
+        assert_that(mock_open_function.call_args[0][0]).is_equal_to(
+            output_file
+        )
+        assert_that(mock_open_function.call_args[0][1]).is_equal_to("w")
 
         assert_that(mock_open_function().write.call_count).is_equal_to(1)
-        assert_that(mock_open_function().write.call_args[0][0]).is_equal_to(content)
+        assert_that(mock_open_function().write.call_args[0][0]).is_equal_to(
+            content
+        )
 
     def test_format_feature_file(self, sample_feature_content):
-        markdown = MarkdownFormatter.format_feature_file(sample_feature_content)
+        markdown = MarkdownFormatter.format_feature_file(
+            sample_feature_content
+        )
 
         assert_that(markdown).contains(
             "# Feature",
@@ -115,14 +131,14 @@ class TestMarkdownFormatter:
             "#### Examples:",
             "| username | password | error_message       |",
             "| user1    | wrong    | Invalid password    |",
-            "| nonuser  | pass123  | User does not exist |"
+            "| nonuser  | pass123  | User does not exist |",
         )
 
     def test__format_example_table(self):
         table_lines = [
             "| header1 | header2 | header3 |",
             "| value1  | value2  | value3  |",
-            "| a       | b       | c       |"
+            "| a       | b       | c       |",
         ]
         formatted_table = MarkdownFormatter._format_example_table(table_lines)
 
@@ -138,10 +154,7 @@ class TestMarkdownFormatter:
         assert_that(MarkdownFormatter._format_example_table([])).is_empty()
 
 
-
-
 class TestFileScanner:
-
     @pytest.fixture
     def valid_python_content(self):
         return """
@@ -184,33 +197,41 @@ def function_with_error(
         assert_that(steps).is_length(3)
         assert_that(scenarios).is_length(1)
 
-        assert_that(steps[0]).contains_entry({
-            'type': 'given',
-            'name': 'the user is on the login page',
-            'function': 'user_on_login_page',
-            'docstring': 'Ensure the user is on the login page'
-        })
+        assert_that(steps[0]).contains_entry(
+            {
+                "type": "given",
+                "name": "the user is on the login page",
+                "function": "user_on_login_page",
+                "docstring": "Ensure the user is on the login page",
+            }
+        )
 
-        assert_that(steps[1]).contains_entry({
-            'type': 'when',
-            'name': 'the user enters valid credentials',
-            'function': 'enter_valid_credentials'
-        })
+        assert_that(steps[1]).contains_entry(
+            {
+                "type": "when",
+                "name": "the user enters valid credentials",
+                "function": "enter_valid_credentials",
+            }
+        )
 
-        assert_that(steps[2]).contains_entry({
-            'type': 'then',
-            'name': 'the user should be logged in successfully',
-            'function': 'verify_successful_login',
-            'docstring': 'Check that the user is logged in'
-        })
+        assert_that(steps[2]).contains_entry(
+            {
+                "type": "then",
+                "name": "the user should be logged in successfully",
+                "function": "verify_successful_login",
+                "docstring": "Check that the user is logged in",
+            }
+        )
 
-        assert_that(scenarios).contains_entry({
-            'test_successful_login': 'Successful login'
-        })
+        assert_that(scenarios).contains_entry(
+            {"test_successful_login": "Successful login"}
+        )
 
     def test_parse_file_syntax_error(self, syntax_error_content):
         with patch("builtins.open", mock_open(read_data=syntax_error_content)):
-            steps, scenarios = FileScanner.parse_file("dummy_file_with_error.py")
+            steps, scenarios = FileScanner.parse_file(
+                "dummy_file_with_error.py"
+            )
 
         assert_that(steps).is_empty()
         assert_that(scenarios).is_empty()
@@ -222,21 +243,23 @@ def function_with_error(
         assert_that(steps).is_empty()
         assert_that(scenarios).is_empty()
 
-    @patch('file_scanner.FileScanner.StepVisitor')
+    @patch("file_scanner.FileScanner.StepVisitor")
     def test_correct_extraction(self, mock_step_visitor):
         # Setup mock visitor
         mock_instance = mock_step_visitor.return_value
-        mock_instance.steps = [{'type': 'given', 'name': 'a condition'}]
-        mock_instance.scenarios = {'test_scenario': 'Test Scenario'}
+        mock_instance.steps = [{"type": "given", "name": "a condition"}]
+        mock_instance.scenarios = {"test_scenario": "Test Scenario"}
 
         with patch("builtins.open", mock_open(read_data="some content")):
             steps, scenarios = FileScanner.parse_file("dummy_file.py")
 
-        assert_that(steps).is_equal_to([{'type': 'given', 'name': 'a condition'}])
-        assert_that(scenarios).is_equal_to({'test_scenario': 'Test Scenario'})
+        assert_that(steps).is_equal_to(
+            [{"type": "given", "name": "a condition"}]
+        )
+        assert_that(scenarios).is_equal_to({"test_scenario": "Test Scenario"})
+
 
 class TestStepVisitor:
-
     @pytest.fixture
     def step_visitor(self):
         return StepVisitor()
@@ -267,166 +290,199 @@ def regular_function():
 
         assert_that(step_visitor.steps).is_length(3)
         assert_that(step_visitor.scenarios).is_length(1)
-        assert_that(step_visitor.steps[0]['type']).is_equal_to('given')
-        assert_that(step_visitor.steps[1]['type']).is_equal_to('when')
-        assert_that(step_visitor.steps[2]['type']).is_equal_to('then')
-        assert_that(step_visitor.scenarios).contains_key('test_scenario')
+        assert_that(step_visitor.steps[0]["type"]).is_equal_to("given")
+        assert_that(step_visitor.steps[1]["type"]).is_equal_to("when")
+        assert_that(step_visitor.steps[2]["type"]).is_equal_to("then")
+        assert_that(step_visitor.scenarios).contains_key("test_scenario")
 
     def test__process_step_with_different_types(self, step_visitor):
-        for step_type in ['given', 'when', 'then']:
+        for step_type in ["given", "when", "then"]:
             node = ast.FunctionDef(
-                name=f'{step_type}_func',
-                args=ast.arguments(args=[], vararg=None, kwarg=None, defaults=[]),
+                name=f"{step_type}_func",
+                args=ast.arguments(
+                    args=[], vararg=None, kwarg=None, defaults=[]
+                ),
                 body=[],
                 decorator_list=[
                     ast.Call(
                         func=ast.Name(id=step_type, ctx=ast.Load()),
                         args=[ast.Str(s=f"a {step_type} step")],
-                        keywords=[]
+                        keywords=[],
                     )
-                ]
+                ],
             )
             step_visitor._process_step(node, node.decorator_list[0])
 
         assert_that(step_visitor.steps).is_length(3)
-        for i, step_type in enumerate(['given', 'when', 'then']):
-            assert_that(step_visitor.steps[i]).contains_entry({
-                'type': step_type,
-                'name': f'a {step_type} step',
-                'function': f'{step_type}_func'
-            })
+        for i, step_type in enumerate(["given", "when", "then"]):
+            assert_that(step_visitor.steps[i]).contains_entry(
+                {
+                    "type": step_type,
+                    "name": f"a {step_type} step",
+                    "function": f"{step_type}_func",
+                }
+            )
 
     def test__extract_step_name_with_different_structures(self, step_visitor):
         # Test with simple string argument
         decorator = ast.Call(
-            func=ast.Name(id='given', ctx=ast.Load()),
+            func=ast.Name(id="given", ctx=ast.Load()),
             args=[ast.Str(s="a simple step")],
-            keywords=[]
+            keywords=[],
         )
-        assert_that(step_visitor._extract_step_name(decorator)).is_equal_to("a simple step")
+        assert_that(step_visitor._extract_step_name(decorator)).is_equal_to(
+            "a simple step"
+        )
 
         # Test with function call (like _)
         decorator = ast.Call(
-            func=ast.Name(id='given', ctx=ast.Load()),
+            func=ast.Name(id="given", ctx=ast.Load()),
             args=[
                 ast.Call(
-                    func=ast.Name(id='_', ctx=ast.Load()),
+                    func=ast.Name(id="_", ctx=ast.Load()),
                     args=[ast.Str(s="a translated step")],
-                    keywords=[]
+                    keywords=[],
                 )
             ],
-            keywords=[]
+            keywords=[],
         )
-        assert_that(step_visitor._extract_step_name(decorator)).is_equal_to("a translated step")
+        assert_that(step_visitor._extract_step_name(decorator)).is_equal_to(
+            "a translated step"
+        )
 
         # Test with keyword argument
         decorator = ast.Call(
-            func=ast.Name(id='given', ctx=ast.Load()),
+            func=ast.Name(id="given", ctx=ast.Load()),
             args=[],
-            keywords=[ast.keyword(arg='text', value=ast.Str(s="a keyword step"))]
+            keywords=[
+                ast.keyword(arg="text", value=ast.Str(s="a keyword step"))
+            ],
         )
-        assert_that(step_visitor._extract_step_name(decorator)).is_equal_to("a keyword step")
+        assert_that(step_visitor._extract_step_name(decorator)).is_equal_to(
+            "a keyword step"
+        )
 
     def test__process_scenario_with_different_structures(self, step_visitor):
         # Test with positional arguments
         node = ast.FunctionDef(
-            name='test_scenario1',
+            name="test_scenario1",
             args=ast.arguments(args=[], vararg=None, kwarg=None, defaults=[]),
             body=[],
             decorator_list=[
                 ast.Call(
-                    func=ast.Name(id='scenario', ctx=ast.Load()),
-                    args=[ast.Str(s="feature.feature"), ast.Str(s="Scenario 1")],
-                    keywords=[]
+                    func=ast.Name(id="scenario", ctx=ast.Load()),
+                    args=[
+                        ast.Str(s="feature.feature"),
+                        ast.Str(s="Scenario 1"),
+                    ],
+                    keywords=[],
                 )
-            ]
+            ],
         )
         step_visitor._process_scenario(node, node.decorator_list[0])
-        assert_that(step_visitor.scenarios).contains_entry({'test_scenario1': 'Scenario 1'})
+        assert_that(step_visitor.scenarios).contains_entry(
+            {"test_scenario1": "Scenario 1"}
+        )
 
         # Test with keyword arguments
         node = ast.FunctionDef(
-            name='test_scenario2',
+            name="test_scenario2",
             args=ast.arguments(args=[], vararg=None, kwarg=None, defaults=[]),
             body=[],
             decorator_list=[
                 ast.Call(
-                    func=ast.Name(id='scenario', ctx=ast.Load()),
+                    func=ast.Name(id="scenario", ctx=ast.Load()),
                     args=[],
                     keywords=[
-                        ast.keyword(arg='feature_name', value=ast.Str(s="feature.feature")),
-                        ast.keyword(arg='scenario_name', value=ast.Str(s="Scenario 2"))
-                    ]
+                        ast.keyword(
+                            arg="feature_name",
+                            value=ast.Str(s="feature.feature"),
+                        ),
+                        ast.keyword(
+                            arg="scenario_name", value=ast.Str(s="Scenario 2")
+                        ),
+                    ],
                 )
-            ]
+            ],
         )
         step_visitor._process_scenario(node, node.decorator_list[0])
-        assert_that(step_visitor.scenarios).contains_entry({'test_scenario2': 'Scenario 2'})
+        assert_that(step_visitor.scenarios).contains_entry(
+            {"test_scenario2": "Scenario 2"}
+        )
 
-    def test__extract_scenario_name_with_different_structures(self, step_visitor):
+    def test__extract_scenario_name_with_different_structures(
+        self, step_visitor
+    ):
         # Test with positional arguments
         decorator = ast.Call(
-            func=ast.Name(id='scenario', ctx=ast.Load()),
+            func=ast.Name(id="scenario", ctx=ast.Load()),
             args=[ast.Str(s="feature.feature"), ast.Str(s="Scenario 1")],
-            keywords=[]
+            keywords=[],
         )
-        assert_that(step_visitor._extract_scenario_name(decorator)).is_equal_to("Scenario 1")
+        assert_that(
+            step_visitor._extract_scenario_name(decorator)
+        ).is_equal_to("Scenario 1")
 
         # Test with keyword arguments
         decorator = ast.Call(
-            func=ast.Name(id='scenario', ctx=ast.Load()),
+            func=ast.Name(id="scenario", ctx=ast.Load()),
             args=[],
             keywords=[
-                ast.keyword(arg='feature_name', value=ast.Str(s="feature.feature")),
-                ast.keyword(arg='scenario_name', value=ast.Str(s="Scenario 2"))
-            ]
+                ast.keyword(
+                    arg="feature_name", value=ast.Str(s="feature.feature")
+                ),
+                ast.keyword(
+                    arg="scenario_name", value=ast.Str(s="Scenario 2")
+                ),
+            ],
         )
-        assert_that(step_visitor._extract_scenario_name(decorator)).is_equal_to("Scenario 2")
+        assert_that(
+            step_visitor._extract_scenario_name(decorator)
+        ).is_equal_to("Scenario 2")
 
     def test__get_signature_with_different_arg_structures(self, step_visitor):
         # Test with no arguments
         node = ast.FunctionDef(
-            name='func_no_args',
+            name="func_no_args",
             args=ast.arguments(args=[], vararg=None, kwarg=None, defaults=[]),
-            body=[]
+            body=[],
         )
-        assert_that(step_visitor._get_signature(node)).is_equal_to("def func_no_args():")
+        assert_that(step_visitor._get_signature(node)).is_equal_to(
+            "def func_no_args():"
+        )
 
         # Test with positional arguments
         node = ast.FunctionDef(
-            name='func_with_args',
+            name="func_with_args",
             args=ast.arguments(
-                args=[ast.arg(arg='arg1'), ast.arg(arg='arg2')],
+                args=[ast.arg(arg="arg1"), ast.arg(arg="arg2")],
                 vararg=None,
                 kwarg=None,
-                defaults=[]
+                defaults=[],
             ),
-            body=[]
+            body=[],
         )
-        assert_that(step_visitor._get_signature(node)).is_equal_to("def func_with_args(arg1, arg2):")
+        assert_that(step_visitor._get_signature(node)).is_equal_to(
+            "def func_with_args(arg1, arg2):"
+        )
 
         # Test with *args and **kwargs
         node = ast.FunctionDef(
-            name='func_with_var_args',
+            name="func_with_var_args",
             args=ast.arguments(
                 args=[],
-                vararg=ast.arg(arg='args'),
-                kwarg=ast.arg(arg='kwargs'),
-                defaults=[]
+                vararg=ast.arg(arg="args"),
+                kwarg=ast.arg(arg="kwargs"),
+                defaults=[],
             ),
-            body=[]
+            body=[],
         )
-        assert_that(step_visitor._get_signature(node)).is_equal_to("def func_with_var_args(*args, **kwargs):")
-
-
-import pytest
-from assertpy import assert_that
-from unittest.mock import Mock, patch, mock_open, call
-import os
+        assert_that(step_visitor._get_signature(node)).is_equal_to(
+            "def func_with_var_args(*args, **kwargs):"
+        )
 
 
 class TestFileHandlers:
-
     @pytest.fixture
     def python_file_handler(self):
         return PythonFileHandler()
@@ -436,55 +492,77 @@ class TestFileHandlers:
         return FeatureFileHandler()
 
     def test_PythonFileHandler_process_file(self, python_file_handler):
-        with patch('file_handlers.FileScanner.parse_file') as mock_parse_file, \
-                patch('file_handlers.MarkdownFormatter.generate_markdown') as mock_generate_markdown, \
-                patch('file_handlers.MarkdownFormatter.write_markdown') as mock_write_markdown:
-            mock_parse_file.return_value = (["step1", "step2"], {"scenario1": "Scenario 1"})
+        with patch(
+            "file_handlers.FileScanner.parse_file"
+        ) as mock_parse_file, patch(
+            "file_handlers.MarkdownFormatter.generate_markdown"
+        ) as mock_generate_markdown, patch(
+            "file_handlers.MarkdownFormatter.write_markdown"
+        ) as mock_write_markdown:
+            mock_parse_file.return_value = (
+                ["step1", "step2"],
+                {"scenario1": "Scenario 1"},
+            )
             mock_generate_markdown.return_value = "# Markdown Content"
 
-            python_file_handler.process_file("input.py", "output.md", "/repo/root")
+            python_file_handler.process_file(
+                "input.py", "output.md", "/repo/root"
+            )
 
             mock_parse_file.assert_called_once_with("input.py")
-            mock_generate_markdown.assert_called_once_with("input.py", ["step1", "step2"], {"scenario1": "Scenario 1"})
-            mock_write_markdown.assert_called_once_with("# Markdown Content", "output.md")
+            mock_generate_markdown.assert_called_once_with(
+                "input.py", ["step1", "step2"], {"scenario1": "Scenario 1"}
+            )
+            mock_write_markdown.assert_called_once_with(
+                "# Markdown Content", "output.md"
+            )
 
     def test_FeatureFileHandler_process_file(self, feature_file_handler):
-        with patch('builtins.open', mock_open(read_data="Feature: Test")) as mock_file, \
-                patch('file_handlers.MarkdownFormatter.format_feature_file') as mock_format_feature, \
-                patch('file_handlers.MarkdownFormatter.write_markdown') as mock_write_markdown:
+        with patch(
+            "builtins.open", mock_open(read_data="Feature: Test")
+        ) as mock_file, patch(
+            "file_handlers.MarkdownFormatter.format_feature_file"
+        ) as mock_format_feature, patch(
+            "file_handlers.MarkdownFormatter.write_markdown"
+        ) as mock_write_markdown:
             mock_format_feature.return_value = "# Formatted Feature"
 
-            feature_file_handler.process_file("input.feature", "output.md", "/repo/root")
+            feature_file_handler.process_file(
+                "input.feature", "output.md", "/repo/root"
+            )
 
-            mock_file.assert_called_once_with("input.feature", 'r')
+            mock_file.assert_called_once_with("input.feature", "r")
             mock_format_feature.assert_called_once_with("Feature: Test")
-            mock_write_markdown.assert_called_once_with("# Formatted Feature", "output.md")
+            mock_write_markdown.assert_called_once_with(
+                "# Formatted Feature", "output.md"
+            )
 
 
 class TestFolderProcessor:
-
     @pytest.fixture
     def folder_processor(self):
         return FolderProcessor()
 
     def test_find_repository_root(self, folder_processor):
-        with patch('os.path.exists') as mock_exists:
+        with patch("os.path.exists") as mock_exists:
             mock_exists.side_effect = [False, False, True]
             root = folder_processor.find_repository_root("/path/to/folder")
             assert_that(root).is_equal_to("/path")
 
-        with patch('os.path.exists') as mock_exists:
+        with patch("os.path.exists") as mock_exists:
             mock_exists.return_value = False
             root = folder_processor.find_repository_root("/path/to/folder")
             assert_that(root).is_equal_to("/path/to/folder")
 
     def test_process_folder(self, folder_processor):
-        with patch('os.walk') as mock_walk, \
-                patch('folder_processor.FolderProcessor._process_file') as mock_process_file, \
-                patch('folder_processor.PostProcessor.create_index_file') as mock_create_index:
+        with patch("os.walk") as mock_walk, patch(
+            "folder_processor.FolderProcessor._process_file"
+        ) as mock_process_file, patch(
+            "folder_processor.PostProcessor.create_index_file"
+        ) as mock_create_index:
             mock_walk.return_value = [
                 ("/root", ["dir1"], ["file1.py", "file2.feature"]),
-                ("/root/dir1", [], ["file3.py"])
+                ("/root/dir1", [], ["file3.py"]),
             ]
 
             folder_processor.process_folder("/input", "/output")
@@ -493,73 +571,80 @@ class TestFolderProcessor:
             mock_create_index.assert_called_once_with("/output")
 
     def test__ensure_output_folder_exists(self, folder_processor):
-        with patch('os.path.exists') as mock_exists, \
-                patch('os.makedirs') as mock_makedirs:
+        with patch("os.path.exists") as mock_exists, patch(
+            "os.makedirs"
+        ) as mock_makedirs:
             mock_exists.return_value = False
             folder_processor._ensure_output_folder_exists("/output")
             mock_makedirs.assert_called_once_with("/output")
 
             mock_exists.return_value = True
             folder_processor._ensure_output_folder_exists("/output")
-            assert_that(mock_makedirs.call_count).is_equal_to(1)  # No additional call
+            assert_that(mock_makedirs.call_count).is_equal_to(
+                1
+            )  # No additional call
 
     def test__process_file(self, folder_processor):
         mock_handler = Mock()
-        folder_processor.file_handlers = {'.py': mock_handler}
+        folder_processor.file_handlers = {".py": mock_handler}
 
-        folder_processor._process_file("/root", "file.py", "/output", "/repo/root")
+        folder_processor._process_file(
+            "/root", "file.py", "/output", "/repo/root"
+        )
         mock_handler.process_file.assert_called_once_with(
-            "/root/file.py",
-            "/output/steps/root/file.md",
-            "/repo/root"
+            "/root/file.py", "/output/steps/root/file.md", "/repo/root"
         )
 
         mock_handler.reset_mock()
-        folder_processor._process_file("/root", "file.txt", "/output", "/repo/root")
+        folder_processor._process_file(
+            "/root", "file.txt", "/output", "/repo/root"
+        )
         assert_that(mock_handler.process_file.called).is_false()
 
 
 class TestPostProcessor:
-
     @pytest.fixture
     def post_processor(self):
         return PostProcessor()
 
     def test_create_index_file(self, post_processor):
-        with patch('os.walk') as mock_walk, \
-                patch('builtins.open', mock_open()) as mock_file:
+        with patch("os.walk") as mock_walk, patch(
+            "builtins.open", mock_open()
+        ) as mock_file:
             mock_walk.return_value = [
                 ("/output", ["features", "steps"], []),
                 ("/output/features", [], ["feature1.md", "feature2.md"]),
-                ("/output/steps", [], ["step1.md", "step2.md"])
+                ("/output/steps", [], ["step1.md", "step2.md"]),
             ]
 
             PostProcessor.create_index_file("/output")
 
-            mock_file.assert_called_once_with("/output/index.md", 'w')
+            mock_file.assert_called_once_with("/output/index.md", "w")
             handle = mock_file()
             assert_that(handle.write.call_count).is_greater_than(1)
-            assert_that(handle.write.call_args_list[0][0][0]).contains("# Test Documentation Index")
+            assert_that(handle.write.call_args_list[0][0][0]).contains(
+                "# Test Documentation Index"
+            )
 
     def test__generate_nested_list(self, post_processor):
         files = [
             "features/scenario1.md",
             "features/subfolder/scenario2.md",
             "steps/step1.md",
-            "steps/subfolder/step2.md"
+            "steps/subfolder/step2.md",
         ]
         result = PostProcessor._generate_nested_list(files, "root")
-        assert_that(result).contains("- scenario1.md", "- subfolder/", "  - scenario2.md")
+        assert_that(result).contains(
+            "- scenario1.md", "- subfolder/", "  - scenario2.md"
+        )
 
     def test__dict_to_md_list(self, post_processor):
         nested_dict = {
             "folder1": {
                 "file1.md": "path/to/file1.md",
-                "subfolder": {
-                    "file2.md": "path/to/subfolder/file2.md"
-                }
+                "subfolder": {"file2.md": "path/to/subfolder/file2.md"},
             },
-            "file3.md": "path/to/file3.md"
+            "file3.md": "path/to/file3.md",
         }
         result = PostProcessor._dict_to_md_list(nested_dict, 0, "root")
         assert_that(result).contains(
@@ -567,7 +652,7 @@ class TestPostProcessor:
             "  - [file1.md](path/to/file1.md)",
             "  - subfolder/",
             "    - [file2.md](path/to/subfolder/file2.md)",
-            "- [file3.md](path/to/file3.md)"
+            "- [file3.md](path/to/file3.md)",
         )
 
 

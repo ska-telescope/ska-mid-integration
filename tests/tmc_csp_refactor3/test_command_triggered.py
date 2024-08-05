@@ -140,19 +140,19 @@ def subarray_in_empty_state(
     subarray_node_facade: TMCSubarrayNodeFacade,
 ):
     """
-        Set the specified subarray to the EMPTY state.
+    Set the specified subarray to the EMPTY state.
 
-        This step uses the TMCSubarrayNodeFacade to force the subarray's
-        ObsState to EMPTY. It does this by calling the force_change_of_obs_state
-        method, which bypasses normal state transition checks. The method is
-        invoked with ObsState.EMPTY and an empty ObsStateCommandsInput,
-        ensuring a direct transition regardless of the current state.
-        The operation waits for completion.
+    This step uses the TMCSubarrayNodeFacade to force the subarray's
+    ObsState to EMPTY. It does this by calling the force_change_of_obs_state
+    method, which bypasses normal state transition checks. The method is
+    invoked with ObsState.EMPTY and an empty ObsStateCommandsInput,
+    ensuring a direct transition regardless of the current state.
+    The operation waits for completion.
 
-        The step also updates the starting_state in the test context data
-        to reflect this EMPTY state, which can be useful for test assertions
-        or subsequent test steps.
-        """
+    The step also updates the starting_state in the test context data
+    to reflect this EMPTY state, which can be useful for test assertions
+    or subsequent test steps.
+    """
     context_fixt.starting_state = ObsState.EMPTY
 
     subarray_node_facade.force_change_of_obs_state(
@@ -649,7 +649,7 @@ def verify_long_running_command_result_on_central_node(
     event_tracer: TangoEventTracer,
 ):
     """
-    Verify the successful completion of a longRunningCommand on the central node.
+    Verify the successful completion of a longRunningCommand on central node.
 
     This step checks that the TMC Central Node reports a successful completion
     of a longRunningCommand. It uses the event_tracer to assert that a change
