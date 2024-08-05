@@ -198,6 +198,7 @@ dishleafnode:
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     tag: 0.16.0
 =======
     tag: 0.14.3-dev.c622c8bba
@@ -312,6 +313,8 @@ dishleafnode:
 >>>>>>> 4b79b3b1 (SAH-1536: Debug test failure)
 =======
 >>>>>>> 45ad6813 (SAH-1574: Release updates)
+=======
+>>>>>>> 084d324d (SAH-1574: Use dishleafnode tag 0.16.4)
     tag: 0.14.3
 =======
     tag: 0.16.0-dev.c7f47ea7a
@@ -583,7 +586,13 @@ dishleafnode:
 =======
     tag: 0.16.3
 >>>>>>> 7a937048 (SAH-1574: Release updates)
+<<<<<<< HEAD
 >>>>>>> 45ad6813 (SAH-1574: Release updates)
+=======
+=======
+    tag: 0.16.4
+>>>>>>> 71d5eb1e (SAH-1574: Use dishleafnode tag 0.16.4)
+>>>>>>> 084d324d (SAH-1574: Use dishleafnode tag 0.16.4)
     pullPolicy: IfNotPresent
 
 resources:
