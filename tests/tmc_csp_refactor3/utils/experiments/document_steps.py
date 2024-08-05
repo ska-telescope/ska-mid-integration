@@ -236,6 +236,156 @@ class MarkdownFormatter:
         return formatted_table + "\n"
 
 
+
+class StepVisitor(ast.NodeVisitor):
+    """Visitor class to extract steps and scenarios from AST."""
+
+    def __init__(self):
+        self.steps: List[Dict[str, str]] = []
+        self.scenarios: Dict[str, str] = {}
+
+    def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
+        """
+        Visit a function definition in the AST.
+
+        Pre-conditions:
+        - node is an instance of ast.FunctionDef
+
+        Post-conditions:
+        - If the function is decorated with 'given', 'when', or 'then', a step is added to self.steps
+        - If the function is decorated with 'scenario', an entry is added to self.scenarios
+        """
+        assert isinstance(node, ast.FunctionDef), "Node must be a FunctionDef"
+
+        initial_steps_count = len(self.steps)
+        initial_scenarios_count = len(self.scenarios)
+
+        for decorator in node.decorator_list:
+            if isinstance(decorator, ast.Call) and isinstance(decorator.func, ast.Name):
+                if decorator.func.id in ['given', 'when', 'then']:
+                    self._process_step(node, decorator)
+                elif decorator.func.id == 'scenario':
+                    self._process_scenario(node, decorator)
+
+        assert len(self.steps) >= initial_steps_count, "Steps should not decrease"
+        assert len(self.scenarios) >= initial_scenarios_count, "Scenarios should not decrease"
+
+    def _process_step(self, node: ast.FunctionDef, decorator: ast.Call) -> None:
+        """
+        Process a step decorator.
+
+        Pre-conditions:
+        - node is an instance of ast.FunctionDef
+        - decorator is an instance of ast.Call
+
+        Post-conditions:
+        - If a valid step name is extracted, a new step is added to self.steps
+        - If no valid step name is extracted, a warning is printed
+        """
+        assert isinstance(node, ast.FunctionDef), "Node must be a FunctionDef"
+        assert isinstance(decorator, ast.Call), "Decorator must be a Call"
+
+        initial_steps_count = len(self.steps)
+
+        step_type = decorator.func.id
+        step_name = self._extract_step_name(decorator)
+        if step_name is not None:
+            self.steps.append({
+                'type': step_type,
+                'name': step_name,
+                'function': node.name,
+                'signature': self._get_signature(node),
+                'docstring': ast.get_docstring(node),
+            })
+        else:
+            print(f"Warning: Could not extract step name for function {node.name}")
+
+        assert len(self.steps) >= initial_steps_count, "Steps should not decrease"
+
+    def _extract_step_name(self, decorator: ast.Call) -> Optional[str]:
+        """
+        Extract the step name from a decorator.
+
+        Pre-conditions:
+        - decorator is an instance of ast.Call
+
+        Post-conditions:
+        - Returns a string if a valid step name is found, None otherwise
+        """
+        assert isinstance(decorator, ast.Call), "Decorator must be a Call"
+
+        if decorator.args:
+            if isinstance(decorator.args[0], ast.Str):
+                return decorator.args[0].s
+            elif isinstance(decorator.args[0], ast.Call):
+                if decorator.args[0].args and isinstance(decorator.args[0].args[0], ast.Str):
+                    return decorator.args[0].args[0].s
+        elif decorator.keywords:
+            for keyword in decorator.keywords:
+                if keyword.arg in ['text', 'name'] and isinstance(keyword.value, ast.Str):
+                    return keyword.value.s
+        return None
+
+    def _process_scenario(self, node: ast.FunctionDef, decorator: ast.Call) -> None:
+        """
+        Process a scenario decorator.
+
+        Pre-conditions:
+        - node is an instance of ast.FunctionDef
+        - decorator is an instance of ast.Call
+
+        Post-conditions:
+        - If a valid scenario name is extracted, a new entry is added to self.scenarios
+        - If no valid scenario name is extracted, a warning is printed
+        """
+        assert isinstance(node, ast.FunctionDef), "Node must be a FunctionDef"
+        assert isinstance(decorator, ast.Call), "Decorator must be a Call"
+
+        initial_scenarios_count = len(self.scenarios)
+
+        scenario_name = self._extract_scenario_name(decorator)
+        if scenario_name is not None:
+            self.scenarios[node.name] = scenario_name
+        else:
+            print(f"Warning: Could not extract scenario name for function {node.name}")
+
+        assert len(self.scenarios) >= initial_scenarios_count, "Scenarios should not decrease"
+
+    def _extract_scenario_name(self, decorator: ast.Call) -> Optional[str]:
+        """
+        Extract the scenario name from a decorator.
+
+        Pre-conditions:
+        - decorator is an instance of ast.Call
+
+        Post-conditions:
+        - Returns a string if a valid scenario name is found, None otherwise
+        """
+        assert isinstance(decorator, ast.Call), "Decorator must be a Call"
+
+        if len(decorator.args) >= 2 and isinstance(decorator.args[1], ast.Str):
+            return decorator.args[1].s
+        for keyword in decorator.keywords:
+            if keyword.arg == 'name' and isinstance(keyword.value, ast.Str):
+                return keyword.value.s
+        return None
+
+    @staticmethod
+    def _get_signature(node: ast.FunctionDef) -> str:
+        """
+        Get the signature of a function.
+
+        Pre-conditions:
+        - node is an instance of ast.FunctionDef
+
+        Post-conditions:
+        - Returns a string representation of the function signature
+        """
+        assert isinstance(node, ast.FunctionDef), "Node must be a FunctionDef"
+
+        args = [arg.arg for arg in node.args.args]
+        return f"def {node.name}({', '.join(args)}):"
+
 class FileScanner:
     """Class to scan the file and extract steps and scenarios."""
 
@@ -246,7 +396,7 @@ class FileScanner:
             with open(filename, 'r') as file:
                 content = file.read()
             tree = ast.parse(content)
-            visitor = FileScanner.StepVisitor()
+            visitor = StepVisitor()
             visitor.visit(tree)
             return visitor.steps, visitor.scenarios
         except SyntaxError as e:
@@ -256,226 +406,6 @@ class FileScanner:
             print(f"Error parsing file {filename}: {str(e)}")
             return [], {}
 
-
-    class StepVisitor2(ast.NodeVisitor):
-        """Visitor class to extract steps and scenarios from AST."""
-
-        def __init__(self):
-            self.steps = []
-            self.scenarios = {}
-
-        def visit_FunctionDef(self, node):
-            for decorator in node.decorator_list:
-                if isinstance(decorator, ast.Call) and isinstance(decorator.func, ast.Name):
-                    if decorator.func.id in ['given', 'when', 'then']:
-                        self._process_step(node, decorator)
-                    elif decorator.func.id == 'scenario':
-                        self._process_scenario(node, decorator)
-
-        def _process_step(self, node, decorator):
-            step_type = decorator.func.id
-            step_name = self._extract_step_name(decorator)
-            if step_name is not None:
-                self.steps.append({
-                    'type': step_type,
-                    'name': step_name,
-                    'function': node.name,
-                    'signature': self._get_signature(node),
-                    'docstring': ast.get_docstring(node),
-                })
-            else:
-                print(f"Warning: Could not extract step name for function {node.name}")
-
-        def _extract_step_name(self, decorator) -> Optional[str]:
-            if decorator.args:
-                # If there are positional arguments
-                if isinstance(decorator.args[0], ast.Str):
-                    # If the argument is a simple string
-                    return decorator.args[0].s
-                elif isinstance(decorator.args[0], ast.Call):
-                    # If the argument is a function call (like _)
-                    if decorator.args[0].args:
-                        if isinstance(decorator.args[0].args[0], ast.Str):
-                            return decorator.args[0].args[0].s
-            elif decorator.keywords:
-                # If there are keyword arguments
-                for keyword in decorator.keywords:
-                    if keyword.arg in ['text', 'name']:
-                        if isinstance(keyword.value, ast.Str):
-                            return keyword.value.s
-            return None
-
-        def _process_scenario(self, node, decorator):
-            scenario_name = self._extract_scenario_name(decorator)
-            if scenario_name is not None:
-                self.scenarios[node.name] = scenario_name
-            else:
-                print(f"Warning: Could not extract scenario name for function {node.name}")
-
-        def _extract_scenario_name(self, decorator) -> Optional[str]:
-            if len(decorator.args) >= 2:
-                if isinstance(decorator.args[1], ast.Str):
-                    return decorator.args[1].s
-            for keyword in decorator.keywords:
-                if keyword.arg == 'name' and isinstance(keyword.value, ast.Str):
-                    return keyword.value.s
-            return None
-
-        @staticmethod
-        def _get_signature(node):
-            args = [arg.arg for arg in node.args.args]
-            return f"def {node.name}({', '.join(args)}):"
-
-
-
-    class StepVisitor(ast.NodeVisitor):
-        """Visitor class to extract steps and scenarios from AST."""
-
-        def __init__(self):
-            self.steps: List[Dict[str, str]] = []
-            self.scenarios: Dict[str, str] = {}
-
-        def visit_FunctionDef(self, node: ast.FunctionDef) -> None:
-            """
-            Visit a function definition in the AST.
-
-            Pre-conditions:
-            - node is an instance of ast.FunctionDef
-
-            Post-conditions:
-            - If the function is decorated with 'given', 'when', or 'then', a step is added to self.steps
-            - If the function is decorated with 'scenario', an entry is added to self.scenarios
-            """
-            assert isinstance(node, ast.FunctionDef), "Node must be a FunctionDef"
-
-            initial_steps_count = len(self.steps)
-            initial_scenarios_count = len(self.scenarios)
-
-            for decorator in node.decorator_list:
-                if isinstance(decorator, ast.Call) and isinstance(decorator.func, ast.Name):
-                    if decorator.func.id in ['given', 'when', 'then']:
-                        self._process_step(node, decorator)
-                    elif decorator.func.id == 'scenario':
-                        self._process_scenario(node, decorator)
-
-            assert len(self.steps) >= initial_steps_count, "Steps should not decrease"
-            assert len(self.scenarios) >= initial_scenarios_count, "Scenarios should not decrease"
-
-        def _process_step(self, node: ast.FunctionDef, decorator: ast.Call) -> None:
-            """
-            Process a step decorator.
-
-            Pre-conditions:
-            - node is an instance of ast.FunctionDef
-            - decorator is an instance of ast.Call
-
-            Post-conditions:
-            - If a valid step name is extracted, a new step is added to self.steps
-            - If no valid step name is extracted, a warning is printed
-            """
-            assert isinstance(node, ast.FunctionDef), "Node must be a FunctionDef"
-            assert isinstance(decorator, ast.Call), "Decorator must be a Call"
-
-            initial_steps_count = len(self.steps)
-
-            step_type = decorator.func.id
-            step_name = self._extract_step_name(decorator)
-            if step_name is not None:
-                self.steps.append({
-                    'type': step_type,
-                    'name': step_name,
-                    'function': node.name,
-                    'signature': self._get_signature(node),
-                    'docstring': ast.get_docstring(node),
-                })
-            else:
-                print(f"Warning: Could not extract step name for function {node.name}")
-
-            assert len(self.steps) >= initial_steps_count, "Steps should not decrease"
-
-        def _extract_step_name(self, decorator: ast.Call) -> Optional[str]:
-            """
-            Extract the step name from a decorator.
-
-            Pre-conditions:
-            - decorator is an instance of ast.Call
-
-            Post-conditions:
-            - Returns a string if a valid step name is found, None otherwise
-            """
-            assert isinstance(decorator, ast.Call), "Decorator must be a Call"
-
-            if decorator.args:
-                if isinstance(decorator.args[0], ast.Str):
-                    return decorator.args[0].s
-                elif isinstance(decorator.args[0], ast.Call):
-                    if decorator.args[0].args and isinstance(decorator.args[0].args[0], ast.Str):
-                        return decorator.args[0].args[0].s
-            elif decorator.keywords:
-                for keyword in decorator.keywords:
-                    if keyword.arg in ['text', 'name'] and isinstance(keyword.value, ast.Str):
-                        return keyword.value.s
-            return None
-
-        def _process_scenario(self, node: ast.FunctionDef, decorator: ast.Call) -> None:
-            """
-            Process a scenario decorator.
-
-            Pre-conditions:
-            - node is an instance of ast.FunctionDef
-            - decorator is an instance of ast.Call
-
-            Post-conditions:
-            - If a valid scenario name is extracted, a new entry is added to self.scenarios
-            - If no valid scenario name is extracted, a warning is printed
-            """
-            assert isinstance(node, ast.FunctionDef), "Node must be a FunctionDef"
-            assert isinstance(decorator, ast.Call), "Decorator must be a Call"
-
-            initial_scenarios_count = len(self.scenarios)
-
-            scenario_name = self._extract_scenario_name(decorator)
-            if scenario_name is not None:
-                self.scenarios[node.name] = scenario_name
-            else:
-                print(f"Warning: Could not extract scenario name for function {node.name}")
-
-            assert len(self.scenarios) >= initial_scenarios_count, "Scenarios should not decrease"
-
-        def _extract_scenario_name(self, decorator: ast.Call) -> Optional[str]:
-            """
-            Extract the scenario name from a decorator.
-
-            Pre-conditions:
-            - decorator is an instance of ast.Call
-
-            Post-conditions:
-            - Returns a string if a valid scenario name is found, None otherwise
-            """
-            assert isinstance(decorator, ast.Call), "Decorator must be a Call"
-
-            if len(decorator.args) >= 2 and isinstance(decorator.args[1], ast.Str):
-                return decorator.args[1].s
-            for keyword in decorator.keywords:
-                if keyword.arg == 'name' and isinstance(keyword.value, ast.Str):
-                    return keyword.value.s
-            return None
-
-        @staticmethod
-        def _get_signature(node: ast.FunctionDef) -> str:
-            """
-            Get the signature of a function.
-
-            Pre-conditions:
-            - node is an instance of ast.FunctionDef
-
-            Post-conditions:
-            - Returns a string representation of the function signature
-            """
-            assert isinstance(node, ast.FunctionDef), "Node must be a FunctionDef"
-
-            args = [arg.arg for arg in node.args.args]
-            return f"def {node.name}({', '.join(args)}):"
 
 class FolderProcessor2:
     """Class to process a folder of Python and feature files."""
