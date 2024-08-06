@@ -16,27 +16,27 @@ dependencies:
     version: 0.21.0
     repository: https://artefact.skao.int/repository/helm-internal
   - name: ska-tmc-mid
-    version: 0.21.2
+    version: 0.21.0
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-tmc-mid.enabled
     alias: tmc-mid
   - name: ska-dish-lmc
-    version: 4.1.0
+    version: 3.4.0
     repository: https://artefact.skao.int/repository/helm-internal
   - name: ska-csp-lmc-mid
-    version: 0.22.0
+    version: 0.21.0
     repository: https://artefact.skao.int/repository/helm-internal
   - name: ska-mid-cbf-mcs
-    version: 0.14.2
+    version: 0.15.2
     repository: https://artefact.skao.int/repository/helm-internal
   - name: ska-mid-cbf-tmleafnode
-    version: 0.14.2
+    version: 0.15.2
     repository: https://artefact.skao.int/repository/helm-internal
   # - name: ska-oso-oet
-  #   version: 6.1.0
+  #   version: 6.2.0
   #   repository: https://artefact.skao.int/repository/helm-internal
   # - name: ska-db-oda
-  #   version: 5.0.0
+  #   version: 5.0.1
   #   repository: https://artefact.skao.int/repository/helm-internal
   - name: ska-tango-taranta
     version: 2.10.3
