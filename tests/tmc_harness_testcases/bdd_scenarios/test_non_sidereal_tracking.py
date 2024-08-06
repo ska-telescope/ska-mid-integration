@@ -1,5 +1,4 @@
-"""Test Timeout for Configure command for SDP, CSP and MCCS Leaf Nodes."""
-# Test to review
+"""Test NonSidereal tracking for TMC"""
 import json
 
 import pytest
