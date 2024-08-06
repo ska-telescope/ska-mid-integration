@@ -9,7 +9,11 @@ import pytest
 import tango
 from pytest_bdd import given
 from ska_ser_logging import configure_logging
+<<<<<<< HEAD
 from ska_tango_base.control_model import ObsState
+=======
+from ska_tango_testing.integration import TangoEventTracer
+>>>>>>> 2e005237 (HM-506: Added test for non-sidereal tracking)
 from ska_tango_testing.mock.tango.event_callback import (
     MockTangoEventCallbackGroup,
 )
@@ -73,6 +77,12 @@ def get_input_str(path):
     with open(path, "r", encoding="UTF-8") as file:
         input_arg = file.read()
     return input_arg
+
+
+@pytest.fixture
+def event_tracer():
+    """Returns a TangoEventTracer instance."""
+    return TangoEventTracer()
 
 
 @pytest.fixture()

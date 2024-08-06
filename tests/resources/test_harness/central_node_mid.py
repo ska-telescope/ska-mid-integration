@@ -2,7 +2,7 @@ import json
 import logging
 import os
 import time
-from typing import Tuple
+from typing import List, Tuple
 
 from ska_control_model import ObsState, ResultCode
 from ska_ser_logging import configure_logging
@@ -345,6 +345,16 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         )
         self.sdp_subarray_leaf_node = DeviceProxy(
             f"ska_mid/tm_leaf_node/sdp_subarray{subarray_id}"
+        )
+
+    def get_track_table_for_dish_id(
+        self, dish_id: str = "SKA001"
+    ) -> List[float]:
+        """Return the programTrackTable value for given dish ID"""
+        return (
+            self.dish_master_dict[dish_id]
+            .read_attribute("programTrackTable")
+            .value
         )
 
     def load_dish_vcc_configuration(
