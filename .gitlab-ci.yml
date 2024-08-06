@@ -139,4 +139,29 @@ redeploy-mid-integration:
   environment:
     name: integration-ska-mid
 
+deploy-dev-environment:
+  variables:
+    KUBE_NAMESPACE: ci-dev-$CI_PROJECT_NAME-mpaulo
+  environment:
+    name: ci-dev-$CI_PROJECT_NAME-mpaulo
+    auto_stop_in: 5 minutes
+
+
+info-dev-environment:
+  variables:
+    KUBE_NAMESPACE: ci-dev-$CI_PROJECT_NAME-mpaulo
+  environment:
+    name: ci-dev-$CI_PROJECT_NAME-mpaulo
+
+test-dev-environment:
+  variables:
+    KUBE_NAMESPACE: ci-dev-$CI_PROJECT_NAME-mpaulo
+  environment:
+    name: ci-dev-$CI_PROJECT_NAME-mpaulo
+
+stop-dev-environment:
+  variables:
+    KUBE_NAMESPACE: ci-dev-$CI_PROJECT_NAME-mpaulo
+  environment:
+    name: ci-dev-$CI_PROJECT_NAME-mpaulo
 
