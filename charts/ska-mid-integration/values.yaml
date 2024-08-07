@@ -68,13 +68,15 @@ ska-sdp:
 
 #=== DISH ===#
 ska-dish-lmc:
+  enabled: true
   ska-tango-base:
     enabled: false
 
   ska-mid-dish-manager: 
     enabled: true
-    ska-mid-dish-ds-manager:
-      enabled: false
+    
+  ska-mid-dish-ds-manager:
+    enabled: true
 
   ska-mid-dish-simulators:
     enabled: true # dish simulator for other interfaces
@@ -109,5 +111,6 @@ tmc-mid: # check why it is separate
 
 ##tangoGQL
 ska-tango-tangogql:
+  enabled: true
   ska-tango-base:
     enabled: false
