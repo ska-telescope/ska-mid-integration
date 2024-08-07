@@ -9,6 +9,7 @@ import pytest
 import tango
 from pytest_bdd import given
 from ska_ser_logging import configure_logging
+from ska_tango_testing.integration import TangoEventTracer
 from ska_tango_testing.mock.tango.event_callback import (
     MockTangoEventCallbackGroup,
 )
@@ -70,6 +71,12 @@ def get_input_str(path):
     with open(path, "r", encoding="UTF-8") as file:
         input_arg = file.read()
     return input_arg
+
+
+@pytest.fixture
+def event_tracer():
+    """Returns a TangoEventTracer instance."""
+    return TangoEventTracer()
 
 
 @pytest.fixture()
