@@ -103,3 +103,8 @@ tmc-mid: # check why it is separate
       dish: false
       csp: false
       sdp: false
+
+##tangoGQL
+ska-tango-tangogql:
+  ska-tango-base:
+    enabled: false
