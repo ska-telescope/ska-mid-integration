@@ -137,8 +137,8 @@ def configure_the_subarray(
     if configure_input_json:
         assert object_name in object_list
         LOGGER.info(
-            "The non-sidereal object visible right now for the Dish SKA001"
-            + " is: %s",
+            "The non-sidereal object selected for observation for the Dish "
+            + "SKA001 is: %s",
             object_name,
         )
         subarray_node.store_configuration_data(configure_input_json)
