@@ -425,7 +425,13 @@ class SubarrayNodeWrapper(object):
         LOGGER.info("Calling Tear down for subarray")
         self._clear_command_call_and_transition_data(clear_transition=True)
 
-        if self.obs_state in ("RESOURCING", "CONFIGURING", "SCANNING"):
+        if self.obs_state in (
+            "RESOURCING",
+            "CONFIGURING",
+            "SCANNING",
+            "READY",
+            "IDLE",
+        ):
             """Invoke Abort and Restart"""
             LOGGER.info("Invoking Abort on Subarray")
             # Waiting for few seconds as the SubarrayNode End command
@@ -563,7 +569,6 @@ class SubarrayNodeWrapper(object):
             (unique_id[0], COMMAND_COMPLETED),
             lookahead=15,
         )
-        assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
 
         # assert sourceOffset gets populated as expected
         ca_offset, ie_offset = (
@@ -577,6 +582,7 @@ class SubarrayNodeWrapper(object):
                 f"{[ca_offset, ie_offset]}",
                 is_list=True,
             )
+        assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
 
         # Scan 1
         self.execute_transition("Scan", scan_1)

@@ -58,7 +58,7 @@ def move_subarray_node_to_ready_obsstate(
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    subarray_node.execute_transition("Configure", argin=configure_input_json)
+    subarray_node.store_configuration_data(configure_input_json)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
@@ -70,7 +70,7 @@ def move_subarray_node_to_ready_obsstate(
 @when(parsers.parse("I issue End command to TMC subarray {subarray_id}"))
 def invoke_end_command(subarray_node: SubarrayNodeWrapper) -> None:
     """Invoke End command."""
-    subarray_node.execute_transition("End")
+    subarray_node.end_observation()
 
 
 @then(parsers.parse("the CSP subarray transitions to ObsState IDLE"))

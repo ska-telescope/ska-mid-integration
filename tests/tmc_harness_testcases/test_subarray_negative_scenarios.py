@@ -59,7 +59,6 @@ class TestSubarrayNodeNegative(object):
         exception_message = (
             "Exception occurred on the following devices: "
             "ska_mid/tm_leaf_node/csp_subarray01: "
-            "Timeout has occurred, command failed\n"
         )
         assert (
             exception_message

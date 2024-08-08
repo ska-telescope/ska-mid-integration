@@ -9,6 +9,7 @@ import pytest
 import tango
 from pytest_bdd import given
 from ska_ser_logging import configure_logging
+from ska_tango_base.control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer
 from ska_tango_testing.mock.tango.event_callback import (
     MockTangoEventCallbackGroup,
@@ -20,6 +21,7 @@ from tests.resources.test_harness.constant import centralnode, csp_master
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     CSP_SIMULATION_ENABLED,
+    prepare_json_args_for_centralnode_commands,
     wait_and_validate_device_attribute_value,
 )
 from tests.resources.test_harness.simulator_factory import SimulatorFactory
@@ -29,6 +31,7 @@ from tests.resources.test_harness.utils.common_utils import (
     JsonFactory,
     SharedContext,
 )
+from tests.resources.test_harness.utils.enums import ResultCode
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -312,6 +315,48 @@ def check_telescope_is_in_on_state(
         central_node_mid.central_node,
         "telescopeState",
         DevState.ON,
+    )
+
+
+@given("TMC subarray is in ObsState IDLE")
+def move_subarray_node_to_idle_obsstate(
+    central_node_mid: CentralNodeWrapperMid,
+    event_recorder: EventRecorder,
+    command_input_factory: JsonFactory,
+    subarray_node,
+) -> None:
+    """
+    Move TMC Subarray to IDLE obsstate.
+    :param central_node_mid: fixture for a TMC CentralNode Mid under test
+    which provides simulated master devices
+    :param event_recorder: fixture for a MockTangoEventCallbackGroup
+    for validating the subscribing and receiving events.
+    :param command_input_factory: fixture for creating input required
+    for command
+    :param subarray_node: fixture for a TMC SubarrayNode under test
+    """
+    assign_input_json = prepare_json_args_for_centralnode_commands(
+        "assign_resources_mid", command_input_factory
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+    # Create json for AssignResources commands with requested subarray_id
+    assign_input = json.loads(assign_input_json)
+    _, unique_id = central_node_mid.store_resources(json.dumps(assign_input))
+
+    event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.subarray_node,
+        "obsState",
+        ObsState.IDLE,
+        lookahead=10,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (unique_id[0], json.dumps([ResultCode.OK, "Command Completed"])),
+        lookahead=5,
     )
 
 
