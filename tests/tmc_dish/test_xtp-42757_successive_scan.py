@@ -14,37 +14,8 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_support.enum import DishMode, PointingState
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-@pytest.mark.skip(reason="Dish pointingstate issue")
-=======
-@pytest.mark.skip
->>>>>>> 1664808f (SAH-1564: Test pipline)
-=======
->>>>>>> f5031dbd (SAH-1564: Test pipline)
-=======
-@pytest.mark.MM
->>>>>>> e96d445e (SAH-1564: Testing integration test case)
-=======
->>>>>>> 7e974b16 (SAH-1564: Update test case for dish side)
-=======
-@pytest.mark.skip
->>>>>>> 22caffec (SAH-1564: Run only long sequence test for tmc-dish interface)
-=======
->>>>>>> 53d94e03 (SAH-1564: Enable tmc-dish bdd tests)
-=======
-=======
-
->>>>>>> 1cf6b1bc (SAH-1574: Fix formatting)
 @pytest.mark.skip(reason="Test being fix in SAH-1564")
->>>>>>> 00483018 (SAH-1536: Update test case)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42757_successive_scan.feature",
@@ -63,10 +34,6 @@ def check_subarray_obsState_idle(
 ):
     """
     Method to check subarray is in IDLE obsState
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 4cdcb54d (SAH-1536: Enable all the tmc-dish tests)
 
     Args:
         subarray_node: Fixture for a Subarray Node wrapper class
@@ -74,11 +41,6 @@ def check_subarray_obsState_idle(
         event_recorder: Fixture for EventRecorder class
         command_input_factory: fixture for creating input required
         for command
-<<<<<<< HEAD
-=======
->>>>>>> 415d590c (SAH-1536: Resolve review comments)
-=======
->>>>>>> 4cdcb54d (SAH-1536: Enable all the tmc-dish tests)
     """
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
 

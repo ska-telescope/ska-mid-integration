@@ -18,22 +18,8 @@ from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.enum import DishMode, PointingState
 
-<<<<<<< HEAD
-=======
 
-<<<<<<< HEAD
->>>>>>> 4cdcb54d (SAH-1536: Enable all the tmc-dish tests)
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-@pytest.mark.skip(reason="Dish pointingstate issue")
-=======
->>>>>>> e50805e3 (SAH-1564: Enable tmc-dish bdd tests)
-=======
-=======
->>>>>>> 12888fb3 (SAH-1574: Execute skb-413 test only)
 @pytest.mark.skip(reason="Test being fix in SAH-1564")
->>>>>>> 00483018 (SAH-1536: Update test case)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-30385_scan.feature",

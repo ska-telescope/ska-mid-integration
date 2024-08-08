@@ -7,55 +7,7 @@ from tango import DevState
 
 from tests.resources.test_support.enum import DishMode
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-# @pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
-=======
-
->>>>>>> a90de43d (SAH-1564: Test pipline)
-@pytest.mark.skip
->>>>>>> e92adc1c (SAH-1536: Update test case)
-=======
-@pytest.mark.skip
->>>>>>> a69408bc (SAH-1536: Test only xtp-42658)
-=======
->>>>>>> 2ee3ddf7 (SAH-1536: Enable skipped tmc-dish tests)
-=======
-@pytest.mark.skip
->>>>>>> c60c8729 (SAH-1536: Test only test case for long sequence)
-=======
->>>>>>> 1fc6a549 (SAH-1536: Enable all the tmc-dish tests)
-=======
-@pytest.mark.skip
->>>>>>> a58b1b2a (SAH-1564: Test pipline)
-=======
->>>>>>> 8ac35da0 (SAH-1564: Revert change)
-=======
-@pytest.mark.skip
->>>>>>> efe6d5dd (SAH-1564: Run only long sequence test for tmc-dish interface)
-=======
->>>>>>> bb18efd6 (SAH-1567: Code cleanup)
-=======
-=======
-
->>>>>>> a59f0d05 (SAH-1574: Fix formatting)
-@pytest.mark.skip(reason="Test being fix in SAH-1564")
->>>>>>> 438706f0 (SAH-1536: Update test case)
-=======
->>>>>>> 6839a417 (SAH-1574: Enable dish on-off tests)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29354_on.feature",

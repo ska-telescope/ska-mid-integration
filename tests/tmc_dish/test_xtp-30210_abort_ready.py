@@ -11,61 +11,8 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_support.enum import DishMode, PointingState
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-# @pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
-@pytest.mark.skip
->>>>>>> e92adc1c (SAH-1536: Update test case)
-=======
-@pytest.mark.skip
->>>>>>> a69408bc (SAH-1536: Test only xtp-42658)
-=======
->>>>>>> 2ee3ddf7 (SAH-1536: Enable skipped tmc-dish tests)
-=======
-@pytest.mark.skip
->>>>>>> c60c8729 (SAH-1536: Test only test case for long sequence)
-=======
->>>>>>> 1fc6a549 (SAH-1536: Enable all the tmc-dish tests)
-=======
-@pytest.mark.skip(reason="Dish pointingstate issue")
->>>>>>> 14801d0e (SAH-1567: Pull changes of sah-1564 branch.)
-=======
->>>>>>> 5f8704fa (SAH-1567: Enable test cases)
-=======
-@pytest.mark.skip
->>>>>>> efe6d5dd (SAH-1564: Run only long sequence test for tmc-dish interface)
-=======
->>>>>>> bb18efd6 (SAH-1567: Code cleanup)
-=======
-@pytest.mark.skip(reason="Dish pointingstate issue")
->>>>>>> 55e352f7 (SAH-1567: Disable test cases)
-=======
-@pytest.mark.skip(reason="Dish pointingstate issue")
-=======
->>>>>>> ef579ec3 (SAH-1564: Enable TMC - Dish Abort tests)
-<<<<<<< HEAD
->>>>>>> 0ad6c34c (SAH-1564: Enable TMC - Dish Abort tests)
-=======
-=======
-=======
-
->>>>>>> 1cf6b1bc (SAH-1574: Fix formatting)
 @pytest.mark.skip(reason="Test being fix in SAH-1564")
->>>>>>> 00483018 (SAH-1536: Update test case)
->>>>>>> 438706f0 (SAH-1536: Update test case)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-30210_abort_ready.feature",

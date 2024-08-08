@@ -51,43 +51,9 @@ server:
           - name: "CommandTimeOut"
             values:
               - "50"
-<<<<<<< HEAD
-<<<<<<< HEAD
           - name: "TrackTableInAdvance"
             values:
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
               - "6"
-=======
-              - 60
-=======
->>>>>>> edc2574d (SAH-1564: Use latest dev image of dishleafnode)
-
-<<<<<<< HEAD
-
->>>>>>> b9945c76 (SAH-1564: Update yaml file)
-=======
->>>>>>> fba4c450 (SAH-1564: code cleanup)
-=======
-          - name: "TrackTableInAdvance"
-            values:
-<<<<<<< HEAD
-              - "30"
->>>>>>> 44cbd70d (SAH-1564: Update yaml file)
-=======
-              - "12"
->>>>>>> 84767653 (SAH-1564: Update yaml file)
-=======
-              - "10"
->>>>>>> 18c52962 (SAH-1564: Update track table value)
-=======
-              - "5"
->>>>>>> c1c63a8b (SAH-1564: UPdate yaml file)
-=======
-              - "6"
->>>>>>> cbb9dc5b (SAH-1564: Update tracktable value)
   {{- end }}
 depends_on:
   - device: sys/database/2

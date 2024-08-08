@@ -14,35 +14,8 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_support.enum import DishMode, PointingState
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-@pytest.mark.skip(reason="Dish pointingstate issue")
-=======
-=======
-
->>>>>>> 1cf6b1bc (SAH-1574: Fix formatting)
-@pytest.mark.skip
->>>>>>> 763893e8 (SAH-1564: Update test case)
-=======
-@pytest.mark.MM
->>>>>>> d6a4e9e3 (SAH-1564: Test pipline)
-=======
-@pytest.mark.skip
->>>>>>> 6726778a (SAH-1564: Test pipline)
-=======
->>>>>>> e50805e3 (SAH-1564: Enable tmc-dish bdd tests)
-=======
-@pytest.mark.skip
->>>>>>> d9ba66d7 (SAH-1564: Test pipeline)
-=======
-@pytest.mark.skip
->>>>>>> 00483018 (SAH-1536: Update test case)
+@pytest.mark.skip(reason="Test being fix in SAH-1564")
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42581_configure_unhappy.feature",

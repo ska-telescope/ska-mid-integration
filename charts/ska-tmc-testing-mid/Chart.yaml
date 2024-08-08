@@ -11,12 +11,6 @@ maintainers:
 dependencies:
   - name: ska-tango-util
     version: 0.4.10
-<<<<<<< HEAD
-=======
-    repository: https://artefact.skao.int/repository/helm-internal
-  - name: ska-tango-base
-    version: 0.4.9
->>>>>>> 68f2d607 (SAH-1564: Resolve review comment)
     repository: https://artefact.skao.int/repository/helm-internal
   - name: ska-tango-base
     version: 0.4.9
@@ -54,10 +48,6 @@ dependencies:
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-csp-lmc-mid.enabled
   - name: ska-mid-cbf-mcs
-<<<<<<< HEAD
     version: 0.14.2
-=======
-    version: 0.14.1
->>>>>>> c4534d33 (SAH-1536: Implemented test case)
     repository:  https://artefact.skao.int/repository/helm-internal
     condition: ska-csp-lmc-mid.enabled

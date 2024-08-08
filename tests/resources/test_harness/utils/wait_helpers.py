@@ -66,17 +66,6 @@ class Waiter:
         """Set wait for dish master and dish leaf node"""
         for index in range(0, len(self.dish_master_list)):
             if self.dish_master_list[index].dishMode != state_name:
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-                LOGGER.info(
-                    "Dish Master %s DishMode %s",
-                    self.dish_master_list[index].dev_name(),
-                    self.dish_master_list[index].dishMode,
-                )
->>>>>>> 0f5aba75 (SAH-1558: Debug the errors in the tests teardown.)
-=======
->>>>>>> 1d7db950 (SAH-1558: Code cleanup.)
                 self.waits.append(
                     watch(Resource(self.dish_master_list[index])).to_become(
                         attribute_name, changed_to=state_name
@@ -109,46 +98,8 @@ class Waiter:
                 "State", changed_to="OFF"
             )
         )
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
         if self.dish_master_list and self.dish_leaf_node_list:
             self.set_wait_for_dish("dishMode", "STANDBY_LP")
-=======
-        LOGGER.info("CSP Master is OFF")
-        LOGGER.info("Dish Master List: %s", self.dish_master_list)
-<<<<<<< HEAD
-        if self.dish_master_list:
-            self.set_wait_for_dish_master("dishMode", "STANDBY_LP")
-        LOGGER.info("Dish LN List: %s", self.dish_leaf_node_list)
-        if self.dish_leaf_node_list:
-            self.set_wait_for_dish_ln("dishMode", "STANDBY_LP")
->>>>>>> 03d0f52c (SAH-1558: Debug the errors in the tests teardown.)
-=======
-        if self.dish_master_list and self.dish_leaf_node_list:
-            self.set_wait_for_dish("dishMode", "STANDBY_LP")
-            # self.set_wait_for_dish_master("dishMode", "STANDBY_LP")
-        # LOGGER.info("Dish LN List: %s", self.dish_leaf_node_list)
-        # if self.dish_leaf_node_list:
-        #     self.set_wait_for_dish_ln("dishMode", "STANDBY_LP")
->>>>>>> 0f5aba75 (SAH-1558: Debug the errors in the tests teardown.)
-=======
-        if self.dish_master_list and self.dish_leaf_node_list:
-            self.set_wait_for_dish("dishMode", "STANDBY_LP")
->>>>>>> 0480614a (SAH-1558: Code cleanup.)
-=======
-        # TODO: Add a dish leaf node check in case of TelescopeOff command.
-        # Currently it is removed as the dishLN dishMode watch statement for
-        # STANDBY_LP value remains stuck if the dishLN is already in STANDBY_LP
-        # and the test job times out.
-        if self.dish_master_list:
-            self.set_wait_for_dish_master("dishMode", "STANDBY_LP")
->>>>>>> d17da1e6 (SAH-1558: Execute tests.)
-=======
-        if self.dish_master_list and self.dish_leaf_node_list:
-            self.set_wait_for_dish("dishMode", "STANDBY_LP")
->>>>>>> 9c57062a (SAH-1558: Execute tests.)
 
     def set_wait_for_going_to_standby(self):
         self.waits.append(
@@ -173,16 +124,6 @@ class Waiter:
         )
         if self.dish_master_list and self.dish_leaf_node_list:
             self.set_wait_for_dish("dishMode", "STANDBY_LP")
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-        # if self.dish_master_list:
-        #     self.set_wait_for_dish_master("dishMode", "STANDBY_LP")
-        # if self.dish_leaf_node_list:
-        #     self.set_wait_for_dish_ln("dishMode", "STANDBY_LP")
->>>>>>> 0f5aba75 (SAH-1558: Debug the errors in the tests teardown.)
-=======
->>>>>>> 0480614a (SAH-1558: Code cleanup.)
 
     def set_wait_for_telescope_on(self):
         self.waits.append(
@@ -316,16 +257,6 @@ class Waiter:
         )
         if self.dish_master_list and self.dish_leaf_node_list:
             self.set_wait_for_dish("pointingState", "TRACK")
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-        # if self.dish_master_list:
-        #     self.set_wait_for_dish_master("pointingState", "TRACK")
-        # if self.dish_leaf_node_list:
-        #     self.set_wait_for_dish_ln("pointingState", "TRACK")
->>>>>>> 0f5aba75 (SAH-1558: Debug the errors in the tests teardown.)
-=======
->>>>>>> 0480614a (SAH-1558: Code cleanup.)
 
     def set_wait_for_configure(self):
         self.waits.append(
@@ -351,18 +282,6 @@ class Waiter:
         if self.dish_master_list and self.dish_leaf_node_list:
             self.set_wait_for_dish("dishMode", "OPERATE")
             self.set_wait_for_dish("pointingState", "TRACK")
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-        # if self.dish_master_list:
-        #     self.set_wait_for_dish_master("dishMode", "OPERATE")
-        #     self.set_wait_for_dish_master("pointingState", "TRACK")
-        # if self.dish_leaf_node_list:
-        #     self.set_wait_for_dish_ln("dishMode", "OPERATE")
-        #     self.set_wait_for_dish_ln("pointingState", "TRACK")
->>>>>>> 0f5aba75 (SAH-1558: Debug the errors in the tests teardown.)
-=======
->>>>>>> 0480614a (SAH-1558: Code cleanup.)
 
         self.waits.append(
             watch(Resource(self.tmc_subarraynode1)).to_become(

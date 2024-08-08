@@ -110,11 +110,8 @@ class EventRecorder(object):
                 ].assert_change_event(attribute_value, lookahead=lookahead)
             except AssertionError:
                 device_name = device.dev_name()
-<<<<<<< HEAD
-<<<<<<< HEAD
                 dish_prefix = ""
                 real_dish1_fqdn = os.getenv("DISH_NAME_1")
-<<<<<<< HEAD
                 if ("dish-manager" in device_name) and (
                     "dish-lmc-1" not in real_dish1_fqdn
                 ):
@@ -130,45 +127,6 @@ class EventRecorder(object):
                 attr_value = attr_proxy.read().value
                 if attr_value == attribute_value:
                     return True
-=======
-=======
-                dish_prefix = ""
->>>>>>> a9c85647 (SAH-1558: Debug the errors in the tests.)
-                LOGGER.info("Device name is: %s", device_name)
-                REAL_DISH1_FQDN = os.getenv("DISH_NAME_1")
-                logging.info("REAL_DISH1_FQDN: %s", REAL_DISH1_FQDN)
-=======
->>>>>>> 82679138 (SAH-1558: Fix the errors in the tests.)
-                if ("dish-manager" in device_name) and (
-                    "dish-lmc-1" not in real_dish1_fqdn
-                ):
-                    # It is a real dish device therefore need a full FQDN
-                    # for dish
-                    dish_prefix = real_dish1_fqdn.replace(
-                        "mid-dish/dish-manager/SKA001", ""
-                    )
-                full_attr_name = (
-                    dish_prefix + device_name + "/" + attribute_name
-                )
-                attr_proxy = AttributeProxy(full_attr_name)
-<<<<<<< HEAD
-                LOGGER.info("Attribute value is: %s", attr_proxy.read())
-<<<<<<< HEAD
->>>>>>> 1cdae141 (SAH-1558: Fix the error in the test.)
-=======
-=======
->>>>>>> 82679138 (SAH-1558: Fix the errors in the tests.)
-                attr_value = attr_proxy.read().value
-                if attr_value == attribute_value:
-                    return True
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> e2dc2929 (SAH-1558: Fix the error in the test.)
-=======
-                LOGGER.info("Returning False")
->>>>>>> ab7b1581 (SAH-1558: Fix the errors in the tests.)
-=======
->>>>>>> 82679138 (SAH-1558: Fix the errors in the tests.)
                 return False
 
         raise AttributeNotSubscribed(

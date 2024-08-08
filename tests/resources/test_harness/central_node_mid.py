@@ -90,8 +90,6 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             dish_fqdn063 = REAL_DISH63_FQDN
             dish_fqdn100 = REAL_DISH100_FQDN
 
-<<<<<<< HEAD
-<<<<<<< HEAD
             # creating spfrx device fqdn
             self.spfrx_fqdn = dish_fqdn001.replace(
                 "mid-dish/dish-manager/SKA001",
@@ -102,31 +100,6 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             # Create Dish1 admin device proxy
             spfrx1_admin_dev_name = spfrx_proxy.adm_name()
             self.spfrx1_admin_dev_proxy = DeviceProxy(spfrx1_admin_dev_name)
-=======
-            LOGGER.info("Dish Manager 1 FQDN is: %s: ", dish_fqdn001)
-=======
-            # creating spfrx device fqdn
->>>>>>> 6806ec97 (SAH-1536: Enable skipped tmc-dish tests)
-            self.spfrx_fqdn = dish_fqdn001.replace(
-                "mid-dish/dish-manager/SKA001",
-                "mid-dish/simulator-spfrx/SKA001",
-            )
-<<<<<<< HEAD
-<<<<<<< HEAD
-            LOGGER.info("spfrx_fqdn 1 FQDN is: %s: ", spfrx_fqdn)
-            spfrx_proxy = DeviceProxy(spfrx_fqdn)
-            LOGGER.info("spfrx_proxy 1 FQDN is: %s: ", spfrx_proxy)
->>>>>>> 2f62b3dd (SAH-1536: Fix the issue in tests.)
-=======
-            LOGGER.info("spfrx_fqdn 1 is: %s: ", self.spfrx_fqdn)
-=======
->>>>>>> 6806ec97 (SAH-1536: Enable skipped tmc-dish tests)
-            spfrx_proxy = DeviceProxy(self.spfrx_fqdn)
-
-            # Create Dish1 admin device proxy
-            spfrx1_admin_dev_name = spfrx_proxy.adm_name()
-            self.spfrx1_admin_dev_proxy = DeviceProxy(spfrx1_admin_dev_name)
->>>>>>> 5a9b7253 (SAH-1536: Fix the error in the test.)
 
             # Create database object for TMC TANGO DB
             self.db = Database()
@@ -144,66 +117,13 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             self.dish1_dev_class = dish1_info.class_name
             self.dish1_dev_server = dish1_info.ds_full_name
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 5ae40c93 (SAH-1536: Update healthstate test case for tmc-dish pair)
             # Get the spfrx1 device class and server
             spfrx1_info = self.dish1_db.get_device_info(
                 "mid-dish/simulator-spfrx/SKA001"
             )
-<<<<<<< HEAD
-<<<<<<< HEAD
-            self.spfrx1_dev_class = spfrx1_info.class_name
-            self.spfrx1_dev_server = spfrx1_info.ds_full_name
-=======
-            # Create database object for Dish1 sprfx TANGO DB
-            LOGGER.info("dish_fqdn001 is %s", dish_fqdn001)
-            self.spfrx_fqdn = (
-                f"{dish_fqdn001}.svc.cluster"
-                ".local:10000/mid-dish/simulator-spfrx/SKA001"
-            )
-            LOGGER.info("SPFRX fqdn is %s ", self.spfrx_fqdn)
-
-            spfrx_tango_host = self.spfrx_fqdn.split("/")[2]
-            spfrx_host = spfrx_tango_host.split(":")[0]
-            spfrx_port = spfrx_tango_host.split(":")[1]
-            LOGGER.info("spfrx host is %s :", spfrx_host)
-            LOGGER.info("spfrx port is %s :", spfrx_port)
-            LOGGER.info("dish001 port is %s :", dish1_host)
-
-            spfrx_deviceproxy = DeviceProxy(self.spfrx_fqdn)
-            LOGGER.info("spfrx proxy created %s", spfrx_deviceproxy)
-
-            self.spfrx_db = Database(dish1_host, int(spfrx_port))
-            LOGGER.info("spfrx database is %s :", self.spfrx_db)
-
-            LOGGER.info("spfrx port type is %s :", type(spfrx_port))
-
-            # Get the Dish1 spfrx device class and server
-            dish1_spfrx_info = self.spfrx_db.get_device_info(
-                "mid-dish/simulator-spfrx/SKA001"
-            )
-            LOGGER.info("dish1_spfrx_info is %s :", dish1_spfrx_info)
-            self.dish1_spfrx_dev_class = dish1_spfrx_info.class_name
-            self.dish1_spfrx_dev_server = dish1_spfrx_info.ds_full_name
-            LOGGER.info("spfrx_dev_class is %s :", self.dish1_spfrx_dev_class)
-            LOGGER.info(
-                "spfrx_dev_server is %s :", self.dish1_spfrx_dev_server
-            )
->>>>>>> 4a3d3a1e (SAH-1536: Add test case for tmc-dish unavailability)
-
-=======
->>>>>>> 6f5563f4 (SAH-1536: Implement unhappy path tests for tmc-dish pair)
-=======
-            LOGGER.info("spfrx device info is : %s", spfrx1_info)
-=======
->>>>>>> 6806ec97 (SAH-1536: Enable skipped tmc-dish tests)
             self.spfrx1_dev_class = spfrx1_info.class_name
             self.spfrx1_dev_server = spfrx1_info.ds_full_name
 
->>>>>>> 5ae40c93 (SAH-1536: Update healthstate test case for tmc-dish pair)
         else:
             dish_fqdn001 = dish_master1
             dish_fqdn036 = dish_master2
@@ -557,15 +477,6 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 self.sdp_master,
                 self.csp_master,
             ]:
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-                LOGGER.info(
-                    "Calling HealthState reset method for CSP and SDP ....."
-                )
->>>>>>> bae50c74 (SAH-1558: Fix the errors in the tests teardown.)
-=======
->>>>>>> 0480614a (SAH-1558: Code cleanup.)
                 mock_device.SetDirectHealthState(HealthState.UNKNOWN)
         elif SIMULATED_DEVICES_DICT["csp_and_dish"]:
             self.csp_master.SetDirectHealthState(HealthState.UNKNOWN)
@@ -582,15 +493,6 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 self.sdp_master,
                 self.csp_master,
             ]:
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-                LOGGER.info(
-                    "Calling HealthState reset method for CSP, SDP and Dish "
-                )
->>>>>>> bae50c74 (SAH-1558: Fix the errors in the tests teardown.)
-=======
->>>>>>> 0480614a (SAH-1558: Code cleanup.)
                 mock_device.SetDirectHealthState(HealthState.UNKNOWN)
             for mock_device in self.dish_master_list:
                 mock_device.SetDirectHealthState(HealthState.UNKNOWN)
@@ -678,13 +580,6 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
 
             else:
                 self.move_to_off()
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-            LOGGER.info("Called TelescopeOff command")
->>>>>>> 1b55e547 (SAH-1558: Debug the errors in the tests teardown.)
-=======
->>>>>>> 0480614a (SAH-1558: Code cleanup.)
 
         self._clear_command_call_and_transition_data(clear_transition=True)
         # if source dish vcc config is empty or not matching with default

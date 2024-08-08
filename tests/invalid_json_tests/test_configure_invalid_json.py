@@ -88,36 +88,13 @@ def send(json_factory, invalid_json):
     try:
         configure_json = json_factory("command_Configure")
         invalid_configure_json = json.loads(configure_json)
-<<<<<<< HEAD
-<<<<<<< HEAD
         # TODO: CDM v10.1.2 does not raise exception for missing config_id
         # if invalid_json == "config_id_key_missing":
         #     del invalid_configure_json["csp"]["common"]["config_id"]
-=======
-        # TODO: CDM v10.1.2 does not raise exception for missing config_id
-        # if invalid_json == "config_id_key_missing":
-        #     del invalid_configure_json["csp"]["common"]["config_id"]
-<<<<<<< HEAD
-        #     LOGGER.info(f"invalid_configure_json: {invalid_configure_json}")
->>>>>>> 9c8400cd (SAH-1564: Verify the behaviour with SA image)
-=======
->>>>>>> 34dc07a5 (SAH-1564: Remove unnecessary statements)
         #     pytest.command_result = tmc_helper.configure_subarray(
         #         json.dumps(invalid_configure_json), **device_params
         #     )
         if invalid_json == "fsp_id_key_missing":
-<<<<<<< HEAD
-=======
-        if invalid_json == "config_id_key_missing":
-            del invalid_configure_json["csp"]["common"]["config_id"]
-            LOGGER.info(f"invalid_configure_json: {invalid_configure_json}")
-            pytest.command_result = tmc_helper.configure_subarray(
-                json.dumps(invalid_configure_json), **device_params
-            )
-        elif invalid_json == "fsp_id_key_missing":
->>>>>>> c5abe860 (SAH-1564: Execute tests)
-=======
->>>>>>> 9c8400cd (SAH-1564: Verify the behaviour with SA image)
             del invalid_configure_json["csp"]["cbf"]["fsp"][0]["fsp_id"]
             pytest.command_result = tmc_helper.configure_subarray(
                 json.dumps(invalid_configure_json), **device_params
@@ -157,10 +134,6 @@ def send(json_factory, invalid_json):
         "the TMC should reject the {invalid_json} with ResultCode.Rejected"
     )
 )
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 34dc07a5 (SAH-1564: Remove unnecessary statements)
 def invalid_command_rejection(invalid_json):
     assert pytest.command_result[0][0] == ResultCode.REJECTED
     # TODO: CDM v10.1.2 does not raise exception for missing config_id
@@ -172,46 +145,6 @@ def invalid_command_rejection(invalid_json):
     # asserting validations message as per invalid json
     if invalid_json in [
         "incorrect_fsp_id",
-=======
-def invalid_command_rejection(invalid_json, change_event_callbacks):
-    # subarray_node_proxy = DeviceProxy(tmc_subarraynode1)
-    LOGGER.info(f"pytest.command_result: {pytest.command_result}")
-    assert pytest.command_result[0][0] == ResultCode.REJECTED
-
-<<<<<<< HEAD
-        assert (
-            "'config_id': ['Missing data for required field.']"
-            in pytest.command_result[1][0]
-        )
-    elif invalid_json == "incorrect_fsp_id":
-        # subarray_node_proxy.subscribe_event(
-        #     "longRunningCommandResult",
-        #     EventType.CHANGE_EVENT,
-        #     change_event_callbacks["longRunningCommandResult"],
-        # )
-        # assertion_data = change_event_callbacks[
-        #     "longRunningCommandResult"
-        # ].assert_change_event(
-        #     (pytest.command_result[1][0], Anything),
-        #     lookahead=15,
-        # )
-        assert (
-            "FSP ID must be in range 1..27. Got 30"
-            in pytest.command_result[1][0]
-        )
-    elif invalid_json in [
->>>>>>> f3f574e3 (SAH-1564: Update invalid json tests)
-=======
-    # TODO: CDM v10.1.2 does not raise exception for missing config_id
-    # if invalid_json == "config_id_key_missing":
-    #     assert (
-    #         "'config_id': ['Missing data for required field.']"
-    #         in pytest.command_result[1][0]
-    #     )
-    # asserting validations message as per invalid json
-    if invalid_json in [
-        "incorrect_fsp_id",
->>>>>>> 9c8400cd (SAH-1564: Verify the behaviour with SA image)
         "fsp_id_key_missing",
         "zoom_factor_key_missing",
         "integration_factor_key_missing",

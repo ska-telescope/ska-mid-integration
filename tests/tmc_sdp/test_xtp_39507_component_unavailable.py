@@ -109,15 +109,7 @@ def tmc_assign_resources_invoke(
 
 @then("SDP subarray report the unavailability of SDP Component")
 def sdp_subarray_reports_unavailability(
-<<<<<<< HEAD
-<<<<<<< HEAD
     event_recorder: EventRecorder, central_node_mid: CentralNodeWrapperMid
-=======
-    event_recorder: EventRecorder, central_node_mid: SubarrayNodeWrapper
->>>>>>> 95b446f7 (SAH-1564: Update test case)
-=======
-    event_recorder: EventRecorder, central_node_mid: CentralNodeWrapperMid
->>>>>>> 68f2d607 (SAH-1564: Resolve review comment)
 ):
     """
     Method to verify SDP subarray reports unavailability to TMC.
@@ -131,8 +123,6 @@ def sdp_subarray_reports_unavailability(
         + "are OFFLINE: cannot start processing blocks."
     )
     pytest.assertion_data = event_recorder.has_change_event_occurred(
-<<<<<<< HEAD
-<<<<<<< HEAD
         central_node_mid.central_node,
         attribute_name="longRunningCommandResult",
         attribute_value=(pytest.unique_id[0], Anything),
@@ -141,21 +131,7 @@ def sdp_subarray_reports_unavailability(
     assert (
         exception_message
         in json.loads(pytest.assertion_data["attribute_value"][1])[1]
-<<<<<<< HEAD
-=======
-        subarray_node.sdp_subarray_leaf_node,
-=======
-        central_node_mid.central_node,
->>>>>>> 95b446f7 (SAH-1564: Update test case)
-        attribute_name="longRunningCommandResult",
-        attribute_value=(pytest.unique_id[0], Anything),
->>>>>>> ef69de99 (SAH-1564: Update test case)
     )
-    assert "AssignResources" in pytest.assertion_data["attribute_value"][0]
-    assert exception_message in pytest.assertion_data["attribute_value"][1][1]
-=======
-    )
->>>>>>> 2e524661 (SAH-1564: Update test case)
 
 
 @then("TMC should report the error to client")
@@ -166,36 +142,16 @@ def tmc_reports_unavailability_to_client(
     Method to verify TMC subarray reports unavailability to client.
     """
     exception_message = (
-<<<<<<< HEAD
-<<<<<<< HEAD
         " ska_mid/tm_subarray_node/1: Exception occurred on the"
-=======
-        "Exception occurred on device:"
-        + "1721217660.907432_144787383731434_AssignResources"
-        + " ska_mid/tm_subarray_node/1: Exception occurred on the"
->>>>>>> 1be197f4 (SAH-1564: Update exception message)
-=======
-        " ska_mid/tm_subarray_node/1: Exception occurred on the"
->>>>>>> 4cfccc74 (SAH-1564: Update exception message)
         + " following devices: ska_mid/tm_leaf_node/sdp_subarray01:"
         + " The processing controller, helm deployer, or both are OFFLINE:"
         + " cannot start processing blocks.\n"
     )
     assert "AssignResources" in pytest.assertion_data["attribute_value"][0]
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 2e524661 (SAH-1564: Update test case)
     assert (
         exception_message
         in json.loads(pytest.assertion_data["attribute_value"][1])[1]
     )
-<<<<<<< HEAD
-=======
-    assert exception_message in pytest.assertion_data["attribute_value"][1][1]
->>>>>>> ef69de99 (SAH-1564: Update test case)
-=======
->>>>>>> 2e524661 (SAH-1564: Update test case)
 
 
 @then(parsers.parse("the TMC SubarrayNode {subarray_id} stuck in RESOURCING"))

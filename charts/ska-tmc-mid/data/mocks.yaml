@@ -34,20 +34,8 @@ server:
           - name: "mid-sdp/queueconnector/01"
         {{- end }}
         {{- if eq $isSimulatedCsp true }}
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-    - name: "04"
-=======
-     - name: "04"
->>>>>>> b18c7f89 (SAH-1564: Resolved review comment)
-      classes:
-=======
->>>>>>> fac26ecb (SAH-1564: Revert change)
-=======
     - name: "04"
       classes:
->>>>>>> da816f44 (SAH-1564: Resolve review comment)
         - name: "HelperCspMasterDevice"
           devices:
           - name: "mid-csp/control/0"
@@ -59,20 +47,8 @@ server:
           - name: "mid-csp/subarray/02"
         {{- end }}
         {{- if eq $isSimulatedDish true }}
-<<<<<<< HEAD
-<<<<<<< HEAD
-    - name: "06"
-<<<<<<< HEAD
-      classes:
-=======
-      classes: 
->>>>>>> b18c7f89 (SAH-1564: Resolved review comment)
-=======
->>>>>>> fac26ecb (SAH-1564: Revert change)
-=======
     - name: "06"
       classes:
->>>>>>> da816f44 (SAH-1564: Resolve review comment)
         - name: "HelperDishDevice"
           devices:
           {{- range .Values.global.dishes }}

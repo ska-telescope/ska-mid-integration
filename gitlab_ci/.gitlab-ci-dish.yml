@@ -9,37 +9,13 @@ dish-lmc-dish001:
     DISH_INDEX: "001"
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
     DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     DISH_HELM_RELEASE: "4.1.0"
-=======
-    DISH_HELM_RELEASE: "3.2.0"
->>>>>>> 8989d051 (SAH-1564: Update yaml file for dish)
-=======
-    DISH_HELM_RELEASE: "4.0.0"
->>>>>>> e6d9f9d5 (SAH-1564: Revert changes)
-=======
-    DISH_HELM_RELEASE: "4.1.0"
->>>>>>> bb6de9aa (SAH-1564: Use a latest chart of 4.1.0)
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
   before_script:
     - make cred SERVICE_ACCOUNT=$DISH_LMC_SERVICE_ACCOUNT
   script:
     - make k8s-install-chart-car KUBE_NAMESPACE=$KUBE_NAMESPACE K8S_CHART_PARAMS='-f charts/dish_lmc_values.yml
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
       --set "global.dishes={$(DISH_INDEX)}" --version=4.1.0
-=======
-      --set "global.dishes={$(DISH_INDEX)}" --version=3.2.0
->>>>>>> 8989d051 (SAH-1564: Update yaml file for dish)
-=======
-      --set "global.dishes={$(DISH_INDEX)}" --version=4.0.0
->>>>>>> e6d9f9d5 (SAH-1564: Revert changes)
-=======
-      --set "global.dishes={$(DISH_INDEX)}" --version=4.1.0
->>>>>>> bb6de9aa (SAH-1564: Use a latest chart of 4.1.0)
       --set global.cluster_domain=$(CLUSTER_DOMAIN)'
       HELM_RELEASE=$DISH_HELM_RELEASE K8S_CHART=$K8S_DISH_LMC_CHART
     - make k8s-wait
@@ -59,19 +35,7 @@ dish-lmc-dish036:
     DISH_INDEX: "036"
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
     DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     DISH_HELM_RELEASE: "4.1.0"
-=======
-    DISH_HELM_RELEASE: "3.2.0"
->>>>>>> 8989d051 (SAH-1564: Update yaml file for dish)
-=======
-    DISH_HELM_RELEASE: "4.0.0"
->>>>>>> e6d9f9d5 (SAH-1564: Revert changes)
-=======
-    DISH_HELM_RELEASE: "4.1.0"
->>>>>>> bb6de9aa (SAH-1564: Use a latest chart of 4.1.0)
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
   environment:
     name: test/$CI_COMMIT_REF_SLUG
@@ -87,19 +51,7 @@ dish-lmc-dish063:
     DISH_INDEX: "063"
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
     DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     DISH_HELM_RELEASE: "4.1.0"
-=======
-    DISH_HELM_RELEASE: "3.2.0"
->>>>>>> 8989d051 (SAH-1564: Update yaml file for dish)
-=======
-    DISH_HELM_RELEASE: "4.0.0"
->>>>>>> e6d9f9d5 (SAH-1564: Revert changes)
-=======
-    DISH_HELM_RELEASE: "4.1.0"
->>>>>>> bb6de9aa (SAH-1564: Use a latest chart of 4.1.0)
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
   environment:
     name: test/$CI_COMMIT_REF_SLUG
@@ -115,19 +67,7 @@ dish-lmc-dish100:
     DISH_INDEX: "100"
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
     DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX"
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     DISH_HELM_RELEASE: "4.1.0"
-=======
-    DISH_HELM_RELEASE: "3.2.0"
->>>>>>> 8989d051 (SAH-1564: Update yaml file for dish)
-=======
-    DISH_HELM_RELEASE: "4.0.0"
->>>>>>> e6d9f9d5 (SAH-1564: Revert changes)
-=======
-    DISH_HELM_RELEASE: "4.1.0"
->>>>>>> bb6de9aa (SAH-1564: Use a latest chart of 4.1.0)
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
     TARANTA_ENABLED: "true"
   environment:
@@ -143,19 +83,7 @@ stop-k8s-dish-lmc-001:
     - stop-k8s-test
   variables:
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-001"
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     DISH_HELM_RELEASE: "4.1.0"
-=======
-    DISH_HELM_RELEASE: "3.2.0"
->>>>>>> 8989d051 (SAH-1564: Update yaml file for dish)
-=======
-    DISH_HELM_RELEASE: "4.0.0"
->>>>>>> e6d9f9d5 (SAH-1564: Revert changes)
-=======
-    DISH_HELM_RELEASE: "4.1.0"
->>>>>>> bb6de9aa (SAH-1564: Use a latest chart of 4.1.0)
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
   script:
     - make k8s-do-uninstall-chart KUBE_NAMESPACE=$KUBE_NAMESPACE HELM_RELEASE=$DISH_HELM_RELEASE K8S_CHART=$K8S_DISH_LMC_CHART
@@ -167,19 +95,7 @@ stop-k8s-dish-lmc-036:
     - stop-k8s-dish-lmc-001
   variables:
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-036"
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     DISH_HELM_RELEASE: "4.1.0"
-=======
-    DISH_HELM_RELEASE: "3.2.0"
->>>>>>> 8989d051 (SAH-1564: Update yaml file for dish)
-=======
-    DISH_HELM_RELEASE: "4.0.0"
->>>>>>> e6d9f9d5 (SAH-1564: Revert changes)
-=======
-    DISH_HELM_RELEASE: "4.1.0"
->>>>>>> bb6de9aa (SAH-1564: Use a latest chart of 4.1.0)
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
 
 stop-k8s-dish-lmc-063:
@@ -187,19 +103,7 @@ stop-k8s-dish-lmc-063:
     - stop-k8s-dish-lmc-001
   variables:
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-063"
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     DISH_HELM_RELEASE: "4.1.0"
-=======
-    DISH_HELM_RELEASE: "3.2.0"
->>>>>>> 8989d051 (SAH-1564: Update yaml file for dish)
-=======
-    DISH_HELM_RELEASE: "4.0.0"
->>>>>>> e6d9f9d5 (SAH-1564: Revert changes)
-=======
-    DISH_HELM_RELEASE: "4.1.0"
->>>>>>> bb6de9aa (SAH-1564: Use a latest chart of 4.1.0)
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
 
 stop-k8s-dish-lmc-100:
@@ -207,17 +111,5 @@ stop-k8s-dish-lmc-100:
     - stop-k8s-dish-lmc-001
   variables:
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-100"
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     DISH_HELM_RELEASE: "4.1.0"
-=======
-    DISH_HELM_RELEASE: "3.2.0"
->>>>>>> 8989d051 (SAH-1564: Update yaml file for dish)
-=======
-    DISH_HELM_RELEASE: "4.0.0"
->>>>>>> e6d9f9d5 (SAH-1564: Revert changes)
-=======
-    DISH_HELM_RELEASE: "4.1.0"
->>>>>>> bb6de9aa (SAH-1564: Use a latest chart of 4.1.0)
     K8S_DISH_LMC_CHART: "ska-dish-lmc"

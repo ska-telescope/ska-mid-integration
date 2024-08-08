@@ -78,27 +78,7 @@ def set_simulator_devices_health_states(
     # database and the spfrx1 device restart
     # time.sleep(5)
 
-<<<<<<< HEAD
-<<<<<<< HEAD:tests/tmc_dish/test_xtp-nnnn_telescope_healthstate.py
-<<<<<<< HEAD
-    # check_spfrx1_info = central_node_mid.dish1_db.get_device_info(
-    #     "mid-dish/simulator-spfrx/SKA001"
-    # )
-    # LOGGER.info("spfrx1 device info is: %s", check_spfrx1_info)
-=======
-    check_spfrx1_info = central_node_mid.dish1_db.get_device_info(
-        "mid-dish/simulator-spfrx/SKA001"
-    )
-    LOGGER.info("spfrx1 device info is: %s", check_spfrx1_info)
->>>>>>> 5a5415f6 (SAH-1536: Fix the error in the test.)
-
-    # asserting dishmanager healthstate
-=======
-    # asserting UNKOWN healthstate for dishmaster and dishleafnode
->>>>>>> 2ee3ddf7 (SAH-1536: Enable skipped tmc-dish tests):tests/tmc_dish/test_xtp-55713_telescope_healthstate.py
-=======
     # asserting UNKNOWN healthstate for dishmaster and dishleafnode
->>>>>>> 9e9e3c92 (SAH-1536: Resolve review comments)
     event_recorder.subscribe_event(
         central_node_mid.dish_master_dict["SKA001"], "healthState"
     )

@@ -41,8 +41,7 @@ def test_csp_subarray_configure_error_propagation():
 
 @when("CSP subarray is set defective")
 def set_csp_subarray_defective(simulator_factory: SimulatorFactory):
-    """A method to set defect on simulated
-    CSP Subarray
+    """A method to set defect on simulated CSP Subarray
 
     Args:
         simulator_factory: fixture for SimulatorFactory class,

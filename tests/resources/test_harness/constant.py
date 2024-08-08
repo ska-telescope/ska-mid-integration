@@ -30,19 +30,8 @@ dish_master2 = "ska036/elt/master"
 dish_master3 = "ska063/elt/master"
 dish_master4 = "ska100/elt/master"
 sdp_queue_connector = "mid-sdp/queueconnector/01"
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 COMMAND_COMPLETED = json.dumps([ResultCode.OK, "Command Completed"])
 
-=======
-spfrx = "mid-dish/simulator-spfrx/SKA001"
->>>>>>> 87da9c58 (SAH-1536: Updated test case)
-=======
-spfrx = "mid-dish/simulator-spfrx/ska001"
->>>>>>> 1b1b0ed6 (SAH-1536: Update constant name)
-=======
->>>>>>> a7d7123b (SAH-1536: Revert change)
 
 COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE = {
     "enabled": True,

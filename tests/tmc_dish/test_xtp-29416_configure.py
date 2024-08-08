@@ -1,22 +1,5 @@
 """Test module for TMC-DISH Configure functionality"""
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
-import json
-
->>>>>>> 38ac12a5 (SAH-1564: Revert change)
-=======
->>>>>>> b5ed1ca7 (SAH-1564: Revert change)
-=======
-import json
-
->>>>>>> 9bc2f1ff (SAH-1564: Update test case)
-=======
->>>>>>> bb6de9aa (SAH-1564: Use a latest chart of 4.1.0)
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
@@ -28,98 +11,8 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_support.enum import DishMode, PointingState
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-# @pytest.mark.xfail(reason="Enable when SKB-292, SKB-293 are resolved")
-@pytest.mark.skip
->>>>>>> e92adc1c (SAH-1536: Update test case)
-=======
-@pytest.mark.skip
->>>>>>> a69408bc (SAH-1536: Test only xtp-42658)
-=======
->>>>>>> 2ee3ddf7 (SAH-1536: Enable skipped tmc-dish tests)
-=======
-@pytest.mark.skip
->>>>>>> c60c8729 (SAH-1536: Test only test case for long sequence)
-=======
->>>>>>> 1fc6a549 (SAH-1536: Enable all the tmc-dish tests)
-=======
-@pytest.mark.skip(reason="Dish pointingstate issue")
->>>>>>> 14801d0e (SAH-1567: Pull changes of sah-1564 branch.)
-=======
-=======
->>>>>>> babb9759 (SAH-1564: Revert change)
-=======
->>>>>>> 5f8704fa (SAH-1567: Enable test cases)
-=======
->>>>>>> efe6d5dd (SAH-1564: Run only long sequence test for tmc-dish interface)
-=======
->>>>>>> bb18efd6 (SAH-1567: Code cleanup)
-=======
->>>>>>> 55e352f7 (SAH-1567: Disable test cases)
-=======
->>>>>>> abc41c54 (SAH-1564: Enable tmc-dish bdd tests)
-@pytest.mark.skip(reason="Dish pointingstate issue")
-=======
-@pytest.mark.VV
->>>>>>> c200e56a (SAH-1564: Update test case)
-<<<<<<< HEAD
->>>>>>> 8b15e00b (SAH-1564: Update test case)
-=======
-=======
->>>>>>> 8de9c640 (SAH-1564: Revert change)
-<<<<<<< HEAD
->>>>>>> babb9759 (SAH-1564: Revert change)
-=======
-=======
->>>>>>> cdd8cab6 (SAH-1567: Enable test cases)
-<<<<<<< HEAD
->>>>>>> 5f8704fa (SAH-1567: Enable test cases)
-=======
-=======
-@pytest.mark.skip
->>>>>>> 22caffec (SAH-1564: Run only long sequence test for tmc-dish interface)
-<<<<<<< HEAD
->>>>>>> efe6d5dd (SAH-1564: Run only long sequence test for tmc-dish interface)
-=======
-=======
->>>>>>> e9646403 (SAH-1567: Code cleanup)
-<<<<<<< HEAD
->>>>>>> bb18efd6 (SAH-1567: Code cleanup)
-=======
-=======
-@pytest.mark.skip(reason="Dish pointingstate issue")
->>>>>>> f5038392 (SAH-1567: Disable test cases)
-<<<<<<< HEAD
->>>>>>> 55e352f7 (SAH-1567: Disable test cases)
-=======
-=======
->>>>>>> 53d94e03 (SAH-1564: Enable tmc-dish bdd tests)
-<<<<<<< HEAD
->>>>>>> abc41c54 (SAH-1564: Enable tmc-dish bdd tests)
-=======
-=======
-=======
-
->>>>>>> 1cf6b1bc (SAH-1574: Fix formatting)
 @pytest.mark.skip(reason="Test being fix in SAH-1564")
->>>>>>> 00483018 (SAH-1536: Update test case)
->>>>>>> 438706f0 (SAH-1536: Update test case)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29416_configure.feature",
@@ -131,21 +24,11 @@ def test_tmc_dish_configure():
     """
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 @given("the TMC subarray is in IDLE obsState")
-=======
-@given(parsers.parse("TMC subarray {subarray_id}  is in IDLE obsState"))
->>>>>>> 415d590c (SAH-1536: Resolve review comments)
-=======
-@given("the TMC subarray is in IDLE obsState")
->>>>>>> b87b3917 (SAH-1536: Resolve review comments)
 def subarray_is_in_idle_obsState(
     central_node_mid,
     subarray_node,
     event_recorder,
-<<<<<<< HEAD
-<<<<<<< HEAD
     command_input_factory,
 ):
     """
@@ -157,25 +40,6 @@ def subarray_is_in_idle_obsState(
         event_recorder: Fixture for EventRecorder class
         command_input_factory: fixture for creating input required
         for command
-=======
-    subarray_id,
-=======
->>>>>>> b112fb51 (SAH-1536: Resolve review comments)
-    command_input_factory,
-):
-    """
-    A method to check if telescope in is idle obsState.
-<<<<<<< HEAD
->>>>>>> 415d590c (SAH-1536: Resolve review comments)
-=======
-
-    Args:
-        central_node_mid: Fixture for a TMC CentralNode wrapper class
-        subarray_node: Fixture for a Subarray Node wrapper class
-        event_recorder: Fixture for EventRecorder class
-        command_input_factory: fixture for creating input required
-        for command
->>>>>>> 4cdcb54d (SAH-1536: Enable all the tmc-dish tests)
     """
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     event_recorder.subscribe_event(
@@ -241,17 +105,6 @@ def invoke_configure(
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-    dl = central_node_mid.dish_master_dict["001"]
->>>>>>> 9bc2f1ff (SAH-1564: Update test case)
-=======
-    dl = central_node_mid.dish_leaf_node_list[0]
->>>>>>> fbf39958 (SAH-1564: Update test and use dev image)
-=======
->>>>>>> bb6de9aa (SAH-1564: Use a latest chart of 4.1.0)
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )

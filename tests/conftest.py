@@ -9,11 +9,8 @@ import pytest
 import tango
 from pytest_bdd import given
 from ska_ser_logging import configure_logging
-<<<<<<< HEAD
 from ska_tango_base.control_model import ObsState
-=======
 from ska_tango_testing.integration import TangoEventTracer
->>>>>>> 2e005237 (HM-506: Added test for non-sidereal tracking)
 from ska_tango_testing.mock.tango.event_callback import (
     MockTangoEventCallbackGroup,
 )

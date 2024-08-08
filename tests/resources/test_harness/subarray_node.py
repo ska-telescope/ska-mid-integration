@@ -161,10 +161,7 @@ class SubarrayNodeWrapper(object):
         self.csp_subarray1 = csp_subarray1
         self.sdp_subarray1 = sdp_subarray1
         device_dict["dish_master_list"] = self.dish_master_list
-<<<<<<< HEAD
         device_dict["dish_leaf_node_list"] = self.dish_leaf_node_list
-=======
->>>>>>> 3dd8aee0 (SAH-1536: Update test case.)
 
     def _setup(self):
         """ """
@@ -370,45 +367,7 @@ class SubarrayNodeWrapper(object):
             or SIMULATED_DEVICES_DICT["sdp_and_dish"]
         ):
             for dish_master in self.dish_master_list:
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-                dish_master.SetDirectDishMode(DishMode.STANDBY_LP)
-                dish_master.SetDirectState(DevState.STANDBY)
-                dish_master.ResetDelayInfo()
-<<<<<<< HEAD
-=======
-                # dish_master.SetDirectDishMode(DishMode.STANDBY_LP)
-                # dish_master.SetDirectState(DevState.STANDBY)
-=======
->>>>>>> b86fe9c1 (SAH-1558: Code cleanup.)
-                dish_master.ResetDelay()
->>>>>>> 8e7e0be9 (SAH-1558: Fix the errors in the tests teardown.)
-=======
-                dish_master.SetDelay()
->>>>>>> 4ddc7bb5 (SAH-1564: Update test cases)
-=======
-                dish_master.ResetDelay()
->>>>>>> 0cd59575 (SAH-1564: Update attribute name)
-=======
-                dish_master.SetDelay()
->>>>>>> 51b5d971 (SAH-1564: Update attribute name)
-=======
-                dish_master.SetDelay(30)
->>>>>>> 70ba7a7c (SAH-1564: Update SN file)
-=======
                 dish_master.SetDelay(2)
->>>>>>> 30272ce3 (SAH-1564: Test pipline)
-=======
->>>>>>> 925bc407 (SAH-1564: Update attribute)
-=======
-                dish_master.SetDelay(2)
->>>>>>> 508d6ac0 (SAH-1536: Update test case.)
                 dish_master.SetDirectHealthState(HealthState.UNKNOWN)
 
     def _clear_command_call_and_transition_data(self, clear_transition=False):
