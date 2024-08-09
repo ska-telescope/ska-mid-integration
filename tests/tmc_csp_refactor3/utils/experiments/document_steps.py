@@ -1,3 +1,6 @@
+# pylint: skip-file
+# flake8: noqa
+
 import argparse
 import ast
 import os

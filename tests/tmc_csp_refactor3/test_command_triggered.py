@@ -19,10 +19,10 @@ from ska_integration_test_harness.inputs.obs_state_commands_input import (
 from ska_tango_testing.integration import TangoEventTracer
 
 from tests.tmc_csp_refactor3.conftest import SubarrayTestContextData
+from tests.tmc_csp_refactor3.utils.file_json_input import FileJSONInput
 from tests.tmc_csp_refactor3.utils.verify_command_call import (
     verify_device_received_command,
 )
-from tests.various_utils.file_json_input import FileJSONInput
 
 ASSERTIONS_TIMEOUT = 30
 

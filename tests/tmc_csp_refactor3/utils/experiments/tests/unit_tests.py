@@ -1,3 +1,6 @@
+# pylint: skip-file
+# flake8: noqa
+
 import ast
 from unittest.mock import Mock, mock_open, patch
 

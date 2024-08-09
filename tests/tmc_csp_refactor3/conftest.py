@@ -19,8 +19,8 @@ from ska_integration_test_harness.facades.tmc_central_node_facade import (
 from ska_integration_test_harness.facades.tmc_subarray_node_facade import (
     TMCSubarrayNodeFacade,
 )
-from ska_integration_test_harness.init.telescope_structure_factory import (
-    TelescopeStructureFactory,
+from ska_integration_test_harness.init.test_harness_builder import (
+    TestHarnessBuilder,
 )
 from ska_integration_test_harness.inputs.obs_state_commands_input import (
     ObsStateCommandsInput,
@@ -30,14 +30,14 @@ from ska_integration_test_harness.structure.telescope_wrapper import (
 )
 from ska_tango_testing.integration import TangoEventTracer  # , log_events
 
-from tests.various_utils.default_json_inputs import (
+from tests.tmc_csp_refactor3.utils.default_json_inputs import (
     ASSING_CENTRAL_NODE_INPUT,
     CONFIGURE_SUBARRAY_INPUT,
     DEFAULT_VCC_CONFIG_INPUT,
     RELEASE_CENTRAL_NODE_INPUT,
     SCAN_SUBARRAY_INPUT,
 )
-from tests.various_utils.file_json_input import FileJSONInput
+from tests.tmc_csp_refactor3.utils.file_json_input import FileJSONInput
 
 # ------------------------------------------------------------
 # Test Harness fixtures
@@ -60,10 +60,32 @@ def telescope_wrapper(
 ) -> TelescopeWrapper:
     """Create an unique test harness with proxies to all devices."""
     # logging.info("Test harness verision: %s", dummy_version())
-    components_factory = TelescopeStructureFactory(
-        default_commands_inputs, DEFAULT_VCC_CONFIG_INPUT
+    # components_factory = TelescopeStructureFactory(
+    #     default_commands_inputs, DEFAULT_VCC_CONFIG_INPUT
+    # )
+    # telescope = components_factory.init_telescope_test_structure()
+
+    test_harness_builder = TestHarnessBuilder()
+    test_harness_builder.read_from_file(
+        "tests/tmc_csp_refactor3/test_harness_config.yaml"
     )
-    telescope = components_factory.init_telescope_test_structure()
+    test_harness_builder.validate_configurations()
+    test_harness_builder.default_inputs.assign_input = (
+        ASSING_CENTRAL_NODE_INPUT
+    )
+    test_harness_builder.default_inputs.configure_input = (
+        CONFIGURE_SUBARRAY_INPUT
+    )
+    test_harness_builder.default_inputs.scan_input = SCAN_SUBARRAY_INPUT
+    test_harness_builder.default_inputs.release_input = (
+        RELEASE_CENTRAL_NODE_INPUT
+    )
+    test_harness_builder.default_inputs.default_vcc_config_input = (
+        DEFAULT_VCC_CONFIG_INPUT
+    )
+    test_harness_builder.validate_default_inputs()
+
+    telescope = test_harness_builder.build()
     yield telescope
     telescope.tear_down()
 
