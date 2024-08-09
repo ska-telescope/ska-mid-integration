@@ -1,6 +1,6 @@
 @XTP-49348 @SKA_mid @Team_SAHYADRI
 Scenario: TMC behavior when subarray stuck in obsState RESOURCING
-    Given Telescope is in on state
+    Given the telescope is in ON state
     And TMC subarray <subarray_id> busy in assigning resources
     And CSP subarray raised error goes back to obsState EMPTY
     And SDP subarray transitioned to obsState IDLE

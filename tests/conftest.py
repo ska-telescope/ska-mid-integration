@@ -7,7 +7,7 @@ from os.path import dirname, join
 
 import pytest
 import tango
-from pytest_bdd import given
+from pytest_bdd import given, parsers, then, when
 from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer
@@ -21,6 +21,7 @@ from tests.resources.test_harness.constant import centralnode, csp_master
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     CSP_SIMULATION_ENABLED,
+    get_device_simulators,
     prepare_json_args_for_centralnode_commands,
     wait_and_validate_device_attribute_value,
 )
@@ -357,6 +358,87 @@ def move_subarray_node_to_idle_obsstate(
         "longRunningCommandResult",
         (unique_id[0], json.dumps([ResultCode.OK, "Command Completed"])),
         lookahead=5,
+    )
+
+
+@given("CSP subarray transitioned to obsState IDLE")
+def csp_subarray_is_in_idle(
+    event_recorder: EventRecorder, simulator_factory: SimulatorFactory
+):
+    "Method to check CSP subarray is in IDLE."
+    csp_sim, _, _, _, _, _ = get_device_simulators(simulator_factory)
+    event_recorder.subscribe_event(csp_sim, "obsState")
+    assert event_recorder.has_change_event_occurred(
+        csp_sim,
+        "obsState",
+        ObsState.IDLE,
+    )
+
+
+@given(
+    parsers.parse("TMC subarray {subarray_id} stuck in obsState RESOURCING")
+)
+def tmc_subarray_stuck_in_resourcing(
+    subarray_node: SubarrayNodeWrapper,
+    event_recorder: EventRecorder,
+    subarray_id: str,
+):
+    "Method to check TMC subarray stuck in Resourcing."
+    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
+    subarray_node.set_subarray_id(subarray_id)
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.RESOURCING,
+    )
+
+
+@when(parsers.parse("I invoked Abort on TMC subarray {subarray_id}"))
+def invoke_abort(subarray_node: SubarrayNodeWrapper, subarray_id: str):
+    """
+    This method invokes abort command on tmc subarray.
+    """
+    subarray_node.set_subarray_id(subarray_id)
+    subarray_node.execute_transition("Abort")
+
+
+@then("the CSP subarray and SDP subarray transitions to ObsState ABORTED")
+def sdp_csp_subarray_is_in_aborted_obsstate(
+    event_recorder: EventRecorder, simulator_factory: SimulatorFactory
+):
+    """
+    Method to check SDP subarray and CSP subarray is in ABORTED obsstate
+    """
+    csp_sim, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
+    event_recorder.subscribe_event(sdp_sim, "obsState")
+    event_recorder.subscribe_event(csp_sim, "obsState")
+
+    assert event_recorder.has_change_event_occurred(
+        csp_sim,
+        "obsState",
+        ObsState.ABORTED,
+    )
+
+
+@then(
+    parsers.parse(
+        "the TMC subarray {subarray_id} transitions to ObsState ABORTED"
+    )
+)
+def tmc_subarray_is_in_aborted_obsstate(
+    subarray_node: SubarrayNodeWrapper,
+    event_recorder: EventRecorder,
+    subarray_id: str,
+):
+    """
+    Method to check if TMC subarray is in ABORTED obsstate
+    """
+    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
+    subarray_node.set_subarray_id(subarray_id)
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.ABORTED,
     )
 
 

@@ -17,6 +17,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 
+@pytest.mark.test1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp_49365_"
