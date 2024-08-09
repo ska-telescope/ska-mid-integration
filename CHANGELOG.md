@@ -3,7 +3,7 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
-[0.23.0]
+[0.22.0]
 ************
 * Utilised base class v1.0.0 and pytango 9.5.0 on TMC nodes
     * Utilised ska-tmc-common v0.17.6 for tango helper devices
@@ -20,13 +20,13 @@ Added
 
 * Utilise dishleafnode: 0.16.3 Patch release for SKB-419 fix from branch SAH-1566
 
-[0.22.1]
+[0.21.1]
 ************
-* Resolve skb-384
+* Fixed SKB-388 and SKB-419(Note: This release is from branch SAH-1564)
 
-[0.22.0]
+[0.21.2]
 ************
-* Integrate TMC-Dish Scan functionality implementation (REL-1295)
+* Fix DishLeafNode image link in tag 0.21.1
 
 [0.21.0]
 ************
