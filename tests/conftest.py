@@ -402,7 +402,7 @@ def invoke_abort(subarray_node: SubarrayNodeWrapper, subarray_id: str):
     subarray_node.execute_transition("Abort")
 
 
-@then("the CSP subarray and SDP subarray transitions to ObsState ABORTED")
+@then("the CSP subarray transitions to ObsState ABORTED")
 def sdp_csp_subarray_is_in_aborted_obsstate(
     event_recorder: EventRecorder, simulator_factory: SimulatorFactory
 ):

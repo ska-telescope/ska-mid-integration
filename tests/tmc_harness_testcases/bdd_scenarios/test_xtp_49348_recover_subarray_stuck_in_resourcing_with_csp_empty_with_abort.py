@@ -2,7 +2,7 @@
 import json
 
 import pytest
-from pytest_bdd import given, parsers, scenario
+from pytest_bdd import given, parsers, scenario, then
 from ska_control_model import ObsState
 from ska_tango_testing.mock.placeholders import Anything
 
@@ -115,5 +115,22 @@ def csp_subarray_is_in_idle(
 # from conftest.py
 # @given("CSP subarray transitioned to obsState IDLE")
 # @when("I invoked Abort on TMC subarray {subarray_id}")
-# @then("the CSP subarray and SDP subarray transitions to ObsState ABORTED")
 # @then("the TMC subarray {subarray_id} transitions to ObsState ABORTED")
+
+
+@then("the SDP subarray transitions to ObsState ABORTED")
+def sdp_csp_subarray_is_in_aborted_obsstate(
+    event_recorder: EventRecorder, simulator_factory: JsonFactory
+):
+    """
+    Method to check SDP subarray and CSP subarray is in ABORTED obsstate
+    """
+    csp_sim, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
+    event_recorder.subscribe_event(sdp_sim, "obsState")
+    event_recorder.subscribe_event(csp_sim, "obsState")
+
+    assert event_recorder.has_change_event_occurred(
+        sdp_sim,
+        "obsState",
+        ObsState.ABORTED,
+    )
