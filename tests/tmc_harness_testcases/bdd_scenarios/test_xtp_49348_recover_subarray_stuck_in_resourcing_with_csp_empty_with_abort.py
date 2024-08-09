@@ -18,7 +18,6 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 
 
-@pytest.mark.test1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp-49348_test_recover_"
