@@ -23,7 +23,8 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 @scenario(
     "../features/test_harness/xtp-49348_test_recover_"
     + "subarray_stuck_in_resourcing_with_csp_empty_with_abort.feature",
-    "TMC behavior when subarray stuck in obsState RESOURCING with defective CSP",
+    "TMC behavior when subarray stuck in obsState RESOURCING "
+    + "with defective CSP",
 )
 def test_recover_subarray_stuck_in_resourcing_with_defective_csp() -> None:
     """
