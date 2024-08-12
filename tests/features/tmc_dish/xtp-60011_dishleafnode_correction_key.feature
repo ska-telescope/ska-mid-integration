@@ -8,5 +8,5 @@ Scenario Outline: Configure the telescope having TMC and Dish Subsystems with co
     then TMC subarray <subarray_id> obsState transitions to READY obsState
 
     Examples:
-      | subarray_id | correction_key |
-      | 1           | UPDATE         |
+      | subarray_id | correction_key | dish_ids                         |
+      | 1           | UPDATE         | SKA001,SKA036,SKA063,SKA100      |
