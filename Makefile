@@ -88,7 +88,6 @@ ifeq ($(MAKECMDGOALS),k8s-test)
 ADD_ARGS +=  --true-context -x
 MARK ?= $(shell echo $(TELESCOPE) | sed "s/-/_/g")
 endif
-MARK = "test1"
 
 # EXIT_AT_FAIL option isn't functioning correctly, so the option -x is added
 # at the end. Will be debugged and fixed as a part of improvement.
