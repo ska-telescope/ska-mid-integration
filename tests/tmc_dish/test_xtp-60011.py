@@ -130,10 +130,7 @@ def invoke_configure_with_correction_key(
     subarray_node.execute_transition("Configure", configure_input_str)
 
 
-@then(
-    "the DishMaster transitions to dishMode OPERATE "
-    + "and pointingState TRACK"
-)
+@then("the DishMaster transitions to dishMode OPERATE and pointingState TRACK")
 def check_dish_mode_and_pointing_state(
     central_node_mid: CentralNodeWrapperMid, event_recorder: EventRecorder
 ):
