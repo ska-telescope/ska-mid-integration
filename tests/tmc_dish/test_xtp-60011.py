@@ -19,7 +19,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 POINTING_CAL = [1.1, 1.1, 1.2]
 
 
-@pytest.mark.tmc_mid
+@pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-60011_dishleafnode_correction_key.feature",
     "Configure the telescope having TMC and Dish Subsystems with "
