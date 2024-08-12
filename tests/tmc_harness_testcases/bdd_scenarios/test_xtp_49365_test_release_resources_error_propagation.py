@@ -5,6 +5,7 @@ import pytest
 from pytest_bdd import scenario, then, when
 from ska_tango_testing.mock.placeholders import Anything
 
+from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.constant import (
     OBS_STATE_CONFIGURING_STUCK_DEFECT,
     RESET_DEFECT,
@@ -13,6 +14,7 @@ from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
 )
+from tests.resources.test_harness.simulator_factory import SimulatorFactory
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
@@ -31,7 +33,7 @@ def test_csp_subarray_release_resources_error_propagation():
 
 
 @when("CSP subarray is set defective")
-def set_csp_subarray_defective(simulator_factory):
+def set_csp_subarray_defective(simulator_factory: SimulatorFactory):
     """A method to set defect on simulated
     CSP Subarray
 
@@ -48,7 +50,7 @@ def set_csp_subarray_defective(simulator_factory):
 
 @when("I issue the ReleaseResources command to the TMC")
 def invoke_release_resources(
-    central_node_mid,
+    central_node_mid: CentralNodeWrapperMid,
     command_input_factory: JsonFactory,
     event_recorder: EventRecorder,
 ) -> None:
@@ -67,7 +69,9 @@ def invoke_release_resources(
 
 
 @then("Exception is propagated to TMC on longRunningCommandResult")
-def check_timeout_error(central_node_mid, event_recorder):
+def check_timeout_error(
+    central_node_mid: CentralNodeWrapperMid, event_recorder: EventRecorder
+):
     """A method to check SubarrayNode.longRunningCommandResult attribute
     change for exception
 

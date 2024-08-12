@@ -1,5 +1,5 @@
 @XTP-49344 @SKA_mid @Team_SAHYADRI
-Scenario: TMC behavior when subarray stuck in obsState RESOURCING
+Scenario: TMC behavior when subarray stuck in obsState RESOURCING with defective SDP
     Given the telescope is in ON state
     And TMC subarray <subarray_id> busy in assigning resources
     And SDP subarray is defective and stuck in RESOURCING

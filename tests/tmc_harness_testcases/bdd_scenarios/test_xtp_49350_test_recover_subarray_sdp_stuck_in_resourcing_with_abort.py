@@ -9,6 +9,7 @@ from tests.resources.test_harness.helpers import (
     get_device_simulators,
     prepare_json_args_for_centralnode_commands,
 )
+from tests.resources.test_harness.simulator_factory import SimulatorFactory
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 
 
@@ -16,7 +17,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 @scenario(
     "../features/test_harness/"
     + "xtp_49350_test_recover_subarray_stuck_in_resourcing_with_abort.feature",
-    "TMC behavior when subarray stuck in obsState RESOURCING",
+    "TMC behavior when subarray stuck in obsState RESOURCING with defective SDP",
 )
 def test_recover_subarray_stuck_in_resourcing() -> None:
     """
@@ -52,7 +53,7 @@ def telescope_is_in_resourcing_obsstate(
 
 @given("SDP subarray is defective and stuck in RESOURCING")
 def sdp_subarray_stuck_is_in_empty(
-    event_recorder: EventRecorder, simulator_factory: JsonFactory
+    event_recorder: EventRecorder, simulator_factory: SimulatorFactory
 ):
     "Method to check SDP subarray is in EMPTY."
     _, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)

@@ -6,6 +6,7 @@ from pytest_bdd import scenario, then, when
 from ska_tango_testing.mock.placeholders import Anything
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
+from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     get_device_simulators,
     prepare_json_args_for_centralnode_commands,
@@ -52,7 +53,9 @@ def invoke_assignresources_command_with_sdp_subarray_defective(
 
 @then("Exception is propagated to TMC on longRunningCommandResult")
 def check_timeout_error(
-    central_node_mid, event_recorder, simulator_factory: SimulatorFactory
+    central_node_mid: CentralNodeWrapperMid,
+    event_recorder: EventRecorder,
+    simulator_factory: SimulatorFactory,
 ):
     """A method to check SubarrayNode longRunningCommandResult attribute
     change for exception
