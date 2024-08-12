@@ -21,7 +21,7 @@ POINTING_CAL = [1.1, 1.1, 1.2]
 
 @pytest.mark.tmc_mid
 @scenario(
-    "../features/tmc_dish/xtp-29416_configure_with_correction_key.feature",
+    "../features/tmc_dish/xtp-60011_dishleafnode_correction_key.feature",
     "Configure the telescope having TMC and Dish Subsystems with "
     + "correction key",
 )
