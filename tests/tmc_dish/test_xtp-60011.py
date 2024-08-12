@@ -6,14 +6,17 @@ import json
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
-from tango import DeviceProxy, DevState
+from tango import DeviceProxy
 
+from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.constant import COMMAND_COMPLETED
+from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
-from tests.resources.test_harness.utils.enums import SimulatorDeviceType
+from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
+from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.enum import DishMode, PointingState
 
 POINTING_CAL = [1.1, 1.1, 1.2]
@@ -32,71 +35,60 @@ def test_tmc_dish_configure_with_correction_key():
     """
 
 
-@given("a TMC")
-def given_tmc(central_node_mid, subarray_node, event_recorder):
-    """Given a TMC"""
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
-    for dish_master in subarray_node.dish_master_list:
-        event_recorder.subscribe_event(dish_master, "dishMode")
-    central_node_mid.move_to_on()
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "obsState",
-        ObsState.EMPTY,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.ON,
-    )
+# @given >> conftest.py
 
 
 @given("the TMC subarray is in IDLE obsState")
 def subarray_is_in_idle_obsState(
-    central_node_mid,
-    subarray_node,
-    event_recorder,
-    command_input_factory,
-    simulator_factory,
+    central_node_mid: CentralNodeWrapperMid,
+    subarray_node: SubarrayNodeWrapper,
+    event_recorder: EventRecorder,
+    command_input_factory: JsonFactory,
 ):
-    # Setup and verification steps to ensure the subarray is in IDLE obsState
-    csp_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_CSP_DEVICE
-    )
-    sdp_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_SDP_DEVICE
-    )
+    """
+    A method to check if telescope in is idle obsState
 
-    event_recorder.subscribe_event(csp_sim, "obsState")
-    event_recorder.subscribe_event(sdp_sim, "obsState")
+    Args:
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        subarray_node: Fixture for a Subarray Node wrapper class
+        event_recorder: Fixture for EventRecorder class
+        command_input_factory: fixture for creating input required
+        for command
+    """
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     event_recorder.subscribe_event(
-        subarray_node.subarray_node, "longRunningCommandResult"
+        central_node_mid.subarray_devices.get("sdp_subarray"), "obsState"
     )
     event_recorder.subscribe_event(
-        central_node_mid.central_node, "longRunningCommandResult"
+        central_node_mid.subarray_devices.get("csp_subarray"), "obsState"
     )
-
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-    _, unique_id = central_node_mid.store_resources(assign_input_json)
+    pytest.command_result = central_node_mid.store_resources(assign_input_json)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
     )
     assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices.get("sdp_subarray"),
+        "obsState",
+        ObsState.IDLE,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices.get("csp_subarray"),
+        "obsState",
+        ObsState.IDLE,
+    )
+
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+    assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (unique_id[0], COMMAND_COMPLETED),
-        lookahead=5,
-    )
-    subarray_node.simulate_receive_addresses_event(
-        sdp_sim, command_input_factory
+        (pytest.command_result[1][0], COMMAND_COMPLETED),
     )
 
 
@@ -107,8 +99,8 @@ def subarray_is_in_idle_obsState(
     )
 )
 def invoke_configure_with_correction_key(
-    subarray_node,
-    command_input_factory,
+    subarray_node: SubarrayNodeWrapper,
+    command_input_factory: JsonFactory,
     correction_key,
 ):
     """
@@ -144,7 +136,9 @@ def invoke_configure_with_correction_key(
         + "TRACK"
     )
 )
-def check_dish_mode_and_pointing_state(central_node_mid, event_recorder):
+def check_dish_mode_and_pointing_state(
+    central_node_mid: CentralNodeWrapperMid, event_recorder: EventRecorder
+):
     """
     Method to check dishMode and pointingState of DISH
 
@@ -174,7 +168,10 @@ def check_dish_mode_and_pointing_state(central_node_mid, event_recorder):
     )
 )
 def check_subarray_obsState_ready(
-    central_node_mid, subarray_node, event_recorder, subarray_id
+    central_node_mid: CentralNodeWrapperMid,
+    subarray_node: SubarrayNodeWrapper,
+    event_recorder: EventRecorder,
+    subarray_id,
 ):
     """
     Method to check subarray is in READY obsState
