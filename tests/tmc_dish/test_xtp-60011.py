@@ -94,7 +94,7 @@ def subarray_is_in_idle_obsState(
 
 @when(
     parsers.parse(
-        "I issue the Configure command to the TMC subarray {subarray_id} with "
+        "I issue the Configure command to the TMC subarray with "
         + "correction key {correction_key}"
     )
 )
@@ -130,9 +130,16 @@ def invoke_configure_with_correction_key(
     subarray_node.execute_transition("Configure", configure_input_str)
 
 
-@then("the DishMaster transitions to dishMode OPERATE and pointingState TRACK")
+@then(
+    parsers.parse(
+        "the DishMaster {dish_ids} transitions to dishMode"
+        + " OPERATE and pointingState TRACK"
+    )
+)
 def check_dish_mode_and_pointing_state(
-    central_node_mid: CentralNodeWrapperMid, event_recorder: EventRecorder
+    central_node_mid: CentralNodeWrapperMid,
+    event_recorder: EventRecorder,
+    dish_ids,
 ):
     """
     Method to check dishMode and pointingState of DISH
@@ -140,17 +147,35 @@ def check_dish_mode_and_pointing_state(
     Args:
         central_node_mid: Fixture for a TMC CentralNode wrapper class
         event_recorder: Fixture for EventRecorder class
+        dish_ids (str): Comma-separated IDs of DISH components.
     """
-    for dish_master in central_node_mid.dish_master_dict.values():
-        event_recorder.subscribe_event(dish_master, "pointingState")
+    for dish_id in dish_ids.split(","):
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "pointingState"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
+        )
         assert event_recorder.has_change_event_occurred(
-            dish_master,
+            central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.OPERATE,
             lookahead=10,
         )
         assert event_recorder.has_change_event_occurred(
-            dish_master,
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "dishMode",
+            DishMode.OPERATE,
+            lookahead=10,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "pointingState",
+            PointingState.TRACK,
+            lookahead=10,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
             lookahead=10,
