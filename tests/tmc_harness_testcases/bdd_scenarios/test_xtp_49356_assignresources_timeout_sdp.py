@@ -40,7 +40,7 @@ def invoke_assignresources_command_with_sdp_subarray_defective(
 ) -> None:
     _, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
     # Set sdp defective
-    sdp_sim.SetDelayInfo(json.dumps({"AssignResources": 60}))
+    sdp_sim.SetDelayInfo(json.dumps({"AssignResources": 150}))
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
