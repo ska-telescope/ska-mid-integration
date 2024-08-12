@@ -132,8 +132,8 @@ def invoke_configure_with_correction_key(
 
 @then(
     parsers.parse(
-        "the DishMaster transitions to dishMode OPERATE and pointingState "
-        + "TRACK"
+        "the DishMaster transitions to dishMode OPERATE "
+        "and pointingState TRACK"
     )
 )
 def check_dish_mode_and_pointing_state(
