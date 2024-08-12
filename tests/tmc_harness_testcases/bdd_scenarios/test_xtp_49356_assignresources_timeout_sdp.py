@@ -42,7 +42,7 @@ def invoke_assignresources_command_with_sdp_subarray_defective(
         SimulatorDeviceType.MID_SDP_DEVICE
     )
     # Set sdp defective
-    pytest.sdp_sim.SetDelayInfo(json.dumps({"ReleaseAllResources": 35}))
+    pytest.sdp_sim.SetDelayInfo(json.dumps({"AssignResources": 35}))
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
