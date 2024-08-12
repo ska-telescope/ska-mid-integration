@@ -7,11 +7,11 @@ from ska_tango_testing.mock.placeholders import Anything
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.helpers import (
+    get_device_simulators,
     prepare_json_args_for_centralnode_commands,
 )
 from tests.resources.test_harness.simulator_factory import SimulatorFactory
 from tests.resources.test_harness.utils.common_utils import JsonFactory
-from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 
 @pytest.mark.test1
@@ -38,9 +38,7 @@ def invoke_assignresources_command_with_sdp_subarray_defective(
     command_input_factory: JsonFactory,
     simulator_factory: SimulatorFactory,
 ) -> None:
-    _, sdp_sim, _, _, _, _ = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_SDP_DEVICE
-    )
+    _, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
     # Set sdp defective
     sdp_sim.SetDelayInfo(json.dumps({"AssignResources": 60}))
 
@@ -54,14 +52,14 @@ def invoke_assignresources_command_with_sdp_subarray_defective(
 
 
 @then("Exception is propagated to TMC on longRunningCommandResult")
-def check_timeout_error(central_node_mid, event_recorder, simulator_factory):
+def check_timeout_error(
+    central_node_mid, event_recorder, simulator_factory: SimulatorFactory
+):
     """A method to check SubarrayNode longRunningCommandResult attribute
     change for exception
 
     """
-    _, sdp_sim, _, _, _, _ = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_SDP_DEVICE
-    )
+    _, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
     event_recorder.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
     )
