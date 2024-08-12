@@ -6,10 +6,6 @@ from pytest_bdd import scenario, then, when
 from ska_tango_testing.mock.placeholders import Anything
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
-from tests.resources.test_harness.constant import (
-    INTERMEDIATE_STATE_DEFECT,
-    RESET_DEFECT,
-)
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
 )
@@ -18,6 +14,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 
+@pytest.mark.test1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/"
@@ -45,7 +42,7 @@ def invoke_assignresources_command_with_sdp_subarray_defective(
         SimulatorDeviceType.MID_SDP_DEVICE
     )
     # Set sdp defective
-    pytest.sdp_sim.SetDefective(json.dumps(INTERMEDIATE_STATE_DEFECT))
+    pytest.sdp_sim.SetDelayInfo(json.dumps({"ReleaseAllResources": 35}))
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
@@ -77,4 +74,4 @@ def check_timeout_error(central_node_mid, event_recorder):
         in json.loads(assertion_data["attribute_value"][1])[1]
     )
 
-    pytest.sdp_sim.SetDefective(RESET_DEFECT)
+    pytest.sdp_sim.ResetDelayInfo()
