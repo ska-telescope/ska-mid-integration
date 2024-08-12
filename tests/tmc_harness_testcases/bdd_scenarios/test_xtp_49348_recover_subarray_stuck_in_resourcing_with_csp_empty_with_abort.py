@@ -122,7 +122,7 @@ def sdp_csp_subarray_is_in_aborted_obsstate(
     event_recorder: EventRecorder, simulator_factory: JsonFactory
 ):
     """
-    Method to check SDP subarray and CSP subarray is in ABORTED obsstate
+    Method to check SDP subarray is in ABORTED obsstate
     """
     csp_sim, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
     event_recorder.subscribe_event(sdp_sim, "obsState")

@@ -1,4 +1,4 @@
-"""Test module to test Assignresources while SDP is defective."""
+"""Test module to test Assignresources timeout on SDP Subarray."""
 import json
 
 import pytest
@@ -18,7 +18,6 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 
-@pytest.mark.test1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/"
@@ -28,7 +27,7 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 )
 def test_assignrsources_timeout_sdp() -> None:
     """
-    Test case to verify ReleaseResources timeout on SDP Subarray.
+    Test case to verify Assignresources timeout on SDP Subarray.
     """
 
 
@@ -47,6 +46,7 @@ def invoke_assignresources_command_with_sdp_subarray_defective(
     )
     # Set sdp defective
     pytest.sdp_sim.SetDefective(json.dumps(INTERMEDIATE_STATE_DEFECT))
+
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )

@@ -1,4 +1,4 @@
-"""Test module to test Assignresources while SDP is defective."""
+"""Test module to test Assignresorces timeout on CSP Subarray."""
 import json
 
 import pytest
@@ -27,7 +27,7 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 )
 def test_assignrsources_timeout_csp() -> None:
     """
-    Test case to verify ReleaseResources timeout on CSP Subarray.
+    Test case to verify Assignresorces timeout on CSP Subarray.
     """
 
 
