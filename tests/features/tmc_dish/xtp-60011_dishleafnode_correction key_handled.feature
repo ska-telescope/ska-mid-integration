@@ -1,4 +1,4 @@
-
+@XTP-60011 @tmc_mid @team_himalaya
 Scenario Outline: Configure the telescope having TMC and Dish Subsystems with correction key
     Given a Telescope consisting of TMC, DISH, simulated CSP and simulated SDP
     And the Telescope is in ON state
