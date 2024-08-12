@@ -38,11 +38,11 @@ def invoke_assignresources_command_with_sdp_subarray_defective(
     command_input_factory: JsonFactory,
     simulator_factory: SimulatorFactory,
 ) -> None:
-    pytest.sdp_sim = simulator_factory.get_or_create_simulator_device(
+    _, sdp_sim, _, _, _, _ = simulator_factory.get_or_create_simulator_device(
         SimulatorDeviceType.MID_SDP_DEVICE
     )
     # Set sdp defective
-    pytest.sdp_sim.SetDelayInfo(json.dumps({"AssignResources": 35}))
+    sdp_sim.SetDelayInfo(json.dumps({"AssignResources": 60}))
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
@@ -54,11 +54,14 @@ def invoke_assignresources_command_with_sdp_subarray_defective(
 
 
 @then("Exception is propagated to TMC on longRunningCommandResult")
-def check_timeout_error(central_node_mid, event_recorder):
+def check_timeout_error(central_node_mid, event_recorder, simulator_factory):
     """A method to check SubarrayNode longRunningCommandResult attribute
     change for exception
 
     """
+    _, sdp_sim, _, _, _, _ = simulator_factory.get_or_create_simulator_device(
+        SimulatorDeviceType.MID_SDP_DEVICE
+    )
     event_recorder.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
     )
@@ -74,4 +77,4 @@ def check_timeout_error(central_node_mid, event_recorder):
         in json.loads(assertion_data["attribute_value"][1])[1]
     )
 
-    pytest.sdp_sim.ResetDelayInfo()
+    sdp_sim.ResetDelayInfo()
