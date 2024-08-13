@@ -20,9 +20,13 @@ MARK ?= $(shell echo $(TELESCOPE) | sed "s/-/_/g") ## What -m opt to pass to pyt
 FILE ?= tests## A specific test file to pass to pytest
 ADD_ARGS ?= ## Additional args to pass to pytest
 FILE_NAME?= alarm_rules.txt
-EXIT_AT_FAIL = true ## Flag for determining exit at failure. Set 'true' to exit at first failure.
 
-ifeq ($(EXIT_AT_FAIL),true)
+EXIT_AT_FAIL ?= true ## Flag for determining exit at failure. 
+# Set 'true' to exit at first failure. Set 'false' to continue running 
+# tests after failure. It defaults to 'true' if not set.
+# Actually, any value other than 'false' will be treated as 'true'.
+
+ifneq ($(EXIT_AT_FAIL), false)
 ADD_ARGS += -x
 endif
 
@@ -85,14 +89,12 @@ DISH_SIMULATION_ENABLED ?= true
 SDP_PROCCONTROL_REPLICAS ?= 1
 
 ifeq ($(MAKECMDGOALS),k8s-test)
-ADD_ARGS +=  --true-context -x
+ADD_ARGS +=  --true-context
 MARK ?= $(shell echo $(TELESCOPE) | sed "s/-/_/g")
 endif
 
-# EXIT_AT_FAIL option isn't functioning correctly, so the option -x is added
-# at the end. Will be debugged and fixed as a part of improvement.
 
-PYTHON_VARS_AFTER_PYTEST ?= -m '$(MARK) $(ADDMARK)' $(ADD_ARGS) $(FILE) --count=$(COUNT) -x 
+PYTHON_VARS_AFTER_PYTEST ?= -m '$(MARK) $(ADDMARK)' $(ADD_ARGS) $(FILE) --count=$(COUNT)
 CUSTOM_VALUES1 ?=
 CUSTOM_VALUES2 ?=
 ifeq ($(CSP_SIMULATION_ENABLED),false)
@@ -201,3 +203,7 @@ test-requirements:
 	@poetry export --without-hashes --dev --format requirements.txt --output tests/requirements.txt
 
 k8s-pre-test: test-requirements
+
+
+PYTHON_TEST_NAME ?= ## -k parameter for pytest
+PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) -k "$(PYTHON_TEST_NAME)"
