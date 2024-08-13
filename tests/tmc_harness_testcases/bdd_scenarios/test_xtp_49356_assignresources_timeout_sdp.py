@@ -69,7 +69,7 @@ def check_timeout_error(
         central_node_mid.central_node,
         "longRunningCommandResult",
         (pytest.command_result[1][0], Anything),
-        lookahead=15,
+        lookahead=20,
     )
     exception_message = "Timeout has occurred, command failed"
     assert (
