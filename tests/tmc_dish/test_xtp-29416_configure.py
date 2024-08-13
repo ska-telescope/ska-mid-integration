@@ -1,8 +1,10 @@
 """Test module for TMC-DISH Configure functionality"""
 
 import pytest
+from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
+from ska_tango_testing.integration import TangoEventTracer, log_events
 
 from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.helpers import (
@@ -12,7 +14,6 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
-@pytest.mark.skip(reason="Test being fix in SAH-1564")
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29416_configure.feature",
@@ -28,7 +29,7 @@ def test_tmc_dish_configure():
 def subarray_is_in_idle_obsState(
     central_node_mid,
     subarray_node,
-    event_recorder,
+    event_tracer: TangoEventTracer,
     command_input_factory,
 ):
     """
@@ -41,40 +42,72 @@ def subarray_is_in_idle_obsState(
         command_input_factory: fixture for creating input required
         for command
     """
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-    event_recorder.subscribe_event(
-        central_node_mid.subarray_devices.get("sdp_subarray"), "obsState"
+    event_tracer.subscribe_event(
+        subarray_node.subarray_devices["sdp_subarray"], "obsState"
     )
-    event_recorder.subscribe_event(
-        central_node_mid.subarray_devices.get("csp_subarray"), "obsState"
+    event_tracer.subscribe_event(
+        subarray_node.subarray_devices["csp_subarray"], "obsState"
     )
+    event_tracer.subscribe_event(subarray_node.subarray_node, "obsState")
+    event_tracer.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-    pytest.command_result = central_node_mid.store_resources(assign_input_json)
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "obsState",
-        ObsState.IDLE,
-    )
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_devices.get("sdp_subarray"),
-        "obsState",
-        ObsState.IDLE,
-    )
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_devices.get("csp_subarray"),
+    _, pytest.unique_id = central_node_mid.store_resources(assign_input_json)
+
+    csp = subarray_node.subarray_devices.get("csp_subarray")
+    sdp = subarray_node.subarray_devices.get("sdp_subarray")
+
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the subarray must be in the IDLE obsState'"
+        "SDP Subarray device"
+        f"({sdp.dev_name()}) "
+        "is expected to be in IDLE obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        subarray_node.subarray_devices["sdp_subarray"],
         "obsState",
         ObsState.IDLE,
     )
 
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "longRunningCommandResult"
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "Given" STEP: '
+        "'the subarray must be in the IDLE obsState'"
+        "CSP Subarray device"
+        f"({csp.dev_name()}) "
+        "is expected to be in IDLE obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        subarray_node.subarray_devices["csp_subarray"],
+        "obsState",
+        ObsState.IDLE,
     )
-    assert event_recorder.has_change_event_occurred(
+
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the subarray must be in the IDLE obsState'"
+        "TMC Subarray device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected to be in IDLE obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.IDLE,
+    )
+
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the subarray is in IDLE obsState'"
+        "TMC Central Node device"
+        f"({central_node_mid.central_node.dev_name()}) "
+        "is expected have longRunningCommand as"
+        '(unique_id,(ResultCode.OK,"Command Completed"))',
+    ).within_timeout(60).has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (pytest.command_result[1][0], COMMAND_COMPLETED),
+        (pytest.unique_id[0], COMMAND_COMPLETED),
     )
 
 
@@ -88,7 +121,6 @@ def invoke_configure(
     subarray_node,
     command_input_factory,
     subarray_id,
-    event_recorder,
 ):
     """
     A method to invoke Configure command
@@ -101,15 +133,11 @@ def invoke_configure(
         subarray_id (str): Subarray ID
         event_recorder: Fixture for EventRecorder class
     """
-
-    event_recorder.subscribe_event(
-        subarray_node.subarray_node, "longRunningCommandResult"
-    )
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
     central_node_mid.set_subarray_id(subarray_id)
-    pytest.command_result = subarray_node.execute_transition(
+    _, pytest.unique_id = subarray_node.execute_transition(
         "Configure", configure_input_json
     )
 
@@ -121,7 +149,7 @@ def invoke_configure(
     )
 )
 def check_dish_mode_and_pointing_state(
-    central_node_mid, event_recorder, dish_ids
+    central_node_mid, event_tracer: TangoEventTracer, dish_ids
 ):
     """
     Method to check dishMode and pointingState of DISH
@@ -132,35 +160,75 @@ def check_dish_mode_and_pointing_state(
         dish_ids (str): Comma-separated IDs of DISH components.
     """
     for dish_id in dish_ids.split(","):
-        event_recorder.subscribe_event(
+        log_events(
+            {
+                central_node_mid.dish_master_dict.get(dish_id): ["dishMode"],
+                central_node_mid.dish_master_dict.get(dish_id): [
+                    "pointingState"
+                ],
+            }
+        )
+
+    for dish_id in dish_ids.split(","):
+        event_tracer.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
+        event_tracer.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
+        )
+        event_tracer.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "pointingState"
         )
-        event_recorder.subscribe_event(
+        event_tracer.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
         )
-        assert event_recorder.has_change_event_occurred(
+
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "THEN" STEP: '
+            "'the dish must be in the OPERATE dishMode'"
+            "dish device"
+            f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
+            "is expected to be in OPERATE dishMode",
+        ).within_timeout(60).has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.OPERATE,
-            lookahead=10,
         )
-        assert event_recorder.has_change_event_occurred(
+
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "THEN" STEP: '
+            "'the DishLeafNode must be in the OPERATE dishMode'"
+            "dish device"
+            f"({central_node_mid.dish_leaf_node_dict[dish_id].dev_name()}) "
+            "is expected to be in OPERATE dishMode",
+        ).within_timeout(60).has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "dishMode",
             DishMode.OPERATE,
-            lookahead=10,
         )
-        assert event_recorder.has_change_event_occurred(
+
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "THEN" STEP: '
+            "'the dish must be in the TRACK pointingState'"
+            "dish device"
+            f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
+            "is expected to be in TRACK pointingState",
+        ).within_timeout(60).has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
-            lookahead=10,
         )
-        assert event_recorder.has_change_event_occurred(
+
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "THEN" STEP: '
+            "'the DishLeafNode must be in the TRACK pointingState'"
+            "dish device"
+            f"({central_node_mid.dish_leaf_node_dict[dish_id].dev_name()}) "
+            "is expected to be in TRACK pointingState",
+        ).within_timeout(60).has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
-            lookahead=10,
         )
 
 
@@ -170,7 +238,10 @@ def check_dish_mode_and_pointing_state(
     )
 )
 def check_subarray_obsState_ready(
-    central_node_mid, subarray_node, event_recorder, subarray_id
+    central_node_mid,
+    subarray_node,
+    event_tracer: TangoEventTracer,
+    subarray_id,
 ):
     """
     Method to check subarray is in READY obsState
@@ -182,29 +253,65 @@ def check_subarray_obsState_ready(
         subarray_id (str): Subarray ID
     """
     central_node_mid.set_subarray_id(subarray_id)
-    event_recorder.subscribe_event(
+
+    event_tracer.subscribe_event(
         subarray_node.subarray_devices["sdp_subarray"], "obsState"
     )
-    assert event_recorder.has_change_event_occurred(
+    event_tracer.subscribe_event(
+        subarray_node.subarray_devices["csp_subarray"], "obsState"
+    )
+    event_tracer.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
+
+    csp = subarray_node.subarray_devices.get("csp_subarray")
+    sdp = subarray_node.subarray_devices.get("sdp_subarray")
+
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "THEN" STEP: '
+        "'the subarray must be in the READY obsState'"
+        "SDP Subarray device"
+        f"({sdp.dev_name()}) "
+        "is expected to be in READY obstate",
+    ).within_timeout(60).has_change_event_occurred(
         subarray_node.subarray_devices["sdp_subarray"],
         "obsState",
         ObsState.READY,
-        lookahead=10,
     )
-    event_recorder.subscribe_event(
-        subarray_node.subarray_devices["csp_subarray"], "obsState"
-    )
-    assert event_recorder.has_change_event_occurred(
+
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "THEN" STEP: '
+        "'the subarray must be in the READY obsState'"
+        "CSP Subarray device"
+        f"({csp.dev_name()}) "
+        "is expected to be in READY obstate",
+    ).within_timeout(60).has_change_event_occurred(
         subarray_node.subarray_devices["csp_subarray"],
         "obsState",
         ObsState.READY,
-        lookahead=10,
     )
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
+
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "THEN" STEP: '
+        "'the subarray must be in the READY obsState'"
+        "TMC Subarray device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected to be in READY obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.READY,
     )
-    assert event_recorder.has_change_event_occurred(
+
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "THEN" STEP: '
+        "'the subarray is in READY obsState'"
+        "TMC Subarray Node device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected have longRunningCommand as"
+        '(unique_id,(ResultCode.OK,"Command Completed"))',
+    ).within_timeout(60).has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
-        (pytest.command_result[1][0], COMMAND_COMPLETED),
+        (pytest.unique_id[0], COMMAND_COMPLETED),
     )

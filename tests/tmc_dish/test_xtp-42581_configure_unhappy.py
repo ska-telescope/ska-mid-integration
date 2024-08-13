@@ -15,7 +15,10 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
-@pytest.mark.skip
+@pytest.mark.skip(
+    reason="Scenario on same band being provided to the Dish "
+    + "is under discussion."
+)
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42581_configure_unhappy.feature",

@@ -120,6 +120,12 @@ class EventRecorder(object):
                     dish_prefix = real_dish1_fqdn.replace(
                         "mid-dish/dish-manager/SKA001", ""
                     )
+                    dish_number = "".join(
+                        letter for letter in device_name if letter.isdigit()
+                    )
+                    dish_prefix = dish_prefix.replace("001", dish_number)
+
+                LOGGER.info("dish_prefix: %s", dish_prefix)
                 full_attr_name = (
                     dish_prefix + device_name + "/" + attribute_name
                 )
