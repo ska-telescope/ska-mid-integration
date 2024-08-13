@@ -206,7 +206,10 @@ k8s-pre-test: test-requirements
 
 
 PYTHON_TEST_NAME ?= ## -k parameter for pytest
-PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) -k "$(PYTHON_TEST_NAME)"
+
+ifneq ($(PYTHON_TEST_NAME),)
+	PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) -k '$(PYTHON_TEST_NAME)'
+endif
 
 # Add BDD HTML test report
 PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --bdd-report=build/bdd-report.html
