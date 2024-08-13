@@ -4,8 +4,8 @@ tag_description=
 **Charts:**
 **1. ska-tmc-integration 0.21.2 - 0.22.0*
 
-    **1.1 ska-tmc-mid - 0.21.2- 0.22.0:
-        a. TMC Mid release with base class version 1.0.0
+    **1.1 ska-tmc-mid - 0.21.2 - 0.22.0:
+        a. TMC Mid release with base class version 1.0.0 and pytango 9.5.0
 
 
 release_notes=
@@ -13,6 +13,4 @@ release_notes=
 **1. ska-tmc-integration 0.21.2 - 0.22.0:**
 
     **1.1 ska-tmc-mid - 0.21.2 - 0.22.0:
-        a. TMC Low release with base class version 1.0.0
-
-
+        a. TMC Mid release with base class version 1.0.0 and pytango 9.5.0
