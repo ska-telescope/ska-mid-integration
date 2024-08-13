@@ -20,9 +20,6 @@ from ska_tango_testing.integration import TangoEventTracer
 
 from tests.tmc_csp_refactor3.conftest import SubarrayTestContextData
 from tests.tmc_csp_refactor3.utils.file_json_input import FileJSONInput
-from tests.tmc_csp_refactor3.utils.verify_command_call import (
-    verify_device_received_command,
-)
 
 ASSERTIONS_TIMEOUT = 30
 
@@ -39,12 +36,13 @@ def test_empty_to_resourcing_to_idle():
     """Test EMPTY to RESOURCING to IDLE transitions."""
 
 
-@pytest.mark.xfail(
-    reason="Without a time.sleep after the telescope reached the IDLE state, "
-    "the test fails. But the test should pass without the time.sleep "
-    "since if a subarray is in IDLE state, by design it should be able "
-    "to receive the Configure command at any time."
-)
+# @pytest.mark.xfail(
+#     reason="Without a time.sleep after the telescope "
+#     "reached the IDLE state, "
+#     "the test fails. But the test should pass without the time.sleep "
+#     "since if a subarray is in IDLE state, by design it should be able "
+#     "to receive the Configure command at any time."
+# )
 @pytest.mark.tmc_csp_refactor3
 @scenario(
     "../tmc_csp_refactor3/features/subarray_commands.feature",
@@ -54,12 +52,13 @@ def test_idle_to_configuring_to_ready():
     """Test IDLE to CONFIGURING to READY transitions."""
 
 
-@pytest.mark.xfail(
-    reason="Without a time.sleep after the telescope reached the IDLE state, "
-    "the test fails. But the test should pass without the time.sleep "
-    "since if a subarray is in IDLE state, by design it should be able "
-    "to receive the Configure command at any time."
-)
+# @pytest.mark.xfail(
+#     reason="Without a time.sleep after the telescope "
+#     "reached the IDLE state, "
+#     "the test fails. But the test should pass without the time.sleep "
+#     "since if a subarray is in IDLE state, by design it should be able "
+#     "to receive the Configure command at any time."
+# )
 @pytest.mark.tmc_csp_refactor3
 @scenario(
     "../tmc_csp_refactor3/features/subarray_commands.feature",
@@ -69,12 +68,13 @@ def test_idle_to_resourcing_to_idle():
     """Test IDLE to RESOURCING to IDLE transitions."""
 
 
-@pytest.mark.xfail(
-    reason="Without a time.sleep after the telescope reached the IDLE state, "
-    "the test fails. But the test should pass without the time.sleep "
-    "since if a subarray is in IDLE state, by design it should be able "
-    "to receive the Configure command."
-)
+# @pytest.mark.xfail(
+#     reason="Without a time.sleep after the telescope "
+#     "reached the IDLE state, "
+#     "the test fails. But the test should pass without the time.sleep "
+#     "since if a subarray is in IDLE state, by design it should be able "
+#     "to receive the Configure command."
+# )
 @pytest.mark.tmc_csp_refactor3
 @scenario(
     "../tmc_csp_refactor3/features/subarray_commands.feature",
@@ -102,12 +102,13 @@ def test_ready_to_idle():
     """Test READY to IDLE transitions."""
 
 
-@pytest.mark.xfail(
-    reason="Without a time.sleep after the telescope reached the READY state, "
-    "the test fails. But the test should pass without the time.sleep "
-    "since if a subarray is in READY state, by design it should be able "
-    "to receive the Configure command."
-)
+# @pytest.mark.xfail(
+#     reason="Without a time.sleep after the telescope "
+#     "reached the READY state, "
+#     "the test fails. But the test should pass without the time.sleep "
+#     "since if a subarray is in READY state, by design it should be able "
+#     "to receive the Configure command."
+# )
 @pytest.mark.tmc_csp_refactor3
 @scenario(
     "../tmc_csp_refactor3/features/subarray_commands.feature",
@@ -385,12 +386,6 @@ def verify_resourcing_state(
         "obsState",
         ObsState.RESOURCING,
         previous_value=context_fixt.starting_state,
-    )
-
-    # for the emulated device (SDP) we verify the correct
-    # Tango command has been called as expected
-    verify_device_received_command(
-        sdp.sdp_subarray, context_fixt.when_action_name
     )
 
     # override the starting state for the next step

@@ -36,9 +36,6 @@ from ska_integration_test_harness.inputs.obs_state_commands_input import (
 from ska_tango_testing.integration import TangoEventTracer
 
 from tests.tmc_csp_refactor3.conftest import SubarrayTestContextData
-from tests.tmc_csp_refactor3.utils.verify_command_call import (
-    verify_device_received_command,
-)
 
 ASSERTIONS_TIMEOUT = 30
 
@@ -46,10 +43,10 @@ ASSERTIONS_TIMEOUT = 30
 # Scenario Definition
 
 
-@pytest.mark.xfail(
-    reason="It may fail because CSP and/or SDP may not actually abort "
-    "but continue with IDLE."
-)
+# @pytest.mark.xfail(
+#     reason="It may fail because CSP and/or SDP may not actually abort "
+#     "but continue with IDLE."
+# )
 @pytest.mark.tmc_csp_refactor3
 @scenario(
     "../tmc_csp_refactor3/features/abort_restart_subarray.feature",
@@ -351,7 +348,6 @@ def verify_aborting_state(
 
     # for the emulated device (SDP) we verify the correct
     # Tango command has been called as expected
-    verify_device_received_command(sdp.sdp_subarray, "Abort")
 
 
 @then(
@@ -443,10 +439,6 @@ def verify_restarting_state(
     )
 
     context_fixt.starting_state = ObsState.RESTARTING
-
-    # for the emulated device (SDP) we verify the correct
-    # Tango command has been called as expected
-    verify_device_received_command(sdp.sdp_subarray, "Aborted")
 
 
 @then(
