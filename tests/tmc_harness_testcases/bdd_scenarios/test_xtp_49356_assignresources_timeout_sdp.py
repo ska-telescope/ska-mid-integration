@@ -20,7 +20,6 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
-@pytest.mark.test1
 @pytest.mark.repeat(10)
 @pytest.mark.SKA_mid
 @scenario(
