@@ -82,4 +82,5 @@ def check_timeout_error(
         in json.loads(assertion_data["attribute_value"][1])[1]
     )
 
+    # Reset Defect
     pytest.csp_sim.SetDefective(RESET_DEFECT)
