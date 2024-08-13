@@ -2,6 +2,8 @@
 import json
 
 import pytest
+import logging
+from ska_ser_logging import configure_logging
 from pytest_bdd import scenario, then, when
 from ska_tango_testing.mock.placeholders import Anything
 
@@ -13,8 +15,10 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_harness.simulator_factory import SimulatorFactory
 from tests.resources.test_harness.utils.common_utils import JsonFactory
+configure_logging(logging.DEBUG)
+LOGGER = logging.getLogger(__name__)
 
-
+@pytest.mark.test1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/"
@@ -71,6 +75,8 @@ def check_timeout_error(
         (pytest.command_result[1][0], Anything),
         lookahead=20,
     )
+    LOGGER.info(f"result:{pytest.command_result}")
+    LOGGER.info(f"assertion_data:{assertion_data}")
     exception_message = "Timeout has occurred, command failed"
     assert (
         exception_message
