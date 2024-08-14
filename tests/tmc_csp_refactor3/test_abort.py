@@ -244,9 +244,7 @@ def send_abort_command(
     """
     subarray_node_facade.abort(wait_termination=False)
 
-    if (
-        context_fixt.is_starting_state_transient()
-    ):
+    if context_fixt.is_starting_state_transient():
         assert_that(event_tracer).described_as(
             "FAILED ASSUMPTION: "
             "TMC Subarray Node device "

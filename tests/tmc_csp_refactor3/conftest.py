@@ -68,7 +68,7 @@ def telescope_wrapper(
     )
     test_harness_builder.validate_configurations()
 
-    # set the default inputs for the TMC commands 
+    # set the default inputs for the TMC commands
     # (that will be mainly used in the various reset procedures)
     test_harness_builder.default_inputs.assign_input = (
         ASSING_CENTRAL_NODE_INPUT
@@ -84,7 +84,7 @@ def telescope_wrapper(
         DEFAULT_VCC_CONFIG_INPUT
     )
     test_harness_builder.validate_default_inputs()
-    
+
     # build the wrapper of the telescope and it's sub-systems
     telescope = test_harness_builder.build()
     yield telescope
