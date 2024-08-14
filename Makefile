@@ -212,7 +212,7 @@ ifneq ($(PYTHON_TEST_NAME),)
 endif
 
 # Add BDD report output 
-PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --cucumberjson=$(XRAY_TEST_RESULT_FILE) --json-report --json-report-file=build/report.json
+# PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --cucumberjson=$(XRAY_TEST_RESULT_FILE) --json-report --json-report-file=build/report.json
 
 # Add BDD HTML test report
 PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --bdd-report=build/bdd-report.html
