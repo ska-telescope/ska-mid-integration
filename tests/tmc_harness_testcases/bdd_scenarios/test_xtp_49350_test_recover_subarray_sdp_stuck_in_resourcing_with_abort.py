@@ -22,7 +22,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 )
 def test_recover_subarray_stuck_in_resourcing() -> None:
     """
-    Test case to verify Assignresources with SDP is defective.
+    Test case to verify Assignresources with SDP defective.
     """
 
 
