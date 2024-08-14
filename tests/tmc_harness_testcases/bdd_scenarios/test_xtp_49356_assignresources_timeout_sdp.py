@@ -16,14 +16,10 @@ from tests.resources.test_harness.simulator_factory import SimulatorFactory
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
-# from ska_tango_testing.mock.placeholders import Anything
-
-
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
-@pytest.mark.test1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/"
@@ -74,23 +70,6 @@ def check_timeout_error(
     event_recorder.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
     )
-    # assertion_data = event_recorder.has_change_event_occurred(
-    #     central_node_mid.central_node,
-    #     "longRunningCommandResult",
-    #     (pytest.command_result[1][0], Anything),
-    #     lookahead=20,
-    # )
-    # LOGGER.info(f"result:{pytest.command_result}")
-    # LOGGER.info(f"assertion_data:{assertion_data}")
-    # exception_message = "Timeout has occurred, command failed"
-    # assert (
-    #         ResultCode.REJECTED
-    #         == json.loads(assertion_data["attribute_value"][1])[0]
-    #     )
-    # assert (
-    #     exception_message
-    #     in json.loads(assertion_data["attribute_value"][1])[1]
-    # )
     event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
