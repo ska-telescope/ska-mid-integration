@@ -59,17 +59,17 @@ def telescope_wrapper(
     default_commands_inputs: ObsStateCommandsInput,
 ) -> TelescopeWrapper:
     """Create an unique test harness with proxies to all devices."""
-    # logging.info("Test harness verision: %s", dummy_version())
-    # components_factory = TelescopeStructureFactory(
-    #     default_commands_inputs, DEFAULT_VCC_CONFIG_INPUT
-    # )
-    # telescope = components_factory.init_telescope_test_structure()
-
     test_harness_builder = TestHarnessBuilder()
+
+    # import from a configuration file device names and emulation directives
+    # for TMC, CSP, SDP and the Dishes
     test_harness_builder.read_from_file(
         "tests/tmc_csp_refactor3/test_harness_config.yaml"
     )
     test_harness_builder.validate_configurations()
+
+    # set the default inputs for the TMC commands 
+    # (that will be mainly used in the various reset procedures)
     test_harness_builder.default_inputs.assign_input = (
         ASSING_CENTRAL_NODE_INPUT
     )
@@ -84,9 +84,13 @@ def telescope_wrapper(
         DEFAULT_VCC_CONFIG_INPUT
     )
     test_harness_builder.validate_default_inputs()
-
+    
+    # build the wrapper of the telescope and it's sub-systems
     telescope = test_harness_builder.build()
     yield telescope
+
+    # after a test is completed, reset the telescope to its initial state
+    # (obsState=READY, telescopeState=OFF, no resources assigned)
     telescope.tear_down()
 
     # NOTE: As the code is organized now, I cannot anticipate the

@@ -246,9 +246,7 @@ def send_abort_command(
 
     if (
         context_fixt.is_starting_state_transient()
-    ):  # TODO: it is not a responsibility of the context fixture to know
-        # if a state is transional or not.
-        # move this to a SA wrapper
+    ):
         assert_that(event_tracer).described_as(
             "FAILED ASSUMPTION: "
             "TMC Subarray Node device "
