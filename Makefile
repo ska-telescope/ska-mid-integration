@@ -66,7 +66,14 @@ K8S_TEST_IMAGE_TO_TEST ?= artefact.skao.int/ska-tango-images-tango-itango:9.3.12
 TARANTA_ENABLED ?= false
 
 CI_PROJECT_DIR ?= .
-XRAY_TEST_RESULT_FILE = "build/cucumber.json"
+
+# test results files
+CUCUMBER_JSON_RESULT_FILE ?= build/cucumber.json
+REPORT_JSON_RESULT_FILE ?= build/report.json
+XRAY_TEST_RESULT_FILE ?= build/cucumber.json
+XRAY_EXECUTION_CONFIG_FILE ?= tests/xray-config.json
+
+
 XAUTHORITY ?= $(HOME)/.Xauthority
 THIS_HOST := $(shell ip a 2> /dev/null | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p' | head -n1)
 DISPLAY ?= $(THIS_HOST):0
@@ -212,7 +219,7 @@ ifneq ($(PYTHON_TEST_NAME),)
 endif
 
 # Add BDD report output 
-# PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --cucumberjson=$(XRAY_TEST_RESULT_FILE) --json-report --json-report-file=build/report.json
+PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --cucumberjson=$(CUCUMBER_JSON_RESULT_FILE) --json-report --json-report-file=$(REPORT_JSON_RESULT_FILE)
 
 # Add BDD HTML test report
 PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --bdd-report=build/bdd-report.html
