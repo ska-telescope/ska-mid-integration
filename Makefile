@@ -218,8 +218,9 @@ ifneq ($(PYTHON_TEST_NAME),)
 	PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) -k '$(PYTHON_TEST_NAME)'
 endif
 
+# Add BDD HTML test report
+PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --bdd-report="build/bdd-report.html"
+
 # Add BDD report output 
 PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --cucumberjson=$(CUCUMBER_JSON_RESULT_FILE) --json-report --json-report-file=$(REPORT_JSON_RESULT_FILE)
 
-# Add BDD HTML test report
-PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --bdd-report="build/bdd-report.html"
