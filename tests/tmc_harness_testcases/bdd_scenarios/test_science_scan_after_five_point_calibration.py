@@ -110,6 +110,7 @@ def a_subarray_after_five_point_calibration(
     event_tracer: TangoEventTracer,
     simulator_factory,
     command_input_factory: JsonFactory,
+    correction_key,
 ):
     """Given a Subarray after the five point Calibration scan."""
     sdp_sim = simulator_factory.get_or_create_simulator_device(
@@ -154,10 +155,13 @@ def a_subarray_after_five_point_calibration(
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
+    # Update the configuration with the correction key
+    configure_data = json.loads(configure_input_json)
+    configure_data["pointing"]["correction"] = correction_key
+    configure_input_str = json.dumps(configure_data)
     _, unique_id = subarray_node.execute_transition(
-        "Configure", configure_input_json
+        "Configure", configure_input_str
     )
-
     assert_that(event_tracer).described_as(
         "FAILED ASSUMPTION AFTER CONFIGURE COMMAND: "
         "Subarray Node device"
