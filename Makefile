@@ -5,7 +5,7 @@
 #
 CAR_OCI_REGISTRY_HOST ?= artefact.skao.int
 CAR_OCI_REGISTRY_USERNAME ?= ska-telescope
-PROJECT_NAME = ska-jupyter-scripting
+PROJECT_NAME = ska-mid-integration
 
 KUBE_APP ?= ska-mid-integration
 KUBE_NAMESPACE ?= ska-mid-integration
