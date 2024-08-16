@@ -101,12 +101,13 @@ deploy-mid-integration:
   extends: deploy-integration
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  # Added the kubeconfig
   variables:
     KUBE_NAMESPACE: "integration-ska-mid"
-  environment:
-    name: integration-ska-mid
-    on_stop: stop-mid-integration
-
+    SERVICE_ACCOUNT: "ci-svc-$CI_COMMIT_REF_NAME"
+  before_script:
+    - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
+    
 info-mid-integration:
   extends: info-integration
   rules:
@@ -134,8 +135,12 @@ redeploy-mid-integration:
   extends: redeploy-integration
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  # Added the kubeconfig
   variables:
     KUBE_NAMESPACE: "integration-ska-mid"
+    SERVICE_ACCOUNT: "ci-svc-$CI_COMMIT_REF_NAME"
+  before_script:
+    - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
   environment:
     name: integration-ska-mid
 
