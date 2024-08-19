@@ -1,5 +1,6 @@
 import json
 import logging
+from datetime import datetime
 
 from ska_ser_logging import configure_logging
 
@@ -414,6 +415,10 @@ class Waiter:
 
     def wait(self, timeout=30, resolution=0.1):
         self.logs = ""
+
+        now = datetime.now()
+        current_time = now.strftime("%d/%m/%Y %H:%M:%S:%f")
+        LOGGER.info("Start Time for wait : %s", current_time)
         while self.waits:
             wait = self.waits.pop()
             if isinstance(wait, AttributeWatcher):
@@ -454,6 +459,9 @@ class Waiter:
                     )
                 )
         if self.timed_out:
+            now = datetime.now()
+            current_time = now.strftime("%d/%m/%Y %H:%M:%S:%f")
+            LOGGER.info("Start Time for wait : %s", current_time)
             raise Exception(
                 "timed out, the following timeouts ocurred:\n{} Successful\
                       changes:\n{}".format(
