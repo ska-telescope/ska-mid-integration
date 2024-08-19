@@ -211,6 +211,9 @@ test-requirements:
 
 k8s-pre-test: test-requirements
 
+# k8s-post-test:
+# 	@echo "k8s-post-test: moving cucumber report to $(CUCUMBER_JSON_RESULT_FILE)"
+# 	mv .cucumber-data.json $(CUCUMBER_JSON_RESULT_FILE)
 
 PYTHON_TEST_NAME ?= ## -k parameter for pytest
 
@@ -226,4 +229,5 @@ PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --cucumberjson="$(CUCUMB
 # PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --bdd-report="build/report.html"
 
 xray-post-publish:
-	echo $(CONFIGURATION_URL)
+	@echo "XRAY OUTPUT (CONFIGURATION_URL):"
+	@echo $(CONFIGURATION_URL)
