@@ -61,7 +61,8 @@ SDP_SUBARRAY_PREFIX ?= tango://$(TANGO_HOST_NAME).$(KUBE_NAMESPACE).svc.$(CLUSTE
 
 CI_REGISTRY ?= gitlab.com
 
-K8S_TEST_IMAGE_TO_TEST ?= artefact.skao.int/ska-tango-images-tango-itango:9.3.12## docker image that will be run for testing purpose
+# K8S_TEST_IMAGE_TO_TEST ?= artefact.skao.int/ska-tango-images-tango-itango:9.3.12## docker image that will be run for testing purpose
+K8S_TEST_IMAGE_TO_TEST ?= harbor.skao.int/production/ska-tango-images-pytango-builder:9.4.2 
 
 TARANTA_ENABLED ?= false
 
@@ -231,10 +232,10 @@ xray-post-publish:
 	@echo $(CONFIGURATION_URL)
 
 # BDD report output must be moved in the correct location
-k8s-post-test:
-	# if the file is not already in the correct location, move it
-	if [ ! -f $(CUCUMBER_JSON_RESULT_FILE) ]; then \
-		echo "k8s-post-test: moving cucumber report to $(CUCUMBER_JSON_RESULT_FILE)"; \
-		mv /app/.cucumber-data.json /app/$(CUCUMBER_JSON_RESULT_FILE); \
-	fi
+# k8s-post-test:
+# 	# if the file is not already in the correct location, move it
+# 	if [ ! -f $(CUCUMBER_JSON_RESULT_FILE) ]; then \
+# 		echo "k8s-post-test: moving cucumber report to $(CUCUMBER_JSON_RESULT_FILE)"; \
+# 		mv /app/.cucumber-data.json /app/$(CUCUMBER_JSON_RESULT_FILE); \
+# 	fi
 	
