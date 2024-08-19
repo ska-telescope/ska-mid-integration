@@ -223,4 +223,7 @@ endif
 PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --cucumberjson="$(CUCUMBER_JSON_RESULT_FILE)" --json-report --json-report-file="$(REPORT_JSON_RESULT_FILE)"
 
 # Add BDD HTML test report
-PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --bdd-report="build/report.html"
+# PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --bdd-report="build/report.html"
+
+xray-post-publish:
+	echo $(CONFIGURATION_URL)
