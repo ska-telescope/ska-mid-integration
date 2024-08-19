@@ -211,9 +211,6 @@ test-requirements:
 
 k8s-pre-test: test-requirements
 
-# k8s-post-test:
-# 	@echo "k8s-post-test: moving cucumber report to $(CUCUMBER_JSON_RESULT_FILE)"
-# 	mv .cucumber-data.json $(CUCUMBER_JSON_RESULT_FILE)
 
 PYTHON_TEST_NAME ?= ## -k parameter for pytest
 
@@ -226,8 +223,18 @@ endif
 PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --cucumberjson="$(CUCUMBER_JSON_RESULT_FILE)" --json-report --json-report-file="$(REPORT_JSON_RESULT_FILE)"
 
 # Add BDD HTML test report
-# PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --bdd-report="build/report.html"
+PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --bdd-report="build/report.html"
 
+# Debug print the XRAY output
 xray-post-publish:
 	@echo "XRAY OUTPUT (CONFIGURATION_URL):"
 	@echo $(CONFIGURATION_URL)
+
+# BDD report output must be moved in the correct location
+k8s-post-test:
+	# if the file is not already in the correct location, move it
+	if [ ! -f $(CUCUMBER_JSON_RESULT_FILE) ]; then \
+		echo "k8s-post-test: moving cucumber report to $(CUCUMBER_JSON_RESULT_FILE)"; \
+		mv .cucumber-data.json $(CUCUMBER_JSON_RESULT_FILE); \
+	fi
+	
