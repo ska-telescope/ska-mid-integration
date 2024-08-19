@@ -235,6 +235,6 @@ k8s-post-test:
 	# if the file is not already in the correct location, move it
 	if [ ! -f $(CUCUMBER_JSON_RESULT_FILE) ]; then \
 		echo "k8s-post-test: moving cucumber report to $(CUCUMBER_JSON_RESULT_FILE)"; \
-		mv .cucumber-data.json $(CUCUMBER_JSON_RESULT_FILE); \
+		mv /app/.cucumber-data.json /app/$(CUCUMBER_JSON_RESULT_FILE); \
 	fi
 	
