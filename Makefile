@@ -230,12 +230,3 @@ PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --bdd-report="build/repo
 xray-post-publish:
 	@echo "XRAY OUTPUT (CONFIGURATION_URL):"
 	@echo $(CONFIGURATION_URL)
-
-# BDD report output must be moved in the correct location
-# k8s-post-test:
-# 	# if the file is not already in the correct location, move it
-# 	if [ ! -f $(CUCUMBER_JSON_RESULT_FILE) ]; then \
-# 		echo "k8s-post-test: moving cucumber report to $(CUCUMBER_JSON_RESULT_FILE)"; \
-# 		mv /app/.cucumber-data.json /app/$(CUCUMBER_JSON_RESULT_FILE); \
-# 	fi
-	

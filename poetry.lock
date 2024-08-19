@@ -1595,8 +1595,8 @@ pytest-bdd = ">=5.0.0,<7.0.0"
 [package.source]
 type = "git"
 url = "https://github.com/EmanueleIDS/pytest-bdd-report.git"
-reference = "dynamic-cucumber-bdd-json"
-resolved_reference = "d9cea1ba309ae5237bc7029a985533c47010167c"
+reference = "main"
+resolved_reference = "23812acbe7b2094a4f9fa1ac007460b9a6adbe92"
 
 [[package]]
 name = "pytest-cov"
@@ -2742,4 +2742,4 @@ reference = "PyPI-public"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "ecad57f07d7ec66964162894e57a35ad14e48ea1c03500333b17d5ba5963341c"
+content-hash = "59dc9121e6d223e7fde93244704da245edf59086118c77184cd2400b318c2f2a"
