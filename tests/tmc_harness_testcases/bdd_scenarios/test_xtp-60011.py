@@ -30,10 +30,10 @@ TIMEOUT = 110
 
 @pytest.mark.SKA_mid
 @scenario(
-    "../features/test_harness/science_scan_after_calibration_scan.feature",
-    "TMC Behavior During a Five-Point Calibration Scan",
+    "../features/test_harness/xtp-60011_configure_with_correction_key.feature",
+    "TMC Behavior During correction key handling",
 )
-def test_science_scan_after_five_point_calibration_scan():
+def test_tmc_dish_configure_with_correction_key():
     """
     Test case to verify the Science scan functionality after a five point
     calibration scan on TMC
@@ -103,7 +103,10 @@ def given_tmc(
     event_tracer.clear_events()
 
 
-@when("five point calibration scan performed on given subarray")
+@when(
+    "five point calibration scan performed on given "
+    "subarray using {correction_key}"
+)
 def a_subarray_after_five_point_calibration(
     central_node_mid: CentralNodeWrapperMid,
     subarray_node: SubarrayNodeWrapper,
@@ -155,7 +158,10 @@ def a_subarray_after_five_point_calibration(
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    configure_input_str = json.dumps(configure_input_json)
+    # Update the configuration with the correction key
+    configure_data = json.loads(configure_input_json)
+    configure_data["pointing"]["correction"] = correction_key
+    configure_input_str = json.dumps(configure_data)
     _, unique_id = subarray_node.execute_transition(
         "Configure", configure_input_str
     )
@@ -221,7 +227,7 @@ def a_subarray_after_five_point_calibration(
 
 
 @then(
-    "the dish leaf node receive calibration solutions from SDP and "
+    "the dish leaf node receive correction key from SDP and "
     + "applies them to the Dishes"
 )
 def subarray_applies_calibration_solutions_to_dishes(
