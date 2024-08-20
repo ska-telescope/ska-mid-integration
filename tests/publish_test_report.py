@@ -24,7 +24,7 @@ def print_env_vars() -> str:
     return msg
 
 
-def search_jira_execution_issue() -> str:
+def search_jira_execution_issue() -> list[dict]:
     """Search for the Jira issue that corresponds to the current CI job."""
     if not CI_JOB_URL or not JIRA_URL or not JIRA_AUTH or not PROJECT_KEY:
         raise ValueError("Missing environment variables: " + print_env_vars())
@@ -66,8 +66,8 @@ def search_jira_execution_issue() -> str:
     return issues
 
 
-def publish_test_report_on_issue(issue) -> str:
-
+def publish_test_report_on_issue(issue) -> None:
+    """Update the JIRA issue with the test report."""
     issue_ticket = issue["key"]
 
     update_api_path = f"/rest/api/2/issue/{issue_ticket}"
