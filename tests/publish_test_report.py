@@ -2,6 +2,7 @@
 
 import logging
 import os
+import sys
 
 import requests
 
@@ -64,8 +65,16 @@ def get_new_text_with_report_links() -> str:
     The new text contains:
     - a link to the HTML execution report
     """
+    # The CI_JOB_URL is like:
+    # https://gitlab.com/ska-telescope/ska-tmc/ska-tmc-mid-integration/-/jobs/7620579897
+    # While instead to reach the report we need to use:
+    # https://ska-telescope.gitlab.io/-/ska-tmc/ska-tmc-mid-integration/-/jobs/7620579897
+    job_base_url = CI_JOB_URL.replace(
+        "gitlab.com", "ska-telescope.gitlab.io/-"
+    )
+
     new_text = "\n\nHTML BDD execution report: "
-    new_text += CI_JOB_URL + "/artifacts/browse/build/report.html"
+    new_text += job_base_url + "/artifacts/build/report.html"
     new_text += "\n\n"
     return new_text
 
@@ -121,6 +130,7 @@ if __name__ == "__main__":
             "No JIRA Test Execution issue found for this CI job. "
             "We cannot publish the further test reports to JIRA."
         )
+        sys.exit(1)
 
     print_issues_links(issues)
 
