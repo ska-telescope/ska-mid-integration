@@ -52,7 +52,6 @@ The script raises an exception if any of the required steps fails.
 
 import logging
 import os
-from urllib.parse import urljoin
 
 import requests
 
@@ -63,12 +62,22 @@ CI_JOB_URL = os.getenv("CI_JOB_URL")
 """The expected URL of the current CI job.
 
 Example: https://gitlab.com/ska-telescope/ska-tmc/ska-tmc-mid-integration/-/jobs/7620579897
+
+NOTE: Do not put a final slash in the path
+(e.g., avoid
+https://gitlab.com/ska-telescope/ska-tmc/ska-tmc-mid-integration/-/jobs/7620579897/
+and use instead
+https://gitlab.com/ska-telescope/ska-tmc/ska-tmc-mid-integration/-/jobs/7620579897).
 """  # pylint: disable=line-too-long # noqa: E501
 
 JIRA_URL = os.getenv("JIRA_URL")
 """The URL of the JIRA instance.
 
 Example: https://jira.skatelescope.org
+
+NOTE: Do not put a final slash in the path
+(e.g., avoid https://jira.skatelescope.org/ and use instead
+https://jira.skatelescope.org).
 """
 
 JIRA_AUTH = os.getenv("JIRA_AUTH")
@@ -142,9 +151,7 @@ def get_report_link() -> str:
     artifact_job_base_url = CI_JOB_URL.replace(
         "gitlab.com/ska-telescope", "ska-telescope.gitlab.io/-"
     )
-    return urljoin(
-        artifact_job_base_url, "artifacts/" + HTML_REPORT_TARGET_FILE
-    )
+    return artifact_job_base_url + "/artifacts/" + HTML_REPORT_TARGET_FILE
 
 
 MARKDOWN_REPORT_DESCRIPTION_TEMPLATE = (
@@ -286,7 +293,7 @@ def get_issue_link(issue) -> str:
 
     :return: the link to the JIRA issue.
     """
-    return urljoin(JIRA_URL, f"browse/{issue['key']}")
+    return JIRA_URL + "/browse/" + issue["key"]
 
 
 def print_issues_links(issues):
