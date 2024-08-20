@@ -235,24 +235,4 @@ xray-post-publish:
 
 	@echo "publish report.html to XRAY done!"
 
-	# @echo "CI_JOB_URL:"
-	# @echo $(CI_JOB_URL)
-
-	# @echo "JIRA_TICKET:"
-	# @echo $(JIRA_TICKET)
-
-	# @echo "JIRA_USERNAME:"
-	# @echo $(JIRA_USERNAME)
-
-	# @echo "JIRA_URL:"
-	# @echo $(JIRA_URL)
-
-	# @echo "JIRA_AUTH:"
-	# if [ -z "$(JIRA_AUTH)" ]; then echo "JIRA_AUTH is not set"; else echo "JIRA_AUTH is set"; fi
-
-	# @echo "JIRA_PASSWORD:"
-	# if [ -z "$(JIRA_PASSWORD)" ]; then echo "JIRA_PASSWORD is not set"; else echo "JIRA_PASSWORD is set"; fi
-
-
-
 	
