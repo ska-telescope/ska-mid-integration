@@ -31,7 +31,7 @@ def search_jira_execution_issue() -> list[dict]:
 
     query = (
         f'project = "{PROJECT_KEY}" '
-        'AND issuetype = "TestExecution" '
+        'AND issuetype = "Test Execution" '
         f'AND description ~ "{CI_JOB_URL}"'
     )
 
