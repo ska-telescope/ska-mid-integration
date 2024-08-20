@@ -28,6 +28,7 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 TIMEOUT = 110
 
 
+@pytest.mark.skip("reason=Supported json not present")
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/science_scan_after_calibration_scan.feature",
