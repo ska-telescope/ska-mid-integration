@@ -84,7 +84,7 @@ subarraynode:
   image:
     registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-subarraynode
     image: ska-tmc-subarraynode
-    tag: 0.23.0-rc-dev.c208e31f0
+    tag: 0.23.0-dev.c3ba02cee
     pullPolicy: IfNotPresent
 
 
@@ -99,14 +99,14 @@ cspmasterleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.19.1
+    tag: 0.19.3
     pullPolicy: IfNotPresent
 
 cspsubarrayleafnode:
   image:
-    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-cspleafnodes
+    registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.19.2-dev.ca1d811c5
+    tag: 0.19.3
     pullPolicy: IfNotPresent
 
 dishleafnode:
@@ -118,10 +118,10 @@ dishleafnode:
 
 resources:
   limits:
-    memory: 2000Mi
+    memory: 3000Mi
   requests:
-    cpu: 500m
-    memory: 1000Mi
+    cpu: 1000m
+    memory: 2000Mi
 
 
 deviceServers:
