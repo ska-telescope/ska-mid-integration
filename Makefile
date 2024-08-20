@@ -73,6 +73,7 @@ CUCUMBER_JSON_RESULT_FILE ?= build/cucumber.json
 REPORT_JSON_RESULT_FILE ?= build/report.json
 XRAY_TEST_RESULT_FILE ?= build/cucumber.json
 XRAY_EXECUTION_CONFIG_FILE ?= tests/xray-config.json
+HTML_REPORT_TARGET_FILE ?= build/report.html
 
 
 XAUTHORITY ?= $(HOME)/.Xauthority
@@ -224,15 +225,9 @@ endif
 PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --cucumberjson="$(CUCUMBER_JSON_RESULT_FILE)" --json-report --json-report-file="$(REPORT_JSON_RESULT_FILE)"
 
 # Add BDD HTML test report
-PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --bdd-report="build/report.html"
+PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --bdd-report="$(HTML_REPORT_TARGET_FILE)"
 
 # Debug print the XRAY output
 xray-post-publish:
-	@echo "XRAY OUTPUT (CONFIGURATION_URL):"
-	@echo $(CONFIGURATION_URL)
-
 	python3 -m tests.publish_test_report 
-
-	@echo "publish report.html to XRAY done!"
-
 	
