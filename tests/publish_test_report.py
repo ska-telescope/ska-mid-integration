@@ -64,8 +64,10 @@ def get_new_text_with_report_links() -> str:
     The new text contains:
     - a link to the HTML execution report
     """
-    new_text = "HTML BDD execution report: "
+    new_text = "\n\nHTML BDD execution report: "
     new_text += CI_JOB_URL + "/artifacts/browse/build/report.html"
+    new_text += "\n\n"
+    return new_text
 
 
 def append_text_to_issue_description(issue, new_text) -> None:
