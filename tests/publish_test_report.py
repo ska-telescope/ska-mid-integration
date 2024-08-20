@@ -39,9 +39,7 @@ def search_jira_execution_issue() -> list[dict]:
     search_api_url = f"{JIRA_URL}{search_api_path}"
 
     logging.info(
-        "Searching JIRA tickets with query: %s (API URL: GET %s)",
-        query,
-        search_api_url,
+        "Searching a JIRA ticket containing the CI job URL: %s", CI_JOB_URL
     )
 
     # Perform the search
@@ -60,27 +58,32 @@ def search_jira_execution_issue() -> list[dict]:
     return response.json().get("issues", [])
 
 
-def publish_test_report_on_issue(issue) -> None:
+def get_new_text_with_report_links() -> str:
+    """Return the new text to append to the JIRA issue description.
+
+    The new text contains:
+    - a link to the HTML execution report
+    """
+    new_text = "HTML BDD execution report: "
+    new_text += CI_JOB_URL + "/artifacts/browse/build/report.html"
+
+
+def append_text_to_issue_description(issue, new_text) -> None:
     """Update the JIRA issue with the test report."""
     issue_ticket = issue["key"]
 
     update_api_path = f"/rest/api/2/issue/{issue_ticket}"
     update_api_url = f"{JIRA_URL}{update_api_path}"
 
-    new_description = issue["fields"]["description"]
-    new_description += f"Hello world! This is a test update for {issue_ticket}"
-
     update_payload = {
         "fields": {
-            "description": new_description,
+            "description": issue["fields"]["description"] + new_text,
         }
     }
 
     logging.info(
-        "Updating JIRA ticket %s with payload: %s (API URL: POST %s)",
+        "Updating JIRA ticket %s description with links to generated reports",
         issue_ticket,
-        update_payload,
-        update_api_url,
     )
 
     response = requests.put(
@@ -98,6 +101,14 @@ def publish_test_report_on_issue(issue) -> None:
         logging.error(msg)
 
 
+def print_issues_links(issues):
+    """Print the links to the JIRA issues."""
+    issues_msg = "This job is related to the following JIRA issues:"
+    for issue in issues:
+        issues_msg += f"\n- {JIRA_URL}/browse/{issue['key']}"
+    logging.info(issues_msg)
+
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
 
@@ -109,10 +120,14 @@ if __name__ == "__main__":
             "We cannot publish the further test reports to JIRA."
         )
 
+    print_issues_links(issues)
+
     if len(issues) > 1:
         logging.warning(
             "Found multiple JIRA Test Execution issues "
             "referring to this CI job. We will update just the first one."
         )
 
-    publish_test_report_on_issue(issues[0])
+    append_text_to_issue_description(
+        issues[0], get_new_text_with_report_links()
+    )
