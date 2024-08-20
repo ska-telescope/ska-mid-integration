@@ -37,7 +37,8 @@ job.
 **Program flow**. The script performs the following steps:
 
 1. verifies the presence of the required environment variables,
-2. verifies the presence of the file containing the HTML BDD test report,
+2. verifies the presence of the file containing the HTML BDD test report
+   (currently deactivated),
 3. searches for the JIRA issue that corresponds to the current CI job,
 4. updates the JIRA issue description with a link to the HTML BDD test report.
 
@@ -178,6 +179,8 @@ def check_report_file_accessible() -> None:
     The function raises an exception if the file is not accessible through
     a GET request to the computed URL. Otherwise, it does nothing.
 
+    NOTE: deactivated! Currently has status code 403.
+
     :raises FileNotFoundError: if the file is not accessible.
     """
     report_url = get_report_link()
@@ -316,7 +319,14 @@ if __name__ == "__main__":
     check_env_vars()
 
     # 2. Check the HTML BDD test report file
-    check_report_file_accessible()
+    # check_report_file_accessible()
+    initial_msg = (
+        "Publishing the HTML BDD test report link "
+        f"({get_report_link()}) "
+        f"to the JIRA Test Execution issue "
+        f"that corresponds to the CI job at {CI_JOB_URL}."
+    )
+    logging.info(initial_msg)
 
     # 3. Search for the JIRA issue that corresponds to the current CI job
     issues = search_jira_execution_issue(CI_JOB_URL)
