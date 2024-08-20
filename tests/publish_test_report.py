@@ -142,7 +142,9 @@ def get_report_link() -> str:
     artifact_job_base_url = CI_JOB_URL.replace(
         "gitlab.com/ska-telescope", "ska-telescope.gitlab.io/-"
     )
-    return urljoin(artifact_job_base_url, "artifacts", HTML_REPORT_TARGET_FILE)
+    return urljoin(
+        artifact_job_base_url, "artifacts/" + HTML_REPORT_TARGET_FILE
+    )
 
 
 MARKDOWN_REPORT_DESCRIPTION_TEMPLATE = (

@@ -227,7 +227,8 @@ PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --cucumberjson="$(CUCUMB
 # Add BDD HTML test report
 PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --bdd-report="$(HTML_REPORT_TARGET_FILE)"
 
-# Debug print the XRAY output
+# Publish the BDD HTML test report to the just published
+# Jira test execution issue
 xray-post-publish:
 	python3 -m tests.publish_test_report 
 	
