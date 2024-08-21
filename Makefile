@@ -273,6 +273,6 @@ endif
 # Jira test execution issue
 xray-post-publish:
 	if [ -f "$(HTML_REPORT_TARGET_FILE)" ]; then \
-		@echo "Publishing the BDD HTML test report to the Jira test execution issue"
-		python3 -m tests.publish_test_report 
+		@echo "Publishing the BDD HTML test report to the Jira test execution issue"; \
+		python3 -m tests.publish_test_report; \
 	fi
