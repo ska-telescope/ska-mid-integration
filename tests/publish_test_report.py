@@ -31,7 +31,7 @@ job.
 **Constants**:
 
 - a fixed ``PROJECT_KEY="XTP"`` is used to identify the project in JIRA,
-- a default ``MARKDOWN_REPORT_DESCRIPTION_TEMPLATE`` is used to create the
+- a default ``REPORT_DESCRIPTION_TEMPLATE`` is used to create the
   text to append to the JIRA issue description.
 
 **Program flow**. The script performs the following steps:
@@ -155,12 +155,17 @@ def get_report_link() -> str:
     return artifact_job_base_url + "/artifacts/" + HTML_REPORT_TARGET_FILE
 
 
-MARKDOWN_REPORT_DESCRIPTION_TEMPLATE = (
-    "\n\nHTML BDD execution report: [link]({report_link})\n\n"
-    "**NOTE**: The link may be not anymore valid after the CI job expiration. "
+REPORT_DESCRIPTION_TEMPLATE = (
+    "\n\nHTML BDD execution report: {report_link}\n\n"
+    "*NOTE*: The link may be not anymore valid after the CI job expiration. "
     "If you think this report is expired, check the latest CI job ticket "
     "for your branch.\n\n"
 )
+"""The template to the text to append to the JIRA issue description
+to describe the HTML BDD test report.
+
+It has a placeholder for the report link.
+"""
 
 
 def get_report_description() -> str:
@@ -168,9 +173,7 @@ def get_report_description() -> str:
 
     :return: the description to append to the JIRA issue.
     """
-    return MARKDOWN_REPORT_DESCRIPTION_TEMPLATE.format(
-        report_link=get_report_link()
-    )
+    return REPORT_DESCRIPTION_TEMPLATE.format(report_link=get_report_link())
 
 
 def check_report_file_accessible() -> None:
@@ -315,11 +318,6 @@ def print_issues_links(issues):
 if __name__ == "__main__":
     logging.basicConfig(level=logging.DEBUG)
 
-    # 1. Check the environment variables
-    check_env_vars()
-
-    # 2. Check the HTML BDD test report file
-    # check_report_file_accessible()
     initial_msg = (
         "Publishing the HTML BDD test report link "
         f"({get_report_link()}) "
@@ -327,6 +325,14 @@ if __name__ == "__main__":
         f"that corresponds to the CI job at {CI_JOB_URL}."
     )
     logging.info(initial_msg)
+
+    # 1. Check the environment variables
+    check_env_vars()
+
+    # 2. Check the HTML BDD test report file
+    # NOTE: currently deactivated because the report may not be accessible
+    # to a non-logged user.
+    # check_report_file_accessible()
 
     # 3. Search for the JIRA issue that corresponds to the current CI job
     issues = search_jira_execution_issue(CI_JOB_URL)
