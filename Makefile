@@ -241,10 +241,16 @@ endif
 # then be published in the artifacts and that will be linked in the 
 # Jira ticket of the test execution.
 
+# target file names for the cucumber-related test results json files
 CUCUMBER_JSON_RESULT_FILE ?= build/cucumber.json
 REPORT_JSON_RESULT_FILE ?= build/report.json
 XRAY_TEST_RESULT_FILE ?= build/cucumber.json
+
+# configuration file for ska-ser-xray to publish the test results to Jira
 XRAY_EXECUTION_CONFIG_FILE ?= tests/xray-config.json
+
+# target file name for the BDD test report in HTML format
+# Leave or set to empty to disable the HTML BDD test report generation
 HTML_REPORT_TARGET_FILE ?= build/report.html
 
 # ----------------------------------------------------------------------------
@@ -256,13 +262,17 @@ PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) \
 	--json-report \
 	--json-report-file="$(REPORT_JSON_RESULT_FILE)"
 
-# Add BDD HTML test report
-PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) \
-	--bdd-report="$(HTML_REPORT_TARGET_FILE)"
+# Add BDD HTML test report (if enabled)
+ifneq ($(HTML_REPORT_TARGET_FILE),)
+	PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) \
+		--bdd-report="$(HTML_REPORT_TARGET_FILE)"
+endif
 
 # ----------------------------------------------------------------------------
 # Publish the BDD HTML test report to the just published
 # Jira test execution issue
 xray-post-publish:
-	python3 -m tests.publish_test_report 
-	
+	if [ -f "$(HTML_REPORT_TARGET_FILE)" ]; then \
+		@echo "Publishing the BDD HTML test report to the Jira test execution issue"
+		python3 -m tests.publish_test_report 
+	fi
