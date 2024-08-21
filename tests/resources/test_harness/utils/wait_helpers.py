@@ -461,7 +461,7 @@ class Waiter:
         if self.timed_out:
             now = datetime.now()
             current_time = now.strftime("%d/%m/%Y %H:%M:%S:%f")
-            LOGGER.info("Start Time for wait : %s", current_time)
+            LOGGER.info("End Time for wait : %s", current_time)
             raise Exception(
                 "timed out, the following timeouts ocurred:\n{} Successful\
                       changes:\n{}".format(

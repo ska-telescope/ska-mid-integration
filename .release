@@ -1,16 +1,20 @@
-release=0.22.0
-tag=0.22.0
+release=0.22.1
+tag=0.22.1
 tag_description=
 **Charts:**
-**1. ska-tmc-integration 0.21.2 - 0.22.0*
+**1. ska-tmc-integration 0.22.0 - 0.22.1*
 
-    **1.1 ska-tmc-mid - 0.21.2 - 0.22.0:
-        a. TMC Mid release with base class version 1.0.0 and pytango 9.5.0
+    **1.1 ska-tmc-mid - 0.22.0 - 0.22.1:
+        a. Observation State Aggregation Logic improvements
+                * Rule engine is used to define rules for ObsState.
+                * EventDataStorage class introduced to store event related data.
 
 
 release_notes=
 **Charts:**
-**1. ska-tmc-integration 0.21.2 - 0.22.0:**
+**1. ska-tmc-integration 0.22.0 - 0.22.1:**
 
-    **1.1 ska-tmc-mid - 0.21.2 - 0.22.0:
-        a. TMC Mid release with base class version 1.0.0 and pytango 9.5.0
+    **1.1 ska-tmc-mid - 0.22.0 - 0.22.1:
+        a. Observation State Aggregation Logic improvements
+                * Rule engine is used to define rules for ObsState.
+                * EventDataStorage class introduced to store event related data.
