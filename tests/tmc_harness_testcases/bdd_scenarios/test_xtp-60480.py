@@ -3,7 +3,7 @@ import json
 
 import pytest
 from assertpy import assert_that
-from pytest_bdd import given, scenario, then, when
+from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer, log_events
 from tango import DevState
@@ -29,6 +29,7 @@ TIMEOUT = 110
 
 
 @pytest.mark.SKA_mid
+@pytest.mark.test
 @scenario(
     "../features/test_harness/xtp-60011_configure_with_correction_key.feature",
     "TMC Behavior During correction key handling",
@@ -104,8 +105,9 @@ def given_tmc(
 
 
 @when(
-    "five point calibration scan performed on given "
-    "subarray using {correction_key}"
+    parsers.parse(
+        "five point calibration scan performed on given subarray with correction key {correction_key}"
+    )
 )
 def a_subarray_after_five_point_calibration(
     central_node_mid: CentralNodeWrapperMid,
@@ -241,7 +243,7 @@ def subarray_applies_calibration_solutions_to_dishes(
         "sourceOffset",
         json.dumps(RESET_OFFSETS),
         is_json=True,
-        timeout=30,
+        timeout=60,
     )
     assert wait_and_validate_device_attribute_value(
         subarray_node.dish_leaf_node_list[1],

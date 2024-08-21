@@ -3,7 +3,7 @@ import json
 
 import pytest
 from assertpy import assert_that
-from pytest_bdd import given, scenario, then, when
+from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer, log_events
 from tango import DevState
@@ -105,8 +105,9 @@ def given_tmc(
 
 
 @when(
-    "five point calibration scan performed on given "
-    "subarray using {correction_key}"
+    parsers.parse(
+        "five point calibration scan performed on given subarray with correction key {correction_key}"
+    )
 )
 def a_subarray_after_five_point_calibration(
     central_node_mid: CentralNodeWrapperMid,
@@ -154,13 +155,12 @@ def a_subarray_after_five_point_calibration(
         sdp_sim, command_input_factory
     )
     event_tracer.clear_events()
-
     # Configure command
-    configure_input_json = prepare_json_args_for_commands(
+    config_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
     # Update the configuration with the correction key
-    configure_data = json.loads(configure_input_json)
+    configure_data = json.loads(config_input_json)
     configure_data["pointing"]["correction"] = correction_key
     configure_input_str = json.dumps(configure_data)
     _, unique_id = subarray_node.execute_transition(
