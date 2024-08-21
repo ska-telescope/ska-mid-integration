@@ -242,8 +242,8 @@ def subarray_applies_calibration_solutions_to_dishes(
     assert wait_and_validate_device_attribute_value(
         subarray_node.dish_leaf_node_list[0],
         "sourceOffset",
-        RESET_OFFSETS,
-        is_json=True,
+        json.dumps(RESET_OFFSETS),
+        is_json=False,
         timeout=60,
     )
     assert wait_and_validate_device_attribute_value(
