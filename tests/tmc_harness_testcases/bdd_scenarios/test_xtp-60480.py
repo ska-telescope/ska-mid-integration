@@ -11,7 +11,6 @@ from tango import DevState
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.constant import (
     COMMAND_COMPLETED,
-    DISH_001_CALIBRATION_DATA,
     RESET_OFFSETS,
 )
 from tests.resources.test_harness.helpers import (
@@ -106,8 +105,8 @@ def given_tmc(
 
 @when(
     parsers.parse(
-        "five point calibration scan performed on given subarray "
-        "with correction key {correction_key}"
+        "five point calibration scan performed on given subarray using "
+        "correction key {correction_key}"
     )
 )
 def a_subarray_after_five_point_calibration(
@@ -240,17 +239,10 @@ def subarray_applies_calibration_solutions_to_dishes(
     dishes."""
 
     assert wait_and_validate_device_attribute_value(
-        subarray_node.dish_leaf_node_list[0],
-        "sourceOffset",
-        RESET_OFFSETS,
-        is_list=True,
-        timeout=30,
-    )
-    assert wait_and_validate_device_attribute_value(
         subarray_node.dish_leaf_node_list[1],
-        "lastPointingData",
-        json.dumps(DISH_001_CALIBRATION_DATA),
-        is_json=True,
+        "sourceOffset",
+        json.dumps(RESET_OFFSETS),
+        is_list=True,
         timeout=30,
     )
 

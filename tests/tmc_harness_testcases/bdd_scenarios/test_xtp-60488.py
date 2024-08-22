@@ -164,10 +164,9 @@ def a_subarray_after_five_point_calibration(
     configure_data = json.loads(configure_input_json)
     configure_data["pointing"]["correction"] = correction_key
     configure_input_str = json.dumps(configure_data)
-    if correction_key == "MAINTAIN":
-        _, unique_id = subarray_node.execute_transition(
-            "Configure", configure_input_str
-        )
+    _, unique_id = subarray_node.execute_transition(
+        "Configure", configure_input_str
+    )
     assert_that(event_tracer).described_as(
         "FAILED ASSUMPTION AFTER CONFIGURE COMMAND: "
         "Subarray Node device"
