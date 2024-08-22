@@ -162,7 +162,7 @@ def a_subarray_after_five_point_calibration(
     configure_data["pointing"]["correction"] = correction_key
     configure_input_str = json.dumps(configure_data)
 
-    pytest.existed_offset = subarray_node.dish_master_list[0].offset
+    pytest.existed_offset = subarray_node.dish_leaf_node_list[0].sourceOffset
 
     _, unique_id = subarray_node.execute_transition(
         "Configure", configure_input_str
@@ -238,7 +238,10 @@ def subarray_applies_calibration_solutions_to_dishes(
     """Then the Subarray fetches and applies the configuration solutions to the
     dishes."""
 
-    assert pytest.existed_offset == subarray_node.dish_master_list[0].offset
+    assert (
+        pytest.existed_offset
+        == subarray_node.dish_leaf_node_list[0].sourceOffset
+    )
 
 
 @then("is in READY obsState")
