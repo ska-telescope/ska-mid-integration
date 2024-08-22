@@ -31,7 +31,7 @@ TIMEOUT = 110
 @pytest.mark.SKA_mid
 @pytest.mark.test
 @scenario(
-    "../features/test_harness/xtp-60011_configure_with_correction_key.feature",
+    "../features/test_harness/xtp-60480_configure_with_reset_key.feature",
     "TMC Behavior During correction key handling",
 )
 def test_tmc_dish_configure_with_reset_correction_key():
@@ -231,7 +231,7 @@ def a_subarray_after_five_point_calibration(
 
 @then(
     "the dish leaf node receive correction key from SDP and "
-    + "applies them to the Dishes"
+    + "reset all the Dishes"
 )
 def subarray_applies_calibration_solutions_to_dishes(
     subarray_node: SubarrayNodeWrapper,
@@ -242,9 +242,9 @@ def subarray_applies_calibration_solutions_to_dishes(
     assert wait_and_validate_device_attribute_value(
         subarray_node.dish_leaf_node_list[0],
         "sourceOffset",
-        json.dumps(RESET_OFFSETS),
-        is_json=False,
-        timeout=60,
+        RESET_OFFSETS,
+        is_list=True,
+        timeout=30,
     )
     assert wait_and_validate_device_attribute_value(
         subarray_node.dish_leaf_node_list[1],

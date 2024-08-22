@@ -33,7 +33,7 @@ TIMEOUT = 110
     "../features/test_harness/xtp-60011_configure_with_correction_key.feature",
     "TMC Behavior During correction key handling",
 )
-def test_tmc_dish_configure_with_reset_correction_key():
+def test_tmc_dish_configure_with_maintain_correction_key():
     """
     Test case to verify the Science scan functionality after a five point
     calibration scan on TMC
