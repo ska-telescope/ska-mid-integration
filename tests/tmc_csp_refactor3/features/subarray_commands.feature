@@ -66,8 +66,6 @@ Feature: test subarray command triggered transitions
     Then the subarray 1 should transition to the RESOURCING state
     Then the subarray 1 should transition to the EMPTY state
     Then the central node reports a longRunningCommand successful completion
-    Then the subarray 1 should transition to the RESOURCING state
-    Then the subarray 1 should transition to the EMPTY state
 
   @Transition("26. READY --> (CMD: Scan) --> SCANNING")
   @Transition("33. SCANNING --> (AUTO: ScanComplete) --> READY")

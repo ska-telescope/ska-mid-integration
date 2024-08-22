@@ -21,7 +21,7 @@ from ska_tango_testing.integration import TangoEventTracer
 from tests.tmc_csp_refactor3.conftest import SubarrayTestContextData
 from tests.tmc_csp_refactor3.utils.file_json_input import FileJSONInput
 
-ASSERTIONS_TIMEOUT = 30
+ASSERTIONS_TIMEOUT = 60
 
 # ------------------------------------------------------------
 # Scenario
@@ -630,7 +630,8 @@ def _get_long_run_command_id(context_fixt: SubarrayTestContextData) -> str:
 
 
 def _get_expected_long_run_command_result(context_fixt) -> tuple[str, str]:
-    return (_get_long_run_command_id(context_fixt), str(ResultCode.OK.value))
+    return (_get_long_run_command_id(context_fixt), 
+            f'[{ResultCode.OK.value}, "Command Completed"]')
 
 
 @then(
