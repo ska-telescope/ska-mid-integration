@@ -29,6 +29,7 @@ TIMEOUT = 110
 
 
 @pytest.mark.SKA_mid
+@pytest.mark.test1
 @scenario(
     "../features/test_harness/xtp-60011_configure_with_correction_key.feature",
     "TMC Behavior During correction key handling",
