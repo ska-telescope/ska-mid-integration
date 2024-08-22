@@ -2,7 +2,7 @@ import json
 import logging
 import os
 import time
-from typing import Tuple
+from typing import List, Tuple
 
 from ska_control_model import ObsState, ResultCode
 from ska_ser_logging import configure_logging
@@ -12,6 +12,7 @@ from tango.db import Database
 
 from tests.resources.test_harness.central_node import CentralNodeWrapper
 from tests.resources.test_harness.constant import (
+    COMMAND_COMPLETED,
     DEFAULT_DISH_VCC_CONFIG,
     centralnode,
     csp_master,
@@ -266,6 +267,16 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             f"ska_mid/tm_leaf_node/sdp_subarray{subarray_id}"
         )
 
+    def get_track_table_for_dish_id(
+        self, dish_id: str = "SKA001"
+    ) -> List[float]:
+        """Return the programTrackTable value for given dish ID"""
+        return (
+            self.dish_master_dict[dish_id]
+            .read_attribute("programTrackTable")
+            .value
+        )
+
     def load_dish_vcc_configuration(
         self, dish_vcc_config: str
     ) -> Tuple[ResultCode, str]:
@@ -375,6 +386,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             LOGGER.info("Invoking TelescopeOff() on simulated sdp and dish")
             self.central_node.TelescopeOff()
         elif SIMULATED_DEVICES_DICT["sdp"]:
+            LOGGER.info("Invoking TelescopeOff() on simulated sdp")
             self.central_node.TelescopeOff()
         else:
             LOGGER.info("Invoke TelescopeOff() with all real sub-systems")
@@ -465,8 +477,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 self.sdp_master,
                 self.csp_master,
             ]:
-                device = DeviceProxy(mock_device)
-                device.SetDirectHealthState(HealthState.UNKNOWN)
+                mock_device.SetDirectHealthState(HealthState.UNKNOWN)
         elif SIMULATED_DEVICES_DICT["csp_and_dish"]:
             self.csp_master.SetDirectHealthState(HealthState.UNKNOWN)
             for mock_device in self.dish_master_list:
@@ -482,8 +493,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 self.sdp_master,
                 self.csp_master,
             ]:
-                device = DeviceProxy(mock_device)
-                device.SetDirectHealthState(HealthState.UNKNOWN)
+                mock_device.SetDirectHealthState(HealthState.UNKNOWN)
             for mock_device in self.dish_master_list:
                 mock_device.SetDirectHealthState(HealthState.UNKNOWN)
         else:
@@ -570,6 +580,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
 
             else:
                 self.move_to_off()
+
         self._clear_command_call_and_transition_data(clear_transition=True)
         # if source dish vcc config is empty or not matching with default
         # dish vcc then load default dish vcc config
@@ -588,7 +599,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             assert event_recorder.has_change_event_occurred(
                 self.central_node,
                 "longRunningCommandResult",
-                (unique_id[0], str(int(ResultCode.OK))),
+                (unique_id[0], COMMAND_COMPLETED),
                 lookahead=10,
             )
             event_recorder.clear_events()

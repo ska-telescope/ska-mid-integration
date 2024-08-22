@@ -3,12 +3,14 @@ import logging
 import os
 import time
 
+from assertpy import assert_that
 from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import HealthState
 from tango import DeviceProxy, DevState
 
 from tests.resources.test_harness.constant import (
+    COMMAND_COMPLETED,
     DISH_001_CALIBRATION_DATA,
     DISH_036_CALIBRATION_DATA,
     centralnode,
@@ -55,12 +57,13 @@ from tests.resources.test_harness.utils.sync_decorators import (
     sync_release_resources,
     sync_restart,
 )
+from tests.resources.test_harness.utils.wait_helpers import Waiter
 from tests.resources.test_support.common_utils.common_helpers import Resource
-from tests.resources.test_support.common_utils.result_code import ResultCode
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
+TIMEOUT = 110
 REAL_DISH1_FQDN = os.getenv("DISH_NAME_1")
 REAL_DISH36_FQDN = os.getenv("DISH_NAME_36")
 REAL_DISH63_FQDN = os.getenv("DISH_NAME_63")
@@ -347,11 +350,14 @@ class SubarrayNodeWrapper(object):
             sim_device_fqdn_list = [self.sdp_subarray1, self.csp_subarray1]
         elif SIMULATED_DEVICES_DICT["csp_and_dish"]:
             sim_device_fqdn_list = [self.csp_subarray1]
-        elif SIMULATED_DEVICES_DICT["sdp_and_dish"]:
+        elif (
+            SIMULATED_DEVICES_DICT["sdp_and_dish"]
+            or SIMULATED_DEVICES_DICT["sdp"]
+        ):
             sim_device_fqdn_list = [self.sdp_subarray1]
         for sim_device_fqdn in sim_device_fqdn_list:
             device = DeviceProxy(sim_device_fqdn)
-            device.ResetDelay()
+            device.ResetDelayInfo()
             device.SetDirectHealthState(HealthState.UNKNOWN)
             device.SetDefective(json.dumps({"enabled": False}))
 
@@ -360,11 +366,10 @@ class SubarrayNodeWrapper(object):
         if (
             SIMULATED_DEVICES_DICT["csp_and_dish"]
             or SIMULATED_DEVICES_DICT["all_mocks"]
+            or SIMULATED_DEVICES_DICT["sdp_and_dish"]
         ):
             for dish_master in self.dish_master_list:
-                dish_master.SetDirectDishMode(DishMode.STANDBY_LP)
-                dish_master.SetDirectState(DevState.STANDBY)
-                dish_master.ResetDelay()
+                dish_master.SetDelay(2)
                 dish_master.SetDirectHealthState(HealthState.UNKNOWN)
 
     def _clear_command_call_and_transition_data(self, clear_transition=False):
@@ -422,9 +427,21 @@ class SubarrayNodeWrapper(object):
         LOGGER.info("Calling Tear down for subarray")
         self._clear_command_call_and_transition_data(clear_transition=True)
 
-        if self.obs_state in ("RESOURCING", "CONFIGURING", "SCANNING"):
+        if self.obs_state in (
+            "RESOURCING",
+            "CONFIGURING",
+            "SCANNING",
+            "READY",
+            "IDLE",
+        ):
             """Invoke Abort and Restart"""
             LOGGER.info("Invoking Abort on Subarray")
+            # Waiting for few seconds as the SubarrayNode End command
+            # completion does not consider Dishes pointingState transition
+            # to READY
+            the_waiter = Waiter()
+            the_waiter.wait(5)
+
             self.abort_subarray()
             self.restart_subarray()
         elif self.obs_state == "ABORTED":
@@ -500,8 +517,7 @@ class SubarrayNodeWrapper(object):
     def execute_five_point_calibration_scan(
         self,
         partial_configure_jsons: list[str],
-        scan_jsons: list[str],
-        event_recorder,
+        event_tracer,
         command_input_factory,
     ) -> None:
         """Perform a five point calibration scan on Subarray Node using the
@@ -525,177 +541,83 @@ class SubarrayNodeWrapper(object):
             partial_configure_jsons[3], command_input_factory
         )
 
-        scan_1 = prepare_json_args_for_commands(
-            scan_jsons[0], command_input_factory
-        )
-        scan_2 = prepare_json_args_for_commands(
-            scan_jsons[1], command_input_factory
-        )
-        scan_3 = prepare_json_args_for_commands(
-            scan_jsons[2], command_input_factory
-        )
-        scan_4 = prepare_json_args_for_commands(
-            scan_jsons[3], command_input_factory
+        scan_json = prepare_json_args_for_commands(
+            "scan_mid", command_input_factory
         )
 
-        # Partial configure 1
-        _, unique_id = self.execute_transition(
-            "Configure", partial_configure_1
-        )
-        assert event_recorder.has_change_event_occurred(
-            self.subarray_node,
-            "obsState",
-            ObsState.CONFIGURING,
-            lookahead=15,
-        )
-        assert event_recorder.has_change_event_occurred(
-            self.subarray_node,
-            "longRunningCommandResult",
-            (unique_id[0], str(int(ResultCode.OK))),
-            lookahead=15,
-        )
-        assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
-
-        # assert sourceOffset gets populated as expected
-        ca_offset, ie_offset = (
-            json.loads(partial_configure_1)["pointing"]["target"][key]
-            for key in ("ca_offset_arcsec", "ie_offset_arcsec")
-        )
-        for dish_leaf_node in self.dish_leaf_node_list:
-            wait_and_validate_device_attribute_value(
-                dish_leaf_node,
-                "sourceOffset",
-                f"{[ca_offset, ie_offset]}",
-                is_list=True,
+        for partial_configure_json in [
+            partial_configure_1,
+            partial_configure_2,
+            partial_configure_3,
+            partial_configure_4,
+        ]:
+            # Partial configure
+            _, unique_id = self.execute_transition(
+                "Configure", partial_configure_json
             )
-
-        # Scan 1
-        self.execute_transition("Scan", scan_1)
-        assert event_recorder.has_change_event_occurred(
-            self.subarray_node,
-            "obsState",
-            ObsState.SCANNING,
-            lookahead=15,
-        )
-        assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
-
-        # Partial configure 2
-        _, unique_id = self.execute_transition(
-            "Configure", partial_configure_2
-        )
-        assert event_recorder.has_change_event_occurred(
-            self.subarray_node,
-            "obsState",
-            ObsState.CONFIGURING,
-            lookahead=15,
-        )
-        assert event_recorder.has_change_event_occurred(
-            self.subarray_node,
-            "longRunningCommandResult",
-            (unique_id[0], str(int(ResultCode.OK))),
-            lookahead=15,
-        )
-        # assert sourceOffset gets populated as expected
-        ca_offset, ie_offset = (
-            json.loads(partial_configure_2)["pointing"]["target"][key]
-            for key in ("ca_offset_arcsec", "ie_offset_arcsec")
-        )
-        for dish_leaf_node in self.dish_leaf_node_list:
-            wait_and_validate_device_attribute_value(
-                dish_leaf_node,
-                "sourceOffset",
-                f"{[ca_offset, ie_offset]}",
-                is_list=True,
+            assert_that(event_tracer).described_as(
+                "FAILED ASSUMPTION AFTER CONFIGURE COMMAND: "
+                "Subarray Node device"
+                f"({self.subarray_node.dev_name()}) "
+                "is expected to be in CONFIGURING obstate",
+            ).within_timeout(TIMEOUT).has_change_event_occurred(
+                self.subarray_node,
+                "obsState",
+                ObsState.CONFIGURING,
             )
-
-        assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
-
-        # Scan 2
-        self.execute_transition("Scan", scan_2)
-        assert event_recorder.has_change_event_occurred(
-            self.subarray_node,
-            "obsState",
-            ObsState.SCANNING,
-            lookahead=15,
-        )
-        assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
-
-        # Partial configure 3
-        _, unique_id = self.execute_transition(
-            "Configure", partial_configure_3
-        )
-        assert event_recorder.has_change_event_occurred(
-            self.subarray_node,
-            "obsState",
-            ObsState.CONFIGURING,
-            lookahead=15,
-        )
-        assert event_recorder.has_change_event_occurred(
-            self.subarray_node,
-            "longRunningCommandResult",
-            (unique_id[0], str(int(ResultCode.OK))),
-            lookahead=15,
-        )
-        # assert sourceOffset gets populated as expected
-        ca_offset, ie_offset = (
-            json.loads(partial_configure_3)["pointing"]["target"][key]
-            for key in ("ca_offset_arcsec", "ie_offset_arcsec")
-        )
-        for dish_leaf_node in self.dish_leaf_node_list:
-            wait_and_validate_device_attribute_value(
-                dish_leaf_node,
-                "sourceOffset",
-                f"{[ca_offset, ie_offset]}",
-                is_list=True,
+            assert_that(event_tracer).described_as(
+                "FAILED ASSUMPTION AFTER CONFIGURE COMMAND COMPLETION: "
+                "Subarray Node device"
+                f"({self.subarray_node.dev_name()}) "
+                "is expected to be in READY obstate",
+            ).within_timeout(TIMEOUT).has_change_event_occurred(
+                self.subarray_node,
+                "obsState",
+                ObsState.READY,
             )
-        assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
-
-        # Scan 3
-        self.execute_transition("Scan", scan_3)
-        assert event_recorder.has_change_event_occurred(
-            self.subarray_node,
-            "obsState",
-            ObsState.SCANNING,
-            lookahead=15,
-        )
-        assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
-
-        # Partial configure 4
-        _, unique_id = self.execute_transition(
-            "Configure", partial_configure_4
-        )
-        assert event_recorder.has_change_event_occurred(
-            self.subarray_node,
-            "obsState",
-            ObsState.CONFIGURING,
-            lookahead=15,
-        )
-        assert event_recorder.has_change_event_occurred(
-            self.subarray_node,
-            "longRunningCommandResult",
-            (unique_id[0], str(int(ResultCode.OK))),
-            lookahead=15,
-        )
-        # assert sourceOffset gets populated as expected
-        ca_offset, ie_offset = (
-            json.loads(partial_configure_4)["pointing"]["target"][key]
-            for key in ("ca_offset_arcsec", "ie_offset_arcsec")
-        )
-        for dish_leaf_node in self.dish_leaf_node_list:
-            wait_and_validate_device_attribute_value(
-                dish_leaf_node,
-                "sourceOffset",
-                f"{[ca_offset, ie_offset]}",
-                is_list=True,
+            assert_that(event_tracer).described_as(
+                "FAILED ASSUMPTION AFTER PARTIAL CONFIGURE COMMAND: "
+                "'the subarray is in READY obsState'"
+                "Subarray Node device"
+                f"({self.subarray_node.dev_name()}) "
+                "is expected have longRunningCommand as"
+                '(unique_id,(ResultCode.OK,"Command Completed"))',
+            ).within_timeout(TIMEOUT).has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (
+                    unique_id[0],
+                    COMMAND_COMPLETED,
+                ),
             )
-        assert check_subarray_obs_state(obs_state="READY", subarray_node=self)
+            event_tracer.clear_events()
 
-        # Scan 4
-        self.execute_transition("Scan", scan_4)
-        assert event_recorder.has_change_event_occurred(
-            self.subarray_node,
-            "obsState",
-            ObsState.SCANNING,
-            lookahead=15,
-        )
-        assert check_subarray_obs_state("READY", subarray_node=self)
+            # assert sourceOffset gets populated as expected
+            ca_offset, ie_offset = (
+                json.loads(partial_configure_json)["pointing"]["target"][key]
+                for key in ("ca_offset_arcsec", "ie_offset_arcsec")
+            )
+            for dish_leaf_node in self.dish_leaf_node_list:
+                wait_and_validate_device_attribute_value(
+                    dish_leaf_node,
+                    "sourceOffset",
+                    f"{[ca_offset, ie_offset]}",
+                    is_list=True,
+                )
+
+            # Scan
+            self.execute_transition("Scan", scan_json)
+            assert_that(event_tracer).described_as(
+                "FAILED ASSUMPTION AFTER SCAN COMMAND: "
+                "Subarray Node device"
+                f"({self.subarray_node.dev_name()}) "
+                "is expected to be in SCANNING obstate",
+            ).within_timeout(TIMEOUT).has_change_event_occurred(
+                self.subarray_node,
+                "obsState",
+                ObsState.SCANNING,
+            )
+            wait_and_validate_device_attribute_value(
+                self.subarray_node, "obsState", ObsState.READY
+            )
+            event_tracer.clear_events()

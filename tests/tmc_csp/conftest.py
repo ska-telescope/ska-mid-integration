@@ -11,6 +11,7 @@ from ska_ser_logging import configure_logging
 from ska_tango_testing.integration import TangoEventTracer
 from tango import DevState
 
+from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.helpers import (
     check_subarray_instance,
     prepare_json_args_for_centralnode_commands,
@@ -128,7 +129,7 @@ def telescope_is_in_idle_state(
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (unique_id[0], str(int(ResultCode.OK))),
+        (unique_id[0], COMMAND_COMPLETED),
         lookahead=5,
     )
 
@@ -175,7 +176,7 @@ def reassign_resources(
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (unique_id[0], str(int(ResultCode.OK))),
+        (unique_id[0], COMMAND_COMPLETED),
         lookahead=10,
     )
 
@@ -208,7 +209,7 @@ def execute_end_command(
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
-        (unique_id[0], str(int(ResultCode.OK))),
+        (unique_id[0], COMMAND_COMPLETED),
         lookahead=10,
     )
 
@@ -241,7 +242,7 @@ def execute_release_resources_command(
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (unique_id[0], str(int(ResultCode.OK))),
+        (unique_id[0], COMMAND_COMPLETED),
         lookahead=5,
     )
 

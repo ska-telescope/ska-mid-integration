@@ -65,12 +65,12 @@ class TestSubarrayNodeObsStateTransitions(object):
             obs_state_transition_duration_sec,
         )
 
-        sdp_sim.setDelay(delay_command_params_str)
-        csp_sim.setDelay(delay_command_params_str)
-        dish_sim_1.setDelay(delay_command_params_str)
-        dish_sim_2.setDelay(delay_command_params_str)
-        dish_sim_3.setDelay(delay_command_params_str)
-        dish_sim_4.setDelay(delay_command_params_str)
+        sdp_sim.SetDelayInfo(delay_command_params_str)
+        csp_sim.SetDelayInfo(delay_command_params_str)
+        dish_sim_1.SetDelay(obs_state_transition_duration_sec)
+        dish_sim_2.SetDelay(obs_state_transition_duration_sec)
+        dish_sim_3.SetDelay(obs_state_transition_duration_sec)
+        dish_sim_4.SetDelay(obs_state_transition_duration_sec)
 
         subarray_node.move_to_on()
 
@@ -110,7 +110,6 @@ class TestSubarrayNodeObsStateTransitions(object):
             args_for_csp, args_for_sdp",
         [
             # skip reason: Test fails in READY assertion
-            # (
             #     "IDLE",
             #     "Configure",
             #     "configure_mid",

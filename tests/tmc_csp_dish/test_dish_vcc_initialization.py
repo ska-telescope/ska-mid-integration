@@ -7,6 +7,7 @@ import json
 import pytest
 from pytest_bdd import given, scenario, then, when
 
+from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.helpers import (
     device_attribute_changed,
     prepare_json_args_for_centralnode_commands,
@@ -158,7 +159,7 @@ def invoke_load_dish_cfg_command(
     assert event_recorder.has_change_event_occurred(
         tmc_mid.central_node.central_node,
         "longRunningCommandResult",
-        (unique_id[0], str(int(ResultCode.OK))),
+        (unique_id[0], COMMAND_COMPLETED),
         lookahead=5,
     )
 

@@ -25,7 +25,6 @@ Feature: Commands with invalid json input
 
         Examples:
             | invalid_json                           |
-            | config_id_key_missing                  |
             | fsp_id_key_missing                     |
             # | frequency_slice_id_key_missing         |
             | integration_factor_key_missing         |

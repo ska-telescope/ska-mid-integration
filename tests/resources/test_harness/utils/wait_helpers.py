@@ -62,6 +62,21 @@ class Waiter:
                     )
                 )
 
+    def set_wait_for_dish(self, attribute_name, state_name):
+        """Set wait for dish master and dish leaf node"""
+        for index in range(0, len(self.dish_master_list)):
+            if self.dish_master_list[index].dishMode != state_name:
+                self.waits.append(
+                    watch(Resource(self.dish_master_list[index])).to_become(
+                        attribute_name, changed_to=state_name
+                    )
+                )
+                self.waits.append(
+                    watch(Resource(self.dish_leaf_node_list[index])).to_become(
+                        attribute_name, changed_to=state_name
+                    )
+                )
+
     def set_wait_for_going_to_off(self):
         self.waits.append(
             watch(Resource(self.sdp_subarray1)).to_become(
@@ -83,10 +98,8 @@ class Waiter:
                 "State", changed_to="OFF"
             )
         )
-        if self.dish_master_list:
-            self.set_wait_for_dish_master("dishMode", "STANDBY_LP")
-        if self.dish_leaf_node_list:
-            self.set_wait_for_dish_ln("dishMode", "STANDBY_LP")
+        if self.dish_master_list and self.dish_leaf_node_list:
+            self.set_wait_for_dish("dishMode", "STANDBY_LP")
 
     def set_wait_for_going_to_standby(self):
         self.waits.append(
@@ -109,10 +122,8 @@ class Waiter:
                 "State", changed_to="STANDBY"
             )
         )
-        if self.dish_master_list:
-            self.set_wait_for_dish_master("dishMode", "STANDBY_LP")
-        if self.dish_leaf_node_list:
-            self.set_wait_for_dish_ln("dishMode", "STANDBY_LP")
+        if self.dish_master_list and self.dish_leaf_node_list:
+            self.set_wait_for_dish("dishMode", "STANDBY_LP")
 
     def set_wait_for_telescope_on(self):
         self.waits.append(
@@ -244,10 +255,8 @@ class Waiter:
                 "obsState", changed_to=obs_state
             )
         )
-        if self.dish_master_list:
-            self.set_wait_for_dish_master("pointingState", "TRACK")
-        if self.dish_leaf_node_list:
-            self.set_wait_for_dish_ln("pointingState", "TRACK")
+        if self.dish_master_list and self.dish_leaf_node_list:
+            self.set_wait_for_dish("pointingState", "TRACK")
 
     def set_wait_for_configure(self):
         self.waits.append(
@@ -270,12 +279,9 @@ class Waiter:
                 "obsState", changed_to="READY"
             )
         )
-        if self.dish_master_list:
-            self.set_wait_for_dish_master("dishMode", "OPERATE")
-            self.set_wait_for_dish_master("pointingState", "TRACK")
-        if self.dish_leaf_node_list:
-            self.set_wait_for_dish_ln("dishMode", "OPERATE")
-            self.set_wait_for_dish_ln("pointingState", "TRACK")
+        if self.dish_master_list and self.dish_leaf_node_list:
+            self.set_wait_for_dish("dishMode", "OPERATE")
+            self.set_wait_for_dish("pointingState", "TRACK")
 
         self.waits.append(
             watch(Resource(self.tmc_subarraynode1)).to_become(
@@ -311,26 +317,6 @@ class Waiter:
         )
 
     def set_wait_for_aborted(self):
-        self.waits.append(
-            watch(Resource(self.tmc_csp_subarray_leaf_node)).to_become(
-                "cspSubarrayObsState", changed_to="ABORTED"
-            )
-        )
-        self.waits.append(
-            watch(Resource(self.tmc_sdp_subarray_leaf_node)).to_become(
-                "sdpSubarrayObsState", changed_to="ABORTED"
-            )
-        )
-        self.waits.append(
-            watch(Resource(self.csp_subarray1)).to_become(
-                "obsState", changed_to="ABORTED"
-            )
-        )
-        self.waits.append(
-            watch(Resource(self.sdp_subarray1)).to_become(
-                "obsState", changed_to="ABORTED"
-            )
-        )
         self.waits.append(
             watch(Resource(self.tmc_subarraynode1)).to_become(
                 "obsState", changed_to="ABORTED"

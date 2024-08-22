@@ -1,6 +1,7 @@
 """Implement Event checker class which can be used to validate events
 """
 import logging
+import os
 import time
 from typing import Any
 
@@ -8,7 +9,7 @@ from ska_ser_logging import configure_logging
 from ska_tango_testing.mock.tango.event_callback import (
     MockTangoEventCallbackGroup,
 )
-from tango import EventType
+from tango import AttributeProxy, EventType
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -108,6 +109,30 @@ class EventRecorder(object):
                     callable_name
                 ].assert_change_event(attribute_value, lookahead=lookahead)
             except AssertionError:
+                device_name = device.dev_name()
+                dish_prefix = ""
+                real_dish1_fqdn = os.getenv("DISH_NAME_1")
+                if ("dish-manager" in device_name) and (
+                    "dish-lmc-1" not in real_dish1_fqdn
+                ):
+                    # It is a real dish device therefore need a full FQDN
+                    # for dish
+                    dish_prefix = real_dish1_fqdn.replace(
+                        "mid-dish/dish-manager/SKA001", ""
+                    )
+                    dish_number = "".join(
+                        letter for letter in device_name if letter.isdigit()
+                    )
+                    dish_prefix = dish_prefix.replace("001", dish_number)
+
+                LOGGER.info("dish_prefix: %s", dish_prefix)
+                full_attr_name = (
+                    dish_prefix + device_name + "/" + attribute_name
+                )
+                attr_proxy = AttributeProxy(full_attr_name)
+                attr_value = attr_proxy.read().value
+                if attr_value == attribute_value:
+                    return True
                 return False
 
         raise AttributeNotSubscribed(

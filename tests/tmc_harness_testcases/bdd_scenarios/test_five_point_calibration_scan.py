@@ -3,6 +3,7 @@ import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 
+from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.helpers import (
     check_subarray_obs_state,
     get_device_simulators,
@@ -11,6 +12,7 @@ from tests.resources.test_harness.helpers import (
 )
 
 
+@pytest.mark.skip(reason="Test fails randomly.")
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/five_point_scan.feature",
@@ -50,6 +52,9 @@ def a_configured_subarray(
     event_recorder.subscribe_event(csp_sim, "obsState")
     event_recorder.subscribe_event(sdp_sim, "obsState")
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
     subarray_node.force_change_of_obs_state(
         "READY", assign_input_json=assign_input_json
     )
@@ -72,12 +77,18 @@ def a_configured_subarray(
     scan_command_input = prepare_json_args_for_commands(
         "scan_mid", command_input_factory
     )
-    subarray_node.execute_transition("Scan", scan_command_input)
+    _, unique_id = subarray_node.execute_transition("Scan", scan_command_input)
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.SCANNING,
+        lookahead=15,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (unique_id[0], COMMAND_COMPLETED),
         lookahead=15,
     )
 

@@ -9,18 +9,19 @@ through the expected states.
 import json
 
 import pytest
+from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
+from ska_tango_testing.integration import TangoEventTracer, log_events
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
-from tests.resources.test_harness.event_recorder import EventRecorder
+from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
-from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
@@ -37,7 +38,10 @@ def test_tmc_dish_long_sequence_functionality():
 
 @given("TMC subarray is in IDLE obsState")
 def check_subarray_obsState_idle(
-    subarray_node, central_node_mid, event_recorder, command_input_factory
+    subarray_node,
+    central_node_mid,
+    event_tracer: TangoEventTracer,
+    command_input_factory,
 ):
     """
     Method to check if the TMC subarray is in IDLE obsState.
@@ -53,25 +57,38 @@ def check_subarray_obsState_idle(
         event_recorder: A fixture for EventRecorder class
         command_input_factory: A fixture for JsonFactory class
     """
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
+    event_tracer.subscribe_event(subarray_node.subarray_node, "obsState")
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-    pytest.command_result = central_node_mid.store_resources(assign_input_json)
+    _, pytest.unique_id = central_node_mid.store_resources(assign_input_json)
 
-    assert event_recorder.has_change_event_occurred(
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the subarray must be in the IDLE obsState'"
+        "TMC Subarray device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected to be in IDLE obstate",
+    ).within_timeout(60).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
     )
-    event_recorder.subscribe_event(
+    event_tracer.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
     )
-    assert event_recorder.has_change_event_occurred(
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the subarray is in IDLE obsState'"
+        "TMC Central Node device"
+        f"({central_node_mid.central_node.dev_name()}) "
+        "is expected have longRunningCommand as"
+        '(unique_id,(ResultCode.OK,"Command Completed"))',
+    ).within_timeout(60).has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+        (pytest.unique_id[0], COMMAND_COMPLETED),
     )
 
 
@@ -83,7 +100,7 @@ def check_subarray_obsState_idle(
 def configure_subarray(
     subarray_node: SubarrayNodeWrapper,
     central_node_mid: CentralNodeWrapperMid,
-    event_recorder: EventRecorder,
+    event_tracer: TangoEventTracer,
     command_input_factory: JsonFactory,
     subarray_id: str,
     receiver_band_1: str,
@@ -100,7 +117,7 @@ def configure_subarray(
         subarray_id (str): Subarray ID
         receiver_band_1 (str): receiver band 1 for configure command
     """
-    event_recorder.subscribe_event(
+    event_tracer.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
     input_json = prepare_json_args_for_commands(
@@ -110,48 +127,104 @@ def configure_subarray(
     configure_input_json["dish"]["receiver_band"] = receiver_band_1
     configure_input_json["csp"]["common"]["frequency_band"] = "1"
     central_node_mid.set_subarray_id(subarray_id)
-    pytest.command_result = subarray_node.store_configuration_data(
+    _, pytest.unique_id = subarray_node.store_configuration_data(
         json.dumps(configure_input_json)
     )
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id],
-            "longRunningCommandResult",
+        log_events(
+            {
+                central_node_mid.dish_master_dict.get(dish_id): ["dishMode"],
+                central_node_mid.dish_master_dict.get(dish_id): [
+                    "pointingState"
+                ],
+            }
         )
-        assert event_recorder.has_change_event_occurred(
+
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_tracer.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
+        event_tracer.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
+        )
+        event_tracer.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "pointingState"
+        )
+        event_tracer.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
+        )
+
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "WHEN" STEP: '
+            "'the dish must be in the OPERATE dishMode'"
+            "dish device"
+            f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
+            "is expected to be in OPERATE dishMode",
+        ).within_timeout(60).has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.OPERATE,
-            lookahead=10,
         )
-        assert event_recorder.has_change_event_occurred(
+
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "WHEN" STEP: '
+            "'the DishLeafNode must be in the OPERATE dishMode'"
+            "dish device"
+            f"({central_node_mid.dish_leaf_node_dict[dish_id].dev_name()}) "
+            "is expected to be in OPERATE dishMode",
+        ).within_timeout(60).has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "dishMode",
             DishMode.OPERATE,
-            lookahead=10,
         )
-        assert event_recorder.has_change_event_occurred(
+
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "WHEN" STEP: '
+            "'the dish must be in the TRACK pointingState'"
+            "dish device"
+            f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
+            "is expected to be in TRACK pointingState",
+        ).within_timeout(60).has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
-            lookahead=10,
         )
-        assert event_recorder.has_change_event_occurred(
+
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "WHEN" STEP: '
+            "'the DishLeafNode must be in the TRACK pointingState'"
+            "dish device"
+            f"({central_node_mid.dish_leaf_node_dict[dish_id].dev_name()}) "
+            "is expected to be in TRACK pointingState",
+        ).within_timeout(60).has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
-            lookahead=10,
         )
-    assert event_recorder.has_change_event_occurred(
+
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "WHEN" STEP: '
+        "'the subarray must be in the READY obsState'"
+        "TMC Subarray device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected to be in READY obstate",
+    ).within_timeout(60).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
-        lookahead=10,
     )
-    assert event_recorder.has_change_event_occurred(
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "WHEN" STEP: '
+        "'the subarray is in READY obsState'"
+        "TMC Subarray Node device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected have longRunningCommand as"
+        '(unique_id,(ResultCode.OK,"Command Completed"))',
+    ).within_timeout(60).has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+        (pytest.unique_id[0], COMMAND_COMPLETED),
     )
 
 
@@ -159,7 +232,7 @@ def configure_subarray(
 def end_configuration_on_subarray(
     subarray_node: SubarrayNodeWrapper,
     central_node_mid: CentralNodeWrapperMid,
-    event_recorder: EventRecorder,
+    event_tracer: TangoEventTracer,
     subarray_id: str,
 ):
     """
@@ -172,32 +245,52 @@ def end_configuration_on_subarray(
         subarray_id (str): Subarray ID
     """
     central_node_mid.set_subarray_id(subarray_id)
-    pytest.command_result = subarray_node.execute_transition("End")
+    _, pytest.unique_id = subarray_node.execute_transition("End")
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-
-        assert event_recorder.has_change_event_occurred(
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "WHEN" STEP: '
+            "'the dish must be in the READY pointingState'"
+            "dish device"
+            f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
+            "is expected to be in READY pointingState",
+        ).within_timeout(60).has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
             PointingState.READY,
-            lookahead=10,
         )
-        assert event_recorder.has_change_event_occurred(
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "WHEN" STEP: '
+            "'the DishLeafNode must be in the READY pointingState'"
+            "dish device"
+            f"({central_node_mid.dish_leaf_node_dict[dish_id].dev_name()}) "
+            "is expected to be in READY pointingState",
+        ).within_timeout(60).has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "pointingState",
             PointingState.READY,
-            lookahead=10,
         )
-
-    assert event_recorder.has_change_event_occurred(
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "WHEN" STEP: '
+        "'the subarray must be in the IDLE obsState'"
+        "TMC Subarray device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected to be in IDLE obstate",
+    ).within_timeout(60).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
     )
-
-    assert event_recorder.has_change_event_occurred(
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "WHEN" STEP: '
+        "'the subarray is in IDLE obsState'"
+        "TMC Central Node device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected have longRunningCommand as"
+        '(unique_id,(ResultCode.OK,"Command Completed"))',
+    ).within_timeout(60).has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+        (pytest.unique_id[0], COMMAND_COMPLETED),
     )
 
 
@@ -209,7 +302,7 @@ def end_configuration_on_subarray(
 def reconfigure_subarray(
     subarray_node: SubarrayNodeWrapper,
     central_node_mid: CentralNodeWrapperMid,
-    event_recorder: EventRecorder,
+    event_tracer: TangoEventTracer,
     command_input_factory: JsonFactory,
     subarray_id: str,
     receiver_band_2: str,
@@ -224,9 +317,6 @@ def reconfigure_subarray(
         subarray_id (str): Subarray ID
         receiver_band_1 (str): receiver band 1 for configure command
     """
-    event_recorder.subscribe_event(
-        subarray_node.subarray_node, "longRunningCommandResult"
-    )
     input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
@@ -234,46 +324,80 @@ def reconfigure_subarray(
     configure_input_json["dish"]["receiver_band"] = receiver_band_2
     configure_input_json["csp"]["common"]["frequency_band"] = "2"
     central_node_mid.set_subarray_id(subarray_id)
-    pytest.command_result = subarray_node.store_configuration_data(
-        json.dumps(configure_input_json)
+    _, pytest.unique_id = subarray_node.execute_transition(
+        "Configure", json.dumps(configure_input_json)
     )
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id],
-            "longRunningCommandResult",
-        )
-        assert (
-            central_node_mid.dish_master_dict[dish_id].dishMode
-            == DishMode.OPERATE
-        )
-        assert (
-            central_node_mid.dish_leaf_node_dict[dish_id].dishMode
-            == DishMode.OPERATE
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "WHEN" STEP: '
+            "'the dish must be in the OPERATE dishMode'"
+            "dish device"
+            f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
+            "is expected to be in OPERATE dishMode",
+        ).within_timeout(60).has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.OPERATE,
         )
 
-        assert event_recorder.has_change_event_occurred(
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "WHEN" STEP: '
+            "'the DishLeafNode must be in the OPERATE dishMode'"
+            "dish device"
+            f"({central_node_mid.dish_leaf_node_dict[dish_id].dev_name()}) "
+            "is expected to be in OPERATE dishMode",
+        ).within_timeout(60).has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "dishMode",
+            DishMode.OPERATE,
+        )
+
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "WHEN" STEP: '
+            "'the dish must be in the TRACK pointingState'"
+            "dish device"
+            f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
+            "is expected to be in TRACK pointingState",
+        ).within_timeout(60).has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
-            lookahead=10,
         )
-        assert event_recorder.has_change_event_occurred(
+
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "WHEN" STEP: '
+            "'the DishLeafNode must be in the TRACK pointingState'"
+            "dish device"
+            f"({central_node_mid.dish_leaf_node_dict[dish_id].dev_name()}) "
+            "is expected to be in TRACK pointingState",
+        ).within_timeout(60).has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
-            lookahead=10,
         )
-    assert event_recorder.has_change_event_occurred(
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "WHEN" STEP: '
+        "'the subarray must be in the READY obsState'"
+        "TMC Subarray device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected to be in READY obstate",
+    ).within_timeout(60).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
-        lookahead=10,
     )
-    assert event_recorder.has_change_event_occurred(
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "WHEN" STEP: '
+        "'the subarray is in READY obsState'"
+        "TMC Subarray Node device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected have longRunningCommand as"
+        '(unique_id,(ResultCode.OK,"Command Completed"))',
+    ).within_timeout(60).has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
-        (pytest.command_result[1][0], str(ResultCode.OK.value)),
+        (pytest.unique_id[0], COMMAND_COMPLETED),
     )
 
 
@@ -282,7 +406,7 @@ def invoke_scan(
     central_node_mid: CentralNodeWrapperMid,
     subarray_node: SubarrayNodeWrapper,
     command_input_factory: JsonFactory,
-    event_recorder: EventRecorder,
+    event_tracer: TangoEventTracer,
     scan_id: str,
 ):
     """
@@ -300,23 +424,22 @@ def invoke_scan(
         "scan_mid", command_input_factory
     )
 
-    pytest.command_result = subarray_node.execute_transition(
+    _, pytest.unique_id = subarray_node.execute_transition(
         "Scan", scan_input_json
     )
-
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        event_recorder.subscribe_event(
+        event_tracer.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "scanID"
         )
-        event_recorder.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id],
-            "longRunningCommandResult",
-        )
-        event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id],
-            "longRunningCommandResult",
-        )
-        assert event_recorder.has_change_event_occurred(
+
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "THEN" STEP: '
+            "'the dish must be in the assigned scan_id'"
+            "dish device"
+            f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
+            "is expected to be in assigned scan_id",
+        ).within_timeout(60).has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "scanID",
             scan_id,
@@ -344,7 +467,7 @@ def invoke_scan(
 @then("tmc subarraynode reports SCANNING obsState")
 def check_tmc_subarray_scanning(
     subarray_node: SubarrayNodeWrapper,
-    event_recorder: EventRecorder,
+    event_tracer: TangoEventTracer,
 ):
     """Checks if SubarrayNode's obsState attribute value is SCANNING
 
@@ -352,14 +475,25 @@ def check_tmc_subarray_scanning(
         subarray_node: Fixture for a Subarray Node wrapper class
         event_recorder: Fixture for EventRecorder class
     """
-    assert event_recorder.has_change_event_occurred(
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "THEN" STEP: '
+        "'the subarray must be in the SCANNING obsState'"
+        "TMC Subarray device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected to be in SCANNING obstate",
+    ).within_timeout(60).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.SCANNING,
     )
-    assert event_recorder.has_change_event_occurred(
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "THEN" STEP: '
+        "'the subarray must be in the READY obsState'"
+        "TMC Subarray device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected to be in READY obstate",
+    ).within_timeout(60).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
-        lookahead=10,
     )

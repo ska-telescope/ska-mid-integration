@@ -30,6 +30,8 @@ dish_master2 = "ska036/elt/master"
 dish_master3 = "ska063/elt/master"
 dish_master4 = "ska100/elt/master"
 sdp_queue_connector = "mid-sdp/queueconnector/01"
+COMMAND_COMPLETED = json.dumps([ResultCode.OK, "Command Completed"])
+
 
 COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE = {
     "enabled": True,
@@ -149,6 +151,15 @@ OBS_STATE_RESOURCING_STUCK_DEFECT = {
     "intermediate_state": ObsState.RESOURCING,
 }
 
+
+OBS_STATE_CONFIGURING_STUCK_DEFECT = {
+    "enabled": True,
+    "fault_type": FaultType.STUCK_IN_OBSTATE,
+    "error_message": "Device stuck in CONFIGURING obsState",
+    "result": ResultCode.FAILED,
+    "intermediate_state": ObsState.CONFIGURING,
+}
+
 INTERMEDIATE_OBSSTATE_EMPTY_DEFECT = {
     "enabled": True,
     "fault_type": FaultType.STUCK_IN_INTERMEDIATE_STATE,
@@ -222,6 +233,13 @@ COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE = {
     "error_message": "Default exception.",
     "result": ResultCode.FAILED,
     "target_obsstates": [ObsState.RESOURCING, ObsState.IDLE],
+}
+
+COMMAND_NOT_ALLOWED_DEFECT = {
+    "enabled": True,
+    "fault_type": FaultType.COMMAND_NOT_ALLOWED,
+    "error_message": "Command is not allowed",
+    "result": ResultCode.FAILED,
 }
 
 

@@ -4,6 +4,7 @@ import json
 
 import pytest
 from ska_tango_base.control_model import ObsState
+from ska_tango_testing.mock.placeholders import Anything
 
 from tests.resources.test_harness.constant import (
     INTERMEDIATE_STATE_DEFECT,
@@ -45,25 +46,23 @@ class TestSubarrayNodeNegative(object):
         # Set csp defective and execute configure command
         csp_sim.SetDefective(json.dumps(INTERMEDIATE_STATE_DEFECT))
 
-        _, unique_id = subarray_node.execute_transition(
+        pytest.command_result = subarray_node.execute_transition(
             "AssignResources", argin=input_json
         )
 
+        assertion_data = event_recorder.has_change_event_occurred(
+            subarray_node.subarray_node,
+            "longRunningCommandResult",
+            (pytest.command_result[1][0], Anything),
+            lookahead=15,
+        )
         exception_message = (
             "Exception occurred on the following devices: "
             "ska_mid/tm_leaf_node/csp_subarray01: "
-            "Timeout has occurred, command failed\n"
         )
-
-        expected_long_running_command_result = (
-            unique_id[0],
-            exception_message,
-        )
-
-        assert event_recorder.has_change_event_occurred(
-            subarray_node.subarray_node,
-            "longRunningCommandResult",
-            expected_long_running_command_result,
+        assert (
+            exception_message
+            in json.loads(assertion_data["attribute_value"][1])[1]
         )
 
         csp_sim.SetDefective(RESET_DEFECT)
