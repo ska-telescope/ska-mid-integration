@@ -9,4 +9,4 @@ Feature: TMC Dish Pointing (ADR-95 and ADR-76)
 
     Examples:
         | correction_key |
-        |    MAINTAIN     |
+        |    MAINTAIN    |
