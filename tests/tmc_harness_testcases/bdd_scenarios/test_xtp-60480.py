@@ -105,8 +105,7 @@ def given_tmc(
 
 @when(
     parsers.parse(
-        "five point calibration scan performed on given subarray using "
-        "correction key {correction_key}"
+        "I configure the subarray with correction key {correction_key}"
     )
 )
 def a_subarray_after_five_point_calibration(
@@ -238,8 +237,8 @@ def a_subarray_after_five_point_calibration(
 
 
 @then(
-    "the dish leaf node receives the correction key from SDP and "
-    + "resets all the Dishes"
+    "the dish leaf node receives correction key from SDP and reset "
+    + "all the Dishes"
 )
 def subarray_applies_calibration_solutions_to_dishes(
     subarray_node: SubarrayNodeWrapper,

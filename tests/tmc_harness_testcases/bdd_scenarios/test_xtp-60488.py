@@ -101,7 +101,7 @@ def given_tmc(
 
 @when(
     parsers.parse(
-        "five point calibration scan performed on given subarray using "
+        "I configure subarray with existed offsets using "
         "correction key {correction_key}"
     )
 )
@@ -233,14 +233,11 @@ def a_subarray_after_five_point_calibration(
     event_tracer.clear_events()
 
 
-@then(
-    "the dish leaf node receive correction key from SDP and " + "reset"
-    " all the Dishes"
-)
+@then("the dish leaf node validates existed offsets")
 def subarray_applies_calibration_solutions_to_dishes(
     subarray_node: SubarrayNodeWrapper,
 ):
-    """Then the dish leaf node fetches and applies the calibration
+    """the dish leaf node fetches and applies the calibration
     solutions to the dishes."""
     assert array_equal(
         pytest.existed_offset,
