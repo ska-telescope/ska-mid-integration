@@ -25,7 +25,6 @@ TIMEOUT = 110
 
 
 @pytest.mark.SKA_mid
-@pytest.mark.test1
 @scenario(
     "../features/test_harness/xtp-60488_dish_correction_maintain_key.feature",
     "TMC Behavior During correction key handling",
@@ -102,7 +101,7 @@ def given_tmc(
 
 @when(
     parsers.parse(
-        "five-point calibration scan performed on given subarray using "
+        "five point calibration scan performed on given subarray using "
         "correction key {correction_key}"
     )
 )
@@ -235,8 +234,8 @@ def a_subarray_after_five_point_calibration(
 
 
 @then(
-    "the dish leaf node receives the correction key from SDP and resets "
-    "all the Dishes"
+    "the dish leaf node receive correction key from SDP and " + "reset"
+    " all the Dishes"
 )
 def subarray_applies_calibration_solutions_to_dishes(
     subarray_node: SubarrayNodeWrapper,
