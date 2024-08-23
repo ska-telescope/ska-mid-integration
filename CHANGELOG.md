@@ -3,6 +3,13 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+
+[0.22.2]
+************
+*TMC Dish Pointing (ADR-95 and ADR-76)
+  * Utilise Dishleafnode v0.17.1 to use correction key from Config json.
+  * Test cases are implemented for correction key[{UPDATE},{RESET},{MAINTAIN}].
+
 [0.22.1]
 ************
 *Observation State Aggregation Logic improvements
