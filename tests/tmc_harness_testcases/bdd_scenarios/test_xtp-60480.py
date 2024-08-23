@@ -105,7 +105,7 @@ def given_tmc(
 
 @when(
     parsers.parse(
-        "five-point calibration scan performed on given subarray using "
+        "five point calibration scan performed on given subarray using "
         "correction key {correction_key}"
     )
 )
