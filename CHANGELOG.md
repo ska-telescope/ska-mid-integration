@@ -3,6 +3,12 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+[0.22.1]
+************
+*Observation State Aggregation Logic improvements
+  * Rule engine is used to define rules for ObsState.
+  * EventDataStorage class introduced to store event related data.
+
 [0.22.0]
 ************
 * Utilised base class v1.0.0 and pytango 9.5.0 on TMC nodes
@@ -27,7 +33,7 @@ Added
 [0.21.1]
 ************
 * Resolve SKB-419
-* Resolve SKB-384
+* Resolve SKB-384 -  Currently, across all devices in TMC, there are no polled attributes (after our work on skb-384). TMC monitors the attributes of other devices using event subscription methods. Unlike polling, which involves continuous querying, event subscription relies on a push-based mechanism. When a device generates an event (such as an attribute value change), the Tango system notifies all subscribed clients. As a result, there is no ongoing polling loop; TMC only receives updates when events occur."
 * Note: This release - REL-1623 is from SAH-1564.
 
 [0.21.0]

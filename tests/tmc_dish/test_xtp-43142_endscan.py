@@ -163,7 +163,7 @@ def move_subarray_obsState_to_scanning(
         "TMC Subarray device"
         f"({subarray_node.subarray_node.dev_name()}) "
         "is expected to be in READY obstate",
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(160).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,

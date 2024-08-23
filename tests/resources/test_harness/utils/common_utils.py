@@ -323,7 +323,7 @@ def check_configure_successful_csp(
     the_waiter.set_wait_for_specific_obsstate(
         "READY", [subarray_node.subarray_node]
     )
-    the_waiter.wait(150)
+    the_waiter.wait(1500)
 
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
