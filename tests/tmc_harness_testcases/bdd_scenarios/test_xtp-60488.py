@@ -11,10 +11,14 @@ from ska_tango_testing.integration import TangoEventTracer, log_events
 from tango import DevState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
-from tests.resources.test_harness.constant import COMMAND_COMPLETED
+from tests.resources.test_harness.constant import (
+    COMMAND_COMPLETED,
+    DISH_001_CALIBRATION_DATA,
+)
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
+    wait_and_validate_device_attribute_value,
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
@@ -148,11 +152,62 @@ def a_subarray_after_five_point_calibration(
             COMMAND_COMPLETED,
         ),
     )
+    # Set initial configure json
+    configure_input_json = prepare_json_args_for_commands(
+        "configure_mid", command_input_factory
+    )
+    _, unique_id = subarray_node.execute_transition(
+        "Configure", configure_input_json
+    )
+
+    assert_that(event_tracer).described_as(
+        "FAILED ASSUMPTION AFTER CONFIGURE COMMAND: "
+        "Subarray Node device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected to be in READY obstate",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.READY,
+    )
+    assert_that(event_tracer).described_as(
+        "FAILED ASSUMPTION AFTER CONFIGURE COMMAND: "
+        "'the subarray is in READY obsState'"
+        "Subarray Node device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected have longRunningCommand as"
+        '(unique_id,(ResultCode.OK,"Command Completed"))',
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (
+            unique_id[0],
+            COMMAND_COMPLETED,
+        ),
+    )
     subarray_node.simulate_receive_addresses_event(
         sdp_sim, command_input_factory
     )
     event_tracer.clear_events()
+    assert wait_and_validate_device_attribute_value(
+        subarray_node.dish_leaf_node_list[0],
+        "sdpQueueConnectorFqdn",
+        "tango://mid-sdp/queueconnector/01/pointing_cal_{dish_id}",
+        timeout=30,
+    )
+    subarray_node.set_pointing_cal_on_queue_connector()
 
+    assert wait_and_validate_device_attribute_value(
+        subarray_node.dish_leaf_node_list[0],
+        "lastPointingData",
+        json.dumps(DISH_001_CALIBRATION_DATA),
+        is_json=True,
+        timeout=30,
+    )
+
+    pytest.existing_last_pointing_data = subarray_node.dish_leaf_node_list[
+        0
+    ].lastPointingData
     # Configure command
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
@@ -227,10 +282,10 @@ def a_subarray_after_five_point_calibration(
             COMMAND_COMPLETED,
         ),
     )
-    # Setting pointing calibration data
-    subarray_node.set_pointing_cal_on_queue_connector()
 
     event_tracer.clear_events()
+
+    subarray_node.sdp_qc.SetPointingCalSka001([1.2, 1.2, 1.3])
 
 
 @then("the dish leaf node validates existed offsets")
@@ -239,7 +294,14 @@ def subarray_applies_calibration_solutions_to_dishes(
 ):
     """the dish leaf node fetches and applies the calibration
     solutions to the dishes."""
+    assert not wait_and_validate_device_attribute_value(
+        subarray_node.dish_leaf_node_list[0],
+        "lastPointingData",
+        json.dumps([1.2, 1.2, 1.3]),
+        is_json=True,
+        timeout=10,
+    )
     assert array_equal(
-        pytest.existed_offset,
-        subarray_node.dish_leaf_node_list[0].sourceOffset,
+        pytest.existing_last_pointing_data,
+        subarray_node.dish_leaf_node_list[0].lastPointingData,
     )
