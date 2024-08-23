@@ -249,7 +249,7 @@ def a_subarray_after_five_point_calibration(
         ),
     )
 
-    # Partial configurations for Configure command
+    # Partial configuration for Configure command
     partial_configure_json = prepare_json_args_for_commands(
         "partial_configure_1", command_input_factory
     )
