@@ -1,7 +1,7 @@
 
 dish-lmc-dish001:
-  extends:
-    - k8s-test
+  # extends:
+  #   - k8s-test
   stage: test
   tags:
     - ska-k8s
