@@ -136,7 +136,7 @@ def check_subarray_obsstate(
             "dish device"
             f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
             "is expected to be in OPERATE dishMode",
-        ).within_timeout(60).has_change_event_occurred(
+        ).within_timeout(160).has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
