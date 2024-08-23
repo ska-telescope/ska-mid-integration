@@ -4,7 +4,7 @@ Feature: TMC Dish Pointing (ADR-95 and ADR-76)
 	Scenario Outline: TMC Behavior During correction key handling
 		Given a TMC
 		When five point calibration scan performed on given subarray using correction key <correction_key> 
-		Then the dish leaf node receive correction key from SDP and reset all the Dishes
+		Then the dish leaf node receives correction key from SDP and reset all the Dishes
 		And is in READY obsState
 
     Examples:
