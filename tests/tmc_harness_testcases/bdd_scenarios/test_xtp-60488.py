@@ -3,6 +3,7 @@ import json
 
 import pytest
 from assertpy import assert_that
+from numpy import array_equal
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer, log_events
@@ -238,9 +239,9 @@ def subarray_applies_calibration_solutions_to_dishes(
     """Then the Subarray fetches and applies the configuration solutions to the
     dishes."""
 
-    assert (
-        pytest.existed_offset
-        == subarray_node.dish_leaf_node_list[0].sourceOffset
+    assert array_equal(
+        pytest.existed_offset,
+        subarray_node.dish_leaf_node_list[0].sourceOffset,
     )
 
 
