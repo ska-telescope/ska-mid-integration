@@ -1,4 +1,4 @@
-"""Testing the Science Scan after a five point calibration scan"""
+"""Test case to verify TMC Behavior during correction key handling."""
 import json
 
 import pytest
@@ -35,8 +35,8 @@ TIMEOUT = 110
 )
 def test_tmc_dish_configure_with_correction_key():
     """
-    Test case to verify the Science scan functionality after a five point
-    calibration scan on TMC
+    Test case to verify TMC Behavior during correction key handling
+    on a TMC subarray.
     """
 
 
@@ -46,7 +46,7 @@ def given_tmc(
     subarray_node: SubarrayNodeWrapper,
     event_tracer: TangoEventTracer,
 ):
-    """Given a TMC"""
+    """Given a TMC setup for the test."""
     # Setting up subscriptions
     event_tracer.subscribe_event(
         central_node_mid.central_node, "telescopeState"
@@ -117,7 +117,7 @@ def a_subarray_after_five_point_calibration(
     command_input_factory: JsonFactory,
     correction_key,
 ):
-    """Given a Subarray after the five point Calibration scan."""
+    """Execute calibration scan and configure subarray."""
     sdp_sim = simulator_factory.get_or_create_simulator_device(
         SimulatorDeviceType.MID_SDP_DEVICE
     )

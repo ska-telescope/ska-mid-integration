@@ -1,4 +1,5 @@
-"""Testing the Science Scan after a five point calibration scan"""
+"""Test case to verify TMC Behavior during correction key handling."""
+
 import json
 
 import pytest
@@ -12,10 +13,8 @@ from tango import DevState
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.helpers import (
-    check_subarray_obs_state,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
-    wait_and_validate_device_attribute_value,
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
@@ -33,8 +32,8 @@ TIMEOUT = 110
 )
 def test_tmc_dish_configure_with_maintain_correction_key():
     """
-    Test case to verify the Science scan functionality after a five point
-    calibration scan on TMC
+    Test case to verify TMC Behavior during correction key handling
+    on a TMC subarray.
     """
 
 
@@ -44,7 +43,7 @@ def given_tmc(
     subarray_node: SubarrayNodeWrapper,
     event_tracer: TangoEventTracer,
 ):
-    """Given a TMC"""
+    """Given a TMC setup for the test."""
     # Setting up subscriptions
     event_tracer.subscribe_event(
         central_node_mid.central_node, "telescopeState"
@@ -103,7 +102,7 @@ def given_tmc(
 
 @when(
     parsers.parse(
-        "five point calibration scan performed on given subarray using "
+        "five-point calibration scan performed on given subarray using "
         "correction key {correction_key}"
     )
 )
@@ -115,7 +114,8 @@ def a_subarray_after_five_point_calibration(
     command_input_factory: JsonFactory,
     correction_key,
 ):
-    """Given a Subarray after the five point Calibration scan."""
+    """When a five-point calibration scan is performed on a subarray using
+    the given correction key."""
     sdp_sim = simulator_factory.get_or_create_simulator_device(
         SimulatorDeviceType.MID_SDP_DEVICE
     )
@@ -168,6 +168,7 @@ def a_subarray_after_five_point_calibration(
     _, unique_id = subarray_node.execute_transition(
         "Configure", configure_input_str
     )
+
     assert_that(event_tracer).described_as(
         "FAILED ASSUMPTION AFTER CONFIGURE COMMAND: "
         "Subarray Node device"
@@ -193,59 +194,56 @@ def a_subarray_after_five_point_calibration(
             COMMAND_COMPLETED,
         ),
     )
-    event_tracer.clear_events()
 
-    # Scan Command
-    scan_command_input = prepare_json_args_for_commands(
-        "scan_mid", command_input_factory
+    # Partial configurations for Configure command
+    partial_configure_json = prepare_json_args_for_commands(
+        "partial_configure_1", command_input_factory
     )
-    subarray_node.execute_transition("Scan", scan_command_input)
+
+    _, unique_id = subarray_node.execute_transition(
+        "Configure", partial_configure_json
+    )
     assert_that(event_tracer).described_as(
-        "FAILED ASSUMPTION AFTER SCAN COMMAND: "
+        "FAILED ASSUMPTION AFTER CONFIGURE COMMAND: "
         "Subarray Node device"
         f"({subarray_node.subarray_node.dev_name()}) "
-        "is expected to be in SCANNING obstate",
+        "is expected to be in READY obstate",
     ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
-        ObsState.SCANNING,
+        ObsState.READY,
     )
-    wait_and_validate_device_attribute_value(
-        subarray_node.subarray_node, "obsState", ObsState.READY
+    assert_that(event_tracer).described_as(
+        "FAILED ASSUMPTION AFTER CONFIGURE COMMAND: "
+        "'the subarray is in READY obsState'"
+        "Subarray Node device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected have longRunningCommand as"
+        '(unique_id,(ResultCode.OK,"Command Completed"))',
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (
+            unique_id[0],
+            COMMAND_COMPLETED,
+        ),
     )
-    event_tracer.clear_events()
-
-    # Partial configurations and scans
-    partial_configuration_jsons = [
-        f"partial_configure_{i}" for i in range(1, 5)
-    ]
-    subarray_node.execute_five_point_calibration_scan(
-        partial_configuration_jsons,
-        event_tracer,
-        command_input_factory,
-    )
-
     # Setting pointing calibration data
     subarray_node.set_pointing_cal_on_queue_connector()
 
+    event_tracer.clear_events()
+
 
 @then(
-    "the dish leaf node receive correction key from SDP and reset "
-    + "all the Dishes"
+    "the dish leaf node receives the correction key from SDP and resets "
+    "all the Dishes"
 )
 def subarray_applies_calibration_solutions_to_dishes(
     subarray_node: SubarrayNodeWrapper,
 ):
-    """Then the Subarray fetches and applies the configuration solutions to the
-    dishes."""
-
+    """Then the dish leaf node fetches and applies the calibration
+    solutions to the dishes."""
     assert array_equal(
         pytest.existed_offset,
         subarray_node.dish_leaf_node_list[0].sourceOffset,
     )
-
-
-@then("is in READY obsState")
-def subarray_is_in_ready_obsstate(subarray_node: SubarrayNodeWrapper):
-    """Subarray is in READY obsState."""
-    assert check_subarray_obs_state("READY", 500, subarray_node=subarray_node)
