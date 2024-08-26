@@ -1579,13 +1579,15 @@ url = "https://pypi.org/simple"
 reference = "PyPI-public"
 
 [[package]]
-name = "pytest_bdd_report"
-version = "1.0.2"
+name = "pytest-bdd-report"
+version = "1.0.3b0"
 description = "A pytest-bdd plugin for generating useful and informative BDD test reports"
 optional = false
 python-versions = ">=3.5"
-files = []
-develop = false
+files = [
+    {file = "pytest_bdd_report-1.0.3b0-py3-none-any.whl", hash = "sha256:54ea9a6df66c9bfc9f2a3f5fe58d8f4fd0179535c023110686dd5bb7db7d3675"},
+    {file = "pytest_bdd_report-1.0.3b0.tar.gz", hash = "sha256:7238b16acceb3b4694b93ada5c5b4fcc23a96800a4878df7c783ce020356af81"},
+]
 
 [package.dependencies]
 Jinja2 = ">=3.1.2"
@@ -1593,10 +1595,9 @@ pytest = ">=7.1.3"
 pytest-bdd = ">=5.0.0,<7.0.0"
 
 [package.source]
-type = "git"
-url = "https://github.com/EmanueleIDS/pytest-bdd-report.git"
-reference = "main"
-resolved_reference = "23812acbe7b2094a4f9fa1ac007460b9a6adbe92"
+type = "legacy"
+url = "https://pypi.org/simple"
+reference = "PyPI-public"
 
 [[package]]
 name = "pytest-cov"
@@ -2156,7 +2157,7 @@ ska-tango-testing = "^0.7.1"
 type = "git"
 url = "https://gitlab.com/ska-telescope/ska-integration-test-harness.git"
 reference = "omcpt-39-init-test-harness-repo"
-resolved_reference = "5fe5140a2109d70bd81fa754bf0f2719ac36b03d"
+resolved_reference = "363df65339e973b9c466e630cd895e7931fc707a"
 
 [[package]]
 name = "ska-ser-logging"
@@ -2765,4 +2766,4 @@ reference = "PyPI-public"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "32422d849c8599c16389d7ef463f163b023da2ffaa28034ef3a0fad98ecc5865"
+content-hash = "29953a0c7ea5b9a24fe626da336f31779872a5968113736608ec1a7c109ee853"
