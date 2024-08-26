@@ -271,8 +271,17 @@ endif
 # ----------------------------------------------------------------------------
 # Publish the BDD HTML test report to the just published
 # Jira test execution issue
+
+PUBLISH_HTML_REPORT_TO_JIRA_SCRIPT ?= helper_scripts/publish_test_report.py
+## The Python script that will publish the BDD HTML test report to the Jira test execution issue
+# (Set to empty to disable the publishing of the BDD HTML test report to the Jira test execution issue)
+
+# after the test run and the Test Execution Jira ticket is created,
+# if the HTML report is enabled and 
+# the script to publish the HTML report to Jira is available,
+# then publish a link to the HTML report to Jira
 xray-post-publish:
-	if [ -f "$(HTML_REPORT_TARGET_FILE)" ]; then \
+	if [ -f "$(HTML_REPORT_TARGET_FILE)" ] && [ -f "$(PUBLISH_HTML_REPORT_TO_JIRA_SCRIPT)" ]; then \
 		echo "Publishing the BDD HTML test report to the Jira test execution issue"; \
-		python3 -m tests.publish_test_report; \
+		python3 $(PUBLISH_HTML_REPORT_TO_JIRA_SCRIPT)
 	fi
