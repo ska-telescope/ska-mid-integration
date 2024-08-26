@@ -283,5 +283,5 @@ PUBLISH_HTML_REPORT_TO_JIRA_SCRIPT ?= helper_scripts/publish_test_report.py
 xray-post-publish:
 	if [ -f "$(HTML_REPORT_TARGET_FILE)" ] && [ -f "$(PUBLISH_HTML_REPORT_TO_JIRA_SCRIPT)" ]; then \
 		echo "Publishing the BDD HTML test report to the Jira test execution issue"; \
-		python3 $(PUBLISH_HTML_REPORT_TO_JIRA_SCRIPT)
+		python3 $(PUBLISH_HTML_REPORT_TO_JIRA_SCRIPT); \
 	fi
