@@ -369,7 +369,7 @@ def verify_aborted_state(
         f", CSP Subarray device ({csp.csp_subarray}) "
         f"and SDP Subarray device ({sdp.sdp_subarray}) "
         "ObsState attribute values should move "
-        "from ABORTING to RESOURCING."
+        "from ABORTING to ABORTED."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         subarray_node_facade.subarray_node,
         "obsState",
