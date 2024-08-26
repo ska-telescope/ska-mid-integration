@@ -7,6 +7,7 @@ k8s-test-mid-with-csp-refactor:
     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-csp-mid-refactor"
     MARK: 'tmc_csp_refactor3'
     CSP_SIMULATION_ENABLED: 'false'
+    EXIT_AT_FAIL: 'false'
   environment:
     name: test/$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-test-mid-with-csp-refactor
