@@ -229,3 +229,11 @@ PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --tb=long
 
 # Generate a BDD report
 # PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --bdd-report=build/tests/report.html
+
+# generate documentation for steps and feature files
+STEP_DOCUMENTATION_OUTPUT_FOLDER ?= docs/bdd-steps-doc
+STEP_DOCUMENTATION_SCRIPT ?= helper_scripts/document_steps.py
+STEP_DOCUMENTATION_TARGET_FOLDER ?= tests/tmc_csp_refactor3/ # for the moment
+bdd-steps-doc:
+	rm -rf $(STEP_DOCUMENTATION_OUTPUT_FOLDER)
+	python $(STEP_DOCUMENTATION_SCRIPT) $(STEP_DOCUMENTATION_TARGET_FOLDER) $(STEP_DOCUMENTATION_OUTPUT_FOLDER)
