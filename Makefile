@@ -285,3 +285,6 @@ xray-post-publish:
 		echo "Publishing the BDD HTML test report to the Jira test execution issue"; \
 		python3 $(PUBLISH_HTML_REPORT_TO_JIRA_SCRIPT); \
 	fi
+
+
+

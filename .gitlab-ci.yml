@@ -101,3 +101,7 @@ k8s-test:
   after_script:
     - pip3 install -q -U ska-ser-xray
     - XRAY_TEST_RESULT_FILE="build/cucumber.json" make xray-publish
+
+docs-build-rtd:
+  rules:
+    - when: never

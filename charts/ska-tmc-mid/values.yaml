@@ -84,7 +84,7 @@ subarraynode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-subarraynode
-    tag: 0.21.1
+    tag: 0.23.1
     pullPolicy: IfNotPresent
 
 
@@ -92,21 +92,21 @@ sdpleafnodes:
   image:
     registry: artefact.skao.int
     image: ska-tmc-sdpleafnodes
-    tag: 0.16.1
+    tag: 0.16.5
     pullPolicy: IfNotPresent
 
 cspmasterleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.19.1
+    tag: 0.19.3
     pullPolicy: IfNotPresent
 
 cspsubarrayleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.19.1
+    tag: 0.19.3
     pullPolicy: IfNotPresent
 
 dishleafnode:
@@ -118,10 +118,10 @@ dishleafnode:
 
 resources:
   limits:
-    memory: 2000Mi
+    memory: 3000Mi
   requests:
-    cpu: 500m
-    memory: 1000Mi
+    cpu: 1500m
+    memory: 2800Mi
 
 
 deviceServers:
@@ -180,10 +180,10 @@ deviceServers:
     file: "data/dishleafnode.yaml"
     resources:
       limits:
-        memory: 2000Mi
+        memory: 3000Mi
       requests:
-        cpu: 900m
-        memory: 1000Mi
+        cpu: 1500m
+        memory: 2800Mi
 
   mocks:
     enabled: false
