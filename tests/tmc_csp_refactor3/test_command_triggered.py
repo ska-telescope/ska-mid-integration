@@ -462,7 +462,7 @@ def verify_empty_state(
         f", CSP Subarray device ({csp.csp_subarray}) "
         f"and SDP Subarray device ({sdp.sdp_subarray}) "
         "ObsState attribute values should move "
-        f"from {context_fixt.starting_state} to EMPTY."
+        f"from {str(context_fixt.starting_state)} to EMPTY."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         subarray_node_facade.subarray_node,
         "obsState",
