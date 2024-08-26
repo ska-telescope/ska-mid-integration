@@ -21,7 +21,6 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_harness.utils.common_utils import (
     check_scan_successful_csp,
 )
-from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.test_harness3.telescope_facades.csp_facade import CSPFacade
 from tests.test_harness3.telescope_facades.dishes_facade import DishesFacade
 from tests.test_harness3.telescope_facades.sdp_facade import SDPFacade

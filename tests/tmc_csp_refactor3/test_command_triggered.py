@@ -630,8 +630,10 @@ def _get_long_run_command_id(context_fixt: SubarrayTestContextData) -> str:
 
 
 def _get_expected_long_run_command_result(context_fixt) -> tuple[str, str]:
-    return (_get_long_run_command_id(context_fixt), 
-            f'[{ResultCode.OK.value}, "Command Completed"]')
+    return (
+        _get_long_run_command_id(context_fixt),
+        f'[{ResultCode.OK.value}, "Command Completed"]',
+    )
 
 
 @then(
