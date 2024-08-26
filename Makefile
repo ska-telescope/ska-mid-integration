@@ -21,14 +21,25 @@ FILE ?= tests## A specific test file to pass to pytest
 ADD_ARGS ?= ## Additional args to pass to pytest
 FILE_NAME?= alarm_rules.txt
 
-EXIT_AT_FAIL ?= true ## Flag for determining exit at failure. 
-# Set 'true' to exit at first failure, 'false' to continue to the end.
-# It defaults to 'true' if not set. Actually, any value other than 'false' will
-# be treated as 'true'.
 
-ifneq ($(EXIT_AT_FAIL),false)
+# ----------------------------------------------------------------------------
+# Exit at failure flag
+# 
+# The following flag is used to determine whether the test run should exit at
+# the first failure or continue running tests after a failure. By default, the
+# test run will exit at the first failure. To continue running tests after a
+# failure, set the flag to 'false'.
+
+EXIT_AT_FAIL ?= true ## Flag for determining exit at failure. 
+# Set 'true' to exit at first failure. Set 'false' to continue running 
+# tests after failure. It defaults to 'true' if not set.
+# Actually, any value other than 'false' will be treated as 'true'.
+
+ifneq ($(EXIT_AT_FAIL), false)
 ADD_ARGS += -x
 endif
+
+# ----------------------------------------------------------------------------
 
 # KUBE_NAMESPACE defines the Kubernetes Namespace that will be deployed to
 # using Helm.  If this does not already exist it will be created
@@ -67,7 +78,7 @@ K8S_TEST_IMAGE_TO_TEST ?= harbor.skao.int/production/ska-tango-images-pytango-bu
 TARANTA_ENABLED ?= false
 
 CI_PROJECT_DIR ?= .
-XRAY_TEST_RESULT_FILE = "build/cucumber.json"
+
 XAUTHORITY ?= $(HOME)/.Xauthority
 THIS_HOST := $(shell ip a 2> /dev/null | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p' | head -n1)
 DISPLAY ?= $(THIS_HOST):0
@@ -90,13 +101,12 @@ DISH_SIMULATION_ENABLED ?= true
 SDP_PROCCONTROL_REPLICAS ?= 1
 
 ifeq ($(MAKECMDGOALS),k8s-test)
-ADD_ARGS +=  --true-context # -x
+ADD_ARGS +=  --true-context
 MARK ?= $(shell echo $(TELESCOPE) | sed "s/-/_/g")
 endif
 
-# EXIT_AT_FAIL option isn't functioning correctly, so the option -x is added
-# at the end. Will be debugged and fixed as a part of improvement.
-PYTHON_VARS_AFTER_PYTEST ?= -m '$(MARK) $(ADDMARK)' $(ADD_ARGS) $(FILE) --count=$(COUNT) # -x 
+
+PYTHON_VARS_AFTER_PYTEST ?= -m '$(MARK) $(ADDMARK)' $(ADD_ARGS) $(FILE) --count=$(COUNT)
 CUSTOM_VALUES1 ?=
 CUSTOM_VALUES2 ?=
 ifeq ($(CSP_SIMULATION_ENABLED),false)
@@ -206,34 +216,85 @@ test-requirements:
 
 k8s-pre-test: test-requirements    
 
-## ############################################
-## Focused test targets
-## 
-## Idea: for debug purposes, it is useful to run a single test or a single file
-##       This section provides targets for that. Those targets use the `-k`
-##       option which allows to match a substring in the test name.
+# ----------------------------------------------------------------------------
+# Trick to select a subset of the tests to run by their python name
+# Very useful when debugging a single test
+# 
+# Example:
+# make k8s-test MARK=tmc_csp PYTHON_TEST_NAME="abort"
+# # Expected result: among all the tests with "tmc_csp" as a marker,
+# #  			  only the ones with "abort" in their name will be run.
 
-PYTHON_TEST_NAME ?=## Name of your test target (it will be passed to pytest through -k) 
-PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) -k '$(PYTHON_TEST_NAME)'
+PYTHON_TEST_NAME ?= ## -k parameter for pytest
 
-# Usage example: run just the test that contains the
-#	string "scan" or "abort" in the function name
+ifneq ($(PYTHON_TEST_NAME),)
+	PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) -k '$(PYTHON_TEST_NAME)'
+endif
 
-# make k8s-test PYTHON_TEST_NAME="scan or abort"
+# ----------------------------------------------------------------------------
+# test results files
+# (The following variables are used to generate the various test results files
+# i.e., cucumber.json, report.json, and report.html)
+# 
+# report.html is used to generate the BDD test report by the pytest-bdd-report
+# plugin. The plugin generates a BDD test report in HTML format, that will
+# then be published in the artifacts and that will be linked in the 
+# Jira ticket of the test execution.
 
-## ############################################
-## Further customisation of the test targets
+# target file names for the cucumber-related test results json files
+CUCUMBER_JSON_RESULT_FILE ?= build/cucumber.json
+REPORT_JSON_RESULT_FILE ?= build/report.json
+XRAY_TEST_RESULT_FILE ?= build/cucumber.json
+
+# configuration file for ska-ser-xray to publish the test results to Jira
+XRAY_EXECUTION_CONFIG_FILE ?= tests/xray-config.json
+
+# target file name for the BDD test report in HTML format
+# Leave or set to empty to disable the HTML BDD test report generation
+HTML_REPORT_TARGET_FILE ?= build/report.html
+
+# ----------------------------------------------------------------------------
+# Add all the flags needed to generate the test results files
+
+# Add BDD report output 
+PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) \
+	--cucumberjson="$(CUCUMBER_JSON_RESULT_FILE)" \
+	--json-report \
+	--json-report-file="$(REPORT_JSON_RESULT_FILE)"
+
+# Add BDD HTML test report (if enabled)
+ifneq ($(HTML_REPORT_TARGET_FILE),)
+	PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) \
+		--bdd-report="$(HTML_REPORT_TARGET_FILE)"
+endif
+
+# ----------------------------------------------------------------------------
+# Publish the BDD HTML test report to the just published
+# Jira test execution issue
+xray-post-publish:
+	if [ -f "$(HTML_REPORT_TARGET_FILE)" ]; then \
+		echo "Publishing the BDD HTML test report to the Jira test execution issue"; \
+		python3 -m tests.publish_test_report; \
+	fi
+
+
+# ----------------------------------------------------------------------------
+# generate documentation for steps and feature files
+
+
+STEP_DOCUMENTATION_OUTPUT_FOLDER ?= docs/bdd-steps-doc ## The folder where the documentation will be generated
+STEP_DOCUMENTATION_SCRIPT ?= helper_scripts/document_steps.py ## The script that will generate the documentation
+STEP_DOCUMENTATION_TARGET_FOLDER ?= tests/tmc_csp_refactor3/ # for the moment
+## The target folder where the script will look for the feature files
+
+bdd-steps-doc:
+	rm -rf $(STEP_DOCUMENTATION_OUTPUT_FOLDER)
+	python $(STEP_DOCUMENTATION_SCRIPT) $(STEP_DOCUMENTATION_TARGET_FOLDER) $(STEP_DOCUMENTATION_OUTPUT_FOLDER)
+
+
+# ----------------------------------------------------------------------------
+# Further customisation of the test targets
 
 # Verbose error tracebacks
 PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --tb=long
 
-# Generate a BDD report
-# PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --bdd-report=build/tests/report.html
-
-# generate documentation for steps and feature files
-STEP_DOCUMENTATION_OUTPUT_FOLDER ?= docs/bdd-steps-doc
-STEP_DOCUMENTATION_SCRIPT ?= helper_scripts/document_steps.py
-STEP_DOCUMENTATION_TARGET_FOLDER ?= tests/tmc_csp_refactor3/ # for the moment
-bdd-steps-doc:
-	rm -rf $(STEP_DOCUMENTATION_OUTPUT_FOLDER)
-	python $(STEP_DOCUMENTATION_SCRIPT) $(STEP_DOCUMENTATION_TARGET_FOLDER) $(STEP_DOCUMENTATION_OUTPUT_FOLDER)
