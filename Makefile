@@ -306,6 +306,7 @@ bdd-steps-doc:
 # ----------------------------------------------------------------------------
 # Further customisation of the test targets
 
-# Verbose error tracebacks
-PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --tb=long
-
+# Verbose error tracebacks (for now, only for refactored tests)
+ifeq ($(MARK),tmc_csp_refactor3)
+	PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --tb=long
+endif
