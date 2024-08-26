@@ -231,6 +231,7 @@ ifneq ($(PYTHON_TEST_NAME),)
 	PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) -k '$(PYTHON_TEST_NAME)'
 endif
 
+
 # ----------------------------------------------------------------------------
 # test results files
 # (The following variables are used to generate the various test results files
@@ -253,6 +254,7 @@ XRAY_EXECUTION_CONFIG_FILE ?= tests/xray-config.json
 # Leave or set to empty to disable the HTML BDD test report generation
 HTML_REPORT_TARGET_FILE ?= build/report.html
 
+
 # ----------------------------------------------------------------------------
 # Add all the flags needed to generate the test results files
 
@@ -267,6 +269,7 @@ ifneq ($(HTML_REPORT_TARGET_FILE),)
 	PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) \
 		--bdd-report="$(HTML_REPORT_TARGET_FILE)"
 endif
+
 
 # ----------------------------------------------------------------------------
 # Publish the BDD HTML test report to the just published
@@ -286,9 +289,9 @@ xray-post-publish:
 		python3 $(PUBLISH_HTML_REPORT_TO_JIRA_SCRIPT); \
 	fi
 
+
 # ----------------------------------------------------------------------------
 # generate documentation for steps and feature files
-
 
 STEP_DOCUMENTATION_OUTPUT_FOLDER ?= docs/bdd-steps-doc ## The folder where the documentation will be generated
 STEP_DOCUMENTATION_SCRIPT ?= helper_scripts/document_steps.py ## The script that will generate the documentation
