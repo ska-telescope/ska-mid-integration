@@ -1,20 +1,12 @@
+# pylint: skip-file
+# flake8: noqa
+
 """Test TMC-CSP Abort functionality in Scanning obstate"""
 import pytest
 from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer, log_events
-
-from tests.test_harness3.telescope_facades.csp_facade import CSPFacade
-from tests.test_harness3.telescope_facades.tmc_central_node_facade import (
-    TMCCentralNodeFacade,
-)
-from tests.test_harness3.telescope_facades.tmc_subarray_node_facade import (
-    TMCSubarrayNodeFacade,
-)
-from tests.test_harness3.telescope_inputs.obs_state_commands_input import (
-    ObsStateCommandsInput,
-)
 
 ASSERTIONS_TIMEOUT = 60
 

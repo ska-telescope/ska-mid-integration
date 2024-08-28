@@ -1,16 +1,13 @@
+# pylint: skip-file
+# flake8: noqa
+
 """Test module for TMC-CSP ShutDown functionality"""
+
 import pytest
 from assertpy import assert_that
 from pytest_bdd import given, scenario, then, when
 from ska_tango_testing.integration import TangoEventTracer, log_events
 from tango import DevState
-
-from tests.test_harness3.telescope_facades.csp_facade import CSPFacade
-from tests.test_harness3.telescope_facades.dishes_facade import DishesFacade
-from tests.test_harness3.telescope_facades.sdp_facade import SDPFacade
-from tests.test_harness3.telescope_facades.tmc_central_node_facade import (
-    TMCCentralNodeFacade,
-)
 
 ASSERTIONS_TIMEOUT = 60
 
