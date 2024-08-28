@@ -6,10 +6,7 @@ from typing import Any
 import pytest
 from pytest_bdd import given, parsers
 from ska_control_model import ObsState
-from ska_integration_test_harness.common_utils.typed_logger import log_events
-from ska_integration_test_harness.common_utils.typed_tracer import (
-    TypedTangoEventTracer,
-)
+
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
 from ska_integration_test_harness.facades.dishes_facade import DishesFacade
 from ska_integration_test_harness.facades.sdp_facade import SDPFacade
@@ -28,7 +25,7 @@ from ska_integration_test_harness.inputs.obs_state_commands_input import (
 from ska_integration_test_harness.structure.telescope_wrapper import (
     TelescopeWrapper,
 )
-from ska_tango_testing.integration import TangoEventTracer  # , log_events
+from ska_tango_testing.integration import TangoEventTracer, log_events
 
 from tests.tmc_csp_refactor3.utils.default_json_inputs import (
     ASSING_CENTRAL_NODE_INPUT,
@@ -136,9 +133,9 @@ def dishes(telescope_wrapper: TelescopeWrapper):
 
 
 @pytest.fixture
-def event_tracer() -> TypedTangoEventTracer:
+def event_tracer() -> TangoEventTracer:
     """Create an event tracer."""
-    return TypedTangoEventTracer()
+    return TangoEventTracer(event_enum_mapping={"obsState": ObsState},) 
 
 
 # ------------------------------------------------------------
@@ -194,7 +191,7 @@ def _setup_event_subscriptions(
     subarray_node_facade: TMCSubarrayNodeFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
-    event_tracer: TypedTangoEventTracer,
+    event_tracer: TangoEventTracer,
 ):
     """Set up event subscriptions for the test.
 
@@ -203,8 +200,6 @@ def _setup_event_subscriptions(
         csp: Facade for the CSP.
         event_tracer: Event tracer for capturing events.
     """
-    event_tracer.associate_attribute_to_enum("obsState", ObsState)
-
     event_tracer.subscribe_event(
         subarray_node_facade.subarray_node, "obsState"
     )
@@ -227,7 +222,7 @@ def _setup_event_subscriptions(
             sdp.sdp_subarray: ["obsState", "commandCallInfo"],
             central_node_facade.central_node: ["longRunningCommandResult"],
         },
-        attribute_enum_map={"obsState": ObsState},
+        event_enum_mapping={"obsState": ObsState},
     )
 
 

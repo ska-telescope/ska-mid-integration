@@ -6,7 +6,7 @@ import tango
 from ska_tango_testing.integration.event import ReceivedEvent
 from ska_tango_testing.integration.logger import TangoEventLogger
 
-from tests.tmc_csp_refactor3.utils.typed_tracer import EventTypeMapper
+from tests.test_harness3.common_utils.typed_tracer import EventTypeMapper
 
 
 # provide a quick utility function to log events
