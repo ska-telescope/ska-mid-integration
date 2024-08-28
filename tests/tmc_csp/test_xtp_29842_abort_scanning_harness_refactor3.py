@@ -19,6 +19,7 @@ from tests.test_harness3.telescope_inputs.obs_state_commands_input import (
 ASSERTIONS_TIMEOUT = 60
 
 
+@pytest.mark.skip("Redundant test")
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/xtp_29842_abort_scanning.feature",

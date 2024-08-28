@@ -15,6 +15,7 @@ from tests.test_harness3.telescope_facades.tmc_central_node_facade import (
 ASSERTIONS_TIMEOUT = 60
 
 
+@pytest.mark.skip("Redundant test")
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/xtp_29250_off.feature",
@@ -26,7 +27,7 @@ def test_tmc_csp_telescope_off_harness_refactor3():
     """
 
 
-# @pytest.mark.skip(reason="TODO: why does it fail?")
+@pytest.mark.skip("Redundant test")
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/xtp_29251_standby.feature",

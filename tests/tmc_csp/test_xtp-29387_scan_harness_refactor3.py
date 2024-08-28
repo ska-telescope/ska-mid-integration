@@ -20,6 +20,7 @@ from tests.various_utils.file_json_input import FileJSONInput
 ASSERTIONS_TIMEOUT = 60
 
 
+@pytest.mark.skip("Redundant test")
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/xtp_29387_scan.feature",

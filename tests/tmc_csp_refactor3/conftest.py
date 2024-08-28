@@ -6,7 +6,6 @@ from typing import Any
 import pytest
 from pytest_bdd import given, parsers
 from ska_control_model import ObsState
-
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
 from ska_integration_test_harness.facades.dishes_facade import DishesFacade
 from ska_integration_test_harness.facades.sdp_facade import SDPFacade
@@ -135,7 +134,9 @@ def dishes(telescope_wrapper: TelescopeWrapper):
 @pytest.fixture
 def event_tracer() -> TangoEventTracer:
     """Create an event tracer."""
-    return TangoEventTracer(event_enum_mapping={"obsState": ObsState},) 
+    return TangoEventTracer(
+        event_enum_mapping={"obsState": ObsState},
+    )
 
 
 # ------------------------------------------------------------

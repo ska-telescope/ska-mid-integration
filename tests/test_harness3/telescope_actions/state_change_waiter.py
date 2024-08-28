@@ -3,8 +3,8 @@
 
 from ska_control_model import ObsState
 
-from tests.test_harness3.telescope_actions.expected_event import ExpectedEvent
 from tests.test_harness3.common_utils.typed_tracer import TypedTangoEventTracer
+from tests.test_harness3.telescope_actions.expected_event import ExpectedEvent
 
 # from ska_tango_testing.integration.tracer import TangoEventTracer
 
