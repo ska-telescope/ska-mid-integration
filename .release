@@ -1,20 +1,18 @@
-release=0.22.1
-tag=0.22.1
+release=0.22.2
+tag=0.22.2
 tag_description=
 **Charts:**
-**1. ska-tmc-integration 0.22.0 - 0.22.1*
+**1. ska-tmc-integration 0.22.1 - 0.22.2*
 
-    **1.1 ska-tmc-mid - 0.22.0 - 0.22.1:
-        a. Observation State Aggregation Logic improvements
-                * Rule engine is used to define rules for ObsState.
-                * EventDataStorage class introduced to store event related data.
+    **1.1 ska-tmc-mid - 0.22.1 - 0.22.2:
+        a. Read the Docs warnings addressed
+
 
 
 release_notes=
 **Charts:**
-**1. ska-tmc-integration 0.22.0 - 0.22.1:**
+**1. ska-tmc-integration 0.22.1 - 0.22.2:**
 
-    **1.1 ska-tmc-mid - 0.22.0 - 0.22.1:
-        a. Observation State Aggregation Logic improvements
-                * Rule engine is used to define rules for ObsState.
-                * EventDataStorage class introduced to store event related data.
+    **1.1 ska-tmc-mid - 0.22.1 - 0.22.2:
+        a. Read the Docs warnings addressed
+
