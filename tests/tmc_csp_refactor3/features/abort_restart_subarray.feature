@@ -26,9 +26,10 @@ Feature: subarray 1 obsState may be Aborted and Restarted
     Given the telescope is in ON state
     Given the subarray 1 can be used
 
-
+  
   @Transition("12. RESOURCING --> (CMD: Abort) --> ABORTING")
   @Transition("37. ABORTING --> (AUTO: Abort complete) --> ABORTED")
+  @XTP-62548 @XTP-62547
   Scenario: RESOURCING to ABORTING to ABORTED - CMD Abort
     Given the subarray 1 is in the RESOURCING state
     When the Abort command is sent to the subarray 1
