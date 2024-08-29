@@ -2151,13 +2151,13 @@ msgpack-numpy = "^0.4.8"
 pytango = "^9.4.2"
 ska-control-model = ">=1.0.0,<2.0.0"
 ska-ser-logging = "^0.4.1"
-ska-tango-testing = "^0.7.1"
+ska-tango-testing = "^0.7.2"
 
 [package.source]
 type = "git"
 url = "https://gitlab.com/ska-telescope/ska-integration-test-harness.git"
 reference = "omcpt-39-init-test-harness-repo"
-resolved_reference = "40c2ea040a1b6c33f0f0f1875df9d20fe68556a3"
+resolved_reference = "ba401e767df34729745c9cce0951fb6e15d7f289"
 
 [[package]]
 name = "ska-ser-logging"
