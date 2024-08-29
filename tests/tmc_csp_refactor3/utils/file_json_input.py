@@ -1,13 +1,11 @@
 """A JSON input based on a file contained in the test data folder."""
 
 import os
-from typing import Any
 
-from ska_integration_test_harness.inputs.dict_json_input import DictJSONInput
-from ska_integration_test_harness.inputs.json_input import JSONInput
+from ska_integration_test_harness.inputs.json_input import FileJSONInput
 
 
-class FileJSONInput(JSONInput):
+class MyFileJSONInput(FileJSONInput):
     """A JSON input based on a file contained in the test data folder."""
 
     PATH_TO_TEST_DATA_FOLDER = os.path.join(
@@ -29,6 +27,8 @@ class FileJSONInput(JSONInput):
         self.target_file_folder_name = target_file_folder_name
         self.target_file_slug = target_file_slug
 
+        super().__init__(self.filename())
+
     def filename(self) -> str:
         """Return the filename of the JSON input.
 
@@ -41,15 +41,3 @@ class FileJSONInput(JSONInput):
             self.target_file_folder_name,
             f"{self.target_file_slug}{self.FILE_SUFFIX}",
         )
-
-    def get_json_string(self):
-        with open(self.filename(), "r", encoding="utf-8") as file:
-            json_string = file.read()
-        return json_string
-
-    def set_attribute_value(
-        self, attr_name: str, attr_value: Any
-    ) -> "DictJSONInput":
-        new_json_dict = self.get_json_dict()
-        new_json_dict[attr_name] = attr_value
-        return DictJSONInput(new_json_dict)

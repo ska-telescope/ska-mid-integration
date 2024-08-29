@@ -33,7 +33,7 @@ from tests.tmc_csp_refactor3.utils.default_json_inputs import (
     RELEASE_CENTRAL_NODE_INPUT,
     SCAN_SUBARRAY_INPUT,
 )
-from tests.tmc_csp_refactor3.utils.file_json_input import FileJSONInput
+from tests.tmc_csp_refactor3.utils.file_json_input import MyFileJSONInput
 
 # ------------------------------------------------------------
 # Test Harness fixtures
@@ -286,8 +286,9 @@ def subarray_in_idle_state(
         wait_termination=True,
     )
 
-    json_input = FileJSONInput("centralnode", "assign_resources_mid")
-    json_input = json_input.set_attribute_value("subarray_id", 1)
+    json_input = MyFileJSONInput(
+        "centralnode", "assign_resources_mid"
+    ).with_attribute("subarray_id", 1)
 
     context_fixt.when_action_result = central_node_facade.assign_resources(
         json_input,

@@ -1,16 +1,16 @@
 """A collection of default JSON inputs for various devices."""
-from ska_integration_test_harness.inputs.dict_json_input import DictJSONInput
+from ska_integration_test_harness.inputs.json_input import DictJSONInput
 
-from tests.tmc_csp_refactor3.utils.file_json_input import FileJSONInput
+from tests.tmc_csp_refactor3.utils.file_json_input import MyFileJSONInput
 
-CONFIGURE_SUBARRAY_INPUT = FileJSONInput("subarray", "configure_mid")
-SCAN_SUBARRAY_INPUT = FileJSONInput("subarray", "scan_mid")
-ASSIGN_SUBARRAY_INPUT = FileJSONInput("subarray", "assign_resources_mid")
+CONFIGURE_SUBARRAY_INPUT = MyFileJSONInput("subarray", "configure_mid")
+SCAN_SUBARRAY_INPUT = MyFileJSONInput("subarray", "scan_mid")
+ASSIGN_SUBARRAY_INPUT = MyFileJSONInput("subarray", "assign_resources_mid")
 
-ASSING_CENTRAL_NODE_INPUT = FileJSONInput(
+ASSING_CENTRAL_NODE_INPUT = MyFileJSONInput(
     "centralnode", "assign_resources_mid"
 )
-RELEASE_CENTRAL_NODE_INPUT = FileJSONInput(
+RELEASE_CENTRAL_NODE_INPUT = MyFileJSONInput(
     "centralnode", "release_resources_mid"
 )
 

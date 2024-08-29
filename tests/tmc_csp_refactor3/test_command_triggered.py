@@ -19,7 +19,7 @@ from ska_integration_test_harness.inputs.obs_state_commands_input import (
 from ska_tango_testing.integration import TangoEventTracer
 
 from tests.tmc_csp_refactor3.conftest import SubarrayTestContextData
-from tests.tmc_csp_refactor3.utils.file_json_input import FileJSONInput
+from tests.tmc_csp_refactor3.utils.file_json_input import MyFileJSONInput
 
 ASSERTIONS_TIMEOUT = 60
 
@@ -185,8 +185,9 @@ def send_assign_resources_command(
     termination. The action result is stored in the context fixture."""
     context_fixt.when_action_name = "AssignResources"
 
-    json_input = FileJSONInput("centralnode", "assign_resources_mid")
-    json_input = json_input.set_attribute_value("subarray_id", 1)
+    json_input = MyFileJSONInput(
+        "centralnode", "assign_resources_mid"
+    ).with_attribute("subarray_id", 1)
 
     context_fixt.when_action_result = central_node_facade.assign_resources(
         json_input,
@@ -215,8 +216,9 @@ def send_assign_additional_resources_command(
     context_fixt.when_action_name = "AssignResources"
 
     # TODO: change this input to assign additional resources
-    json_input = FileJSONInput("centralnode", "assign_resources_mid")
-    json_input = json_input.set_attribute_value("subarray_id", 1)
+    json_input = MyFileJSONInput(
+        "centralnode", "assign_resources_mid"
+    ).with_attribute("subarray_id", 1)
 
     context_fixt.when_action_result = central_node_facade.assign_resources(
         json_input,
@@ -244,8 +246,9 @@ def send_release_resources_command(
     """
     context_fixt.when_action_name = "ReleaseResources"
 
-    json_input = FileJSONInput("centralnode", "release_resources_mid")
-    json_input = json_input.set_attribute_value("subarray_id", 1)
+    json_input = MyFileJSONInput(
+        "centralnode", "release_resources_mid"
+    ).with_attribute("subarray_id", 1)
 
     context_fixt.when_action_result = central_node_facade.release_resources(
         json_input,
@@ -270,7 +273,7 @@ def send_configure_command(
     """
     context_fixt.when_action_name = "Configure"
 
-    json_input = FileJSONInput("subarray", "configure_mid")
+    json_input = MyFileJSONInput("subarray", "configure_mid")
 
     context_fixt.when_action_result = subarray_node_facade.configure(
         json_input,
@@ -293,7 +296,7 @@ def send_scan_command(
     """
     context_fixt.when_action_name = "Scan"
 
-    json_input = FileJSONInput("subarray", "scan_mid")
+    json_input = MyFileJSONInput("subarray", "scan_mid")
 
     context_fixt.when_action_result = subarray_node_facade.scan(
         json_input,
