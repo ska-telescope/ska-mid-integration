@@ -8,8 +8,6 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer, log_events
 
-from tests.various_utils.file_json_input import FileJSONInput
-
 ASSERTIONS_TIMEOUT = 60
 
 
