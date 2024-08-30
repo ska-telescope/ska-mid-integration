@@ -13,8 +13,8 @@ from ska_integration_test_harness.facades.tmc_central_node_facade import (
 from ska_integration_test_harness.facades.tmc_subarray_node_facade import (
     TMCSubarrayNodeFacade,
 )
-from ska_integration_test_harness.inputs.obs_state_commands_input import (
-    ObsStateCommandsInput,
+from ska_integration_test_harness.inputs.test_harness_inputs import (
+    TestHarnessInputs,
 )
 from ska_tango_testing.integration import TangoEventTracer
 
@@ -146,7 +146,7 @@ def subarray_in_empty_state(
     This step uses the TMCSubarrayNodeFacade to force the subarray's
     ObsState to EMPTY. It does this by calling the force_change_of_obs_state
     method, which bypasses normal state transition checks. The method is
-    invoked with ObsState.EMPTY and an empty ObsStateCommandsInput,
+    invoked with ObsState.EMPTY and an empty TestHarnessInputs,
     ensuring a direct transition regardless of the current state.
     The operation waits for completion.
 
@@ -158,7 +158,7 @@ def subarray_in_empty_state(
 
     subarray_node_facade.force_change_of_obs_state(
         ObsState.EMPTY,
-        ObsStateCommandsInput(),
+        TestHarnessInputs(),
         wait_termination=True,
     )
 

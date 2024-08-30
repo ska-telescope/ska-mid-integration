@@ -30,8 +30,8 @@ from ska_integration_test_harness.facades.sdp_facade import SDPFacade
 from ska_integration_test_harness.facades.tmc_subarray_node_facade import (
     TMCSubarrayNodeFacade,
 )
-from ska_integration_test_harness.inputs.obs_state_commands_input import (
-    ObsStateCommandsInput,
+from ska_integration_test_harness.inputs.test_harness_inputs import (
+    TestHarnessInputs,
 )
 from ska_tango_testing.integration import TangoEventTracer
 
@@ -197,7 +197,7 @@ def subarray_in_aborted_state(
     context_fixt: SubarrayTestContextData,
     # subarray_id: str,
     subarray_node_facade: TMCSubarrayNodeFacade,
-    default_commands_inputs: ObsStateCommandsInput,
+    default_commands_inputs: TestHarnessInputs,
 ):
     """
     Ensure the subarray is in the ABORTED state.

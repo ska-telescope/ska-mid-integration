@@ -30,7 +30,7 @@ Set the specified subarray to the EMPTY state.
 This step uses the TMCSubarrayNodeFacade to force the subarray's
 ObsState to EMPTY. It does this by calling the force_change_of_obs_state
 method, which bypasses normal state transition checks. The method is
-invoked with ObsState.EMPTY and an empty ObsStateCommandsInput,
+invoked with ObsState.EMPTY and an empty TestHarnessInputs,
 ensuring a direct transition regardless of the current state.
 The operation waits for completion.
 

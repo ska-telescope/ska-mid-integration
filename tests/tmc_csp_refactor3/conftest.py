@@ -18,8 +18,8 @@ from ska_integration_test_harness.facades.tmc_subarray_node_facade import (
 from ska_integration_test_harness.init.test_harness_builder import (
     TestHarnessBuilder,
 )
-from ska_integration_test_harness.inputs.obs_state_commands_input import (
-    ObsStateCommandsInput,
+from ska_integration_test_harness.inputs.test_harness_inputs import (
+    TestHarnessInputs,
 )
 from ska_integration_test_harness.structure.telescope_wrapper import (
     TelescopeWrapper,
@@ -40,9 +40,9 @@ from tests.tmc_csp_refactor3.utils.file_json_input import MyFileJSONInput
 
 
 @pytest.fixture
-def default_commands_inputs() -> ObsStateCommandsInput:
+def default_commands_inputs() -> TestHarnessInputs:
     """Default JSON inputs for TMC commands."""
-    return ObsStateCommandsInput(
+    return TestHarnessInputs(
         assign_input=ASSING_CENTRAL_NODE_INPUT,
         configure_input=CONFIGURE_SUBARRAY_INPUT,
         scan_input=SCAN_SUBARRAY_INPUT,
@@ -52,7 +52,7 @@ def default_commands_inputs() -> ObsStateCommandsInput:
 
 @pytest.fixture
 def telescope_wrapper(
-    default_commands_inputs: ObsStateCommandsInput,
+    default_commands_inputs: TestHarnessInputs,
 ) -> TelescopeWrapper:
     """Create an unique test harness with proxies to all devices."""
     test_harness_builder = TestHarnessBuilder()
@@ -256,7 +256,7 @@ def subarray_in_resourcing_state(
     context_fixt: SubarrayTestContextData,
     # subarray_id: str,
     subarray_node_facade: TMCSubarrayNodeFacade,
-    default_commands_inputs: ObsStateCommandsInput,
+    default_commands_inputs: TestHarnessInputs,
 ):
     """Ensure the subarray is in the RESOURCING state."""
     context_fixt.starting_state = ObsState.RESOURCING
@@ -275,7 +275,7 @@ def subarray_in_idle_state(
     # subarray_id: str,
     subarray_node_facade: TMCSubarrayNodeFacade,
     central_node_facade: TMCCentralNodeFacade,
-    default_commands_inputs: ObsStateCommandsInput,
+    default_commands_inputs: TestHarnessInputs,
 ):
     """Ensure the subarray is in the IDLE state."""
     context_fixt.starting_state = ObsState.IDLE
@@ -349,7 +349,7 @@ def subarray_in_configuring_state(
     context_fixt: SubarrayTestContextData,
     # subarray_id: str,
     subarray_node_facade: TMCSubarrayNodeFacade,
-    default_commands_inputs: ObsStateCommandsInput,
+    default_commands_inputs: TestHarnessInputs,
 ):
     """Ensure the subarray is in the CONFIGURING state."""
     context_fixt.starting_state = ObsState.CONFIGURING
@@ -367,7 +367,7 @@ def subarray_in_ready_state(
     context_fixt: SubarrayTestContextData,
     # subarray_id: str,
     subarray_node_facade: TMCSubarrayNodeFacade,
-    default_commands_inputs: ObsStateCommandsInput,
+    default_commands_inputs: TestHarnessInputs,
 ):
     """Ensure the subarray is in the READY state."""
     context_fixt.starting_state = ObsState.READY
@@ -393,7 +393,7 @@ def subarray_in_scanning_state(
     context_fixt: SubarrayTestContextData,
     # subarray_id: str,
     subarray_node_facade: TMCSubarrayNodeFacade,
-    default_commands_inputs: ObsStateCommandsInput,
+    default_commands_inputs: TestHarnessInputs,
 ):
     """Ensure the subarray is in the SCANNING state."""
     context_fixt.starting_state = ObsState.SCANNING
