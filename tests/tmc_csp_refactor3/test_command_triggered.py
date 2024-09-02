@@ -19,7 +19,7 @@ from ska_integration_test_harness.inputs.test_harness_inputs import (
 from ska_tango_testing.integration import TangoEventTracer
 
 from tests.tmc_csp_refactor3.conftest import SubarrayTestContextData
-from tests.tmc_csp_refactor3.utils.file_json_input import MyFileJSONInput
+from tests.tmc_csp_refactor3.utils.my_file_json_input import MyFileJSONInput
 
 ASSERTIONS_TIMEOUT = 60
 

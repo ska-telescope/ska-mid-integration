@@ -27,7 +27,7 @@ from ska_integration_test_harness.structure.telescope_wrapper import (
 )
 from ska_tango_testing.integration import TangoEventTracer, log_events
 
-from tests.tmc_csp_refactor3.utils.file_json_input import MyFileJSONInput
+from tests.tmc_csp_refactor3.utils.my_file_json_input import MyFileJSONInput
 
 # ------------------------------------------------------------
 # Test Harness fixtures
