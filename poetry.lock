@@ -2157,7 +2157,7 @@ ska-tango-testing = "^0.7.2"
 type = "git"
 url = "https://gitlab.com/ska-telescope/ska-integration-test-harness.git"
 reference = "omcpt-39-init-test-harness-repo"
-resolved_reference = "6f9dd2311a9e151ccd94bba0eec7d35e8d0de26e"
+resolved_reference = "856894b98ad5517e44de701c163d79c7f955346a"
 
 [[package]]
 name = "ska-ser-logging"

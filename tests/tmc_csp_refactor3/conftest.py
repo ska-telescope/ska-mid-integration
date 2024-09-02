@@ -47,6 +47,7 @@ def default_commands_inputs() -> TestHarnessInputs:
         configure_input=CONFIGURE_SUBARRAY_INPUT,
         scan_input=SCAN_SUBARRAY_INPUT,
         release_input=RELEASE_CENTRAL_NODE_INPUT,
+        default_vcc_config_input=DEFAULT_VCC_CONFIG_INPUT,
     )
 
 
@@ -64,21 +65,9 @@ def telescope_wrapper(
     )
     test_harness_builder.validate_configurations()
 
-    # set the default inputs for the TMC commands
-    # (that will be mainly used in the various reset procedures)
-    test_harness_builder.default_inputs.assign_input = (
-        ASSING_CENTRAL_NODE_INPUT
-    )
-    test_harness_builder.default_inputs.configure_input = (
-        CONFIGURE_SUBARRAY_INPUT
-    )
-    test_harness_builder.default_inputs.scan_input = SCAN_SUBARRAY_INPUT
-    test_harness_builder.default_inputs.release_input = (
-        RELEASE_CENTRAL_NODE_INPUT
-    )
-    test_harness_builder.default_inputs.default_vcc_config_input = (
-        DEFAULT_VCC_CONFIG_INPUT
-    )
+    # set the default inputs for the TMC commands,
+    # which will be used for teardown procedures
+    test_harness_builder.set_default_inputs(default_commands_inputs)
     test_harness_builder.validate_default_inputs()
 
     # build the wrapper of the telescope and it's sub-systems
