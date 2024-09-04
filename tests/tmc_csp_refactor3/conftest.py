@@ -67,7 +67,7 @@ def telescope_wrapper(
 
     # import from a configuration file device names and emulation directives
     # for TMC, CSP, SDP and the Dishes
-    test_harness_builder.read_from_file(
+    test_harness_builder.read_config_file(
         "tests/tmc_csp_refactor3/test_harness_config.yaml"
     )
     test_harness_builder.validate_configurations()
