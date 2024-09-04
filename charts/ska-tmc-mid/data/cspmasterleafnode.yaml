@@ -25,6 +25,9 @@ server:
         - name: "LoggingLevelDefault"
           values:
             - "5"
+        - name: "DishVccInitTimeout"
+          values:
+            - "{{ .Values.deviceServers.cspmasterleafnode.DishVccInitTimeout}}"
 
 depends_on:
   - device: sys/database/2

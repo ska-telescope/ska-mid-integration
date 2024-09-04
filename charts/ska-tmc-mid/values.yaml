@@ -140,7 +140,8 @@ deviceServers:
     KValueValidRange:
       min: 1
       max: 1177
-
+    CommandTimeOut: 120
+    DishVccInitTimeout: 180
   subarraynode:
     enabled: true
     file: "data/subarraynode_mid.yaml"
@@ -151,11 +152,12 @@ deviceServers:
     CspAssignResourcesInterfaceURL: "https://schema.skao.int/ska-csp-assignresources/2.0"
     CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.0"
     SdpScanInterfaceURL: "https://schema.skao.int/ska-sdp-scan/0.4"
-
+    CommandTimeOut: 110
   sdpsubarrayleafnode:
     enabled: true
     file: "data/sdpsubarrayleafnode.yaml"
-
+    CommandTimeOut: 50
+    
   sdpmasterleafnode:
     enabled: true
     instances: ["01"]
@@ -165,6 +167,7 @@ deviceServers:
     enabled: true
     instances: ["01"]
     file: "data/cspmasterleafnode.yaml"
+    DishVccInitTimeout: 250
 
   cspsubarrayleafnode:
     enabled: true
@@ -172,7 +175,7 @@ deviceServers:
     DelayCadence: 10.0
     DelayValidityPeriod: 20.0
     DelayModelTimeInAdvance: 30
-
+    CommandTimeOut: 50
   dishleafnode:
     enabled: true
     file: "data/dishleafnode.yaml"
@@ -182,7 +185,8 @@ deviceServers:
       requests:
         cpu: 1500m
         memory: 2800Mi
-
+    CommandTimeOut: 90
+    TrackTableInAdvance: 6
   mocks:
     enabled: false
     file: "data/mocks.yaml"
