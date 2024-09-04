@@ -153,11 +153,12 @@ deviceServers:
     CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.0"
     SdpScanInterfaceURL: "https://schema.skao.int/ska-sdp-scan/0.4"
     CommandTimeOut: 110
+    AbortCommandTimeout: 100
   sdpsubarrayleafnode:
     enabled: true
     file: "data/sdpsubarrayleafnode.yaml"
     CommandTimeOut: 50
-    
+
   sdpmasterleafnode:
     enabled: true
     instances: ["01"]
