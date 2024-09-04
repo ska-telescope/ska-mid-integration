@@ -33,6 +33,7 @@ Feature: test subarray command triggered transitions
 
   @Transition("6. EMPTY --> (CMD: AssignResources) --> RESOURCING")
   @Transition("10. RESOURCING --> (AUTO: Assigned) --> IDLE")
+  @XTP-62720 @XTP-62547 @XTP-28347
   Scenario: EMPTY to RESOURCING to IDLE - CMD AssignResources
     Given the subarray 1 is in the EMPTY state
     When the AssignResources command is sent to the subarray 1 and the Assigned event is induced
@@ -42,6 +43,7 @@ Feature: test subarray command triggered transitions
 
   @Transition("16. IDLE --> (CMD: Configure) --> CONFIGURING")
   @Transition("22. CONFIGURING --> (AUTO: Ready) --> READY")
+  @XTP-62721 @XTP-62547 @XTP-28347
   Scenario: IDLE to CONFIGURING to READY - CMD Configure
     Given the subarray 1 is in the IDLE state
     When the Configure command is sent to the subarray 1
@@ -51,6 +53,7 @@ Feature: test subarray command triggered transitions
 
   @Transition("18. IDLE --> (CMD: AssignResources) --> RESOURCING")
   @Transition("10. RESOURCING --> (AUTO: Assigned) --> IDLE")
+  @XTP-62722 @XTP-62547 @XTP-28347
   Scenario: IDLE to RESOURCING to IDLE - CMD AssignResources
     Given the subarray 1 is in the IDLE state
     When the AssignResources command is sent to the subarray 1 to assign additional resources
@@ -60,6 +63,7 @@ Feature: test subarray command triggered transitions
 
   @Transition("17. IDLE --> (CMD: ReleaseResources) --> RESOURCING")
   @Transition("13. RESOURCING --> (AUTO: All released) --> EMPTY")
+  @XTP-62723 @XTP-62547 @XTP-28347
   Scenario: IDLE to RESOURCING to EMPTY - CMD ReleaseResources
     Given the subarray 1 is in the IDLE state
     When the ReleaseResources command is sent to the subarray 1 and the All released event is induced
@@ -69,6 +73,7 @@ Feature: test subarray command triggered transitions
 
   @Transition("26. READY --> (CMD: Scan) --> SCANNING")
   @Transition("33. SCANNING --> (AUTO: ScanComplete) --> READY")
+  @XTP-62724 @XTP-62547 @XTP-28347
   Scenario: READY to SCANNING to READY- CMD Scan
     Given the subarray 1 is in the READY state
     When the Scan command is sent to the subarray 1
@@ -77,6 +82,7 @@ Feature: test subarray command triggered transitions
     Then the subarray 1 reports a longRunningCommand successful completion
 
   @Transition("27. READY --> (CMD: End) --> IDLE")
+  @XTP-62725 @XTP-62547 @XTP-28347
   Scenario: READY to IDLE - CMD End
     Given the subarray 1 is in the READY state
     When the End command is sent to the subarray 1
@@ -84,6 +90,7 @@ Feature: test subarray command triggered transitions
 
   @Transition("29. READY --> (CMD: Configure) --> CONFIGURING")
   @Transition("22. CONFIGURING --> (AUTO: Ready) --> READY")
+  @XTP-62726 @XTP-62547 @XTP-28347
   Scenario: READY to CONFIGURING to READY - CMD Configure
     Given the subarray 1 is in the READY state
     When the Configure command is sent to the subarray 1
@@ -92,6 +99,7 @@ Feature: test subarray command triggered transitions
     Then the subarray 1 reports a longRunningCommand successful completion
 
   @Transition("32. SCANNING --> (CMD: EndScan) --> READY")
+  @XTP-62727 @XTP-62547 @XTP-28347
   Scenario: SCANNING to READY - CMD End Scan
     Given the subarray 1 is in the SCANNING state
     When the Endscan command is sent to the subarray 1

@@ -29,7 +29,7 @@ Feature: subarray 1 obsState may be Aborted and Restarted
   
   @Transition("12. RESOURCING --> (CMD: Abort) --> ABORTING")
   @Transition("37. ABORTING --> (AUTO: Abort complete) --> ABORTED")
-  @XTP-62548 @XTP-62547
+  @XTP-62548 @XTP-62547 @XTP-28347
   Scenario: RESOURCING to ABORTING to ABORTED - CMD Abort
     Given the subarray 1 is in the RESOURCING state
     When the Abort command is sent to the subarray 1
@@ -38,6 +38,7 @@ Feature: subarray 1 obsState may be Aborted and Restarted
 
   @Transition("19. IDLE --> (CMD: Abort) --> ABORTING")
   @Transition("37. ABORTING --> (AUTO: Abort complete) --> ABORTED")
+  @XTP-62715 @XTP-62547 @XTP-28347
   Scenario: IDLE to ABORTING to ABORTED - CMD Abort
     Given the subarray 1 is in the IDLE state
     When the Abort command is sent to the subarray 1
@@ -46,6 +47,7 @@ Feature: subarray 1 obsState may be Aborted and Restarted
 
   @Transition("25. CONFIGURING --> (CMD: Abort) --> ABORTING")
   @Transition("37. ABORTING --> (AUTO: Abort complete) --> ABORTED")
+  @XTP-62716 @XTP-62547 @XTP-28347
   Scenario: CONFIGURING to ABORTING to ABORTED - CMD Abort
     Given the subarray 1 is in the CONFIGURING state
     When the Abort command is sent to the subarray 1
@@ -54,6 +56,7 @@ Feature: subarray 1 obsState may be Aborted and Restarted
 
   @Transition("28. READY --> (CMD: Abort) --> ABORTING")
   @Transition("37. ABORTING --> (AUTO: Abort complete) --> ABORTED")
+  @XTP-62717 @XTP-62547 @XTP-28347
   Scenario: READY to ABORTING to ABORTED - CMD Abort
     Given the subarray 1 is in the READY state
     When the Abort command is sent to the subarray 1
@@ -62,6 +65,7 @@ Feature: subarray 1 obsState may be Aborted and Restarted
 
   @Transition("34. SCANNING --> (CMD: Abort) --> ABORTING")
   @Transition("37. ABORTING --> (AUTO: Abort complete) --> ABORTED")
+  @XTP-62718 @XTP-62547 @XTP-28347
   Scenario: SCANNING to ABORTING to ABORTED - CMD Abort
     Given the subarray 1 is in the SCANNING state
     When the Abort command is sent to the subarray 1
@@ -70,6 +74,7 @@ Feature: subarray 1 obsState may be Aborted and Restarted
 
   @Transition("40. ABORTED --> (CMD: Restart) --> RESTARTING")
   @Transition("43. RESTARTING --> (AUTO: Restart Complete) --> EMPTY")
+  @XTP-62719 @XTP-62547 @XTP-28347
   Scenario: ABORTED to RESTARTING to EMPTY - CMD Restart
     Given the subarray 1 is in the ABORTED state
     When the Restart command is sent to the subarray 1
