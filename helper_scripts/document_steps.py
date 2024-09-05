@@ -1,6 +1,128 @@
 # pylint: skip-file
 # flake8: noqa
 
+"""
+Generate a test documentation from the feature files and Python implementation.
+
+This script is used to generate markdown files
+from Python files containing test steps and scenarios.
+The script scans the Python files and extracts the test steps
+and scenarios using AST.
+It then generates a markdown file with the extracted information
+for each input file.
+Use the script as follows:
+python document_steps.py <input_folder> <output_folder>
+
+for example ``python3 document_steps.py ../../.. out/`` produces:
+
+.. code-block:: text
+
+    out
+    ├── features
+    │ └── tests
+    │     ├── features
+    │     │ ├── ai_generated_scenarios.md
+    │     │ ├── check_abort_command.md
+    │     │ ├── check_command_not_allowed.md
+    │     │ ├── check_invalid_json_not_allowed.md
+    │     │ ├── dish_vcc_initialization
+    │     │ │ ├── xtp_30249_csp_mln_init.md
+    │     │ │ ├── xtp_30250_restart.md
+    │     │ │ ├── ...
+    │     │ ├── load_dish_cfg_command.md
+    │     │ ├── ...
+    │     │ ├── test_harness
+    │     │ │ ├── five_point_scan.md
+    │     │ │ ├── science_scan_after_calibration_scan.md
+    │     │ │ ├── subarray_health_state.md
+    │     │ │ ├── ...
+    │     │ ├── tmc_csp
+    │     │ │ ├── xtp_29249_on.md
+    │     │ │ ├── xtp_29250_off.md
+    │     │ │ ├── xtp_29251_standby.md
+    │     │ │ ├── ...
+    │     │ ├── tmc_dish
+    │     │ │ ├── xtp-29077.md
+    │     │ │ ├── xtp-29351_off.md
+    │     │ │ ├── ...
+    │     │ ├── tmc_sdp
+    │     │ │ ├── xtp_27257_recovery_after_failed_assign.md
+    │     │ │ ├── xtp-29230_on.md
+    │     │ │ ├── ...
+    │     │ ├── xtp-28259.md
+    │     │ ├── xtp-28282.md
+    │     │ ├── ...
+    │     ├── tmc_csp
+    │     │ └── suggestions_for_new_stuff
+    │     │     ├── esempio_scenario_ai.md
+    │     │     └── via
+    │     │         ├── ai_generated_scenarios_GB.md
+    │     │         └── positive_scenarios_single_transitions.md
+    │     └── tmc_csp_refactor3
+    │         ├── features
+    │         │ ├── abort_restart_subarray.md
+    │         │ └── subarray_commands.md
+    │         └── specifications
+    │             ├── obsstate_invalid_single_transitions.md
+    │             ├── obsstate_valid_single_transitions_automatic.md
+    │             └── obsstate_valid_single_transitions_commands.md
+    └── steps
+        └── tests
+            ├── alarm_handler
+            │ ├── test_dishvcc_alarm_configurator.md
+            │ └── test_pointing_data_alarm.md
+            ├── check_command_allowed
+            │ ├── test_command_not_allowed_assigning_resources.md
+            │ ├── test_command_not_allowed_empty.md
+            │ ├── ...
+            ├── conftest.md
+            ├── dish_vcc_configuration
+            │ ├── conftest.md
+            │ ├── test_load_dish_cfg.md
+            │ ├── test_load_dish_cfg_negative_scenario.md
+            │ ├── ...
+            ├── invalid_json_tests
+            │ ├── test_assign_not_allowed_with_invalid_json.md
+            │ └── test_configure_invalid_json.md
+            ├── tmc_csp
+            │ ├── conftest.md
+            │ ├── test_delay_model.md
+            │ ├── test_scan_ai_generated.md
+            │ ├── ...
+            ├── tmc_csp_dish
+            │ └── test_dish_vcc_initialization.md
+            ├── tmc_csp_refactor3
+            │ ├── conftest.md
+            │ ├── test_abort.md
+            │ └── test_command_triggered.md
+            ├── tmc_dish
+            │ ├── conftest.md
+            │ ├── test_xtp-29077.md
+            │ ├── ...
+            ├── tmc_harness_testcases
+            │ └── bdd_scenarios
+            │     ├── test_central_node_telescope_health_state.md
+            │     ├── ...
+            ├── tmc_robustness
+            │ ├── AssignResources_Failure_Handling_tests
+            │ │ ├── test_assign_resources_handling_on_csp_obsstate_empty_failure.md  
+            │ │ ├── test_assign_resources_handling_on_csp_obsstate_resourcing_failure.md
+            │ │ ├── ...
+            │ ├── Configure_failure_handling_tests
+            │ │ ├── test_configure_handling_on_csp_obstate_configuring.md
+            │ │ ├── ...
+            │ ├── Incremental_AssignResources_Failure_Handling_tests
+            │ │ ├── test_incremental_assign_resources_csp_subarray_failure.md
+            │ │ ├── ...
+            │ ├── test_mid_successive_configure.md
+            │ ├── ...
+            └── tmc_sdp
+                ├── conftest.md
+                ├── test_xtp_27257_recovery_after_failed_assign.md
+                ├── ...
+
+"""# pylint: disable=line-too-long # noqa E501
+
 import argparse
 import ast
 import os
@@ -8,123 +130,7 @@ from abc import ABC, abstractmethod
 from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 
-# This script is used to generate markdown files
-# from Python files containing test steps and scenarios.
-# The script scans the Python files and extracts the test steps
-# and scenarios using AST.
-# It then generates a markdown file with the extracted information
-# for each input file.
-# Use the script as follows:
-# python document_steps.py <input_folder> <output_folder>
 
-# for example:
-#  python3 document_steps.py ../../.. out/
-# produces
-# out
-# ├── features
-# │ └── tests
-# │     ├── features
-# │     │ ├── ai_generated_scenarios.md
-# │     │ ├── check_abort_command.md
-# │     │ ├── check_command_not_allowed.md
-# │     │ ├── check_invalid_json_not_allowed.md
-# │     │ ├── dish_vcc_initialization
-# │     │ │ ├── xtp_30249_csp_mln_init.md
-# │     │ │ ├── xtp_30250_restart.md
-# │     │ │ ├── ...
-# │     │ ├── load_dish_cfg_command.md
-# │     │ ├── ...
-# │     │ ├── test_harness
-# │     │ │ ├── five_point_scan.md
-# │     │ │ ├── science_scan_after_calibration_scan.md
-# │     │ │ ├── subarray_health_state.md
-# │     │ │ ├── ...
-# │     │ ├── tmc_csp
-# │     │ │ ├── xtp_29249_on.md
-# │     │ │ ├── xtp_29250_off.md
-# │     │ │ ├── xtp_29251_standby.md
-# │     │ │ ├── ...
-# │     │ ├── tmc_dish
-# │     │ │ ├── xtp-29077.md
-# │     │ │ ├── xtp-29351_off.md
-# │     │ │ ├── ...
-# │     │ ├── tmc_sdp
-# │     │ │ ├── xtp_27257_recovery_after_failed_assign.md
-# │     │ │ ├── xtp-29230_on.md
-# │     │ │ ├── ...
-# │     │ ├── xtp-28259.md
-# │     │ ├── xtp-28282.md
-# │     │ ├── ...
-# │     ├── tmc_csp
-# │     │ └── suggestions_for_new_stuff
-# │     │     ├── esempio_scenario_ai.md
-# │     │     └── via
-# │     │         ├── ai_generated_scenarios_GB.md
-# │     │         └── positive_scenarios_single_transitions.md
-# │     └── tmc_csp_refactor3
-# │         ├── features
-# │         │ ├── abort_restart_subarray.md
-# │         │ └── subarray_commands.md
-# │         └── specifications
-# │             ├── obsstate_invalid_single_transitions.md
-# │             ├── obsstate_valid_single_transitions_automatic.md
-# │             └── obsstate_valid_single_transitions_commands.md
-# └── steps
-#     └── tests
-#         ├── alarm_handler
-#         │ ├── test_dishvcc_alarm_configurator.md
-#         │ └── test_pointing_data_alarm.md
-#         ├── check_command_allowed
-#         │ ├── test_command_not_allowed_assigning_resources.md
-#         │ ├── test_command_not_allowed_empty.md
-#         │ ├── ...
-#         ├── conftest.md
-#         ├── dish_vcc_configuration
-#         │ ├── conftest.md
-#         │ ├── test_load_dish_cfg.md
-#         │ ├── test_load_dish_cfg_negative_scenario.md
-#         │ ├── ...
-#         ├── invalid_json_tests
-#         │ ├── test_assign_not_allowed_with_invalid_json.md
-#         │ └── test_configure_invalid_json.md
-#         ├── tmc_csp
-#         │ ├── conftest.md
-#         │ ├── test_delay_model.md
-#         │ ├── test_scan_ai_generated.md
-#         │ ├── ...
-#         ├── tmc_csp_dish
-#         │ └── test_dish_vcc_initialization.md
-#         ├── tmc_csp_refactor3
-#         │ ├── conftest.md
-#         │ ├── test_abort.md
-#         │ └── test_command_triggered.md
-#         ├── tmc_dish
-#         │ ├── conftest.md
-#         │ ├── test_xtp-29077.md
-#         │ ├── ...
-#         ├── tmc_harness_testcases
-#         │ └── bdd_scenarios
-#         │     ├── test_central_node_telescope_health_state.md
-#         │     ├── ...
-#         ├── tmc_robustness
-#         │ ├── AssignResources_Failure_Handling_tests
-#         │ │ ├── test_assign_resources_handling_on_csp_obsstate_empty_failure.md  # pylint: disable=line-too-long # noqa E501
-#         │ │ ├── test_assign_resources_handling_on_csp_obsstate_resourcing_failure.md  # pylint: disable=line-too-long # noqa E501
-#         │ │ ├── ...
-#         │ ├── Configure_failure_handling_tests
-#         │ │ ├── test_configure_handling_on_csp_obstate_configuring.md
-#         │ │ ├── ...
-#         │ ├── Incremental_AssignResources_Failure_Handling_tests
-#         │ │ ├── test_incremental_assign_resources_csp_subarray_failure.md
-#         │ │ ├── ...
-#         │ ├── test_mid_successive_configure.md
-#         │ ├── ...
-#         └── tmc_sdp
-#             ├── conftest.md
-#             ├── test_xtp_27257_recovery_after_failed_assign.md
-#             ├── ...
-
-#
 
 
 class MarkdownFormatter:
@@ -618,6 +624,10 @@ class PostProcessor:
         index_content = "# Test Documentation Index\n\n"
         index_content += "Last updated on: "
         index_content += f"{datetime.now().strftime('%d %B %Y %H:%M:%S')}\n\n"
+
+        index_content += "> **NOTE**: *This file is auto-generated through a "
+        index_content += "``make bdd-steps-doc`` command. "
+        index_content += "Do not edit manually*.\n\n"
 
         if feature_files:
             index_content += "## Feature Files\n\n"

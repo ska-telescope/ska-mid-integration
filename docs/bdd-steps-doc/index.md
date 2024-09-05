@@ -1,6 +1,8 @@
 # Test Documentation Index
 
-Last updated on: 26 August 2024 11:55:56
+Last updated on: 05 September 2024 15:40:51
+
+> **NOTE**: *This file is auto-generated through a ``make bdd-steps-doc`` command. Do not edit manually*.
 
 ## Feature Files
 

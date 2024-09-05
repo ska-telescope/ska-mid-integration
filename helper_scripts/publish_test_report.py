@@ -10,11 +10,15 @@ job.
 **Expected inputs**: The script expects the following.
 
 - Some environment variables:
-  - ``CI_JOB_URL``: the URL of the current CI job,
+  - ``CI_JOB_URL``: the URL of the current CI job, if availabl
   - ``JIRA_URL``: the URL of the JIRA instance,
   - ``JIRA_AUTH``: the authentication token for the JIRA API,
   - ``HTML_REPORT_TARGET_FILE``: the relative path of the HTML BDD test report,
     artifact in the CI job.
+  - ``TEST_DOCS_LINK`: link to the test documentation. If provided, it will be
+    used to update the JIRA issue description. If not provided, that part of
+    the description will be omitted.
+
 - An already existing JIRA ticket in the project with key
   ``PROJECT_KEY="XTP"``,
   which is expected to be unique and to contain somewhere the ``CI_JOB_URL``
@@ -95,6 +99,8 @@ NOTE: Do not put a leading slash in the path
 (e.g., "build/report.html" instead of "/build/report.html").
 """
 
+TEST_DOCS_LINK = os.getenv("TEST_DOCS_LINK", None)
+
 PROJECT_KEY = "XTP"
 """The key of the project in JIRA (for now, it is a fixed value)."""
 
@@ -173,8 +179,10 @@ def get_report_description() -> str:
 
     :return: the description to append to the JIRA issue.
     """
-    return REPORT_DESCRIPTION_TEMPLATE.format(report_link=get_report_link())
+    msg = REPORT_DESCRIPTION_TEMPLATE.format(report_link=get_report_link())
 
+    if TEST_DOCS_LINK:
+        msg += f"Test documentation: {TEST_DOCS_LINK}\n\n"
 
 def check_report_file_accessible() -> None:
     """Check if the HTML BDD test is accessible from the CI job artifacts.

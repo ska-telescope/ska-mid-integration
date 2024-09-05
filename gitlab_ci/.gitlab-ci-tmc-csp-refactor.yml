@@ -8,6 +8,7 @@ k8s-test-mid-with-csp-refactor:
     MARK: 'tmc_csp_refactor3'
     CSP_SIMULATION_ENABLED: 'false'
     EXIT_AT_FAIL: 'false'
+    ADD_DOCS_LINK_TO_JIRA: 'true'
   environment:
     name: test/$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-test-mid-with-csp-refactor
