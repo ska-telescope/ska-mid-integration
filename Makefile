@@ -284,7 +284,7 @@ ADD_DOCS_LINK_TO_JIRA ?= false
 # (Set to false to disable the link to the BDD test documentation in the Jira test execution issue)
 
 ifeq ($(ADD_DOCS_LINK_TO_JIRA), true)
-	TEST_DOCS_LINK ?= https://gitlab.com/ska-telescope/ska-tmc/ska-tmc-mid-integration/-/blob/$(CI_COMMIT_SHA)/docs/bdd-steps-doc/index.md
+	TEST_DOCS_LINK := https://gitlab.com/ska-telescope/ska-tmc/ska-tmc-mid-integration/-/blob/$(CI_COMMIT_SHA)/docs/bdd-steps-doc/index.md
 endif
 
 ## Extract a link to the BDD test documentation where the steps are documented
