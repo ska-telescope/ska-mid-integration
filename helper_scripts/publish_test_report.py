@@ -183,6 +183,7 @@ def get_report_description() -> str:
 
     if TEST_DOCS_LINK:
         msg += f"Test documentation: {TEST_DOCS_LINK}\n\n"
+    return msg
 
 def check_report_file_accessible() -> None:
     """Check if the HTML BDD test is accessible from the CI job artifacts.
