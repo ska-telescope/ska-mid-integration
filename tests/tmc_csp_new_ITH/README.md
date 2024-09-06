@@ -74,7 +74,7 @@ The folder contains the following files and subfolders.
 
 ## How to run the tests
 
-A new marker called `tmc_csp_refactor3` has been introduced to
+A new marker called `tmc_csp_new_ITH` has been introduced to
 run the tests.
 
 To run the tests:
@@ -94,7 +94,7 @@ To run the tests:
    want CSP to not be emulated:
 
     ```bash
-    make k8s-test CSP_SIMULATION_ENABLED=false MARK=tmc_csp_refactor3
+    make k8s-test CSP_SIMULATION_ENABLED=false MARK=tmc_csp_new_ITH
     ```
 
 Some further, maybe useful options to be set:
@@ -109,7 +109,7 @@ The new tests are executed in the pipeline and their results are pushed
 on Jira-Xray (associated to the test plan `XTP-62547`).
 
 The pipeline is defined in
-[gitlab_ci/.gitlab-ci-tmc-csp-refactor.yml](../../gitlab_ci/.gitlab-ci-tmc-csp-refactor.yml),
+[gitlab_ci/.gitlab-ci-tmc-csp-new-ith.yml](../../gitlab_ci/.gitlab-ci-tmc-csp-new-ith.yml),
 by default it sets `EXIT_AT_FAIL=false`.
 
 The pipeline is also set up to make use of the new
@@ -125,7 +125,7 @@ The pipeline is also set up to make use of the new
 - thanks to the `document_steps.py` support script you can generate
   (manually) a markdown documentation of the tests (generated through
   `make bdd-steps-doc` and currently stored
-  in [tests/tmc_csp_refactor3/bdd-steps-doc/](bdd-steps-doc/index.md));
+  in [tests/tmc_csp_new_ITH/bdd-steps-doc/](bdd-steps-doc/index.md));
   a link to that documentation is also published in the Jira ticket
   associated with the current CI JOB by the same script, but that
   option is enabled only if the `ADD_DOCS_LINK_TO_JIRA` flag is set to

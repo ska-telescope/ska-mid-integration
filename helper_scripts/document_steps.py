@@ -58,7 +58,7 @@ for example ``python3 document_steps.py ../../.. out/`` produces:
     │     │     └── via
     │     │         ├── ai_generated_scenarios_GB.md
     │     │         └── positive_scenarios_single_transitions.md
-    │     └── tmc_csp_refactor3
+    │     └── tmc_csp_new_ITH
     │         ├── features
     │         │ ├── abort_restart_subarray.md
     │         │ └── subarray_commands.md
@@ -91,7 +91,7 @@ for example ``python3 document_steps.py ../../.. out/`` produces:
             │ ├── ...
             ├── tmc_csp_dish
             │ └── test_dish_vcc_initialization.md
-            ├── tmc_csp_refactor3
+            ├── tmc_csp_new_ITH
             │ ├── conftest.md
             │ ├── test_abort.md
             │ └── test_command_triggered.md

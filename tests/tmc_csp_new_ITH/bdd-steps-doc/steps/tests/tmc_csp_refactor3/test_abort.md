@@ -1,4 +1,4 @@
-# Test Steps and Scenarios from tests/tmc_csp_refactor3/test_abort.py
+# Test Steps and Scenarios from tests/tmc_csp_new_ITH/test_abort.py
 
 Last updated on: 06 September 2024 16:28:31
 

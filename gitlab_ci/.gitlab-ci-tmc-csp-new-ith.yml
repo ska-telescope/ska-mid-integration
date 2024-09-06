@@ -1,21 +1,21 @@
-k8s-test-mid-with-csp-refactor:
+k8s-test-mid-with-csp-new-ith:
   extends:
     - k8s-test
   variables:
     TELESCOPE: 'SKA-mid'
     KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-csp-mid-refactor'
     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-csp-mid-refactor"
-    MARK: 'tmc_csp_refactor3'
+    MARK: 'tmc_csp_new_ITH'
     CSP_SIMULATION_ENABLED: 'false'
     EXIT_AT_FAIL: 'false'
     ADD_DOCS_LINK_TO_JIRA: 'true'
   environment:
     name: test/$CI_COMMIT_REF_SLUG
-    on_stop: stop-k8s-test-mid-with-csp-refactor
+    on_stop: stop-k8s-test-mid-with-csp-ith
     auto_stop_in: 1 minute
 
 
-stop-k8s-test-mid-with-csp-refactor:
+stop-k8s-test-mid-with-csp-new-ith:
   extends:
     - stop-k8s-test
   variables:

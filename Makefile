@@ -274,9 +274,9 @@ endif
 # ----------------------------------------------------------------------------
 # generate documentation for steps and feature files
 
-STEP_DOCUMENTATION_OUTPUT_FOLDER ?= tests/tmc_csp_refactor3/bdd-steps-doc ## The folder where the documentation will be generated
+STEP_DOCUMENTATION_OUTPUT_FOLDER ?= tests/tmc_csp_new_ITH/bdd-steps-doc ## The folder where the documentation will be generated
 STEP_DOCUMENTATION_SCRIPT ?= helper_scripts/document_steps.py ## The script that will generate the documentation
-STEP_DOCUMENTATION_TARGET_FOLDER ?= tests/tmc_csp_refactor3/ # for the moment
+STEP_DOCUMENTATION_TARGET_FOLDER ?= tests/tmc_csp_new_ITH/ # for the moment
 ## The target folder where the script will look for the feature files
 
 bdd-steps-doc:
@@ -323,6 +323,6 @@ endif
 
 # Verbose error tracebacks (for now, only for refactored tests)
 # and also link to test documentation
-ifeq ($(MARK),tmc_csp_refactor3)
+ifeq ($(MARK),tmc_csp_new_ITH)
 	PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --tb=long
 endif

@@ -18,8 +18,8 @@ from ska_integration_test_harness.inputs.test_harness_inputs import (
 )
 from ska_tango_testing.integration import TangoEventTracer
 
-from tests.tmc_csp_refactor3.conftest import SubarrayTestContextData
-from tests.tmc_csp_refactor3.utils.my_file_json_input import MyFileJSONInput
+from tests.tmc_csp_new_ITH.conftest import SubarrayTestContextData
+from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 
 ASSERTIONS_TIMEOUT = 60
 
@@ -27,9 +27,9 @@ ASSERTIONS_TIMEOUT = 60
 # Scenario
 
 
-@pytest.mark.tmc_csp_refactor3
+@pytest.mark.tmc_csp_new_ITH
 @scenario(
-    "../tmc_csp_refactor3/features/subarray_commands.feature",
+    "../tmc_csp_new_ITH/features/subarray_commands.feature",
     "EMPTY to RESOURCING to IDLE - CMD AssignResources",
 )
 def test_empty_to_resourcing_to_idle():
@@ -43,9 +43,9 @@ def test_empty_to_resourcing_to_idle():
 #     "since if a subarray is in IDLE state, by design it should be able "
 #     "to receive the Configure command at any time."
 # )
-@pytest.mark.tmc_csp_refactor3
+@pytest.mark.tmc_csp_new_ITH
 @scenario(
-    "../tmc_csp_refactor3/features/subarray_commands.feature",
+    "../tmc_csp_new_ITH/features/subarray_commands.feature",
     "IDLE to CONFIGURING to READY - CMD Configure",
 )
 def test_idle_to_configuring_to_ready():
@@ -59,9 +59,9 @@ def test_idle_to_configuring_to_ready():
 #     "since if a subarray is in IDLE state, by design it should be able "
 #     "to receive the Configure command at any time."
 # )
-@pytest.mark.tmc_csp_refactor3
+@pytest.mark.tmc_csp_new_ITH
 @scenario(
-    "../tmc_csp_refactor3/features/subarray_commands.feature",
+    "../tmc_csp_new_ITH/features/subarray_commands.feature",
     "IDLE to RESOURCING to IDLE - CMD AssignResources",
 )
 def test_idle_to_resourcing_to_idle():
@@ -75,27 +75,27 @@ def test_idle_to_resourcing_to_idle():
 #     "since if a subarray is in IDLE state, by design it should be able "
 #     "to receive the Configure command."
 # )
-@pytest.mark.tmc_csp_refactor3
+@pytest.mark.tmc_csp_new_ITH
 @scenario(
-    "../tmc_csp_refactor3/features/subarray_commands.feature",
+    "../tmc_csp_new_ITH/features/subarray_commands.feature",
     "IDLE to RESOURCING to EMPTY - CMD ReleaseResources",
 )
 def test_idle_to_resourcing_to_empty():
     """Test IDLE to RESOURCING to EMPTY transitions."""
 
 
-@pytest.mark.tmc_csp_refactor3
+@pytest.mark.tmc_csp_new_ITH
 @scenario(
-    "../tmc_csp_refactor3/features/subarray_commands.feature",
+    "../tmc_csp_new_ITH/features/subarray_commands.feature",
     "READY to SCANNING to READY- CMD Scan",
 )
 def test_ready_to_scanning_to_ready():
     """Test READY to SCANNING to READY transitions."""
 
 
-@pytest.mark.tmc_csp_refactor3
+@pytest.mark.tmc_csp_new_ITH
 @scenario(
-    "../tmc_csp_refactor3/features/subarray_commands.feature",
+    "../tmc_csp_new_ITH/features/subarray_commands.feature",
     "READY to IDLE - CMD End",
 )
 def test_ready_to_idle():
@@ -109,18 +109,18 @@ def test_ready_to_idle():
 #     "since if a subarray is in READY state, by design it should be able "
 #     "to receive the Configure command."
 # )
-@pytest.mark.tmc_csp_refactor3
+@pytest.mark.tmc_csp_new_ITH
 @scenario(
-    "../tmc_csp_refactor3/features/subarray_commands.feature",
+    "../tmc_csp_new_ITH/features/subarray_commands.feature",
     "READY to CONFIGURING to READY - CMD Configure",
 )
 def test_ready_to_configuring_to_ready():
     """Test READY to CONFIGURING to READY transitions."""
 
 
-@pytest.mark.tmc_csp_refactor3
+@pytest.mark.tmc_csp_new_ITH
 @scenario(
-    "../tmc_csp_refactor3/features/subarray_commands.feature",
+    "../tmc_csp_new_ITH/features/subarray_commands.feature",
     "SCANNING to READY - CMD End Scan",
 )
 def test_scanning_to_ready():

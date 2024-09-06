@@ -1,4 +1,4 @@
-# Test Steps and Scenarios from tests/tmc_csp_refactor3/test_command_triggered.py
+# Test Steps and Scenarios from tests/tmc_csp_new_ITH/test_command_triggered.py
 
 Last updated on: 06 September 2024 16:28:31
 

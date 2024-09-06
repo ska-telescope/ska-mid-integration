@@ -35,7 +35,7 @@ from ska_integration_test_harness.inputs.test_harness_inputs import (
 )
 from ska_tango_testing.integration import TangoEventTracer
 
-from tests.tmc_csp_refactor3.conftest import SubarrayTestContextData
+from tests.tmc_csp_new_ITH.conftest import SubarrayTestContextData
 
 ASSERTIONS_TIMEOUT = 60
 
@@ -47,54 +47,54 @@ ASSERTIONS_TIMEOUT = 60
 #     reason="It may fail because CSP and/or SDP may not actually abort "
 #     "but continue with IDLE."
 # )
-@pytest.mark.tmc_csp_refactor3
+@pytest.mark.tmc_csp_new_ITH
 @scenario(
-    "../tmc_csp_refactor3/features/abort_restart_subarray.feature",
+    "../tmc_csp_new_ITH/features/abort_restart_subarray.feature",
     "RESOURCING to ABORTING to ABORTED - CMD Abort",
 )
 def test_resourcing_to_aborting_to_aborted():
     """Test RESOURCING to ABORTING to ABORTED transitions."""
 
 
-@pytest.mark.tmc_csp_refactor3
+@pytest.mark.tmc_csp_new_ITH
 @scenario(
-    "../tmc_csp_refactor3/features/abort_restart_subarray.feature",
+    "../tmc_csp_new_ITH/features/abort_restart_subarray.feature",
     "IDLE to ABORTING to ABORTED - CMD Abort",
 )
 def test_idle_to_aborting_to_aborted():
     """Test IDLE to ABORTING to ABORTED transitions."""
 
 
-@pytest.mark.tmc_csp_refactor3
+@pytest.mark.tmc_csp_new_ITH
 @scenario(
-    "../tmc_csp_refactor3/features/abort_restart_subarray.feature",
+    "../tmc_csp_new_ITH/features/abort_restart_subarray.feature",
     "CONFIGURING to ABORTING to ABORTED - CMD Abort",
 )
 def test_configuring_to_aborting_to_aborted():
     """Test CONFIGURING to ABORTING to ABORTED transitions."""
 
 
-@pytest.mark.tmc_csp_refactor3
+@pytest.mark.tmc_csp_new_ITH
 @scenario(
-    "../tmc_csp_refactor3/features/abort_restart_subarray.feature",
+    "../tmc_csp_new_ITH/features/abort_restart_subarray.feature",
     "READY to ABORTING to ABORTED - CMD Abort",
 )
 def test_ready_to_aborting_to_aborted():
     """Test READY to ABORTING to ABORTED transitions."""
 
 
-@pytest.mark.tmc_csp_refactor3
+@pytest.mark.tmc_csp_new_ITH
 @scenario(
-    "../tmc_csp_refactor3/features/abort_restart_subarray.feature",
+    "../tmc_csp_new_ITH/features/abort_restart_subarray.feature",
     "SCANNING to ABORTING to ABORTED - CMD Abort",
 )
 def test_scanning_to_aborting_to_aborted():
     """Test SCANNING to ABORTING to ABORTED transitions."""
 
 
-@pytest.mark.tmc_csp_refactor3
+@pytest.mark.tmc_csp_new_ITH
 @scenario(
-    "../tmc_csp_refactor3/features/abort_restart_subarray.feature",
+    "../tmc_csp_new_ITH/features/abort_restart_subarray.feature",
     "ABORTED to RESTARTING to EMPTY - CMD Restart",
 )
 def test_aborted_to_restarting():

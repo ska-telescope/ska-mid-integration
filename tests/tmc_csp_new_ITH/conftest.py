@@ -27,7 +27,7 @@ from ska_integration_test_harness.structure.telescope_wrapper import (
 )
 from ska_tango_testing.integration import TangoEventTracer, log_events
 
-from tests.tmc_csp_refactor3.utils.my_file_json_input import MyFileJSONInput
+from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 
 # ------------------------------------------------------------
 # Test Harness fixtures
@@ -68,7 +68,7 @@ def telescope_wrapper(
     # import from a configuration file device names and emulation directives
     # for TMC, CSP, SDP and the Dishes
     test_harness_builder.read_config_file(
-        "tests/tmc_csp_refactor3/test_harness_config.yaml"
+        "tests/tmc_csp_new_ITH/test_harness_config.yaml"
     )
     test_harness_builder.validate_configurations()
 
