@@ -272,25 +272,25 @@ endif
 
 
 # ----------------------------------------------------------------------------
+# generate documentation for steps and feature files
+
+STEP_DOCUMENTATION_OUTPUT_FOLDER ?= tests/tmc_csp_refactor3/bdd-steps-doc ## The folder where the documentation will be generated
+STEP_DOCUMENTATION_SCRIPT ?= helper_scripts/document_steps.py ## The script that will generate the documentation
+STEP_DOCUMENTATION_TARGET_FOLDER ?= tests/tmc_csp_refactor3/ # for the moment
+## The target folder where the script will look for the feature files
+
+bdd-steps-doc:
+	rm -rf $(STEP_DOCUMENTATION_OUTPUT_FOLDER)
+	python $(STEP_DOCUMENTATION_SCRIPT) $(STEP_DOCUMENTATION_TARGET_FOLDER) $(STEP_DOCUMENTATION_OUTPUT_FOLDER)
+
+
+# ----------------------------------------------------------------------------
 # Publish the BDD HTML test report to the just published
 # Jira test execution issue
 
 PUBLISH_HTML_REPORT_TO_JIRA_SCRIPT ?= helper_scripts/publish_test_report.py
 ## The Python script that will publish the BDD HTML test report to the Jira test execution issue
 # (Set to empty to disable the publishing of the BDD HTML test report to the Jira test execution issue)
-
-ADD_DOCS_LINK_TO_JIRA ?= false
-## Flag to set to "true" if you want to add a link to the BDD test documentation in the Jira test execution issue
-# (Set to false to disable the link to the BDD test documentation in the Jira test execution issue)
-
-## Extract a link to the BDD test documentation where the steps are documented
-# This link is generated from the commit SHA, since it is expected that the BDD test documentation
-# is versioned with the code.
-# (Set to empty to disable the link to the BDD test documentation in the Jira test execution issue)
-ifeq ($(ADD_DOCS_LINK_TO_JIRA), true)
-	TEST_DOCS_LINK:=https://gitlab.com/ska-telescope/ska-tmc/ska-tmc-mid-integration/-/blob/$(CI_COMMIT_SHA)/docs/bdd-steps-doc/index.md
-endif
-
 
 
 # after the test run and the Test Execution Jira ticket is created,
@@ -305,18 +305,17 @@ xray-post-publish:
 		python3 $(PUBLISH_HTML_REPORT_TO_JIRA_SCRIPT); \
 	fi
 
+ADD_DOCS_LINK_TO_JIRA ?= false
+## Flag to set to "true" if you want to add a link to the BDD test documentation in the Jira test execution issue
+# (Set to false to disable the link to the BDD test documentation in the Jira test execution issue)
 
-# ----------------------------------------------------------------------------
-# generate documentation for steps and feature files
-
-STEP_DOCUMENTATION_OUTPUT_FOLDER ?= docs/bdd-steps-doc ## The folder where the documentation will be generated
-STEP_DOCUMENTATION_SCRIPT ?= helper_scripts/document_steps.py ## The script that will generate the documentation
-STEP_DOCUMENTATION_TARGET_FOLDER ?= tests/tmc_csp_refactor3/ # for the moment
-## The target folder where the script will look for the feature files
-
-bdd-steps-doc:
-	rm -rf $(STEP_DOCUMENTATION_OUTPUT_FOLDER)
-	python $(STEP_DOCUMENTATION_SCRIPT) $(STEP_DOCUMENTATION_TARGET_FOLDER) $(STEP_DOCUMENTATION_OUTPUT_FOLDER)
+## Extract a link to the BDD test documentation where the steps are documented
+# This link is generated from the commit SHA, since it is expected that the BDD test documentation
+# is versioned with the code.
+# (Set to empty to disable the link to the BDD test documentation in the Jira test execution issue)
+ifeq ($(ADD_DOCS_LINK_TO_JIRA), true)
+	TEST_DOCS_LINK:=https://gitlab.com/ska-telescope/ska-tmc/ska-tmc-mid-integration/-/blob/$(CI_COMMIT_SHA)/$(STEP_DOCUMENTATION_OUTPUT_FOLDER)/index.md
+endif
 
 
 # ----------------------------------------------------------------------------
