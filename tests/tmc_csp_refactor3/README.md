@@ -26,6 +26,15 @@ aspects:
 
 The folder contains the following files and subfolders.
 
+- [bdd-steps-doc](bdd-steps-doc/): the folder containing the
+  auto-generated markdown test documentation. You can use this as a reference to
+  understand what each test is doing. This documentation is generated
+  extracting all the necessary information from the feature files
+  and from the steps implementation. The documentation is generated
+  using the `document_steps.py` support script, called through the
+  `make bdd-steps-doc` command. For more details, see the
+  [Makefile](../../Makefile) and the
+  [support scripts README](../../helper_scripts/README.md).
 - [features](features/): the folder containing the Gherkin feature files
   implementing the scenarios. Some important notes about the features:
   - the feature are two: one for covering the "regular" subarray
@@ -43,7 +52,8 @@ The folder contains the following files and subfolders.
   some feature files drafts. They are not used in the current test
   implementation but they are the code and the draft used to generate
   the initial version of the features starting from the `obsState` state
-  machine graph.
+  machine graph. The content of this folder is probably not needed
+  to understand the current test implementation.
 - [utils](utils/): some utility code, like the extensions of the ITH
   input classes (to access the [test data](../data/) in an easier way).
 - [conftest.py](conftest.py): the `pytest` configuration file. Right now it
@@ -99,10 +109,11 @@ The new tests are executed in the pipeline and their results are pushed
 on Jira-Xray (associated to the test plan `XTP-62547`).
 
 The pipeline is defined in
-[gitlab_ci/.gitlab-ci-tmc-csp-refactor.yml](../../gitlab_ci/.gitlab-ci-tmc-csp-refactor.yml), by default it sets `EXIT_AT_FAIL=false`.
+[gitlab_ci/.gitlab-ci-tmc-csp-refactor.yml](../../gitlab_ci/.gitlab-ci-tmc-csp-refactor.yml),
+by default it sets `EXIT_AT_FAIL=false`.
 
 The pipeline is also set up to make use of the new
-[support scripts](../../helper_scripts/). In particular:
+[support scripts](../../helper_scripts/README.md). In particular:
 
 - thanks to
   [pytest-bdd-report](https://github.com/mattiamonti/pytest-bdd-report))
