@@ -11,7 +11,7 @@ k8s-test-mid-with-csp-new-ith:
     ADD_DOCS_LINK_TO_JIRA: 'true'
   environment:
     name: test/$CI_COMMIT_REF_SLUG
-    on_stop: stop-k8s-test-mid-with-csp-ith
+    on_stop: stop-k8s-test-mid-with-csp-new-ith
     auto_stop_in: 1 minute
 
 
