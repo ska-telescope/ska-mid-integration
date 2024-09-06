@@ -179,11 +179,14 @@ def get_report_description() -> str:
 
     :return: the description to append to the JIRA issue.
     """
-    msg = REPORT_DESCRIPTION_TEMPLATE.format(report_link=get_report_link())
+    return REPORT_DESCRIPTION_TEMPLATE.format(report_link=get_report_link())
 
-    if TEST_DOCS_LINK:
-        msg += f"Test documentation: {TEST_DOCS_LINK}\n\n"
-    return msg
+def get_test_docs_description() -> str:
+    """Return a description to append to the JIRA issue.
+
+    :return: the description to append to the JIRA issue.
+    """
+    return f"\n\nTest documentation: {TEST_DOCS_LINK}\n\n"
 
 def check_report_file_accessible() -> None:
     """Check if the HTML BDD test is accessible from the CI job artifacts.
@@ -363,8 +366,13 @@ if __name__ == "__main__":
         )
 
     # 4. Update the JIRA issue description with the link
-    # to the HTML BDD test report
-    append_text_to_issue_description(issues[0], get_report_description())
+    # to the HTML BDD test report (and eventually to the test documentation)
+    msg = get_report_description()
+    if TEST_DOCS_LINK:
+        logging.info(f"Adding also test documentation link: {TEST_DOCS_LINK}")
+        msg += get_test_docs_description()
+
+    append_text_to_issue_description(issues[0], msg)
 
     completition_msg = (
         f"The {get_report_link()} HTML BDD test report has been "
