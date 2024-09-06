@@ -371,6 +371,9 @@ if __name__ == "__main__":
     if TEST_DOCS_LINK:
         logging.info(f"Adding also test documentation link: {TEST_DOCS_LINK}")
         msg += get_test_docs_description()
+    else:
+        logging.info("No test documentation link provided. "
+                     f"(TEST_DOCS_LINK={TEST_DOCS_LINK})")
 
     append_text_to_issue_description(issues[0], msg)
 
