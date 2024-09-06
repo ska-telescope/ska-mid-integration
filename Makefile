@@ -279,13 +279,13 @@ PUBLISH_HTML_REPORT_TO_JIRA_SCRIPT ?= helper_scripts/publish_test_report.py
 ## The Python script that will publish the BDD HTML test report to the Jira test execution issue
 # (Set to empty to disable the publishing of the BDD HTML test report to the Jira test execution issue)
 
-# ADD_DOCS_LINK_TO_JIRA ?= false
-# ## Flag to set to "true" if you want to add a link to the BDD test documentation in the Jira test execution issue
-# # (Set to false to disable the link to the BDD test documentation in the Jira test execution issue)
+ADD_DOCS_LINK_TO_JIRA ?= false
+## Flag to set to "true" if you want to add a link to the BDD test documentation in the Jira test execution issue
+# (Set to false to disable the link to the BDD test documentation in the Jira test execution issue)
 
-# ifeq ($(ADD_DOCS_LINK_TO_JIRA), true)
-# 	TEST_DOCS_LINK:=https://gitlab.com/ska-telescope/ska-tmc/ska-tmc-mid-integration/-/blob/$(CI_COMMIT_SHA)/docs/bdd-steps-doc/index.md
-# endif
+ifeq ($(ADD_DOCS_LINK_TO_JIRA), true)
+	TEST_DOCS_LINK:=https://gitlab.com/ska-telescope/ska-tmc/ska-tmc-mid-integration/-/blob/$(CI_COMMIT_SHA)/docs/bdd-steps-doc/index.md
+endif
 
 ## Extract a link to the BDD test documentation where the steps are documented
 # This link is generated from the commit SHA, since it is expected that the BDD test documentation
@@ -300,6 +300,8 @@ PUBLISH_HTML_REPORT_TO_JIRA_SCRIPT ?= helper_scripts/publish_test_report.py
 xray-post-publish:
 	if [ -f "$(HTML_REPORT_TARGET_FILE)" ] && [ -f "$(PUBLISH_HTML_REPORT_TO_JIRA_SCRIPT)" ]; then \
 		echo "Publishing the BDD HTML test report to the Jira test execution issue"; \
+		export HTML_REPORT_TARGET_FILE="$(HTML_REPORT_TARGET_FILE)"; \
+		export TEST_DOCS_LINK="$(TEST_DOCS_LINK)"; \
 		python3 $(PUBLISH_HTML_REPORT_TO_JIRA_SCRIPT); \
 	fi
 
@@ -322,8 +324,6 @@ bdd-steps-doc:
 
 # Verbose error tracebacks (for now, only for refactored tests)
 # and also link to test documentation
-TEST_DOCS_LINK:="https://gitlab.com/ska-telescope/ska-tmc/ska-tmc-mid-integration/-/blob/$(CI_COMMIT_SHA)/docs/bdd-steps-doc/index.md"
-
 ifeq ($(MARK),tmc_csp_refactor3)
 	PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --tb=long
 endif
