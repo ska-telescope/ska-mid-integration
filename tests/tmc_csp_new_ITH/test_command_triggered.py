@@ -1,5 +1,20 @@
-"""The TMC-CSP sub-arrays execute the transition from EMPTY to RESOURCING."""
+"""Verify the subarray commands works as expected on TMC-CSP.
 
+
+The purpose of these scenarios is to verify that the subarray obsState
+commands work as expected on the TMC-CSP. The verified commands are:
+
+- AssignResources
+- ReleaseResources
+- Configure
+- Scan
+- End
+- EndScan
+
+Foreach of those commands, there are verified the transitions to the
+target state, eventually checking the intermediate transient states
+and the longRunningCommand completion.
+"""
 
 import pytest
 from assertpy import assert_that

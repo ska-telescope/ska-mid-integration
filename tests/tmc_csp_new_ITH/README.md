@@ -37,7 +37,7 @@ The folder contains the following files and subfolders.
   [support scripts README](../../helper_scripts/README.md).
 - [features](features/): the folder containing the Gherkin feature files
   implementing the scenarios. Some important notes about the features:
-  - the feature are two: one for covering the "regular" subarray
+  - the main feature are two: one for covering the "regular" subarray
     transactions (assign resources, configure, scan, etc.)
     and one for the "exceptional" transactions (i.e., the ones regarding
     the `Abort` and `Restart` commands);
@@ -47,7 +47,10 @@ The folder contains the following files and subfolders.
     initialize the system in a `ON` telescope state and in a `EMPTY`
     subarray state;
   - the scenarios are decorated with one or more - not yet used - tags
-    that indicates the covered transactions.
+    that indicates the covered transactions;
+  - a third, still incomplete feature is added to cover some transactions
+    related to the `telescopeState`, but their implementation is still
+    naive and may be subject to changes.
 - [specifications](specifications/): the folder containing a some scripts and
   some feature files drafts. They are not used in the current test
   implementation but they are the code and the draft used to generate
@@ -66,6 +69,9 @@ The folder contains the following files and subfolders.
 - [test_abort.py](test_abort.py) and
   [test_command_triggered.py](test_command_triggered.py):
   the two test files containing the implementation of the test cases.
+- [test_telescope_state.py](test_telescope_state.py): the test file
+  containing the implementation of the test cases related to the
+  `telescopeState` transactions (still naive and subject to changes).
 - [test_harness_config.yaml](test_harness_config.yaml): the configuration
   file for the ITH. It contains the expected device names for TMC, CSP,
   SDP and the Dishes and it specifies that the ITH expects TMC and CSP
