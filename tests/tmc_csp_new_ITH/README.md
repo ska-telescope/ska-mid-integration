@@ -97,7 +97,7 @@ To run the tests:
     make k8s-test CSP_SIMULATION_ENABLED=false MARK=tmc_csp_new_ITH
     ```
 
-Some further, maybe useful options to be set:
+Some further, maybe useful `Makefile` variables are:
 
 - `PYTHON_TEST_NAME="..."` to use the `-k` option of `pytest` to
   filter the tests by python name;
@@ -116,7 +116,7 @@ The pipeline is also set up to make use of the new
 [support scripts](../../helper_scripts/README.md). In particular:
 
 - thanks to
-  [pytest-bdd-report](https://github.com/mattiamonti/pytest-bdd-report))
+  [pytest-bdd-report](https://github.com/mattiamonti/pytest-bdd-report)
   we generate a nice HTML report of the test execution;
 - a link to that report (currently stored in the job artifacts) is
   published in the Jira ticket associated with the current CI JOB, through
