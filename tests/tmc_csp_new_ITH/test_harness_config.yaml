@@ -38,8 +38,3 @@ dishes:
   dish_master3_name: "ska063/elt/master"
   dish_master4_name: "ska100/elt/master"
 
-  # Expected devices (when production)
-  # dish_master1_name: "ska001/elt/master"
-  # dish_master2_name: "ska036/elt/master"
-  # dish_master3_name: "ska063/elt/master"
-  # dish_master4_name: "ska100/elt/master"
