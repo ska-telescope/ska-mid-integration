@@ -300,8 +300,8 @@ PUBLISH_HTML_REPORT_TO_JIRA_SCRIPT ?= helper_scripts/publish_test_report.py
 xray-post-publish:
 	if [ -f "$(HTML_REPORT_TARGET_FILE)" ] && [ -f "$(PUBLISH_HTML_REPORT_TO_JIRA_SCRIPT)" ]; then \
 		echo "Publishing the BDD HTML test report to the Jira test execution issue"; \
-		export HTML_REPORT_TARGET_FILE="$(HTML_REPORT_TARGET_FILE)"; \
-		export TEST_DOCS_LINK="$(TEST_DOCS_LINK)"; \
+		export HTML_REPORT_TARGET_FILE="$(strip $(HTML_REPORT_TARGET_FILE))"; \
+		export TEST_DOCS_LINK="$(strip $(TEST_DOCS_LINK))"; \
 		python3 $(PUBLISH_HTML_REPORT_TO_JIRA_SCRIPT); \
 	fi
 
@@ -314,7 +314,7 @@ ADD_DOCS_LINK_TO_JIRA ?= false
 # is versioned with the code.
 # (Set to empty to disable the link to the BDD test documentation in the Jira test execution issue)
 ifeq ($(ADD_DOCS_LINK_TO_JIRA), true)
-	TEST_DOCS_LINK:=https://gitlab.com/ska-telescope/ska-tmc/ska-tmc-mid-integration/-/blob/$(CI_COMMIT_SHA)/$(STEP_DOCUMENTATION_OUTPUT_FOLDER)/index.md
+	TEST_DOCS_LINK := https://gitlab.com/ska-telescope/ska-tmc/ska-tmc-mid-integration/-/blob/$(CI_COMMIT_SHA)/$(strip $(STEP_DOCUMENTATION_OUTPUT_FOLDER))/index.md
 endif
 
 
