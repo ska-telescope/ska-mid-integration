@@ -228,7 +228,7 @@ k8s-pre-test: test-requirements
 PYTHON_TEST_NAME ?= ## -k parameter for pytest
 
 ifneq ($(PYTHON_TEST_NAME),)
-	PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) -k '$(PYTHON_TEST_NAME)'
+	PYTHON_VARS_AFTER_PYTEST += -k '$(PYTHON_TEST_NAME)'
 endif
 
 
@@ -259,15 +259,14 @@ HTML_REPORT_TARGET_FILE ?= build/report.html
 # Add all the flags needed to generate the test results files
 
 # Add BDD report output 
-PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) \
+PYTHON_VARS_AFTER_PYTEST += \
 	--cucumberjson="$(CUCUMBER_JSON_RESULT_FILE)" \
 	--json-report \
 	--json-report-file="$(REPORT_JSON_RESULT_FILE)"
 
 # Add BDD HTML test report (if enabled)
 ifneq ($(HTML_REPORT_TARGET_FILE),)
-	PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) \
-		--bdd-report="$(HTML_REPORT_TARGET_FILE)"
+	PYTHON_VARS_AFTER_PYTEST += --bdd-report="$(HTML_REPORT_TARGET_FILE)"
 endif
 
 
@@ -319,10 +318,10 @@ endif
 
 
 # ----------------------------------------------------------------------------
-# Further customisation of the test targets
+# Further customisations of the test command args
 
-# Verbose error tracebacks (for now, only for refactored tests)
+# Verbose error tracebacks (for now, only for new ITH tests)
 # and also link to test documentation
 ifeq ($(MARK),tmc_csp_new_ITH)
-	PYTHON_VARS_AFTER_PYTEST := $(PYTHON_VARS_AFTER_PYTEST) --tb=long
+	PYTHON_VARS_AFTER_PYTEST += --tb=long
 endif
