@@ -661,7 +661,11 @@ class FolderProcessor:
 
 
 class PostProcessor:
-    """Class to post-process generated markdown files and create an index."""
+    """Class to post-process generated markdown files and create an index.
+    
+    This class is used to create a top-level index file pointing to all
+    feature and step files, including subfolder structure.
+    """
 
     @staticmethod
     def create_index_file(output_folder: str) -> None:
@@ -671,7 +675,11 @@ class PostProcessor:
         feature_files = []
         step_files = []
 
+        # navigate the directory structure to find all feature and step files
         for root, _, files in os.walk(output_folder):
+
+            # get all feature and step markdown descriptions
+            # (excluding index.md)
             for file in files:
                 if file.endswith(".md") and file != "index.md":
                     file_path = os.path.join(root, file)
@@ -680,7 +688,8 @@ class PostProcessor:
                         feature_files.append(relative_path)
                     elif relative_path.startswith("steps"):
                         step_files.append(relative_path)
-
+        
+        # generate index prefix content
         index_content = "# Test Documentation Index\n\n"
         index_content += "Last updated on: "
         index_content += f"{datetime.now().strftime('%d %B %Y %H:%M:%S')}\n\n"
@@ -689,6 +698,7 @@ class PostProcessor:
         index_content += "``make bdd-steps-doc`` command. "
         index_content += "Do not edit manually*.\n\n"
 
+        # create a nested list of feature and step files
         if feature_files:
             index_content += "## Feature Files\n\n"
             index_content += PostProcessor._generate_nested_list(
@@ -702,6 +712,7 @@ class PostProcessor:
                 sorted(step_files), "steps"
             )
 
+        # create the index file
         index_file_path = os.path.join(output_folder, "index.md")
         with open(index_file_path, "w") as index_file:
             index_file.write(index_content)

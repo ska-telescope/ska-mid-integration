@@ -39,21 +39,17 @@ latest test report.
 
 ### Overview
 
-The Test Documentation Generator is a Python script designed to automatically generate markdown documentation from Python test files and Gherkin feature files. It's particularly useful for projects using Behaviour Driven Development (BDD) methodologies.
+The Test Documentation Generator is a Python script designed to automatically
+generate markdown documentation from Python test files and Gherkin
+feature files. It's particularly useful for projects using
+Behaviour Driven Development (BDD) methodologies.
 
-### Installation
-
-To use the Test Documentation Generator, you need Python 3.6 or higher. Clone the repository and install the required dependencies:
-
-```bash
-git clone https://github.com/your-repo/test-documentation-generator.git
-cd test-documentation-generator
-pip install -r requirements.txt
-```
 
 ### Usage
 
-Run the script from the command line, providing the input folder containing your Python and feature files, and the desired output folder for the markdown files:
+Run the script from the command line, providing the input folder
+containing your Python and feature files, and the desired output folder
+for the markdown files:
 
 ```bash
 python document_steps.py <input_folder> <output_folder>
