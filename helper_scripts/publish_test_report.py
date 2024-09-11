@@ -10,7 +10,7 @@ job.
 **Expected inputs**: The script expects the following.
 
 - Some environment variables:
-  - ``CI_JOB_URL``: the URL of the current CI job, if availabl
+  - ``CI_JOB_URL``: the URL of the current CI job, if available
   - ``JIRA_URL``: the URL of the JIRA instance,
   - ``JIRA_AUTH``: the authentication token for the JIRA API,
   - ``HTML_REPORT_TARGET_FILE``: the relative path of the HTML BDD test report,

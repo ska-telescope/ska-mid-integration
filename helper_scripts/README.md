@@ -29,10 +29,10 @@ latest test report.
 > **IMPORTANT NOTE**: at the current state, those two script are more a
 > proof-of-concept than a production-ready tool. Neither their design, nor
 > their implementation, nor their actual usage, nor their location in this
-> repository are final. They are here prevalently to show how through a
+> repository are final. They are here primarily to show how through a
 > set of scripts and plugin you can enhance the test documentation
 > and the test report publication. Things may change in PI24 and/or in the
-> followings. If you have any feedback, questions, ideas, or you want to
+> following PIs. If you have any feedback, questions, ideas, or you want to
 > contribute, please contact Emanuele Lena and Giorgio Brajnik.
 
 ## 1. Document Steps
