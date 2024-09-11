@@ -3,18 +3,22 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
-
-[0.22.2]
+[0.22.3]
 ************
 *TMC Dish Pointing (ADR-95 and ADR-76)*
   * Utilise Dishleafnode v0.17.1 to use correction key from Config json.
   * Test cases are implemented for correction key [{UPDATE},{RESET},{MAINTAIN}].
 
+[0.22.2]
+************
+*Read the Docs warnings addressed*
+
+
 [0.22.1]
 ************
 *Observation State Aggregation Logic improvements*
-  * Rule engine is used to define rules for ObsState.
-  * EventDataStorage class introduced to store event-related data.
+  * Rule engine is used to define rules for ObsState
+  * EventDataStorage class introduced to store event related data
 
 [0.22.0]
 ************
