@@ -121,6 +121,17 @@ for example ``python3 document_steps.py ../../.. out/`` produces:
                 ├── test_xtp_27257_recovery_after_failed_assign.md
                 ├── ...
 
+**NOTE**: This script uses a powerful Python library called `ast`
+to parse the Python files and extract the tests docstrings. For whose are
+not familiar with the `ast` library, it is a library that allows
+you to parse Python code navigating a module's abstract syntax tree (AST)
+and navigate the tree to extract the information you need (e.g.,
+function names, docstrings, decorators, etc.). Useful links:
+
+- https://docs.python.org/3/library/ast.html
+- https://greentreesnakes.readthedocs.io/en/latest/
+
+
 """# pylint: disable=line-too-long # noqa E501
 
 import argparse
@@ -131,7 +142,8 @@ from datetime import datetime
 from typing import Dict, List, Optional, Tuple
 
 
-
+# -----------------------------------------------------------------------
+# Output formatting
 
 class MarkdownFormatter:
     """Class for managing the output and MD formatting."""
@@ -280,8 +292,42 @@ class MarkdownFormatter:
         return formatted_table + "\n"
 
 
+# -----------------------------------------------------------------------
+# Python file processing (AST parsing and extraction of steps
+# and scenarios implementations)
+
 class StepVisitor(ast.NodeVisitor):
-    """Visitor class to extract steps and scenarios from AST."""
+    """Visitor class to extract steps and scenarios from AST.
+
+    StepVisitor is a class that extracts test steps and scenarios from
+    Python code by analyzing its structure using
+    the `ast` (Abstract Syntax Tree) module.
+    The AST is a tree representation of the source code where
+    each node represents a construct in the code, like a function or an
+    expression. Since the AST is a tree, it can be traversed to extract
+    and collect information about the code without executing it (
+    "visiting" the tree nodes).
+
+
+    This class processes specific function decorators commonly 
+    used in BDD (Behavior-Driven Development) testing, 
+    such as 'given', 'when', 'then', and 'scenario' and in its visit
+    it collects information about the test steps and scenarios
+    found in the source code.
+
+    Logic:
+    - ast.NodeVisitor is a base class for visitors that need to traverse
+      an AST. You can subclass it and define methods that will be called
+      when different kinds of AST nodes are visited.
+    - We implement the visit_FunctionDef method to visit function definitions
+      in the AST and extract information about the function, such as its
+      name, decorators, and docstring. If the function is found to be a
+      test step or a scenario, the relevant information is extracted and
+      stored in the self.steps and self.scenarios attributes.
+    - At the end of the visit, we expect to have collected all the test
+      steps and scenarios found in the source code.
+    """
+
 
     def __init__(self):
         self.steps: List[Dict[str, str]] = []
@@ -480,16 +526,22 @@ class FileScanner:
             return [], {}
 
 
+# -----------------------------------------------------------------------
+# Folder processing (handle Python and feature files)
 
 class FileHandler(ABC):
+    """Abstract class for handling different file types."""
+
     @abstractmethod
     def process_file(
         self, input_path: str, output_path: str, repo_root: str
     ) -> None:
-        pass
+        """Process a single file and generate markdown output."""
 
 
 class PythonFileHandler(FileHandler):
+    """Class to handle Python files containing test steps and scenarios."""
+
     def process_file(
         self, input_path: str, output_path: str, repo_root: str
     ) -> None:
@@ -507,6 +559,8 @@ class PythonFileHandler(FileHandler):
 
 
 class FeatureFileHandler(FileHandler):
+    """Class to handle Gherkin feature files."""
+
     def process_file(
         self, input_path: str, output_path: str, repo_root: str
     ) -> None:
@@ -524,7 +578,13 @@ class FeatureFileHandler(FileHandler):
 
 
 class FolderProcessor:
-    """Class to process a folder of Python and feature files."""
+    """Class to process a folder of Python and feature files.
+    
+    The class processes all Python and feature files in a given folder
+    and generates corresponding markdown files in the output folders
+    (steps and features subfolders). Two separate FileHandlers are used
+    for Python and feature files.
+    """
 
     def __init__(self):
         self.file_handlers: Dict[str, FileHandler] = {
@@ -679,6 +739,9 @@ class PostProcessor:
 
 
 def main():
+    """Code entry point for the script."""
+
+    # parse command-line arguments to extract an input and output folder
     parser = argparse.ArgumentParser(
         description="Generate markdown from test steps and feature files in a folder."  # pylint: disable=line-too-long # noqa E501
     )
@@ -691,6 +754,7 @@ def main():
     )
     args = parser.parse_args()
 
+    # process the input folder and generate markdown files in the output folder
     FolderProcessor().process_folder(args.input_folder, args.output_folder)
 
 
