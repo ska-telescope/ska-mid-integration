@@ -302,43 +302,6 @@ def subarray_in_idle_state(
     #     wait_termination=True,
     # )
 
-    # NOTE: we could consider foreach TelescopeAction that moves to
-    # a transient state and then to a quiescent state, to permit to choose
-    # if the termination condition should be the transient state or the
-    # quiescent state.
-
-    # NOTE: The following line makes a few more tests pass,
-    # but it is not correct since a subarray that is in IDLE state
-    # state should be able to receive the
-    # Configure, AssignResources, ... commands.
-    # (instead occasionally it fails for a sort of timeout error in the
-    # Tango command reception)
-
-    # time.sleep(5)
-
-    # NOTE: it fails also if I verify this!
-    # assert_that(subarray_node_facade.subarray_node.obsState).is_equal_to(
-    #     ObsState.IDLE
-    # )
-    # assert_that(
-    #     subarray_node_facade.csp_subarray_leaf_node.cspSubarrayObsState
-    # ).is_equal_to(ObsState.IDLE)
-    # assert_that(
-    #     subarray_node_facade.sdp_subarray_leaf_node.sdpSubarrayObsState
-    # ).is_equal_to(ObsState.IDLE)
-    # assert_that(csp.csp_subarray.obsState).is_equal_to(ObsState.IDLE)
-    # assert_that(sdp.sdp_subarray.obsState).is_equal_to(ObsState.IDLE)
-    # assert_that(event_tracer).described_as(
-    #     "Central Node "
-    #     f"({central_node_facade.central_node}) "
-    #     "longRunningCommand successful completion."
-    # ).within_timeout(30).has_change_event_occurred(
-    #     central_node_facade.central_node,
-    #     "longRunningCommandResult",
-    #     # _get_expected_long_run_command_result(context_fixt),
-    #     (res[1][0], str(ResultCode.OK.value))
-    # )
-
 
 @given(parsers.parse("the subarray {subarray} is in the CONFIGURING state"))
 def subarray_in_configuring_state(
@@ -373,15 +336,6 @@ def subarray_in_ready_state(
         default_commands_inputs,
         wait_termination=True,
     )
-
-    # NOTE: The following line makes a few more tests pass,
-    # but it is not correct since a subarray that is in READY state
-    # state should be able to receive the
-    # Configure command
-    # (instead occasionally it fails for a sort of timeout error in the
-    # Tango command reception)
-
-    # time.sleep(5)
 
 
 @given(parsers.parse("the subarray {subarray} is in the SCANNING state"))
