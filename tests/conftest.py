@@ -4,6 +4,7 @@ import logging
 import os
 import time
 from os.path import dirname, join
+from typing import Generator
 
 import pytest
 import tango
@@ -146,7 +147,7 @@ def change_event_callbacks() -> MockTangoEventCallbackGroup:
 
 
 @pytest.fixture()
-def central_node_mid() -> CentralNodeWrapperMid:
+def central_node_mid() -> Generator[CentralNodeWrapperMid, None, None]:
     """Return CentralNode for Mid Telescope and calls tear down"""
     central_node = CentralNodeWrapperMid()
     yield central_node
@@ -155,7 +156,7 @@ def central_node_mid() -> CentralNodeWrapperMid:
 
 
 @pytest.fixture()
-def tmc_mid() -> TMCMid:
+def tmc_mid() -> Generator[TMCMid, None, None]:
     """Return TMC Mid object"""
     tmc_mid = TMCMid()
     yield tmc_mid
@@ -163,7 +164,7 @@ def tmc_mid() -> TMCMid:
 
 
 @pytest.fixture()
-def subarray_node() -> SubarrayNodeWrapper:
+def subarray_node() -> Generator[SubarrayNodeWrapper, None, None]:
     """Return SubarrayNode and calls tear down"""
     subarray = SubarrayNodeWrapper()
     yield subarray
@@ -184,7 +185,7 @@ def simulator_factory() -> SimulatorFactory:
 
 
 @pytest.fixture()
-def event_recorder() -> EventRecorder:
+def event_recorder() -> Generator[EventRecorder, None, None]:
     """Return EventRecorder and clear events"""
     event_rec = EventRecorder()
     yield event_rec

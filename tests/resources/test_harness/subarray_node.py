@@ -106,6 +106,7 @@ class SubarrayNodeWrapper(object):
         self.subarray_node.set_timeout_millis(5000)
         self.csp_subarray_leaf_node = DeviceProxy(tmc_csp_subarray_leaf_node)
         self.sdp_subarray_leaf_node = DeviceProxy(tmc_sdp_subarray_leaf_node)
+        self.sdp_qc = DeviceProxy(sdp_queue_connector)
         self.dish_leaf_node_list = [
             DeviceProxy(tmc_dish_leaf_node1),
             DeviceProxy(tmc_dish_leaf_node2),
