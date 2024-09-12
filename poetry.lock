@@ -2138,13 +2138,13 @@ reference = "ska-nexus"
 
 [[package]]
 name = "ska-integration-test-harness"
-version = "0.1.0"
+version = "0.1.1"
 description = "Currently, a test harness for TMC-CSP integration tests. In future, a generic test harness integration testing an arbitrary combination of production or emulated SKA subsystems."
 optional = false
 python-versions = ">=3.10,<4.0"
 files = [
-    {file = "ska_integration_test_harness-0.1.0-py3-none-any.whl", hash = "sha256:161e4a76264326a6ce4aa3575ce8d0c6a4108ca96169b1cc3ac4497eeff917f0"},
-    {file = "ska_integration_test_harness-0.1.0.tar.gz", hash = "sha256:adfa8339b3b81295b36ada7716447083cc81bae3751b07eba535be9d02d8f260"},
+    {file = "ska_integration_test_harness-0.1.1-py3-none-any.whl", hash = "sha256:b7b42c901a3235421a493f7a58b9e3a17b2a0e0f3562d0e8daa6284de42ed117"},
+    {file = "ska_integration_test_harness-0.1.1.tar.gz", hash = "sha256:8ce88e50c14e1b605299b41a669af5af694a6d694eb94d5ca64bbfb8b3ead0b3"},
 ]
 
 [package.dependencies]
