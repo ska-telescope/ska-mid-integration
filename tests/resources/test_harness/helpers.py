@@ -647,12 +647,14 @@ def wait_and_validate_device_attribute_value(
     error = ""
     while count <= timeout:
         try:
+
             attribute_value = device.read_attribute(attribute_name).value
             logging.info(
-                "%s current %s value: %s",
+                "%s current %s value: %s and type: %s",
                 device.name(),
                 attribute_name,
                 attribute_value,
+                type(attribute_value),
             )
             if is_json and json.loads(attribute_value) == json.loads(
                 expected_value
