@@ -130,7 +130,7 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 
 k8s-pre-install-chart:
 	@echo "k8s-pre-install-chart: creating the CSP namespace $(KUBE_NAMESPACE_CSP)"
-	@make k8s-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP )
+	@make k8s-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP)
 
 k8s-pre-install-chart-car:
 	@echo "k8s-pre-install-chart-car: creating the SDP namespace $(KUBE_NAMESPACE_SDP)"
