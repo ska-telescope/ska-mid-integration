@@ -175,6 +175,37 @@ stop-k8s-test-tmc-with-csp:
     - echo "Deleting namespace $KUBE_NAMESPACE"
     - kubectl delete namespace $KUBE_NAMESPACE  # This will delete the namespace
 
+deploy-all-dishes:
+  stage: test
+  tags:
+    - ska-k8s
+  variables:
+    KUBE_NAMESPACE: 'integration-ska-tmc-mid-dish'
+    DISH_INDICES: "001 036 063 100"
+    
+  script:
+    - for DISH_INDEX in $DISH_INDICES; do
+        echo "Deploying dish-lmc for DISH_INDEX=$$DISH_INDEX";
+        make deploy-dish-$$DISH_INDEX KUBE_NAMESPACE=$$KUBE_NAMESPACE;
+      done
+  environment:
+    name: test/$CI_COMMIT_REF_SLUG
+    on_stop: stop-all-dishes
+    action: stop
+  allow_failure: true
+
+stop-all-dishes:
+  stage: test
+  script:
+    - for DISH_INDEX in $DISH_INDICES; do
+        KUBE_NAMESPACE="integration-ska-tmc-mid-dish";
+        echo "Cleaning up dish-lmc for DISH_INDEX=$$DISH_INDEX";
+        make clean-dish-$$DISH_INDEX KUBE_NAMESPACE=$$KUBE_NAMESPACE;
+      done
+  environment:
+    name: test/$CI_COMMIT_REF_SLUG
+    action: stop
+
 deploy-mid-integration:
   extends: deploy-integration
   rules:

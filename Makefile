@@ -15,6 +15,7 @@ UMBRELLA_CHART_PATH ?= charts/$(HELM_CHART)/
 RELEASE_NAME = $(HELM_CHART)
 SDP_SIMULATION_ENABLED ?= true
 CSP_SIMULATION_ENABLED ?= true
+DISH_SIMULATION_ENABLED ?= true
 CI_PROJECT_DIR ?= .
 
 MINIKUBE ?= true ## Minikube or not
@@ -97,6 +98,12 @@ K8S_EXTRA_PARAMS =	-f charts/ska-mid-integration/tmc_pairwise/tmc_csp_values.yam
 	--set global.csp_subarray_prefix=$(CSP_SUBARRAY_PREFIX)
 endif
 
+
+ifeq ($(DISH_SIMULATION_ENABLED),false)
+K8S_EXTRA_PARAMS=   -f charts/ska-mid-integration/tmc_pairwise/tmc_dish_values.yaml \
+
+endif
+
 K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set global.exposeAllDS=$(EXPOSE_All_DS) \
 	--set global.tango_host=$(TANGO_HOST) \
@@ -133,6 +140,13 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 # 	--set global.taranta_dashboard_enabled=true
 # endif
 # endif
+
+
+deploy-dish-%:
+    @echo "Deploying dish-lmc for DISH_INDEX=$* in KUBE_NAMESPACE=$(KUBE_NAMESPACE)"
+    make k8s-install-chart-car KUBE_NAMESPACE=$(KUBE_NAMESPACE) K8S_CHART_PARAMS='-f charts/dish_lmc_values.yml --set "global.dishes={$*}" --version=4.1.0 --set global.cluster_domain=$(CLUSTER_DOMAIN)' HELM_RELEASE=$(DISH_HELM_RELEASE) K8S_CHART=$(K8S_DISH_LMC_CHART)
+    make k8s-wait
+
 
 k8s-pre-install-chart:
 	@echo "k8s-pre-install-chart: creating the CSP namespace $(KUBE_NAMESPACE_SDP)"
