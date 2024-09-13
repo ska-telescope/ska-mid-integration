@@ -11,6 +11,7 @@ variables:
 stages:
   - lint
   - build
+  - on-demand
   - test #BDD will come later, just python tests for now if required
   - deploy
   - integration
@@ -58,6 +59,22 @@ include:
   - project: 'ska-telescope/templates-repository'
     file: 'gitlab-ci/includes/deploy.gitlab-ci.yml' 
 
+  - project: 'ska-telescope/templates-repository'
+    file: 'gitlab-ci/includes/python-lint.gitlab-ci.yml'
+
+  - project: 'ska-telescope/templates-repository'
+    file: 'gitlab-ci/includes/docs-pages.gitlab-ci.yml'
+
+
+  - project: 'ska-telescope/templates-repository'
+    file: 'gitlab-ci/includes/deploy.integration.gitlab-ci.yml'
+
+  - project: "ska-telescope/templates-repository"
+    file: "gitlab-ci/includes/deploy.staging.gitlab-ci.yml"
+
+  - project: 'ska-telescope/templates-repository'
+    file: 'gitlab-ci/includes/finaliser.gitlab-ci.yml'
+
 notebook-lint:
   allow_failure: true 
 
@@ -96,6 +113,64 @@ stop-integration:
 redeploy-integration:
   rules:
     - when: never
+
+
+deploy-tmc-with-sdp:
+  extends: deploy-integration
+  rules:
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+  variables:
+    TELESCOPE: 'SKA-mid'
+    PORT: "10000"
+    KUBE_NAMESPACE: 'integration-ska-mid-tmc-sdp'
+    KUBE_NAMESPACE_SDP: 'integration-ska-tmc-mid-sdp'
+    SDP_SIMULATION_ENABLED: 'false'
+  
+  environment:
+    name: test/$CI_COMMIT_REF_SLUG
+    on_stop: stop-k8s-test-tmc-with-sdp
+
+
+stop-k8s-test-tmc-with-sdp:
+  extends:
+    - stop-k8s-test
+  variables:
+    KUBE_NAMESPACE: 'integration-ska-mid-tmc-sdp'
+    SDP_SIMULATION_ENABLED: 'false'
+  rules:
+    - when: manual  # Allow this job to be triggered manually
+  script:
+    - echo "Deleting namespace $KUBE_NAMESPACE"
+    - kubectl delete namespace $KUBE_NAMESPACE  # This will delete the namespace
+
+
+
+deploy-tmc-with-csp:
+  extends: deploy-mid-integration
+  
+  variables:
+    TELESCOPE: 'SKA-mid'
+    PORT: "10000"
+    KUBE_NAMESPACE: 'integration-ska-mid-tmc-csp'
+    KUBE_NAMESPACE_CSP: 'integration-ska-tmc-mid-csp'
+    CSP_SIMULATION_ENABLED: 'false'
+    
+  
+  environment:
+    name: test/$CI_COMMIT_REF_SLUG
+    on_stop: stop-k8s-test-tmc-with-csp
+
+stop-k8s-test-tmc-with-csp:
+  extends:
+    - stop-k8s-test
+  variables:
+    KUBE_NAMESPACE: 'integration-ska-mid-tmc-csp'
+    CSP_SIMULATION_ENABLED: 'false'
+  rules:
+    - when: manual  # Allow this job to be triggered manually
+  script:
+    - echo "Deleting namespace $KUBE_NAMESPACE"
+    - kubectl delete namespace $KUBE_NAMESPACE  # This will delete the namespace
 
 deploy-mid-integration:
   extends: deploy-integration

@@ -65,6 +65,12 @@ ska-sdp:
       size: 20Gi
       storageClassName: nfss1
 
+#=== CSP ===#
+ska-csp-lmc-mid:
+  labels:
+    app: ska-tmc-mid-integration
+  enabled: true
+
 
 #=== DISH ===#
 ska-dish-lmc:

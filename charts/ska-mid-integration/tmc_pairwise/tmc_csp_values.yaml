@@ -1,0 +1,37 @@
+global:
+  taranta_dashboard_enabled: false
+  taranta_auth_enabled: false
+
+tmc-mid:
+  enabled: true
+  deviceServers:
+    mocks:
+      is_simulated:
+        csp: false
+ska-csp:
+  enabled: true
+
+ska-taranta:
+  enabled : false    
+
+ska-pst-lmc:
+  enabled: false
+
+ska-pst:
+  enabled: false
+
+ska-csp-lmc-mid:
+  enabled : true
+  
+ska-ser-skuid:
+  enabled : false
+
+ska-tango-tangogql:
+  enabled: false
+
+ska-mid-cbf-mcs:
+  enabled : true
+
+ska-mid-cbf-tmleafnode:
+  enabled : true
+

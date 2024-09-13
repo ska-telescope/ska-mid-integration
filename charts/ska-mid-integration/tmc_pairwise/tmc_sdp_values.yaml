@@ -1,0 +1,28 @@
+global:
+  taranta_dashboard_enabled: false
+  taranta_auth_enabled: false
+
+tmc-mid:
+  enabled: true
+  deviceServers:
+    mocks:
+      is_simulated:
+        sdp: false
+ska-sdp:
+  enabled: true
+  lmc:
+    loadBalancer: true
+  
+ska-taranta:
+  enabled : false 
+  
+  
+ska-ser-skuid:
+  enabled : false
+
+
+ska-mid-cbf-mcs:
+  enabled : false
+
+ska-mid-cbf-tmleafnode:
+  enabled : false
