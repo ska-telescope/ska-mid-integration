@@ -8,8 +8,15 @@ tmc-mid:
     mocks:
       is_simulated:
         csp: false
-ska-csp:
-  enabled: true
+
+ska-sdp:
+  enabled: false
+
+ska-dish-lmc:
+  enabled: false
+
+ska-csp-lmc-mid:
+  enabled : true
 
 ska-taranta:
   enabled : false    
@@ -20,9 +27,6 @@ ska-pst-lmc:
 ska-pst:
   enabled: false
 
-ska-csp-lmc-mid:
-  enabled : true
-  
 ska-ser-skuid:
   enabled : false
 

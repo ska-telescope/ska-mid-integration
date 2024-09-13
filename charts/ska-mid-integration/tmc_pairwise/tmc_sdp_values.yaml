@@ -12,7 +12,13 @@ ska-sdp:
   enabled: true
   lmc:
     loadBalancer: true
-  
+
+ska-dish-lmc:
+  enabled: false
+
+ska-csp-lmc-mid:
+  enabled : false
+
 ska-taranta:
   enabled : false 
   
