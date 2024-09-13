@@ -137,5 +137,5 @@ k8s-pre-install-chart-car:
 	@make k8s-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP)
 
 k8s-pre-uninstall-chart:
-	@echo "k8s-post-uninstall-chart: deleting the CSP namespace $(KUBE_NAMESPACE_CSP)"
-	@if [ "$(KEEP_NAMESPACE)" != "true" ]; then make k8s-delete-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_CSP); fi
+	@echo "k8s-post-uninstall-chart: deleting the CSP namespace $(KUBE_NAMESPACE_SDP)"
+	@if [ "$(KEEP_NAMESPACE)" != "true" ]; then make k8s-delete-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP); fi
