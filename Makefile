@@ -15,12 +15,11 @@ UMBRELLA_CHART_PATH ?= charts/$(HELM_CHART)/
 RELEASE_NAME = $(HELM_CHART)
 SDP_SIMULATION_ENABLED ?= true
 CSP_SIMULATION_ENABLED ?= true
-MCCS_SIMULATION_ENABLED ?= true
 CI_PROJECT_DIR ?= .
 
 MINIKUBE ?= true ## Minikube or not
 EXPOSE_All_DS ?= true ## Expose All Tango Services to the external network (enable Loadbalancer service)
-SKA_TANGO_OPERATOR ?= false
+SKA_TANGO_OPERATOR ?= true
 ODA_URI ?= http://ska-db-oda-rest-$(HELM_RELEASE).$(KUBE_NAMESPACE).svc.$(CLUSTER_DOMAIN):5000/$(KUBE_NAMESPACE)/api/v1
 
 NOTEBOOK_IGNORE_FILES = not notebook.ipynb
