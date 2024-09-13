@@ -98,6 +98,7 @@ ska-oso-oet:
 ska-sdp:
   labels:
     app: ska-mid-integration
+  enabled: true
   ska-tango-base:
     enabled: false
   lmc:
