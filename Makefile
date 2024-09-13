@@ -79,9 +79,15 @@ K8S_EXTRA_PARAMS ?=
 
 
 ifeq ($(SDP_SIMULATION_ENABLED),false)
-K8S_EXTRA_PARAMS =	-f charts/ska-mid-integration/tmc_pairwise/tmc_sdp_values.yaml \
-	--set global.sdp_master=$(SDP_MASTER)\
-	--set global.sdp_subarray_prefix=$(SDP_SUBARRAY_PREFIX)
+K8S_EXTRA_PARAMS=	-f charts/ska-mid-integration/tmc_pairwise/tmc_csp_values.yaml \
+	--set tmc-mid.deviceServers.mocks.sdp=$(SDP_SIMULATION_ENABLED)\
+	--set global.sdp_master="$(SDP_MASTER)"\
+	--set global.sdp_subarray_prefix="$(SDP_SUBARRAY_PREFIX)"\
+	--set ska-sdp.proccontrol.replicas=$(SDP_PROCCONTROL_REPLICAS)\
+	--set ska-sdp.enabled=true\
+	--set ska-sdp.lmc.loadBalancer=true\
+	--set tmc-mid.subarray_count=1\
+	--set ska-sdp.lmc.nsubarray=1
 endif
 
 
