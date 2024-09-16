@@ -177,7 +177,6 @@ stop-k8s-test-tmc-with-csp:
 
 
 deploy-all-dishes:
-  extends: deploy-mid-integration
   stage: test
   tags:
     - ska-k8s
