@@ -177,10 +177,15 @@ stop-k8s-test-tmc-with-csp:
 
 
 deploy-all-dishes:
+  extends: deploy-mid-integration
+  rules:
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   stage: test
   tags:
     - ska-k8s
   variables:
+    TELESCOPE: 'SKA-mid'
+    PORT: "10000"
     KUBE_NAMESPACE: "integration-tmc-dish-lmc"
     DISH_IMAGE: "artefact.skao.int/ska-mid-dish-simulators:3.1.2"
   script:
@@ -203,14 +208,12 @@ deploy-all-dishes:
     action: stop
   allow_failure: true
 
-
-
 stop-k8s-test-tmc-with-dish:
   extends:
     - stop-k8s-test
   variables:
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-dish'
-    CSP_SIMULATION_ENABLED: 'false'
+    DISH_SIMULATION_ENABLED: 'false'
   rules:
     - when: manual  # Allow this job to be triggered manually
   script:
