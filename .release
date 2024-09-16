@@ -1,22 +1,16 @@
-release=0.22.3
-tag=0.22.3
+release=0.22.4
+tag=0.22.4
 tag_description=
 **Charts:**
-**1. ska-tmc-integration 0.22.2 - 0.22.3**
+**1. ska-tmc-integration 0.22.3 - 0.22.4**
 
-    **1.1 ska-tmc-mid - 0.22.2 - 0.22.3:
-        a. TMC Dish Pointing (ADR-95 and ADR-76)*
-        * Utilise Dishleafnode v0.17.1 to use correction key from Config json.
-        * Test cases are implemented for correction key [{UPDATE},{RESET},{MAINTAIN}]
-
+    **1.1 ska-tmc-mid - 0.22.3 - 0.22.4:
+        a. Fixed SKB-497
 
 
 release_notes=
 **Charts:**
-**1. ska-tmc-integration 0.22.2 - 0.22.3:*
+**1. ska-tmc-integration 0.22.3 - 0.22.4:*
 
-    **1.1 ska-tmc-mid - 0.22.2 - 0.22.3:
-        a. TMC Dish Pointing (ADR-95 and ADR-76)*
-        * Utilise Dishleafnode v0.17.1 to use correction key from Config json.
-        * Test cases are implemented for correction key [{UPDATE},{RESET},{MAINTAIN}]
-
+    **1.1 ska-tmc-mid - 0.22.3 - 0.22.4:
+        a. Fixed SKB-497
