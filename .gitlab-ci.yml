@@ -177,11 +177,14 @@ stop-k8s-test-tmc-with-csp:
 
 
 deploy-all-dishes:
-  stage: test
   tags:
     - ska-k8s
+  extends: deploy-mid-integration
+  rules:
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
     KUBE_NAMESPACE: "integration-tmc-dish-lmc"
+    KUBE_NAMESPACE_DISH: 'integration-ska-tmc-mid-dish'
     DISH_IMAGE: "artefact.skao.int/ska-mid-dish-simulators:3.1.2"
   script:
     - echo "Deploying ska-mid-dish-simulators deployments in namespace $KUBE_NAMESPACE"
