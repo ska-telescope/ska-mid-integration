@@ -3,6 +3,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+[0.22.4]
+************
+Fixed *SKB-497*
+
 [0.22.3]
 ************
 *TMC Dish Pointing (ADR-95 and ADR-76)*
