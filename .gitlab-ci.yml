@@ -184,20 +184,20 @@ deploy-all-dishes:
     KUBE_NAMESPACE: "integration-tmc-dish-lmc"
     DISH_IMAGE: "artefact.skao.int/ska-mid-dish-simulators:3.1.2"
   script:
-    - echo "Deploying ska-mid-dish-simulators pods in namespace $KUBE_NAMESPACE"
-    - for dish in dish001 dish100 dish063 dish036; do
-        kubectl run "$dish" \
+    - echo "Deploying ska-mid-dish-simulators deployments in namespace $KUBE_NAMESPACE"
+    - |
+      for dish in dish001 dish100 dish063 dish036; do
+        kubectl create deployment "$dish" \
           --namespace="$KUBE_NAMESPACE" \
           --image="$DISH_IMAGE" \
-          --image-pull-policy="IfNotPresent" \
-          --restart=Never \
-          --labels="app=ska-mid-dish-simulator,dish=$dish";
+          --dry-run=client -o yaml | kubectl apply -f -
       done
   environment:
     name: test/$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-test-tmc-with-dish
     action: stop
   allow_failure: true
+
 
 
 stop-k8s-test-tmc-with-dish:
