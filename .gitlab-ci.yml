@@ -175,6 +175,49 @@ stop-k8s-test-tmc-with-csp:
     - echo "Deleting namespace $KUBE_NAMESPACE"
     - kubectl delete namespace $KUBE_NAMESPACE  # This will delete the namespace
 
+
+deploy-all-dishes:
+  stage: test
+  tags:
+    - ska-k8s
+  variables:
+    DISH_SIMULATION_ENABLED: 'false'
+    KUBE_NAMESPACE: "integration-tmc-dish-lmc"
+    DISH_HELM_RELEASE: "4.1.0"
+    K8S_DISH_LMC_CHART: "ska-dish-lmc"
+    DISH_IMAGE: "artefact.skao.int/ska-mid-dish-simulators:3.1.2"
+  script:
+    - echo "Deploying ska-mid-dish-simulators for specific dishes in namespace $KUBE_NAMESPACE"
+    - for dish in dish001 dish100 dish063 dish036; do
+        helm upgrade --install "$dish" $K8S_DISH_LMC_CHART \
+          --namespace "$KUBE_NAMESPACE" \
+          --set image.repository="artefact.skao.int/ska-mid-dish-simulators" \
+          --set image.tag="3.1.2" \
+          --set image.pullPolicy="IfNotPresent" \
+          --set dishName="$dish";
+      done
+  environment:
+    name: test/$CI_COMMIT_REF_SLUG
+    on_stop: stop-k8s-dish-lmc
+    action: stop
+  allow_failure: true
+
+
+stop-k8s-test-tmc-with-dish:
+  extends:
+    - stop-k8s-test
+  variables:
+    KUBE_NAMESPACE: 'integration-ska-mid-tmc-dish'
+    CSP_SIMULATION_ENABLED: 'false'
+  rules:
+    - when: manual  # Allow this job to be triggered manually
+  script:
+    - echo "Deleting namespace $KUBE_NAMESPACE"
+    - kubectl delete namespace $KUBE_NAMESPACE
+
+
+
+
 deploy-mid-integration:
   extends: deploy-integration
   rules:
