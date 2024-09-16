@@ -198,7 +198,7 @@ deploy-all-dishes:
       done
   environment:
     name: test/$CI_COMMIT_REF_SLUG
-    on_stop: stop-k8s-dish-lmc
+    on_stop: stop-k8s-test-tmc-with-dish
     action: stop
   allow_failure: true
 
