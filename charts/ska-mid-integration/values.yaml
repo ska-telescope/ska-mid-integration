@@ -104,6 +104,18 @@ ska-sdp:
   lmc:
     prefix: mid
     nsubarray: 3
+    queueconnector:
+      image: artefact.skao.int/ska-sdp-lmc-queue-connector
+      version: 4.1.0
+      domain: queue-connector
+      function: sdp-queue-connector
+      resources:
+        limits:
+          memory: 500Mi
+          cpu: 0.5
+        requests:
+          memory: 100Mi
+          cpu: 0.3
   data-pvc:
     create:
       enabled: true
