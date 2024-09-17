@@ -75,18 +75,18 @@ TANGO_HOST_NAME ?= tango-databaseds
 PORT ?= 10000
 CSP_MASTER ?= tango://$(TANGO_HOST_NAME).$(KUBE_NAMESPACE).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-csp/control/0
 CSP_SUBARRAY_PREFIX ?= tango://$(TANGO_HOST_NAME).$(KUBE_NAMESPACE).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-csp/subarray
-
+SDP_MASTER ?= tango://$(TANGO_HOST_NAME).$(KUBE_NAMESPACE).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-sdp/control/0
+SDP_SUBARRAY_PREFIX ?= tango://$(TANGO_HOST_NAME).$(KUBE_NAMESPACE).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-sdp/subarray
 HELM_CHARTS_TO_PUBLISH = $(HELM_CHART)
 HELM_CHARTS ?= $(HELM_CHARTS_TO_PUBLISH)
 K8S_EXTRA_PARAMS ?= 
 
 
 ifeq ($(SDP_SIMULATION_ENABLED),false)
-K8S_EXTRA_PARAMS=	-f charts/ska-mid-integration/tmc_pairwise/tmc_csp_values.yaml \
+K8S_EXTRA_PARAMS=	-f charts/ska-mid-integration/tmc_pairwise/tmc_sdp_values.yaml \
 	--set tmc-mid.deviceServers.mocks.sdp=$(SDP_SIMULATION_ENABLED)\
 	--set global.sdp_master="$(SDP_MASTER)"\
 	--set global.sdp_subarray_prefix="$(SDP_SUBARRAY_PREFIX)"\
-	--set ska-sdp.proccontrol.replicas=$(SDP_PROCCONTROL_REPLICAS)\
 	--set ska-sdp.enabled=true\
 	--set ska-sdp.lmc.loadBalancer=true\
 	--set tmc-mid.subarray_count=1\
