@@ -155,7 +155,6 @@ deploy-tmc-with-csp:
     TELESCOPE: 'SKA-mid'
     PORT: "10000"
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-csp'
-    KUBE_NAMESPACE_CSP: 'integration-ska-tmc-mid-csp'
     CSP_SIMULATION_ENABLED: 'false'
     
   
