@@ -156,9 +156,10 @@ tmc-mid: # check why it is separate
   deviceServers:
     mocks:
       enabled: false
-      dish: false
-      csp: false
-      sdp: false
+      is_simulated:
+        dish: false
+        csp: false
+        sdp: false
 
 ##tangoGQL
 ska-tango-tangogql:
