@@ -176,37 +176,34 @@ stop-k8s-test-tmc-with-csp:
     - kubectl delete namespace $KUBE_NAMESPACE  # This will delete the namespace
 
 
-deploy-all-dishes:
+deploy-dish-lmc:
   extends: deploy-mid-integration
-  rules:
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   stage: test
   tags:
     - ska-k8s
   variables:
-    TELESCOPE: 'SKA-mid'
-    PORT: "10000"
-    KUBE_NAMESPACE: "integration-tmc-dish-lmc"
-    DISH_IMAGE: "artefact.skao.int/ska-mid-dish-simulators:3.1.2"
+    DISH_INDEX: 
+      - "001"
+      - "100"
+      - "063"
+      - "036"
+    DISH_HELM_RELEASE: "4.1.0"
+    K8S_DISH_LMC_CHART: "ska-dish-lmc"
+    KUBE_NAMESPACE: "integration-ska-mid-tmc-dish"
   script:
-    - echo "Deploying ska-mid-dish-simulators deployments in namespace $KUBE_NAMESPACE"
-    # Check if namespace exists, create if not
     - |
-      if ! kubectl get namespace "$KUBE_NAMESPACE"; then
-        kubectl create namespace "$KUBE_NAMESPACE"
-      fi
-    - |
-      for dish in dish001 dish100 dish063 dish036; do
-        kubectl create deployment "$dish" \
-          --namespace="$KUBE_NAMESPACE" \
-          --image="$DISH_IMAGE" \
-          --dry-run=client -o yaml | kubectl apply -f -
+      for dish in "${DISH_INDEX[@]}"; do
+        make k8s-install-chart-car KUBE_NAMESPACE=$KUBE_NAMESPACE K8S_CHART_PARAMS="-f charts/dish_lmc_values.yml
+          --set global.dishes={$dish} --version=4.1.0 --set global.cluster_domain=$CLUSTER_DOMAIN"
+          HELM_RELEASE=$DISH_HELM_RELEASE K8S_CHART=$K8S_DISH_LMC_CHART
+        make k8s-wait
       done
   environment:
     name: test/$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-test-tmc-with-dish
     action: stop
   allow_failure: true
+
 
 stop-k8s-test-tmc-with-dish:
   extends:
