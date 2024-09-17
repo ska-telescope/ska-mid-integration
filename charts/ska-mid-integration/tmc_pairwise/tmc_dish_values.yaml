@@ -7,8 +7,7 @@ tmc-mid:
   deviceServers:
     mocks:
       enabled: true
-      is_simulated:
-        dish: false
+      dish: false
 
 ska-sdp:
   enabled: false

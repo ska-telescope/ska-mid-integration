@@ -81,6 +81,11 @@ HELM_CHARTS_TO_PUBLISH = $(HELM_CHART)
 HELM_CHARTS ?= $(HELM_CHARTS_TO_PUBLISH)
 K8S_EXTRA_PARAMS ?= 
 
+#dish variables 
+DISH_INDICES ?= "001 002 003 100"
+DISH_NAMESPACES ?= "integration-ska-mid-tmc-dish01 integration-ska-mid-tmc-dish36 integration-ska-mid-tmc-dish64 integration-ska-mid-tmc-dish100"
+DISH_HELM_RELEASE ?= "4.1.0"
+K8S_DISH_LMC_CHART ?= "ska-dish-lmc"
 
 ifeq ($(SDP_SIMULATION_ENABLED),false)
 K8S_EXTRA_PARAMS=	-f charts/ska-mid-integration/tmc_pairwise/tmc_sdp_values.yaml \
@@ -100,6 +105,25 @@ K8S_EXTRA_PARAMS =	-f charts/ska-mid-integration/tmc_pairwise/tmc_csp_values.yam
 	--set global.csp_subarray_prefix=$(CSP_SUBARRAY_PREFIX)
 endif
 
+
+# Target to deploy dishes
+deploy-dishes:
+	@echo "Deploying dishes to Kubernetes namespaces..."
+	IFS=' ' read -r -a indices <<< "$(DISH_INDICES)"; \
+	IFS=' ' read -r -a namespaces <<< "$(DISH_NAMESPACES)"; \
+	for index in "$${!indices[@]}"; do \
+		DISH_INDEX=$${indices[$$index]}; \
+		KUBE_NAMESPACE=$${namespaces[$$index]}; \
+		make k8s-install-chart-car \
+			KUBE_NAMESPACE=$$KUBE_NAMESPACE \
+			K8S_CHART_PARAMS="-f charts/dish_lmc_values.yml \
+				--set global.dishes=$${DISH_INDEX} \
+				--version=$(DISH_HELM_RELEASE) \
+				--set global.cluster_domain=$(CLUSTER_DOMAIN)" \
+			HELM_RELEASE=$(DISH_HELM_RELEASE) \
+			K8S_CHART=$(K8S_DISH_LMC_CHART); \
+		make k8s-wait; \
+	done
 
 K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set global.exposeAllDS=$(EXPOSE_All_DS) \
