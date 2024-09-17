@@ -116,6 +116,16 @@ ska-sdp:
         requests:
           memory: 100Mi
           cpu: 0.3
+      pointing-offset:
+        image: artefact.skao.int/ska-sdp-wflow-pointing-offset
+        version: 0.5.0
+        script: pointing-offset
+        imagePullPolicy: IfNotPresent
+        command:
+          - pointing-offset
+        dataProductStorage:
+          name: test-pvc
+          mountPath: /mnt/data
   data-pvc:
     create:
       enabled: true

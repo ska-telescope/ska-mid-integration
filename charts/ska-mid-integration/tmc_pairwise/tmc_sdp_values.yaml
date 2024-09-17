@@ -9,6 +9,8 @@ tmc-mid:
       enabled: true
       is_simulated:
         sdp: false
+        csp: true
+        dish: true
 ska-sdp:
   enabled: true
   lmc:

@@ -9,6 +9,8 @@ tmc-mid:
       enabled: true
       is_simulated:
         csp: false
+        sdp: true
+        dish: true
 
 ska-sdp:
   enabled: false
@@ -23,9 +25,6 @@ ska-taranta:
   enabled : false    
 
 ska-pst-lmc:
-  enabled: false
-
-ska-pst:
   enabled: false
 
 ska-ser-skuid:
