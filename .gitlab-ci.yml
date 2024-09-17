@@ -182,6 +182,7 @@ deploy-dish-lmc:
   variables:
     DISH_INDICES: "001 002 003 100"
     DISH_NAMESPACES: "integration-ska-mid-tmc-dish01 integration-ska-mid-tmc-dish36 integration-ska-mid-tmc-dish64 integration-ska-mid-tmc-dish100"
+    KUBE_NAMESPACE: 'integration-ska-mid-tmc-dish'
     DISH_HELM_RELEASE: "4.1.0"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
   script:
