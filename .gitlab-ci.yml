@@ -181,15 +181,16 @@ deploy-dish-lmc:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
     DISH_INDICES: "001 002 003 100"
-    DISH_NAMESPACES: "integration-ska-mid-tmc-dish01 integration-ska-mid-tmc-dish036 integration-ska-mid-tmc-dish064 integration-ska-mid-tmc-dish100"
+    DISH_NAMESPACES: "integration-ska-mid-tmc-dish01 integration-ska-mid-tmc-dish02 integration-ska-mid-tmc-dish03 integration-ska-mid-tmc-dish100"
     DISH_HELM_RELEASE: "4.1.0"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
   script:
-    - IFS=' ' read -r -a indices <<< "$DISH_INDICES"; \
-      IFS=' ' read -r -a namespaces <<< "$DISH_NAMESPACES"; \
-      for index in "${!indices[@]}"; do \
-        DISH_INDEX=${indices[$index]}; \
-        KUBE_NAMESPACE=${namespaces[$index]}; \
+    - |
+      IFS=' ' read -r -a indices <<< "$DISH_INDICES"
+      IFS=' ' read -r -a namespaces <<< "$DISH_NAMESPACES"
+      for index in "${!indices[@]}"; do
+        DISH_INDEX=${indices[$index]}
+        KUBE_NAMESPACE=${namespaces[$index]}
         make k8s-install-chart-car \
           KUBE_NAMESPACE=$KUBE_NAMESPACE \
           K8S_CHART_PARAMS="-f charts/dish_lmc_values.yml \
@@ -197,8 +198,8 @@ deploy-dish-lmc:
             --version=$DISH_HELM_RELEASE \
             --set global.cluster_domain=$(CLUSTER_DOMAIN)" \
           HELM_RELEASE=$DISH_HELM_RELEASE \
-          K8S_CHART=$K8S_DISH_LMC_CHART; \
-        make k8s-wait; \
+          K8S_CHART=$K8S_DISH_LMC_CHART
+        make k8s-wait
       done
   environment:
     name: test/$CI_COMMIT_REF_SLUG
