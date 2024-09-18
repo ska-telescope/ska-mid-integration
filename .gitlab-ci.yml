@@ -129,7 +129,7 @@ deploy-tmc-with-sdp:
     SDP_SIMULATION_ENABLED: 'false'
   
   environment:
-    name: test/$CI_COMMIT_REF_SLUG
+    name: integration-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-sdp
 
 
@@ -164,7 +164,7 @@ deploy-tmc-with-csp:
     
   
   environment:
-    name: test/$CI_COMMIT_REF_SLUG
+    name: integration-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-csp
 
 stop-k8s-test-tmc-with-csp:
@@ -198,7 +198,7 @@ deploy-tmc-with-dish:
         DISH_HELM_RELEASE="$DISH_HELM_RELEASE" \
         K8S_DISH_LMC_CHART="$K8S_DISH_LMC_CHART"
   environment:
-    name: test/$CI_COMMIT_REF_SLUG
+    name: integration-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-dish
     action: stop
   allow_failure: true
