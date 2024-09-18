@@ -53,5 +53,5 @@ stop-k8s-test-csp-dish:
   - make k8s-uninstall-chart
   - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
   environment:
-    name: test/csp-dish-$CI_COMMIT_REF_SLUG
+    name: $CI_PROJECT_NAME/csp-dish-$CI_COMMIT_REF_SLUG
     action: stop
