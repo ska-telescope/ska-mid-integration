@@ -105,7 +105,7 @@ endif
 
 
 ifeq ($(CSP_SIMULATION_ENABLED),false)
-K8S_EXTRA_PARAMS =	-f charts/ska-mid-integration/tmc_pairwise/tmc_csp_values.yaml \
+K8S_EXTRA_PARAMS =	-f charts/ska-mid-integration/tmc_pairwise/tmc_csp_values.yaml
 endif
 
 
