@@ -32,7 +32,7 @@ k8s-test-csp-dish:
     - dish-lmc-dish063
     - dish-lmc-dish100
   environment:
-    name: $CI_PROJECT_NAME/$CI_COMMIT_REF_SLUG
+    name: $CI_PROJECT_NAME/csp-dish-$CI_COMMIT_REF_SLUG
     kubernetes:
       # This repetition is needed for gitlab to parse the namespace correctly
       namespace: $KUBE_NAMESPACE
@@ -52,3 +52,6 @@ stop-k8s-test-csp-dish:
   - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
   - make k8s-uninstall-chart
   - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
+  environment:
+    name: test/csp-dish-$CI_COMMIT_REF_SLUG
+    action: stop

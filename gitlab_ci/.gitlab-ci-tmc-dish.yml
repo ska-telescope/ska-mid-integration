@@ -38,7 +38,7 @@ k8s-test-dish-lmc:
     - XRAY_TEST_RESULT_FILE="build/cucumber.json" make xray-publish
     - make k8s-uninstall-chart
   environment:
-    name: test/$CI_COMMIT_REF_SLUG
+    name: test/dish-$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-test-dish-lmc
 
 stop-k8s-test-dish-lmc:
@@ -50,3 +50,6 @@ stop-k8s-test-dish-lmc:
     - make k8s-uninstall-chart
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
     - make k8s-delete-namespace
+  environment:
+    name: test/dish-$CI_COMMIT_REF_SLUG
+    action: stop
