@@ -135,16 +135,16 @@ deploy-tmc-with-sdp:
 
 stop-k8s-test-tmc-with-sdp:
   extends:
-    - stop-k8s-test
+    - stop-integration
   variables:
-    KUBE_NAMESPACE: 'integration-ska-mid-tmc-sdp'
+    KUBE_NAMESPACE: 'integration-ska-low-tmc-sdp'
     SDP_SIMULATION_ENABLED: 'false'
+  needs:
+    - deploy-tmc-with-sdp
   rules:
-    - when: manual  # Allow this job to be triggered manually
-  script:
-    - echo "Deleting namespace $KUBE_NAMESPACE"
-    - kubectl delete namespace $KUBE_NAMESPACE  # This will delete the namespace
-
+    - when: manual  
+  rules:
+  - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 
 deploy-tmc-with-csp:
@@ -169,18 +169,19 @@ deploy-tmc-with-csp:
 
 stop-k8s-test-tmc-with-csp:
   extends:
-    - stop-k8s-test
+    - stop-integration
   variables:
-    KUBE_NAMESPACE: 'integration-ska-mid-tmc-csp'
+    KUBE_NAMESPACE: 'integration-ska-low-tmc-csp'
     CSP_SIMULATION_ENABLED: 'false'
+  needs:
+    - deploy-tmc-with-csp
   rules:
-    - when: manual  # Allow this job to be triggered manually
-  script:
-    - echo "Deleting namespace $KUBE_NAMESPACE"
-    - kubectl delete namespace $KUBE_NAMESPACE  # This will delete the namespace
+    - when: manual  
+  rules:
+  - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 
-deploy-dish-lmc:
+deploy-tmc-with-dish:
   extends: deploy-mid-integration
   rules:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
@@ -205,17 +206,16 @@ deploy-dish-lmc:
 
 stop-k8s-test-tmc-with-dish:
   extends:
-    - stop-k8s-test
+    - stop-integration
   variables:
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-dish'
-    DISH_SIMULATION_ENABLED: 'false'
+    CSP_SIMULATION_ENABLED: 'false'
+  needs:
+    - deploy-tmc-with-dish
   rules:
-    - when: manual  # Allow this job to be triggered manually
-  script:
-    - echo "Deleting namespace $KUBE_NAMESPACE"
-    - kubectl delete namespace $KUBE_NAMESPACE
-
-
+    - when: manual  
+  rules:
+  - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 
 deploy-mid-integration:
