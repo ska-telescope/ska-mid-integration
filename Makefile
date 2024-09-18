@@ -104,11 +104,11 @@ K8S_EXTRA_PARAMS=	-f charts/ska-mid-integration/tmc_pairwise/tmc_sdp_values.yaml
 endif
 
 
-ifeq ($(CSP_SIMULATION_ENABLED),false)
-K8S_EXTRA_PARAMS =	-f charts/ska-mid-integration/tmc_pairwise/tmc_csp_values.yaml \
-	--set global.csp_master=$(CSP_MASTER)\
-	--set global.csp_subarray_prefix=$(CSP_SUBARRAY_PREFIX)
-endif
+# ifeq ($(CSP_SIMULATION_ENABLED),false)
+# K8S_EXTRA_PARAMS =	-f charts/ska-mid-integration/tmc_pairwise/tmc_csp_values.yaml \
+# 	--set global.csp_master=$(CSP_MASTER)\
+# 	--set global.csp_subarray_prefix=$(CSP_SUBARRAY_PREFIX)
+# endif
 
 
 # Target to deploy dishes
