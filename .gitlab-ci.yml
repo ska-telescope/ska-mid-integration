@@ -137,7 +137,7 @@ stop-k8s-test-tmc-with-sdp:
   extends:
     - stop-integration
   variables:
-    KUBE_NAMESPACE: 'integration-ska-low-tmc-sdp'
+    KUBE_NAMESPACE: 'integration-ska-mid-tmc-sdp'
     SDP_SIMULATION_ENABLED: 'false'
   needs:
     - deploy-tmc-with-sdp
@@ -171,7 +171,7 @@ stop-k8s-test-tmc-with-csp:
   extends:
     - stop-integration
   variables:
-    KUBE_NAMESPACE: 'integration-ska-low-tmc-csp'
+    KUBE_NAMESPACE: 'integration-ska-mid-tmc-csp'
     CSP_SIMULATION_ENABLED: 'false'
   needs:
     - deploy-tmc-with-csp
@@ -209,7 +209,7 @@ stop-k8s-test-tmc-with-dish:
     - stop-integration
   variables:
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-dish'
-    CSP_SIMULATION_ENABLED: 'false'
+    DISH_SIMULATION_ENABLED: 'false'
   needs:
     - deploy-tmc-with-dish
   rules:
