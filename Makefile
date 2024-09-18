@@ -87,7 +87,7 @@ HELM_CHARTS ?= $(HELM_CHARTS_TO_PUBLISH)
 K8S_EXTRA_PARAMS ?= 
 
 #dish variables 
-DISH_INDICES ?= "001 002 003 100"
+DISH_INDICES ?= "001 036 064 100"
 DISH_NAMESPACES ?= "integration-ska-mid-tmc-dish01 integration-ska-mid-tmc-dish36 integration-ska-mid-tmc-dish64 integration-ska-mid-tmc-dish100"
 DISH_HELM_RELEASE ?= "4.1.0"
 K8S_DISH_LMC_CHART ?= "ska-dish-lmc"
@@ -119,7 +119,7 @@ deploy-dishes:
 		KUBE_NAMESPACE=$${namespaces[$$index]}; \
 		make k8s-install-chart-car \
 			KUBE_NAMESPACE=$$KUBE_NAMESPACE \
-			K8S_CHART_PARAMS="-f charts/dish_lmc_values.yml \
+			K8S_CHART_PARAMS="-f charts/ska-mid-integration/tmc_pairwise/tmc_dish_values.yaml \
 				--set global.dishes=$${DISH_INDEX} \
 				--version=$(DISH_HELM_RELEASE) \
 				--set global.cluster_domain=$(CLUSTER_DOMAIN)" \

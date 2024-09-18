@@ -186,7 +186,7 @@ deploy-tmc-with-dish:
   rules:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
-    DISH_INDICES: "001 002 003 100"
+    DISH_INDICES: "001 036 064 100"
     DISH_NAMESPACES: "integration-ska-mid-tmc-dish01 integration-ska-mid-tmc-dish36 integration-ska-mid-tmc-dish64 integration-ska-mid-tmc-dish100"
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-dish'
     DISH_HELM_RELEASE: "4.1.0"
@@ -202,6 +202,8 @@ deploy-tmc-with-dish:
     on_stop: stop-k8s-test-tmc-with-dish
     action: stop
   allow_failure: true
+
+
 
 
 stop-k8s-test-tmc-with-dish:
