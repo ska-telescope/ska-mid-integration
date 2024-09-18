@@ -106,13 +106,13 @@ on-demand-dish-lmc-dish001:
   when: manual
 
 stop-on-demand-dish-lmc-001:
-    extends:
-      - stop-k8s-dish-lmc-001
-    stage: on-demand
-    variables:
-      KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-on-demand-dish-lmc-001"
-      DISH_HELM_RELEASE: "4.1.0"
-      K8S_DISH_LMC_CHART: "ska-dish-lmc"
+  extends:
+    - stop-k8s-dish-lmc-001
+  stage: on-demand
+  variables:
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-on-demand-dish-lmc-001"
+    DISH_HELM_RELEASE: "4.1.0"
+    K8S_DISH_LMC_CHART: "ska-dish-lmc"
   environment:
     name: test/od-d001-$CI_COMMIT_REF_SLUG
     action: stop
