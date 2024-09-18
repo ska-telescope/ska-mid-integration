@@ -15,7 +15,7 @@ ska-sdp:
   enabled: false
 
 ska-dish-lmc:
-  enabled: false
+  enabled: true
 
 ska-csp-lmc-mid:
   enabled : true
