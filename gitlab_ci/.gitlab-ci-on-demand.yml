@@ -101,9 +101,8 @@ on-demand-dish-lmc-dish001:
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
     TARANTA_ENABLED: "true"
   environment:
-    name: test/$CI_COMMIT_REF_SLUG
+    name: test/od-d001-$CI_COMMIT_REF_SLUG
     on_stop: stop-on-demand-dish-lmc-001
-    action: stop
   when: manual
 
 stop-on-demand-dish-lmc-001:
@@ -114,6 +113,9 @@ stop-on-demand-dish-lmc-001:
       KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-on-demand-dish-lmc-001"
       DISH_HELM_RELEASE: "4.1.0"
       K8S_DISH_LMC_CHART: "ska-dish-lmc"
+  environment:
+    name: test/od-d001-$CI_COMMIT_REF_SLUG
+    action: stop
 
 on-demand-dish-lmc-dish036:
   extends:
@@ -126,9 +128,8 @@ on-demand-dish-lmc-dish036:
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
     TARANTA_ENABLED: "true"
   environment:
-    name: test/$CI_COMMIT_REF_SLUG
+    name: test/od-d036-$CI_COMMIT_REF_SLUG
     on_stop: stop-on-demand-dish-lmc-036
-    action: stop
   when: manual
 
 stop-on-demand-dish-lmc-036:
@@ -139,6 +140,9 @@ stop-on-demand-dish-lmc-036:
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-on-demand-dish-lmc-036"
     DISH_HELM_RELEASE: "4.1.0"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
+  environment:
+    name: test/od-d036-$CI_COMMIT_REF_SLUG
+    action: stop
 
 on-demand-dish-lmc-dish063:
   extends:
@@ -151,9 +155,8 @@ on-demand-dish-lmc-dish063:
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
     TARANTA_ENABLED: "true"
   environment:
-    name: test/$CI_COMMIT_REF_SLUG
+    name: test/od-d036-$CI_COMMIT_REF_SLUG
     on_stop: stop-on-demand-dish-lmc-063
-    action: stop
   when: manual
 
 stop-on-demand-dish-lmc-063:
@@ -164,6 +167,9 @@ stop-on-demand-dish-lmc-063:
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-on-demand-dish-lmc-063"
     DISH_HELM_RELEASE: "4.1.0"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
+  environment:
+    name: test/od-d036-$CI_COMMIT_REF_SLUG
+    action: stop
 
 on-demand-dish-lmc-dish100:
   extends:
@@ -176,9 +182,8 @@ on-demand-dish-lmc-dish100:
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
     TARANTA_ENABLED: "true"
   environment:
-    name: test/$CI_COMMIT_REF_SLUG
+    name: test/od-d100-$CI_COMMIT_REF_SLUG
     on_stop: stop-on-demand-dish-lmc-100
-    action: stop
   when: manual
 
 stop-on-demand-dish-lmc-100:
@@ -189,7 +194,9 @@ stop-on-demand-dish-lmc-100:
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-on-demand-dish-lmc-100"
     DISH_HELM_RELEASE: "4.1.0"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
-
+  environment:
+    name: test/od-d100-$CI_COMMIT_REF_SLUG
+    action: stop
 
 
 mid-on-demand-destroy-mini-skampi:
