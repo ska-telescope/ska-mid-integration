@@ -13,6 +13,8 @@ ska-sdp:
   enabled: false
 
 ska-dish-lmc:
+  labels:
+    app: ska-mid-integration
   enabled: true
 
 ska-csp-lmc-mid:
