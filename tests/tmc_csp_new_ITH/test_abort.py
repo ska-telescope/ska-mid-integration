@@ -223,40 +223,17 @@ def verify_aborting_state(
         ObsState.ABORTING,
         previous_value=context_fixt.starting_state,
     ).has_change_event_occurred(
-        # TODO: even though it does not seem so, these 2
-        # chained assertions require 2 separate
-        # timeouts. We should instead use a single timeout for both.
         csp.csp_subarray,
         "obsState",
         ObsState.ABORTING,
-    )  # .has_change_event_occurred(
-    #     sdp.sdp_subarray,
-    #     "obsState",
-    #     ObsState.ABORTING,
-    # ) # TODO: configure SDP emulated to transition to ABORTING state
+    ).has_change_event_occurred(
+        sdp.sdp_subarray,
+        "obsState",
+        ObsState.ABORTING,
+    )
 
-    # NOTE: if the starting state is transient, the previous value
-    # cannot be verified for CSP and SDP, because it may have changed to
-    # another state in the meantime. But we still want to guarantee
-    # ABORTING is reached.
-
-    # TODO: Not clear why the previous value is not verified for CSP and SDP.
-    # let's forget about the SDP which is emulated - we will deal with it later
-    # but using the tracer we should be able to capture a sequence of
-    # transitions. There will be 2 change-events,
-    # one for the first transition and one for the second.
-    # GB agrees that it is questionable if we have to test that the CSP.SA
-    # evolves along the prescribed path.
-    # But I would say yes, we need to make sure that the CSP.SA evolves
-    # as expected because that might affect how
-    # the TMC.SA evolves.
-
-    # The previous value can and should instead be verified for TMC
-    # (since we already have an assertion that checks the command have
-    # been called when the transient state was still in place).
-
-    # for the emulated device (SDP) we verify the correct
-    # Tango command has been called as expected
+    # NOTE: since the previous state may be transient, we cannot guarantee
+    # for the sub-devices to still be in that state, so we don't check it.
 
 
 @then(
@@ -297,8 +274,7 @@ def verify_aborted_state(
         sdp.sdp_subarray,
         "obsState",
         ObsState.ABORTED,
-        # previous_value=ObsState.ABORTING,
-        # TODO: configure SDP emulated to transition to ABORTING state
+        previous_value=ObsState.ABORTING,
     )
 
 
