@@ -42,11 +42,6 @@ ska-mid-cbf-mcs:
 ska-mid-cbf-tmleafnode:
   enabled : false
 
-
-
-
-
-
 ska-dish-lmc:
   enabled: true
 
