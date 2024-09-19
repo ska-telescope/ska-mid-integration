@@ -117,7 +117,7 @@ deploy-dishes:
 		make k8s-install-chart \
 			KUBE_NAMESPACE=$$KUBE_NAMESPACE \
 			K8S_CHART_PARAMS="-f charts/ska-mid-integration/tmc_pairwise/dish-lmc-values.yaml \
-				--set global.dishes=$${DISH_INDEX} \
+				--set global.dishes={$${DISH_INDEX}} \
 				--set global.cluster_domain=$(CLUSTER_DOMAIN)" \
 		make k8s-wait; \
 	done
@@ -164,22 +164,22 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 # endif
 
 
-k8s-pre-install-chart:
-ifeq ($(SDP_SIMULATION_ENABLED),false)
-	@echo "k8s-pre-install-chart: creating the CSP namespace $(KUBE_NAMESPACE_SDP)"
-	@make k8s-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP)
-endif
+# k8s-pre-install-chart:
+# ifeq ($(SDP_SIMULATION_ENABLED),false)
+# 	@echo "k8s-pre-install-chart: creating the CSP namespace $(KUBE_NAMESPACE_SDP)"
+# 	@make k8s-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP)
+# endif
 
-k8s-pre-install-chart-car:
-ifeq ($(SDP_SIMULATION_ENABLED),false)
-	@echo "k8s-pre-install-chart-car: creating the SDP namespace $(KUBE_NAMESPACE_SDP)"
-	@make k8s-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP)
-endif
-k8s-pre-uninstall-chart:
-ifeq ($(SDP_SIMULATION_ENABLED),false)
-	@echo "k8s-post-uninstall-chart: deleting the CSP namespace $(KUBE_NAMESPACE_SDP)"
-	@if [ "$(KEEP_NAMESPACE)" != "true" ]; then make k8s-delete-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP); fi
-endif
+# k8s-pre-install-chart-car:
+# ifeq ($(SDP_SIMULATION_ENABLED),false)
+# 	@echo "k8s-pre-install-chart-car: creating the SDP namespace $(KUBE_NAMESPACE_SDP)"
+# 	@make k8s-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP)
+# endif
+# k8s-pre-uninstall-chart:
+# ifeq ($(SDP_SIMULATION_ENABLED),false)
+# 	@echo "k8s-post-uninstall-chart: deleting the SDP namespace $(KUBE_NAMESPACE_SDP)"
+# 	@if [ "$(KEEP_NAMESPACE)" != "true" ]; then make k8s-delete-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP); fi
+# endif
 cred:
 	make k8s-namespace
 	curl -s https://gitlab.com/ska-telescope/templates-repository/-/raw/master/scripts/namespace_auth.sh | bash -s $(SERVICE_ACCOUNT) $(KUBE_NAMESPACE) || true
