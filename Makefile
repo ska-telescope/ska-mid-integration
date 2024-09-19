@@ -118,7 +118,7 @@ deploy-dishes:
 			KUBE_NAMESPACE=$$KUBE_NAMESPACE \
 			K8S_CHART_PARAMS="-f charts/ska-mid-integration/tmc_pairwise/dish-lmc-values.yaml \
 				--set global.dishes=$${DISH_INDEX} \
-				--set global.cluster_domain=$(CLUSTER_DOMAIN)" 
+				--set global.cluster_domain=$(CLUSTER_DOMAIN)" \
 		make k8s-wait; \
 	done
 
