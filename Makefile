@@ -119,13 +119,13 @@ deploy-dishes:
 	@echo "Deploying dishes to Kubernetes namespaces..."
 	IFS=' ' read -r -a indices <<< "$(DISH_INDICES)"; \
 	IFS=' ' read -r -a namespaces <<< "$(DISH_NAMESPACES)"; \
-	for index in "${!indices[@]}"; do \
-		DISH_INDEX=${indices[$$index]}; \
-		KUBE_NAMESPACE=${namespaces[$$index]}; \
+	for index in "$${!indices[@]}"; do \
+		DISH_INDEX=$${indices[$$index]}; \
+		KUBE_NAMESPACE=$${namespaces[$$index]}; \
 		make k8s-install-chart \
 			KUBE_NAMESPACE=$$KUBE_NAMESPACE \
 			K8S_CHART_PARAMS="-f charts/ska-mid-integration/tmc_pairwise/dish-lmc-values.yaml \
-				--set global.dishes={${DISH_INDEX}} \
+				--set global.dishes={$${DISH_INDEX}} \
 				--set global.cluster_domain=$(CLUSTER_DOMAIN)"; \
 		make k8s-wait \
 			KUBE_NAMESPACE=$$KUBE_NAMESPACE; \
