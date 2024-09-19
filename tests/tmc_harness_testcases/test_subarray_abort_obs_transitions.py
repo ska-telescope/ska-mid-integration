@@ -21,10 +21,10 @@ class TestSubarrayNodeAbortCommandObsStateTransitions(object):
             # KeyError('ska_mid/tm_leaf_node/d0001'))
             # dish_availability = devices_availability_dict[
             # KeyError: 'ska_mid/tm_leaf_node/d0001'
-            # "RESOURCING",
+            "RESOURCING",
             "IDLE",
             "CONFIGURING",
-            # "SCANNING",
+            "SCANNING",
         ],
     )
     @pytest.mark.SKA_mid20
