@@ -1,0 +1,37 @@
+global:
+  minikube: false
+  operator: true
+  exposeALLDS: false
+
+labels: 
+  app: ska-mid-integration
+
+# DISH LMC
+ska-mid-dish-manager:
+  labels:
+    app: ska-mid-integration
+  enabled: true
+
+
+ska-mid-dish-simulators:
+  dishsimulators:
+    image:
+      registry: artefact.skao.int
+      image: ska-mid-dish-simulators
+      tag: 3.1.2
+      pullPolicy: IfNotPresent
+  labels:
+    app: ska-mid-integration
+  enabled: true
+  deviceServers:
+    spfdevice:
+      enabled: true
+    spfrxdevice:
+      enabled: true
+  dsOpcuaSimulator:
+    enabled: true
+
+ska-mid-dish-ds-manager:
+  labels:
+    app: ska-mid-integration
+  enabled: true

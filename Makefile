@@ -114,16 +114,17 @@ deploy-dishes:
 	for index in "$${!indices[@]}"; do \
 		DISH_INDEX=$${indices[$$index]}; \
 		KUBE_NAMESPACE=$${namespaces[$$index]}; \
-		make k8s-install-chart-car \
+		make k8s-install-chart \
 			KUBE_NAMESPACE=$$KUBE_NAMESPACE \
-			K8S_CHART_PARAMS="-f charts/ska-mid-integration/tmc_pairwise/tmc_dish_values.yaml \
+			K8S_CHART_PARAMS="-f charts/ska-mid-integration/tmc_pairwise/dish-lmc-values.yaml \
 				--set global.dishes=$${DISH_INDEX} \
-				--version=$(DISH_HELM_RELEASE) \
-				--set global.cluster_domain=$(CLUSTER_DOMAIN)" \
-			HELM_RELEASE=$(DISH_HELM_RELEASE) \
-			K8S_CHART=$(K8S_DISH_LMC_CHART); \
+				--set global.cluster_domain=$(CLUSTER_DOMAIN)" 
 		make k8s-wait; \
 	done
+
+ifeq ($(DISH_SIMULATION_ENABLED),false)
+K8S_EXTRA_PARAMS =	-f charts/ska-mid-integration/tmc_pairwise/tmc_dish_values.yaml
+endif
 
 K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set global.exposeAllDS=$(EXPOSE_All_DS) \
