@@ -121,7 +121,6 @@ deploy-dishes:
 				--version=$(DISH_HELM_RELEASE) \
 				--set global.cluster_domain=$(CLUSTER_DOMAIN)" \
 			HELM_RELEASE=$(DISH_HELM_RELEASE) \
-			K8S_CHART=$(K8S_DISH_LMC_CHART); \
 		make k8s-wait; \
 	done
 
