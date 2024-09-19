@@ -15,7 +15,7 @@ ska-sdp:
   enabled: false
 
 ska-dish-lmc:
-   labels:
+  labels:
     app: ska-mid-integration
   enabled: false
 
