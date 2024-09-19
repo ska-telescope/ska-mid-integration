@@ -121,6 +121,7 @@ deploy-dishes:
 				--version=$(DISH_HELM_RELEASE) \
 				--set global.cluster_domain=$(CLUSTER_DOMAIN)" \
 			HELM_RELEASE=$(DISH_HELM_RELEASE) \
+			K8S_CHART=$(K8S_DISH_LMC_CHART); \
 		make k8s-wait; \
 	done
 
@@ -178,7 +179,6 @@ ifeq ($(SDP_SIMULATION_ENABLED),false)
 	@echo "k8s-post-uninstall-chart: deleting the CSP namespace $(KUBE_NAMESPACE_SDP)"
 	@if [ "$(KEEP_NAMESPACE)" != "true" ]; then make k8s-delete-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP); fi
 endif
-
 cred:
 	make k8s-namespace
 	curl -s https://gitlab.com/ska-telescope/templates-repository/-/raw/master/scripts/namespace_auth.sh | bash -s $(SERVICE_ACCOUNT) $(KUBE_NAMESPACE) || true
