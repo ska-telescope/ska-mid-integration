@@ -148,9 +148,9 @@ stop-dishes:
 
 
 
-ifeq ($(DISH_SIMULATION_ENABLED),false)
-K8S_EXTRA_PARAMS =	-f charts/ska-mid-integration/tmc_pairwise/tmc_dish_values.yaml
-endif
+# ifeq ($(DISH_SIMULATION_ENABLED),false)
+# K8S_EXTRA_PARAMS =	-f charts/ska-mid-integration/tmc_pairwise/tmc_dish_values.yaml
+# endif
 
 K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set global.exposeAllDS=$(EXPOSE_All_DS) \
