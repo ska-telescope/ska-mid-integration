@@ -131,6 +131,7 @@ deploy-dishes:
 			KUBE_NAMESPACE=$$KUBE_NAMESPACE; \
 	done
 
+
 stop-dishes:
 	@echo "Stopping dishes in Kubernetes namespaces..."
 	IFS=' ' read -r -a indices <<< "$(DISH_INDICES)"; \
@@ -142,6 +143,7 @@ stop-dishes:
 		make k8s-uninstall-chart \
 			KUBE_NAMESPACE=$$KUBE_NAMESPACE; \
 	done
+
 
 
 ifeq ($(DISH_SIMULATION_ENABLED),false)

@@ -191,7 +191,7 @@ deploy-tmc-with-dish:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
     DISH_INDICES: "001 036 064 100"
-    DISH_NAMESPACES: "integration-ska-mid-tmc-dish001 integration-ska-mid-tmc-dish036 integration-ska-mid-tmc-dish064 integration-ska-mid-tmc-dish100 "
+    DISH_NAMESPACES: "integration-ska-mid-tmc-dish001 integration-ska-mid-tmc-dish036 integration-ska-mid-tmc-dish064 integration-ska-mid-tmc-dish100"
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-dish'
     DISH_HELM_RELEASE: "4.1.0"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
@@ -203,15 +203,15 @@ deploy-tmc-with-dish:
         DISH_HELM_RELEASE="$DISH_HELM_RELEASE" \
         K8S_DISH_LMC_CHART="$K8S_DISH_LMC_CHART"
     - make k8s-install-chart 
-    
   environment:
-    name: integration-mid-dish-$CI_PROJECT_NAME
+    name: integration-mid-tmc-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-dish
   allow_failure: true
 
 
+
 stop-k8s-test-tmc-with-dish:
-  extends: deploy-mid-integration
+  extends: stop-mid-integration
   rules:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   script:
@@ -220,7 +220,7 @@ stop-k8s-test-tmc-with-dish:
         DISH_NAMESPACES="$DISH_NAMESPACES"
     - make k8s-uninstall-chart
   environment:
-    name: integration-mid-dish-$CI_PROJECT_NAME
+    name: integration-mid-tmc-$CI_PROJECT_NAME
     action: stop
 
 
