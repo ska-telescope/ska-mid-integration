@@ -2,36 +2,77 @@ global:
   minikube: false
   operator: true
   exposeALLDS: false
+  taranta_dashboard_enabled: false
+  taranta_auth_enabled: false
 
 labels: 
   app: ska-mid-integration
 
-# DISH LMC
-ska-mid-dish-manager:
-  labels:
-    app: ska-mid-integration
-  enabled: true
+
+tmc-mid:
+  enabled: false
+  
+ska-sdp:
+  enabled: false
 
 
-ska-mid-dish-simulators:
-  dishsimulators:
-    image:
-      registry: artefact.skao.int
-      image: ska-mid-dish-simulators
-      tag: 3.1.2
-      pullPolicy: IfNotPresent
-  labels:
-    app: ska-mid-integration
+ska-csp-lmc-mid:
+  enabled : false
+
+ska-taranta:
+  enabled : false    
+
+ska-pst-lmc:
+  enabled: false
+
+ska-pst:
+  enabled: false
+
+ska-ser-skuid:
+  enabled : false
+
+ska-tango-tangogql:
+  enabled: false
+
+ska-mid-cbf-mcs:
+  enabled : false
+
+ska-mid-cbf-tmleafnode:
+  enabled : false
+
+
+
+
+
+
+ska-dish-lmc:
   enabled: true
-  deviceServers:
-    spfdevice:
-      enabled: true
-    spfrxdevice:
-      enabled: true
-  dsOpcuaSimulator:
+
+  ska-mid-dish-manager:
+    labels:
+      app: ska-mid-integration
     enabled: true
 
-ska-mid-dish-ds-manager:
-  labels:
-    app: ska-mid-integration
-  enabled: true
+
+  ska-mid-dish-simulators:
+    dishsimulators:
+      image:
+        registry: artefact.skao.int
+        image: ska-mid-dish-simulators
+        tag: 3.1.2
+        pullPolicy: IfNotPresent
+    labels:
+      app: ska-mid-integration
+    enabled: true
+    deviceServers:
+      spfdevice:
+        enabled: true
+      spfrxdevice:
+        enabled: true
+    dsOpcuaSimulator:
+      enabled: true
+
+  ska-mid-dish-ds-manager:
+    labels:
+      app: ska-mid-integration
+    enabled: true
