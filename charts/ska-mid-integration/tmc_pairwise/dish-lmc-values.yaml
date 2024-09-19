@@ -15,7 +15,9 @@ tmc-mid:
 ska-sdp:
   enabled: false
 
-
+ska-tango-base:
+  enabled: true
+  
 ska-csp-lmc-mid:
   enabled : false
 
