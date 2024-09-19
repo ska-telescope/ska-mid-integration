@@ -92,6 +92,7 @@ DISH_NAMESPACES ?= "integration-ska-mid-tmc-dish01 integration-ska-mid-tmc-dish3
 DISH_HELM_RELEASE ?= "4.1.0"
 K8S_DISH_LMC_CHART ?= "ska-dish-lmc"
 
+
 ifeq ($(SDP_SIMULATION_ENABLED),false)
 K8S_EXTRA_PARAMS=	-f charts/ska-mid-integration/tmc_pairwise/tmc_sdp_values.yaml \
 	--set tmc-mid.deviceServers.mocks.sdp=$(SDP_SIMULATION_ENABLED)\
@@ -167,16 +168,21 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 
 
 k8s-pre-install-chart:
+ifeq ($(SDP_SIMULATION_ENABLED),false)
 	@echo "k8s-pre-install-chart: creating the CSP namespace $(KUBE_NAMESPACE_SDP)"
 	@make k8s-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP)
+endif
 
 k8s-pre-install-chart-car:
+ifeq ($(SDP_SIMULATION_ENABLED),false)
 	@echo "k8s-pre-install-chart-car: creating the SDP namespace $(KUBE_NAMESPACE_SDP)"
 	@make k8s-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP)
-
+endif
 k8s-pre-uninstall-chart:
+ifeq ($(SDP_SIMULATION_ENABLED),false)
 	@echo "k8s-post-uninstall-chart: deleting the CSP namespace $(KUBE_NAMESPACE_SDP)"
 	@if [ "$(KEEP_NAMESPACE)" != "true" ]; then make k8s-delete-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP); fi
+endif
 
 cred:
 	make k8s-namespace
