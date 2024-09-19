@@ -131,6 +131,16 @@ deploy-dishes:
 			KUBE_NAMESPACE=$$KUBE_NAMESPACE; \
 	done
 
+uninstall-dishes:
+	@echo "Deploying dishes to Kubernetes namespaces..."
+	IFS=' ' read -r -a indices <<< "$(DISH_INDICES)"; \
+	IFS=' ' read -r -a namespaces <<< "$(DISH_NAMESPACES)"; \
+	for index in "$${!indices[@]}"; do \
+		DISH_INDEX=$${indices[$$index]}; \
+		KUBE_NAMESPACE=$${namespaces[$$index]}; \
+		make k8s-uninstall-chart \
+			KUBE_NAMESPACE=$$KUBE_NAMESPACE \
+	done
 
 ifeq ($(DISH_SIMULATION_ENABLED),false)
 K8S_EXTRA_PARAMS =	-f charts/ska-mid-integration/tmc_pairwise/tmc_dish_values.yaml
