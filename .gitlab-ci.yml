@@ -129,7 +129,7 @@ deploy-tmc-with-sdp:
     SDP_SIMULATION_ENABLED: 'false'
   
   environment:
-    name: integration-$CI_PROJECT_NAME
+    name: integration-mid-sdp-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-sdp
 
 
@@ -139,12 +139,14 @@ stop-k8s-test-tmc-with-sdp:
   variables:
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-sdp'
     SDP_SIMULATION_ENABLED: 'false'
+  environment:
+    name: integration-mid-sdp-$CI_PROJECT_NAME
+    action: stop
   needs:
     - deploy-tmc-with-sdp
   rules:
     - when: manual  
-  rules:
-  - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 
 deploy-tmc-with-csp:
@@ -162,9 +164,8 @@ deploy-tmc-with-csp:
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
     - 'make help | grep k8s-test'
     
-  
   environment:
-    name: integration-$CI_PROJECT_NAME
+    name: integration-mid-csp-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-csp
 
 stop-k8s-test-tmc-with-csp:
@@ -173,12 +174,14 @@ stop-k8s-test-tmc-with-csp:
   variables:
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-csp'
     CSP_SIMULATION_ENABLED: 'false'
+  environment:
+    name: integration-mid-csp-$CI_PROJECT_NAME
+    action: stop
   needs:
     - deploy-tmc-with-csp
   rules:
     - when: manual  
-  rules:
-  - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 
 deploy-tmc-with-dish:
@@ -198,12 +201,9 @@ deploy-tmc-with-dish:
         DISH_HELM_RELEASE="$DISH_HELM_RELEASE" \
         K8S_DISH_LMC_CHART="$K8S_DISH_LMC_CHART"
   environment:
-    name: integration-$CI_PROJECT_NAME
+    name: integration-mid-dish-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-dish
-    action: stop
   allow_failure: true
-
-
 
 
 stop-k8s-test-tmc-with-dish:
@@ -212,12 +212,14 @@ stop-k8s-test-tmc-with-dish:
   variables:
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-dish'
     DISH_SIMULATION_ENABLED: 'false'
+  environment:
+    name: integration-mid-dish-$CI_PROJECT_NAME
+    action: stop
   needs:
     - deploy-tmc-with-dish
   rules:
     - when: manual  
-  rules:
-  - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 
 deploy-mid-integration:
