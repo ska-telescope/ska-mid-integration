@@ -191,15 +191,12 @@ deploy-tmc-with-dish:
   variables:
     DISH_INDICES: "001 036 064 100"
     DISH_NAMESPACES: "integration-ska-mid-tmc-dish01 integration-ska-mid-tmc-dish36 integration-ska-mid-tmc-dish64 integration-ska-mid-tmc-dish100"
-    KUBE_NAMESPACE: 'integration-ska-mid-tmc-dish'
     DISH_HELM_RELEASE: "4.1.0"
-    K8S_DISH_LMC_CHART: "ska-dish-lmc"
   script:
     - make deploy-dishes \
         DISH_INDICES="$DISH_INDICES" \
         DISH_NAMESPACES="$DISH_NAMESPACES" \
-        DISH_HELM_RELEASE="$DISH_HELM_RELEASE" \
-        K8S_DISH_LMC_CHART="$K8S_DISH_LMC_CHART"
+        DISH_HELM_RELEASE="$DISH_HELM_RELEASE" 
   environment:
     name: integration-mid-dish-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-dish
