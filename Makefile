@@ -86,8 +86,16 @@ K8S_EXTRA_PARAMS ?=
 DISH_INDICES ?= "001 036 064 100"
 DISH_NAMESPACES ?= "integration-ska-mid-tmc-dish01 integration-ska-mid-tmc-dish36 integration-ska-mid-tmc-dish64 integration-ska-mid-tmc-dish100"
 DISH_HELM_RELEASE ?= "4.1.0"
+DISH_TANGO_HOST ?= tango-databaseds
 K8S_DISH_LMC_CHART ?= "ska-dish-lmc"
-
+DISH_NAMESPACE_1 ?= dish-lmc-1
+DISH_NAMESPACE_2 ?= dish-lmc-2
+DISH_NAMESPACE_3 ?= dish-lmc-3
+DISH_NAMESPACE_4 ?= dish-lmc-4
+DISH_NAME_1 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_1).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA001
+DISH_NAME_36 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_2).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA036
+DISH_NAME_63 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_3).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA063
+DISH_NAME_100 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_4).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA100
 
 ifeq ($(SDP_SIMULATION_ENABLED),false)
 K8S_EXTRA_PARAMS=	-f charts/ska-mid-integration/tmc_pairwise/tmc_sdp_values.yaml \
@@ -119,7 +127,8 @@ deploy-dishes:
 			K8S_CHART_PARAMS="-f charts/ska-mid-integration/tmc_pairwise/dish-lmc-values.yaml \
 				--set global.dishes={$${DISH_INDEX}} \
 				--set global.cluster_domain=$(CLUSTER_DOMAIN)" \
-		make k8s-wait; \
+		make k8s-wait \
+			KUBE_NAMESPACE=$$KUBE_NAMESPACE;
 	done
 
 ifeq ($(DISH_SIMULATION_ENABLED),false)
@@ -137,6 +146,10 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set ska-sdp.kafka.zookeeper.clusterDomain=$(CLUSTER_DOMAIN) \
 	--set ska-sdp.kafka.clusterDomain=$(CLUSTER_DOMAIN) \
 	--set ska-sdp.ska-sdp-qa.redis.clusterDomain=$(CLUSTER_DOMAIN) \
+	--set global.namespace_dish.dish_names[0]="$(DISH_NAME_1)"\
+	--set global.namespace_dish.dish_names[1]="$(DISH_NAME_36)"\
+	--set global.namespace_dish.dish_names[2]="$(DISH_NAME_63)"\
+	--set global.namespace_dish.dish_names[3]="$(DISH_NAME_100)"\
 	--set ska-oso-oet.rest.ingress.enabled=$(OET_INGRESS_ENABLED) \
 	--set ska-oso-oet.rest.oda.url=$(ODA_URI) \
 	--set ska-db-oda.rest.backend.type=filesystem \

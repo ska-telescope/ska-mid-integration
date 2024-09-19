@@ -132,8 +132,6 @@ deploy-tmc-with-sdp:
     name: integration-mid-sdp-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-sdp
   
-  rules:
-    - when: manual 
 
 
 stop-k8s-test-tmc-with-sdp:
