@@ -204,26 +204,33 @@ deploy-tmc-with-dish:
         K8S_DISH_LMC_CHART="$K8S_DISH_LMC_CHART"
     - make k8s-install-chart 
   environment:
-    name: integration-mid-tmc-$CI_PROJECT_NAME
+    name: integration-mid-dish-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-dish
   allow_failure: true
 
 
 
 stop-k8s-test-tmc-with-dish:
-  extends: stop-mid-integration
-  rules:
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+  extends: 
+    - stop-integration
+  variables:
+    KUBE_NAMESPACE: 'integration-ska-mid-tmc-dish'
+    DISH_SIMULATION_ENABLED: 'false'
+  environment:
+    name: integration-mid-dish-$CI_PROJECT_NAME
+    action: stop
+  needs:
+    - deploy-tmc-with-dish
   script:
     - make stop-dishes \
         DISH_INDICES="$DISH_INDICES" \
         DISH_NAMESPACES="$DISH_NAMESPACES"
     - make k8s-uninstall-chart
-  environment:
-    name: integration-mid-tmc-$CI_PROJECT_NAME
-    action: stop
+  rules:
+    - when: manual  
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
-
+  
 
 deploy-mid-integration:
   extends: deploy-integration
