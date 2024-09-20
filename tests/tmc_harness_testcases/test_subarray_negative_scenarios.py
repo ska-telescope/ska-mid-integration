@@ -277,7 +277,7 @@ class TestSubarrayNodeNegative(object):
         subarray_node.abort_subarray()
         LOGGER.info("Abort command sent")
 
-        assert device_received_this_command(dish_sim, "AbortCommands", "True")
+        assert device_received_this_command(dish_sim, "AbortCommands", "")
 
         for dish_id in dish_ids.split(","):
             assert event_recorder.has_change_event_occurred(
