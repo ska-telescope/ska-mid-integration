@@ -167,7 +167,6 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set global.namespace_dish.dish_names[1]="$(DISH_NAME_36)"\
 	--set global.namespace_dish.dish_names[2]="$(DISH_NAME_63)"\
 	--set global.namespace_dish.dish_names[3]="$(DISH_NAME_100)"\
-	--set tmc-mid.deviceServers.mocks.dish=$(DISH_SIMULATION_ENABLED)\
 	--set ska-oso-oet.rest.ingress.enabled=$(OET_INGRESS_ENABLED) \
 	--set ska-oso-oet.rest.oda.url=$(ODA_URI) \
 	--set ska-db-oda.rest.backend.type=filesystem \
