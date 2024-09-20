@@ -1,6 +1,7 @@
 """Implement negative scenario test cases for subarray
 """
 import json
+import time
 
 import pytest
 from ska_tango_base.control_model import ObsState
@@ -11,11 +12,13 @@ from tests.resources.test_harness.constant import (
     RESET_DEFECT,
 )
 from tests.resources.test_harness.helpers import (
+    LOGGER,
     device_received_this_command,
     get_recorded_commands,
     prepare_json_args_for_commands,
 )
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
+from tests.resources.test_support.enum import DishMode, PointingState
 
 
 class TestSubarrayNodeNegative(object):
@@ -151,8 +154,8 @@ class TestSubarrayNodeNegative(object):
         )
         assert len(get_recorded_commands(sdp_sim)) == 1
 
-    # @pytest.mark.skip(reason="Skipped due to SKB-373")
-    @pytest.mark.SKA_mid30
+    @pytest.mark.skip(reason="Skipped due to SKB-373")
+    @pytest.mark.SKA_mid
     def test_subarray_configure_when_dish_stuck_in_slew(
         self,
         subarray_node,
@@ -186,6 +189,111 @@ class TestSubarrayNodeNegative(object):
                 subarray_node.subarray_node, "obsState", ObsState.READY
             )
         assert device_received_this_command(dish_sim, "ConfigureBand1", "True")
+
+    @pytest.mark.SKA_mid30
+    def test_subarray_abort_when_dish_in_ready(
+        self,
+        subarray_node,
+        command_input_factory,
+        simulator_factory,
+        event_recorder,
+        central_node_mid,
+    ):
+        input_json = prepare_json_args_for_commands(
+            "configure_mid", command_input_factory
+        )
+
+        dish_sim = simulator_factory.get_or_create_simulator_device(
+            SimulatorDeviceType.DISH_DEVICE
+        )
+
+        event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
+        subarray_node.move_to_on()
+        subarray_node.force_change_of_obs_state("IDLE")
+
+        subarray_node.execute_transition("Configure", argin=input_json)
+
+        assert event_recorder.has_change_event_occurred(
+            subarray_node.subarray_node, "obsState", ObsState.CONFIGURING
+        )
+        LOGGER.info("ObsState.CONFIGURING")
+
+        time.sleep(1)
+
+        assert device_received_this_command(dish_sim, "ConfigureBand1", "True")
+        assert device_received_this_command(dish_sim, "SetOperateMode", "True")
+        assert device_received_this_command(dish_sim, "Track", "True")
+
+        dish_ids = ["SKA001", "SKA036", "SKA063", "SKA100"]
+        for dish_id in dish_ids.split(","):
+            assert event_recorder.has_change_event_occurred(
+                central_node_mid.dish_master_dict[dish_id],
+                "dishMode",
+                DishMode.OPERATE,
+                lookahead=10,
+            )
+            assert event_recorder.has_change_event_occurred(
+                central_node_mid.dish_leaf_node_dict[dish_id],
+                "dishMode",
+                DishMode.OPERATE,
+                lookahead=10,
+            )
+            assert event_recorder.has_change_event_occurred(
+                central_node_mid.dish_master_dict[dish_id],
+                "pointingState",
+                PointingState.TRACK,
+                lookahead=15,
+            )
+            assert event_recorder.has_change_event_occurred(
+                central_node_mid.dish_leaf_node_dict[dish_id],
+                "pointingState",
+                PointingState.TRACK,
+                lookahead=15,
+            )
+
+            assert event_recorder.has_change_event_occurred(
+                subarray_node.subarray_node, "obsState", ObsState.READY
+            )
+
+            LOGGER.info("Dish checks completed")
+            # Dish master should go to slew in no more than 0.1 sec
+            pointing_state_duration_params = '[["READY",0.1]]'
+            dish_sim.AddTransition(pointing_state_duration_params)
+
+            subarray_node.abort_subarray()
+            LOGGER.info("Abort command sent")
+
+            assert device_received_this_command(
+                dish_sim, "AbortCommands", "True"
+            )
+
+            for dish_id in dish_ids.split(","):
+                assert event_recorder.has_change_event_occurred(
+                    central_node_mid.dish_master_dict[dish_id],
+                    "pointingState",
+                    PointingState.READY,
+                    lookahead=10,
+                )
+                assert event_recorder.has_change_event_occurred(
+                    central_node_mid.dish_leaf_node_dict[dish_id],
+                    "pointingState",
+                    PointingState.READY,
+                    lookahead=10,
+                )
+                assert event_recorder.has_change_event_occurred(
+                    central_node_mid.dish_master_dict[dish_id],
+                    "dishMode",
+                    DishMode.STANDBY_FP,
+                    lookahead=10,
+                )
+                assert event_recorder.has_change_event_occurred(
+                    central_node_mid.dish_leaf_node_dict[dish_id],
+                    "dishMode",
+                    DishMode.STANDBY_FP,
+                    lookahead=10,
+                )
+
+            LOGGER.info("Abort checks done after pointing state Ready")
 
     @pytest.mark.skip(reason="Fails in assertions after Fault")
     @pytest.mark.SKA_mid
