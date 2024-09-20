@@ -218,7 +218,7 @@ class TestSubarrayNodeNegative(object):
         )
         LOGGER.info("ObsState.CONFIGURING")
 
-        time.sleep(1)
+        time.sleep(10)
 
         assert device_received_this_command(dish_sim, "ConfigureBand1", "True")
         assert device_received_this_command(dish_sim, "SetOperateMode", "True")
@@ -255,45 +255,43 @@ class TestSubarrayNodeNegative(object):
                 subarray_node.subarray_node, "obsState", ObsState.READY
             )
 
-            LOGGER.info("Dish checks completed")
-            # Dish master should go to slew in no more than 0.1 sec
-            pointing_state_duration_params = '[["READY",0.1]]'
-            dish_sim.AddTransition(pointing_state_duration_params)
+        LOGGER.info("Dish checks completed")
+        # Dish master should go to slew in no more than 0.1 sec
+        pointing_state_duration_params = '[["READY",0.1]]'
+        dish_sim.AddTransition(pointing_state_duration_params)
 
-            subarray_node.abort_subarray()
-            LOGGER.info("Abort command sent")
+        subarray_node.abort_subarray()
+        LOGGER.info("Abort command sent")
 
-            assert device_received_this_command(
-                dish_sim, "AbortCommands", "True"
+        assert device_received_this_command(dish_sim, "AbortCommands", "True")
+
+        for dish_id in dish_ids.split(","):
+            assert event_recorder.has_change_event_occurred(
+                central_node_mid.dish_master_dict[dish_id],
+                "pointingState",
+                PointingState.READY,
+                lookahead=10,
+            )
+            assert event_recorder.has_change_event_occurred(
+                central_node_mid.dish_leaf_node_dict[dish_id],
+                "pointingState",
+                PointingState.READY,
+                lookahead=10,
+            )
+            assert event_recorder.has_change_event_occurred(
+                central_node_mid.dish_master_dict[dish_id],
+                "dishMode",
+                DishMode.STANDBY_FP,
+                lookahead=10,
+            )
+            assert event_recorder.has_change_event_occurred(
+                central_node_mid.dish_leaf_node_dict[dish_id],
+                "dishMode",
+                DishMode.STANDBY_FP,
+                lookahead=10,
             )
 
-            for dish_id in dish_ids.split(","):
-                assert event_recorder.has_change_event_occurred(
-                    central_node_mid.dish_master_dict[dish_id],
-                    "pointingState",
-                    PointingState.READY,
-                    lookahead=10,
-                )
-                assert event_recorder.has_change_event_occurred(
-                    central_node_mid.dish_leaf_node_dict[dish_id],
-                    "pointingState",
-                    PointingState.READY,
-                    lookahead=10,
-                )
-                assert event_recorder.has_change_event_occurred(
-                    central_node_mid.dish_master_dict[dish_id],
-                    "dishMode",
-                    DishMode.STANDBY_FP,
-                    lookahead=10,
-                )
-                assert event_recorder.has_change_event_occurred(
-                    central_node_mid.dish_leaf_node_dict[dish_id],
-                    "dishMode",
-                    DishMode.STANDBY_FP,
-                    lookahead=10,
-                )
-
-            LOGGER.info("Abort checks done after pointing state Ready")
+        LOGGER.info("Abort checks done after pointing state Ready")
 
     @pytest.mark.skip(reason="Fails in assertions after Fault")
     @pytest.mark.SKA_mid
