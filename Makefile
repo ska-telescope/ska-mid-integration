@@ -141,12 +141,12 @@ stop-dishes:
 	for index in "$${!indices[@]}"; do \
 		DISH_INDEX=$${indices[$$index]}; \
 		DISH_NAMESPACE=$${namespaces[$$index]}; \
-		echo "Namespace: ${DISH_NAMESPACE}"; \
-		kubectl -n ${DISH_NAMESPACE} delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all; \
-		make k8s-delete-namespace KUBE_NAMESPACE=${DISH_NAMESPACE};\
-		echo "Uninstalling dish ${DISH_INDEX} in namespace ${DISH_NAMESPACE}"; \
+		echo "Namespace: $$DISH_NAMESPACE"; \
+		kubectl -n $$DISH_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all; \
+		make k8s-delete-namespace KUBE_NAMESPACE=$$DISH_NAMESPACE;\
+		echo "Uninstalling dish $$DISH_INDEX in namespace $$DISH_NAMESPACE"; \
 		make k8s-uninstall-chart \
-			KUBE_NAMESPACE=${DISH_NAMESPACE}; \
+			KUBE_NAMESPACE=$$DISH_NAMESPACE; \
 	done
 
 
