@@ -24,7 +24,7 @@ class TestSubarrayNodeObsStateTransitions(object):
             # ("READY", "End", "IDLE"),
         ],
     )
-    @pytest.mark.SKA_mid
+    @pytest.mark.SKA_mid20
     def test_subarray_obs_transitions_valid_data(
         self,
         subarray_node,

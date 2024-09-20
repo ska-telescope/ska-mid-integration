@@ -8,26 +8,17 @@ from tests.resources.test_harness.helpers import check_subarray_obs_state
 
 
 class TestSubarrayNodeAbortCommandObsStateTransitions(object):
-
-    # TODO :: Add SCANNING to below list
-    # Currently it fails.
     @pytest.mark.parametrize(
         "source_obs_state",
         [
             "READY",
-            # SubarrayNode Abort command issue:
-            # ('Execution of Abort command is failed.Reason:
-            # Failed to execute Abortcommand on Dish Leaf Node:
-            # KeyError('ska_mid/tm_leaf_node/d0001'))
-            # dish_availability = devices_availability_dict[
-            # KeyError: 'ska_mid/tm_leaf_node/d0001'
             "RESOURCING",
             "IDLE",
             "CONFIGURING",
             "SCANNING",
         ],
     )
-    @pytest.mark.SKA_mid
+    @pytest.mark.SKA_mid20
     def test_subarray_obs_transitions_valid_data(
         self,
         subarray_node,
