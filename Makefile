@@ -83,7 +83,7 @@ HELM_CHARTS ?= $(HELM_CHARTS_TO_PUBLISH)
 K8S_EXTRA_PARAMS ?= 
 
 #dish variables 
-DISH_INDICES ?= "001 036 064 100"
+DISH_INDICES ?= "001 036 063 100"
 DISH_NAMESPACES ?= "integration-ska-mid-tmc-dish01 integration-ska-mid-tmc-dish36 integration-ska-mid-tmc-dish64 integration-ska-mid-tmc-dish100"
 DISH_HELM_RELEASE ?= "4.1.0"
 DISH_TANGO_HOST ?= databaseds

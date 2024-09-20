@@ -190,14 +190,14 @@ deploy-tmc-with-dish:
   rules:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
-    DISH_INDICES: "001 036 064 100"
+    DISH_INDICES: "001 036 063 100"
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-dish'
     DISH_HELM_RELEASE: "4.1.0"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
     DISH_SIMULATION_ENABLED: false
     DISH_NAMESPACE_1: "integration-ska-mid-tmc-dish001"
     DISH_NAMESPACE_2: "integration-ska-mid-tmc-dish036"
-    DISH_NAMESPACE_3: "integration-ska-mid-tmc-dish064"
+    DISH_NAMESPACE_3: "integration-ska-mid-tmc-dish063"
     DISH_NAMESPACE_4: "integration-ska-mid-tmc-dish100"
   script:
     - make deploy-dishes 
@@ -215,7 +215,7 @@ stop-k8s-test-tmc-with-dish:
   variables:
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-dish'
     DISH_SIMULATION_ENABLED: 'false'
-    DISH_INDICES: "001 036 064 100"
+    DISH_INDICES: "001 036 063 100"
     DISH_NAMESPACE_1: "integration-ska-mid-tmc-dish001"
     DISH_NAMESPACE_2: "integration-ska-mid-tmc-dish036"
     DISH_NAMESPACE_3: "integration-ska-mid-tmc-dish063"
