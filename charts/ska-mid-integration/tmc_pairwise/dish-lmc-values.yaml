@@ -9,7 +9,7 @@ labels:
   app: ska-mid-integration
 
 
-tmc-mid:
+ska-tmc-mid:
   enabled: false
   
 ska-sdp:

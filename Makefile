@@ -88,10 +88,10 @@ DISH_NAMESPACES ?= "integration-ska-mid-tmc-dish01 integration-ska-mid-tmc-dish3
 DISH_HELM_RELEASE ?= "4.1.0"
 DISH_TANGO_HOST ?= tango-databaseds
 K8S_DISH_LMC_CHART ?= "ska-dish-lmc"
-DISH_NAMESPACE_1 ?= dish-lmc-1
-DISH_NAMESPACE_2 ?= dish-lmc-2
-DISH_NAMESPACE_3 ?= dish-lmc-3
-DISH_NAMESPACE_4 ?= dish-lmc-4
+DISH_NAMESPACE_1 ?= ${KUBE_NAMESPACE}
+DISH_NAMESPACE_2 ?= ${KUBE_NAMESPACE}
+DISH_NAMESPACE_3 ?= ${KUBE_NAMESPACE}
+DISH_NAMESPACE_4 ?= ${KUBE_NAMESPACE}
 DISH_NAME_1 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_1).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA001
 DISH_NAME_36 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_2).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA036
 DISH_NAME_63 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_3).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA063
@@ -113,7 +113,7 @@ ifeq ($(CSP_SIMULATION_ENABLED),false)
 K8S_EXTRA_PARAMS =	-f charts/ska-mid-integration/tmc_pairwise/tmc_csp_values.yaml
 endif
 
-
+DISH_NAMESPACES = "${DISH_NAMESPACE_1} ${DISH_NAMESPACE_2} ${DISH_NAMESPACE_3} ${DISH_NAMESPACE_4}"
 # Target to deploy dishes
 deploy-dishes:
 	@echo "Deploying dishes to Kubernetes namespaces..."
@@ -134,16 +134,19 @@ deploy-dishes:
 
 stop-dishes:
 	@echo "Stopping dishes in Kubernetes namespaces..."
+	echo "DISH_INDICES: $(DISH_INDICES)"
+	echo "DISH_NAMESPACES: $(DISH_NAMESPACES)"
 	IFS=' ' read -r -a indices <<< "$(DISH_INDICES)"; \
 	IFS=' ' read -r -a namespaces <<< "$(DISH_NAMESPACES)"; \
 	for index in "$${!indices[@]}"; do \
 		DISH_INDEX=$${indices[$$index]}; \
-		KUBE_NAMESPACE=$${namespaces[$$index]}; \
-		kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all; \
-    	make k8s-delete-namespace KUBE_NAMESPACE=$KUBE_NAMESPACE;\
-		echo "Uninstalling dish $$DISH_INDEX in namespace $$KUBE_NAMESPACE"; \
+		DISH_NAMESPACE=$${namespaces[$$index]}; \
+		echo "Namespace: $$DISH_NAMESPACE"; \
+		kubectl -n $DISH_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all; \
+		make k8s-delete-namespace KUBE_NAMESPACE=$DISH_NAMESPACE;\
+		echo "Uninstalling dish $$DISH_INDEX in namespace $$DISH_NAMESPACE"; \
 		make k8s-uninstall-chart \
-			KUBE_NAMESPACE=$$KUBE_NAMESPACE; \
+			KUBE_NAMESPACE=$DISH_NAMESPACE; \
 	done
 
 

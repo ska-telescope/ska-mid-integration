@@ -191,17 +191,17 @@ deploy-tmc-with-dish:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
     DISH_INDICES: "001 036 064 100"
-    DISH_NAMESPACES: "integration-ska-mid-tmc-dish001 integration-ska-mid-tmc-dish036 integration-ska-mid-tmc-dish064 integration-ska-mid-tmc-dish100"
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-dish'
     DISH_HELM_RELEASE: "4.1.0"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
     DISH_SIMULATION_ENABLED: false
+    DISH_NAMESPACE_1: "integration-ska-mid-tmc-dish001"
+    DISH_NAMESPACE_2: "integration-ska-mid-tmc-dish036"
+    DISH_NAMESPACE_3: "integration-ska-mid-tmc-dish064"
+    DISH_NAMESPACE_4: "integration-ska-mid-tmc-dish100"
+
   script:
-    - make deploy-dishes \
-        DISH_INDICES="$DISH_INDICES" \
-        DISH_NAMESPACES="$DISH_NAMESPACES" \
-        DISH_HELM_RELEASE="$DISH_HELM_RELEASE" \
-        K8S_DISH_LMC_CHART="$K8S_DISH_LMC_CHART"
+    - make deploy-dishes 
     - make k8s-install-chart 
   environment:
     name: integration-mid-dish-$CI_PROJECT_NAME
@@ -216,22 +216,26 @@ stop-k8s-test-tmc-with-dish:
   variables:
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-dish'
     DISH_SIMULATION_ENABLED: 'false'
+    DISH_INDICES: "001 036 064 100"
+    DISH_NAMESPACE_1: "integration-ska-mid-tmc-dish001"
+    DISH_NAMESPACE_2: "integration-ska-mid-tmc-dish036"
+    DISH_NAMESPACE_3: "integration-ska-mid-tmc-dish064"
+    DISH_NAMESPACE_4: "integration-ska-mid-tmc-dish100"
   environment:
     name: integration-mid-dish-$CI_PROJECT_NAME
     action: stop
   needs:
     - deploy-tmc-with-dish
   script:
-    - make stop-dishes \
-        DISH_INDICES="$DISH_INDICES" \
-        DISH_NAMESPACES="$DISH_NAMESPACES"
+    - make stop-dishes 
     - make k8s-uninstall-chart
+    - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
+    - make k8s-delete-namespace 
   rules:
     - when: manual  
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
   
-
 deploy-mid-integration:
   extends: deploy-integration
   rules:
