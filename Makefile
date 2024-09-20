@@ -113,7 +113,7 @@ ifeq ($(CSP_SIMULATION_ENABLED),false)
 K8S_EXTRA_PARAMS =	-f charts/ska-mid-integration/tmc_pairwise/tmc_csp_values.yaml
 endif
 
-DISH_NAMESPACES = "${DISH_NAMESPACE_1} ${DISH_NAMESPACE_2} ${DISH_NAMESPACE_3} ${DISH_NAMESPACE_4}"
+DISH_NAMESPACES = ${DISH_NAMESPACE_1} ${DISH_NAMESPACE_2} ${DISH_NAMESPACE_3} ${DISH_NAMESPACE_4}
 # Target to deploy dishes
 deploy-dishes:
 	@echo "Deploying dishes to Kubernetes namespaces..."
