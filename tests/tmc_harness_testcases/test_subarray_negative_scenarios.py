@@ -295,13 +295,13 @@ class TestSubarrayNodeNegative(object):
             assert event_recorder.has_change_event_occurred(
                 central_node_mid.dish_master_dict[dish_id],
                 "dishMode",
-                DishMode.STANDBY_FP,
+                DishMode.OPERATE,
                 lookahead=10,
             )
             assert event_recorder.has_change_event_occurred(
                 central_node_mid.dish_leaf_node_dict[dish_id],
                 "dishMode",
-                DishMode.STANDBY_FP,
+                DishMode.OPERATE,
                 lookahead=10,
             )
 
