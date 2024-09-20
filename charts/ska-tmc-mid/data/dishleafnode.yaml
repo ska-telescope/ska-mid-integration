@@ -54,6 +54,9 @@ server:
           - name: "TrackTableInAdvance"
             values:
               - "6"
+          - name: "IsDishAbortCommands"
+            values:
+              - "True"
   {{- end }}
 depends_on:
   - device: sys/database/2
