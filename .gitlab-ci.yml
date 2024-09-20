@@ -218,7 +218,7 @@ stop-k8s-test-tmc-with-dish:
     DISH_INDICES: "001 036 064 100"
     DISH_NAMESPACE_1: "integration-ska-mid-tmc-dish001"
     DISH_NAMESPACE_2: "integration-ska-mid-tmc-dish036"
-    DISH_NAMESPACE_3: "integration-ska-mid-tmc-dish064"
+    DISH_NAMESPACE_3: "integration-ska-mid-tmc-dish063"
     DISH_NAMESPACE_4: "integration-ska-mid-tmc-dish100"
   environment:
     name: integration-mid-dish-$CI_PROJECT_NAME
