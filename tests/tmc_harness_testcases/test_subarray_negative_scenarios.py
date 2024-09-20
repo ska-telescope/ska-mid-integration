@@ -225,7 +225,19 @@ class TestSubarrayNodeNegative(object):
         # assert device_received_this_command(dish_sim, "SetOperateMode",
         # "True")
         # assert device_received_this_command(dish_sim, "Track", "True")
-
+        for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+            event_recorder.subscribe_event(
+                central_node_mid.dish_master_dict[dish_id], "dishMode"
+            )
+            event_recorder.subscribe_event(
+                central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
+            )
+            event_recorder.subscribe_event(
+                central_node_mid.dish_master_dict[dish_id], "pointingState"
+            )
+            event_recorder.subscribe_event(
+                central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
+            )
         dish_ids = "SKA001,SKA036,SKA063, SKA100"
         for dish_id in dish_ids.split(","):
             assert event_recorder.has_change_event_occurred(
