@@ -25,9 +25,6 @@ server:
         - name: "LoggingLevelDefault"
           values:
             - "5"
-        - name: "DishVccInitTimeout"
-          values:
-            - "250"
 
 depends_on:
   - device: sys/database/2
