@@ -5,7 +5,8 @@ Added
 -----
 [0.22.4]
 ************
-Fixed *SKB-497*
+*Resolve skb-511
+*Validate SKB-467
 
 [0.22.3]
 ************
