@@ -215,5 +215,4 @@ ifeq ($(SDP_SIMULATION_ENABLED),false)
 endif
 cred:
 	make k8s-namespace
-	make k8s-namespace-credentials
-	
+	# curl -s https://gitlab.com/ska-telescope/templates-repository/-/raw/master/scripts/namespace_auth.sh | bash -s $(SERVICE_ACCOUNT) $(KUBE_NAMESPACE) || true

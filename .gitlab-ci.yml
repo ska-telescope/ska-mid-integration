@@ -199,11 +199,6 @@ deploy-tmc-with-dish:
     DISH_NAMESPACE_2: "integration-ska-mid-tmc-dish036"
     DISH_NAMESPACE_3: "integration-ska-mid-tmc-dish064"
     DISH_NAMESPACE_4: "integration-ska-mid-tmc-dish100"
-    SERVICE_ACCOUNT: "svc-integration-ska-mid-tmc-dish"
-  before_script:
-    - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
-    - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
-    - 'make help | grep k8s-test'
   script:
     - make deploy-dishes 
     - make k8s-install-chart 
