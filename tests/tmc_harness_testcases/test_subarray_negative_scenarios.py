@@ -265,9 +265,9 @@ class TestSubarrayNodeNegative(object):
                 lookahead=15,
             )
 
-            assert event_recorder.has_change_event_occurred(
-                subarray_node.subarray_node, "obsState", ObsState.READY
-            )
+        assert event_recorder.has_change_event_occurred(
+            subarray_node.subarray_node, "obsState", ObsState.READY
+        )
 
         LOGGER.info("Dish checks completed")
         # Dish master should go to slew in no more than 0.1 sec
