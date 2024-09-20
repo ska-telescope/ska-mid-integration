@@ -226,10 +226,12 @@ def verify_aborting_state(
         csp.csp_subarray,
         "obsState",
         ObsState.ABORTING,
-    ).has_change_event_occurred(
-        sdp.sdp_subarray,
-        "obsState",
-        ObsState.ABORTING,
+    # ).has_change_event_occurred(
+    #     sdp.sdp_subarray,
+    #     "obsState",
+    #     ObsState.ABORTING,
+    # NOTE: the emulated SDP may not actually pass 
+    # through the ABORTING state
     )
 
     # NOTE: since the previous state may be transient, we cannot guarantee
@@ -274,7 +276,9 @@ def verify_aborted_state(
         sdp.sdp_subarray,
         "obsState",
         ObsState.ABORTED,
-        previous_value=ObsState.ABORTING,
+        # previous_value=ObsState.ABORTING,
+        # NOTE: the emulated SDP may not actually pass 
+        # through the ABORTING state
     )
 
 
