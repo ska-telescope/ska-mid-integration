@@ -257,6 +257,8 @@ def check_dish_mode_and_pointing_state_after_abort(
         central_node_mid: Fixture for a TMC CentralNode wrapper class
         dish_ids (str): Comma-separated IDs of DISH components.
     """
+
+    LOGGER.info("check_dish_mode_and_pointing_state_after_abort")
     for dish_id in dish_ids.split(","):
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],

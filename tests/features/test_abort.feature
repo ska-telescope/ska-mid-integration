@@ -6,7 +6,7 @@ Scenario: TMC mid executes Abort command on DISH
     And TMC subarray <subarray_id> is in obsState READY
     And DishMaster <dish_ids> is in dishMode OPERATE with pointingState READY
     When I issue the Abort command to the TMC subarray <subarray_id>
-    And the Dish <dish_ids> transitions in dishMode STANDBY_FP and pointingState READY
+    Then the Dish <dish_ids> transitions in dishMode STANDBY_FP and pointingState READY
     And TMC SubarrayNode transitions to obsState ABORTED
     Examples:
 
