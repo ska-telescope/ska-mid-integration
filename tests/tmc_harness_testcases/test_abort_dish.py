@@ -20,19 +20,19 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid22
 @scenario(
-    "../features/tmc_dish/xtp-43142_endscan.feature",
-    "TMC mid executes EndScan command on DISH",
+    "../features/test_abort.feature",
+    "TMC mid executes Abort command on DISH",
 )
-def test_tmc_dish_endscan():
+def test_tmc_dish_abort():
     """
     Test case to verify TMC-DISH EndScan functionality
     """
 
 
-@given(parsers.parse("TMC subarray {subarray_id} is in obsState SCANNING"))
-def move_subarray_obsState_to_scanning(
+@given(parsers.parse("TMC subarray {subarray_id} is in obsState READY"))
+def move_subarray_obsState_to_ready(
     subarray_node: SubarrayNodeWrapper,
     command_input_factory: JsonFactory,
     event_tracer: TangoEventTracer,
@@ -57,9 +57,6 @@ def move_subarray_obsState_to_scanning(
     )
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
-    )
-    scan_input_json = prepare_json_args_for_commands(
-        "scan_mid", command_input_factory
     )
 
     _, pytest.unique_id = central_node_mid.store_resources(assign_input_json)
@@ -183,26 +180,14 @@ def move_subarray_obsState_to_scanning(
         "longRunningCommandResult",
         (pytest.unique_id[0], COMMAND_COMPLETED),
     )
-    subarray_node.execute_transition("Scan", scan_input_json)
-    assert_that(event_tracer).described_as(
-        'FAILED ASSUMPTION IN "GIVEN" STEP: '
-        "'the subarray must be in the SCANNING obsState'"
-        "TMC Subarray device"
-        f"({subarray_node.subarray_node.dev_name()}) "
-        "is expected to be in SCANNING obstate",
-    ).within_timeout(60).has_change_event_occurred(
-        subarray_node.subarray_node,
-        "obsState",
-        ObsState.SCANNING,
-    )
 
 
 @given(
     parsers.parse(
-        "DishMaster {dish_ids} is in dishMode OPERATE with pointingState TRACK"
+        "DishMaster {dish_ids} is in dishMode OPERATE with pointingState READY"
     )
 )
-def check_dish_mode_and_pointing_state_after_scan(
+def check_dish_mode_and_pointing_state_after_configure(
     central_node_mid: CentralNodeWrapperMid,
     dish_ids: str,
 ):
@@ -234,10 +219,10 @@ def check_dish_mode_and_pointing_state_after_scan(
 
 @when(
     parsers.parse(
-        "I issue the EndScan command to the TMC subarray {subarray_id}"
+        "I issue the Abort command to the TMC subarray {subarray_id}"
     )
 )
-def invoke_endscan(
+def invoke_abort(
     subarray_node: SubarrayNodeWrapper,
     subarray_id: str,
 ):
@@ -252,51 +237,19 @@ def invoke_endscan(
     _, pytest.unique_id = subarray_node.remove_scan_data()
 
 
-@then(parsers.parse("scan_id gets cleared from Dish {dish_ids}"))
-def check_scan_id(
-    central_node_mid: CentralNodeWrapperMid,
-    event_tracer: TangoEventTracer,
-    dish_ids: str,
-):
-    """
-    Method to check scan_id value of DISH
-
-    Args:
-        central_node_mid: Fixture for a TMC CentralNode wrapper class
-        event_recorder: Fixture for EventRecorder class
-        dish_ids (str): Comma-separated IDs of DISH components.
-    """
-    for dish_id in dish_ids.split(","):
-        event_tracer.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "scanID"
-        )
-    for dish_id in dish_ids.split(","):
-        assert_that(event_tracer).described_as(
-            'FAILED ASSUMPTION IN "THEN" STEP: '
-            "'the dish must be in the assigned scan_id'"
-            "dish device"
-            f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
-            "is expected to be in assigned scan_id",
-        ).within_timeout(60).has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "scanID",
-            "",
-        )
-
-
 @then(
     parsers.parse(
-        "the Dish {dish_ids} remains in "
-        + "dishMode OPERATE and pointingState TRACK"
+        "the Dish <dish_ids> transitions "
+        + "in dishMode STANDBY_FP and pointingState READY"
     )
 )
-def check_dish_mode_and_pointing_state_after_endscan(
+def check_dish_mode_and_pointing_state_after_abort(
     central_node_mid: CentralNodeWrapperMid,
     dish_ids: str,
     event_recorder: EventRecorder,
 ):
     """
-    Method to check dishMode and pointingState of DISH after EndScan command.
+    Method to check dishMode and pointingState of DISH after Abort command.
 
     Args:
         central_node_mid: Fixture for a TMC CentralNode wrapper class
@@ -306,30 +259,30 @@ def check_dish_mode_and_pointing_state_after_endscan(
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
-            DishMode.OPERATE,
+            DishMode.STANDBY_FP,
             lookahead=10,
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "dishMode",
-            DishMode.OPERATE,
+            DishMode.STANDBY_FP,
             lookahead=10,
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
-            PointingState.TRACK,
+            PointingState.READY,
             lookahead=15,
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "pointingState",
-            PointingState.TRACK,
+            PointingState.READY,
             lookahead=15,
         )
 
 
-@then("TMC SubarrayNode transitions to obsState READY")
+@then("TMC SubarrayNode transitions to obsState ABORTED")
 def check_subarray_obsstate_ready(
     subarray_node: SubarrayNodeWrapper,
     event_tracer: TangoEventTracer,
