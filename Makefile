@@ -103,6 +103,7 @@ K8S_EXTRA_PARAMS=	-f charts/ska-mid-integration/tmc_pairwise/tmc_sdp_values.yaml
 	--set global.sdp_subarray_prefix="$(SDP_SUBARRAY_PREFIX)"\
 	--set ska-sdp.enabled=true\
 	--set ska-sdp.lmc.loadBalancer=true\
+	--set global.operator=true \
 	--set tmc-mid.subarray_count=1\
 	--set ska-sdp.lmc.nsubarray=1
 endif
@@ -198,18 +199,18 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 
 k8s-pre-install-chart:
 ifeq ($(SDP_DEPLOY),true)
-   @echo "k8s-pre-install-chart: creating the SDP namespace $(KUBE_NAMESPACE_SDP)"
+   @echo "k8s-pre-install-chart: creating the SDP namespace $(KUBE_NAMESPACE_SDP)" \
    @make k8s-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP)
 endif
 
 k8s-pre-install-chart-car:
 ifeq ($(SDP_DEPLOY),true)
-   @echo "k8s-pre-install-chart-car: creating the SDP namespace $(KUBE_NAMESPACE_SDP)"
+   @echo "k8s-pre-install-chart-car: creating the SDP namespace $(KUBE_NAMESPACE_SDP)" \
    @make k8s-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP)
 endif
 k8s-pre-uninstall-chart:
 ifeq ($(SDP_DEPLOY),true)
-   @echo "k8s-post-uninstall-chart: deleting the SDP namespace $(KUBE_NAMESPACE_SDP)"
+   @echo "k8s-post-uninstall-chart: deleting the SDP namespace $(KUBE_NAMESPACE_SDP)" \
    @if [ "$(KEEP_NAMESPACE)" != "true" ]; then make k8s-delete-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP); fi
 endif
 
