@@ -202,8 +202,8 @@ def check_dish_mode_and_pointing_state_after_configure(
     """
 
     # Dish master should go to slew in no more than 0.1 sec
-    pointing_state_duration_params = '[["READY",0.1]]'
-    dish_simulator.AddTransition(pointing_state_duration_params)
+    # pointing_state_duration_params = '[["READY",0.1]]'
+    dish_simulator.SetDirectPointingState(PointingState.READY)
     time.sleep(0.2)
 
     for dish_id in dish_ids.split(","):
