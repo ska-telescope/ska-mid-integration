@@ -1,0 +1,2116 @@
+{
+  "id": "667411bb5e5d4f00121a6e81",
+  "name": "OMCPT-LOW",
+  "version": "2.10.3",
+  "user": "TEAM_OMCPT",
+  "insertTime": "2024-06-20T11:25:47.295Z",
+  "updateTime": "2024-07-29T14:30:47.532Z",
+  "group": null,
+  "groupWriteAccess": false,
+  "lastUpdatedBy": "TEAM_OMCPT",
+  "widget": [
+    {
+      "valid": 1,
+      "id": "1",
+      "x": 2,
+      "y": 1,
+      "canvas": "0",
+      "width": 188,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "LOW Telescope Overview",
+        "textColor": "#ffffff",
+        "backgroundColor": "#e70068",
+        "borderWidth": 0,
+        "borderColor": "#e70068",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.3,
+        "linkTo": "",
+        "customCss": "text-align: center\n"
+      },
+      "order": 0
+    },
+    {
+      "valid": 1,
+      "id": "2",
+      "x": 2,
+      "y": 6,
+      "canvas": "0",
+      "width": 61,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "TMC",
+        "textColor": "#ffffff",
+        "backgroundColor": "#e70068",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.3,
+        "linkTo": "",
+        "customCss": "text-align: center\n"
+      },
+      "order": 1
+    },
+    {
+      "valid": 1,
+      "id": "3",
+      "x": 2,
+      "y": 18,
+      "canvas": "0",
+      "width": 28,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_low/tm_central/central_node",
+          "attribute": "telescopestate",
+          "label": "telescopeState"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "float: left;\npadding: 1px"
+      },
+      "order": 2
+    },
+    {
+      "valid": 1,
+      "id": "4",
+      "x": 2,
+      "y": 9,
+      "canvas": "0",
+      "width": 28,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "Central Node",
+        "textColor": "#000000",
+        "backgroundColor": "#e9ecef",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1,
+        "linkTo": "",
+        "customCss": "font-weight:bold"
+      },
+      "order": 3
+    },
+    {
+      "valid": 1,
+      "id": "5",
+      "x": 2,
+      "y": 21,
+      "canvas": "0",
+      "width": 28,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_low/tm_central/central_node",
+          "attribute": "telescopehealthstate",
+          "label": "telescopeHealthState"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "float: left;\npadding: 1px"
+      },
+      "order": 4
+    },
+    {
+      "valid": 1,
+      "id": "6",
+      "x": 128,
+      "y": 6,
+      "canvas": "0",
+      "width": 62,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "SDP",
+        "textColor": "#ffffff",
+        "backgroundColor": "#e70068",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.3,
+        "linkTo": "",
+        "customCss": "text-align: center\n"
+      },
+      "order": 5
+    },
+    {
+      "valid": 1,
+      "id": "7",
+      "x": 64,
+      "y": 64,
+      "canvas": "0",
+      "width": 62,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "CSP",
+        "textColor": "#ffffff",
+        "backgroundColor": "#e70068",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.3,
+        "linkTo": "",
+        "customCss": "text-align: center\n"
+      },
+      "order": 6
+    },
+    {
+      "valid": 1,
+      "id": "8",
+      "x": 64,
+      "y": 6,
+      "canvas": "0",
+      "width": 62,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "Observation Information",
+        "textColor": "#ffffff",
+        "backgroundColor": "#e70068",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.3,
+        "linkTo": "",
+        "customCss": "text-align: center\n"
+      },
+      "order": 7
+    },
+    {
+      "valid": 1,
+      "id": "9",
+      "x": 64,
+      "y": 12,
+      "canvas": "0",
+      "width": 62,
+      "height": 50,
+      "type": "TIMELINE",
+      "inputs": {
+        "timeWindow": 120,
+        "overflow": true,
+        "groupAttributes": true,
+        "showTangoDB": false,
+        "attributes": [
+          {
+            "attribute": {
+              "device": "taranta://ska_low/tm_subarray_node/1",
+              "attribute": "obsstate",
+              "label": "obsState"
+            },
+            "yAxisDisplay": "Label",
+            "showAttribute": "Label",
+            "yAxis": "left"
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_low/tm_leaf_node/csp_subarray01",
+              "attribute": "cspsubarrayobsstate",
+              "label": "cspSubarrayObsState"
+            },
+            "yAxisDisplay": "Label",
+            "showAttribute": "Label",
+            "yAxis": "left"
+          },
+          {
+            "attribute": {
+              "device": "taranta://low-sdp/subarray/01",
+              "attribute": "obsstate",
+              "label": "Observing state"
+            },
+            "yAxisDisplay": "Label",
+            "showAttribute": "Label",
+            "yAxis": "left"
+          },
+          {
+            "attribute": {
+              "device": "taranta://low-csp/subarray/01",
+              "attribute": "obsstate",
+              "label": "obsState"
+            },
+            "yAxisDisplay": "Label",
+            "showAttribute": "Label",
+            "yAxis": "left"
+          }
+        ]
+      },
+      "order": 8
+    },
+    {
+      "valid": 1,
+      "id": "10",
+      "x": 2,
+      "y": 1,
+      "canvas": "0",
+      "width": 10,
+      "height": 4,
+      "type": "LABEL",
+      "inputs": {
+        "text": "",
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1,
+        "linkTo": "",
+        "customCss": "background-image: url(https://taranta-image-hosting.skao.int/skao_logo_2021_colour_rgb_2500x1058px.jpg);\nbackground-size: contain;\nbackground-repeat: no-repeat;\n"
+      },
+      "order": 9
+    },
+    {
+      "valid": 1,
+      "id": "11",
+      "x": 35,
+      "y": 18,
+      "canvas": "0",
+      "width": 28,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "CSP Master Leaf Node",
+        "textColor": "#000000",
+        "backgroundColor": "#e9ecef",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 0.9,
+        "linkTo": "",
+        "customCss": "padding: 1px\nfont-weight:bold"
+      },
+      "order": 10
+    },
+    {
+      "valid": 1,
+      "id": "12",
+      "x": 35,
+      "y": 9,
+      "canvas": "0",
+      "width": 28,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "SDP Master Leaf Node",
+        "textColor": "#000000",
+        "backgroundColor": "#e9ecef",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 0.9,
+        "linkTo": "",
+        "customCss": "font-weight:bold"
+      },
+      "order": 11
+    },
+    {
+      "valid": 1,
+      "id": "13",
+      "x": 2,
+      "y": 24,
+      "canvas": "0",
+      "width": 28,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "MCCS Master Leaf Node",
+        "textColor": "#000000",
+        "backgroundColor": "#e9ecef",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 0.9,
+        "linkTo": "",
+        "customCss": "font-weight:bold"
+      },
+      "order": 12
+    },
+    {
+      "valid": 1,
+      "id": "14",
+      "x": 128,
+      "y": 9,
+      "canvas": "0",
+      "width": 62,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "SDP Controller",
+        "textColor": "#000000",
+        "backgroundColor": "#e9ecef",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1,
+        "linkTo": "",
+        "customCss": ""
+      },
+      "order": 13
+    },
+    {
+      "valid": 1,
+      "id": "15",
+      "x": 64,
+      "y": 9,
+      "canvas": "0",
+      "width": 62,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "Observing State Transition",
+        "textColor": "#000000",
+        "backgroundColor": "#e9ecef",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1,
+        "linkTo": "",
+        "customCss": "font-weight:bold"
+      },
+      "order": 14
+    },
+    {
+      "valid": 1,
+      "id": "16",
+      "x": 128,
+      "y": 12,
+      "canvas": "0",
+      "width": 21,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://low-sdp/control/0",
+          "attribute": "state",
+          "label": "State"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "float: left;\npadding: 1px"
+      },
+      "order": 15
+    },
+    {
+      "valid": 1,
+      "id": "17",
+      "x": 149,
+      "y": 12,
+      "canvas": "0",
+      "width": 21,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://low-sdp/control/0",
+          "attribute": "healthstate",
+          "label": "Health state"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "float: left;\npadding: 1px"
+      },
+      "order": 16
+    },
+    {
+      "valid": 1,
+      "id": "18",
+      "x": 170,
+      "y": 12,
+      "canvas": "0",
+      "width": 20,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://low-sdp/control/0",
+          "attribute": "adminmode",
+          "label": "Admin mode"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "float: left;\npadding: 1px"
+      },
+      "order": 17
+    },
+    {
+      "valid": 1,
+      "id": "19",
+      "x": 128,
+      "y": 15,
+      "canvas": "0",
+      "width": 62,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "SDP Subarray(s)",
+        "textColor": "#000000",
+        "backgroundColor": "#e9ecef",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1,
+        "linkTo": "",
+        "customCss": ""
+      },
+      "order": 18
+    },
+    {
+      "valid": 1,
+      "id": "20",
+      "x": 35,
+      "y": 12,
+      "canvas": "0",
+      "width": 28,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_low/tm_leaf_node/sdp_master",
+          "attribute": "state",
+          "label": "State"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "float: left;\npadding: 1px"
+      },
+      "order": 19
+    },
+    {
+      "valid": 1,
+      "id": "21",
+      "x": 35,
+      "y": 15,
+      "canvas": "0",
+      "width": 28,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_low/tm_leaf_node/sdp_master",
+          "attribute": "adminmode",
+          "label": "adminMode"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "float: left;\npadding: 1px"
+      },
+      "order": 20
+    },
+    {
+      "valid": 1,
+      "id": "22",
+      "x": 2,
+      "y": 15,
+      "canvas": "0",
+      "width": 28,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_low/tm_central/central_node",
+          "attribute": "adminmode",
+          "label": "adminMode"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "float: left;\npadding: 1px"
+      },
+      "order": 21
+    },
+    {
+      "valid": 1,
+      "id": "23",
+      "x": 2,
+      "y": 12,
+      "canvas": "0",
+      "width": 28,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_low/tm_central/central_node",
+          "attribute": "state",
+          "label": "State"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "float: left;\npadding: 1px"
+      },
+      "order": 22
+    },
+    {
+      "valid": 1,
+      "id": "24",
+      "x": 35,
+      "y": 24,
+      "canvas": "0",
+      "width": 28,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_low/tm_leaf_node/sdp_master",
+          "attribute": "adminmode",
+          "label": "adminMode"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "float: left;\npadding: 1px"
+      },
+      "order": 23
+    },
+    {
+      "valid": 1,
+      "id": "25",
+      "x": 35,
+      "y": 21,
+      "canvas": "0",
+      "width": 28,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_low/tm_leaf_node/sdp_master",
+          "attribute": "state",
+          "label": "State"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "float: left;\npadding: 1px"
+      },
+      "order": 24
+    },
+    {
+      "valid": 1,
+      "id": "26",
+      "x": 128,
+      "y": 18,
+      "canvas": "0",
+      "width": 62,
+      "height": 14,
+      "type": "TABULAR_VIEW",
+      "inputs": {
+        "devices": [
+          {
+            "device": "taranta://low-sdp/subarray/01"
+          },
+          {
+            "device": "taranta://low-sdp/subarray/02"
+          },
+          {
+            "device": "taranta://low-sdp/subarray/03"
+          }
+        ],
+        "precision": 2,
+        "scientificNotation": false,
+        "showDefaultAttribute": false,
+        "showEnumLabels": true,
+        "showTangoDB": false,
+        "customAttributes": [
+          {
+            "attribute": {
+              "device": "taranta://low-sdp/subarray/01,taranta://low-sdp/subarray/02,taranta://low-sdp/subarray/03",
+              "attribute": "state",
+              "label": "State"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://low-sdp/subarray/01,taranta://low-sdp/subarray/02,taranta://low-sdp/subarray/03",
+              "attribute": "adminmode",
+              "label": "Admin mode"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://low-sdp/subarray/01,taranta://low-sdp/subarray/02,taranta://low-sdp/subarray/03",
+              "attribute": "healthstate",
+              "label": "Health state"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://low-sdp/subarray/01,taranta://low-sdp/subarray/02,taranta://low-sdp/subarray/03",
+              "attribute": "obsstate",
+              "label": "Observing state"
+            }
+          }
+        ],
+        "compactTable": true,
+        "borderedTable": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px,\nfloat: left,\nfont-size: 14px"
+      },
+      "order": 25
+    },
+    {
+      "valid": 1,
+      "id": "27",
+      "x": 64,
+      "y": 67,
+      "canvas": "0",
+      "width": 62,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "CSP Controller",
+        "textColor": "#000000",
+        "backgroundColor": "#e9ecef",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1,
+        "linkTo": "",
+        "customCss": ""
+      },
+      "order": 26
+    },
+    {
+      "valid": 1,
+      "id": "28",
+      "x": 64,
+      "y": 70,
+      "canvas": "0",
+      "width": 21,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://low-csp/control/0",
+          "attribute": "state",
+          "label": "State"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "float: left;\npadding: 1px"
+      },
+      "order": 27
+    },
+    {
+      "valid": 1,
+      "id": "29",
+      "x": 85,
+      "y": 70,
+      "canvas": "0",
+      "width": 21,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://low-csp/control/0",
+          "attribute": "healthstate",
+          "label": "healthState"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "float: left;\npadding: 1px"
+      },
+      "order": 28
+    },
+    {
+      "valid": 1,
+      "id": "30",
+      "x": 106,
+      "y": 70,
+      "canvas": "0",
+      "width": 20,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://low-csp/control/0",
+          "attribute": "adminmode",
+          "label": "adminMode"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "float: left;\npadding: 1px"
+      },
+      "order": 29
+    },
+    {
+      "valid": 1,
+      "id": "31",
+      "x": 64,
+      "y": 74,
+      "canvas": "0",
+      "width": 62,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "CSP Subarray(s)",
+        "textColor": "#000000",
+        "backgroundColor": "#e9ecef",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1,
+        "linkTo": "",
+        "customCss": ""
+      },
+      "order": 30
+    },
+    {
+      "valid": 1,
+      "id": "32",
+      "x": 64,
+      "y": 77,
+      "canvas": "0",
+      "width": 62,
+      "height": 14,
+      "type": "TABULAR_VIEW",
+      "inputs": {
+        "devices": [
+          {
+            "device": "taranta://low-csp/subarray/01"
+          },
+          {
+            "device": "taranta://low-csp/subarray/02"
+          },
+          {
+            "device": "taranta://low-csp/subarray/03"
+          }
+        ],
+        "precision": 2,
+        "scientificNotation": false,
+        "showDefaultAttribute": false,
+        "showEnumLabels": true,
+        "showTangoDB": false,
+        "customAttributes": [
+          {
+            "attribute": {
+              "device": "taranta://low-csp/subarray/01,taranta://low-csp/subarray/02,taranta://low-csp/subarray/03",
+              "attribute": "state",
+              "label": "State"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://low-csp/subarray/01,taranta://low-csp/subarray/02,taranta://low-csp/subarray/03",
+              "attribute": "adminmode",
+              "label": "adminMode"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://low-csp/subarray/01,taranta://low-csp/subarray/02,taranta://low-csp/subarray/03",
+              "attribute": "healthstate",
+              "label": "healthState"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://low-csp/subarray/01,taranta://low-csp/subarray/02,taranta://low-csp/subarray/03",
+              "attribute": "obsstate",
+              "label": "obsState"
+            }
+          }
+        ],
+        "compactTable": true,
+        "borderedTable": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px,\nfloat: left,\nfont-size: 14px"
+      },
+      "order": 31
+    },
+    {
+      "valid": 1,
+      "id": "33",
+      "x": 2,
+      "y": 30,
+      "canvas": "0",
+      "width": 28,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_low/tm_leaf_node/mccs_master",
+          "attribute": "adminmode",
+          "label": "adminMode"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "float: left;\npadding: 1px"
+      },
+      "order": 32
+    },
+    {
+      "valid": 1,
+      "id": "34",
+      "x": 2,
+      "y": 27,
+      "canvas": "0",
+      "width": 28,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_low/tm_leaf_node/mccs_master",
+          "attribute": "state",
+          "label": "State"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "float: left;\npadding: 1px"
+      },
+      "order": 33
+    },
+    {
+      "valid": 1,
+      "id": "35",
+      "x": 2,
+      "y": 34,
+      "canvas": "0",
+      "width": 61,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "   Subarray Node(s)",
+        "textColor": "#ffffff",
+        "backgroundColor": "#e70068",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1,
+        "linkTo": "",
+        "customCss": "\n"
+      },
+      "order": 34
+    },
+    {
+      "valid": 1,
+      "id": "36",
+      "x": 2,
+      "y": 37,
+      "canvas": "0",
+      "width": 61,
+      "height": 8,
+      "type": "TABULAR_VIEW",
+      "inputs": {
+        "devices": [
+          {
+            "device": "taranta://ska_low/tm_subarray_node/1"
+          }
+        ],
+        "precision": 2,
+        "scientificNotation": false,
+        "showDefaultAttribute": false,
+        "showEnumLabels": true,
+        "showTangoDB": false,
+        "customAttributes": [
+          {
+            "attribute": {
+              "device": "taranta://ska_low/tm_subarray_node/1",
+              "attribute": "state",
+              "label": "State"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_low/tm_subarray_node/1",
+              "attribute": "adminmode",
+              "label": "adminMode"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_low/tm_subarray_node/1",
+              "attribute": "healthstate",
+              "label": "healthState"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_low/tm_subarray_node/1",
+              "attribute": "obsstate",
+              "label": "obsState"
+            }
+          }
+        ],
+        "compactTable": true,
+        "borderedTable": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 0.8,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px,\nfloat: left,\nfont-size: 14px"
+      },
+      "order": 35
+    },
+    {
+      "valid": 1,
+      "id": "37",
+      "x": 2,
+      "y": 50,
+      "canvas": "0",
+      "width": 61,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "SDP Subarray Leaf Node(s)",
+        "textColor": "#ffffff",
+        "backgroundColor": "#e70068",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1,
+        "linkTo": "",
+        "customCss": "\n"
+      },
+      "order": 36
+    },
+    {
+      "valid": 1,
+      "id": "38",
+      "x": 2,
+      "y": 53,
+      "canvas": "0",
+      "width": 61,
+      "height": 8,
+      "type": "TABULAR_VIEW",
+      "inputs": {
+        "devices": [
+          {
+            "device": "taranta://ska_low/tm_leaf_node/sdp_subarray01"
+          }
+        ],
+        "precision": 2,
+        "scientificNotation": false,
+        "showDefaultAttribute": false,
+        "showEnumLabels": true,
+        "showTangoDB": false,
+        "customAttributes": [
+          {
+            "attribute": {
+              "device": "taranta://ska_low/tm_leaf_node/sdp_subarray01",
+              "attribute": "state",
+              "label": "State"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_low/tm_leaf_node/sdp_subarray01",
+              "attribute": "adminmode",
+              "label": "adminMode"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_low/tm_leaf_node/sdp_subarray01",
+              "attribute": "healthstate",
+              "label": "healthState"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_low/tm_leaf_node/sdp_subarray01",
+              "attribute": "sdpsubarrayobsstate",
+              "label": "sdpSubarrayObsState"
+            }
+          }
+        ],
+        "compactTable": true,
+        "borderedTable": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 0.8,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px,\nfloat: left,\nfont-size: 14px"
+      },
+      "order": 37
+    },
+    {
+      "valid": 1,
+      "id": "39",
+      "x": 2,
+      "y": 64,
+      "canvas": "0",
+      "width": 61,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "CSP Subarray Leaf Node(s)",
+        "textColor": "#ffffff",
+        "backgroundColor": "#e70068",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1,
+        "linkTo": "",
+        "customCss": "\n"
+      },
+      "order": 38
+    },
+    {
+      "valid": 1,
+      "id": "40",
+      "x": 2,
+      "y": 67,
+      "canvas": "0",
+      "width": 61,
+      "height": 8,
+      "type": "TABULAR_VIEW",
+      "inputs": {
+        "devices": [
+          {
+            "device": "taranta://ska_low/tm_leaf_node/csp_subarray01"
+          }
+        ],
+        "precision": 2,
+        "scientificNotation": false,
+        "showDefaultAttribute": false,
+        "showEnumLabels": true,
+        "showTangoDB": false,
+        "customAttributes": [
+          {
+            "attribute": {
+              "device": "taranta://ska_low/tm_leaf_node/csp_subarray01",
+              "attribute": "state",
+              "label": "State"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_low/tm_leaf_node/csp_subarray01",
+              "attribute": "adminmode",
+              "label": "adminMode"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_low/tm_leaf_node/csp_subarray01",
+              "attribute": "adminmode",
+              "label": "adminMode"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_low/tm_leaf_node/csp_subarray01",
+              "attribute": "cspsubarrayobsstate",
+              "label": "cspSubarrayObsState"
+            }
+          }
+        ],
+        "compactTable": true,
+        "borderedTable": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 0.8,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px,\nfloat: left,\nfont-size: 14px"
+      },
+      "order": 39
+    },
+    {
+      "valid": 1,
+      "id": "41",
+      "x": 2,
+      "y": 77,
+      "canvas": "0",
+      "width": 61,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "MCCS Subarray Leaf Node(s)",
+        "textColor": "#ffffff",
+        "backgroundColor": "#e70068",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1,
+        "linkTo": "",
+        "customCss": "\n"
+      },
+      "order": 40
+    },
+    {
+      "valid": 1,
+      "id": "42",
+      "x": 2,
+      "y": 80,
+      "canvas": "0",
+      "width": 61,
+      "height": 8,
+      "type": "TABULAR_VIEW",
+      "inputs": {
+        "devices": [
+          {
+            "device": "taranta://ska_low/tm_leaf_node/mccs_subarray01"
+          }
+        ],
+        "precision": 2,
+        "scientificNotation": false,
+        "showDefaultAttribute": false,
+        "showEnumLabels": true,
+        "showTangoDB": false,
+        "customAttributes": [
+          {
+            "attribute": {
+              "device": "taranta://ska_low/tm_leaf_node/mccs_subarray01",
+              "attribute": "state",
+              "label": "State"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_low/tm_leaf_node/mccs_subarray01",
+              "attribute": "adminmode",
+              "label": "adminMode"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_low/tm_leaf_node/mccs_subarray01",
+              "attribute": "healthstate",
+              "label": "healthState"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_low/tm_leaf_node/mccs_subarray01",
+              "attribute": "obsstate",
+              "label": "obsState"
+            }
+          }
+        ],
+        "compactTable": true,
+        "borderedTable": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 0.8,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px,\nfloat: left,\nfont-size: 14px"
+      },
+      "order": 41
+    },
+    {
+      "valid": 1,
+      "id": "43",
+      "x": 2,
+      "y": 93,
+      "canvas": "0",
+      "width": 124,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "MCCS",
+        "textColor": "#ffffff",
+        "backgroundColor": "#e70068",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.3,
+        "linkTo": "",
+        "customCss": "text-align: center"
+      },
+      "order": 42
+    },
+    {
+      "valid": 3,
+      "id": "44",
+      "x": 2,
+      "y": 102,
+      "canvas": "0",
+      "width": 124,
+      "height": 20,
+      "type": "TABULAR_VIEW",
+      "inputs": {
+        "devices": [
+          {
+            "device": "taranta://low-mccs/station/ci-1"
+          },
+          {
+            "device": "taranta://low-mccs/station/ci-2"
+          }
+        ],
+        "precision": 2,
+        "scientificNotation": false,
+        "showDefaultAttribute": false,
+        "showEnumLabels": true,
+        "showTangoDB": false,
+        "customAttributes": [
+          {
+            "attribute": {
+              "device": "taranta://low-mccs/station/ci-1,taranta://low-mccs/station/ci-2",
+              "attribute": "state",
+              "label": "State"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://low-mccs/station/ci-1,taranta://low-mccs/station/ci-2",
+              "attribute": "adminmode",
+              "label": "adminMode"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://low-mccs/station/ci-1,taranta://low-mccs/station/ci-2",
+              "attribute": "healthstate",
+              "label": "healthState"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://low-mccs/station/ci-1,taranta://low-mccs/station/ci-2",
+              "attribute": "obsstate",
+              "label": "obsState"
+            }
+          }
+        ],
+        "compactTable": true,
+        "borderedTable": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 0.8,
+        "font": "Helvetica",
+        "widgetCss": ""
+      },
+      "order": 43
+    },
+    {
+      "valid": 1,
+      "id": "45",
+      "x": 128,
+      "y": 35,
+      "canvas": "0",
+      "width": 62,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "LOW CBF",
+        "textColor": "#ffffff",
+        "backgroundColor": "#e70068",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.3,
+        "linkTo": "",
+        "customCss": "text-align: center\n"
+      },
+      "order": 44
+    },
+    {
+      "valid": 1,
+      "id": "46",
+      "x": 128,
+      "y": 38,
+      "canvas": "0",
+      "width": 62,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "CBF Controller",
+        "textColor": "#000000",
+        "backgroundColor": "#e9ecef",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1,
+        "linkTo": "",
+        "customCss": ""
+      },
+      "order": 45
+    },
+    {
+      "valid": 1,
+      "id": "47",
+      "x": 128,
+      "y": 41,
+      "canvas": "0",
+      "width": 21,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://low-cbf/control/0",
+          "attribute": "state",
+          "label": "State"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "float: left;\npadding: 1px"
+      },
+      "order": 46
+    },
+    {
+      "valid": 1,
+      "id": "48",
+      "x": 149,
+      "y": 41,
+      "canvas": "0",
+      "width": 21,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://low-cbf/control/0",
+          "attribute": "healthstate",
+          "label": "healthState"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "float: left;\npadding: 1px"
+      },
+      "order": 47
+    },
+    {
+      "valid": 1,
+      "id": "49",
+      "x": 170,
+      "y": 41,
+      "canvas": "0",
+      "width": 20,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://low-csp/control/0",
+          "attribute": "adminmode",
+          "label": "adminMode"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "float: left;\npadding: 1px"
+      },
+      "order": 48
+    },
+    {
+      "valid": 1,
+      "id": "50",
+      "x": 128,
+      "y": 44,
+      "canvas": "0",
+      "width": 62,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "CBF Allocator",
+        "textColor": "#000000",
+        "backgroundColor": "#e9ecef",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1,
+        "linkTo": "",
+        "customCss": ""
+      },
+      "order": 49
+    },
+    {
+      "valid": 1,
+      "id": "51",
+      "x": 128,
+      "y": 47,
+      "canvas": "0",
+      "width": 21,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://low-cbf/allocator/0",
+          "attribute": "state",
+          "label": "State"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "float: left;\npadding: 1px"
+      },
+      "order": 50
+    },
+    {
+      "valid": 1,
+      "id": "52",
+      "x": 149,
+      "y": 47,
+      "canvas": "0",
+      "width": 21,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://low-cbf/allocator/0",
+          "attribute": "healthstate",
+          "label": "healthState"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "float: left;\npadding: 1px"
+      },
+      "order": 51
+    },
+    {
+      "valid": 1,
+      "id": "53",
+      "x": 170,
+      "y": 47,
+      "canvas": "0",
+      "width": 20,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://low-cbf/allocator/0",
+          "attribute": "adminmode",
+          "label": "adminMode"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "float: left;\npadding: 1px"
+      },
+      "order": 52
+    },
+    {
+      "valid": 1,
+      "id": "54",
+      "x": 128,
+      "y": 50,
+      "canvas": "0",
+      "width": 62,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "CBF Processor(s)",
+        "textColor": "#000000",
+        "backgroundColor": "#e9ecef",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1,
+        "linkTo": "",
+        "customCss": ""
+      },
+      "order": 53
+    },
+    {
+      "valid": 1,
+      "id": "55",
+      "x": 128,
+      "y": 53,
+      "canvas": "0",
+      "width": 62,
+      "height": 10,
+      "type": "TABULAR_VIEW",
+      "inputs": {
+        "devices": [
+          {
+            "device": "taranta://low-cbf/processor/0.0.0"
+          },
+          {
+            "device": "taranta://low-cbf/processor/0.0.1"
+          }
+        ],
+        "precision": 2,
+        "scientificNotation": false,
+        "showDefaultAttribute": false,
+        "showEnumLabels": true,
+        "showTangoDB": false,
+        "customAttributes": [
+          {
+            "attribute": {
+              "device": "taranta://low-cbf/processor/0.0.0,taranta://low-cbf/processor/0.0.1",
+              "attribute": "state",
+              "label": "State"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://low-cbf/processor/0.0.0,taranta://low-cbf/processor/0.0.1",
+              "attribute": "adminmode",
+              "label": "adminMode"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://low-cbf/processor/0.0.0,taranta://low-cbf/processor/0.0.1",
+              "attribute": "healthstate",
+              "label": "healthState"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://low-cbf/processor/0.0.0,taranta://low-cbf/processor/0.0.1",
+              "attribute": "obsstate",
+              "label": "Observing state"
+            }
+          }
+        ],
+        "compactTable": true,
+        "borderedTable": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px,\nfloat: left,\nfont-size: 14px"
+      },
+      "order": 54
+    },
+    {
+      "valid": 1,
+      "id": "56",
+      "x": 128,
+      "y": 63,
+      "canvas": "0",
+      "width": 62,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "CBF Subarray(s)",
+        "textColor": "#000000",
+        "backgroundColor": "#e9ecef",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1,
+        "linkTo": "",
+        "customCss": ""
+      },
+      "order": 55
+    },
+    {
+      "valid": 1,
+      "id": "57",
+      "x": 128,
+      "y": 66,
+      "canvas": "0",
+      "width": 62,
+      "height": 16,
+      "type": "TABULAR_VIEW",
+      "inputs": {
+        "devices": [
+          {
+            "device": "taranta://low-cbf/subarray/01"
+          },
+          {
+            "device": "taranta://low-cbf/subarray/02"
+          },
+          {
+            "device": "taranta://low-cbf/subarray/03"
+          },
+          {
+            "device": "taranta://low-cbf/subarray/04"
+          }
+        ],
+        "precision": 2,
+        "scientificNotation": false,
+        "showDefaultAttribute": false,
+        "showEnumLabels": true,
+        "showTangoDB": false,
+        "customAttributes": [
+          {
+            "attribute": {
+              "device": "taranta://low-cbf/subarray/01,taranta://low-cbf/subarray/02,taranta://low-cbf/subarray/03,taranta://low-cbf/subarray/04",
+              "attribute": "state",
+              "label": "State"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://low-cbf/subarray/01,taranta://low-cbf/subarray/02,taranta://low-cbf/subarray/03,taranta://low-cbf/subarray/04",
+              "attribute": "adminmode",
+              "label": "adminMode"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://low-cbf/subarray/01,taranta://low-cbf/subarray/02,taranta://low-cbf/subarray/03,taranta://low-cbf/subarray/04",
+              "attribute": "healthstate",
+              "label": "healthState"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://low-cbf/subarray/01,taranta://low-cbf/subarray/02,taranta://low-cbf/subarray/03,taranta://low-cbf/subarray/04",
+              "attribute": "obsstate",
+              "label": "Observing state"
+            }
+          }
+        ],
+        "compactTable": true,
+        "borderedTable": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px,\nfloat: left,\nfont-size: 14px"
+      },
+      "order": 56
+    },
+    {
+      "valid": 1,
+      "id": "58",
+      "x": 2,
+      "y": 96,
+      "canvas": "0",
+      "width": 124,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": " MCCS Controller",
+        "textColor": "#000000",
+        "backgroundColor": "#e9ecef",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1,
+        "linkTo": "",
+        "customCss": ""
+      },
+      "order": 57
+    },
+    {
+      "valid": 1,
+      "id": "59",
+      "x": 2,
+      "y": 99,
+      "canvas": "0",
+      "width": 21,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://low-mccs/control/control",
+          "attribute": "state",
+          "label": "State"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "float: left;\npadding: 1px"
+      },
+      "order": 58
+    },
+    {
+      "valid": 1,
+      "id": "60",
+      "x": 23,
+      "y": 99,
+      "canvas": "0",
+      "width": 21,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://low-mccs/control/control",
+          "attribute": "healthstate",
+          "label": "healthState"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "float: left;\npadding: 1px"
+      },
+      "order": 59
+    },
+    {
+      "valid": 1,
+      "id": "61",
+      "x": 44,
+      "y": 99,
+      "canvas": "0",
+      "width": 21,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://low-mccs/control/control",
+          "attribute": "adminmode",
+          "label": "adminMode"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "float: left;\npadding: 1px"
+      },
+      "order": 60
+    }
+  ],
+  "variables": [],
+  "environment": [
+    "*/*"
+  ]
+}

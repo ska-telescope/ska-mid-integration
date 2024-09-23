@@ -1,0 +1,189 @@
+display: ":0"
+xauthority: "~/.Xauthority"
+
+global:
+  labels:
+    app: ska-mid-integration
+  minikube: false
+  operator: true
+  exposeAllDS: false
+  taranta_auth_enabled: false
+  taranta_dashboard_enabled: false
+  sub-system:
+    tango-base:
+      enabled: false
+    ska-tango-base:
+      enabled: false
+    ska-taranta:
+      enabled: false
+  retry:
+    - "--sleep=3"
+    - "--tries=100"
+  tango_host: databaseds:10000
+  device_server_port: 45450
+  cluster_domain: techops.internal.skao.int # check with Ugur what it should be? it should be just cloud- cluster.local is what dev teams use
+  dishes: ["001", "036","063", "100"]
+  namespace_dish: # these are used when TMC is deployed with Dish Leaf Nodes . To override the variable defined in TMC repo, this is useful from configurability
+    dish_names: ['mid-dish/dish-manager/SKA001','mid-dish/dish-manager/SKA036','mid-dish/dish-manager/SKA063','mid-dish/dish-manager/SKA100']
+  data-product-pvc-name: shared
+  dsconfig:
+    timeout: 300s
+    image:
+      registry: artefact.skao.int
+      image: ska-tango-images-tango-dsconfig
+      tag: 1.5.1
+      pullPolicy: IfNotPresent
+  itango:
+    image:
+      registry: artefact.skao.int
+      image: ska-tango-images-tango-itango
+      tag: 9.3.5
+      pullPolicy: IfNotPresent
+  tango_example:
+    image:
+      registry: harbor.skao.int/production
+      image: ska-tango-examples
+      tag: 0.4.32
+      pullPolicy: IfNotPresent
+
+ska-tango-base:
+  enabled: true
+  vnc:
+    replicas: 1
+    enabled: true
+  tangorest:
+    replicas: 1
+    enabled: true
+    resources:
+      requests:
+        cpu: 100m # 100m = 0.1 CPU
+        memory: 128Mi # 256Mi = 0.25 GB mem
+        ephemeral-storage: 256Mi
+      limits:
+        cpu: 200m # 100m = 0.1 CPU
+        memory: 768Mi # 256Mi = 0.25 GB mem
+        ephemeral-storage: 256Mi
+  tangotest:
+    enabled: true
+  ingress:
+    enabled: true
+    hostname: k8s.stfc.skao.int
+  tangodb:
+    use_pv: false
+
+#=== OSO ===#
+ska-oso-oet:
+  labels:
+    app: ska-mid-integration
+  system: TM-mid
+  telescope: SKA-mid
+  central_node: ska_mid/tm_central/central_node
+  subarray: ska_mid/tm_subarray_node
+  rest:
+    ingress:
+      enabled: false
+    oda:
+      backendType: rest
+      url: http://ska-db-oda-rest-test.button-dev-ska-db-oda:5000/button-dev-ska-db-oda/api/v1
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+    limits:
+      cpu: 2000m
+      memory: 1024Mi
+
+
+#=== SDP ===#
+ska-sdp:
+  labels:
+    app: ska-mid-integration
+  enabled: true
+  ska-tango-base:
+    enabled: false
+  lmc:
+    prefix: mid
+    nsubarray: 3
+    queueconnector:
+      image: artefact.skao.int/ska-sdp-lmc-queue-connector
+      version: 4.1.0
+      domain: queue-connector
+      function: sdp-queue-connector
+      resources:
+        limits:
+          memory: 500Mi
+          cpu: 0.5
+        requests:
+          memory: 100Mi
+          cpu: 0.3
+      pointing-offset:
+        image: artefact.skao.int/ska-sdp-wflow-pointing-offset
+        version: 0.5.0
+        script: pointing-offset
+        imagePullPolicy: IfNotPresent
+        command:
+          - pointing-offset
+        dataProductStorage:
+          name: test-pvc
+          mountPath: /mnt/data
+  data-pvc:
+    create:
+      enabled: true
+      size: 20Gi
+      storageClassName: nfss1
+
+#=== CSP ===#
+ska-csp-lmc-mid:
+  labels:
+    app: ska-tmc-mid-integration
+  enabled: true
+
+
+#=== DISH ===#
+ska-dish-lmc:
+  enabled: true
+  ska-tango-base:
+    enabled: false
+
+  ska-mid-dish-manager: 
+    enabled: true
+    
+  ska-mid-dish-ds-manager:
+    enabled: true
+
+  ska-mid-dish-simulators:
+    enabled: true # dish simulator for other interfaces
+    dishsimulators:
+      image:
+        tag: 3.1.2
+    deviceServers:
+      spfdevice:
+        enabled: true
+      spfrxdevice:
+        enabled: true
+    dsOpcuaSimulator:
+      enabled: true
+
+#=== TMC MID ===#
+ska-tmc-mid:
+  enabled: true
+
+##tmc-mid
+tmc-mid: # check why it is separate
+  enabled: true
+  legacy_compatibility: true
+  telescope: SKA-mid
+  ska-tango-base:
+    enabled: false
+  deviceServers:
+    mocks:
+      enabled: false
+      dish: false
+      csp: false
+      sdp: false
+
+##tangoGQL
+ska-tango-tangogql:
+  enabled: true
+  ska-tango-base:
+    enabled: false

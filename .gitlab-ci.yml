@@ -1,0 +1,264 @@
+image: $SKA_K8S_TOOLS_BUILD_DEPLOY
+
+default:
+  tags:
+    - ska-k8s
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+  MINIKUBE: "false"
+
+stages:
+  - lint
+  - build
+  - on-demand
+  - test #BDD will come later, just python tests for now if required
+  - deploy
+  - integration
+  - staging # - join-reports
+  - pages
+  - publish  # might not need in our case
+  - scan
+
+# Include CI templates
+include:
+# OCI Images
+# do a custom set of build and publish stages
+  - project: 'ska-telescope/templates-repository'
+    file: 'gitlab-ci/includes/oci-image.gitlab-ci.yml'
+
+# Python packages build,lint, test and publish
+  - project: 'ska-telescope/templates-repository'
+    file: 'gitlab-ci/includes/python.gitlab-ci.yml'
+
+# Jupyter notebook linting and testing
+  - project: 'ska-telescope/templates-repository'
+    file: 'gitlab-ci/includes/notebook.gitlab-ci.yml' # this is for using jupyter notebooks
+
+# Helm Charts
+  - project: 'ska-telescope/templates-repository'
+    file: 'gitlab-ci/includes/helm-chart.gitlab-ci.yml'
+
+# Docs pages
+  - project: 'ska-telescope/templates-repository'
+    file: 'gitlab-ci/includes/docs.gitlab-ci.yml'
+
+# .post step finalisers eg: badges
+  - project: 'ska-telescope/templates-repository'
+    file: 'gitlab-ci/includes/finaliser.gitlab-ci.yml'
+
+# k8s steps
+  - project: 'ska-telescope/templates-repository'
+    file: 'gitlab-ci/includes/k8s.gitlab-ci.yml'
+
+# changelog release page
+  - project: 'ska-telescope/templates-repository'
+    file: 'gitlab-ci/includes/release.gitlab-ci.yml' 
+
+# deploy steps
+  - project: 'ska-telescope/templates-repository'
+    file: 'gitlab-ci/includes/deploy.gitlab-ci.yml' 
+
+  - project: 'ska-telescope/templates-repository'
+    file: 'gitlab-ci/includes/python-lint.gitlab-ci.yml'
+
+  - project: 'ska-telescope/templates-repository'
+    file: 'gitlab-ci/includes/docs-pages.gitlab-ci.yml'
+
+
+  - project: 'ska-telescope/templates-repository'
+    file: 'gitlab-ci/includes/deploy.integration.gitlab-ci.yml'
+
+  - project: "ska-telescope/templates-repository"
+    file: "gitlab-ci/includes/deploy.staging.gitlab-ci.yml"
+
+  - project: 'ska-telescope/templates-repository'
+    file: 'gitlab-ci/includes/finaliser.gitlab-ci.yml'
+
+notebook-lint:
+  allow_failure: true 
+
+notebook-test:
+  rules:
+    - when: never
+
+python-gemnasium-scan:
+  rules:
+    - when: never
+
+python-test: 
+  rules:
+    - when: never
+
+
+
+k8s-test: 
+  rules:
+    - when: never
+
+deploy-integration:
+  rules:
+    - when: never
+
+stop-k8s-test: 
+  rules:
+    - when: never
+
+info-integration:
+  rules:
+    - when: never
+
+stop-integration:
+  rules:
+    - when: never
+
+redeploy-integration:
+  rules:
+    - when: never
+
+
+deploy-tmc-with-sdp:
+  extends: deploy-integration
+  variables:
+    TELESCOPE: 'SKA-mid'
+    PORT: "10000"
+    KUBE_NAMESPACE: 'integration-ska-mid-tmc-sdp'
+    KUBE_NAMESPACE_SDP: 'integration-ska-tmc-mid-sdp'
+    SDP_SIMULATION_ENABLED: 'false' 
+  environment:
+    name: integration-mid-sdp-$CI_PROJECT_NAME
+    on_stop: stop-k8s-test-tmc-with-sdp
+  
+
+
+stop-k8s-test-tmc-with-sdp:
+  extends:
+    - stop-integration
+  variables:
+    KUBE_NAMESPACE: 'integration-ska-mid-tmc-sdp'
+    SDP_SIMULATION_ENABLED: 'false'
+  environment:
+    name: integration-mid-sdp-$CI_PROJECT_NAME
+    action: stop
+  needs:
+    - deploy-tmc-with-sdp
+ 
+
+
+deploy-tmc-with-csp:
+  extends: deploy-mid-integration
+  variables:
+    TELESCOPE: 'SKA-mid'
+    PORT: "10000"
+    KUBE_NAMESPACE: 'integration-ska-mid-tmc-csp'
+    CSP_SIMULATION_ENABLED: 'false'
+    SDP_DEPLOY: false  
+  environment:
+    name: integration-mid-csp-$CI_PROJECT_NAME
+    on_stop: stop-k8s-test-tmc-with-csp
+
+stop-k8s-test-tmc-with-csp:
+  extends:
+    - stop-integration
+  variables:
+    KUBE_NAMESPACE: 'integration-ska-mid-tmc-csp'
+    CSP_SIMULATION_ENABLED: 'false'
+    SDP_DEPLOY: false  
+  environment:
+    name: integration-mid-csp-$CI_PROJECT_NAME
+    action: stop
+  needs:
+    - deploy-tmc-with-csp
+ 
+
+
+deploy-tmc-with-dish:
+  extends: deploy-mid-integration
+  variables:
+    DISH_INDICES: "001 036 063 100"
+    KUBE_NAMESPACE: 'integration-ska-mid-tmc-dish'
+    DISH_HELM_RELEASE: "4.1.0"
+    K8S_DISH_LMC_CHART: "ska-dish-lmc"
+    DISH_SIMULATION_ENABLED: false
+    DISH_NAMESPACE_1: "integration-ska-mid-tmc-dish001"
+    DISH_NAMESPACE_2: "integration-ska-mid-tmc-dish036"
+    DISH_NAMESPACE_3: "integration-ska-mid-tmc-dish063"
+    DISH_NAMESPACE_4: "integration-ska-mid-tmc-dish100"
+    SDP_DEPLOY: false
+  script:
+    - make deploy-dishes 
+    - make k8s-install-chart 
+  environment:
+    name: integration-mid-dish-$CI_PROJECT_NAME
+    on_stop: stop-k8s-test-tmc-with-dish
+  allow_failure: true
+
+
+
+stop-k8s-test-tmc-with-dish:
+  extends: 
+    - stop-integration
+  variables:
+    KUBE_NAMESPACE: 'integration-ska-mid-tmc-dish'
+    DISH_SIMULATION_ENABLED: 'false'
+    DISH_INDICES: "001 036 063 100"
+    DISH_NAMESPACE_1: "integration-ska-mid-tmc-dish001"
+    DISH_NAMESPACE_2: "integration-ska-mid-tmc-dish036"
+    DISH_NAMESPACE_3: "integration-ska-mid-tmc-dish063"
+    DISH_NAMESPACE_4: "integration-ska-mid-tmc-dish100"
+    SDP_DEPLOY: false  
+  environment:
+    name: integration-mid-dish-$CI_PROJECT_NAME
+    action: stop
+  needs:
+    - deploy-tmc-with-dish
+  script:
+    - make stop-dishes 
+    - make k8s-uninstall-chart
+    - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
+    - make k8s-delete-namespace 
+
+
+deploy-mid-integration:
+  extends: deploy-integration
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  variables:
+    KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
+  environment:
+    name: integration-ska-mid-test
+    on_stop: stop-mid-integration
+
+info-mid-integration:
+  extends: info-integration
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  needs:
+    - deploy-mid-integration
+  variables:
+    KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
+  environment:
+    name: integration-ska-mid-test
+
+stop-mid-integration:
+  extends: stop-integration
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  needs:
+    - deploy-mid-integration
+  variables:
+    KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
+  environment:
+    name: integration-ska-mid-test
+    action: stop
+
+redeploy-mid-integration:
+  extends: redeploy-integration
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  variables:
+    KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
+  environment:
+    name: integration-ska-mid-test
+
+

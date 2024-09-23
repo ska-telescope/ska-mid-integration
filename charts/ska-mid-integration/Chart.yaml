@@ -1,0 +1,72 @@
+apiVersion: v2
+name: ska-mid-integration
+description: A Helm chart for Kubernetes MVP Mid Notebooks
+type: application
+version: 0.1.0
+appVersion: 0.1.0
+icon: https://www.skatelescope.org/wp-content/uploads/2016/07/09545_NEW_LOGO_2014.png
+dependencies:
+  - name: ska-tango-base
+    version: 0.4.10
+    repository: https://artefact.skao.int/repository/helm-internal
+    condition: ska-tango-base.enabled
+  - name: ska-tango-util
+    version: 0.4.11
+    repository: https://artefact.skao.int/repository/helm-internal
+    condition: ska-tango-util.enabled
+  - name: ska-sdp
+    version: 0.21.0
+    repository: https://artefact.skao.int/repository/helm-internal
+    condition: ska-sdp.enabled
+  - name: ska-tmc-mid
+    version: 0.22.4
+    repository: https://artefact.skao.int/repository/helm-internal
+    condition: ska-tmc-mid.enabled
+    alias: tmc-mid
+  - name: ska-dish-lmc
+    version: 4.1.0
+    repository: https://artefact.skao.int/repository/helm-internal
+    condition: ska-dish-lmc.enabled
+  - name: ska-csp-lmc-mid
+    version: 0.22.0
+    repository: https://artefact.skao.int/repository/helm-internal
+    condition: ska-csp-lmc-mid.enabled
+  - name: ska-mid-cbf-mcs
+    version: 0.15.2
+    repository: https://artefact.skao.int/repository/helm-internal
+    condition: ska-mid-cbf-mcs.enabled
+  - name: ska-mid-cbf-tmleafnode
+    version: 0.15.2
+    repository: https://artefact.skao.int/repository/helm-internal
+    condition: ska-mid-cbf-tmleafnode.enabled
+    alias: mid-cbf
+  # - name: ska-oso-oet
+  #   version: 6.2.0
+  #   repository: https://artefact.skao.int/repository/helm-internal
+  # - name: ska-db-oda
+  #   version: 5.0.1
+  #   repository: https://artefact.skao.int/repository/helm-internal
+  - name: ska-tango-taranta
+    version: 2.10.3
+    repository: https://artefact.skao.int/repository/helm-internal
+    condition: ska-taranta.enabled
+  - name: ska-tango-tangogql
+    version: 1.4.4
+    repository: https://artefact.skao.int/repository/helm-internal
+    condition: ska-taranta.enabled
+  - name: ska-tango-taranta-auth
+    version: 0.2.3
+    repository: https://artefact.skao.int/repository/helm-internal
+    condition: global.taranta_auth_enabled
+  - name: ska-tango-taranta-dashboard
+    version: 1.6.3
+    repository: https://artefact.skao.int/repository/helm-internal
+    condition: global.taranta_dashboard_enabled
+  - name: ska-tango-taranta-dashboard-pvc
+    version: 1.6.3
+    repository: https://artefact.skao.int/repository/helm-internal
+    condition: global.taranta_dashboard_enabled
+  - name: ska-ser-skuid
+    version: 3.3.3
+    repository: https://artefact.skao.int/repository/helm-internal
+    condition: ska-ser-skuid.enabled

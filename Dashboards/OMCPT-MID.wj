@@ -1,0 +1,2310 @@
+{
+  "id": "662804eeb20f160012116029",
+  "name": "OMCPT-MID",
+  "version": "2.10.3",
+  "user": "TEAM_OMCPT",
+  "insertTime": "2024-04-23T18:58:54.317Z",
+  "updateTime": "2024-07-31T15:49:59.117Z",
+  "group": null,
+  "groupWriteAccess": false,
+  "lastUpdatedBy": "TEAM_OMCPT",
+  "widget": [
+    {
+      "valid": 1,
+      "id": "2",
+      "x": 4,
+      "y": 10,
+      "canvas": "0",
+      "width": 26,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "CentralNode",
+        "textColor": "#495058",
+        "backgroundColor": "#e9ecef",
+        "size": 1,
+        "borderWidth": 0.01,
+        "borderColor": "#e9ecef",
+        "font": "Helvetica",
+        "linkTo": "",
+        "customCss": "padding: 1px\nfont-weight: bold\n",
+        "automaticResize": "Disabled"
+      },
+      "order": 6
+    },
+    {
+      "valid": 1,
+      "id": "13",
+      "x": 4,
+      "y": 33,
+      "canvas": "0",
+      "width": 58,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "SubarrayNode(s)",
+        "textColor": "#ffffff",
+        "backgroundColor": "#070069",
+        "size": 1,
+        "borderWidth": 0.1,
+        "borderColor": "#07006a",
+        "font": "Helvetica",
+        "linkTo": "",
+        "customCss": "padding: 1px\nfont-weight: bold",
+        "automaticResize": "Disabled"
+      },
+      "order": 8
+    },
+    {
+      "valid": 1,
+      "id": "24",
+      "x": 68.4,
+      "y": 40.650000000000006,
+      "canvas": "0",
+      "width": 72.2,
+      "height": 37.7,
+      "type": "TIMELINE",
+      "inputs": {
+        "timeWindow": 120,
+        "overflow": true,
+        "groupAttributes": true,
+        "attributes": [
+          {
+            "attribute": {
+              "device": "taranta://mid-csp/subarray/01",
+              "attribute": "obsstate",
+              "label": "obsState"
+            },
+            "yAxisDisplay": "Label",
+            "showAttribute": "Label",
+            "yAxis": "left"
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_mid/tm_leaf_node/csp_subarray01",
+              "attribute": "cspsubarrayobsstate",
+              "label": "cspSubarrayObsState"
+            },
+            "yAxisDisplay": "Label",
+            "showAttribute": "Label",
+            "yAxis": "left"
+          },
+          {
+            "attribute": {
+              "device": "taranta://mid-sdp/subarray/01",
+              "attribute": "obsstate",
+              "label": "Observing state"
+            },
+            "yAxisDisplay": "Label",
+            "showAttribute": "Name",
+            "yAxis": "left"
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_mid/tm_subarray_node/1",
+              "attribute": "obsstate",
+              "label": "obsState"
+            },
+            "yAxisDisplay": "Label",
+            "showAttribute": "Label",
+            "yAxis": "left"
+          }
+        ],
+        "showTangoDB": false
+      },
+      "order": 7
+    },
+    {
+      "valid": 1,
+      "id": "25",
+      "x": 33,
+      "y": 20,
+      "canvas": "0",
+      "width": 28,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "CSP Master Leaf Node",
+        "textColor": "#495058",
+        "backgroundColor": "#e9ecef",
+        "size": 0.9,
+        "borderWidth": 0.1,
+        "borderColor": "#e9ecef",
+        "font": "Helvetica",
+        "linkTo": "",
+        "customCss": "padding: 1px\nfont-weight: bold",
+        "automaticResize": "Disabled"
+      },
+      "order": 9
+    },
+    {
+      "valid": 1,
+      "id": "26",
+      "x": 4,
+      "y": 61,
+      "canvas": "0",
+      "width": 54,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "CSP Subarray Leaf Node(s)",
+        "textColor": "#fdfdfd",
+        "backgroundColor": "#07006b",
+        "size": 0.85,
+        "borderWidth": 0.1,
+        "borderColor": "#070069",
+        "font": "Helvetica",
+        "linkTo": "",
+        "customCss": "padding: 1px\nfont-weight: bold\n",
+        "automaticResize": "Disabled"
+      },
+      "order": 10
+    },
+    {
+      "valid": 1,
+      "id": "39",
+      "x": 4,
+      "y": 74,
+      "canvas": "0",
+      "width": 51,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "Dish Leaf Node(s)",
+        "textColor": "#ffffff",
+        "backgroundColor": "#070068",
+        "size": 0.8,
+        "borderWidth": 0.1,
+        "borderColor": "#070069",
+        "font": "Helvetica",
+        "linkTo": "",
+        "customCss": "padding: 1px\nfont-weight: bold\n",
+        "automaticResize": "Disabled"
+      },
+      "order": 11
+    },
+    {
+      "valid": 1,
+      "id": "50",
+      "x": 151,
+      "y": 35,
+      "canvas": "0",
+      "width": 61,
+      "height": 4,
+      "type": "LABEL",
+      "inputs": {
+        "text": "CSP",
+        "textColor": "#ffffff",
+        "backgroundColor": "#070067",
+        "size": 1.2,
+        "borderWidth": 0.1,
+        "borderColor": "#404040",
+        "font": "Helvetica",
+        "linkTo": "",
+        "customCss": "text-align: center\n",
+        "automaticResize": "Disabled"
+      },
+      "order": 1
+    },
+    {
+      "valid": 1,
+      "id": "51",
+      "x": 151,
+      "y": 40,
+      "canvas": "0",
+      "width": 61,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "CSP Controller",
+        "textColor": "#495058",
+        "backgroundColor": "#eaecef",
+        "size": 1,
+        "borderWidth": 0.1,
+        "borderColor": "#eaecef",
+        "font": "Helvetica",
+        "linkTo": "",
+        "customCss": "padding: 1px\n",
+        "automaticResize": "Disabled"
+      },
+      "order": 2
+    },
+    {
+      "valid": 1,
+      "id": "52",
+      "x": 151,
+      "y": 48,
+      "canvas": "0",
+      "width": 61,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "CSP Subarray(s)",
+        "textColor": "#495058",
+        "backgroundColor": "#eaecef",
+        "size": 1,
+        "borderWidth": 0.1,
+        "borderColor": "#eaecef",
+        "font": "Helvetica",
+        "linkTo": "",
+        "customCss": "padding: 1px",
+        "automaticResize": "Disabled"
+      },
+      "order": 3
+    },
+    {
+      "valid": 1,
+      "id": "53",
+      "x": 151,
+      "y": 6,
+      "canvas": "0",
+      "width": 61,
+      "height": 4,
+      "type": "LABEL",
+      "inputs": {
+        "text": "SDP",
+        "textColor": "#ffffff",
+        "backgroundColor": "#070068",
+        "size": 1.2,
+        "borderWidth": 0.1,
+        "borderColor": "#070068",
+        "font": "Helvetica",
+        "linkTo": "",
+        "customCss": "text-align: center;",
+        "automaticResize": "Disabled"
+      },
+      "order": 12
+    },
+    {
+      "valid": 1,
+      "id": "54",
+      "x": 151,
+      "y": 10,
+      "canvas": "0",
+      "width": 61,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "SDP Controller",
+        "textColor": "#495058",
+        "backgroundColor": "#e9ecef",
+        "size": 1,
+        "borderWidth": 0.1,
+        "borderColor": "#e9ecef",
+        "font": "Helvetica",
+        "linkTo": "",
+        "customCss": "padding: 1px\nfont-weight:bol",
+        "automaticResize": "Disabled"
+      },
+      "order": 13
+    },
+    {
+      "valid": 1,
+      "id": "55",
+      "x": 151,
+      "y": 16,
+      "canvas": "0",
+      "width": 61,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "SDP Subarray(s)",
+        "textColor": "#495058",
+        "backgroundColor": "#e9ecef",
+        "size": 1,
+        "borderWidth": 0.1,
+        "borderColor": "#e9ecef",
+        "font": "Helvetica",
+        "linkTo": "",
+        "customCss": "padding: 1px",
+        "automaticResize": "Disabled"
+      },
+      "order": 14
+    },
+    {
+      "valid": 1,
+      "id": "92",
+      "x": 4,
+      "y": 47,
+      "canvas": "0",
+      "width": 48,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "SDP Subarray Leaf Node(s)",
+        "textColor": "#ffffff",
+        "backgroundColor": "#07006a",
+        "size": 0.8,
+        "borderWidth": 0.1,
+        "borderColor": "#07006b",
+        "font": "Helvetica",
+        "linkTo": "",
+        "customCss": "padding: 1px\nfont-weight:bold",
+        "automaticResize": "Disabled"
+      },
+      "order": 15
+    },
+    {
+      "valid": 1,
+      "id": "93",
+      "x": 33,
+      "y": 10,
+      "canvas": "0",
+      "width": 28,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "SDP Master Leaf Node",
+        "textColor": "#495058",
+        "backgroundColor": "#e9ecef",
+        "size": 0.9,
+        "borderWidth": 0.1,
+        "borderColor": "#e9ecef",
+        "font": "Helvetica",
+        "linkTo": "",
+        "customCss": "padding: 1px\nfont-weight:bold",
+        "automaticResize": "Disabled"
+      },
+      "order": 16
+    },
+    {
+      "valid": 1,
+      "id": "95",
+      "x": 4,
+      "y": 6,
+      "canvas": "0",
+      "width": 87,
+      "height": 4,
+      "type": "LABEL",
+      "inputs": {
+        "text": "TMC",
+        "textColor": "#ffffff",
+        "backgroundColor": "#070068",
+        "size": 1.2,
+        "borderWidth": 0.1,
+        "borderColor": "#070068",
+        "font": "Helvetica",
+        "linkTo": "",
+        "customCss": "text-align: center",
+        "automaticResize": "Disabled"
+      },
+      "order": 4
+    },
+    {
+      "valid": 1,
+      "id": "96",
+      "x": 68.4,
+      "y": 36.849999999999994,
+      "canvas": "0",
+      "width": 74.2,
+      "height": 3.3000000000000007,
+      "type": "LABEL",
+      "inputs": {
+        "text": "Observing State Transitions",
+        "textColor": "#495059",
+        "backgroundColor": "#e9ecef",
+        "size": 1,
+        "borderWidth": 0.1,
+        "borderColor": "#e9ecef",
+        "font": "Helvetica",
+        "linkTo": "",
+        "customCss": "font-weight: bold",
+        "automaticResize": "Disabled"
+      },
+      "order": 5
+    },
+    {
+      "valid": 1,
+      "id": "97",
+      "x": 4,
+      "y": 94,
+      "canvas": "0",
+      "width": 158,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "DISH",
+        "textColor": "#ffffff",
+        "backgroundColor": "#070068",
+        "size": 1.2,
+        "borderWidth": 0.1,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "linkTo": "",
+        "customCss": "text-align: center\n",
+        "automaticResize": "Disabled"
+      },
+      "order": 0
+    },
+    {
+      "valid": 1,
+      "id": "106",
+      "x": 21,
+      "y": 10,
+      "canvas": "0",
+      "width": 11,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_mid/tm_central/central_node",
+          "attribute": "versionid",
+          "label": "versionId"
+        },
+        "precision": 2,
+        "showDevice": false,
+        "showAttribute": "Label",
+        "scientificNotation": false,
+        "showEnumLabels": false,
+        "showAttrQuality": false,
+        "textColor": "#495058",
+        "backgroundColor": "#e9ecef",
+        "size": 0.8,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px\nfloat: left",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "format": "",
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showUnit": true
+      },
+      "order": 17
+    },
+    {
+      "valid": 1,
+      "id": "107",
+      "x": 52,
+      "y": 33,
+      "canvas": "0",
+      "width": 11,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_mid/tm_subarray_node/1",
+          "attribute": "versionid",
+          "label": "versionId"
+        },
+        "precision": 2,
+        "showDevice": false,
+        "showAttribute": "Label",
+        "scientificNotation": false,
+        "showEnumLabels": false,
+        "showAttrQuality": false,
+        "textColor": "#ffffff",
+        "backgroundColor": "#07006a",
+        "size": 0.8,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px\nfloat: left",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "format": "",
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showUnit": true
+      },
+      "order": 18
+    },
+    {
+      "valid": 1,
+      "id": "108",
+      "x": 52,
+      "y": 61,
+      "canvas": "0",
+      "width": 10,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_mid/tm_leaf_node/csp_subarray01",
+          "attribute": "versionid",
+          "label": "versionId"
+        },
+        "precision": 2,
+        "showDevice": false,
+        "showAttribute": "Label",
+        "scientificNotation": false,
+        "showEnumLabels": false,
+        "showAttrQuality": false,
+        "textColor": "#ffffff",
+        "backgroundColor": "#07006c",
+        "size": 0.8,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px\nfloat: left",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "format": "",
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showUnit": true
+      },
+      "order": 19
+    },
+    {
+      "valid": 1,
+      "id": "110",
+      "x": 49,
+      "y": 20,
+      "canvas": "0",
+      "width": 10,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_mid/tm_leaf_node/csp_master",
+          "attribute": "versionid",
+          "label": "versionId"
+        },
+        "precision": 2,
+        "showDevice": false,
+        "showAttribute": "Label",
+        "scientificNotation": false,
+        "showEnumLabels": false,
+        "showAttrQuality": false,
+        "textColor": "#495058",
+        "backgroundColor": "#e9ecef",
+        "size": 0.8,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px\nfloat: left",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "format": "",
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showUnit": true
+      },
+      "order": 20
+    },
+    {
+      "valid": 1,
+      "id": "111",
+      "x": 52,
+      "y": 47,
+      "canvas": "0",
+      "width": 10,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_mid/tm_leaf_node/sdp_subarray01",
+          "attribute": "versionid",
+          "label": "versionId"
+        },
+        "precision": 2,
+        "showDevice": false,
+        "showAttribute": "Label",
+        "scientificNotation": false,
+        "showEnumLabels": false,
+        "showAttrQuality": false,
+        "textColor": "#ffffff",
+        "backgroundColor": "#07006a",
+        "size": 0.8,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px\nfloat: left",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "format": "",
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showUnit": true
+      },
+      "order": 21
+    },
+    {
+      "valid": 1,
+      "id": "112",
+      "x": 202,
+      "y": 11,
+      "canvas": "0",
+      "width": 10,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://mid-sdp/control/0",
+          "attribute": "versionid",
+          "label": "Version"
+        },
+        "precision": 2,
+        "showDevice": false,
+        "showAttribute": "None",
+        "scientificNotation": false,
+        "showEnumLabels": false,
+        "showAttrQuality": false,
+        "textColor": "#495058",
+        "backgroundColor": "#e9ecef",
+        "size": 0.8,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px\nfloat: left",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "format": "",
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showUnit": true
+      },
+      "order": 22
+    },
+    {
+      "valid": 1,
+      "id": "113",
+      "x": 202,
+      "y": 17,
+      "canvas": "0",
+      "width": 10,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://mid-sdp/subarray/01",
+          "attribute": "versionid",
+          "label": "Version"
+        },
+        "precision": 2,
+        "showDevice": false,
+        "showAttribute": "None",
+        "scientificNotation": false,
+        "showEnumLabels": false,
+        "showAttrQuality": false,
+        "textColor": "#495058",
+        "backgroundColor": "#e9ecef",
+        "size": 0.8,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px\nfloat: left",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "format": "",
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showUnit": true
+      },
+      "order": 23
+    },
+    {
+      "valid": 1,
+      "id": "114",
+      "x": 68,
+      "y": 33,
+      "canvas": "0",
+      "width": 75,
+      "height": 4,
+      "type": "LABEL",
+      "inputs": {
+        "text": "Observation Information",
+        "textColor": "#ffffff",
+        "backgroundColor": "#070068",
+        "size": 1.2,
+        "borderWidth": 0.1,
+        "borderColor": "#070068",
+        "font": "Helvetica",
+        "linkTo": "",
+        "customCss": "text-align: center",
+        "automaticResize": "Disabled"
+      },
+      "order": 24
+    },
+    {
+      "valid": 1,
+      "id": "119",
+      "x": 49,
+      "y": 10,
+      "canvas": "0",
+      "width": 10,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_mid/tm_leaf_node/sdp_master",
+          "attribute": "versionid",
+          "label": "versionId"
+        },
+        "precision": 2,
+        "showDevice": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": false,
+        "showAttrQuality": false,
+        "textColor": "#495058",
+        "backgroundColor": "#e9ecef",
+        "size": 0.8,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px\nfloat: left",
+        "format": "",
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showUnit": true
+      },
+      "order": 25
+    },
+    {
+      "valid": 1,
+      "id": "120",
+      "x": 52,
+      "y": 74,
+      "canvas": "0",
+      "width": 10,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_mid/tm_leaf_node/d0001",
+          "attribute": "versionid",
+          "label": "versionId"
+        },
+        "precision": 2,
+        "showDevice": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": false,
+        "showAttrQuality": false,
+        "textColor": "#ffffff",
+        "backgroundColor": "#070069",
+        "size": 0.8,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px\nfloat: left",
+        "format": "",
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showUnit": true
+      },
+      "order": 26
+    },
+    {
+      "valid": 1,
+      "id": "123",
+      "x": 4,
+      "y": 1,
+      "canvas": "0",
+      "width": 208,
+      "height": 4,
+      "type": "LABEL",
+      "inputs": {
+        "text": "MID Telescope Overview",
+        "textColor": "#ffffff",
+        "backgroundColor": "#070068",
+        "size": 1.3,
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "linkTo": "",
+        "customCss": "text-align: center",
+        "automaticResize": "Disabled"
+      },
+      "order": 27
+    },
+    {
+      "valid": 1,
+      "id": "124",
+      "x": 4,
+      "y": 97,
+      "canvas": "0",
+      "width": 112,
+      "height": 18,
+      "type": "TABULAR_VIEW",
+      "inputs": {
+        "devices": [
+          {
+            "device": "taranta://mid-dish/dish-manager/ska001"
+          },
+          {
+            "device": "taranta://mid-dish/dish-manager/ska036"
+          },
+          {
+            "device": "taranta://mid-dish/dish-manager/ska063"
+          },
+          {
+            "device": "taranta://mid-dish/dish-manager/ska100"
+          }
+        ],
+        "precision": 2,
+        "scientificNotation": false,
+        "showDefaultAttribute": false,
+        "showEnumLabels": true,
+        "customAttributes": [
+          {
+            "attribute": {
+              "device": "taranta://mid-dish/dish-manager/ska001,taranta://mid-dish/dish-manager/ska036,taranta://mid-dish/dish-manager/ska063,taranta://mid-dish/dish-manager/ska100",
+              "attribute": "state",
+              "label": "State"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://mid-dish/dish-manager/ska001,taranta://mid-dish/dish-manager/ska036,taranta://mid-dish/dish-manager/ska063,taranta://mid-dish/dish-manager/ska100",
+              "attribute": "adminmode",
+              "label": "adminMode"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://mid-dish/dish-manager/ska001,taranta://mid-dish/dish-manager/ska036,taranta://mid-dish/dish-manager/ska063,taranta://mid-dish/dish-manager/ska100",
+              "attribute": "dishmode",
+              "label": "dishMode"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://mid-dish/dish-manager/ska001,taranta://mid-dish/dish-manager/ska036,taranta://mid-dish/dish-manager/ska063,taranta://mid-dish/dish-manager/ska100",
+              "attribute": "desiredpointing",
+              "label": "desiredPointing"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://mid-dish/dish-manager/ska001,taranta://mid-dish/dish-manager/ska036,taranta://mid-dish/dish-manager/ska063,taranta://mid-dish/dish-manager/ska100",
+              "attribute": "kvalue",
+              "label": "kValue"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://mid-dish/dish-manager/ska001,taranta://mid-dish/dish-manager/ska036,taranta://mid-dish/dish-manager/ska063,taranta://mid-dish/dish-manager/ska100",
+              "attribute": "pointingstate",
+              "label": "pointingState"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://mid-dish/dish-manager/ska001,taranta://mid-dish/dish-manager/ska036,taranta://mid-dish/dish-manager/ska063,taranta://mid-dish/dish-manager/ska100",
+              "attribute": "achievedpointing",
+              "label": "achievedPointing"
+            }
+          }
+        ],
+        "compactTable": true,
+        "borderedTable": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px,\nfloat: left,\nfont-size: 14px",
+        "showTangoDB": false
+      },
+      "order": 28
+    },
+    {
+      "valid": 1,
+      "id": "129",
+      "x": 169,
+      "y": 43,
+      "canvas": "0",
+      "width": 18,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://mid-csp/control/0",
+          "attribute": "adminmode",
+          "label": "Admin mode"
+        },
+        "precision": 2,
+        "format": "",
+        "showDevice": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": false,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px,\nfloat: left",
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showUnit": true
+      },
+      "order": 29
+    },
+    {
+      "valid": 1,
+      "id": "131",
+      "x": 4,
+      "y": 16,
+      "canvas": "0",
+      "width": 20,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_mid/tm_central/central_node",
+          "attribute": "adminmode",
+          "label": "adminMode"
+        },
+        "precision": 2,
+        "format": "",
+        "showDevice": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": false,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px",
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showUnit": true
+      },
+      "order": 30
+    },
+    {
+      "valid": 1,
+      "id": "132",
+      "x": 151,
+      "y": 43,
+      "canvas": "0",
+      "width": 18,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://mid-csp/control/0",
+          "attribute": "state",
+          "label": "State"
+        },
+        "precision": 2,
+        "format": "",
+        "showDevice": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": false,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px,\nfloat: left\n",
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showUnit": true
+      },
+      "order": 31
+    },
+    {
+      "valid": 1,
+      "id": "134",
+      "x": 4,
+      "y": 77,
+      "canvas": "0",
+      "width": 58,
+      "height": 16,
+      "type": "TABULAR_VIEW",
+      "inputs": {
+        "devices": [
+          {
+            "device": "taranta://ska_mid/tm_leaf_node/d0001"
+          },
+          {
+            "device": "taranta://ska_mid/tm_leaf_node/d0036"
+          },
+          {
+            "device": "taranta://ska_mid/tm_leaf_node/d0063"
+          },
+          {
+            "device": "taranta://ska_mid/tm_leaf_node/d0100"
+          }
+        ],
+        "precision": 2,
+        "scientificNotation": false,
+        "showDefaultAttribute": false,
+        "showEnumLabels": true,
+        "customAttributes": [
+          {
+            "attribute": {
+              "device": "taranta://ska_mid/tm_leaf_node/d0001,taranta://ska_mid/tm_leaf_node/d0036,taranta://ska_mid/tm_leaf_node/d0063,taranta://ska_mid/tm_leaf_node/d0100",
+              "attribute": "state",
+              "label": "State"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_mid/tm_leaf_node/d0001,taranta://ska_mid/tm_leaf_node/d0036,taranta://ska_mid/tm_leaf_node/d0063,taranta://ska_mid/tm_leaf_node/d0100",
+              "attribute": "adminmode",
+              "label": "adminMode"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_mid/tm_leaf_node/d0001,taranta://ska_mid/tm_leaf_node/d0036,taranta://ska_mid/tm_leaf_node/d0063,taranta://ska_mid/tm_leaf_node/d0100",
+              "attribute": "healthstate",
+              "label": "healthState"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_mid/tm_leaf_node/d0001,taranta://ska_mid/tm_leaf_node/d0036,taranta://ska_mid/tm_leaf_node/d0063,taranta://ska_mid/tm_leaf_node/d0100",
+              "attribute": "kvalue",
+              "label": "kValue"
+            }
+          }
+        ],
+        "compactTable": true,
+        "borderedTable": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px,\nfloat: left,\nfont-size: 14px",
+        "showTangoDB": false
+      },
+      "order": 32
+    },
+    {
+      "valid": 1,
+      "id": "135",
+      "x": 4,
+      "y": 13,
+      "canvas": "0",
+      "width": 20,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_mid/tm_central/central_node",
+          "attribute": "state",
+          "label": "State"
+        },
+        "precision": 2,
+        "format": "",
+        "showDevice": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": false,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px,\nfloat: left\n",
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showUnit": true
+      },
+      "order": 33
+    },
+    {
+      "valid": 1,
+      "id": "136",
+      "x": 4,
+      "y": 19,
+      "canvas": "0",
+      "width": 20,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_mid/tm_central/central_node",
+          "attribute": "telescopestate",
+          "label": "telescopeState"
+        },
+        "precision": 2,
+        "format": "",
+        "showDevice": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": false,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "",
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showUnit": true
+      },
+      "order": 34
+    },
+    {
+      "valid": 1,
+      "id": "137",
+      "x": 4,
+      "y": 22,
+      "canvas": "0",
+      "width": 20,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_mid/tm_central/central_node",
+          "attribute": "telescopehealthstate",
+          "label": "telescopeHealthState"
+        },
+        "precision": 2,
+        "format": "",
+        "showDevice": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": false,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "",
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showUnit": true
+      },
+      "order": 35
+    },
+    {
+      "valid": 1,
+      "id": "138",
+      "x": 33,
+      "y": 13,
+      "canvas": "0",
+      "width": 20,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_mid/tm_leaf_node/sdp_master",
+          "attribute": "state",
+          "label": "State"
+        },
+        "precision": 2,
+        "format": "",
+        "showDevice": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": false,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px,\nfloat: left",
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showUnit": true
+      },
+      "order": 36
+    },
+    {
+      "valid": 1,
+      "id": "139",
+      "x": 33,
+      "y": 23,
+      "canvas": "0",
+      "width": 20,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_mid/tm_leaf_node/csp_master",
+          "attribute": "state",
+          "label": "State"
+        },
+        "precision": 2,
+        "format": "",
+        "showDevice": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": false,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px,\nfloat: left\n",
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showUnit": true
+      },
+      "order": 37
+    },
+    {
+      "valid": 1,
+      "id": "140",
+      "x": 4,
+      "y": 36,
+      "canvas": "0",
+      "width": 58,
+      "height": 10,
+      "type": "TABULAR_VIEW",
+      "inputs": {
+        "devices": [
+          {
+            "device": "taranta://ska_mid/tm_subarray_node/1"
+          },
+          {
+            "device": "taranta://ska_mid/tm_subarray_node/2"
+          }
+        ],
+        "precision": 2,
+        "scientificNotation": false,
+        "showDefaultAttribute": false,
+        "showEnumLabels": true,
+        "customAttributes": [
+          {
+            "attribute": {
+              "device": "taranta://ska_mid/tm_subarray_node/1,taranta://ska_mid/tm_subarray_node/2",
+              "attribute": "state",
+              "label": "State"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_mid/tm_subarray_node/1,taranta://ska_mid/tm_subarray_node/2",
+              "attribute": "adminmode",
+              "label": "adminMode"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_mid/tm_subarray_node/1,taranta://ska_mid/tm_subarray_node/2",
+              "attribute": "healthstate",
+              "label": "healthState"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_mid/tm_subarray_node/1,taranta://ska_mid/tm_subarray_node/2",
+              "attribute": "obsstate",
+              "label": "obsState"
+            }
+          }
+        ],
+        "compactTable": true,
+        "borderedTable": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 0.8,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px,\nfloat: left,\nfont-size: 14px",
+        "showTangoDB": false
+      },
+      "order": 38
+    },
+    {
+      "valid": 1,
+      "id": "141",
+      "x": 4,
+      "y": 50,
+      "canvas": "0",
+      "width": 58,
+      "height": 10,
+      "type": "TABULAR_VIEW",
+      "inputs": {
+        "devices": [
+          {
+            "device": "taranta://ska_mid/tm_leaf_node/sdp_subarray01"
+          },
+          {
+            "device": "taranta://ska_mid/tm_leaf_node/sdp_subarray02"
+          }
+        ],
+        "precision": 2,
+        "scientificNotation": false,
+        "showDefaultAttribute": false,
+        "showEnumLabels": true,
+        "customAttributes": [
+          {
+            "attribute": {
+              "device": "taranta://ska_mid/tm_leaf_node/sdp_subarray01,taranta://ska_mid/tm_leaf_node/sdp_subarray02",
+              "attribute": "state",
+              "label": "State"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_mid/tm_leaf_node/sdp_subarray01,taranta://ska_mid/tm_leaf_node/sdp_subarray02",
+              "attribute": "adminmode",
+              "label": "adminMode"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_mid/tm_leaf_node/sdp_subarray01,taranta://ska_mid/tm_leaf_node/sdp_subarray02",
+              "attribute": "healthstate",
+              "label": "healthState"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_mid/tm_leaf_node/sdp_subarray01,taranta://ska_mid/tm_leaf_node/sdp_subarray02",
+              "attribute": "sdpsubarrayobsstate",
+              "label": "sdpSubarrayObsState"
+            }
+          }
+        ],
+        "compactTable": true,
+        "borderedTable": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "font-size: 14px;",
+        "showTangoDB": false
+      },
+      "order": 39
+    },
+    {
+      "valid": 1,
+      "id": "142",
+      "x": 4,
+      "y": 64,
+      "canvas": "0",
+      "width": 58,
+      "height": 9,
+      "type": "TABULAR_VIEW",
+      "inputs": {
+        "devices": [
+          {
+            "device": "taranta://ska_mid/tm_leaf_node/csp_subarray01"
+          },
+          {
+            "device": "taranta://ska_mid/tm_leaf_node/csp_subarray02"
+          }
+        ],
+        "precision": 2,
+        "scientificNotation": false,
+        "showDefaultAttribute": false,
+        "showEnumLabels": true,
+        "customAttributes": [
+          {
+            "attribute": {
+              "device": "taranta://ska_mid/tm_leaf_node/csp_subarray01,taranta://ska_mid/tm_leaf_node/csp_subarray02",
+              "attribute": "state",
+              "label": "State"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_mid/tm_leaf_node/csp_subarray01,taranta://ska_mid/tm_leaf_node/csp_subarray02",
+              "attribute": "adminmode",
+              "label": "adminMode"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_mid/tm_leaf_node/csp_subarray01,taranta://ska_mid/tm_leaf_node/csp_subarray02",
+              "attribute": "healthstate",
+              "label": "healthState"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://ska_mid/tm_leaf_node/csp_subarray01,taranta://ska_mid/tm_leaf_node/csp_subarray02",
+              "attribute": "cspsubarrayobsstate",
+              "label": "cspSubarrayObsState"
+            }
+          }
+        ],
+        "compactTable": true,
+        "borderedTable": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px,\nfloat: left,\nfont-size: 14px",
+        "showTangoDB": false
+      },
+      "order": 40
+    },
+    {
+      "valid": 1,
+      "id": "143",
+      "x": 151,
+      "y": 13,
+      "canvas": "0",
+      "width": 20,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://mid-sdp/control/0",
+          "attribute": "state",
+          "label": "State"
+        },
+        "precision": 2,
+        "format": "",
+        "showDevice": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": false,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px,\nfloat: left",
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showUnit": true
+      },
+      "order": 41
+    },
+    {
+      "valid": 1,
+      "id": "144",
+      "x": 187,
+      "y": 43,
+      "canvas": "0",
+      "width": 25,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://mid-csp/control/0",
+          "attribute": "healthstate",
+          "label": "healthState"
+        },
+        "precision": 2,
+        "format": "",
+        "showDevice": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": false,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px,\nfloat: left\n",
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showUnit": true
+      },
+      "order": 42
+    },
+    {
+      "valid": 1,
+      "id": "145",
+      "x": 191,
+      "y": 13,
+      "canvas": "0",
+      "width": 20,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://mid-sdp/control/0",
+          "attribute": "healthstate",
+          "label": "Health state"
+        },
+        "precision": 2,
+        "format": "",
+        "showDevice": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": false,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px,\nfloat: left\n",
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showUnit": true
+      },
+      "order": 43
+    },
+    {
+      "valid": 1,
+      "id": "146",
+      "x": 171,
+      "y": 13,
+      "canvas": "0",
+      "width": 20,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://mid-sdp/control/0",
+          "attribute": "adminmode",
+          "label": "Admin mode"
+        },
+        "precision": 2,
+        "format": "",
+        "showDevice": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": false,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px,\nfloat: left",
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showUnit": true
+      },
+      "order": 44
+    },
+    {
+      "valid": 1,
+      "id": "147",
+      "x": 151,
+      "y": 19,
+      "canvas": "0",
+      "width": 61,
+      "height": 13,
+      "type": "TABULAR_VIEW",
+      "inputs": {
+        "devices": [
+          {
+            "device": "taranta://mid-sdp/subarray/01"
+          },
+          {
+            "device": "taranta://mid-sdp/subarray/02"
+          },
+          {
+            "device": "taranta://mid-sdp/subarray/03"
+          }
+        ],
+        "precision": 2,
+        "scientificNotation": false,
+        "showDefaultAttribute": false,
+        "showEnumLabels": true,
+        "customAttributes": [
+          {
+            "attribute": {
+              "device": "taranta://mid-sdp/subarray/01,taranta://mid-sdp/subarray/02,taranta://mid-sdp/subarray/03",
+              "attribute": "state",
+              "label": "State"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://mid-sdp/subarray/01,taranta://mid-sdp/subarray/02,taranta://mid-sdp/subarray/03",
+              "attribute": "adminmode",
+              "label": "Admin mode"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://mid-sdp/subarray/01,taranta://mid-sdp/subarray/02,taranta://mid-sdp/subarray/03",
+              "attribute": "healthstate",
+              "label": "Health state"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://mid-sdp/subarray/01,taranta://mid-sdp/subarray/02,taranta://mid-sdp/subarray/03",
+              "attribute": "obsstate",
+              "label": "Observing state"
+            }
+          }
+        ],
+        "compactTable": true,
+        "borderedTable": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px,\nfloat: left,\nfont-size: 14px",
+        "showTangoDB": false
+      },
+      "order": 45
+    },
+    {
+      "valid": 1,
+      "id": "148",
+      "x": 151,
+      "y": 51,
+      "canvas": "0",
+      "width": 61,
+      "height": 13,
+      "type": "TABULAR_VIEW",
+      "inputs": {
+        "devices": [
+          {
+            "device": "taranta://mid-csp/subarray/01"
+          },
+          {
+            "device": "taranta://mid-csp/subarray/02"
+          },
+          {
+            "device": "taranta://mid-csp/subarray/03"
+          }
+        ],
+        "precision": 2,
+        "scientificNotation": false,
+        "showDefaultAttribute": false,
+        "showEnumLabels": true,
+        "customAttributes": [
+          {
+            "attribute": {
+              "device": "taranta://mid-csp/subarray/01,taranta://mid-csp/subarray/02,taranta://mid-csp/subarray/03",
+              "attribute": "state",
+              "label": "State"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://mid-csp/subarray/01,taranta://mid-csp/subarray/02,taranta://mid-csp/subarray/03",
+              "attribute": "adminmode",
+              "label": "adminMode"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://mid-csp/subarray/01,taranta://mid-csp/subarray/02,taranta://mid-csp/subarray/03",
+              "attribute": "healthstate",
+              "label": "healthState"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://mid-csp/subarray/01,taranta://mid-csp/subarray/02,taranta://mid-csp/subarray/03",
+              "attribute": "obsstate",
+              "label": "obsState"
+            }
+          }
+        ],
+        "compactTable": true,
+        "borderedTable": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px,\nfloat: left,\nfont-size: 14px",
+        "showTangoDB": false
+      },
+      "order": 46
+    },
+    {
+      "valid": 1,
+      "id": "150",
+      "x": 121,
+      "y": 100,
+      "canvas": "0",
+      "width": 6,
+      "height": 8,
+      "type": "SPECTRUM_TABLE",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://mid-dish/dish-manager/ska001",
+          "attribute": "band2pointingmodelparams",
+          "label": "band2PointingModelParams"
+        },
+        "precision": 4,
+        "layout": "vertical",
+        "showDevice": false,
+        "showTangoDB": false,
+        "showAttribute": "None",
+        "showIndex": false,
+        "showLabel": false,
+        "fontSize": 16,
+        "customCss": "padding: 0.1px;\nfont-size: 16px\n\n",
+        "showSpecificIndexValue": "11"
+      },
+      "order": 47
+    },
+    {
+      "valid": 1,
+      "id": "151",
+      "x": 127,
+      "y": 100,
+      "canvas": "0",
+      "width": 6,
+      "height": 8,
+      "type": "SPECTRUM_TABLE",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://mid-dish/dish-manager/ska036",
+          "attribute": "band2pointingmodelparams",
+          "label": "band2PointingModelParams"
+        },
+        "precision": 4,
+        "layout": "vertical",
+        "showDevice": false,
+        "showTangoDB": false,
+        "showAttribute": "None",
+        "showIndex": false,
+        "showLabel": false,
+        "fontSize": 16,
+        "customCss": "padding: 0.1px;\nfont-size: 16px",
+        "showSpecificIndexValue": "11"
+      },
+      "order": 48
+    },
+    {
+      "valid": 1,
+      "id": "152",
+      "x": 133,
+      "y": 100,
+      "canvas": "0",
+      "width": 6,
+      "height": 8,
+      "type": "SPECTRUM_TABLE",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://mid-dish/dish-manager/ska063",
+          "attribute": "band2pointingmodelparams",
+          "label": "band2PointingModelParams"
+        },
+        "precision": 3,
+        "layout": "vertical",
+        "showDevice": false,
+        "showTangoDB": false,
+        "showAttribute": "None",
+        "showIndex": false,
+        "showLabel": false,
+        "fontSize": 16,
+        "customCss": "padding: 0.1px;\nfont-size: 16px",
+        "showSpecificIndexValue": "11"
+      },
+      "order": 49
+    },
+    {
+      "valid": 1,
+      "id": "153",
+      "x": 116,
+      "y": 97,
+      "canvas": "0",
+      "width": 46,
+      "height": 4,
+      "type": "LABEL",
+      "inputs": {
+        "text": "DISH                            Offset Point Params",
+        "textColor": "#495057",
+        "backgroundColor": "#eaecef",
+        "borderWidth": 0,
+        "borderColor": "#070069",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1,
+        "linkTo": "",
+        "customCss": "padding: 1px\ntext-align: center\n"
+      },
+      "order": 50
+    },
+    {
+      "valid": 1,
+      "id": "154",
+      "x": 121,
+      "y": 108,
+      "canvas": "0",
+      "width": 6,
+      "height": 7,
+      "type": "SPECTRUM_TABLE",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://mid-dish/dish-manager/ska001",
+          "attribute": "band2pointingmodelparams",
+          "label": "band2PointingModelParams"
+        },
+        "showSpecificIndexValue": "19",
+        "precision": 4,
+        "layout": "vertical",
+        "showDevice": false,
+        "showTangoDB": false,
+        "showAttribute": "None",
+        "showIndex": false,
+        "showLabel": false,
+        "fontSize": 16,
+        "customCss": "padding: 0.1px;\nfont-size: 16px"
+      },
+      "order": 51
+    },
+    {
+      "valid": 1,
+      "id": "155",
+      "x": 127,
+      "y": 108,
+      "canvas": "0",
+      "width": 6,
+      "height": 7,
+      "type": "SPECTRUM_TABLE",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://mid-dish/dish-manager/ska036",
+          "attribute": "band2pointingmodelparams",
+          "label": "band2PointingModelParams"
+        },
+        "showSpecificIndexValue": "19",
+        "precision": 4,
+        "layout": "vertical",
+        "showDevice": false,
+        "showTangoDB": false,
+        "showAttribute": "None",
+        "showIndex": false,
+        "showLabel": false,
+        "fontSize": 16,
+        "customCss": "padding: 0.1px;\nfont-size: 16px"
+      },
+      "order": 52
+    },
+    {
+      "valid": 1,
+      "id": "156",
+      "x": 133,
+      "y": 108,
+      "canvas": "0",
+      "width": 6,
+      "height": 7,
+      "type": "SPECTRUM_TABLE",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://mid-dish/dish-manager/ska063",
+          "attribute": "band2pointingmodelparams",
+          "label": "band2PointingModelParams"
+        },
+        "showSpecificIndexValue": "19",
+        "precision": 4,
+        "layout": "vertical",
+        "showDevice": false,
+        "showTangoDB": false,
+        "showAttribute": "None",
+        "showIndex": false,
+        "showLabel": false,
+        "fontSize": 16,
+        "customCss": "padding: 0.1px;\nfont-size: 16px"
+      },
+      "order": 53
+    },
+    {
+      "valid": 1,
+      "id": "157",
+      "x": 116,
+      "y": 107,
+      "canvas": "0",
+      "width": 5,
+      "height": 8,
+      "type": "LABEL",
+      "inputs": {
+        "text": "Eobs",
+        "textColor": "#000000",
+        "backgroundColor": "#eaecef",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1,
+        "linkTo": "",
+        "customCss": "vertical-align: center"
+      },
+      "order": 54
+    },
+    {
+      "valid": 1,
+      "id": "158",
+      "x": 116,
+      "y": 100,
+      "canvas": "0",
+      "width": 5,
+      "height": 7,
+      "type": "LABEL",
+      "inputs": {
+        "text": "CAobs",
+        "textColor": "#000000",
+        "backgroundColor": "#eaecef",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1,
+        "linkTo": "",
+        "customCss": ""
+      },
+      "order": 55
+    },
+    {
+      "valid": 1,
+      "id": "159",
+      "x": 179,
+      "y": 93,
+      "canvas": "0",
+      "width": 18,
+      "height": 20,
+      "type": "LABEL",
+      "inputs": {
+        "text": " ",
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1,
+        "linkTo": "",
+        "customCss": "background-image: url(https://taranta-image-hosting.skao.int/SKAO%20Pictorial%20mark-01.png);\nbackground-size: contain;\nbackground-repeat: no-repeat;"
+      },
+      "order": 56
+    },
+    {
+      "valid": 1,
+      "id": "160",
+      "x": 3,
+      "y": 0,
+      "canvas": "0",
+      "width": 11,
+      "height": 5,
+      "type": "LABEL",
+      "inputs": {
+        "text": "",
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1,
+        "linkTo": "",
+        "customCss": "background-image: url(https://taranta-image-hosting.skao.int/skao_logo_2021_colour_rgb_2500x1058px.jpg);\nbackground-size: contain;\nbackground-repeat: no-repeat;\n"
+      },
+      "order": 57
+    },
+    {
+      "valid": 1,
+      "id": "161",
+      "x": 139,
+      "y": 100,
+      "canvas": "0",
+      "width": 6,
+      "height": 8,
+      "type": "SPECTRUM_TABLE",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://mid-dish/dish-manager/ska100",
+          "attribute": "band2pointingmodelparams",
+          "label": "band2PointingModelParams"
+        },
+        "precision": 3,
+        "layout": "vertical",
+        "showDevice": false,
+        "showTangoDB": false,
+        "showAttribute": "None",
+        "showIndex": false,
+        "showLabel": false,
+        "fontSize": 16,
+        "customCss": "padding: 0.1px;\nfont-size: 16px",
+        "showSpecificIndexValue": "11"
+      },
+      "order": 58
+    },
+    {
+      "valid": 1,
+      "id": "162",
+      "x": 139,
+      "y": 108,
+      "canvas": "0",
+      "width": 6,
+      "height": 7,
+      "type": "SPECTRUM_TABLE",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://mid-dish/dish-manager/ska100",
+          "attribute": "band2pointingmodelparams",
+          "label": "band2PointingModelParams"
+        },
+        "showSpecificIndexValue": "19",
+        "precision": 3,
+        "layout": "vertical",
+        "showDevice": false,
+        "showTangoDB": false,
+        "showAttribute": "None",
+        "showIndex": false,
+        "showLabel": false,
+        "fontSize": 16,
+        "customCss": "padding: 0.1px;\nfont-size: 16px"
+      },
+      "order": 59
+    },
+    {
+      "valid": 1,
+      "id": "163",
+      "x": 4,
+      "y": 25,
+      "canvas": "0",
+      "width": 20,
+      "height": 4,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_mid/tm_central/central_node",
+          "attribute": "isdishvccconfigset",
+          "label": "isDishVccConfigSet"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": false,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": ""
+      },
+      "order": 60
+    },
+    {
+      "valid": 1,
+      "id": "164",
+      "x": 33,
+      "y": 26,
+      "canvas": "0",
+      "width": 20,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_mid/tm_leaf_node/csp_master",
+          "attribute": "adminmode",
+          "label": "adminMode"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px,\nfloat: left"
+      },
+      "order": 61
+    },
+    {
+      "valid": 1,
+      "id": "165",
+      "x": 33,
+      "y": 16,
+      "canvas": "0",
+      "width": 20,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_mid/tm_leaf_node/sdp_master",
+          "attribute": "adminmode",
+          "label": "adminMode"
+        },
+        "precision": 2,
+        "format": "",
+        "showUnit": true,
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "Label",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": "padding: 1px,\nfloat: left"
+      },
+      "order": 62
+    },
+    {
+      "valid": 1,
+      "id": "166",
+      "x": 151,
+      "y": 66,
+      "canvas": "0",
+      "width": 61,
+      "height": 4,
+      "type": "LABEL",
+      "inputs": {
+        "text": "MID CBF",
+        "textColor": "#ffffff",
+        "backgroundColor": "#070067",
+        "size": 1.2,
+        "borderWidth": 0.1,
+        "borderColor": "#404040",
+        "font": "Helvetica",
+        "linkTo": "",
+        "customCss": "text-align: center\n",
+        "automaticResize": "Disabled"
+      },
+      "order": 63
+    },
+    {
+      "valid": 1,
+      "id": "167",
+      "x": 151,
+      "y": 70,
+      "canvas": "0",
+      "width": 61,
+      "height": 15,
+      "type": "TABULAR_VIEW",
+      "inputs": {
+        "devices": [
+          {
+            "device": "taranta://mid_csp_cbf/sub_elt/controller"
+          },
+          {
+            "device": "taranta://mid_csp_cbf/sub_elt/subarray_01"
+          },
+          {
+            "device": "taranta://mid_csp_cbf/sub_elt/subarray_02"
+          },
+          {
+            "device": "taranta://mid_csp_cbf/sub_elt/subarray_03"
+          }
+        ],
+        "precision": 2,
+        "scientificNotation": false,
+        "showDefaultAttribute": false,
+        "showEnumLabels": true,
+        "showTangoDB": false,
+        "customAttributes": [
+          {
+            "attribute": {
+              "device": "taranta://mid_csp_cbf/sub_elt/controller,taranta://mid_csp_cbf/sub_elt/subarray_01,taranta://mid_csp_cbf/sub_elt/subarray_02,taranta://mid_csp_cbf/sub_elt/subarray_03",
+              "attribute": "state",
+              "label": "State"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://mid_csp_cbf/sub_elt/controller,taranta://mid_csp_cbf/sub_elt/subarray_01,taranta://mid_csp_cbf/sub_elt/subarray_02,taranta://mid_csp_cbf/sub_elt/subarray_03",
+              "attribute": "adminmode",
+              "label": "adminMode"
+            }
+          },
+          {
+            "attribute": {
+              "device": "taranta://mid_csp_cbf/sub_elt/controller,taranta://mid_csp_cbf/sub_elt/subarray_01,taranta://mid_csp_cbf/sub_elt/subarray_02,taranta://mid_csp_cbf/sub_elt/subarray_03",
+              "attribute": "healthstate",
+              "label": "healthState"
+            }
+          }
+        ],
+        "compactTable": true,
+        "borderedTable": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 0.8,
+        "font": "Helvetica",
+        "widgetCss": ""
+      },
+      "order": 64
+    },
+    {
+      "valid": 1,
+      "id": "168",
+      "x": 64,
+      "y": 14,
+      "canvas": "0",
+      "width": 23,
+      "height": 5,
+      "type": "COMMAND",
+      "inputs": {
+        "title": "Subarray1",
+        "buttonText": "ABORT",
+        "command": {
+          "device": "taranta://ska_mid/tm_subarray_node/1",
+          "command": "Abort",
+          "acceptedType": "DevVoid",
+          "intypedesc": "Uninitialised",
+          "outtypedesc": "(ReturnType, 'informational message')",
+          "outtype": "DevVarLongStringArray",
+          "tag": "0"
+        },
+        "commandArgs": [],
+        "showDevice": false,
+        "showTangoDB": false,
+        "showCommand": false,
+        "requireConfirmation": true,
+        "displayOutput": true,
+        "alignButtonRight": true,
+        "placeholder": "intype",
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "btnCss": "color: #ffffff;\nbackground-color: #EF0068;\nfont-size: 18px",
+        "widgetCss": ""
+      },
+      "order": 65
+    },
+    {
+      "valid": 1,
+      "id": "169",
+      "x": 64,
+      "y": 10,
+      "canvas": "0",
+      "width": 24,
+      "height": 4,
+      "type": "COMMAND",
+      "inputs": {
+        "title": "Subarray1",
+        "buttonText": "RESTART",
+        "command": {
+          "device": "taranta://ska_mid/tm_subarray_node/1",
+          "command": "Restart",
+          "acceptedType": "DevVoid",
+          "intypedesc": "Uninitialised",
+          "outtypedesc": "(ReturnType, 'informational message')",
+          "outtype": "DevVarLongStringArray",
+          "tag": "0"
+        },
+        "commandArgs": [],
+        "showDevice": false,
+        "showTangoDB": false,
+        "showCommand": false,
+        "requireConfirmation": true,
+        "displayOutput": true,
+        "alignButtonRight": true,
+        "placeholder": "intype",
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "btnCss": "color: #ffffff;\nbackground-color: #EF0068;\nfont-size: 18px",
+        "widgetCss": ""
+      },
+      "order": 66
+    }
+  ],
+  "variables": [],
+  "environment": [
+    "*/*"
+  ]
+}
