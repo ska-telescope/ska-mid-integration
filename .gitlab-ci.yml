@@ -142,8 +142,7 @@ stop-k8s-test-tmc-with-sdp:
     action: stop
   needs:
     - deploy-tmc-with-sdp
-  rules:
-    - when: manual  
+ 
 
 
 deploy-tmc-with-csp:
@@ -170,8 +169,7 @@ stop-k8s-test-tmc-with-csp:
     action: stop
   needs:
     - deploy-tmc-with-csp
-  rules:
-    - when: manual  
+ 
 
 
 deploy-tmc-with-dish:
@@ -219,10 +217,8 @@ stop-k8s-test-tmc-with-dish:
     - make k8s-uninstall-chart
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
     - make k8s-delete-namespace 
-  rules:
-    - when: manual  
 
-  
+
 deploy-mid-integration:
   extends: deploy-integration
   rules:
