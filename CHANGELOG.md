@@ -3,6 +3,11 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+[0.22.5]
+**********
+* Updated dish leaf node version 0.17.3 to resolve SKB-502
+* Updated central node to 0.16.4 to resolve SKB-434
+
 [0.22.4]
 ************
 Fixed *SKB-497*
