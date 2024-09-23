@@ -1,4 +1,4 @@
-"""Test module for TMC-DISH EndScan functionality"""
+"""Test module for TMC-DISH Abort functionality"""
 
 import json
 
@@ -28,7 +28,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 )
 def test_tmc_dish_abort():
     """
-    Test case to verify TMC-DISH EndScan functionality
+    Test case to verify TMC-DISH Abort functionality
     """
 
 
@@ -41,7 +41,7 @@ def move_subarray_obsState_to_ready(
     subarray_id: str,
 ):
     """
-    Method to move subarray is in Scanning obsState
+    Method to move subarray in Ready obsState
 
     Args:
         subarray_node: Fixture for a Subarray Node wrapper class
@@ -52,7 +52,6 @@ def move_subarray_obsState_to_ready(
         subarray_id (str): Subarray ID
     """
 
-    LOGGER.info("Moving SN to READY")
     central_node_mid.set_subarray_id(subarray_id)
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
@@ -194,7 +193,7 @@ def check_dish_mode_and_pointing_state_after_configure(
     dish_ids: str,
 ):
     """
-    Method to check dishMode and pointingState of DISH after scan command
+    Method to check dishMode and pointingState of DISH after Configure command
 
     Args:
         central_node_mid: Fixture for a TMC CentralNode wrapper class
@@ -218,6 +217,8 @@ def check_dish_mode_and_pointing_state_after_configure(
             == PointingState.TRACK
         )
 
+    # TODO - Add pointing state READY
+
 
 @when(
     parsers.parse(
@@ -229,14 +230,14 @@ def invoke_abort(
     subarray_id: str,
 ):
     """
-    A method to invoke EndScan command
+    A method to invoke Abort command
 
     Args:
         subarray_node: Fixture for a Subarray Node wrapper class
         subarray_id (str): Subarray ID
     """
     subarray_node.set_subarray_id(subarray_id)
-    _, pytest.unique_id = subarray_node.remove_scan_data()
+    _, pytest.unique_id = subarray_node.abort_subarray()
 
 
 @then(
@@ -287,13 +288,13 @@ def check_dish_mode_and_pointing_state_after_abort(
 
 
 @then("TMC SubarrayNode transitions to obsState ABORTED")
-def check_subarray_obsstate_ready(
+def check_subarray_obsstate_aborted(
     subarray_node: SubarrayNodeWrapper,
     event_tracer: TangoEventTracer,
     subarray_id: str,
 ):
     """
-    Checks if SubarrayNode's obsState attribute value is READY
+    Checks if SubarrayNode's obsState attribute value is ABORTED
 
     Args:
         subarray_node: Fixture for a Subarray Node wrapper class
@@ -306,11 +307,11 @@ def check_subarray_obsstate_ready(
         "'the subarray must be in the READY obsState'"
         "TMC Subarray device"
         f"({subarray_node.subarray_node.dev_name()}) "
-        "is expected to be in READY obstate",
+        "is expected to be in ABORTED obstate",
     ).within_timeout(60).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
-        ObsState.READY,
+        ObsState.ABORTED,
     )
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "THEN" STEP: '
