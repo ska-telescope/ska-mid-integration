@@ -25,7 +25,7 @@ k8s-test-csp-dish:
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
     - make k8s-install-chart
     - make k8s-wait
-    - make k8s-test MARK=tmc_csp_dish
+    - make k8s-test MARK=tmc_csp_dish1
   needs:
     - dish-lmc-dish001
     - dish-lmc-dish036
