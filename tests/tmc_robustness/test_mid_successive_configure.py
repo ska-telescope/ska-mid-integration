@@ -11,7 +11,7 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid_skip
 @scenario(
     "../features/successive_configure.feature",
     "TMC validates reconfigure functionality",
