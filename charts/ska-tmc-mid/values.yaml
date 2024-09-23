@@ -142,6 +142,7 @@ deviceServers:
       max: 1177
     CommandTimeOut: 120
     DishVccInitTimeout: 180
+    
   subarraynode:
     enabled: true
     file: "data/subarraynode_mid.yaml"
@@ -154,8 +155,7 @@ deviceServers:
     SdpScanInterfaceURL: "https://schema.skao.int/ska-sdp-scan/0.4"
     CommandTimeOut: 110
     AbortCommandTimeout: 100
-    DishVccInitTimeout: 250
-    
+
   sdpsubarrayleafnode:
     enabled: true
     file: "data/sdpsubarrayleafnode.yaml"

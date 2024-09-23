@@ -23,7 +23,7 @@ server:
   {{- $isSimulatedCsp := .Values.deviceServers.mocks.csp }}
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
   {{- $CommandTimeOut := .Values.deviceServers.centralnode.CommandTimeOut}}
-  {{- $DishVccInitTimeout := .Values.deviceServers.central_node.DishVccInitTimeout}}
+  {{- $DishVccInitTimeout := .Values.deviceServers.centralnode.DishVccInitTimeout}}
   - name: "01"
     classes:
     - name: "CentralNodeMid"
