@@ -126,8 +126,7 @@ deploy-tmc-with-sdp:
     PORT: "10000"
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-sdp'
     KUBE_NAMESPACE_SDP: 'integration-ska-tmc-mid-sdp'
-    SDP_SIMULATION_ENABLED: 'false'
-    SDP_DEPLOY: true 
+    SDP_SIMULATION_ENABLED: 'false' 
   environment:
     name: integration-mid-sdp-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-sdp
@@ -140,7 +139,6 @@ stop-k8s-test-tmc-with-sdp:
   variables:
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-sdp'
     SDP_SIMULATION_ENABLED: 'false'
-    SDP_DEPLOY: true 
   environment:
     name: integration-mid-sdp-$CI_PROJECT_NAME
     action: stop
