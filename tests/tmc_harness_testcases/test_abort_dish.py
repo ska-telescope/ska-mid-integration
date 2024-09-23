@@ -13,11 +13,13 @@ from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     LOGGER,
+    device_received_this_command,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
+from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
@@ -189,8 +191,7 @@ def move_subarray_obsState_to_ready(
     )
 )
 def check_dish_mode_and_pointing_state_after_configure(
-    central_node_mid: CentralNodeWrapperMid,
-    dish_ids: str,
+    central_node_mid: CentralNodeWrapperMid, dish_ids: str, simulator_factory
 ):
     """
     Method to check dishMode and pointingState of DISH after Configure command
@@ -199,6 +200,16 @@ def check_dish_mode_and_pointing_state_after_configure(
         central_node_mid: Fixture for a TMC CentralNode wrapper class
         dish_ids (str): Comma-separated IDs of DISH components.
     """
+
+    dish_sim = simulator_factory.get_or_create_simulator_device(
+        SimulatorDeviceType.DISH_DEVICE
+    )
+    # Dish master should go to slew in no more than 0.1 sec
+    pointing_state_duration_params = '[["READY",0.1]]'
+    dish_sim.AddTransition(pointing_state_duration_params)
+
+    assert device_received_this_command(dish_sim, "AbortCommands", "")
+
     for dish_id in dish_ids.split(","):
         assert (
             central_node_mid.dish_master_dict[dish_id].dishMode
@@ -210,11 +221,11 @@ def check_dish_mode_and_pointing_state_after_configure(
         )
         assert (
             central_node_mid.dish_master_dict[dish_id].pointingState
-            == PointingState.TRACK
+            == PointingState.READY
         )
         assert (
             central_node_mid.dish_leaf_node_dict[dish_id].pointingState
-            == PointingState.TRACK
+            == PointingState.READY
         )
 
     # TODO - Add pointing state READY
