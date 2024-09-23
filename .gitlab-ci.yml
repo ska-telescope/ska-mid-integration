@@ -127,6 +127,7 @@ deploy-tmc-with-sdp:
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-sdp'
     KUBE_NAMESPACE_SDP: 'integration-ska-tmc-mid-sdp'
     SDP_SIMULATION_ENABLED: 'false'
+    SDP_DEPLOY: true 
   environment:
     name: integration-mid-sdp-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-sdp
@@ -170,6 +171,7 @@ stop-k8s-test-tmc-with-csp:
   variables:
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-csp'
     CSP_SIMULATION_ENABLED: 'false'
+    SDP_DEPLOY: false  
   environment:
     name: integration-mid-csp-$CI_PROJECT_NAME
     action: stop
@@ -216,6 +218,7 @@ stop-k8s-test-tmc-with-dish:
     DISH_NAMESPACE_2: "integration-ska-mid-tmc-dish036"
     DISH_NAMESPACE_3: "integration-ska-mid-tmc-dish063"
     DISH_NAMESPACE_4: "integration-ska-mid-tmc-dish100"
+    SDP_DEPLOY: false  
   environment:
     name: integration-mid-dish-$CI_PROJECT_NAME
     action: stop
