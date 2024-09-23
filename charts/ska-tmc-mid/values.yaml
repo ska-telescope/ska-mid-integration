@@ -168,7 +168,7 @@ deviceServers:
     enabled: true
     instances: ["01"]
     file: "data/cspmasterleafnode.yaml"
-    DishVccInitTimeout: 250
+
 
   cspsubarrayleafnode:
     enabled: true
