@@ -85,9 +85,7 @@ K8S_EXTRA_PARAMS ?=
 #dish variables 
 DISH_INDICES ?= "001 036 063 100"
 DISH_NAMESPACES ?= "integration-ska-mid-tmc-dish01 integration-ska-mid-tmc-dish36 integration-ska-mid-tmc-dish36 integration-ska-mid-tmc-dish100"
-DISH_HELM_RELEASE ?= "4.1.0"
 DISH_TANGO_HOST ?= databaseds
-K8S_DISH_LMC_CHART ?= "ska-dish-lmc"
 DISH_NAMESPACE_1 ?= ${KUBE_NAMESPACE}
 DISH_NAMESPACE_2 ?= ${KUBE_NAMESPACE}
 DISH_NAMESPACE_3 ?= ${KUBE_NAMESPACE}
@@ -96,6 +94,7 @@ DISH_NAME_1 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_1).svc.$(CLUSTER_DOMA
 DISH_NAME_36 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_2).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA036
 DISH_NAME_63 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_3).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA063
 DISH_NAME_100 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_4).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA100
+SDP_DEPLOY ?= true
 
 ifeq ($(SDP_SIMULATION_ENABLED),false)
 K8S_EXTRA_PARAMS=	-f charts/ska-mid-integration/tmc_pairwise/tmc_sdp_values.yaml \
@@ -198,21 +197,23 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 
 
 k8s-pre-install-chart:
-ifeq ($(SDP_SIMULATION_ENABLED),false)
-	@echo "k8s-pre-install-chart: creating the SDP namespace $(KUBE_NAMESPACE_SDP)"
-	@make k8s-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP)
+ifeq ($(SDP_DEPLOY),true)
+   @echo "k8s-pre-install-chart: creating the SDP namespace $(KUBE_NAMESPACE_SDP)"
+   @make k8s-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP)
 endif
 
 k8s-pre-install-chart-car:
-ifeq ($(SDP_SIMULATION_ENABLED),false)
-	@echo "k8s-pre-install-chart-car: creating the SDP namespace $(KUBE_NAMESPACE_SDP)"
-	@make k8s-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP)
+ifeq ($(SDP_DEPLOY),true)
+   @echo "k8s-pre-install-chart-car: creating the SDP namespace $(KUBE_NAMESPACE_SDP)"
+   @make k8s-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP)
 endif
 k8s-pre-uninstall-chart:
-ifeq ($(SDP_SIMULATION_ENABLED),false)
-	@echo "k8s-post-uninstall-chart: deleting the SDP namespace $(KUBE_NAMESPACE_SDP)"
-	@if [ "$(KEEP_NAMESPACE)" != "true" ]; then make k8s-delete-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP); fi
+ifeq ($(SDP_DEPLOY),true)
+   @echo "k8s-post-uninstall-chart: deleting the SDP namespace $(KUBE_NAMESPACE_SDP)"
+   @if [ "$(KEEP_NAMESPACE)" != "true" ]; then make k8s-delete-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP); fi
 endif
+
+
 cred:
 	make k8s-namespace
 	# curl -s https://gitlab.com/ska-telescope/templates-repository/-/raw/master/scripts/namespace_auth.sh | bash -s $(SERVICE_ACCOUNT) $(KUBE_NAMESPACE) || true
