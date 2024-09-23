@@ -143,7 +143,7 @@ stop-k8s-test-tmc-with-sdp:
     name: integration-mid-sdp-$CI_PROJECT_NAME
     action: stop
   needs:
-    - deploy-mid-integration
+    - deploy-tmc-with-sdp
   rules:
     - when: manual  
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
@@ -174,7 +174,7 @@ stop-k8s-test-tmc-with-csp:
     name: integration-mid-csp-$CI_PROJECT_NAME
     action: stop
   needs:
-    - deploy-mid-integration
+    - deploy-tmc-with-csp
   rules:
     - when: manual  
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
@@ -221,7 +221,7 @@ stop-k8s-test-tmc-with-dish:
     name: integration-mid-dish-$CI_PROJECT_NAME
     action: stop
   needs:
-    - deploy-mid-integration
+    - deploy-tmc-with-dish
   script:
     - make stop-dishes 
     - make k8s-uninstall-chart
@@ -229,7 +229,7 @@ stop-k8s-test-tmc-with-dish:
     - make k8s-delete-namespace 
   rules:
     - when: manual  
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH
 
   
 deploy-mid-integration:
