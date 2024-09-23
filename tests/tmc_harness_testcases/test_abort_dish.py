@@ -12,7 +12,6 @@ from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
-    LOGGER,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
@@ -226,8 +225,6 @@ def check_dish_mode_and_pointing_state_after_configure(
             == PointingState.READY
         )
 
-    # TODO - Add pointing state READY
-
 
 @when(
     parsers.parse(
@@ -247,8 +244,6 @@ def invoke_abort(
 
     subarray_node.set_subarray_id(subarray_id)
     _, pytest.unique_id = subarray_node.abort_subarray()
-
-    # assert device_received_this_command(dish_simulator, "AbortCommands", "")
 
 
 @then(
@@ -270,7 +265,6 @@ def check_dish_mode_and_pointing_state_after_abort(
         dish_ids (str): Comma-separated IDs of DISH components.
     """
 
-    LOGGER.info("check_dish_mode_and_pointing_state_after_abort")
     for dish_id in dish_ids.split(","):
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
