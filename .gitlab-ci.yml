@@ -120,7 +120,7 @@ redeploy-integration:
 deploy-tmc-with-sdp:
   extends: deploy-integration
   rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
     TELESCOPE: 'SKA-mid'
     PORT: "10000"
@@ -143,17 +143,16 @@ stop-k8s-test-tmc-with-sdp:
     name: integration-mid-sdp-$CI_PROJECT_NAME
     action: stop
   needs:
-    - job: deploy-mid-integration
-      optional: true
+    - deploy-tmc-with-sdp
   rules:
     - when: manual  
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 
 deploy-tmc-with-csp:
   extends: deploy-mid-integration
   rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
     TELESCOPE: 'SKA-mid'
     PORT: "10000"
@@ -175,17 +174,16 @@ stop-k8s-test-tmc-with-csp:
     name: integration-mid-csp-$CI_PROJECT_NAME
     action: stop
   needs:
-    - job: deploy-mid-integration
-      optional: true
+    - deploy-tmc-with-csp
   rules:
     - when: manual  
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 
 deploy-tmc-with-dish:
   extends: deploy-mid-integration
   rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
     DISH_INDICES: "001 036 063 100"
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-dish'
@@ -223,8 +221,7 @@ stop-k8s-test-tmc-with-dish:
     name: integration-mid-dish-$CI_PROJECT_NAME
     action: stop
   needs:
-    - job: deploy-mid-integration
-      optional: true
+    - deploy-tmc-with-dish
   script:
     - make stop-dishes 
     - make k8s-uninstall-chart
@@ -232,7 +229,7 @@ stop-k8s-test-tmc-with-dish:
     - make k8s-delete-namespace 
   rules:
     - when: manual  
-    - if: $CI_COMMIT_REF_NAME = $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
   
 deploy-mid-integration:
@@ -250,8 +247,7 @@ info-mid-integration:
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   needs:
-    - job: deploy-mid-integration
-      optional: true
+    - deploy-mid-integration
   variables:
     KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
   environment:
@@ -262,8 +258,7 @@ stop-mid-integration:
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   needs:
-    - job: deploy-mid-integration
-      optional: true
+    - deploy-mid-integration
   variables:
     KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
   environment:
