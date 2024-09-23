@@ -241,7 +241,7 @@ def invoke_abort(
 
 @then(
     parsers.parse(
-        "the Dish <dish_ids> transitions "
+        "the Dish {dish_ids} transitions "
         + "in dishMode STANDBY_FP and pointingState READY"
     )
 )
