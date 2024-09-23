@@ -19,7 +19,6 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
-from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
@@ -191,8 +190,7 @@ def move_subarray_obsState_to_ready(
     )
 )
 def check_dish_mode_and_pointing_state_after_configure(
-    central_node_mid: CentralNodeWrapperMid,
-    dish_ids: str,
+    central_node_mid: CentralNodeWrapperMid, dish_ids: str, dish_simulator
 ):
     """
     Method to check dishMode and pointingState of DISH after Configure command
@@ -202,8 +200,9 @@ def check_dish_mode_and_pointing_state_after_configure(
         dish_ids (str): Comma-separated IDs of DISH components.
     """
 
-    # TODO -
-    # Remove this
+    # Dish master should go to slew in no more than 0.1 sec
+    pointing_state_duration_params = '[["READY",0.1]]'
+    dish_simulator.AddTransition(pointing_state_duration_params)
 
     for dish_id in dish_ids.split(","):
         assert (
@@ -216,11 +215,11 @@ def check_dish_mode_and_pointing_state_after_configure(
         )
         assert (
             central_node_mid.dish_master_dict[dish_id].pointingState
-            == PointingState.TRACK
+            == PointingState.READY
         )
         assert (
             central_node_mid.dish_leaf_node_dict[dish_id].pointingState
-            == PointingState.TRACK
+            == PointingState.READY
         )
 
     # TODO - Add pointing state READY
@@ -232,7 +231,7 @@ def check_dish_mode_and_pointing_state_after_configure(
     )
 )
 def invoke_abort(
-    subarray_node: SubarrayNodeWrapper, subarray_id: str, simulator_factory
+    subarray_node: SubarrayNodeWrapper, subarray_id: str, dish_simulator
 ):
     """
     A method to invoke Abort command
@@ -242,17 +241,10 @@ def invoke_abort(
         subarray_id (str): Subarray ID
     """
 
-    dish_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.DISH_DEVICE
-    )
-    # Dish master should go to slew in no more than 0.1 sec
-    pointing_state_duration_params = '[["READY",0.1]]'
-    dish_sim.AddTransition(pointing_state_duration_params)
-
     subarray_node.set_subarray_id(subarray_id)
     _, pytest.unique_id = subarray_node.abort_subarray()
 
-    assert device_received_this_command(dish_sim, "AbortCommands", "")
+    assert device_received_this_command(dish_simulator, "AbortCommands", "")
 
 
 @then(
