@@ -23,7 +23,6 @@ server:
   {{- $isSimulatedCsp := .Values.deviceServers.mocks.csp }}
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
   {{- $CommandTimeOut := .Values.deviceServers.centralnode.CommandTimeOut}}
-  {{- $DishVccInitTimeout := .Values.deviceServers.central_node.DishVccInitTimeout}}
   - name: "01"
     classes:
     - name: "CentralNodeMid"
@@ -110,9 +109,6 @@ server:
         - name: "LoggingLevelDefault"
           values:
             - "5"
-        - name: "DishVccInitTimeout"
-          values:
-            - "{{ $DishVccInitTimeout }}"
         - name: "CommandTimeOut"
           values:
             - "{{ $CommandTimeOut }}"
