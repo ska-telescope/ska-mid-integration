@@ -1,7 +1,7 @@
 # This BDD test performs TMC-Dish pairwise testing to verify EndScan command flow.
 @Team_SAHYADRI
 Scenario: TMC mid executes Abort command on DISH
-    Given a Telescope consisting of TMC
+    Given a Telescope consisting of TMC, DISH <dish_ids>
     And the Telescope is in ON state
     And TMC subarray <subarray_id> is in obsState READY
     And DishMaster <dish_ids> is in dishMode OPERATE with pointingState READY

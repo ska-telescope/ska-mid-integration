@@ -12,6 +12,7 @@ from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
+    LOGGER,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
@@ -51,6 +52,7 @@ def move_subarray_obsState_to_ready(
         subarray_id (str): Subarray ID
     """
 
+    LOGGER.info("Moving SN to READY")
     central_node_mid.set_subarray_id(subarray_id)
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
