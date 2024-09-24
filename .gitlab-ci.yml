@@ -122,7 +122,7 @@ redeploy-staging:
     - when: never
 
 deploy-tmc-with-sdp:
-  extends: deploy-integration
+  extends: deploy-mid-integration
   rules:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
@@ -134,7 +134,9 @@ deploy-tmc-with-sdp:
   environment:
     name: integration-mid-sdp-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-sdp
-  
+
+
+
 stop-k8s-test-tmc-with-sdp:
   extends:
     - stop-integration
@@ -143,6 +145,7 @@ stop-k8s-test-tmc-with-sdp:
   variables:
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-sdp'
     SDP_SIMULATION_ENABLED: 'false'
+    KUBE_NAMESPACE_SDP: 'integration-ska-tmc-mid-sdp'
   environment:
     name: integration-mid-sdp-$CI_PROJECT_NAME
     action: stop
