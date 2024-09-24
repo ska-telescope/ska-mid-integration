@@ -22,6 +22,8 @@ server:
   {{- $SimulatorDishMasterIdentifier := .Values.deviceServers.centralnode.SimulatorDishMasterIdentifier }}
   {{- $isSimulatedCsp := .Values.deviceServers.mocks.csp }}
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
+  {{- $CommandTimeOut := .Values.deviceServers.centralnode.CommandTimeOut}}
+  {{- $DishVccInitTimeout := .Values.deviceServers.centralnode.DishVccInitTimeout}}
   - name: "01"
     classes:
     - name: "CentralNodeMid"
@@ -110,10 +112,10 @@ server:
             - "5"
         - name: "DishVccInitTimeout"
           values:
-            - "180"
+            - "{{ $DishVccInitTimeout }}"
         - name: "CommandTimeOut"
           values:
-            - "120"
+            - "{{ $CommandTimeOut }}"
 
 {{- else }}
 {{- fail "KValueValidRangeUpperLimit should be greater than KValueValidRangeLowerLimit" }}

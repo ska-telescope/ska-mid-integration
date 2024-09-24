@@ -19,10 +19,11 @@ k8s-test-dish-lmc:
     DISH_NAMESPACE_4: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX_100"
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-test"
     DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-test"
-  script:
+  before_script:
     - make cred SERVICE_ACCOUNT=$DISH_LMC_SERVICE_ACCOUNT
     - make k8s-install-chart
     - make k8s-wait
+  script:
     - make k8s-test MARK=tmc_dish
   needs:
     - dish-lmc-dish001
@@ -38,7 +39,7 @@ k8s-test-dish-lmc:
     - XRAY_TEST_RESULT_FILE="build/cucumber.json" make xray-publish
     - make k8s-uninstall-chart
   environment:
-    name: test/$CI_COMMIT_REF_SLUG
+    name: test/dish-$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-test-dish-lmc
 
 stop-k8s-test-dish-lmc:
@@ -50,3 +51,6 @@ stop-k8s-test-dish-lmc:
     - make k8s-uninstall-chart
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
     - make k8s-delete-namespace
+  environment:
+    name: test/dish-$CI_COMMIT_REF_SLUG
+    action: stop

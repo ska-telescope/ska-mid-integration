@@ -12,7 +12,7 @@ k8s-test-tmc-with-sdp:
     SUBARRAY_COUNT: 2
     SDP_SIMULATION_ENABLED: 'false'
     TARANTA_ENABLED: 'true'
-  script:
+  before_script: 
     - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
     - 'make help | grep k8s-test'
@@ -20,6 +20,7 @@ k8s-test-tmc-with-sdp:
     - chmod u=rwx,go=rx tests/scripts/sdp_data_copy.sh
     - ${PWD}/tests/scripts/sdp_data_copy.sh create_pod
     - make k8s-wait
+  script:
     - make k8s-test MARK='tmc_sdp_unhappy'
     - make k8s-install-chart SDP_PROCCONTROL_REPLICAS=1
     - make k8s-wait
@@ -32,7 +33,7 @@ k8s-test-tmc-with-sdp:
     - XRAY_TEST_RESULT_FILE="build/cucumber.json" make xray-publish
 
   environment:
-    name: test/$CI_COMMIT_REF_SLUG
+    name: test/sdp-$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-test-tmc-with-sdp
     auto_stop_in: 1 minute
 
@@ -49,3 +50,6 @@ stop-k8s-test-tmc-with-sdp:
     - make k8s-uninstall-chart
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
     - make k8s-delete-namespace
+  environment:
+    name: test/sdp-$CI_COMMIT_REF_SLUG
+    action: stop
