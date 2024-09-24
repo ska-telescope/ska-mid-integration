@@ -116,6 +116,13 @@ redeploy-integration:
   rules:
     - when: never
 
+deploy-integration:
+  rules:
+    - when: never
+
+deploy-staging:
+  rules:
+    - when: never
 
 deploy-tmc-with-sdp:
   extends: deploy-integration
