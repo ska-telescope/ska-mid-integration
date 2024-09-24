@@ -15,6 +15,7 @@ stages:
   - test #BDD will come later, just python tests for now if required
   - deploy
   - integration
+   - staging # - join-reports 
   - pages
   - publish  # might not need in our case
   - scan
