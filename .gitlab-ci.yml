@@ -147,8 +147,6 @@ stop-k8s-test-tmc-with-sdp:
   environment:
     name: integration-mid-sdp-$CI_PROJECT_NAME
     action: stop
-  needs:
-    - deploy-tmc-with-sdp
   when: manual
 
  
@@ -178,8 +176,6 @@ stop-k8s-test-tmc-with-csp:
   environment:
     name: integration-mid-csp-$CI_PROJECT_NAME
     action: stop
-  needs:
-    - deploy-tmc-with-csp
   when: manual
 
 deploy-tmc-with-dish:
@@ -222,8 +218,6 @@ stop-k8s-test-tmc-with-dish:
   environment:
     name: integration-mid-dish-$CI_PROJECT_NAME
     action: stop
-  needs:
-    - deploy-tmc-with-dish
   script:
     - make stop-dishes 
     - make k8s-uninstall-chart
