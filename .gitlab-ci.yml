@@ -131,6 +131,10 @@ deploy-tmc-with-sdp:
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-sdp'
     KUBE_NAMESPACE_SDP: 'integration-ska-tmc-mid-sdp'
     SDP_SIMULATION_ENABLED: 'false' 
+  before_script:
+    - make k8s-uninstall-chart
+    - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
+    - make k8s-delete-namespace 
   environment:
     name: integration-mid-sdp-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-sdp
@@ -147,6 +151,8 @@ stop-k8s-test-tmc-with-sdp:
   environment:
     name: integration-mid-sdp-$CI_PROJECT_NAME
     action: stop
+  needs:
+    - deploy-tmc-with-sdp
   when: manual
 
  
@@ -176,6 +182,8 @@ stop-k8s-test-tmc-with-csp:
   environment:
     name: integration-mid-csp-$CI_PROJECT_NAME
     action: stop
+  needs:
+    - deploy-tmc-with-csp
   when: manual
 
 deploy-tmc-with-dish:
@@ -223,6 +231,8 @@ stop-k8s-test-tmc-with-dish:
     - make k8s-uninstall-chart
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
     - make k8s-delete-namespace 
+  needs:
+    - deploy-tmc-with-dish
   when: manual
 
 deploy-mid-integration:
