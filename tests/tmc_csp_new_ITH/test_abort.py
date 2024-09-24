@@ -44,8 +44,10 @@ ASSERTIONS_TIMEOUT = 60
 
 
 # @pytest.mark.xfail(
-#     reason="It may fail because CSP and/or SDP may not actually abort "
-#     "but continue with IDLE."
+#     reason=(
+#         "It may fail because right now we cannot detect the passage "
+#         "trough an 'ABORTING' state in the SDP emulator subarray."
+#     )
 # )
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
@@ -144,8 +146,6 @@ def send_abort_command(
     context_fixt: SubarrayTestContextData,
     # subarray_id: str,
     subarray_node_facade: TMCSubarrayNodeFacade,
-    csp: CSPFacade,
-    sdp: SDPFacade,
     event_tracer: TangoEventTracer,
 ):
     """
@@ -155,6 +155,8 @@ def send_abort_command(
     If the starting state is transient, it verifies that the
     expected state transition hasn't occurred prematurely.
     """
+    context_fixt.when_action_name = "Abort"
+
     subarray_node_facade.abort(wait_termination=False)
 
     if context_fixt.is_starting_state_transient():
@@ -184,6 +186,8 @@ def send_restart_command(
 
     This step sends the Restart command without waiting for termination.
     """
+    context_fixt.when_action_name = "Restart"
+
     subarray_node_facade.restart(wait_termination=False)
 
 
@@ -226,12 +230,10 @@ def verify_aborting_state(
         csp.csp_subarray,
         "obsState",
         ObsState.ABORTING,
-        # ).has_change_event_occurred(
-        #     sdp.sdp_subarray,
-        #     "obsState",
-        #     ObsState.ABORTING,
-        # NOTE: the emulated SDP may not actually pass
-        # through the ABORTING state
+    ).has_change_event_occurred(
+        sdp.sdp_subarray,
+        "obsState",
+        ObsState.ABORTING,
     )
 
     # NOTE: since the previous state may be transient, we cannot guarantee
@@ -276,9 +278,7 @@ def verify_aborted_state(
         sdp.sdp_subarray,
         "obsState",
         ObsState.ABORTED,
-        # previous_value=ObsState.ABORTING,
-        # NOTE: the emulated SDP may not actually pass
-        # through the ABORTING state
+        previous_value=ObsState.ABORTING,
     )
 
 
