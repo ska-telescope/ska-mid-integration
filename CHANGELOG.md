@@ -3,9 +3,16 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+
+[0.22.5]
+************
+*Resolve SKB-511
+*Validate SKB-467
+
+
 [0.22.4]
 ************
-*Resolve skb-511
+*Resolve SKB-511
 *Validate SKB-467
 
 [0.22.3]

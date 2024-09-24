@@ -1,4 +1,4 @@
-# This BDD test performs TMC-Dish pairwise testing to verify EndScan command flow.
+# This BDD test performs TMC-Dish pairwise testing to verify Abort command flow.
 @Team_SAHYADRI
 Scenario: TMC mid executes Abort command on DISH
     Given a Telescope consisting of TMC, DISH <dish_ids>
@@ -6,7 +6,7 @@ Scenario: TMC mid executes Abort command on DISH
     And TMC subarray <subarray_id> is in obsState READY
     And DishMaster <dish_ids> is in dishMode OPERATE with pointingState READY
     When I issue the Abort command to the TMC subarray <subarray_id>
-    Then the Dish <dish_ids> transitions in dishMode STANDBY_FP and pointingState READY
+    Then the Dish <dish_ids> transitions to dishMode STANDBY_FP and pointingState READY
     And TMC SubarrayNode transitions to obsState ABORTED
     Examples:
 

@@ -4,7 +4,6 @@ tests."""
 from pytest_bdd import given, parsers
 from tango import DevState
 
-from tests.resources.test_harness.helpers import LOGGER
 from tests.resources.test_support.enum import DishMode
 
 
@@ -17,7 +16,7 @@ def given_a_telescope(central_node_mid, dish_ids):
         central_node_mid: Fixture for a TMC CentralNode wrapper class
         dish_ids (str): Comma-separated IDs of DISH components.
     """
-    LOGGER.info("Will perform basic chcks ")
+
     assert central_node_mid.csp_master.ping() > 0
     assert central_node_mid.sdp_master.ping() > 0
     for dish_id in dish_ids.split(","):
@@ -34,7 +33,7 @@ def turn_on_telescope(central_node_mid, event_recorder):
         central_node_mid: Fixture for a TMC CentralNode wrapper class
         event_recorder: Fixture for EventRecorder class
     """
-    LOGGER.info("Moving Telescope to On")
+
     central_node_mid.move_to_on()
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(

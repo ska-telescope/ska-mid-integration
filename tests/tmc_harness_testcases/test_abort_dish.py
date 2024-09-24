@@ -81,7 +81,7 @@ def move_subarray_obsState_to_ready(
         "TMC Central Node device"
         f"({central_node_mid.central_node.dev_name()}) "
         "is expected have longRunningCommand as"
-        '(unique_id,(ResultCode.OK,"Command Completed"))',
+        f"(unique_id,{COMMAND_COMPLETED})",
     ).within_timeout(60).has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
@@ -92,19 +92,17 @@ def move_subarray_obsState_to_ready(
     _, pytest.unique_id = subarray_node.execute_transition(
         "Configure", json.dumps(configure_json)
     )
-    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        event_tracer.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode"
-        )
-        event_tracer.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
-        )
-        event_tracer.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "pointingState"
-        )
-        event_tracer.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
-        )
+
+    dish_ids = ["SKA001", "SKA036"]
+    events = ["dishMode", "pointingState"]
+
+    for dish_id in dish_ids:
+        dish_master = central_node_mid.dish_master_dict[dish_id]
+        dish_leaf = central_node_mid.dish_leaf_node_dict[dish_id]
+
+        for event in events:
+            event_tracer.subscribe_event(dish_master, event)
+            event_tracer.subscribe_event(dish_leaf, event)
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         assert_that(event_tracer).described_as(
@@ -174,12 +172,14 @@ def move_subarray_obsState_to_ready(
         "TMC Subarray Node device"
         f"({subarray_node.subarray_node.dev_name()}) "
         "is expected have longRunningCommand as"
-        '(unique_id,(ResultCode.OK,"Command Completed"))',
+        f"(unique_id,{COMMAND_COMPLETED})",
     ).within_timeout(60).has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
         (pytest.unique_id[0], COMMAND_COMPLETED),
     )
+
+    event_tracer.clear_events()
 
 
 @given(
@@ -197,11 +197,6 @@ def check_dish_mode_and_pointing_state_after_configure(
         central_node_mid: Fixture for a TMC CentralNode wrapper class
         dish_ids (str): Comma-separated IDs of DISH components.
     """
-
-    # Dish master should go to slew in no more than 0.1 sec
-    # pointing_state_duration_params = '[["READY",0.1]]'
-    # dish_simulator.SetDirectPointingState(PointingState.READY)
-    # time.sleep(0.2)
 
     for dish_id in dish_ids.split(","):
         central_node_mid.dish_master_dict[dish_id].SetDirectPointingState(
@@ -249,7 +244,7 @@ def invoke_abort(
 @then(
     parsers.parse(
         "the Dish {dish_ids} transitions "
-        + "in dishMode STANDBY_FP and pointingState READY"
+        + "to dishMode STANDBY_FP and pointingState READY"
     )
 )
 def check_dish_mode_and_pointing_state_after_abort(
@@ -318,3 +313,5 @@ def check_subarray_obsstate_aborted(
         "obsState",
         ObsState.ABORTED,
     )
+
+    event_tracer.clear_events()
