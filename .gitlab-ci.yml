@@ -64,8 +64,7 @@ include:
   - project: 'ska-telescope/templates-repository'
     file: 'gitlab-ci/includes/deploy.integration.gitlab-ci.yml'
 
-  - project: 'ska-telescope/templates-repository'
-    file: 'gitlab-ci/includes/finaliser.gitlab-ci.yml'
+
 
 notebook-lint:
   allow_failure: true 
@@ -103,6 +102,22 @@ stop-integration:
     - when: never
 
 redeploy-integration:
+  rules:
+    - when: never
+
+deploy-staging:
+  rules:
+    - when: never
+
+info-staging:
+  rules:
+    - when: never
+
+stop-staging:
+  rules:
+    - when: never
+
+redeploy-staging:
   rules:
     - when: never
 
