@@ -116,9 +116,6 @@ redeploy-integration:
   rules:
     - when: never
 
-deploy-integration:
-  rules:
-    - when: never
 
 deploy-staging:
   rules:
