@@ -82,8 +82,6 @@ python-test:
   rules:
     - when: never
 
-
-
 k8s-test: 
   rules:
     - when: never
@@ -95,7 +93,7 @@ deploy-integration:
 stop-k8s-test: 
   rules:
     - when: never
-    
+
 info-integration:
   rules:
     - when: never
@@ -104,11 +102,9 @@ stop-integration:
   rules:
     - when: never
 
-
 redeploy-integration:
   rules:
     - when: never
-
 
 deploy-tmc-with-sdp:
   extends: deploy-integration
@@ -122,8 +118,6 @@ deploy-tmc-with-sdp:
     name: integration-mid-sdp-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-sdp
   
-
-
 stop-k8s-test-tmc-with-sdp:
   extends:
     - stop-integration
@@ -136,8 +130,6 @@ stop-k8s-test-tmc-with-sdp:
   needs:
     - deploy-tmc-with-sdp
  
-
-
 deploy-tmc-with-csp:
   extends: deploy-mid-integration
   variables:
@@ -162,8 +154,6 @@ stop-k8s-test-tmc-with-csp:
     action: stop
   needs:
     - deploy-tmc-with-csp
- 
-
 
 deploy-tmc-with-dish:
   extends: deploy-mid-integration
@@ -185,8 +175,6 @@ deploy-tmc-with-dish:
     name: integration-mid-dish-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-dish
   allow_failure: true
-
-
 
 stop-k8s-test-tmc-with-dish:
   extends: 
@@ -210,7 +198,6 @@ stop-k8s-test-tmc-with-dish:
     - make k8s-uninstall-chart
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
     - make k8s-delete-namespace 
-
 
 deploy-mid-integration:
   extends: deploy-integration
