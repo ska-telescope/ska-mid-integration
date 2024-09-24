@@ -11,11 +11,10 @@ variables:
 stages:
   - lint
   - build
-  - on-demand
   - test #BDD will come later, just python tests for now if required
   - deploy
   - integration
-   - staging # - join-reports 
+  - staging # - join-reports 
   - pages
   - publish  # might not need in our case
   - scan
@@ -60,15 +59,10 @@ include:
     file: 'gitlab-ci/includes/deploy.gitlab-ci.yml' 
 
   - project: 'ska-telescope/templates-repository'
-    file: 'gitlab-ci/includes/python-lint.gitlab-ci.yml'
-
-  - project: 'ska-telescope/templates-repository'
     file: 'gitlab-ci/includes/docs-pages.gitlab-ci.yml'
-
 
   - project: 'ska-telescope/templates-repository'
     file: 'gitlab-ci/includes/deploy.integration.gitlab-ci.yml'
-
 
   - project: 'ska-telescope/templates-repository'
     file: 'gitlab-ci/includes/finaliser.gitlab-ci.yml'
@@ -88,7 +82,9 @@ python-test:
   rules:
     - when: never
 
-
+stop-k8s-test: 
+  rules:
+    - when: never
 
 k8s-test: 
   rules:
@@ -98,9 +94,6 @@ deploy-integration:
   rules:
     - when: never
 
-stop-k8s-test: 
-  rules:
-    - when: never
 
 info-integration:
   rules:
