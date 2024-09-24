@@ -155,7 +155,7 @@ on-demand-dish-lmc-dish063:
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
     TARANTA_ENABLED: "true"
   environment:
-    name: test/od-d036-$CI_COMMIT_REF_SLUG
+    name: test/od-d063-$CI_COMMIT_REF_SLUG
     on_stop: stop-on-demand-dish-lmc-063
   when: manual
 
@@ -168,7 +168,7 @@ stop-on-demand-dish-lmc-063:
     DISH_HELM_RELEASE: "4.1.0"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
   environment:
-    name: test/od-d036-$CI_COMMIT_REF_SLUG
+    name: test/od-d063-$CI_COMMIT_REF_SLUG
     action: stop
 
 on-demand-dish-lmc-dish100:
