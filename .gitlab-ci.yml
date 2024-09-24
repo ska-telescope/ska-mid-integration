@@ -107,7 +107,7 @@ redeploy-integration:
     - when: never
 
 deploy-tmc-with-sdp:
-  extends: deploy-integration
+  extends: deploy-mid-integration
   rules:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
