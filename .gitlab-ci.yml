@@ -92,7 +92,10 @@ deploy-integration:
   rules:
     - when: never
 
-
+stop-k8s-test: 
+  rules:
+    - when: never
+    
 info-integration:
   rules:
     - when: never
@@ -100,6 +103,7 @@ info-integration:
 stop-integration:
   rules:
     - when: never
+
 
 redeploy-integration:
   rules:
