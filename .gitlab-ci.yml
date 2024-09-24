@@ -15,7 +15,6 @@ stages:
   - test #BDD will come later, just python tests for now if required
   - deploy
   - integration
-  - staging # - join-reports
   - pages
   - publish  # might not need in our case
   - scan
@@ -69,8 +68,6 @@ include:
   - project: 'ska-telescope/templates-repository'
     file: 'gitlab-ci/includes/deploy.integration.gitlab-ci.yml'
 
-  - project: "ska-telescope/templates-repository"
-    file: "gitlab-ci/includes/deploy.staging.gitlab-ci.yml"
 
   - project: 'ska-telescope/templates-repository'
     file: 'gitlab-ci/includes/finaliser.gitlab-ci.yml'
@@ -116,10 +113,6 @@ redeploy-integration:
   rules:
     - when: never
 
-
-deploy-staging:
-  rules:
-    - when: never
 
 deploy-tmc-with-sdp:
   extends: deploy-integration
