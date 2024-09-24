@@ -34,7 +34,11 @@ def test_tmc_dish_abort():
     """
 
 
-@given(parsers.parse("TMC subarray with {dish_ids} is in obsState READY"))
+@given(
+    parsers.parse(
+        "TMC subarray {subarray_id} with {dish_ids} is in obsState READY"
+    )
+)
 def move_subarray_obsState_to_ready(
     subarray_node: SubarrayNodeWrapper,
     command_input_factory: JsonFactory,
