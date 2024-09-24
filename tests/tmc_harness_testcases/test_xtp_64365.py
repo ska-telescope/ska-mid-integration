@@ -16,13 +16,16 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_commands,
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
-from tests.resources.test_harness.utils.common_utils import JsonFactory
+from tests.resources.test_harness.utils.common_utils import (
+    JsonFactory,
+    setup_dish_events,
+)
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
 @pytest.mark.SKA_mid22
 @scenario(
-    "../features/test_abort.feature",
+    "../features/xtp-64365.feature",
     "TMC mid executes Abort command on DISH",
 )
 def test_tmc_dish_abort():
@@ -93,16 +96,7 @@ def move_subarray_obsState_to_ready(
         "Configure", json.dumps(configure_json)
     )
 
-    dish_ids = ["SKA001", "SKA036"]
-    events = ["dishMode", "pointingState"]
-
-    for dish_id in dish_ids:
-        dish_master = central_node_mid.dish_master_dict[dish_id]
-        dish_leaf = central_node_mid.dish_leaf_node_dict[dish_id]
-
-        for event in events:
-            event_tracer.subscribe_event(dish_master, event)
-            event_tracer.subscribe_event(dish_leaf, event)
+    setup_dish_events(central_node_mid, event_tracer)
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         assert_that(event_tracer).described_as(

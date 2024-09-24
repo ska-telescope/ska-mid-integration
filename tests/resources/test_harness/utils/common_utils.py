@@ -339,3 +339,19 @@ def check_configure_successful_csp(
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
     )
+
+
+def setup_dish_events(central_node_mid, event_tracer):
+    """
+    This function will subscribe events for dish attributes
+    """
+    dish_ids = ["SKA001", "SKA036", "SKA063", "SKA100"]
+    events = ["dishMode", "pointingState"]
+
+    for dish_id in dish_ids:
+        dish_master = central_node_mid.dish_master_dict[dish_id]
+        dish_leaf = central_node_mid.dish_leaf_node_dict[dish_id]
+
+        for event in events:
+            event_tracer.subscribe_event(dish_master, event)
+            event_tracer.subscribe_event(dish_leaf, event)
