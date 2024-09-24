@@ -11,11 +11,10 @@ variables:
 stages:
   - lint
   - build
-  - on-demand
   - test #BDD will come later, just python tests for now if required
   - deploy
   - integration
-  - staging # - join-reports
+  - staging # - join-reports 
   - pages
   - publish  # might not need in our case
   - scan
@@ -60,17 +59,10 @@ include:
     file: 'gitlab-ci/includes/deploy.gitlab-ci.yml' 
 
   - project: 'ska-telescope/templates-repository'
-    file: 'gitlab-ci/includes/python-lint.gitlab-ci.yml'
-
-  - project: 'ska-telescope/templates-repository'
     file: 'gitlab-ci/includes/docs-pages.gitlab-ci.yml'
-
 
   - project: 'ska-telescope/templates-repository'
     file: 'gitlab-ci/includes/deploy.integration.gitlab-ci.yml'
-
-  - project: "ska-telescope/templates-repository"
-    file: "gitlab-ci/includes/deploy.staging.gitlab-ci.yml"
 
   - project: 'ska-telescope/templates-repository'
     file: 'gitlab-ci/includes/finaliser.gitlab-ci.yml'
@@ -89,8 +81,6 @@ python-gemnasium-scan:
 python-test: 
   rules:
     - when: never
-
-
 
 k8s-test: 
   rules:
@@ -116,7 +106,6 @@ redeploy-integration:
   rules:
     - when: never
 
-
 deploy-tmc-with-sdp:
   extends: deploy-integration
   variables:
@@ -129,8 +118,6 @@ deploy-tmc-with-sdp:
     name: integration-mid-sdp-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-sdp
   
-
-
 stop-k8s-test-tmc-with-sdp:
   extends:
     - stop-integration
@@ -143,8 +130,6 @@ stop-k8s-test-tmc-with-sdp:
   needs:
     - deploy-tmc-with-sdp
  
-
-
 deploy-tmc-with-csp:
   extends: deploy-mid-integration
   variables:
@@ -169,8 +154,6 @@ stop-k8s-test-tmc-with-csp:
     action: stop
   needs:
     - deploy-tmc-with-csp
- 
-
 
 deploy-tmc-with-dish:
   extends: deploy-mid-integration
@@ -192,8 +175,6 @@ deploy-tmc-with-dish:
     name: integration-mid-dish-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-dish
   allow_failure: true
-
-
 
 stop-k8s-test-tmc-with-dish:
   extends: 
@@ -217,7 +198,6 @@ stop-k8s-test-tmc-with-dish:
     - make k8s-uninstall-chart
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
     - make k8s-delete-namespace 
-
 
 deploy-mid-integration:
   extends: deploy-integration
