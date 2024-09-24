@@ -1,5 +1,4 @@
-"""Pytest BDD step implementations specific to TMC DISH-LMC integration
-tests."""
+"""Pytest BDD step implementations tests."""
 
 from pytest_bdd import given, parsers
 from tango import DevState

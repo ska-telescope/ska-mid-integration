@@ -33,10 +33,7 @@ from tests.resources.test_harness.utils.common_utils import (
     JsonFactory,
     SharedContext,
 )
-from tests.resources.test_harness.utils.enums import (
-    ResultCode,
-    SimulatorDeviceType,
-)
+from tests.resources.test_harness.utils.enums import ResultCode
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -273,16 +270,6 @@ def shared_context():
     This is used for sharing data between BDD tests
     """
     return SharedContext()
-
-
-@pytest.fixture
-def dish_simulator(simulator_factory):
-    """
-    Fixture to create simulator device for dish
-    """
-    return simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.DISH_DEVICE
-    )
 
 
 @pytest.fixture(scope="module")

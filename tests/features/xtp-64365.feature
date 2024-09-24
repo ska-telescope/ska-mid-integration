@@ -1,4 +1,4 @@
-# This BDD test performs TMC-Dish pairwise testing to verify Abort command flow.
+
 @Team_SAHYADRI @XTP-64365 @SKA_mid
 Scenario: TMC mid executes Abort command on DISH with pointingState READY
     Given a Telescope consisting of TMC, DISH <dish_ids>
