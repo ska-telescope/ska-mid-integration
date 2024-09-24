@@ -182,7 +182,7 @@ def move_subarray_obsState_to_ready(
     )
 )
 def check_dish_mode_and_pointing_state_after_configure(
-    central_node_mid: CentralNodeWrapperMid, dish_ids: str, dish_simulator
+    central_node_mid: CentralNodeWrapperMid, dish_ids: str
 ):
     """
     Method to check dishMode and pointingState of DISH after Configure command
@@ -220,9 +220,7 @@ def check_dish_mode_and_pointing_state_after_configure(
         "I issue the Abort command to the TMC subarray {subarray_id}"
     )
 )
-def invoke_abort(
-    subarray_node: SubarrayNodeWrapper, subarray_id: str, dish_simulator
-):
+def invoke_abort(subarray_node: SubarrayNodeWrapper, subarray_id: str):
     """
     A method to invoke Abort command
 
