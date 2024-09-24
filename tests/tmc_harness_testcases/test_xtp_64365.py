@@ -18,7 +18,7 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import (
     JsonFactory,
-    setup_dish_events,
+    turn_on_telescope,
 )
 from tests.resources.test_support.enum import DishMode, PointingState
 
@@ -34,13 +34,14 @@ def test_tmc_dish_abort():
     """
 
 
-@given(parsers.parse("TMC subarray {subarray_id} is in obsState READY"))
+@given(parsers.parse("TMC subarray with {dish_ids} is in obsState READY"))
 def move_subarray_obsState_to_ready(
     subarray_node: SubarrayNodeWrapper,
     command_input_factory: JsonFactory,
     event_tracer: TangoEventTracer,
     central_node_mid: CentralNodeWrapperMid,
     subarray_id: str,
+    dish_ids: str,
 ):
     """
     Method to move subarray in Ready obsState
@@ -54,6 +55,7 @@ def move_subarray_obsState_to_ready(
         subarray_id (str): Subarray ID
     """
 
+    turn_on_telescope(central_node_mid, event_tracer, dish_ids)
     central_node_mid.set_subarray_id(subarray_id)
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
@@ -95,8 +97,6 @@ def move_subarray_obsState_to_ready(
     _, pytest.unique_id = subarray_node.execute_transition(
         "Configure", json.dumps(configure_json)
     )
-
-    setup_dish_events(central_node_mid, event_tracer)
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         assert_that(event_tracer).described_as(

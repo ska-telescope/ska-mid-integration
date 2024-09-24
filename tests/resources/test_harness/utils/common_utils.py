@@ -4,9 +4,11 @@ import time
 from os.path import dirname, join
 
 from ska_control_model import ObsState
+from tango import DevState
 
 from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.utils.wait_helpers import Waiter
+from tests.resources.test_support.enum import DishMode
 
 
 def get_subarray_input_json(slug):
@@ -355,3 +357,58 @@ def setup_dish_events(central_node_mid, event_tracer):
         for event in events:
             event_tracer.subscribe_event(dish_master, event)
             event_tracer.subscribe_event(dish_leaf, event)
+
+
+def turn_on_telescope(central_node_mid, event_tracer, dish_ids):
+    """
+    A method to put Telescope ON
+
+    Args:
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        event_recorder: Fixture for EventRecorder class
+    """
+
+    assert central_node_mid.csp_master.ping() > 0
+    assert central_node_mid.sdp_master.ping() > 0
+    for dish_id in dish_ids.split(","):
+        assert central_node_mid.dish_master_dict[dish_id].ping() > 0
+        assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
+
+    central_node_mid.move_to_on()
+    setup_dish_events(central_node_mid, event_tracer)
+
+    assert event_tracer.has_change_event_occurred(
+        central_node_mid.csp_master,
+        "State",
+        DevState.ON,
+    )
+    assert event_tracer.has_change_event_occurred(
+        central_node_mid.sdp_master,
+        "State",
+        DevState.ON,
+    )
+
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        assert event_tracer.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+        )
+        assert event_tracer.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+            lookahead=15,
+        )
+
+    event_tracer.subscribe_event(
+        central_node_mid.central_node, "telescopeState"
+    )
+
+    assert event_tracer.has_change_event_occurred(
+        central_node_mid.central_node,
+        "telescopeState",
+        DevState.ON,
+    )
+
+    event_tracer.clear_events()
