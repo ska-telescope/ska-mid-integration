@@ -82,9 +82,7 @@ python-test:
   rules:
     - when: never
 
-stop-k8s-test: 
-  rules:
-    - when: never
+
 
 k8s-test: 
   rules:
