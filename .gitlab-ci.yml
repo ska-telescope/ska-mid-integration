@@ -97,6 +97,7 @@ redeploy-integration:
   rules:
     - when: never
 
+# This is system deployment in integration env with all real sub-systems
 deploy-mid-integration:
   extends: deploy-integration
   rules:

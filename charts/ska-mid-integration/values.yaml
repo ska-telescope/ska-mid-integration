@@ -8,7 +8,7 @@ global:
   operator: true
   exposeAllDS: false
   use_aws: true
-  aws_url: k8s-services.skao.int
+  aws_url: k8s-services.skao.int # For enabling Taranta dashboard 
   # taranta_auth_enabled: false
   # taranta_dashboard_enabled: false
   sub-system:

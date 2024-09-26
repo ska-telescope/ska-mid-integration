@@ -88,6 +88,7 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set ska-db-oda.postgresql.enabled=false \
 	$(K8S_EXTRA_PARAMS)
 
+# why these are requierd? Now taranta can be enabled from AWS and different global values. DO we need to change those?
 ifeq ($(strip $(MINIKUBE)),true)
 ifeq ($(strip $(TARANTA_AUTH_DASHBOARD_ENABLE)),true)
 K8S_CHART_PARAMS += \
