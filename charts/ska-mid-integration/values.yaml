@@ -98,34 +98,34 @@ ska-oso-oet:
 ska-sdp:
   labels:
     app: ska-mid-integration
-  enabled: true
+  # enabled: true
   ska-tango-base:
     enabled: false
   lmc:
     prefix: mid
     nsubarray: 3
-    queueconnector:
-      image: artefact.skao.int/ska-sdp-lmc-queue-connector
-      version: 4.1.0
-      domain: queue-connector
-      function: sdp-queue-connector
-      resources:
-        limits:
-          memory: 500Mi
-          cpu: 0.5
-        requests:
-          memory: 100Mi
-          cpu: 0.3
-      pointing-offset:
-        image: artefact.skao.int/ska-sdp-wflow-pointing-offset
-        version: 0.5.0
-        script: pointing-offset
-        imagePullPolicy: IfNotPresent
-        command:
-          - pointing-offset
-        dataProductStorage:
-          name: test-pvc
-          mountPath: /mnt/data
+    # queueconnector:
+    #   image: artefact.skao.int/ska-sdp-lmc-queue-connector
+    #   version: 4.1.0
+    #   domain: queue-connector
+    #   function: sdp-queue-connector
+    #   resources:
+    #     limits:
+    #       memory: 500Mi
+    #       cpu: 0.5
+    #     requests:
+    #       memory: 100Mi
+    #       cpu: 0.3
+    #   pointing-offset:
+    #     image: artefact.skao.int/ska-sdp-wflow-pointing-offset
+    #     version: 0.5.0
+    #     script: pointing-offset
+    #     imagePullPolicy: IfNotPresent
+    #     command:
+    #       - pointing-offset
+    #     dataProductStorage:
+    #       name: test-pvc
+    #       mountPath: /mnt/data
   data-pvc:
     create:
       enabled: true
