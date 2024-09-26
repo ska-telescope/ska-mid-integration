@@ -3,10 +3,14 @@
 import time
 from os.path import dirname, join
 
+from assertpy import assert_that
 from ska_control_model import ObsState
+from ska_tango_testing.integration import TangoEventTracer
 from tango import DevState
 
+from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.constant import COMMAND_COMPLETED
+from tests.resources.test_harness.utils.constant import EVENT_TIMEOUT
 from tests.resources.test_harness.utils.wait_helpers import Waiter
 from tests.resources.test_support.enum import DishMode
 
@@ -343,9 +347,15 @@ def check_configure_successful_csp(
     )
 
 
-def setup_dish_events(central_node_mid, event_tracer):
+def setup_dish_events(
+    central_node_mid: CentralNodeWrapperMid, event_tracer: TangoEventTracer
+) -> None:
     """
     This function will subscribe events for dish attributes
+
+      Args:
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        event_tracer: Fixture for EventTracer class
     """
     dish_ids = ["SKA001", "SKA036", "SKA063", "SKA100"]
     events = ["dishMode", "pointingState"]
@@ -359,13 +369,18 @@ def setup_dish_events(central_node_mid, event_tracer):
             event_tracer.subscribe_event(dish_leaf, event)
 
 
-def turn_on_telescope(central_node_mid, event_tracer, dish_ids):
+def turn_on_telescope(
+    central_node_mid: CentralNodeWrapperMid,
+    event_tracer: TangoEventTracer,
+    dish_ids: str,
+) -> None:
     """
     A method to put Telescope ON
 
     Args:
         central_node_mid: Fixture for a TMC CentralNode wrapper class
-        event_recorder: Fixture for EventRecorder class
+        event_tracer: Fixture for EventTracer class
+        dish_ids: Dish Ids to be assigned to Subarray
     """
 
     assert central_node_mid.csp_master.ping() > 0
@@ -377,35 +392,62 @@ def turn_on_telescope(central_node_mid, event_tracer, dish_ids):
     central_node_mid.move_to_on()
     setup_dish_events(central_node_mid, event_tracer)
 
-    assert event_tracer.has_change_event_occurred(
+    assert_that(event_tracer).described_as(
+        "FAILED ASSUMPTION AFTER ON COMMAND: "
+        "CSP Master device"
+        f"({central_node_mid.csp_master.dev_name()}) "
+        "is expected to be in DevState ON",
+    ).within_timeout(EVENT_TIMEOUT).has_change_event_occurred(
         central_node_mid.csp_master,
         "State",
         DevState.ON,
     )
-    assert event_tracer.has_change_event_occurred(
+
+    assert_that(event_tracer).described_as(
+        "FAILED ASSUMPTION AFTER ON COMMAND: "
+        "SDP Master device"
+        f"({central_node_mid.sdp_master.dev_name()}) "
+        "is expected to be in DevState ON",
+    ).within_timeout(EVENT_TIMEOUT).has_change_event_occurred(
         central_node_mid.sdp_master,
         "State",
         DevState.ON,
     )
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        assert event_tracer.has_change_event_occurred(
+
+        assert_that(event_tracer).described_as(
+            "FAILED ASSUMPTION AFTER ON COMMAND: "
+            "Dish Master device"
+            f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
+            "is expected to be in DishMode STANDBY_FP",
+        ).within_timeout(EVENT_TIMEOUT).has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.STANDBY_FP,
         )
-        assert event_tracer.has_change_event_occurred(
+
+        assert_that(event_tracer).described_as(
+            "FAILED ASSUMPTION AFTER ON COMMAND: "
+            "Dish Leaf Node device"
+            f"({central_node_mid.dish_leaf_node_dict[dish_id].dev_name()}) "
+            "is expected to be in DishMode STANDBY_FP",
+        ).within_timeout(EVENT_TIMEOUT).has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "dishMode",
             DishMode.STANDBY_FP,
-            lookahead=15,
         )
 
     event_tracer.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
 
-    assert event_tracer.has_change_event_occurred(
+    assert_that(event_tracer).described_as(
+        "FAILED ASSUMPTION AFTER ON COMMAND: "
+        "Central Node "
+        f"({central_node_mid.central_node.dev_name()}) "
+        "is expected to be in telescopeState ON",
+    ).within_timeout(EVENT_TIMEOUT).has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
         DevState.ON,
