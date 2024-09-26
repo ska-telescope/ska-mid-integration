@@ -9,6 +9,7 @@ PROJECT_NAME = ska-mid-integration
 
 KUBE_APP ?= ska-mid-integration
 KUBE_NAMESPACE ?= ska-mid-integration
+KUBE_NAMESPACE ?= ci-$(CI_PROJECT_NAME)-$(CI_COMMIT_SHORT_SHA)
 KUBE_NAMESPACE_SDP ?= $(KUBE_NAMESPACE)-sdp
 HELM_CHART ?= ska-mid-integration
 UMBRELLA_CHART_PATH ?= charts/$(HELM_CHART)/
