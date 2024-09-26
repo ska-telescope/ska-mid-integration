@@ -66,7 +66,7 @@ K8S_TEST_RUNNER = test-runner-$(CI_JOB_ID)##name of the pod running the k8s-test
 TARANTA_AUTH_DASHBOARD_ENABLE ?= false
 # Single image in root of project
 OCI_IMAGES = ska-mid-integration
-
+OET_INGRESS_ENABLED ?= false
 ITANGO_ENABLED ?= true
 
 HELM_CHARTS_TO_PUBLISH = $(HELM_CHART)
