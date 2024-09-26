@@ -234,7 +234,7 @@ stop-k8s-test-tmc-with-dish:
 deploy-mid-integration:
   extends: deploy-integration
   rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
     KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
   environment:
@@ -244,7 +244,7 @@ deploy-mid-integration:
 info-mid-integration:
   extends: info-integration
   rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   needs:
     - deploy-mid-integration
   variables:
@@ -255,7 +255,7 @@ info-mid-integration:
 stop-mid-integration:
   extends: stop-integration
   rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   needs:
     - deploy-mid-integration
   variables:
@@ -267,7 +267,7 @@ stop-mid-integration:
 redeploy-mid-integration:
   extends: redeploy-integration
   rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
     KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
   environment:
