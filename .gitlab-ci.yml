@@ -236,9 +236,9 @@ deploy-mid-integration:
   rules:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
-    KUBE_NAMESPACE: "integration-ska-mid" #changing namespace
+    KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
   environment:
-    name: integration-ska-mid
+    name: integration-ska-mid-test
     on_stop: stop-mid-integration
 
 info-mid-integration:
@@ -248,9 +248,9 @@ info-mid-integration:
   needs:
     - deploy-mid-integration
   variables:
-    KUBE_NAMESPACE: "integration-ska-mid" #changing namespace
+    KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
   environment:
-    name: integration-ska-mid
+    name: integration-ska-mid-test
 
 stop-mid-integration:
   extends: stop-integration
@@ -259,9 +259,9 @@ stop-mid-integration:
   needs:
     - deploy-mid-integration
   variables:
-    KUBE_NAMESPACE: "integration-ska-mid" #changing namespace
+    KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
   environment:
-    name: integration-ska-mid
+    name: integration-ska-mid-test
     action: stop
 
 redeploy-mid-integration:
@@ -269,8 +269,8 @@ redeploy-mid-integration:
   rules:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
-    KUBE_NAMESPACE: "integration-ska-mid" #changing namespace
+    KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
   environment:
-    name: integration-ska-mid
+    name: integration-ska-mid-test
 
 
