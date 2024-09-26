@@ -1,6 +1,8 @@
 """This module implement common utils
 """
 
+from __future__ import annotations
+
 import time
 from os.path import dirname, join
 from typing import TYPE_CHECKING
