@@ -1,18 +1,24 @@
 """This module implement common utils
 """
+
 import time
 from os.path import dirname, join
+from typing import TYPE_CHECKING
 
 from assertpy import assert_that
 from ska_control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer
 from tango import DevState
 
-from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.utils.constant import EVENT_TIMEOUT
 from tests.resources.test_harness.utils.wait_helpers import Waiter
 from tests.resources.test_support.enum import DishMode
+
+if TYPE_CHECKING:
+    from tests.resources.test_harness.central_node_mid import (
+        CentralNodeWrapperMid,
+    )
 
 
 def get_subarray_input_json(slug):
