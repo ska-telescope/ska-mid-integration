@@ -34,7 +34,7 @@ telescope_control = BaseTelescopeControl()
     reason="test fails intermittenlty due to dish"
     + "unavailability. Work under SAH-1531"
 )
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid32
 @scenario(
     "../features/successive_configure.feature",
     "TMC validates reconfigure functionality",
