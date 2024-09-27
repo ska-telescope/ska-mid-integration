@@ -361,7 +361,7 @@ def setup_dish_events(
     """
     This function will subscribe events for dish attributes
 
-      Args:
+    Args:
         central_node_mid: Fixture for a TMC CentralNode wrapper class
         event_tracer: Fixture for EventTracer class
     """
@@ -397,8 +397,14 @@ def turn_on_telescope(
         assert central_node_mid.dish_master_dict[dish_id].ping() > 0
         assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
 
-    central_node_mid.move_to_on()
     setup_dish_events(central_node_mid, event_tracer)
+    event_tracer.subscribe_event(central_node_mid.csp_master, "State")
+    event_tracer.subscribe_event(central_node_mid.sdp_master, "State")
+    event_tracer.subscribe_event(
+        central_node_mid.central_node, "telescopeState"
+    )
+
+    central_node_mid.move_to_on()
 
     assert_that(event_tracer).described_as(
         "FAILED ASSUMPTION AFTER ON COMMAND: "
@@ -445,10 +451,6 @@ def turn_on_telescope(
             "dishMode",
             DishMode.STANDBY_FP,
         )
-
-    event_tracer.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
 
     assert_that(event_tracer).described_as(
         "FAILED ASSUMPTION AFTER ON COMMAND: "
