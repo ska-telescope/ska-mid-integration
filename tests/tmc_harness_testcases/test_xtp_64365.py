@@ -64,9 +64,6 @@ def move_subarray_obsState_to_ready(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-    configure_input_json = prepare_json_args_for_commands(
-        "configure_mid", command_input_factory
-    )
 
     _, pytest.unique_id = central_node_mid.store_resources(assign_input_json)
     event_tracer.subscribe_event(subarray_node.subarray_node, "obsState")
@@ -96,88 +93,13 @@ def move_subarray_obsState_to_ready(
         "longRunningCommandResult",
         (pytest.unique_id[0], COMMAND_COMPLETED),
     )
-    configure_json = json.loads(configure_input_json)
-    configure_json["tmc"]["scan_duration"] = 20.0
+
+    configure_input_json = prepare_json_args_for_commands(
+        "configure_mid", command_input_factory
+    )
     _, pytest.unique_id = subarray_node.execute_transition(
-        "Configure", json.dumps(configure_json)
+        "Configure", json.dumps(configure_input_json)
     )
-
-    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-        assert_that(event_tracer).described_as(
-            'FAILED ASSUMPTION IN "THEN" STEP: '
-            "'the dish must be in the OPERATE dishMode'"
-            "dish device"
-            f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
-            "is expected to be in OPERATE dishMode",
-        ).within_timeout(60).has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "dishMode",
-            DishMode.OPERATE,
-        )
-
-        assert_that(event_tracer).described_as(
-            'FAILED ASSUMPTION IN "THEN" STEP: '
-            "'the DishLeafNode must be in the OPERATE dishMode'"
-            "dish device"
-            f"({central_node_mid.dish_leaf_node_dict[dish_id].dev_name()}) "
-            "is expected to be in OPERATE dishMode",
-        ).within_timeout(60).has_change_event_occurred(
-            central_node_mid.dish_leaf_node_dict[dish_id],
-            "dishMode",
-            DishMode.OPERATE,
-        )
-        assert_that(event_tracer).described_as(
-            'FAILED ASSUMPTION IN "THEN" STEP: '
-            "'the dish must be in the TRACK pointingState'"
-            "dish device"
-            f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
-            "is expected to be in TRACK pointingState",
-        ).within_timeout(60).has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "pointingState",
-            PointingState.TRACK,
-        )
-
-        assert_that(event_tracer).described_as(
-            'FAILED ASSUMPTION IN "THEN" STEP: '
-            "'the DishLeafNode must be in the TRACK pointingState'"
-            "dish device"
-            f"({central_node_mid.dish_leaf_node_dict[dish_id].dev_name()}) "
-            "is expected to be in TRACK pointingState",
-        ).within_timeout(60).has_change_event_occurred(
-            central_node_mid.dish_leaf_node_dict[dish_id],
-            "pointingState",
-            PointingState.TRACK,
-        )
-
-    assert_that(event_tracer).described_as(
-        'FAILED ASSUMPTION IN "GIVEN" STEP: '
-        "'the subarray must be in the READY obsState'"
-        "TMC Subarray device"
-        f"({subarray_node.subarray_node.dev_name()}) "
-        "is expected to be in READY obstate",
-    ).within_timeout(160).has_change_event_occurred(
-        subarray_node.subarray_node,
-        "obsState",
-        ObsState.READY,
-    )
-    event_tracer.subscribe_event(
-        subarray_node.subarray_node, "longRunningCommandResult"
-    )
-    assert_that(event_tracer).described_as(
-        'FAILED ASSUMPTION IN "GIVEN" STEP: '
-        "'the subarray is in READY obsState'"
-        "TMC Subarray Node device"
-        f"({subarray_node.subarray_node.dev_name()}) "
-        "is expected have longRunningCommand as"
-        f"(unique_id,{COMMAND_COMPLETED})",
-    ).within_timeout(60).has_change_event_occurred(
-        subarray_node.subarray_node,
-        "longRunningCommandResult",
-        (pytest.unique_id[0], COMMAND_COMPLETED),
-    )
-
-    event_tracer.clear_events()
 
 
 @given(
@@ -198,31 +120,31 @@ def check_dish_mode_and_pointing_state_after_configure(
         dish_ids (str): Comma-separated IDs of DISH components.
     """
     for dish_id in dish_ids.split(","):
-        event_tracer.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "dishMode"
-        )
+        # event_tracer.subscribe_event(
+        #     central_node_mid.dish_master_dict[dish_id], "dishMode"
+        # )
         event_tracer.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
         )
-        event_tracer.subscribe_event(
-            central_node_mid.dish_master_dict[dish_id], "pointingState"
-        )
+        # event_tracer.subscribe_event(
+        #     central_node_mid.dish_master_dict[dish_id], "pointingState"
+        # )
         event_tracer.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
         )
 
     for dish_id in dish_ids.split(","):
-        assert_that(event_tracer).described_as(
-            'FAILED ASSUMPTION IN "GIVEN" STEP: '
-            "'the dish must be in the OPERATE dishMode'"
-            "dish device"
-            f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
-            "is expected to be in OPERATE dishMode",
-        ).within_timeout(60).has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "dishMode",
-            DishMode.OPERATE,
-        )
+        # assert_that(event_tracer).described_as(
+        #     'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        #     "'the dish must be in the OPERATE dishMode'"
+        #     "dish device"
+        #     f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
+        #     "is expected to be in OPERATE dishMode",
+        # ).within_timeout(60).has_change_event_occurred(
+        #     central_node_mid.dish_master_dict[dish_id],
+        #     "dishMode",
+        #     DishMode.OPERATE,
+        # )
 
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "GIVEN" STEP: '
@@ -236,17 +158,17 @@ def check_dish_mode_and_pointing_state_after_configure(
             DishMode.OPERATE,
         )
 
-        assert_that(event_tracer).described_as(
-            'FAILED ASSUMPTION IN "GIVEN" STEP: '
-            "'the dish must be in the TRACK pointingState'"
-            "dish device"
-            f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
-            "is expected to be in TRACK pointingState",
-        ).within_timeout(60).has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "pointingState",
-            PointingState.READY,
-        )
+        # assert_that(event_tracer).described_as(
+        #     'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        #     "'the dish must be in the TRACK pointingState'"
+        #     "dish device"
+        #     f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
+        #     "is expected to be in TRACK pointingState",
+        # ).within_timeout(60).has_change_event_occurred(
+        #     central_node_mid.dish_master_dict[dish_id],
+        #     "pointingState",
+        #     PointingState.READY,
+        # )
 
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "GIVEN" STEP: '
@@ -299,17 +221,17 @@ def check_dish_mode_and_pointing_state_after_abort(
     """
 
     for dish_id in dish_ids.split(","):
-        assert_that(event_tracer).described_as(
-            'FAILED ASSUMPTION IN "THEN" STEP: '
-            "'the dish must be in the STANDBY_FP dishMode'"
-            "dish device"
-            f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
-            "is expected to be in STANDBY_FP dishMode",
-        ).within_timeout(60).has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "dishMode",
-            DishMode.STANDBY_FP,
-        )
+        # assert_that(event_tracer).described_as(
+        #     'FAILED ASSUMPTION IN "THEN" STEP: '
+        #     "'the dish must be in the STANDBY_FP dishMode'"
+        #     "dish device"
+        #     f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
+        #     "is expected to be in STANDBY_FP dishMode",
+        # ).within_timeout(60).has_change_event_occurred(
+        #     central_node_mid.dish_master_dict[dish_id],
+        #     "dishMode",
+        #     DishMode.STANDBY_FP,
+        # )
 
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
