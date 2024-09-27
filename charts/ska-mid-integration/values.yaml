@@ -46,7 +46,7 @@ global:
       tag: 0.4.32
       pullPolicy: IfNotPresent
   sdp:
-    processingNamespace: ska-tmc-integration-sdp
+    processingNamespace: ska-mid-integration-sdp
 
 ska-tango-base:
   enabled: true
