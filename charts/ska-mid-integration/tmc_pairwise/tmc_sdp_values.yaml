@@ -1,6 +1,9 @@
 global:
   taranta_dashboard_enabled: false
   taranta_auth_enabled: false
+  sdp:
+    processingNamespace: ska-mid-integration-sdp
+
 
 tmc-mid:
   enabled: true
