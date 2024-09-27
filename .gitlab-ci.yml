@@ -231,13 +231,15 @@ stop-k8s-test-tmc-with-dish:
     - deploy-tmc-with-dish
   when: manual
 
+
+# this job is for system level tests
 deploy-mid-integration:
   extends: deploy-integration
   rules:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
     KUBE_NAMESPACE: "ci-integration-ska-mid-test"
-    KUBE_NAMESPACE_SDP: "ci-integration-ska-tmc-mid-sdp"
+   # KUBE_NAMESPACE_SDP: "integration-ska-tmc-mid-sdp"
   environment:
     name: integration-ska-mid-test
     on_stop: stop-mid-integration
@@ -271,7 +273,7 @@ redeploy-mid-integration:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
     KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
-    KUBE_NAMESPACE_SDP: "integration-ska-tmc-mid-sdp"
+   # KUBE_NAMESPACE_SDP: "integration-ska-tmc-mid-sdp"
   environment:
     name: integration-ska-mid-test
 
