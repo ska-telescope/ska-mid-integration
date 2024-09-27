@@ -45,8 +45,8 @@ global:
       image: ska-tango-examples
       tag: 0.4.32
       pullPolicy: IfNotPresent
-  sdp:
-    processingNamespace: ska-mid-integration-sdp
+  # sdp:
+  #   processingNamespace: ska-mid-integration-sdp
 
 ska-tango-base:
   enabled: true
