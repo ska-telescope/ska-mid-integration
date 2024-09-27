@@ -16,9 +16,8 @@ dish-lmc-dish001:
       HELM_RELEASE=$DISH_HELM_RELEASE K8S_CHART=$K8S_DISH_LMC_CHART
     - make k8s-wait
   environment:
-    name: test/$CI_COMMIT_REF_SLUG
+    name: test/d001-$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-dish-lmc-001
-    action: stop
   allow_failure: true
 
 
@@ -34,9 +33,9 @@ dish-lmc-dish036:
     DISH_HELM_RELEASE: "4.1.0"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
   environment:
-    name: test/$CI_COMMIT_REF_SLUG
+    name: test/d036-$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-dish-lmc-036
-    action: stop
+
 
 dish-lmc-dish063:
   extends:
@@ -50,9 +49,9 @@ dish-lmc-dish063:
     DISH_HELM_RELEASE: "4.1.0"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
   environment:
-    name: test/$CI_COMMIT_REF_SLUG
+    name: test/d063-$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-dish-lmc-063
-    action: stop
+
 
 dish-lmc-dish100:
   extends:
@@ -67,9 +66,9 @@ dish-lmc-dish100:
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
     TARANTA_ENABLED: "true"
   environment:
-    name: test/$CI_COMMIT_REF_SLUG
+    name: test/d100-$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-dish-lmc-100
-    action: stop
+
 
 
 
@@ -85,6 +84,9 @@ stop-k8s-dish-lmc-001:
     - make k8s-do-uninstall-chart KUBE_NAMESPACE=$KUBE_NAMESPACE HELM_RELEASE=$DISH_HELM_RELEASE K8S_CHART=$K8S_DISH_LMC_CHART
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,sa,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
     - kubectl delete namespace $KUBE_NAMESPACE
+  environment:
+    name: test/d001-$CI_COMMIT_REF_SLUG
+    action: stop
 
 stop-k8s-dish-lmc-036:
   extends:
@@ -93,7 +95,9 @@ stop-k8s-dish-lmc-036:
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-036"
     DISH_HELM_RELEASE: "4.1.0"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
-
+  environment:
+    name: test/d036-$CI_COMMIT_REF_SLUG
+    action: stop
 stop-k8s-dish-lmc-063:
   extends:
     - stop-k8s-dish-lmc-001
@@ -101,7 +105,9 @@ stop-k8s-dish-lmc-063:
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-063"
     DISH_HELM_RELEASE: "4.1.0"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
-
+  environment:
+    name: test/d063-$CI_COMMIT_REF_SLUG
+    action: stop
 stop-k8s-dish-lmc-100:
   extends:
     - stop-k8s-dish-lmc-001
@@ -109,3 +115,6 @@ stop-k8s-dish-lmc-100:
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-100"
     DISH_HELM_RELEASE: "4.1.0"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
+  environment:
+    name: test/d100-$CI_COMMIT_REF_SLUG
+    action: stop

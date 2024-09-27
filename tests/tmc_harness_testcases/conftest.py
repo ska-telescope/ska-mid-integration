@@ -51,7 +51,7 @@ def turn_on_telescope(central_node_mid, event_recorder):
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
-    
+
     central_node_mid.move_to_on()
 
     assert event_recorder.has_change_event_occurred(

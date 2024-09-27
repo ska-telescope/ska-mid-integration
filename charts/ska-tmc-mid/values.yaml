@@ -77,7 +77,7 @@ centralnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-centralnode
-    tag: 0.16.2
+    tag: 0.16.4
     pullPolicy: IfNotPresent
 
 subarraynode:
@@ -117,11 +117,9 @@ dishleafnode:
     pullPolicy: IfNotPresent
 
 resources:
-  limits:
-    memory: 3000Mi
   requests:
-    cpu: 1500m
-    memory: 2800Mi
+    cpu: 200m
+    memory: 200Mi
 
 
 deviceServers:
@@ -142,7 +140,9 @@ deviceServers:
     KValueValidRange:
       min: 1
       max: 1177
-
+    CommandTimeOut: 120
+    DishVccInitTimeout: 180
+    
   subarraynode:
     enabled: true
     file: "data/subarraynode_mid.yaml"
@@ -153,10 +153,13 @@ deviceServers:
     CspAssignResourcesInterfaceURL: "https://schema.skao.int/ska-csp-assignresources/2.0"
     CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.0"
     SdpScanInterfaceURL: "https://schema.skao.int/ska-sdp-scan/0.4"
+    CommandTimeOut: 110
+    AbortCommandTimeout: 100
 
   sdpsubarrayleafnode:
     enabled: true
     file: "data/sdpsubarrayleafnode.yaml"
+    CommandTimeOut: 50
 
   sdpmasterleafnode:
     enabled: true
@@ -168,13 +171,14 @@ deviceServers:
     instances: ["01"]
     file: "data/cspmasterleafnode.yaml"
 
+
   cspsubarrayleafnode:
     enabled: true
     file: "data/cspsubarrayleafnode.yaml"
     DelayCadence: 10.0
     DelayValidityPeriod: 20.0
     DelayModelTimeInAdvance: 30
-
+    CommandTimeOut: 50
   dishleafnode:
     enabled: true
     file: "data/dishleafnode.yaml"
@@ -185,7 +189,8 @@ deviceServers:
       requests:
         cpu: 1500m
         memory: 2800Mi
-
+    CommandTimeOut: 90
+    TrackTableInAdvance: 6
   mocks:
     enabled: false
     file: "data/mocks.yaml"

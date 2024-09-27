@@ -26,6 +26,7 @@ server:
           values:
             - "5"
 
+
 depends_on:
   - device: sys/database/2
 image:

@@ -7,6 +7,8 @@ entrypoints:
 server:
   name: "dish_leaf_node"
   instances:
+  {{- $CommandTimeOut := .Values.deviceServers.dishleafnode.CommandTimeOut }}
+  {{- $TrackTableInAdvance := .Values.deviceServers.dishleafnode.TrackTableInAdvance }}
   {{- $instance_list := list -}}
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
   {{- $isSimulatedDish := .Values.deviceServers.mocks.dish }}
@@ -51,7 +53,7 @@ server:
               - "5"
           - name: "CommandTimeOut"
             values:
-              - "50"
+              - "{{$CommandTimeOut}}"
           - name: "TrackTableInAdvance"
             values:
               - "6"

@@ -7,6 +7,7 @@ entrypoints:
 {{- $DelayModelTimeInAdvance := .Values.deviceServers.cspsubarrayleafnode.DelayModelTimeInAdvance }}
 {{- $DelayCadence := .Values.deviceServers.cspsubarrayleafnode.DelayCadence }}
 {{- $DelayValidityPeriod := .Values.deviceServers.cspsubarrayleafnode.DelayValidityPeriod }}
+{{- $CommandTimeOut := .Values.deviceServers.cspsubarrayleafnode.CommandTimeOut}}
 server:
   name: "csp_subarray_leaf_node_mid"
   instances:
@@ -39,6 +40,9 @@ server:
               - name: "DelayValidityPeriod"
                 values:
                 - "{{ $DelayValidityPeriod }}"
+              - name: "CommandTimeOut"
+                values:
+                - "{{ $CommandTimeOut }}"
   {{- end}}
 depends_on:
   - device: sys/database/2

@@ -20,6 +20,8 @@ server:
   {{- $csp_assign_interface := .Values.deviceServers.subarraynode.CspAssignResourcesInterfaceURL }}
   {{- $csp_scan_interface := .Values.deviceServers.subarraynode.CspScanInterfaceURL }}
   {{- $sdp_scan_interface := .Values.deviceServers.subarraynode.SdpScanInterfaceURL }}
+  {{- $CommandTimeOut := .Values.deviceServers.subarraynode.CommandTimeOut}}
+  {{- $AbortCommandTimeout := .Values.deviceServers.subarraynode.AbortCommandTimeout}}
   {{- range  ( regexSplit " " ((.Values.subarray_count | int) | seq ) -1 ) }}
     - name: "{{ printf "%02s" . }}"
       classes:
@@ -76,10 +78,10 @@ server:
               - "5"
           - name: "CommandTimeOut"
             values:
-              - "110"
+              - "{{ $CommandTimeOut }}"
           - name: "AbortCommandTimeout"
             values:
-              - "100"
+              - "{{ $AbortCommandTimeout}}"
           - name: "CspAssignResourcesInterfaceURL"
             values:
               - "{{ $csp_assign_interface }}"
