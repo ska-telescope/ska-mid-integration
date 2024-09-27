@@ -236,11 +236,11 @@ stop-k8s-test-tmc-with-dish:
 deploy-mid-integration:
   extends: deploy-integration
   rules:
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   variables:
-    KUBE_NAMESPACE: "integration-ska-mid-test"
+    KUBE_NAMESPACE: "ska-mid-integration"
   environment:
-    name: integration-ska-mid-test
+    name: ska-mid-integration-$CI_PROJECT_NAME
     on_stop: stop-mid-integration
 
 info-mid-integration:
