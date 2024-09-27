@@ -1,9 +1,7 @@
-from datetime import datetime
-
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
-from tango import DeviceProxy
+from tango import DevState
 
 from tests.conftest import LOGGER
 from tests.resources.test_support.common_utils.telescope_controls import (
@@ -14,17 +12,15 @@ from tests.resources.test_support.common_utils.tmc_helpers import (
     tear_down,
 )
 from tests.resources.test_support.constant import (
-    DEVICE_LIST_FOR_CHECK_DEVICES,
     DEVICE_OBS_STATE_EMPTY_INFO,
     DEVICE_OBS_STATE_IDLE_INFO,
     DEVICE_OBS_STATE_READY_INFO,
     DEVICE_STATE_OFF_INFO,
-    DEVICE_STATE_ON_INFO,
-    DEVICE_STATE_STANDBY_INFO,
     ON_OFF_DEVICE_COMMAND_DICT,
     centralnode,
     tmc_subarraynode1,
 )
+from tests.resources.test_support.enum import DishMode
 
 tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 telescope_control = BaseTelescopeControl()
@@ -43,34 +39,63 @@ def test_multiple_configure_functionality():
 
 
 @given("the TMC is On")
-def given_tmc(json_factory):
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        tmc_helper.check_devices(DEVICE_LIST_FOR_CHECK_DEVICES)
-        # Verify Telescope is Off/Standby
-        assert telescope_control.is_in_valid_state(
-            DEVICE_STATE_STANDBY_INFO, "State"
+def given_tmc(central_node_mid, dish_ids, event_recorder):
+    assert central_node_mid.csp_master.ping() > 0
+    assert central_node_mid.sdp_master.ping() > 0
+    for dish_id in dish_ids.split(","):
+        assert central_node_mid.dish_master_dict[dish_id].ping() > 0
+        assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
+
+    central_node_mid.move_to_on()
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "pointingState"
+        )
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
+        )
+    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
+    event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.csp_master,
+        "State",
+        DevState.ON,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.sdp_master,
+        "State",
+        DevState.ON,
+    )
+
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+            lookahead=15,
         )
 
-        dish_node = DeviceProxy("ska063/elt/master")
-        LOGGER.info(dish_node.read_attribute("DishMode").value)
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "telescopeState"
+    )
 
-        tmc_helper.set_to_on(**ON_OFF_DEVICE_COMMAND_DICT)
-        LOGGER.info("TelescopeOn command is invoked successfully")
-
-        now = datetime.now()
-        current_time = now.strftime("%d/%m/%Y %H:%M:%S:%f")
-        LOGGER.info("current_time - %s ", current_time)
-
-        assert telescope_control.is_in_valid_state(
-            DEVICE_STATE_ON_INFO, "State"
-        )
-
-        assert telescope_control.is_in_valid_state(
-            DEVICE_OBS_STATE_EMPTY_INFO, "obsState"
-        )
-    except Exception:
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "telescopeState",
+        DevState.ON,
+    )
 
 
 @given("the subarray is in IDLE obsState")
