@@ -10,8 +10,8 @@ from ska_tango_testing.integration import TangoEventTracer
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.constant import COMMAND_COMPLETED
-from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
+    check_long_running_command_status,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
@@ -186,7 +186,9 @@ def move_subarray_obsState_to_ready(
     )
 )
 def check_dish_mode_and_pointing_state_after_configure(
-    central_node_mid: CentralNodeWrapperMid, dish_ids: str
+    central_node_mid: CentralNodeWrapperMid,
+    dish_ids: str,
+    event_tracer: TangoEventTracer,
 ):
     """
     Method to check dishMode and pointingState of DISH after Configure command
@@ -195,27 +197,67 @@ def check_dish_mode_and_pointing_state_after_configure(
         central_node_mid: Fixture for a TMC CentralNode wrapper class
         dish_ids (str): Comma-separated IDs of DISH components.
     """
+    for dish_id in dish_ids.split(","):
+        event_tracer.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "dishMode"
+        )
+        event_tracer.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
+        )
+        event_tracer.subscribe_event(
+            central_node_mid.dish_master_dict[dish_id], "pointingState"
+        )
+        event_tracer.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
+        )
 
     for dish_id in dish_ids.split(","):
-        central_node_mid.dish_master_dict[dish_id].SetDirectPointingState(
-            PointingState.READY
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "GIVEN" STEP: '
+            "'the dish must be in the OPERATE dishMode'"
+            "dish device"
+            f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
+            "is expected to be in OPERATE dishMode",
+        ).within_timeout(60).has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.OPERATE,
         )
 
-        assert (
-            central_node_mid.dish_master_dict[dish_id].dishMode
-            == DishMode.OPERATE
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "GIVEN" STEP: '
+            "'the DishLeafNode must be in the OPERATE dishMode'"
+            "dish device"
+            f"({central_node_mid.dish_leaf_node_dict[dish_id].dev_name()}) "
+            "is expected to be in OPERATE dishMode",
+        ).within_timeout(60).has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "dishMode",
+            DishMode.OPERATE,
         )
-        assert (
-            central_node_mid.dish_leaf_node_dict[dish_id].dishMode
-            == DishMode.OPERATE
+
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "GIVEN" STEP: '
+            "'the dish must be in the TRACK pointingState'"
+            "dish device"
+            f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
+            "is expected to be in TRACK pointingState",
+        ).within_timeout(60).has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "pointingState",
+            PointingState.READY,
         )
-        assert (
-            central_node_mid.dish_master_dict[dish_id].pointingState
-            == PointingState.READY
-        )
-        assert (
-            central_node_mid.dish_leaf_node_dict[dish_id].pointingState
-            == PointingState.READY
+
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "GIVEN" STEP: '
+            "'the DishLeafNode must be in the TRACK pointingState'"
+            "dish device"
+            f"({central_node_mid.dish_leaf_node_dict[dish_id].dev_name()}) "
+            "is expected to be in TRACK pointingState",
+        ).within_timeout(60).has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "pointingState",
+            PointingState.READY,
         )
 
 
@@ -246,7 +288,7 @@ def invoke_abort(subarray_node: SubarrayNodeWrapper, subarray_id: str):
 def check_dish_mode_and_pointing_state_after_abort(
     central_node_mid: CentralNodeWrapperMid,
     dish_ids: str,
-    event_recorder: EventRecorder,
+    event_tracer: TangoEventTracer,
 ):
     """
     Method to check dishMode and pointingState of DISH after Abort command.
@@ -257,29 +299,35 @@ def check_dish_mode_and_pointing_state_after_abort(
     """
 
     for dish_id in dish_ids.split(","):
-        assert event_recorder.has_change_event_occurred(
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "THEN" STEP: '
+            "'the dish must be in the STANDBY_FP dishMode'"
+            "dish device"
+            f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
+            "is expected to be in STANDBY_FP dishMode",
+        ).within_timeout(60).has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.STANDBY_FP,
-            lookahead=10,
         )
-        assert event_recorder.has_change_event_occurred(
+
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "THEN" STEP: '
+            "'the DishLeafNode must be in the STANDBY_FP dishMode'"
+            "dish device"
+            f"({central_node_mid.dish_leaf_node_dict[dish_id].dev_name()}) "
+            "is expected to be in STANDBY_FP dishMode",
+        ).within_timeout(60).has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "dishMode",
             DishMode.STANDBY_FP,
-            lookahead=10,
         )
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_master_dict[dish_id],
-            "pointingState",
-            PointingState.READY,
-            lookahead=15,
-        )
-        assert event_recorder.has_change_event_occurred(
+
+        assert check_long_running_command_status(
             central_node_mid.dish_leaf_node_dict[dish_id],
-            "pointingState",
-            PointingState.READY,
-            lookahead=15,
+            "longRunningCommandStatus",
+            "_Configure",
+            "ABORTED",
         )
 
 
