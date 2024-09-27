@@ -26,7 +26,7 @@ tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 telescope_control = BaseTelescopeControl()
 
 
-@pytest.mark.SKA_mid32
+@pytest.mark.SKA_mid33
 @scenario(
     "../features/tmc_dish/successive_configure_dish.feature",
     "TMC validates reconfigure functionality",
