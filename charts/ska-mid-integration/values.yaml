@@ -105,7 +105,7 @@ ska-sdp:
   ska-tango-base:
     enabled: false
   lmc:
-    prefix: low
+    prefix: mid
     nsubarray: 3
   data-pvc:
     create:

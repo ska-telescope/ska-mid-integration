@@ -278,8 +278,3 @@ redeploy-mid-integration:
   when: manual
 
 
-deploy-dev-environment:
-  variables:
-    KUBE_NAMESPACE: "ci-dev-ska-mid-integration" 
-    KUBE_NAMESPACE_SDP: "ci-dev-ska-mid-integration-sdp"
-    SKIP_CI: 1
