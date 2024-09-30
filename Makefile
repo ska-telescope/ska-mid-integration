@@ -287,7 +287,7 @@ bdd-steps-doc:
 # Publish the BDD HTML test report to the just published
 # Jira test execution issue
 
-JIRA_ULR ?= https://jira.skatelescope.org
+JIRA_URL ?= https://jira.skatelescope.org
 PROJECT_KEY ?= XTP
 
 ADD_DOCS_LINK_TO_JIRA ?= false
@@ -297,7 +297,7 @@ ADD_DOCS_LINK_TO_JIRA ?= false
 # in the Jira test execution issue)
 
 DECORATE_TEST_EXECUTIONS := true
-DECORATE_TEST_EXECUTIONS_PARAMS := --jira-url="$(strip $(JIRA_ULR))" \
+DECORATE_TEST_EXECUTIONS_PARAMS := --jira-url="$(strip $(JIRA_URL))" \
 	--project-key="$(strip $(PROJECT_KEY))" \
 	--ci-job-id="$(CI_JOB_ID)" --commit-sha="$(CI_COMMIT_SHA)" \
 	--html-report="$(strip $(HTML_REPORT_TARGET_FILE))"
@@ -314,7 +314,7 @@ xray-post-publish:
 	if [ -f "$(HTML_REPORT_TARGET_FILE)" ] && [ -f "$(DECORATE_TEST_EXECUTIONS)" ]; then \
 		echo "Publishing the BDD HTML test report to the Jira test execution issue"; \
 		python -m ska_ser_xray.scripts.decorate_test_execution $(DECORATE_TEST_EXECUTIONS_PARAMS); \
-	fi
+	fi;
 
 # ----------------------------------------------------------------------------
 # Further customisations of the test command args
