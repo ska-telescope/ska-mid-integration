@@ -287,35 +287,34 @@ bdd-steps-doc:
 # Publish the BDD HTML test report to the just published
 # Jira test execution issue
 
-PUBLISH_HTML_REPORT_TO_JIRA_SCRIPT ?= helper_scripts/publish_test_report.py
-## The Python script that will publish the BDD HTML test report to the Jira test execution issue
-# (Set to empty to disable the publishing of the BDD HTML test report to the Jira test execution issue)
+JIRA_ULR ?= https://jira.skatelescope.org
+PROJECT_KEY ?= XTP
 
+ADD_DOCS_LINK_TO_JIRA ?= false
+## Flag to set to "true" if you want to add a link to the 
+# BDD test documentation in the Jira test execution issue
+# (Set to false to disable the link to the BDD test documentation 
+# in the Jira test execution issue)
+
+DECORATE_TEST_EXECUTIONS := true
+DECORATE_TEST_EXECUTIONS_PARAMS := --jira-url="$(strip $(JIRA_ULR))" \
+	--project-key="$(strip $(PROJECT_KEY))" \
+	--ci-job-id="$(CI_JOB_ID)" --commit-sha="$(CI_COMMIT_SHA)" \
+	--html-report="$(strip $(HTML_REPORT_TARGET_FILE))"
+
+ifeq ($(ADD_DOCS_LINK_TO_JIRA), true)
+	DECORATE_TEST_EXECUTIONS_PARAMS += --test-docs-link="$(strip $(STEP_DOCUMENTATION_OUTPUT_FOLDER))"
+endif
 
 # after the test run and the Test Execution Jira ticket is created,
 # if the HTML report is enabled and 
 # the script to publish the HTML report to Jira is available,
 # then publish a link to the HTML report to Jira
 xray-post-publish:
-	if [ -f "$(HTML_REPORT_TARGET_FILE)" ] && [ -f "$(PUBLISH_HTML_REPORT_TO_JIRA_SCRIPT)" ]; then \
+	if [ -f "$(HTML_REPORT_TARGET_FILE)" ] && [ -f "$(DECORATE_TEST_EXECUTIONS)" ]; then \
 		echo "Publishing the BDD HTML test report to the Jira test execution issue"; \
-		export HTML_REPORT_TARGET_FILE="$(strip $(HTML_REPORT_TARGET_FILE))"; \
-		export TEST_DOCS_LINK="$(strip $(TEST_DOCS_LINK))"; \
-		python3 $(PUBLISH_HTML_REPORT_TO_JIRA_SCRIPT); \
+		python -m ska_ser_xray.scripts.decorate_test_execution $(DECORATE_TEST_EXECUTIONS_PARAMS); \
 	fi
-
-ADD_DOCS_LINK_TO_JIRA ?= false
-## Flag to set to "true" if you want to add a link to the BDD test documentation in the Jira test execution issue
-# (Set to false to disable the link to the BDD test documentation in the Jira test execution issue)
-
-## Extract a link to the BDD test documentation where the steps are documented
-# This link is generated from the commit SHA, since it is expected that the BDD test documentation
-# is versioned with the code.
-# (Set to empty to disable the link to the BDD test documentation in the Jira test execution issue)
-ifeq ($(ADD_DOCS_LINK_TO_JIRA), true)
-	TEST_DOCS_LINK := https://gitlab.com/ska-telescope/ska-tmc/ska-tmc-mid-integration/-/blob/$(CI_COMMIT_SHA)/$(strip $(STEP_DOCUMENTATION_OUTPUT_FOLDER))/index.md
-endif
-
 
 # ----------------------------------------------------------------------------
 # Further customisations of the test command args
