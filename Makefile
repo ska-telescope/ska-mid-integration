@@ -303,7 +303,7 @@ DECORATE_TEST_EXECUTIONS_PARAMS := --jira-url="$(strip $(JIRA_ULR))" \
 	--html-report="$(strip $(HTML_REPORT_TARGET_FILE))"
 
 ifeq ($(ADD_DOCS_LINK_TO_JIRA), true)
-	DECORATE_TEST_EXECUTIONS_PARAMS += --test-docs-link="$(strip $(STEP_DOCUMENTATION_OUTPUT_FOLDER))"
+	DECORATE_TEST_EXECUTIONS_PARAMS += --test-docs="$(strip $(STEP_DOCUMENTATION_OUTPUT_FOLDER))"
 endif
 
 # after the test run and the Test Execution Jira ticket is created,
