@@ -100,7 +100,8 @@ ska-oso-oet:
 #=== SDP ===#
 ska-sdp:
   labels:
-    app: ska-jupyter-scripting
+    app: ska-tmc-mid-integration
+  enabled: true
   ska-tango-base:
     enabled: false
   lmc:
@@ -165,6 +166,7 @@ tmc-mid: # check why it is separate
 
 ska-taranta:
   enabled: true
+
 
 ##tangoGQL
 ska-tango-tangogql:
