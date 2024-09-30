@@ -17,7 +17,7 @@ SDP_SIMULATION_ENABLED ?= true
 CSP_SIMULATION_ENABLED ?= true
 DISH_SIMULATION_ENABLED ?= true
 CI_PROJECT_DIR ?= .
-
+SDP_DEPLOY ?= true
 MINIKUBE ?= true ## Minikube or not
 EXPOSE_All_DS ?= true ## Expose All Tango Services to the external network (enable Loadbalancer service)
 SKA_TANGO_OPERATOR ?= true
@@ -94,18 +94,12 @@ DISH_NAME_1 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_1).svc.$(CLUSTER_DOMA
 DISH_NAME_36 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_2).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA036
 DISH_NAME_63 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_3).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA063
 DISH_NAME_100 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_4).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA100
-SDP_DEPLOY ?= true
+
 
 ifeq ($(SDP_SIMULATION_ENABLED),false)
 K8S_EXTRA_PARAMS=	-f charts/ska-mid-integration/tmc_pairwise/tmc_sdp_values.yaml \
-	--set tmc-mid.deviceServers.mocks.sdp=$(SDP_SIMULATION_ENABLED)\
 	--set global.sdp_master="$(SDP_MASTER)"\
-	--set global.sdp_subarray_prefix="$(SDP_SUBARRAY_PREFIX)"\
-	--set ska-sdp.enabled=true\
-	--set ska-sdp.lmc.loadBalancer=true\
-	--set global.operator=true \
-	--set tmc-mid.subarray_count=1\
-	--set ska-sdp.lmc.nsubarray=1
+	--set global.sdp_subarray_prefix="$(SDP_SUBARRAY_PREFIX)"
 endif
 
 
@@ -199,17 +193,19 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 
 k8s-pre-install-chart:
 ifeq ($(SDP_DEPLOY),true)
-   @echo "k8s-pre-install-chart: creating the SDP namespace $(KUBE_NAMESPACE_SDP)" \
-   @make k8s-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP)
+   		@echo "k8s-pre-install-chart: creating the SDP namespace $(KUBE_NAMESPACE_SDP)" \
+  		@make k8s-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP)
 endif
 
 k8s-pre-install-chart-car:
 ifeq ($(SDP_DEPLOY),true)
-   @echo "k8s-pre-install-chart-car: creating the SDP namespace $(KUBE_NAMESPACE_SDP)" \
-   @make k8s-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP)
+   		@echo "k8s-pre-install-chart-car: creating the SDP namespace $(KUBE_NAMESPACE_SDP)" \
+  		@make k8s-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP)
 endif
+
 k8s-pre-uninstall-chart:
 ifeq ($(SDP_DEPLOY),true)
-   @echo "k8s-post-uninstall-chart: deleting the SDP namespace $(KUBE_NAMESPACE_SDP)" \
-   @if [ "$(KEEP_NAMESPACE)" != "true" ]; then make k8s-delete-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP); fi
+  		@echo "k8s-post-uninstall-chart: deleting the SDP namespace $(KUBE_NAMESPACE_SDP)" \
+		@make k8s-delete-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP)
+   		# @if [ "$(KEEP_NAMESPACE)" != "true" ]; then make k8s-delete-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP); fi
 endif
