@@ -122,11 +122,15 @@ def send_configure(json_factory, input_json1):
     try:
         LOGGER.info("Invoking Configure command with input_json1")
         # Invoke Configure() command
-        tmc_helper.configure_subarray(
+        result, message = tmc_helper.configure_subarray(
             configure_json1, **ON_OFF_DEVICE_COMMAND_DICT
         )
-        LOGGER.info("Configure1 is invoked successfully")
-    except Exception:
+        LOGGER.info(
+            "Configure1 is invoked successfully %s %s", result, message
+        )
+
+    except Exception as e:
+        LOGGER.info("Exception raised %s %s %s ", e, result, message)
         tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
 
 
