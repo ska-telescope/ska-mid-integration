@@ -127,8 +127,8 @@ deploy-tmc-with-sdp:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
     TELESCOPE: 'SKA-mid'
-    KUBE_NAMESPACE: 'integration-ska-mid-tmc-sdp'
-    KUBE_NAMESPACE_SDP: 'integration-ska-tmc-mid-sdp'
+    KUBE_NAMESPACE: 'ci-dev-$CI_PROJECT_NAME'
+    KUBE_NAMESPACE_SDP: 'ci-dev-$CI_PROJECT_NAME'
     SDP_SIMULATION_ENABLED: 'false' 
   environment:
     name: integration-sdp-$CI_PROJECT_NAME
@@ -140,8 +140,8 @@ stop-k8s-test-tmc-with-sdp:
   rules:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
-    KUBE_NAMESPACE: 'integration-ska-mid-tmc-sdp'
-    KUBE_NAMESPACE_SDP: 'integration-ska-tmc-mid-sdp'
+    KUBE_NAMESPACE: 'ci-dev-$CI_PROJECT_NAME'
+    KUBE_NAMESPACE_SDP: 'ci-dev-$CI_PROJECT_NAME'
     SDP_SIMULATION_ENABLED: 'false'
   environment:
     name: integration-sdp-$CI_PROJECT_NAME
@@ -277,4 +277,20 @@ redeploy-mid-integration:
     name: integration-ska-mid
   when: manual
 
+deploy-dev-environment:
+  image: $SKA_K8S_TOOLS_BUILD_DEPLOY
+  tags:
+    - ska-k8s
+  stage: deploy
+  when: manual
+  variables:
+    SKIP_CI: 1
+    KUBE_NAMESPACE: "ci-dev-$CI_PROJECT_NAME"
+  script:
+    - make k8s-install-chart
+    - make k8s-wait
+  environment:
+    name: integration-sdp-$CI_PROJECT_NAME
+    on_stop: stop-dev-environment
+    auto_stop_in: 4 hours
 
