@@ -9,6 +9,9 @@ global:
   exposeAllDS: false
   taranta_auth_enabled: false
   taranta_dashboard_enabled: false
+  annotations:
+    app.gitlab.com/app: ska-mid-integration
+    app.gitlab.com/env: ska-mid
   sub-system:
     tango-base:
       enabled: false
@@ -97,40 +100,18 @@ ska-oso-oet:
 #=== SDP ===#
 ska-sdp:
   labels:
-    app: ska-mid-integration
-    enabled: true
+    app: ska-jupyter-scripting
   ska-tango-base:
     enabled: false
   lmc:
-    prefix: mid
+    prefix: low
     nsubarray: 3
-    queueconnector:
-      image: artefact.skao.int/ska-sdp-lmc-queue-connector
-      version: 4.1.0
-      domain: queue-connector
-      function: sdp-queue-connector
-      resources:
-        limits:
-          memory: 500Mi
-          cpu: 0.5
-        requests:
-          memory: 100Mi
-          cpu: 0.3
-      pointing-offset:
-        image: artefact.skao.int/ska-sdp-wflow-pointing-offset
-        version: 0.5.0
-        script: pointing-offset
-        imagePullPolicy: IfNotPresent
-        command:
-          - pointing-offset
-        dataProductStorage:
-          name: test-pvc
-          mountPath: /mnt/data
   data-pvc:
     create:
       enabled: true
       size: 20Gi
       storageClassName: nfss1
+
 
 #=== CSP ===#
 ska-csp-lmc-mid:
@@ -181,6 +162,9 @@ tmc-mid: # check why it is separate
       dish: false
       csp: false
       sdp: false
+
+ska-taranta:
+  enabled: true
 
 ##tangoGQL
 ska-tango-tangogql:
