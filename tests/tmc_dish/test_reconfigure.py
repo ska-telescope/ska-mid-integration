@@ -29,7 +29,7 @@ telescope_control = BaseTelescopeControl()
 @pytest.mark.SKA_mid33
 @scenario(
     "../features/tmc_dish/successive_configure_dish.feature",
-    "TMC validates reconfigure functionality",
+    "TMC validates reconfigure functionality with real dish",
 )
 def test_multiple_configure_functionality():
     """
@@ -39,10 +39,10 @@ def test_multiple_configure_functionality():
 
 
 @given("the TMC is On")
-def given_tmc(central_node_mid, dish_ids, event_recorder):
+def given_tmc(central_node_mid, event_recorder):
     assert central_node_mid.csp_master.ping() > 0
     assert central_node_mid.sdp_master.ping() > 0
-    for dish_id in dish_ids.split(","):
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         assert central_node_mid.dish_master_dict[dish_id].ping() > 0
         assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
 

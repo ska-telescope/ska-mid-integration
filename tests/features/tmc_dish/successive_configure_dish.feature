@@ -1,6 +1,6 @@
 Feature:  TMC executes successive configure commands
     @tmc_dish
-    Scenario: TMC validates reconfigure functionality
+    Scenario: TMC validates reconfigure functionality with real dish
         Given the TMC is On
         And the subarray is in IDLE obsState
         When the command configure is issued with <input_json1>
