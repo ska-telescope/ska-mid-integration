@@ -156,16 +156,14 @@ def send_next_configure(json_factory, input_json2, subarray_node):
     try:
         LOGGER.info("Invoking Configure command with input_json2")
         # Invoke successive Configure() command
-        tmc_helper.configure_subarray(
-            configure_json2, **ON_OFF_DEVICE_COMMAND_DICT
-        )
 
         _, pytest.unique_id = subarray_node.execute_transition(
             "Configure", configure_json2
         )
 
         LOGGER.info("Configure2 is invoked successfully")
-    except Exception:
+    except Exception as e:
+        LOGGER.info("Exception raised %s ", e)
         tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
 
 
