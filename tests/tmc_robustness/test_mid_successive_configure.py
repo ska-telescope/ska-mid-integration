@@ -1,6 +1,5 @@
 from datetime import datetime
 
-import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from tango import DeviceProxy
@@ -30,7 +29,6 @@ tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 telescope_control = BaseTelescopeControl()
 
 
-@pytest.mark.SKA_mid32
 @scenario(
     "../features/successive_configure.feature",
     "TMC validates reconfigure functionality",

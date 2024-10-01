@@ -24,13 +24,13 @@ k8s-test-dish-lmc:
     - make k8s-install-chart
     - make k8s-wait
   script:
-    - make k8s-test MARK=SKA_mid33
+    - make k8s-test MARK=tmc_dish
   needs:
     - dish-lmc-dish001
     - dish-lmc-dish036
     - dish-lmc-dish063
     - dish-lmc-dish100
-
+    - k8s-test-csp-dish
   after_script:
     - ls -al
     - ls -al build

@@ -353,7 +353,7 @@ def setup_dish_events(
         central_node_mid: Fixture for a TMC CentralNode wrapper class
         event_tracer: Fixture for EventTracer class
     """
-    # dish_ids = ["SKA001", "SKA036", "SKA063", "SKA100"]
+
     events = ["dishMode", "pointingState"]
 
     for dish_id in dish_ids.split(","):
