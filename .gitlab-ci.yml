@@ -254,7 +254,8 @@ stop-mid-integration:
     action: stop
 
 redeploy-mid-integration:
-  extends: redeploy-integratio
+  extends: redeploy-integration
+  when: manual
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   variables:
