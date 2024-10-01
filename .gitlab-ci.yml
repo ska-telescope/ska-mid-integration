@@ -122,7 +122,7 @@ redeploy-staging:
     - when: never
 
 deploy-tmc-with-sdp:
-  extends: deploy-integration
+  extends: deploy-mid-integration
   variables:
     TELESCOPE: 'SKA-mid'
     PORT: "10000"
@@ -144,6 +144,7 @@ stop-k8s-test-tmc-with-sdp:
     action: stop
   needs:
     - deploy-tmc-with-sdp
+  when: manual
  
 deploy-tmc-with-csp:
   extends: deploy-mid-integration
@@ -169,6 +170,7 @@ stop-k8s-test-tmc-with-csp:
     action: stop
   needs:
     - deploy-tmc-with-csp
+  when: manual
 
 deploy-tmc-with-dish:
   extends: deploy-mid-integration
@@ -213,9 +215,11 @@ stop-k8s-test-tmc-with-dish:
     - make k8s-uninstall-chart
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
     - make k8s-delete-namespace 
+  when: manual
 
 deploy-mid-integration:
   extends: deploy-integration
+  when: manual
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   variables:
@@ -226,6 +230,7 @@ deploy-mid-integration:
 
 info-mid-integration:
   extends: info-integration
+  when: manual
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   needs:
@@ -237,6 +242,7 @@ info-mid-integration:
 
 stop-mid-integration:
   extends: stop-integration
+  when: manual
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   needs:
@@ -249,6 +255,7 @@ stop-mid-integration:
 
 redeploy-mid-integration:
   extends: redeploy-integration
+  when: manual
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   variables:
