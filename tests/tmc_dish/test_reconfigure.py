@@ -4,6 +4,9 @@ from ska_control_model import ObsState
 from tango import DevState
 
 from tests.conftest import LOGGER
+from tests.resources.test_harness.utils.common_utils import (
+    wait_for_device_status_ready,
+)
 from tests.resources.test_support.common_utils.telescope_controls import (
     BaseTelescopeControl,
 )
@@ -13,7 +16,6 @@ from tests.resources.test_support.common_utils.tmc_helpers import (
 )
 from tests.resources.test_support.constant import (
     DEVICE_OBS_STATE_IDLE_INFO,
-    DEVICE_OBS_STATE_READY_INFO,
     ON_OFF_DEVICE_COMMAND_DICT,
     centralnode,
     tmc_subarraynode1,
@@ -37,7 +39,7 @@ def test_multiple_configure_functionality():
 
 
 @given("the TMC is On")
-def given_tmc(central_node_mid, event_recorder):
+def given_tmc(central_node_mid, subarray_node, event_recorder):
     assert central_node_mid.csp_master.ping() > 0
     assert central_node_mid.sdp_master.ping() > 0
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
@@ -60,6 +62,7 @@ def given_tmc(central_node_mid, event_recorder):
         )
     event_recorder.subscribe_event(central_node_mid.csp_master, "State")
     event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
+    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
 
     assert event_recorder.has_change_event_occurred(
         central_node_mid.csp_master,
@@ -118,14 +121,15 @@ def send_configure(json_factory, input_json1, subarray_node):
     configure_json1 = json_factory(input_json1)
     release_json = json_factory("command_ReleaseResources")
     try:
+
         LOGGER.info("Invoking Configure command with input_json1")
         # Invoke Configure() command
         # tmc_helper.configure_subarray(
         #     configure_json1, **ON_OFF_DEVICE_COMMAND_DICT
         # )
 
-        _, pytest.unique_id = subarray_node.store_configuration_data(
-            configure_json1
+        _, pytest.unique_id = subarray_node.execute_transition(
+            "Configure", configure_json1
         )
         LOGGER.info("Configure1 is invoked successfully")
 
@@ -135,11 +139,12 @@ def send_configure(json_factory, input_json1, subarray_node):
 
 
 @then("the subarray transitions to obsState READY")
-def check_for_ready():
+def check_for_ready(subarray_node, event_recorder):
     # Verify ObsState is READY
     LOGGER.info("Verifying obsState READY after Configure1")
-    assert telescope_control.is_in_valid_state(
-        DEVICE_OBS_STATE_READY_INFO, "obsState"
+    wait_for_device_status_ready(subarray_node.subarray_node)
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=20
     )
 
 
@@ -148,15 +153,17 @@ def check_for_ready():
         "the next successive configure command is issued with {input_json2}"
     )
 )
-def send_next_configure(json_factory, input_json2, subarray_node):
+def send_next_configure(
+    json_factory, input_json2, subarray_node, event_recorder
+):
     configure_json2 = json_factory(input_json2)
     release_json = json_factory("command_ReleaseResources")
     try:
         LOGGER.info("Invoking Configure command with input_json2")
         # Invoke successive Configure() command
 
-        _, pytest.unique_id = subarray_node.store_configuration_data(
-            configure_json2
+        _, pytest.unique_id = subarray_node.execute_transition(
+            "Configure", configure_json2
         )
 
         LOGGER.info(
@@ -170,12 +177,13 @@ def send_next_configure(json_factory, input_json2, subarray_node):
 @then("the subarray reconfigures changing its obsState to READY")
 def check_for_reconfigure_ready(subarray_node, event_recorder):
 
-    # Verify ObsState is READY
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     LOGGER.info("Verifying obsState READY after Configure2")
-    # assert telescope_control.is_in_valid_state(
-    #     DEVICE_OBS_STATE_READY_INFO, "obsState"
-    # )
+
+    wait_for_device_status_ready(subarray_node.subarray_node)
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=20
+    )
+
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
