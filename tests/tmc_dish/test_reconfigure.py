@@ -116,14 +116,18 @@ def given_subarray_in_idle(json_factory):
 
 
 @when(parsers.parse("the command configure is issued with {input_json1}"))
-def send_configure(json_factory, input_json1):
+def send_configure(json_factory, input_json1, subarray_node):
     configure_json1 = json_factory(input_json1)
     release_json = json_factory("command_ReleaseResources")
     try:
         LOGGER.info("Invoking Configure command with input_json1")
         # Invoke Configure() command
-        tmc_helper.configure_subarray(
-            configure_json1, **ON_OFF_DEVICE_COMMAND_DICT
+        # tmc_helper.configure_subarray(
+        #     configure_json1, **ON_OFF_DEVICE_COMMAND_DICT
+        # )
+
+        _, pytest.unique_id = subarray_node.execute_transition(
+            "Configure", configure_json1
         )
         LOGGER.info("Configure1 is invoked successfully")
 
@@ -146,7 +150,7 @@ def check_for_ready():
         "the next successive configure command is issued with {input_json2}"
     )
 )
-def send_next_configure(json_factory, input_json2):
+def send_next_configure(json_factory, input_json2, subarray_node):
     configure_json2 = json_factory(input_json2)
     release_json = json_factory("command_ReleaseResources")
     try:
@@ -155,6 +159,11 @@ def send_next_configure(json_factory, input_json2):
         tmc_helper.configure_subarray(
             configure_json2, **ON_OFF_DEVICE_COMMAND_DICT
         )
+
+        _, pytest.unique_id = subarray_node.execute_transition(
+            "Configure", configure_json2
+        )
+
         LOGGER.info("Configure2 is invoked successfully")
     except Exception:
         tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
