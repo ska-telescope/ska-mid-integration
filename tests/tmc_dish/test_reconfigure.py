@@ -12,10 +12,8 @@ from tests.resources.test_support.common_utils.tmc_helpers import (
     tear_down,
 )
 from tests.resources.test_support.constant import (
-    DEVICE_OBS_STATE_EMPTY_INFO,
     DEVICE_OBS_STATE_IDLE_INFO,
     DEVICE_OBS_STATE_READY_INFO,
-    DEVICE_STATE_OFF_INFO,
     ON_OFF_DEVICE_COMMAND_DICT,
     centralnode,
     tmc_subarraynode1,
@@ -127,7 +125,7 @@ def send_configure(json_factory, input_json1, subarray_node):
         # )
 
         _, pytest.unique_id = subarray_node.store_configuration_data(
-            "Configure", configure_json1
+            configure_json1
         )
         LOGGER.info("Configure1 is invoked successfully")
 
@@ -158,7 +156,7 @@ def send_next_configure(json_factory, input_json2, subarray_node):
         # Invoke successive Configure() command
 
         _, pytest.unique_id = subarray_node.store_configuration_data(
-            "Configure", configure_json2
+            configure_json2
         )
 
         LOGGER.info(
@@ -183,36 +181,3 @@ def check_for_reconfigure_ready(subarray_node, event_recorder):
         "obsState",
         ObsState.READY,
     )
-
-
-@then("test goes for the tear down")
-def check_for_tear_down(json_factory):
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        # Invoke End() command
-        LOGGER.info("Invoking End command on TMC SubarrayNode")
-        tmc_helper.end(**ON_OFF_DEVICE_COMMAND_DICT)
-
-        # Verify ObsState is IDLE
-        assert telescope_control.is_in_valid_state(
-            DEVICE_OBS_STATE_IDLE_INFO, "obsState"
-        )
-        # Invoke ReleaseResources() command
-        tmc_helper.invoke_releaseResources(
-            release_json, **ON_OFF_DEVICE_COMMAND_DICT
-        )
-
-        assert telescope_control.is_in_valid_state(
-            DEVICE_OBS_STATE_EMPTY_INFO, "obsState"
-        )
-
-        # Invoke TelescopeOff() command
-        tmc_helper.set_to_off(**ON_OFF_DEVICE_COMMAND_DICT)
-
-        # Verify State transitions after TelescopeOff
-        assert telescope_control.is_in_valid_state(
-            DEVICE_STATE_OFF_INFO, "State"
-        )
-
-    except Exception:
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
