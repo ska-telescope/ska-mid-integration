@@ -2,19 +2,11 @@
 """
 import time
 from os.path import dirname, join
-from typing import TYPE_CHECKING
 
 from ska_control_model import ObsState
 
 from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.utils.wait_helpers import Waiter
-
-if TYPE_CHECKING:
-    from tests.resources.test_harness.central_node_mid import (
-        CentralNodeWrapperMid,
-    )
-
-from ska_tango_testing.integration import TangoEventTracer
 
 
 def get_subarray_input_json(slug):
@@ -350,8 +342,8 @@ def check_configure_successful_csp(
 
 
 def setup_dish_events(
-    central_node_mid: CentralNodeWrapperMid,
-    event_tracer: TangoEventTracer,
+    central_node_mid,
+    event_tracer,
     dish_ids,
 ) -> None:
     """
