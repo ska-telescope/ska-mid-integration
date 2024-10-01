@@ -161,7 +161,9 @@ def send_next_configure(json_factory, input_json2, subarray_node):
             "Configure", configure_json2
         )
 
-        LOGGER.info("Configure2 is invoked successfully")
+        LOGGER.info(
+            "Next successive configure command is invoked successfully"
+        )
     except Exception as e:
         LOGGER.info("Exception raised %s ", e)
         tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
