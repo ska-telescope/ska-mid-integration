@@ -41,7 +41,7 @@ def sync_set_to_off(device_dict: dict):
             the_waiter = Waiter(**device_dict)
             the_waiter.set_wait_for_going_to_off()
             result = func(*args, **kwargs)
-            the_waiter.wait(1300)
+            the_waiter.wait(130)
             return result
 
         return wrapper
