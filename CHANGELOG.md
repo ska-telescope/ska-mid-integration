@@ -3,6 +3,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+[0.22.6]
+**********
+* Updated ska-tmc-dishleafnode v0.17.4 to resolve SKB-511
+
 [0.22.5]
 **********
 * Updated dish leaf node version 0.17.3 to resolve SKB-502
@@ -10,8 +14,7 @@ Added
 
 [0.22.4]
 ************
-*Resolve SKB-511
-*Validate SKB-467
+Fixed *SKB-497*
 
 [0.22.3]
 ************
