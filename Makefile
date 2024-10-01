@@ -197,19 +197,23 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 # endif
 
 
+# to create SDP namespace
 k8s-pre-install-chart:
 ifeq ($(SDP_DEPLOY),true)
-   @echo "k8s-pre-install-chart: creating the SDP namespace $(KUBE_NAMESPACE_SDP)" 
-   @make k8s-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP)
+	@echo "k8s-pre-install-chart: creating the SDP namespace $(KUBE_NAMESPACE_SDP)"
+	@make k8s-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP)
 endif
 
+# to create SDP namespace
 k8s-pre-install-chart-car:
 ifeq ($(SDP_DEPLOY),true)
-   @echo "k8s-pre-install-chart-car: creating the SDP namespace $(KUBE_NAMESPACE_SDP)" 
-   @make k8s-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP)
+	@echo "k8s-pre-install-chart-car: creating the SDP namespace $(KUBE_NAMESPACE_SDP)"
+	@make k8s-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP)
 endif
-k8s-pre-uninstall-chart:
+# to delete SDP namespace
+k8s-post-uninstall-chart:
 ifeq ($(SDP_DEPLOY),true)
-   @echo "k8s-post-uninstall-chart: deleting the SDP namespace $(KUBE_NAMESPACE_SDP)" 
-   @if [ "$(KEEP_NAMESPACE)" != "true" ]; then make k8s-delete-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP); fi
+	@echo "k8s-post-uninstall-chart: deleting the SDP namespace $(KUBE_NAMESPACE_SDP)"
+	@make k8s-delete-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP)
 endif
+
