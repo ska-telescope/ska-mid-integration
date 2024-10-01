@@ -255,9 +255,9 @@ stop-mid-integration:
 
 redeploy-mid-integration:
   extends: redeploy-integratio
-  when: manual
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  when: manual
   variables:
     KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
   environment:
