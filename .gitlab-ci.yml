@@ -94,7 +94,8 @@ k8s-test:
     KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA'
     ADDMARK: ""
   after_script:
-    - pip3 install -q -U ska-ser-xray
+    # - pip3 install -q -U ska-ser-xray
+    - pip3 install -q -U git+https://gitlab.com/ska-telescope/ska-ser-xray.git@sst-979-scripts-to-create-update-jira-test-tickets
     - XRAY_TEST_RESULT_FILE="build/cucumber.json" make xray-publish
 
 docs-build-rtd:
