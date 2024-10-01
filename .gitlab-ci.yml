@@ -123,8 +123,6 @@ redeploy-staging:
 
 deploy-tmc-with-sdp:
   extends: deploy-mid-integration
-  rules:
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
     TELESCOPE: 'SKA-mid'
     PORT: "10000"
@@ -138,8 +136,6 @@ deploy-tmc-with-sdp:
 stop-k8s-test-tmc-with-sdp:
   extends:
     - stop-integration
-  rules:
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-sdp'
     SDP_SIMULATION_ENABLED: 'false'
@@ -152,8 +148,6 @@ stop-k8s-test-tmc-with-sdp:
  
 deploy-tmc-with-csp:
   extends: deploy-mid-integration
-  rules:
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
     TELESCOPE: 'SKA-mid'
     PORT: "10000"
@@ -167,8 +161,6 @@ deploy-tmc-with-csp:
 stop-k8s-test-tmc-with-csp:
   extends:
     - stop-integration
-  rules:
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-csp'
     CSP_SIMULATION_ENABLED: 'false'
@@ -182,8 +174,6 @@ stop-k8s-test-tmc-with-csp:
 
 deploy-tmc-with-dish:
   extends: deploy-mid-integration
-  rules:
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
     DISH_INDICES: "001 036 063 100"
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-dish'
@@ -206,8 +196,6 @@ deploy-tmc-with-dish:
 stop-k8s-test-tmc-with-dish:
   extends: 
     - stop-integration
-  rules:
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-dish'
     DISH_SIMULATION_ENABLED: 'false'
