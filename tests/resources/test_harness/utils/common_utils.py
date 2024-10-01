@@ -2,11 +2,19 @@
 """
 import time
 from os.path import dirname, join
+from typing import TYPE_CHECKING
 
 from ska_control_model import ObsState
 
 from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.utils.wait_helpers import Waiter
+
+if TYPE_CHECKING:
+    from tests.resources.test_harness.central_node_mid import (
+        CentralNodeWrapperMid,
+    )
+
+from ska_tango_testing.integration import TangoEventTracer
 
 
 def get_subarray_input_json(slug):
@@ -339,3 +347,27 @@ def check_configure_successful_csp(
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node, "obsState", ObsState.READY, lookahead=10
     )
+
+
+def setup_dish_events(
+    central_node_mid: CentralNodeWrapperMid,
+    event_tracer: TangoEventTracer,
+    dish_ids,
+) -> None:
+    """
+    This function will subscribe events for dish attributes
+
+    Args:
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        event_tracer: Fixture for EventTracer class
+    """
+    # dish_ids = ["SKA001", "SKA036", "SKA063", "SKA100"]
+    events = ["dishMode", "pointingState"]
+
+    for dish_id in dish_ids.split(","):
+        dish_master = central_node_mid.dish_master_dict[dish_id]
+        dish_leaf = central_node_mid.dish_leaf_node_dict[dish_id]
+
+        for event in events:
+            event_tracer.subscribe_event(dish_master, event)
+            event_tracer.subscribe_event(dish_leaf, event)
