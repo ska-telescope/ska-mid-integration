@@ -11,5 +11,5 @@ Feature:  TMC executes successive configure commands
 
         Examples:
             | input_json1           |      input_json2       | dish_ids |
-            | multiple_configure1   |   multiple_configure2  |  SKA001,SKA036 |
+            | multiple_configure1   |   multiple_configure2  | SKA001,SKA036 |
             | multiple_configure1   |   multiple_configure1  | SKA001,SKA036  |

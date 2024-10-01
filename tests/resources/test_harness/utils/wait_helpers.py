@@ -423,6 +423,8 @@ class Waiter:
             wait = self.waits.pop()
             if isinstance(wait, AttributeWatcher):
                 timeout = timeout * resolution
+            timeout = timeout * resolution
+            LOGGER.info("timeout - %s", timeout)
             try:
                 result = wait.wait_until_conditions_met(
                     timeout=timeout, resolution=resolution

@@ -177,15 +177,23 @@ def given_subarray_in_idle(
 
 
 @then(
-    "the subarray reconfigures changing its obsState to READY for {dish_ids}"
+    parsers.parse(
+        "the subarray reconfigures changing its obsState to READY for"
+        " {dish_ids}"
+    )
 )
-@then("the subarray transitions to obsState READY for {dish_ids}")
+@then(
+    parsers.parse(
+        "the subarray transitions to obsState READY for" " {dish_ids}"
+    )
+)
 def check_for_ready(central_node_mid, subarray_node, event_tracer, dish_ids):
     # Verify ObsState is READY
 
     event_tracer.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
+    event_tracer.subscribe_event(subarray_node.subarray_node, "obsState")
 
     for dish_id in dish_ids.split(","):
         log_events(
@@ -271,3 +279,5 @@ def check_for_ready(central_node_mid, subarray_node, event_tracer, dish_ids):
         "longRunningCommandResult",
         (pytest.unique_id[0], COMMAND_COMPLETED),
     )
+
+    event_tracer.clear_events()
