@@ -1,3 +1,7 @@
+global:
+  taranta_dashboard_enabled: false
+  taranta_auth_enabled: false
+
 tmc-mid:
   enabled: true
   deviceServers:
@@ -9,9 +13,6 @@ tmc-mid:
 
 ska-sdp:
   enabled: false
-
-ska-tango-base:
-  enabled: true
 
 ska-dish-lmc:
   labels:
