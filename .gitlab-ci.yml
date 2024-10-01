@@ -219,6 +219,7 @@ stop-k8s-test-tmc-with-dish:
 
 deploy-mid-integration:
   extends: deploy-integration
+  when: manual
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   variables:
@@ -229,6 +230,7 @@ deploy-mid-integration:
 
 info-mid-integration:
   extends: info-integration
+  when: manual
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   needs:
@@ -240,6 +242,7 @@ info-mid-integration:
 
 stop-mid-integration:
   extends: stop-integration
+  when: manual
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   needs:
@@ -251,7 +254,8 @@ stop-mid-integration:
     action: stop
 
 redeploy-mid-integration:
-  extends: redeploy-integration
+  extends: redeploy-integratio
+  when: manual
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   variables:
