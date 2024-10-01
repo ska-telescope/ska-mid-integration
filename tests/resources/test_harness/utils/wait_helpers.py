@@ -415,7 +415,7 @@ class Waiter:
 
     def wait(self, timeout=30, resolution=0.1):
         self.logs = ""
-
+        timeout = 90
         now = datetime.now()
         current_time = now.strftime("%d/%m/%Y %H:%M:%S:%f")
         LOGGER.info("Start Time for wait : %s", current_time)
@@ -424,7 +424,7 @@ class Waiter:
             if isinstance(wait, AttributeWatcher):
                 timeout = timeout * resolution
             timeout = timeout * resolution
-            LOGGER.info("timeout - %s", timeout)
+            # LOGGER.info("timeout - %s", timeout)
             try:
                 result = wait.wait_until_conditions_met(
                     timeout=timeout, resolution=resolution
