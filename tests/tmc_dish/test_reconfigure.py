@@ -126,7 +126,7 @@ def send_configure(json_factory, input_json1, subarray_node):
         #     configure_json1, **ON_OFF_DEVICE_COMMAND_DICT
         # )
 
-        _, pytest.unique_id = subarray_node.execute_transition(
+        _, pytest.unique_id = subarray_node.store_configuration_data(
             "Configure", configure_json1
         )
         LOGGER.info("Configure1 is invoked successfully")
@@ -157,7 +157,7 @@ def send_next_configure(json_factory, input_json2, subarray_node):
         LOGGER.info("Invoking Configure command with input_json2")
         # Invoke successive Configure() command
 
-        _, pytest.unique_id = subarray_node.execute_transition(
+        _, pytest.unique_id = subarray_node.store_configuration_data(
             "Configure", configure_json2
         )
 
