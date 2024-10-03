@@ -136,20 +136,6 @@ def subarray_is_in_configuring_obsState(
             lookahead=10,
         )
 
-    for dish_id in dish_ids.split(","):
-        event_recorder.subscribe_event(
-            central_node_mid.dish_leaf_node_dict[dish_id],
-            "longRunningCommandStatus",
-        )
-
-    for dish_id in dish_ids.split(","):
-        assert check_long_running_command_status(
-            central_node_mid.dish_leaf_node_dict[dish_id],
-            "longRunningCommandStatus",
-            "Configure",
-            "ABORTED",
-        )
-
 
 @when("I issue the Abort command to the TMC subarray")
 def abort_is_invoked(subarray_node):
@@ -203,6 +189,20 @@ def check_dish_mode_and_pointing_state(
             "pointingState",
             PointingState.READY,
             lookahead=10,
+        )
+
+    for dish_id in dish_ids.split(","):
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "longRunningCommandStatus",
+        )
+
+    for dish_id in dish_ids.split(","):
+        assert check_long_running_command_status(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "longRunningCommandStatus",
+            "Configure",
+            "ABORTED",
         )
 
 
