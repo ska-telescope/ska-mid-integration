@@ -1,5 +1,5 @@
 Feature:  TMC executes successive configure commands
-    @SKA_mid11
+    @SKA_mid
     Scenario: TMC validates reconfigure functionality
         Given the TMC is On
         And the subarray is in IDLE obsState
@@ -7,7 +7,7 @@ Feature:  TMC executes successive configure commands
         Then the subarray transitions to obsState READY
         When the next successive configure command is issued with <input_json2>
         Then the subarray reconfigures changing its obsState to READY
-
+        And test goes for the tear down
 
         Examples:
             | input_json1           |      input_json2       |
