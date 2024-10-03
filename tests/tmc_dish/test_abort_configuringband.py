@@ -19,7 +19,7 @@ from tests.resources.test_support.enum import DishMode
 
 @pytest.mark.tmc_dish_abort
 @scenario(
-    "../features/tmc_dish/abort_configuring.feature",
+    "../features/tmc_dish/abort_configuringband.feature",
     "Abort configuring DISH.LMC using TMC",
 )
 def test_tmc_dish_abort_in_configuring():
