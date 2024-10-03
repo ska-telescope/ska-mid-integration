@@ -13,7 +13,7 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
-@pytest.mark.tmc_dish
+@pytest.mark.tmc_dish_abort
 @scenario(
     "../features/tmc_dish/xtp-30211_abort_configuring.feature",
     "Abort configuring DISH.LMC using TMC",
