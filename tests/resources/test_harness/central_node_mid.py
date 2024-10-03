@@ -572,6 +572,8 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             self.subarray_restart()
         elif self.subarray_node.obsState == ObsState.ABORTED:
             self.subarray_restart()
+
+        LOGGER.info("telescope_state - %s", self.telescope_state)
         if self.telescope_state != "OFF":
             if (SIMULATED_DEVICES_DICT["sdp"]) and not SIMULATED_DEVICES_DICT[
                 "all_mocks"
@@ -579,6 +581,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 LOGGER.info("Tear down is not required.")
 
             else:
+                LOGGER.info("Moving to Off State")
                 self.move_to_off()
 
         self._clear_command_call_and_transition_data(clear_transition=True)
@@ -603,3 +606,6 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 lookahead=10,
             )
             event_recorder.clear_events()
+            LOGGER.info("longRunningCommandResult for Dish VCC verified")
+
+        LOGGER.info("Tear Down complete")
