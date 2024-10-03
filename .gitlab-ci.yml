@@ -70,7 +70,7 @@ include:
 #   file: 'gitlab-ci/includes/xray-publish.gitlab-ci.yml'
 
 #- local: '/gitlab_ci/.gitlab-ci-tmc-csp-new-ith.yml'
-#- local: '/gitlab_ci/.gitlab-ci-on-demand.yml'
+- local: '/gitlab_ci/.gitlab-ci-on-demand.yml'
 - local: '/gitlab_ci/.gitlab-ci-dish.yml'
 - local: '/gitlab_ci/.gitlab-ci-csp-dish.yml'
 #- local: '/gitlab_ci/.gitlab-ci-tmc-dish.yml'
