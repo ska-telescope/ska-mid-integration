@@ -282,31 +282,40 @@ bdd-steps-doc:
 	rm -rf $(STEP_DOCUMENTATION_OUTPUT_FOLDER)
 	python $(STEP_DOCUMENTATION_SCRIPT) $(STEP_DOCUMENTATION_TARGET_FOLDER) $(STEP_DOCUMENTATION_OUTPUT_FOLDER)
 
-
 # ----------------------------------------------------------------------------
 # Publish the BDD HTML test report to the just published
 # Jira test execution issue
 
-JIRA_URL ?= https://jira.skatelescope.org
-PROJECT_KEY ?= XTP
 
-ADD_DOCS_LINK_TO_JIRA ?= false
-## Flag to set to "true" if you want to add a link to the 
+## General flag to enable/disable the publishing of the BDD HTML test report
+# to the Jira test execution issue. 
+# Set to any value other than "true" to disable it
+DECORATE_TEST_EXECUTIONS ?= true
+
+## Jira configurations for publishing the BDD HTML test report to Jira
+JIRA_URL ?= https://jira.skatelescope.org
+JIRA_PROJECT_KEY ?= XTP
+
+DECORATE_TEST_EXECUTIONS_PARAMS ?=
+DECORATE_TEST_EXECUTIONS_PARAMS += --jira-url="$(strip $(JIRA_URL))" \
+	--project-key="$(strip $(JIRA_PROJECT_KEY))" \
+	--ci-job-id="$(CI_JOB_ID)" --commit-sha="$(CI_COMMIT_SHA)" \
+	--html-report="$(strip $(HTML_REPORT_TARGET_FILE))"
+
+# NOTE: we assume CI_JOB_ID and CI_COMMIT_SHA are available in the environment
+
+## Flag to set to "true" if you want to add also a link to the 
 # BDD test documentation in the Jira test execution issue
 # (Set to false to disable the link to the BDD test documentation 
 # in the Jira test execution issue)
-
-DECORATE_TEST_EXECUTIONS := true
-DECORATE_TEST_EXECUTIONS_PARAMS := --jira-url="$(strip $(JIRA_URL))" \
-	--project-key="$(strip $(PROJECT_KEY))" \
-	--ci-job-id="$(CI_JOB_ID)" --commit-sha="$(CI_COMMIT_SHA)" \
-	--html-report="$(strip $(HTML_REPORT_TARGET_FILE))"
+ADD_DOCS_LINK_TO_JIRA ?= false
 
 ifeq ($(ADD_DOCS_LINK_TO_JIRA), true)
 	DECORATE_TEST_EXECUTIONS_PARAMS += --test-docs="$(strip $(STEP_DOCUMENTATION_OUTPUT_FOLDER))"
 endif
 
-# after the test run and the Test Execution Jira ticket is created,
+
+## After the test run and the Test Execution Jira ticket is created,
 # if the HTML report is enabled and 
 # the script to publish the HTML report to Jira is available,
 # then publish a link to the HTML report to Jira
