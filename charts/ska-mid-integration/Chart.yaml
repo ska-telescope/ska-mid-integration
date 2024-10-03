@@ -19,12 +19,12 @@ dependencies:
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-sdp.enabled
   - name: ska-tmc-mid
-    version: 0.22.4
+    version: 0.22.5
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-tmc-mid.enabled
     alias: tmc-mid
   - name: ska-dish-lmc
-    version: 4.1.0
+    version: 4.2.0
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-dish-lmc.enabled
   - name: ska-csp-lmc-mid
