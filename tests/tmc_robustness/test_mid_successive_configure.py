@@ -5,6 +5,14 @@ from ska_control_model import ObsState
 from tango import DeviceProxy
 
 from tests.conftest import LOGGER
+
+# from tests.resources.test_harness.helpers import (
+#     check_subarray_instance,
+#     prepare_json_args_for_centralnode_commands,
+# )
+# from tests.resources.test_harness.utils.common_utils import (
+#     wait_for_device_status_idle,
+# )
 from tests.resources.test_support.common_utils.telescope_controls import (
     BaseTelescopeControl,
 )
@@ -17,7 +25,6 @@ from tests.resources.test_support.constant import (
     DEVICE_OBS_STATE_EMPTY_INFO,
     DEVICE_OBS_STATE_IDLE_INFO,
     DEVICE_OBS_STATE_READY_INFO,
-    DEVICE_STATE_OFF_INFO,
     DEVICE_STATE_ON_INFO,
     DEVICE_STATE_STANDBY_INFO,
     ON_OFF_DEVICE_COMMAND_DICT,
@@ -29,6 +36,7 @@ tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 telescope_control = BaseTelescopeControl()
 
 
+# @pytest.mark.repeat(10)
 @scenario(
     "../features/successive_configure.feature",
     "TMC validates reconfigure functionality",
@@ -148,33 +156,44 @@ def check_for_reconfigure_ready(subarray_node, event_recorder):
 
 
 @then("test goes for the tear down")
-def check_for_tear_down(json_factory):
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        # Invoke End() command
-        LOGGER.info("Invoking End command on TMC SubarrayNode")
-        tmc_helper.end(**ON_OFF_DEVICE_COMMAND_DICT)
-
-        # Verify ObsState is IDLE
-        assert telescope_control.is_in_valid_state(
-            DEVICE_OBS_STATE_IDLE_INFO, "obsState"
-        )
-        # Invoke ReleaseResources() command
-        tmc_helper.invoke_releaseResources(
-            release_json, **ON_OFF_DEVICE_COMMAND_DICT
-        )
-
-        assert telescope_control.is_in_valid_state(
-            DEVICE_OBS_STATE_EMPTY_INFO, "obsState"
-        )
-
-        # Invoke TelescopeOff() command
-        tmc_helper.set_to_off(**ON_OFF_DEVICE_COMMAND_DICT)
-
-        # Verify State transitions after TelescopeOff
-        assert telescope_control.is_in_valid_state(
-            DEVICE_STATE_OFF_INFO, "State"
-        )
-
-    except Exception:
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
+# def check_for_tear_down(json_factory,central_node_mid,
+# subarray_node,event_recorder,command_input_factory):
+def check_for_tear_down(central_node_mid):
+    central_node_mid.tear_down()
+    # release_json = json_factory("command_ReleaseResources")
+    # try:
+    #     # Invoke End() command
+    #     LOGGER.info("Invoking End command on TMC SubarrayNode")
+    #
+    #     central_node_mid.set_subarray_id(1)
+    #     subarray_node.execute_transition("End")
+    #
+    #     wait_for_device_status_idle(subarray_node.subarray_node)
+    #
+    #     assert event_recorder.has_change_event_occurred(
+    #         subarray_node.subarray_node,
+    #         "obsState",
+    #         ObsState.IDLE,
+    #     )
+    #
+    #     # Invoke ReleaseResources() command
+    #     tmc_helper.invoke_releaseResources(
+    #         release_json, **ON_OFF_DEVICE_COMMAND_DICT
+    #     )
+    #
+    #     release_input_json = prepare_json_args_for_centralnode_commands(
+    #         "release_json", command_input_factory
+    #     )
+    #     check_subarray_instance(central_node_mid.subarray_node, 1)
+    #     central_node_mid.invoke_release_resources(release_input_json)
+    #
+    #     # Invoke TelescopeOff() command
+    #     tmc_helper.set_to_off(**ON_OFF_DEVICE_COMMAND_DICT)
+    #
+    #     # Verify State transitions after TelescopeOff
+    #     assert telescope_control.is_in_valid_state(
+    #         DEVICE_STATE_OFF_INFO, "State"
+    #     )
+    #
+    # except Exception:
+    #     tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
