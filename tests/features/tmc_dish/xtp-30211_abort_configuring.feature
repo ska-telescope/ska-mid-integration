@@ -3,7 +3,7 @@
 Scenario: Abort configuring DISH.LMC using TMC
     Given a Telescope consisting of TMC, DISH <dish_ids>, simulated CSP and simulated SDP
     And the Telescope is in ON state
-    And the TMC subarray <subarray_id> is busy configuring and DishMaster <dish_ids> is in pointingState TRACK
+    And the TMC subarray <subarray_id> is busy configuring and DishMaster <dish_ids> is in pointingState READY and dishMode OPERATE
     When I issue the Abort command to the TMC subarray 
     Then the DishMaster <dish_ids> transitions to dishMode STANDBY-FP and pointingState READY  
     And the TMC subarray transitions to obsState ABORTED

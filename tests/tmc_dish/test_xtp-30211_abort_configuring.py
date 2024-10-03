@@ -6,6 +6,7 @@ from ska_tango_base.control_model import ObsState
 
 from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.helpers import (
+    check_long_running_command_status,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
@@ -26,7 +27,8 @@ def test_tmc_dish_abort_in_configuring():
 @given(
     parsers.parse(
         "the TMC subarray {subarray_id} is busy configuring and"
-        + " DishMaster {dish_ids} is in pointingState TRACK"
+        + " DishMaster {dish_ids} is in pointingState READY and dishMode"
+        + " OPERATE"
     )
 )
 def subarray_is_in_configuring_obsState(
@@ -110,13 +112,13 @@ def subarray_is_in_configuring_obsState(
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
-            PointingState.TRACK,
+            PointingState.READY,
             lookahead=15,
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "pointingState",
-            PointingState.TRACK,
+            PointingState.READY,
             lookahead=15,
         )
 
@@ -133,14 +135,20 @@ def subarray_is_in_configuring_obsState(
             DishMode.OPERATE,
             lookahead=10,
         )
-    event_recorder.subscribe_event(
-        subarray_node.subarray_node, "longRunningCommandResult"
-    )
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "longRunningCommandResult",
-        (pytest.command_result[1][0], COMMAND_COMPLETED),
-    )
+
+    for dish_id in dish_ids.split(","):
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "longRunningCommandStatus",
+        )
+
+    for dish_id in dish_ids.split(","):
+        assert check_long_running_command_status(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "longRunningCommandStatus",
+            "Configure",
+            "ABORTED",
+        )
 
 
 @when("I issue the Abort command to the TMC subarray")
