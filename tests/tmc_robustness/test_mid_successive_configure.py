@@ -156,8 +156,6 @@ def check_for_reconfigure_ready(subarray_node, event_recorder):
 
 
 @then("test goes for the tear down")
-# def check_for_tear_down(json_factory,central_node_mid,
-# subarray_node,event_recorder,command_input_factory):
 def check_for_tear_down(central_node_mid):
     central_node_mid.tear_down()
     # release_json = json_factory("command_ReleaseResources")
