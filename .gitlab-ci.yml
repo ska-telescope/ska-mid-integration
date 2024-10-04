@@ -175,6 +175,7 @@ stop-k8s-test-tmc-with-csp:
 deploy-tmc-with-dish:
   extends: deploy-mid-integration
   variables:
+    DISH_TANGO_HOST: "databaseds"
     DISH_INDICES: "001 036 063 100"
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-dish'
     DISH_HELM_RELEASE: "4.1.0"
@@ -264,24 +265,3 @@ redeploy-mid-integration:
     name: integration-ska-mid-test
 
 
-# deploy-dev-environment:
-#   extends: deploy-integration
-#   image: $SKA_K8S_TOOLS_BUILD_DEPLOY
-#   tags:
-#     - ska-k8s
-#   stage: deploy
-#   when: manual
-#   variables:
-#     SKIP_CI: 1
-#     KUBE_NAMESPACE: "ci-dev-$CI_PROJECT_NAME"
-#     DISH_NAME_1: mid-dish/dish-manager/SKA001
-#     DISH_NAME_36: mid-dish/dish-manager/SKA036
-#     DISH_NAME_63: mid-dish/dish-manager/SKA063
-#     DISH_NAME_100: mid-dish/dish-manager/SKA100
-#   script:
-#     - make k8s-install-chart
-#     - make k8s-wait
-#   environment:
-#     name: ci-dev-$CI_PROJECT_NAME
-#     on_stop: stop-dev-environment
-#     auto_stop_in: 4 hours
