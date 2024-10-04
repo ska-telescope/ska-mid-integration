@@ -142,6 +142,8 @@ ska-csp-lmc-mid:
 #=== DISH ===#
 ska-dish-lmc:
   enabled: true
+  labels:
+    app: ska-tmc-mid-integration
   ska-tango-base:
     enabled: false
 
