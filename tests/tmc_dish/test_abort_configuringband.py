@@ -211,7 +211,7 @@ def check_dish_mode_and_pointing_state(
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "longRunningCommandResult",
-            (Anything, '[7, "ConfigureBand1 Aborted"]'),
+            (Anything, '[7, "SetOperateMode Aborted"]'),
             lookahead=10,
         )
 
