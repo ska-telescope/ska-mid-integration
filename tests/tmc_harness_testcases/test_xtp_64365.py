@@ -1,4 +1,5 @@
-"""Test module for TMC-DISH Abort functionality"""
+"""Test module for verification """
+
 import pytest
 from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
@@ -19,7 +20,7 @@ from tests.resources.test_harness.utils.common_utils import (
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
-@pytest.mark.SKA_mid_abort
+@pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-64365.feature",
     "TMC mid executes Abort command on DISH with pointingState READY",
@@ -171,18 +172,6 @@ def check_dish_mode_and_pointing_state_after_configure(
         )
 
     for dish_id in dish_ids.split(","):
-        # assert_that(event_tracer).described_as(
-        #     'FAILED ASSUMPTION IN "GIVEN" STEP: '
-        #     "'the dish must be in the OPERATE dishMode'"
-        #     "dish device"
-        #     f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
-        #     "is expected to be in OPERATE dishMode",
-        # ).within_timeout(60).has_change_event_occurred(
-        #     central_node_mid.dish_master_dict[dish_id],
-        #     "dishMode",
-        #     DishMode.OPERATE,
-        # )
-
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "GIVEN" STEP: '
             "'the DishLeafNode must be in the OPERATE dishMode'"
@@ -194,18 +183,6 @@ def check_dish_mode_and_pointing_state_after_configure(
             "dishMode",
             DishMode.OPERATE,
         )
-
-        # assert_that(event_tracer).described_as(
-        #     'FAILED ASSUMPTION IN "GIVEN" STEP: '
-        #     "'the dish must be in the TRACK pointingState'"
-        #     "dish device"
-        #     f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
-        #     "is expected to be in TRACK pointingState",
-        # ).within_timeout(60).has_change_event_occurred(
-        #     central_node_mid.dish_master_dict[dish_id],
-        #     "pointingState",
-        #     PointingState.READY,
-        # )
 
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "GIVEN" STEP: '
@@ -235,7 +212,7 @@ def invoke_abort(subarray_node: SubarrayNodeWrapper, subarray_id: str):
     """
 
     subarray_node.set_subarray_id(subarray_id)
-    _, pytest.unique_id = subarray_node.abort_subarray()
+    subarray_node.abort_subarray()
 
 
 @then(
@@ -258,18 +235,6 @@ def check_dish_mode_and_pointing_state_after_abort(
     """
 
     for dish_id in dish_ids.split(","):
-        # assert_that(event_tracer).described_as(
-        #     'FAILED ASSUMPTION IN "THEN" STEP: '
-        #     "'the dish must be in the STANDBY_FP dishMode'"
-        #     "dish device"
-        #     f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
-        #     "is expected to be in STANDBY_FP dishMode",
-        # ).within_timeout(60).has_change_event_occurred(
-        #     central_node_mid.dish_master_dict[dish_id],
-        #     "dishMode",
-        #     DishMode.STANDBY_FP,
-        # )
-
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
             "'the DishLeafNode must be in the STANDBY_FP dishMode'"
