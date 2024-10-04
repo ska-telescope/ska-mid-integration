@@ -1,6 +1,7 @@
 """Test TMC-DISH Abort functionality in Configuring obsState"""
 
 import json
+from typing import Any
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -211,7 +212,7 @@ def check_dish_mode_and_pointing_state(
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "longRunningCommandResult",
-            (pytest.command_result[1][0], COMMAND_CONFIGUREBAND_ABORTED),
+            (Any, COMMAND_CONFIGUREBAND_ABORTED),
             lookahead=10,
         )
 
