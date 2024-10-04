@@ -1,7 +1,4 @@
 """Test module for TMC-DISH Abort functionality"""
-
-import json
-
 import pytest
 from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
@@ -102,9 +99,7 @@ def move_subarray_obsState_to_ready(
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    subarray_node.execute_transition(
-        "Configure", json.dumps(configure_input_json)
-    )
+    subarray_node.execute_transition("Configure", configure_input_json)
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "GIVEN" STEP: '
         "'the CSP Subarray Leaf Node must be in the CONFIGURING obsState'"
