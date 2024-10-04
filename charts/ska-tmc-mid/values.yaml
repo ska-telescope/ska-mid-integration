@@ -113,13 +113,13 @@ dishleafnode:
   image:
     registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-dishleafnode
     image: ska-tmc-dishleafnode
-    tag: 0.17.5-dev.ce74da3f2
+    tag: 0.17.6-dev.cd8ba2c36
     pullPolicy: IfNotPresent
 
 resources:
   requests:
     cpu: 1000m
-    memory: 2000Mi
+    memory: 500Mi
 
 
 deviceServers:
