@@ -7,9 +7,10 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
 from ska_tango_testing.mock.placeholders import Anything
 
-from tests.resources.test_harness.constant import COMMAND_COMPLETED
-
-# COMMAND_CONFIGUREBAND_ABORTED
+from tests.resources.test_harness.constant import (
+    COMMAND_COMPLETED,
+    COMMAND_SETOPERATEMODE_ABORTED,
+)
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
@@ -31,8 +32,7 @@ def test_tmc_dish_abort_in_configuring():
 @given(
     parsers.parse(
         "the TMC subarray {subarray_id} is busy configuring and"
-        + " DishMaster {dish_ids} is in pointingState READY and dishMode"
-        + " OPERATE"
+        + " DishMaster {dish_ids} is in dishMode CONFIG"
     )
 )
 def subarray_is_in_configuring_obsState(
@@ -119,20 +119,6 @@ def subarray_is_in_configuring_obsState(
         lookahead=10,
     )
 
-    # for dish_id in dish_ids.split(","):
-    #     assert event_recorder.has_change_event_occurred(
-    #         central_node_mid.dish_master_dict[dish_id],
-    #         "pointingState",
-    #         PointingState.READY,
-    #         lookahead=15,
-    #     )
-    #     assert event_recorder.has_change_event_occurred(
-    #         central_node_mid.dish_leaf_node_dict[dish_id],
-    #         "pointingState",
-    #         PointingState.READY,
-    #         lookahead=15,
-    #     )
-
     for dish_id in dish_ids.split(","):
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
@@ -140,12 +126,6 @@ def subarray_is_in_configuring_obsState(
             DishMode.CONFIG,
             lookahead=10,
         )
-        # assert event_recorder.has_change_event_occurred(
-        #     central_node_mid.dish_leaf_node_dict[dish_id],
-        #     "dishMode",
-        #     DishMode.OPERATE,
-        #     lookahead=10,
-        # )
 
 
 @when("I issue the Abort command to the TMC subarray")
@@ -161,8 +141,8 @@ def abort_is_invoked(subarray_node):
 
 @then(
     parsers.parse(
-        "the DishMaster {dish_ids} transitions to dishMode"
-        + " STANDBY-FP and pointingState READY"
+        "the DishMaster {dish_ids} reports"
+        + " that command is aborted on lrcr"
     )
 )
 def check_dish_mode_and_pointing_state(
@@ -176,32 +156,6 @@ def check_dish_mode_and_pointing_state(
         event_recorder: Fixture for EventRecorder class
         dish_ids (str): Comma-separated IDs of DISH components.
     """
-    # for dish_id in dish_ids.split(","):
-    #     assert event_recorder.has_change_event_occurred(
-    #         central_node_mid.dish_master_dict[dish_id],
-    #         "dishMode",
-    #         DishMode.STANDBY_FP,
-    #         lookahead=10,
-    #     )
-    #     assert event_recorder.has_change_event_occurred(
-    #         central_node_mid.dish_leaf_node_dict[dish_id],
-    #         "dishMode",
-    #         DishMode.STANDBY_FP,
-    #         lookahead=10,
-    #     )
-    #     assert event_recorder.has_change_event_occurred(
-    #         central_node_mid.dish_master_dict[dish_id],
-    #         "pointingState",
-    #         PointingState.READY,
-    #         lookahead=10,
-    #     )
-    #     assert event_recorder.has_change_event_occurred(
-    #         central_node_mid.dish_leaf_node_dict[dish_id],
-    #         "pointingState",
-    #         PointingState.READY,
-    #         lookahead=10,
-    #     )
-
     for dish_id in dish_ids.split(","):
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id],
@@ -211,7 +165,7 @@ def check_dish_mode_and_pointing_state(
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "longRunningCommandResult",
-            (Anything, '[7, "SetOperateMode Aborted"]'),
+            (Anything, COMMAND_SETOPERATEMODE_ABORTED),
             lookahead=10,
         )
 
