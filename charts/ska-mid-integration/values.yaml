@@ -142,8 +142,6 @@ ska-csp-lmc-mid:
 #=== DISH ===#
 ska-dish-lmc:
   enabled: true
-  labels:
-    app: ska-tmc-mid-integration
   ska-tango-base:
     enabled: false
 
@@ -155,8 +153,6 @@ ska-dish-lmc:
 
   ska-mid-dish-simulators:
     enabled: true # dish simulator for other interfaces
-    labels:
-      app: ska-tmc-mid-integration
     dishsimulators:
       image:
         tag: 3.1.2
