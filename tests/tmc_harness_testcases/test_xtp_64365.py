@@ -22,7 +22,7 @@ from tests.resources.test_harness.utils.common_utils import (
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid_abort
 @scenario(
     "../features/xtp-64365.feature",
     "TMC mid executes Abort command on DISH with pointingState READY",
