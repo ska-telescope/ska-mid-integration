@@ -1,11 +1,11 @@
 """Test TMC-DISH Abort functionality in Configuring obsState"""
 
 import json
-from typing import Any
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import ObsState
+from ska_tango_testing.mock.placeholders import Anything
 
 from tests.resources.test_harness.constant import COMMAND_COMPLETED
 
@@ -211,7 +211,7 @@ def check_dish_mode_and_pointing_state(
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "longRunningCommandResult",
-            (Any, '[7, "ConfigureBand1 Aborted"]'),
+            (Anything, '[7, "ConfigureBand1 Aborted"]'),
             lookahead=10,
         )
 
