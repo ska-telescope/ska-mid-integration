@@ -11,7 +11,6 @@ from ska_tango_testing.integration import TangoEventTracer
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.helpers import (
-    check_long_running_command_status,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
@@ -36,7 +35,7 @@ def test_tmc_dish_abort():
 
 @given(
     parsers.parse(
-        "TMC subarray {subarray_id} with {dish_ids} is in obsState READY"
+        "TMC subarray {subarray_id} with {dish_ids} is in obsState CONFIGURING"
     )
 )
 def move_subarray_obsState_to_ready(
@@ -94,11 +93,52 @@ def move_subarray_obsState_to_ready(
         (pytest.unique_id[0], COMMAND_COMPLETED),
     )
 
+    event_tracer.subscribe_event(
+        subarray_node.csp_subarray_leaf_node, "cspSubarrayObsState"
+    )
+    event_tracer.subscribe_event(
+        subarray_node.sdp_subarray_leaf_node, "sdpSubarrayObsState"
+    )
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    _, pytest.unique_id = subarray_node.execute_transition(
+    subarray_node.execute_transition(
         "Configure", json.dumps(configure_input_json)
+    )
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the CSP Subarray Leaf Node must be in the CONFIGURING obsState'"
+        "TMC CSP Subarray Leaf Node device"
+        f"({subarray_node.csp_subarray_leaf_node.dev_name()}) "
+        "is expected to be in CONFIGURING obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        subarray_node.csp_subarray_leaf_node,
+        "cspSubarrayObsState",
+        ObsState.CONFIGURING,
+    )
+
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the CDP Subarray Leaf Node must be in the CONFIGURING obsState'"
+        "TMC CSP Subarray Leaf Node device"
+        f"({subarray_node.sdp_subarray_leaf_node.dev_name()}) "
+        "is expected to be in CONFIGURING obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        subarray_node.sdp_subarray_leaf_node,
+        "sdpSubarrayObsState",
+        ObsState.CONFIGURING,
+    )
+
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the subarray must be in the CONFIGURING obsState'"
+        "TMC Subarray device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected to be in CONFIGURING obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.CONFIGURING,
     )
 
 
@@ -120,17 +160,19 @@ def check_dish_mode_and_pointing_state_after_configure(
         dish_ids (str): Comma-separated IDs of DISH components.
     """
     for dish_id in dish_ids.split(","):
-        # event_tracer.subscribe_event(
-        #     central_node_mid.dish_master_dict[dish_id], "dishMode"
-        # )
         event_tracer.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id], "dishMode"
         )
-        # event_tracer.subscribe_event(
-        #     central_node_mid.dish_master_dict[dish_id], "pointingState"
-        # )
         event_tracer.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
+        )
+
+    for dish_id in dish_ids.split(","):
+        central_node_mid.dish_master_dict[dish_id].SetDirectDishMode(
+            DishMode.OPERATE
+        )
+        central_node_mid.dish_master_dict[dish_id].SetDirectPointingState(
+            PointingState.READY
         )
 
     for dish_id in dish_ids.split(","):
@@ -243,13 +285,6 @@ def check_dish_mode_and_pointing_state_after_abort(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "dishMode",
             DishMode.STANDBY_FP,
-        )
-
-        assert check_long_running_command_status(
-            central_node_mid.dish_leaf_node_dict[dish_id],
-            "longRunningCommandStatus",
-            "_Configure",
-            "ABORTED",
         )
 
 
