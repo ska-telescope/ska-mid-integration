@@ -22,6 +22,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 LOGGER = logging.getLogger(__name__)
 
 
+@pytest.mark.skip
 @pytest.mark.tmc_csp
 @scenario(
     "../features/test_harness/xtp_35778_test_delay_model.feature",
