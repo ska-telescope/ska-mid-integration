@@ -32,7 +32,7 @@ Feature:  TMC Mid executes long running sequences with real csp devices
 
     Examples:
             |subarray_id  |scan_ids | scan_types    | new_scan_id|
-            |1            |["1"]    |["science_a"]  |   10       |
+            |1            |["1"]    |["science_A"]  |   10       |
 
 
     @tmc_csp @Team_SAHYADRI @XTP-29381 @XTP-42550
@@ -52,7 +52,7 @@ Feature:  TMC Mid executes long running sequences with real csp devices
     Examples:
 
      |subarray_id  | scan_ids | scan_types     | new_scan_ids  | new_scan_types|
-     |1            |  ["1"]   | ["science_a"]  | ["2"]         | ["target:a"]  |
+     |1            |  ["1"]   | ["science_A"]  | ["2"]         | ["target:a"]  |
 
 
 
@@ -71,4 +71,4 @@ Feature:  TMC Mid executes long running sequences with real csp devices
     Examples:
 
      |subarray_id  | scan_ids | scan_types     | new_scan_ids  | new_scan_types|
-     |1            |  ["1"]   | ["science_a"]  | ["2"]         | ["target:a"] |
+     |1            |  ["1"]   | ["science_A"]  | ["2"]         | ["target:a"] |
