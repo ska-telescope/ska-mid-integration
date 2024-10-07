@@ -51,6 +51,18 @@ ska-dish-lmc:
     enabled: true
 
 
+  ska-mid-dish-simulators:
+    dishsimulators:
+      labels:
+        app: ska-mid-integration
+      enabled: true
+      deviceServers:
+        spfdevice:
+          enabled: true
+        spfrxdevice:
+          enabled: true
+      dsOpcuaSimulator:
+        enabled: true
 
   ska-mid-dish-ds-manager:
     labels:
