@@ -108,16 +108,16 @@ class Waiter:
                 "State", changed_to="STANDBY"
             )
         )
-        self.waits.append(
-            watch(Resource(self.csp_subarray1)).to_become(
-                "State", changed_to="OFF"
-            )
-        )
-        self.waits.append(
-            watch(Resource(self.csp_master)).to_become(
-                "State", changed_to="STANDBY"
-            )
-        )
+        # self.waits.append(
+        #     watch(Resource(self.csp_subarray1)).to_become(
+        #         "State", changed_to="OFF"
+        #     )
+        # )
+        # self.waits.append(
+        #     watch(Resource(self.csp_master)).to_become(
+        #         "State", changed_to="STANDBY"
+        #     )
+        # )
         if self.dish_master_list and self.dish_leaf_node_list:
             self.set_wait_for_dish("dishMode", "STANDBY_LP")
 
