@@ -223,18 +223,6 @@ def wait_for_device_status_ready(device_name: str) -> None:
     the_waiter.wait(800)
 
 
-def wait_for_device_status_idle(device_name: str) -> None:
-    """
-    Checks if given device is in READY obs-state
-
-     :param device_name: device name
-     :type device_name: str
-    """
-    the_waiter = Waiter()
-    the_waiter.set_wait_for_specific_obsstate("IDLE", [device_name])
-    the_waiter.wait(800)
-
-
 def wait_for_device_status_scanning(device_name: str) -> None:
     """
     Checks if given device is in SCANNING obs-state
