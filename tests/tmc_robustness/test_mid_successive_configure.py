@@ -5,14 +5,6 @@ from ska_control_model import ObsState
 from tango import DeviceProxy
 
 from tests.conftest import LOGGER
-
-# from tests.resources.test_harness.helpers import (
-#     check_subarray_instance,
-#     prepare_json_args_for_centralnode_commands,
-# )
-# from tests.resources.test_harness.utils.common_utils import (
-#     wait_for_device_status_idle,
-# )
 from tests.resources.test_support.common_utils.telescope_controls import (
     BaseTelescopeControl,
 )
@@ -36,7 +28,6 @@ tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 telescope_control = BaseTelescopeControl()
 
 
-# @pytest.mark.repeat(10)
 @scenario(
     "../features/successive_configure.feature",
     "TMC validates reconfigure functionality",
