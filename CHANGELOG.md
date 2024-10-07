@@ -6,6 +6,7 @@ Added
 [0.22.6]
 **********
 * Updated ska-tmc-dishleafnode v0.17.4 to resolve SKB-511
+* Updated ska-tmc-cspleafnode v0.21.0 to resolve SKB-530
 
 [0.22.5]
 **********
