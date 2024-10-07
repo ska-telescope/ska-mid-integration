@@ -151,19 +151,6 @@ ska-dish-lmc:
   ska-mid-dish-ds-manager:
     enabled: true
 
-  ska-mid-dish-simulators:
-    enabled: true # dish simulator for other interfaces
-    dishsimulators:
-      image:
-        tag: 3.1.2
-    deviceServers:
-      spfdevice:
-        enabled: true
-      spfrxdevice:
-        enabled: true
-    dsOpcuaSimulator:
-      enabled: true
-
 #=== TMC MID ===#
 ska-tmc-mid:
   enabled: true
