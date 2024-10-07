@@ -5,10 +5,8 @@ Added
 -----
 [0.22.6]
 **********
-* Updated dish leaf node version to  0.17.3 to resolve SKB-467
+* Updated dish leaf node version to  0.17.6 to resolve SKB-467
 * Track command will not be invoked from Dish leaf node if  pointingState of Dish is TRACK/SLEW
-
-
 
 
 [0.22.5]
