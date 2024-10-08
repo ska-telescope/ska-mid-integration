@@ -9,7 +9,6 @@ Added
 * Track command will not be invoked from Dish leaf node if  pointingState of Dish is TRACK/SLEW
 
 
-
 [0.22.5]
 **********
 * Updated dish leaf node version 0.17.3 to resolve SKB-502
