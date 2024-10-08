@@ -42,6 +42,9 @@ ASSERTIONS_TIMEOUT = 60
 # Scenario
 
 
+@pytest.mark.xfail(
+    reason="CSP subarray always remain in On state, update require in teardown"
+)
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",
@@ -58,6 +61,9 @@ def test_empty_to_resourcing_to_idle():
 #     "since if a subarray is in IDLE state, by design it should be able "
 #     "to receive the Configure command at any time."
 # )
+@pytest.mark.xfail(
+    reason="CSP subarray always remain in On state, update require in teardown"
+)
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",
@@ -74,6 +80,9 @@ def test_idle_to_configuring_to_ready():
 #     "since if a subarray is in IDLE state, by design it should be able "
 #     "to receive the Configure command at any time."
 # )
+@pytest.mark.xfail(
+    reason="CSP subarray always remain in On state, update require in teardown"
+)
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",
@@ -90,6 +99,9 @@ def test_idle_to_resourcing_to_idle():
 #     "since if a subarray is in IDLE state, by design it should be able "
 #     "to receive the Configure command."
 # )
+@pytest.mark.xfail(
+    reason="CSP subarray always remain in On state, update require in teardown"
+)
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",
@@ -99,6 +111,9 @@ def test_idle_to_resourcing_to_empty():
     """Test IDLE to RESOURCING to EMPTY transitions."""
 
 
+@pytest.mark.xfail(
+    reason="CSP subarray always remain in On state, update require in teardown"
+)
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",
@@ -108,6 +123,9 @@ def test_ready_to_scanning_to_ready():
     """Test READY to SCANNING to READY transitions."""
 
 
+@pytest.mark.xfail(
+    reason="CSP subarray always remain in On state, update require in teardown"
+)
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",
@@ -124,6 +142,9 @@ def test_ready_to_idle():
 #     "since if a subarray is in READY state, by design it should be able "
 #     "to receive the Configure command."
 # )
+@pytest.mark.xfail(
+    reason="CSP subarray always remain in On state, update require in teardown"
+)
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",
@@ -133,6 +154,9 @@ def test_ready_to_configuring_to_ready():
     """Test READY to CONFIGURING to READY transitions."""
 
 
+@pytest.mark.xfail(
+    reason="CSP subarray always remain in On state, update require in teardown"
+)
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",

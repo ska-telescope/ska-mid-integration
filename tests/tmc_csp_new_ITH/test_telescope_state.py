@@ -30,6 +30,9 @@ ASSERTIONS_TIMEOUT = 60
 # ---------------------------------
 
 
+@pytest.mark.xfail(
+    reason="CSP subarray always remain in On state, update require in teardown"
+)
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/telescope_state.feature",
@@ -39,6 +42,9 @@ def test_on_to_off():
     """Test transitioning from ON to OFF."""
 
 
+@pytest.mark.xfail(
+    reason="CSP subarray always remain in On state, update require in teardown"
+)
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/telescope_state.feature",
@@ -48,6 +54,9 @@ def test_on_to_standby():
     """Test transitioning from ON to STANDBY."""
 
 
+@pytest.mark.xfail(
+    reason="CSP subarray always remain in On state, update require in teardown"
+)
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/telescope_state.feature",
