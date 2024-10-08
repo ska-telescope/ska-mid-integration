@@ -445,7 +445,7 @@ class SubarrayNodeWrapper(object):
 
             self.abort_subarray()
             self.restart_subarray()
-        elif self.obs_state == "ABORTED":
+        elif self.obs_state in ["ABORTED", "FAULT"]:
             """Invoke Restart"""
             LOGGER.info("Invoking Restart on Subarray")
             self.restart_subarray()

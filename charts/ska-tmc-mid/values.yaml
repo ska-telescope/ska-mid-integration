@@ -84,7 +84,7 @@ subarraynode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-subarraynode
-    tag: 0.23.1
+    tag: 0.23.3
     pullPolicy: IfNotPresent
 
 
@@ -142,7 +142,7 @@ deviceServers:
       max: 1177
     CommandTimeOut: 120
     DishVccInitTimeout: 180
-    
+
   subarraynode:
     enabled: true
     file: "data/subarraynode_mid.yaml"
