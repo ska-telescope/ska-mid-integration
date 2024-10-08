@@ -23,6 +23,7 @@ from tests.resources.test_harness.constant import (
 )
 from tests.resources.test_harness.helpers import (
     get_device_simulators,
+    prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
 from tests.resources.test_harness.simulator_factory import SimulatorFactory
@@ -112,7 +113,7 @@ def given_a_tmc_in_scanning_obs_state(
         ObsState.EMPTY,
     )
 
-    assign_input_json = prepare_json_args_for_commands(
+    assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
     _, unique_id = central_node_mid.store_resources(assign_input_json)
@@ -257,3 +258,5 @@ def check_obs_state_ready_for_leaf_nodes(
         ObsState.READY,
     )
     event_tracer.clear_events()
+    csp_sim, _, _, _, _, _ = get_device_simulators(simulator_factory)
+    csp_sim.SetDirectObsState(ObsState.READY)
