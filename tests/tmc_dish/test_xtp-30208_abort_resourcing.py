@@ -11,6 +11,7 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_support.enum import DishMode
 
 
+@pytest.mark.skip(reason="Will be tested with new dish image")
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-30208_abort_resourcing.feature",

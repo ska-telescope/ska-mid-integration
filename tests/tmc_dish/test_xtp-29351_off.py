@@ -7,7 +7,7 @@ from tango import DevState
 from tests.resources.test_support.enum import DishMode
 
 
-# @pytest.mark.skip(reason="Currently failing. Why?")
+@pytest.mark.skip(reason="Will be tested with new dish image")
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29351_off.feature",
