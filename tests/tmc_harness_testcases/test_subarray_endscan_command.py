@@ -32,7 +32,6 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 
 
 @pytest.mark.SKA_mid
-@pytest.mark.temp
 @scenario(
     "../features/skb_512.feature",
     "TMC executes EndScan on other sub-systems even if one sub-system goes "

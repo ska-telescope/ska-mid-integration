@@ -3,6 +3,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+[master]
+********
+* Updated Subarray Node to v0.23.3 to fix SKB-512
+
 [0.22.5]
 **********
 * Updated dish leaf node version 0.17.3 to resolve SKB-502
