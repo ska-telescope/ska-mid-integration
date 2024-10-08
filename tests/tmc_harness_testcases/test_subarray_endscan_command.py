@@ -206,7 +206,7 @@ def invoke_endscan_with_a_device_going_to_fault(
 
     csp_sim, _, _, _, _, _ = get_device_simulators(simulator_factory)
     INTERMEDIATE_STATE_DEFECT["intermediate_state"] = ObsState.FAULT
-    csp_sim.SetDefective(json.dumps(json.dumps(INTERMEDIATE_STATE_DEFECT)))
+    csp_sim.SetDefective(json.dumps(INTERMEDIATE_STATE_DEFECT))
 
     subarray_node.execute_transition("EndScan")
     assert_that(event_tracer).described_as(
