@@ -10,7 +10,6 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-@pytest.mark.skip(reason="skb-591")
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/xtp_29842_abort_scanning.feature",
