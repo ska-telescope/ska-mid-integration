@@ -37,6 +37,7 @@ from tests.resources.test_harness.helpers import (
     generate_eb_pb_ids,
     prepare_json_args_for_commands,
     wait_and_validate_device_attribute_value,
+    wait_for_partial_or_complete_abort,
 )
 from tests.resources.test_harness.utils.constant import (
     ABORTED,
@@ -327,8 +328,14 @@ class SubarrayNodeWrapper(object):
         while retry <= 3:
             try:
                 if command_name is not None:
+                    if argin:
+                        result, message = self.subarray_node.command_inout(
+                            command_name, argin
+                        )
+                        LOGGER.info(f"Invoked {command_name} on SubarrayNode")
+                        return result, message
                     result, message = self.subarray_node.command_inout(
-                        command_name, argin
+                        command_name
                     )
                     LOGGER.info(f"Invoked {command_name} on SubarrayNode")
                     return result, message
@@ -443,7 +450,8 @@ class SubarrayNodeWrapper(object):
             the_waiter = Waiter()
             the_waiter.wait(5)
 
-            self.abort_subarray()
+            self.execute_transition("Abort")
+            wait_for_partial_or_complete_abort()
             self.restart_subarray()
         elif self.obs_state in ["ABORTED", "FAULT"]:
             """Invoke Restart"""

@@ -230,7 +230,6 @@ def invoke_endscan_with_a_device_going_to_fault(
 def check_obs_state_ready_for_leaf_nodes(
     event_tracer: TangoEventTracer,
     subarray_node: SubarrayNodeWrapper,
-    simulator_factory: SimulatorFactory,
 ):
     """Method to check observation state of subarray leaf nodes
     after EndScan command.
@@ -258,5 +257,3 @@ def check_obs_state_ready_for_leaf_nodes(
         ObsState.READY,
     )
     event_tracer.clear_events()
-    csp_sim, _, _, _, _, _ = get_device_simulators(simulator_factory)
-    csp_sim.SetDirectObsState(ObsState.READY)

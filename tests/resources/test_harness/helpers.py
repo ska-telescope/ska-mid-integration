@@ -8,6 +8,7 @@ from typing import Any, List
 
 from astropy.time import Time
 from numpy import array_equal
+from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
 from ska_tango_base.commands import ResultCode
 from ska_tango_base.control_model import HealthState
@@ -853,3 +854,49 @@ def wait_until_devices_operational(devices_to_monitor):
         "Timeout of %d seconds reached. Devices are not operational.", TIMEOUT
     )
     return False
+
+
+def wait_for_partial_or_complete_abort(timeout: int = 110) -> None:
+    """Wait for completion of Partial/Full abort on SubarrayNode by waiting for
+    one of 3 states on all the devices - ABORTED, EMPTY or FAULT until
+    occurance of timeout.
+
+    :param timeout: Timeout value to wait for.
+    """
+    DEVICE_ATTRIBUTE_MAP: dict[str, str] = {
+        tmc_subarraynode1: "obsState",
+        tmc_csp_subarray_leaf_node: "cspSubarrayObsState",
+        tmc_sdp_subarray_leaf_node: "sdpSubarrayObsState",
+    }
+    end_states_of_devices: dict[str, ObsState] = {}
+    start_time = time.time()
+    count = 0
+    while True:
+        for device_name, attribute_name in DEVICE_ATTRIBUTE_MAP.items():
+            if device_name in end_states_of_devices:
+                continue
+            device_proxy = DeviceProxy(device_name)
+            attribute_value = device_proxy.read_attribute(attribute_name).value
+            if device_name == tmc_subarraynode1:
+                expected_value_list = [ObsState.ABORTED, ObsState.FAULT]
+            else:
+                expected_value_list = [
+                    ObsState.ABORTED,
+                    ObsState.FAULT,
+                    ObsState.EMPTY,
+                ]
+            if attribute_value in expected_value_list:
+                count += 1
+                end_states_of_devices[device_name] = attribute_value
+        if count == 3:
+            LOGGER.info(
+                "The final states for all the devices are: %s",
+                end_states_of_devices,
+            )
+            break
+        if time.time() - start_time > timeout:
+            raise TimeoutError(
+                "Timeout occurred while waiting for partial abort. "
+                + f"Successful state transitions were: {end_states_of_devices}"
+            )
+        time.sleep(1)
