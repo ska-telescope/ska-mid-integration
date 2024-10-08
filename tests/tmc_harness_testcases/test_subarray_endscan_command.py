@@ -113,7 +113,7 @@ def given_a_tmc_in_scanning_obs_state(
     )
 
     assign_input_json = prepare_json_args_for_commands(
-        "command_AssignResources", command_input_factory
+        "assign_resources_mid", command_input_factory
     )
     _, unique_id = central_node_mid.store_resources(assign_input_json)
     assert_that(event_tracer).described_as(
@@ -141,7 +141,7 @@ def given_a_tmc_in_scanning_obs_state(
     )
 
     configure_input_json = prepare_json_args_for_commands(
-        "command_Configure", command_input_factory
+        "configure_mid", command_input_factory
     )
     _, unique_id = subarray_node.store_configuration_data(configure_input_json)
     assert_that(event_tracer).described_as(
@@ -169,7 +169,7 @@ def given_a_tmc_in_scanning_obs_state(
     )
 
     scan_input_json = prepare_json_args_for_commands(
-        "command_Scan", command_input_factory
+        "scan_mid", command_input_factory
     )
     _, unique_id = subarray_node.store_scan_data(scan_input_json)
     assert_that(event_tracer).described_as(
