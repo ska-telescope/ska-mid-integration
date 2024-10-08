@@ -45,7 +45,7 @@ def test_verify_skb_512():
 
 @given("a TMC in SCANNING obsState")
 def given_a_tmc_in_scanning_obs_state(
-    central_node: CentralNodeWrapperMid,
+    central_node_mid: CentralNodeWrapperMid,
     subarray_node: SubarrayNodeWrapper,
     command_input_factory: JsonFactory,
     event_tracer: TangoEventTracer,
@@ -53,8 +53,9 @@ def given_a_tmc_in_scanning_obs_state(
     """
     This method brings TMC to Scanning ObsState
     Args:
-        central_node (CentralNodeWrapperMid): Object of Central node wrapper
-        subarray_node_low (SubarrayNodeWrapper): Object of subarray
+        central_node_mid (CentralNodeWrapperMid): Object of Central node
+            wrapper
+        subarray_node (SubarrayNodeWrapper): Object of subarray
         node wrapper
         command_input_factory (JsonFactory): object of TangoEventTracer
         used for
@@ -62,23 +63,25 @@ def given_a_tmc_in_scanning_obs_state(
         managing the device events
     """
     # Event Subscriptions
-    event_tracer.subscribe_event(central_node.central_node, "telescopeState")
     event_tracer.subscribe_event(
-        central_node.central_node, "longRunningCommandResult"
+        central_node_mid.central_node, "telescopeState"
+    )
+    event_tracer.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
     )
     event_tracer.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
-    event_tracer.subscribe_event(central_node.subarray_node, "obsState")
+    event_tracer.subscribe_event(central_node_mid.subarray_node, "obsState")
 
     # Logging events
     log_events(
         {
-            central_node.central_node: [
+            central_node_mid.central_node: [
                 "telescopeState",
                 "longRunningCommandResult",
             ],
-            central_node.subarray_node: [
+            central_node_mid.subarray_node: [
                 "longRunningCommandResult",
                 "obsState",
             ],
@@ -86,25 +89,25 @@ def given_a_tmc_in_scanning_obs_state(
     )
 
     # Invoking commands on TMC
-    central_node.move_to_on()
+    central_node_mid.move_to_on()
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "GIVEN" STEP: '
         "'the telescope is is ON state'"
         "Central Node device"
-        f"({central_node.central_node.dev_name()}) "
+        f"({central_node_mid.central_node.dev_name()}) "
         "is expected to be in TelescopeState ON",
     ).within_timeout(TIMEOUT).has_change_event_occurred(
-        central_node.central_node,
+        central_node_mid.central_node,
         "telescopeState",
         DevState.ON,
     )
     assert_that(event_tracer).described_as(
         "FAILED UNEXPECTED INITIAL OBSSTATE: "
         "Subarray Node device"
-        f"({central_node.subarray_node.dev_name()}) "
+        f"({central_node_mid.subarray_node.dev_name()}) "
         "is expected to be in EMPTY obstate",
     ).within_timeout(TIMEOUT).has_change_event_occurred(
-        central_node.subarray_node,
+        central_node_mid.subarray_node,
         "obsState",
         ObsState.EMPTY,
     )
@@ -112,15 +115,15 @@ def given_a_tmc_in_scanning_obs_state(
     assign_input_json = prepare_json_args_for_commands(
         "command_AssignResources", command_input_factory
     )
-    _, unique_id = central_node.store_resources(assign_input_json)
+    _, unique_id = central_node_mid.store_resources(assign_input_json)
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "GIVEN" STEP: '
         "'a TMC in SCANNING obsState'"
         "Subarray Node device"
-        f"({central_node.subarray_node.dev_name()}) "
+        f"({central_node_mid.subarray_node.dev_name()}) "
         "is expected to be in IDLE obstate",
     ).within_timeout(TIMEOUT).has_change_event_occurred(
-        central_node.subarray_node,
+        central_node_mid.subarray_node,
         "obsState",
         ObsState.IDLE,
     )
@@ -128,11 +131,11 @@ def given_a_tmc_in_scanning_obs_state(
         'FAILED ASSUMPTION IN "GIVEN" STEP: '
         "'a TMC in SCANNING obsState'"
         "Subarray Node device"
-        f"({central_node.central_node.dev_name()}) "
+        f"({central_node_mid.central_node.dev_name()}) "
         "is expected have longRunningCommand as"
         '(unique_id,(ResultCode.OK,"Command Completed"))',
     ).within_timeout(TIMEOUT).has_change_event_occurred(
-        central_node.central_node,
+        central_node_mid.central_node,
         "longRunningCommandResult",
         (unique_id[0], json.dumps((int(ResultCode.OK), "Command Completed"))),
     )
@@ -145,10 +148,10 @@ def given_a_tmc_in_scanning_obs_state(
         'FAILED ASSUMPTION IN "GIVEN" STEP: '
         "'a TMC in SCANNING obsState'"
         "Subarray Node device"
-        f"({central_node.subarray_node.dev_name()}) "
+        f"({central_node_mid.subarray_node.dev_name()}) "
         "is expected to be in READY obstate",
     ).within_timeout(TIMEOUT).has_change_event_occurred(
-        central_node.subarray_node,
+        central_node_mid.subarray_node,
         "obsState",
         ObsState.READY,
     )
@@ -156,11 +159,11 @@ def given_a_tmc_in_scanning_obs_state(
         'FAILED ASSUMPTION IN "GIVEN" STEP: '
         "'a TMC in SCANNING obsState'"
         "Subarray Node device"
-        f"({central_node.subarray_node.dev_name()}) "
+        f"({central_node_mid.subarray_node.dev_name()}) "
         "is expected have longRunningCommand as"
         '(unique_id,(ResultCode.OK,"Command Completed"))',
     ).within_timeout(TIMEOUT).has_change_event_occurred(
-        central_node.subarray_node,
+        central_node_mid.subarray_node,
         "longRunningCommandResult",
         (unique_id[0], json.dumps((int(ResultCode.OK), "Command Completed"))),
     )
@@ -173,10 +176,10 @@ def given_a_tmc_in_scanning_obs_state(
         'FAILED ASSUMPTION IN "GIVEN" STEP: '
         "'a TMC in SCANNING obsState'"
         "Subarray Node device"
-        f"({central_node.subarray_node.dev_name()}) "
+        f"({central_node_mid.subarray_node.dev_name()}) "
         "is expected to be in SCANNING obstate",
     ).within_timeout(TIMEOUT).has_change_event_occurred(
-        central_node.subarray_node,
+        central_node_mid.subarray_node,
         "obsState",
         ObsState.SCANNING,
     )
