@@ -190,7 +190,7 @@ deviceServers:
         cpu: 2000m
         memory: 2800Mi
     CommandTimeOut: 90
-    TrackTableInAdvance: 6
+    TrackTableInAdvance: 15
   mocks:
     enabled: false
     file: "data/mocks.yaml"
