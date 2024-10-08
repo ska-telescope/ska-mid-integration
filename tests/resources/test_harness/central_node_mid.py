@@ -611,5 +611,6 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
 
         except Exception as e:
             LOGGER.exception("The exception is: %s", e)
+            raise Exception(e)
 
         LOGGER.info("Tear Down complete")
