@@ -51,3 +51,7 @@ dependencies:
     version: 0.15.2
     repository:  https://artefact.skao.int/repository/helm-internal
     condition: ska-csp-lmc-mid.enabled
+  - name: ska-k8s-config-exporter
+    version: 0.0.4
+    repository: https://artefact.skao.int/repository/helm-internal
+    condition: ska-k8s-config-exporter.enabled
