@@ -84,9 +84,7 @@ def check_active_devices() -> None:
     # namespace = "ska-tmc-integration"
 
     # get commit id from ENV variables
-    namespace = (
-        f"ci-ska-tmc-mid-integration-{os.getenv('CI_COMMIT_SHA')[0:8]}"
-    )
+    namespace = f"ci-ska-tmc-mid-integration-{os.getenv('CI_COMMIT_SHA')[0:8]}"
 
     port = 8080
     path = "tango_devices"
