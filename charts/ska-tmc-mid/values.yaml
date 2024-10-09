@@ -186,7 +186,7 @@ deviceServers:
       limits:
         memory: 3000Mi
       requests:
-        cpu: 1000m # 1500m
+        cpu: 1500m
         memory: 2800Mi
     CommandTimeOut: 90
     TrackTableInAdvance: 6

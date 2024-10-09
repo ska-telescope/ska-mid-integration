@@ -1,8 +1,8 @@
 """Configurations needed for the tests using the new harness."""
 
 import logging
-from dataclasses import dataclass
 import os
+from dataclasses import dataclass
 from typing import Any
 
 import pytest
@@ -82,9 +82,11 @@ def check_active_devices() -> None:
     # I am in a CI-enviroment, so I need to use the commit ID
     # as namespace to access the service
     # namespace = "ska-tmc-integration"
-    
-    #get commit id from ENV variables
-    namespace = f"ci-ska-tmc-mid-integration-{os.getenv('CI_COMMIT_SHORT_SHA')}"
+
+    # get commit id from ENV variables
+    namespace = (
+        f"ci-ska-tmc-mid-integration-{os.getenv('CI_COMMIT_SHORT_SHA')}"
+    )
 
     port = 8080
     path = "tango_devices"
