@@ -1,4 +1,5 @@
 from http.client import HTTPConnection
+import json
 from kubernetes import client, config, stream
 import requests
 import time
@@ -59,15 +60,26 @@ port_forward = stream.portforward(
 conn = ForwardedKubernetesHTTPConnection(port_forward, LOCAL_PORT)
 
 # Step 6: Make a request to the forwarded service
-print(f"Step 6: Making a request to http://localhost:{LOCAL_PORT}/")
-try:
-    conn.request("GET", "/tango_devices")
-    response = conn.getresponse() 
-    # print(f"Response: {response.text}")
-    print(f"Status: {response.status}")
-    print(f"Headers: {response.headers}")
-    print(f"Read: {response.read()}")
-except requests.RequestException as e:
-    print(f"Error making the request: {e}")
+print(f"Step 6: Making necessary requests to http://localhost:{LOCAL_PORT}/")
+def request(conn: HTTPConnection, method: str, path: str) -> None:
+    try:
+        conn.request(method, path)
+        response = conn.getresponse() 
+        # print(f"Response: {response.text}")
+        print(f"Status: {response.status}")
+        print(f"Headers: {response.headers}")
+        # pretty print the JSON response
+        # try:
+        #     print(json.dumps(json.loads(response.read()), indent=2))
+        # except json.JSONDecodeError:
+        #     print(response.read())
+        print(response.read())
+    except requests.RequestException as e:
+        print(f"Error making the request: {e}")
+
+for target_path in ["/pods", "/helm", "/dsconfig", "/tango_devices"]:
+    print("\n" + "-" * 50)
+    print(f"Requesting: {target_path}")
+    request(conn, "GET", target_path)
 
 print("Step 7: Port-forwarding session complete")
