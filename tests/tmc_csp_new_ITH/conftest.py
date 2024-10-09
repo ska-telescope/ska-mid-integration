@@ -83,8 +83,10 @@ def check_active_devices() -> None:
     # as namespace to access the service
     # namespace = "ska-tmc-integration"
 
-    # get commit id from ENV variables
-    namespace = f"ci-ska-tmc-mid-integration-{os.getenv('CI_COMMIT_SHA')[0:8]}"
+    # get namespace from environment variable
+    namespace = os.getenv("KUBE_NAMESPACE")
+    if namespace is None:
+        raise ValueError("Environment variable KUBE_NAMESPACE is not set")
 
     port = 8080
     path = "tango_devices"
