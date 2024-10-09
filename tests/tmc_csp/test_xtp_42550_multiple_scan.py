@@ -22,7 +22,6 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
-@pytest.mark.skip(reason="issue at CSP side for multiconfigure")
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/xtp_40175_long_sequence_configure_scan.feature",
