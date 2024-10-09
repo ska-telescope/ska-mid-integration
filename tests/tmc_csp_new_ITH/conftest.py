@@ -1,9 +1,11 @@
 """Configurations needed for the tests using the new harness."""
 
+import logging
 from dataclasses import dataclass
 from typing import Any
 
 import pytest
+import requests
 from pytest_bdd import given, parsers
 from ska_control_model import ObsState
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
@@ -58,11 +60,44 @@ def default_commands_inputs() -> TestHarnessInputs:
     )
 
 
+def check_active_devices() -> None:
+    """Check active Tango devices trough ska-k8s-config-exporter-service.
+
+    Experimental function to check the active Tango devices
+    in the Kubernetes cluster. It uses the service
+    ska-k8s-config-exporter-service in the namespace
+    ska-tmc-integration. Let's see if it works in the
+    CI/CD pipeline too.
+    """
+    logger = logging.getLogger()
+    logger.info(
+        "BEFORE BUILDING THE TELESCOPE WRAPPER, "
+        "LET'S CHECK ACTIVE TANGO DEVICES:"
+    )
+
+    # Service URL using internal Kubernetes DNS
+    service_name = "ska-k8s-config-exporter-service"
+    namespace = "ska-tmc-integration"
+    port = 8080
+    path = "tango_devices"
+    url = f"http://{service_name}.{namespace}:{port}/{path}"
+
+    # Make the GET request
+    response = requests.get(url)
+
+    # Print the response (status code and body)
+    logger.info(f"Status code: {response.status_code}")
+    logger.info(f"Response body: {response.text}")
+
+
 @pytest.fixture
 def telescope_wrapper(
     default_commands_inputs: TestHarnessInputs,
 ) -> TelescopeWrapper:
     """Create an unique test harness with proxies to all devices."""
+    # EXPERIMENTAL: Check active Tango devices
+    check_active_devices()
+
     test_harness_builder = TestHarnessBuilder()
 
     # import from a configuration file device names and emulation directives

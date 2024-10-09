@@ -186,7 +186,7 @@ deviceServers:
       limits:
         memory: 3000Mi
       requests:
-        cpu: 1500m
+        cpu: 1000m # 1500m
         memory: 2800Mi
     CommandTimeOut: 90
     TrackTableInAdvance: 6
@@ -202,3 +202,12 @@ nodeSelector: {}
 affinity: {}
 
 tolerations: []
+
+ingress:
+  enabled: true
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  host: ""  # You can put your domain here or leave it blank for IP-based access
+  path: /
+  serviceName: ska-k8s-config-exporter-service
+  servicePort: 8080
