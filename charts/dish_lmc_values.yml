@@ -8,17 +8,23 @@ labels:
 
 # DISH LMC
 ska-mid-dish-manager:
+  enabled: true
+  dishmanager:
+    image:
+      registry: https://artefact.skao.int/repository/helm-internal
+      image: ska-mid-dish-simulators
+      tag: 5.0.1
+      pullPolicy: IfNotPresent
   labels:
     app: ska-tmc-integration
-  enabled: true
 
 
 ska-mid-dish-simulators:
   dishsimulators:
     image:
-      registry: artefact.skao.int
+      registry: https://artefact.skao.int/repository/helm-internal
       image: ska-mid-dish-simulators
-      tag: 3.1.2
+      tag: 4.1.2
       pullPolicy: IfNotPresent
   labels:
     app: ska-tmc-integration
@@ -35,3 +41,10 @@ ska-mid-dish-ds-manager:
   labels:
     app: ska-tmc-integration
   enabled: true
+  dishstructuremanager:
+  image:
+    registry: https://artefact.skao.int/repository/helm-internal
+    image: ska-mid-dish-ds-manager
+    tag: 2.1.2
+    pullPolicy: IfNotPresent
+
