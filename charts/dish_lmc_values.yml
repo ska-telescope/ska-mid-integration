@@ -8,15 +8,9 @@ labels:
 
 # DISH LMC
 ska-mid-dish-manager:
-  enabled: true
-  dishmanager:
-    image:
-      registry: artefact.skao.int
-      image: ska-mid-dish-simulators
-      tag: 5.0.1
-      pullPolicy: IfNotPresent
   labels:
     app: ska-tmc-integration
+  enabled: true
 
 
 ska-mid-dish-simulators:
@@ -41,10 +35,3 @@ ska-mid-dish-ds-manager:
   labels:
     app: ska-tmc-integration
   enabled: true
-  dishstructuremanager:
-  image:
-    registry: artefact.skao.int
-    image: ska-mid-dish-ds-manager
-    tag: 2.1.2
-    pullPolicy: IfNotPresent
-
