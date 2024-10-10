@@ -56,7 +56,7 @@ class EventRecorder(object):
 
         start_time = time.time()
         TIMEOUT = 30
-
+        EXCEPTION = ""
         while time.time() - start_time < TIMEOUT:
             try:
                 event_id = device.subscribe_event(
@@ -66,13 +66,16 @@ class EventRecorder(object):
                 )
                 break
 
-            except Exception:
+            except Exception as exception:
+                EXCEPTION = str(exception)
                 time.sleep(1)
         else:
             LOGGER.info(
-                "Timeout of %d seconds reached - %s", TIMEOUT, Exception
+                "Timeout of %d seconds reached with exception - %s",
+                TIMEOUT,
+                EXCEPTION,
             )
-            raise Exception
+            raise Exception(EXCEPTION)
 
         # ----------------------------------------------------------
 
