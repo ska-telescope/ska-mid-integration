@@ -6,6 +6,7 @@ Added
 [0.22.6-rc.1]
 *************
 * Updated ska-tmc-subarraynode v.0.23.4 to resolve SKB-509
+* TMC supporting TMC-CSP Configure interface v.3.0
 
 [0.22.5]
 **********
