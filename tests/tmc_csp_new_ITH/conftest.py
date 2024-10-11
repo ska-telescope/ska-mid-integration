@@ -106,7 +106,7 @@ def telescope_wrapper(
 ) -> TelescopeWrapper:
     """Create an unique test harness with proxies to all devices."""
     # EXPERIMENTAL: Check active Tango devices
-    check_active_devices()
+    # check_active_devices()
 
     test_harness_builder = TestHarnessBuilder()
 
@@ -121,6 +121,7 @@ def telescope_wrapper(
     # which will be used for teardown procedures
     test_harness_builder.set_default_inputs(default_commands_inputs)
     test_harness_builder.validate_default_inputs()
+    test_harness_builder.set_kubernetes_namespace(os.getenv("KUBE_NAMESPACE"))
 
     # build the wrapper of the telescope and it's sub-systems
     telescope = test_harness_builder.build()
