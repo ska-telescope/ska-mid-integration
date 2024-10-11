@@ -16,6 +16,8 @@ from tests.resources.test_support.common_utils.tmc_helpers import (
 )
 from tests.resources.test_support.constant import alarm_handler1
 
+TIMEOUT = 10
+
 
 @pytest.mark.SKA_mid
 @scenario(
@@ -77,11 +79,18 @@ def test_load_alarm():
     """A method to load tmc alarm for Alarm handler instance"""
     global alarm_handler, alarm_list
     alarm_handler = DeviceProxy(alarm_handler1)
+
+    start_time = time.time()
+    while time.time() - start_time < TIMEOUT:
+        if alarm_handler.ping() > 0:
+            break
+        time.sleep(0.5)
+
     alarm_formula = (
         "tag=dishleafnode_kvalue_not_set;formula="
         "(ska_mid/tm_leaf_node/d0001/kValueValidationResult == '4' );"
         "priority=log;group=none;message="
-        "alarm for dishvalidation status raised when k-value is not set"
+        "alarm for dish validation status raised when k-value is not set"
     )
     alarm_handler.Load(alarm_formula)
     alarm_list = alarm_handler.alarmList
