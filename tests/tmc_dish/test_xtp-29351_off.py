@@ -7,7 +7,6 @@ from tango import DevState
 from tests.resources.test_support.enum import DishMode
 
 
-@pytest.mark.skip
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29351_off.feature",

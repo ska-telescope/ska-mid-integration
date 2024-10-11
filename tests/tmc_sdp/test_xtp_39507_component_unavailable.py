@@ -19,10 +19,6 @@ from tests.resources.test_harness.simulator_factory import SimulatorFactory
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 
 
-@pytest.mark.skip(
-    reason="failed with reason processing controller, "
-    + "helm deployer are OFFLINE"
-)
 @pytest.mark.tmc_sdp_unhappy
 @scenario(
     "../features/tmc_sdp/xtp_39507_component_unavailable.feature",
