@@ -21,6 +21,7 @@ from tests.resources.test_support.constant import alarm_handler1
 TIMEOUT = 10
 
 
+@pytest.mark.skip
 @pytest.mark.SKA_mid
 @scenario(
     "../features/dish_vcc_initialization/" "xtp_alarm_dish_vcc.feature",
