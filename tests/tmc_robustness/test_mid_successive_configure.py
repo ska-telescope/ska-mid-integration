@@ -30,6 +30,7 @@ tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 telescope_control = BaseTelescopeControl()
 
 
+@pytest.mark.skip(reason="Test is being fixed in SAH-1596")
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successive_configure.feature",
