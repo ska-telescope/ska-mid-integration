@@ -159,8 +159,13 @@ class EventRecorder(object):
                 assertion_data = change_event_callback[
                     callable_name
                 ].assert_change_event(Anything)
+                LOGGER.debug(
+                    "Received event for attribute: %s with assertion data: %s",
+                    attribute_name,
+                    assertion_data,
+                )
                 if (
-                    assertion_data["arg0"].attr_value.name
+                    assertion_data["arg0"].attr_value.name.lower()
                     == attribute_name.lower()
                 ):
                     if (
