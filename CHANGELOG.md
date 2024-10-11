@@ -3,7 +3,7 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
-[master]
+[unreleased]
 ********
 * Updated Subarray Node to v0.23.3 to fix SKB-512
 
