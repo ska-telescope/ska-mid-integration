@@ -4,9 +4,11 @@ import json
 import time
 
 import pytest
+import tango
 from pytest_bdd import given, scenario, then, when
 from tango import DeviceProxy, DevState
 
+from tests.conftest import LOGGER
 from tests.resources.test_harness.helpers import (
     wait_and_validate_device_attribute_value,
 )
@@ -95,8 +97,24 @@ def test_load_alarm():
     alarm_handler.Load(alarm_formula)
     alarm_list = alarm_handler.alarmList
     assert ("dishleafnode_kvalue_not_set") in alarm_list
-    time.sleep(3)
-    alarm_summary = alarm_handler.alarmSummary
+
+    # time.sleep(3)
+    # alarm_summary = alarm_handler.alarmSummary
+    # assert "UNACK" in alarm_summary[0]
+
+    tries = 10
+    for tri in range(tries):
+        try:
+            alarm_summary = alarm_handler.alarmSummary
+        except (Exception, tango.DevFailed) as exception:
+            LOGGER.error(exception)
+            time.sleep(1)
+            if tri < tries - 1:
+                continue
+            else:
+                raise
+        break
+
     assert "UNACK" in alarm_summary[0]
     # tear_down_configured_alarms(alarm_handler, alarm_list)
 
