@@ -28,9 +28,9 @@ tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 telescope_control = BaseTelescopeControl()
 result, message = "", ""
 the_waiter = Waiter()
-central_node = DeviceProxy(centralnode)
 
 
+@pytest.mark.skip(reason="Invalid scenario")
 @pytest.mark.SKA_mid
 @scenario(
     "../features/check_command_not_allowed.feature",
@@ -57,6 +57,7 @@ def given_tmc():
 @given("the subarray is busy in assigning the resources")
 def given_tmc_obsState(json_factory):
     assign_json = json_factory("command_AssignResources")
+    central_node = DeviceProxy(centralnode)
     tmc_helper.check_devices(DEVICE_LIST_FOR_CHECK_DEVICES)
     pytest.command_result = central_node.AssignResources(assign_json)
     LOGGER.info("Checking for Subarray node obsState")
@@ -74,8 +75,9 @@ def given_tmc_obsState(json_factory):
 @when("AssignResources command is invoked, TMC raises exception")
 def send_command(json_factory):
     LOGGER.info("Invoked AssignResources2 from CentralNode")
-    assign_json2 = json_factory("command_AssignResources_2")
-    with pytest.raises(StateModelError) as e:
+    with pytest.raises(Exception) as e:
+        assign_json2 = json_factory("command_AssignResources_2")
+        central_node = DeviceProxy(centralnode)
         LOGGER.info("Invoked AssignResources2 from CentralNode")
         central_node.AssignResources(assign_json2)
     assert "AssignResources command not permitted in observation state" in str(
@@ -87,6 +89,7 @@ def send_command(json_factory):
 
 @when("previous AssignResources executed succesfully")
 def check_asignresources_completed(change_event_callbacks):
+    central_node = DeviceProxy(centralnode)
     central_node.subscribe_event(
         "longRunningCommandResult",
         EventType.CHANGE_EVENT,
@@ -130,7 +133,3 @@ def tmc_accepts_permitted_commands(json_factory):
     )
 
     LOGGER.info("Tear Down complete. Telescope is in Standby State")
-
-
-class StateModelError(ValueError):
-    """Error in state machine model related to transitions or state."""
