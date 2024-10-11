@@ -856,7 +856,7 @@ def wait_until_devices_operational(devices_to_monitor):
     return False
 
 
-def wait_for_partial_or_complete_abort(timeout: int = 110) -> None:
+def wait_for_partial_or_complete_abort() -> None:
     """Wait for completion of Partial/Full abort on SubarrayNode by waiting for
     one of 3 states on all the devices - ABORTED, EMPTY or FAULT until
     occurance of timeout.

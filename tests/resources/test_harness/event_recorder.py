@@ -159,7 +159,7 @@ class EventRecorder(object):
                 assertion_data = change_event_callback[
                     callable_name
                 ].assert_change_event(Anything)
-                if assertion_data["arg0"].attribute_name == attribute_name:
+                if assertion_data["arg0"].name == attribute_name.lower():
                     if (
                         assertion_data["arg0"].attr_value.value
                         in attribute_values
