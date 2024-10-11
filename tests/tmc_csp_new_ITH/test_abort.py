@@ -118,9 +118,6 @@ def test_scanning_to_aborting_to_aborted():
     """Test SCANNING to ABORTING to ABORTED transitions."""
 
 
-@pytest.mark.xfail(
-    reason="CSP subarray always remain in On state, update require in teardown"
-)
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/abort_restart_subarray.feature",
