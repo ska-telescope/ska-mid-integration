@@ -42,9 +42,6 @@ ASSERTIONS_TIMEOUT = 60
 # Scenario
 
 
-@pytest.mark.xfail(
-    reason="CSP subarray always remain in On state, update require in teardown"
-)
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",
