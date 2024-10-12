@@ -865,9 +865,9 @@ def wait_for_partial_or_complete_abort() -> None:
     """
     event_recorder = EventRecorder()
     DEVICE_ATTRIBUTE_MAP: dict[DeviceProxy, str] = {
-        DeviceProxy(tmc_subarraynode1): "obsState",
         DeviceProxy(tmc_csp_subarray_leaf_node): "cspSubarrayObsState",
         DeviceProxy(tmc_sdp_subarray_leaf_node): "sdpSubarrayObsState",
+        DeviceProxy(tmc_subarraynode1): "obsState",
     }
 
     # Subscribing to events
