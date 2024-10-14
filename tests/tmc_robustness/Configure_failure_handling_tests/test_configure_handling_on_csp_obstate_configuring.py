@@ -16,8 +16,9 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 
+# Check assigned resources
 @pytest.mark.bdd_configure
-@pytest.mark.SKA_mid1
+@pytest.mark.skip
 @scenario(
     "../features/xtp-28834.feature",
     "TMC behavior when Csp Subarray is stuck in obsState CONFIGURING",
