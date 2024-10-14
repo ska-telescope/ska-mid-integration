@@ -18,7 +18,7 @@ ska-mid-dish-simulators:
     image:
       registry: artefact.skao.int
       image: ska-mid-dish-simulators
-      tag: 3.1.2
+      tag: 4.1.2
       pullPolicy: IfNotPresent
   labels:
     app: ska-tmc-integration
