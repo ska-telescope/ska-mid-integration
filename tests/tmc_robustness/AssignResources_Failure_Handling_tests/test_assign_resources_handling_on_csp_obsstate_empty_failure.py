@@ -1,6 +1,5 @@
 import json
 
-import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from ska_tango_testing.mock.placeholders import Anything
