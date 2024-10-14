@@ -80,14 +80,14 @@ device_dict = {
     "dish_master_list": [
         dish_master1,
         dish_master2,
-        dish_master3,
-        dish_master4,
+        # dish_master3,
+        # dish_master4,
     ],
     "dish_leaf_node_list": [
         tmc_dish_leaf_node1,
         tmc_dish_leaf_node2,
-        tmc_dish_leaf_node3,
-        tmc_dish_leaf_node4,
+        # tmc_dish_leaf_node3,
+        # tmc_dish_leaf_node4,
     ],
     "csp_subarray_leaf_node": tmc_csp_subarray_leaf_node,
     "sdp_subarray_leaf_node": tmc_sdp_subarray_leaf_node,
@@ -120,32 +120,32 @@ class SubarrayNodeWrapper(object):
         ):
             dish_fqdn001 = REAL_DISH1_FQDN
             dish_fqdn036 = REAL_DISH36_FQDN
-            dish_fqdn063 = REAL_DISH63_FQDN
-            dish_fqdn100 = REAL_DISH100_FQDN
+            # dish_fqdn063 = REAL_DISH63_FQDN
+            # dish_fqdn100 = REAL_DISH100_FQDN
         else:
             dish_fqdn001 = dish_master1
             dish_fqdn036 = dish_master2
-            dish_fqdn063 = dish_master3
-            dish_fqdn100 = dish_master4
+            # dish_fqdn063 = dish_master3
+            # dish_fqdn100 = dish_master4
 
         self.dish_master_list = [
             DeviceProxy(dish_fqdn001),
             DeviceProxy(dish_fqdn036),
-            DeviceProxy(dish_fqdn063),
-            DeviceProxy(dish_fqdn100),
+            # DeviceProxy(dish_fqdn063),
+            # DeviceProxy(dish_fqdn100),
         ]
         self.dish_master_name_list = [
             dish_fqdn001,
             dish_fqdn036,
-            dish_fqdn063,
-            dish_fqdn100,
+            # dish_fqdn063,
+            # dish_fqdn100,
         ]
 
         self.dish_leaf_node_list = [
             DeviceProxy(tmc_dish_leaf_node1),
             DeviceProxy(tmc_dish_leaf_node2),
-            DeviceProxy(tmc_dish_leaf_node3),
-            DeviceProxy(tmc_dish_leaf_node4),
+            # DeviceProxy(tmc_dish_leaf_node3),
+            # DeviceProxy(tmc_dish_leaf_node4),
         ]
 
         self.subarray_devices = {
