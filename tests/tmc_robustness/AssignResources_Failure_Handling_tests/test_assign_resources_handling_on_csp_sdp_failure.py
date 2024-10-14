@@ -1,6 +1,5 @@
 import json
 
-import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from ska_tango_testing.mock.placeholders import Anything
@@ -15,7 +14,7 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-@pytest.mark.SKA_mid1
+# Enabled as part of this story
 @scenario(
     "../features/xtp-28340.feature",
     "TMC behavior when CSP and SDP Subarrays AssignResources raise exception",
