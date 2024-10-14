@@ -17,7 +17,6 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 
 # Check assigned resources
-@pytest.mark.bdd_configure
 @pytest.mark.skip
 @scenario(
     "../features/xtp-28834.feature",

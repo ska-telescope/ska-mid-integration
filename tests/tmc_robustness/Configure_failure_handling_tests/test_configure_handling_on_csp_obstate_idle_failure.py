@@ -17,8 +17,7 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 
-@pytest.mark.bdd_configure
-@pytest.mark.skip(reason="Need investigation")
+@pytest.mark.skip
 @scenario(
     "../features/xtp-28436.feature",
     "TMC behavior when Csp Subarray Configure raises exception",
