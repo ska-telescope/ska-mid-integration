@@ -15,11 +15,7 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-@pytest.mark.skip(
-    reason="Failure scenario is not getting simulated correctly. The issue "
-    + "will be investigated under SAH-1531."
-)
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid1
 @scenario(
     "../features/xtp-28340.feature",
     "TMC behavior when CSP and SDP Subarrays AssignResources raise exception",
