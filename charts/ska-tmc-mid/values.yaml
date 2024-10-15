@@ -19,7 +19,7 @@ annotations:
 ##  Order of instances resolution ##
 # .Values.subarray_count
 # subarray_count, this will be expanded (1 to N inclusive)
-subarray_count: 1
+subarray_count: 2
 
 global:
   minikube: false
@@ -33,7 +33,7 @@ global:
   # List the dishes, if set, then this list will be applied to instances of:
   # deviceServers.dishmaster, deviceServers.dishleafnode
   dish_devices: ["dishmaster", "dishleafnode"]
-  dishes: ["001", "036"]
+  dishes: ["001", "036", "063", "100"]
 
   namespace_dish:
     dish_names: []
@@ -111,15 +111,15 @@ cspsubarrayleafnode:
 
 dishleafnode:
   image:
-    registry: artefact.skao.int
+    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-dishleafnode
     image: ska-tmc-dishleafnode
-    tag: 0.17.6-dirty
-    pullPolicy: Never
+    tag: 0.17.6-dev.ce4b34517
+    pullPolicy: IfNotPresent
 
 resources:
   requests:
-    cpu: 200m
-    memory: 200Mi
+    cpu: 1000m
+    memory: 300Mi
 
 
 deviceServers:
@@ -129,7 +129,7 @@ deviceServers:
     subarray_count: 1
     file: "data/centralnode_mid.yaml"
     DishLeafNodePrefix: "ska_mid/tm_leaf_node/d0"
-    DishIDs: ["SKA001", "SKA036"]
+    DishIDs: ["SKA001", "SKA036", "SKA063", "SKA100"]
     RealDishMasterIdentifier: "mid-dish/dish-manager"
     SimulatorDishMasterIdentifier: "elt/master"
     DishVccConfig:
@@ -147,7 +147,7 @@ deviceServers:
     enabled: true
     file: "data/subarraynode_mid.yaml"
     DishLeafNodePrefix: "ska_mid/tm_leaf_node/d0"
-    DishIDs: ["SKA001", "SKA036"]
+    DishIDs: ["SKA001", "SKA036", "SKA063", "SKA100"]
     RealDishMasterIdentifier: "mid-dish/dish-manager"
     SimulatorDishMasterIdentifier: "elt/master"
     CspAssignResourcesInterfaceURL: "https://schema.skao.int/ska-csp-assignresources/2.0"
@@ -186,7 +186,7 @@ deviceServers:
       limits:
         memory: 3000Mi
       requests:
-        cpu: 1000m
+        cpu: 2000m
         memory: 280Mi
     CommandTimeOut: 90
     TrackTableInAdvance: 6
