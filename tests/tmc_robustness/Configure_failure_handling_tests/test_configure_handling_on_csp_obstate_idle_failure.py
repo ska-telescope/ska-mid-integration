@@ -211,13 +211,21 @@ def tmc_subarray_transitions_to_aborted(subarray_node, event_recorder):
         "I issue the Restart command on TMC SubarrayNode {subarray_id}"
     )
 )
-def send_command_restart(subarray_node, event_recorder):
+def send_command_restart(subarray_node, event_recorder, simulator_factory):
     subarray_node.execute_transition("Restart", argin=None)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.RESTARTING,
     )
+    csp_sim = simulator_factory.get_or_create_simulator_device(
+        SimulatorDeviceType.MID_CSP_DEVICE
+    )
+    csp_sim.SetDirectObsState(ObsState.EMPTY)
+    sdp_sim = simulator_factory.get_or_create_simulator_device(
+        SimulatorDeviceType.MID_SDP_DEVICE
+    )
+    sdp_sim.SetDirectObsState(ObsState.EMPTY)
 
 
 @then(
