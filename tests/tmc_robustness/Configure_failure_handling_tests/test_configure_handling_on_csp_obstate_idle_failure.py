@@ -94,7 +94,8 @@ def given_tmc_subarray_configure_is_in_progress(
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    subarray_node.execute_transition("Configure", configure_input_json)
+    # subarray_node.execute_transition("Configure", configure_input_json)
+    subarray_node.command_inout("Configure", configure_input_json)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
