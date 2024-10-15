@@ -5,7 +5,7 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from tango import DevState
 
-from tests.conftest import LOGGER
+# from tests.conftest import LOGGER
 from tests.resources.test_harness.constant import (
     COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE,
 )
@@ -94,10 +94,7 @@ def given_tmc_subarray_configure_is_in_progress(
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    # subarray_node.execute_transition("Configure", configure_input_json)
-    subarray_node.subarray_node.command_inout(
-        "Configure", configure_input_json
-    )
+    subarray_node.execute_transition("Configure", configure_input_json)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
@@ -218,14 +215,6 @@ def send_command_restart(subarray_node, event_recorder, simulator_factory):
         "obsState",
         ObsState.RESTARTING,
     )
-    csp_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_CSP_DEVICE
-    )
-    csp_sim.SetDirectObsState(ObsState.EMPTY)
-    sdp_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_SDP_DEVICE
-    )
-    sdp_sim.SetDirectObsState(ObsState.EMPTY)
 
 
 @then(
@@ -279,12 +268,28 @@ def tmc_subarray_transitions_to_empty(subarray_node, event_recorder):
         + "Subarray {subarray_id}"
     )
 )
-def configure_executed_on_subarray(subarray_node, event_recorder):
-    subarray_node.force_change_of_obs_state("READY")
-    LOGGER.info(
-        f"SubarrayNode ObsState is: {subarray_node.subarray_node.obsState}"
+def configure_executed_on_subarray(
+    subarray_node, event_recorder, central_node_mid, command_input_factory
+):
+    assign_input_json = prepare_json_args_for_centralnode_commands(
+        "assign_resources_mid", command_input_factory
     )
-    assert subarray_node.subarray_node.obsState == ObsState.READY
+    central_node_mid.perform_action("AssignResources", assign_input_json)
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.IDLE,
+    )
+    configure_input_json = prepare_json_args_for_commands(
+        "configure_mid", command_input_factory
+    )
+    subarray_node.execute_transition("Configure", configure_input_json)
+
+    # subarray_node.force_change_of_obs_state("READY")
+    # LOGGER.info(
+    #     f"SubarrayNode ObsState is: {subarray_node.subarray_node.obsState}"
+    # )
+    # assert subarray_node.subarray_node.obsState == ObsState.READY
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
