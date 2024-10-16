@@ -1,15 +1,19 @@
 """Testing the 5 point calibration scan"""
 import pytest
+from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
+from ska_tango_testing.integration import log_events
 
 from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.helpers import (
     check_subarray_obs_state,
-    get_device_simulators,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
+
+# Assertion timeouts
+TIMEOUT = 50
 
 
 # @pytest.mark.skip(reason="Test fails randomly.")
@@ -26,50 +30,54 @@ def test_five_point_calibration_scan():
 
 
 @given("a TMC")
-def given_tmc(subarray_node, event_recorder):
+def given_tmc(subarray_node, event_tracer):
     """Given a TMC"""
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-    event_recorder.subscribe_event(
+    event_tracer.subscribe_event(subarray_node.subarray_node, "obsState")
+    event_tracer.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
+
+    # Logging setup
+    log_events(
+        {
+            subarray_node.subarray_node: [
+                "obsState",
+                "longRunningCommandResult",
+            ],
+        }
+    )
+
     subarray_node.move_to_on()
-    assert event_recorder.has_change_event_occurred(
+    assert_that(event_tracer).described_as(
+        "FAILED UNEXPECTED INITIAL OBSSTATE: "
+        "Subarray Node device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected to be in EMPTY obstate",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.EMPTY,
     )
+    event_tracer.clear_events()
 
 
 @given("a subarray configured for a calibration scan")
 def a_configured_subarray(
-    subarray_node, event_recorder, simulator_factory, command_input_factory
+    subarray_node, event_tracer, simulator_factory, command_input_factory
 ):
     """Given a subarray configured for a calibration scan."""
-    csp_sim, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
-    )
-
-    event_recorder.subscribe_event(csp_sim, "obsState")
-    event_recorder.subscribe_event(sdp_sim, "obsState")
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-    event_recorder.subscribe_event(
-        subarray_node.subarray_node, "longRunningCommandResult"
     )
     subarray_node.force_change_of_obs_state(
         "READY", assign_input_json=assign_input_json
     )
-    assert event_recorder.has_change_event_occurred(
-        csp_sim,
-        "obsState",
-        ObsState.READY,
-    )
-    assert event_recorder.has_change_event_occurred(
-        sdp_sim,
-        "obsState",
-        ObsState.READY,
-    )
-    assert event_recorder.has_change_event_occurred(
+    assert_that(event_tracer).described_as(
+        "FAILED ASSUMPTION AFTER CONFIGURE COMMAND: "
+        "Subarray Node device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected to be in READY obstate",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
@@ -80,18 +88,32 @@ def a_configured_subarray(
     )
     _, unique_id = subarray_node.execute_transition("Scan", scan_command_input)
 
-    assert event_recorder.has_change_event_occurred(
+    assert_that(event_tracer).described_as(
+        "FAILED ASSUMPTION AFTER SCAN COMMAND: "
+        "Subarray Node device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected to be in SCANNING obstate",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.SCANNING,
-        lookahead=15,
     )
-    assert event_recorder.has_change_event_occurred(
+    assert_that(event_tracer).described_as(
+        "FAILED ASSUMPTION AFTER SCAN COMMAND: "
+        "'the subarray is in SCANNING obsState'"
+        "Subarray Node device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected have longRunningCommand as"
+        f"({unique_id[0]},{COMMAND_COMPLETED})",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
-        (unique_id[0], COMMAND_COMPLETED),
-        lookahead=15,
+        (
+            unique_id[0],
+            COMMAND_COMPLETED,
+        ),
     )
+    event_tracer.clear_events()
 
 
 @given("the subarray is in READY obsState")
@@ -108,20 +130,18 @@ def a_subarray_in_ready_obsstate(subarray_node):
 )
 def when_i_perform_partial_configurations_and_scans(
     subarray_node,
-    event_recorder,
+    event_tracer,
     command_input_factory,
     partial_configuration_json,
 ):
     """When I perform partial configurations and scans."""
-    scan_jsons = ["scan_mid" for _ in range(4)]
     partial_configuration_jsons = partial_configuration_json.rstrip().split(
         ","
     )
 
     subarray_node.execute_five_point_calibration_scan(
         partial_configuration_jsons,
-        scan_jsons,
-        event_recorder,
+        event_tracer,
         command_input_factory,
     )
 
