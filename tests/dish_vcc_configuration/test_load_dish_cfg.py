@@ -4,12 +4,12 @@ import pytest
 from pytest_bdd import given, scenario, then, when
 from tango import DevState
 
+from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.helpers import (
     device_attribute_changed,
     get_master_device_simulators,
     prepare_json_args_for_centralnode_commands,
 )
-from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
 @pytest.mark.temp
@@ -84,7 +84,7 @@ def invoke_load_dish_cfg(
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (unique_id[0], str(int(ResultCode.OK))),
+        (unique_id[0], COMMAND_COMPLETED),
         lookahead=5,
     )
 
