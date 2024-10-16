@@ -135,11 +135,11 @@ def validate_dish_vcc_config_attribute_set(central_node_mid):
         {
             "interface": interface_schema,
             "tm_data_sources": [
-                "gitlab://gitlab.com/ska-telescope/ska-telmodel-data?main#"
-                + "tmdata"
+                "car://gitlab.com/ska-telescope/ska-telmodel-data?ska-sdp-"
+                + "tmlite-repository-1.0.0#tmdata"
             ],
             "tm_data_filepath": (
-                "instrument/dishid_vcc_configuration/mid_cbf_parameters.json"
+                "instrument/ska1_mid_psi/ska-mid-cbf-system-parameters.json"
             ),
         }
     )
