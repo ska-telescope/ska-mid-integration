@@ -101,11 +101,12 @@ def tmc_pass_configuration_to_csp_controller(simulator_factory):
         simulator_factory
     )
     expected_dish_vcc_config = {
-        "interface": "https://schema.skao.int"
-        "/ska-mid-cbf-initial-parameters/2.2",
+        "interface": "https://schema.skao.int/ska-mid-cbf-initsysparam/1.0",
         "dish_parameters": {
-            "SKA001": {"vcc": 1, "k": 11},
-            "SKA036": {"vcc": 2, "k": 101},
+            "SKA001": {"k": 119, "vcc": 1},
+            "SKA036": {"k": 1127, "vcc": 2},
+            "SKA063": {"k": 620, "vcc": 3},
+            "SKA100": {"k": 101, "vcc": 4},
         },
     }
     assert json.loads(csp_master_sim.dishVccConfig) == expected_dish_vcc_config
@@ -119,14 +120,16 @@ def validate_dish_vcc_config_attribute_set(central_node_mid):
     which provides simulated master devices
     """
     interface_schema = (
-        "https://schema.skao.int/ska-mid-cbf-initial-parameters/2.2"
+        "https://schema.skao.int/ska-mid-cbf-initial-parameters/1.0"
     )
     expected_dish_vcc_config = json.dumps(
         {
             "interface": interface_schema,
             "dish_parameters": {
-                "SKA001": {"vcc": 1, "k": 11},
-                "SKA036": {"vcc": 2, "k": 101},
+                "SKA001": {"k": 119, "vcc": 1},
+                "SKA036": {"k": 1127, "vcc": 2},
+                "SKA063": {"k": 620, "vcc": 3},
+                "SKA100": {"k": 101, "vcc": 4},
             },
         }
     )
@@ -171,5 +174,5 @@ def validate_k_number_set(simulator_factory):
         _,
         _,
     ) = get_master_device_simulators(simulator_factory)
-    assert dish_master_1_sim.kValue == 11
-    assert dish_master_2_sim.kValue == 101
+    assert dish_master_1_sim.kValue == 119
+    assert dish_master_2_sim.kValue == 1127
