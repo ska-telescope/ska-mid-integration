@@ -36,7 +36,7 @@ dependencies:
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-mid-cbf-mcs.enabled
   - name: ska-mid-cbf-tmleafnode
-    version: 0.15.2
+    version: 1.0.0
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-mid-cbf-tmleafnode.enabled
     alias: mid-cbf
