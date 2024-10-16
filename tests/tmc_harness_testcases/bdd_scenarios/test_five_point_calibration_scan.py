@@ -16,9 +16,7 @@ from tests.resources.test_harness.helpers import (
 TIMEOUT = 50
 
 
-# @pytest.mark.skip(reason="Test fails randomly.")
 @pytest.mark.SKA_mid
-@pytest.mark.temp
 @scenario(
     "../features/test_harness/five_point_scan.feature",
     "TMC behaviour during five point calibration scan.",
