@@ -119,9 +119,7 @@ def validate_dish_vcc_config_attribute_set(central_node_mid):
     :param central_node_mid: fixture for a TMC CentralNode Mid under test
     which provides simulated master devices
     """
-    interface_schema = (
-        "https://schema.skao.int/ska-mid-cbf-initial-parameters/1.0"
-    )
+    interface_schema = "https://schema.skao.int/ska-mid-cbf-initsysparam/1.0"
     expected_dish_vcc_config = json.dumps(
         {
             "interface": interface_schema,
