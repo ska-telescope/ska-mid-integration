@@ -22,7 +22,8 @@ def test_dish_id_vcc_configuration():
     """This test validate that TMC is able to load the dish vcc
     configuration file provided to LoadDishCfg command.
     Validate that k-numbers set on dish masters
-    Validate sysParam and sourceSysParam attribute set on csp master leaf node
+    Validate dishVccConfig and sourceDishVccConfig attribute set on csp master
+    leaf node
     """
 
 
@@ -91,14 +92,15 @@ def invoke_load_dish_cfg(
 
 @then("TMC should pass the configuration to CSP Controller")
 def tmc_pass_configuration_to_csp_controller(simulator_factory):
-    """Validate sysParam and sourceSysParam attribute set on Csp Master
+    """Validate dishVccConfig and sourceDishVccConfig attribute set on Csp
+    Master
     :param simulator_factory: fixture for creating simulator devices for
     mid Telescope respectively.
     """
     csp_master_sim, _, _, _, _, _ = get_master_device_simulators(
         simulator_factory
     )
-    expected_sys_param = {
+    expected_dish_vcc_config = {
         "interface": "https://schema.skao.int"
         "/ska-mid-cbf-initial-parameters/2.2",
         "dish_parameters": {
@@ -106,12 +108,12 @@ def tmc_pass_configuration_to_csp_controller(simulator_factory):
             "SKA036": {"vcc": 2, "k": 101},
         },
     }
-    assert json.loads(csp_master_sim.sysParam) == expected_sys_param
+    assert json.loads(csp_master_sim.dishVccConfig) == expected_dish_vcc_config
 
 
 @then("TMC displays the current version of Dish and VCC configuration")
-def validate_sys_param_attribute_set(central_node_mid):
-    """Valdate sysParam and sourceSysParam attribute
+def validate_dish_vcc_config_attribute_set(central_node_mid):
+    """Valdate dishVccConfig and sourceDishVccConfig attribute
     correctly set on csp master leaf node
     :param central_node_mid: fixture for a TMC CentralNode Mid under test
     which provides simulated master devices
@@ -119,7 +121,7 @@ def validate_sys_param_attribute_set(central_node_mid):
     interface_schema = (
         "https://schema.skao.int/ska-mid-cbf-initial-parameters/2.2"
     )
-    expected_sys_param = json.dumps(
+    expected_dish_vcc_config = json.dumps(
         {
             "interface": interface_schema,
             "dish_parameters": {
@@ -128,7 +130,7 @@ def validate_sys_param_attribute_set(central_node_mid):
             },
         }
     )
-    expected_source_sys_param = json.dumps(
+    expected_source_dish_vcc_config = json.dumps(
         {
             "interface": interface_schema,
             "tm_data_sources": [
@@ -143,11 +145,14 @@ def validate_sys_param_attribute_set(central_node_mid):
 
     assert device_attribute_changed(
         device=central_node_mid.csp_master_leaf_node,
-        attribute_name_list=["sysParam", "sourceSysParam"],
-        attribute_value_list=[expected_sys_param, expected_source_sys_param],
+        attribute_name_list=["dishVccConfig", "sourceDishVccConfig"],
+        attribute_value_list=[
+            expected_dish_vcc_config,
+            expected_source_dish_vcc_config,
+        ],
         timeout=100,
     ), (
-        "sysParam and sourceSysParam attribute value is not set "
+        "dishVccConfig and sourceDishVccConfig attribute value is not set "
         "on csp master leaf node"
     )
 
