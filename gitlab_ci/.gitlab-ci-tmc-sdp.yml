@@ -12,7 +12,7 @@ k8s-test-tmc-with-sdp:
     SUBARRAY_COUNT: 2
     SDP_SIMULATION_ENABLED: 'false'
     TARANTA_ENABLED: 'true'
-  before_script: 
+  before_script:
     - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
     - 'make help | grep k8s-test'
@@ -36,6 +36,8 @@ k8s-test-tmc-with-sdp:
     name: test/sdp-$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-test-tmc-with-sdp
     auto_stop_in: 1 minute
+  rules:
+    - when: never
 
 
 stop-k8s-test-tmc-with-sdp:
@@ -44,7 +46,7 @@ stop-k8s-test-tmc-with-sdp:
   variables:
     KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-sdp'
     SDP_SIMULATION_ENABLED: 'false'
-    KUBE_NAMESPACE_SDP: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-sdp' 
+    KUBE_NAMESPACE_SDP: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-sdp'
   script:
     - ${PWD}/tests/scripts/sdp_data_copy.sh delete_pod
     - make k8s-uninstall-chart

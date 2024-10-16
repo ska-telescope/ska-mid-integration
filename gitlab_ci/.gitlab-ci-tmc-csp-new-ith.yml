@@ -13,6 +13,8 @@ k8s-test-mid-with-csp-new-ith:
     name: test/$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-test-mid-with-csp-new-ith
     auto_stop_in: 1 minute
+  rules:
+    - when: never
 
 
 stop-k8s-test-mid-with-csp-new-ith:

@@ -19,6 +19,8 @@ dish-lmc-dish001:
     name: test/d001-$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-dish-lmc-001
   allow_failure: true
+  rules:
+    - when: never
 
 
 dish-lmc-dish036:
@@ -35,6 +37,8 @@ dish-lmc-dish036:
   environment:
     name: test/d036-$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-dish-lmc-036
+  rules:
+  - when: never
 
 
 dish-lmc-dish063:
@@ -51,6 +55,8 @@ dish-lmc-dish063:
   environment:
     name: test/d063-$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-dish-lmc-063
+  rules:
+    - when: never
 
 
 dish-lmc-dish100:
@@ -68,6 +74,8 @@ dish-lmc-dish100:
   environment:
     name: test/d100-$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-dish-lmc-100
+  rules:
+    - when: never
 
 
 
