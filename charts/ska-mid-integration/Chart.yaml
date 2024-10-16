@@ -24,11 +24,11 @@ dependencies:
     condition: ska-tmc-mid.enabled
     alias: tmc-mid
   - name: ska-dish-lmc
-    version: 4.2.0
+    version: 5.0.1-rc1
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-dish-lmc.enabled
   - name: ska-csp-lmc-mid
-    version: 0.24.0-rc.2
+    version: 0.24.0-rc.3
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-csp-lmc-mid.enabled
   - name: ska-mid-cbf-mcs
