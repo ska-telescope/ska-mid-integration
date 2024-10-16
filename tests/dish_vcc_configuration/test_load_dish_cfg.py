@@ -12,7 +12,6 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-@pytest.mark.temp
 @pytest.mark.SKA_mid
 @scenario(
     "../features/load_dish_cfg_command.feature",
