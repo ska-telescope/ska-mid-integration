@@ -77,8 +77,8 @@ def test_central_node_return_error_for_duplicate_vcc_id():
 def test_central_node_handle_exception():
     """This test validate that when exception is raised on csp controller
     device then the csp master should raise the error to central node and
-    sysParam and sourceSysParam attributes are not updated at csp master leaf
-    node device
+    dishVccConfig and sourceDishVccConfig attributes are not updated at
+    csp master leaf node device
     """
 
 
@@ -217,9 +217,11 @@ def invoke_command_load_cfg_on_defective_csp(
     csp_sim = simulator_factory.get_or_create_simulator_device(
         SimulatorDeviceType.MID_CSP_MASTER_DEVICE
     )
-    pytest.initial_sysParam = central_node_mid.csp_master_leaf_node.sysParam
-    pytest.initial_sourceSysParam = (
-        central_node_mid.csp_master_leaf_node.sourceSysParam
+    pytest.initial_dishVccConfig = (
+        central_node_mid.csp_master_leaf_node.dishVccConfig
+    )
+    pytest.initial_sourceDishVccConfig = (
+        central_node_mid.csp_master_leaf_node.sourceDishVccConfig
     )
 
     csp_sim.SetDefective(ERROR_PROPAGATION_DEFECT)
@@ -243,20 +245,20 @@ def invoke_command_load_cfg_on_defective_csp(
 
 
 @then(
-    "sysParam and sourceSysParam attributes "
+    "dishVccConfig and sourceDishVccConfig attributes "
     "remains unchanged on CSP Master Leaf Node"
 )
 def check_sys_param_source_sys_param_attributes(central_node_mid):
-    """Test validate that sysParam and sourceSysParam attributes
+    """Test validate that dishVccConfig and sourceDishVccConfig attributes
     are not updated after error
     """
     assert (
-        pytest.initial_sysParam
-        == central_node_mid.csp_master_leaf_node.sysParam
+        pytest.initial_dishVccConfig
+        == central_node_mid.csp_master_leaf_node.dishVccConfig
     )
     assert (
-        pytest.initial_sourceSysParam
-        == central_node_mid.csp_master_leaf_node.sourceSysParam
+        pytest.initial_sourceDishVccConfig
+        == central_node_mid.csp_master_leaf_node.sourceDishVccConfig
     )
 
 
