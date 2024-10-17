@@ -322,7 +322,7 @@ endif
 xray-post-publish:
 	if [ -f "$(HTML_REPORT_TARGET_FILE)" ] && [ "$(strip $(DECORATE_TEST_EXECUTIONS))" == "true" ]; then \
 		echo "Publishing the BDD HTML test report to the Jira test execution issue"; \
-		python -m ska_ser_xray.scripts.decorate_test_execution $(DECORATE_TEST_EXECUTIONS_PARAMS); \
+		xray-enrich-test-execution $(DECORATE_TEST_EXECUTIONS_PARAMS); \
 	fi;
 
 # ----------------------------------------------------------------------------
