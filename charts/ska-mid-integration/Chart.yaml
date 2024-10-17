@@ -28,11 +28,11 @@ dependencies:
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-dish-lmc.enabled
   - name: ska-csp-lmc-mid
-    version: 0.22.0
+    version: 0.24.0-rc.3
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-csp-lmc-mid.enabled
   - name: ska-mid-cbf-mcs
-    version: 0.15.2
+    version: 1.0.0
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-mid-cbf-mcs.enabled
   - name: ska-mid-cbf-tmleafnode
