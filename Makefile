@@ -90,10 +90,10 @@ DISH_NAMESPACE_1 ?= ${KUBE_NAMESPACE}
 DISH_NAMESPACE_2 ?= ${KUBE_NAMESPACE}
 DISH_NAMESPACE_3 ?= ${KUBE_NAMESPACE}
 DISH_NAMESPACE_4 ?= ${KUBE_NAMESPACE}
-DISH_NAME_1 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_1).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA001
-DISH_NAME_36 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_2).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA036
-DISH_NAME_63 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_3).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA063
-DISH_NAME_100 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_4).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA100
+DISH_NAME_1 ?= mid-dish/dish-manager/SKA001
+DISH_NAME_36 ?= mid-dish/dish-manager/SKA036
+DISH_NAME_63 ?= mid-dish/dish-manager/SKA063
+DISH_NAME_100 ?= mid-dish/dish-manager/SKA100 #tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_4).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA100
 SDP_DEPLOY ?= true
 
 ifeq ($(SDP_SIMULATION_ENABLED),false)

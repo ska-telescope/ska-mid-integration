@@ -138,7 +138,6 @@ ska-csp-lmc-mid:
     app: ska-tmc-mid-integration
   enabled: true
 
-
 #=== DISH ===#
 ska-dish-lmc:
   enabled: true
