@@ -16,7 +16,7 @@ dependencies:
     version: 0.4.9
     repository: https://artefact.skao.int/repository/helm-internal
   - name: ska-tmc-mid
-    version: 0.22.5
+    version: 0.22.6-rc.1
     repository: file://../ska-tmc-mid
     alias: tmc-mid
   - name: ska-sdp
@@ -44,11 +44,11 @@ dependencies:
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-taranta.enabled
   - name: ska-csp-lmc-mid
-    version: 0.22.0
+    version: 0.24.0-rc.3
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-csp-lmc-mid.enabled
   - name: ska-mid-cbf-mcs
-    version: 0.15.2
+    version: 1.0.0
     repository:  https://artefact.skao.int/repository/helm-internal
     condition: ska-csp-lmc-mid.enabled
   - name: ska-k8s-config-exporter
