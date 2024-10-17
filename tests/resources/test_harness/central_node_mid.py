@@ -13,6 +13,7 @@ from tango.db import Database
 from tests.resources.test_harness.central_node import CentralNodeWrapper
 from tests.resources.test_harness.constant import (
     COMMAND_COMPLETED,
+    DEFAULT_DISH_VALIDATION_STATUS,
     DEFAULT_DISH_VCC_CONFIG,
     centralnode,
     csp_master,
@@ -590,6 +591,8 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             not self.csp_master_leaf_node.sourceDishVccConfig
             or json.loads(self.csp_master_leaf_node.sourceDishVccConfig)
             != DEFAULT_DISH_VCC_CONFIG
+            or json.loads(self.central_node.DishVccValidationStatus)
+            != DEFAULT_DISH_VALIDATION_STATUS
         ):
             _, unique_id = self._load_default_dish_vcc_config()
             event_recorder = EventRecorder()
