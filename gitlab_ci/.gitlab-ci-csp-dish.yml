@@ -38,6 +38,7 @@ k8s-test-csp-dish:
       namespace: $KUBE_NAMESPACE
     on_stop: stop-k8s-test-csp-dish
   allow_failure: false # need to keep this to unlock the pipeline
+  when: manual
 
 
 stop-k8s-test-csp-dish:

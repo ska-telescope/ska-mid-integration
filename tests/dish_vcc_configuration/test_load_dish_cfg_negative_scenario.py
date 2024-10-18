@@ -20,10 +20,6 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 # @pytest.mark.skip("Need design change to avoid timeout corba exception")
 
 
-@pytest.mark.skip(
-    reason="Test fails because of TRANSIENT CORBA EXCEPTION with command"
-    + " exceeding the timeout of 3 seconds"
-)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/load_dish_cfg_command_negative_scenario.feature",
@@ -44,10 +40,6 @@ def test_central_node_return_error_for_invalid_file():
     """
 
 
-@pytest.mark.skip(
-    reason="Test fails because of TRANSIENT CORBA EXCEPTION with command"
-    + " exceeding the timeout of 3 seconds"
-)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/load_dish_cfg_command_negative_scenario.feature",
@@ -59,10 +51,6 @@ def test_central_node_return_error_for_invalid_dish_id():
     """
 
 
-@pytest.mark.skip(
-    reason="Test fails because of TRANSIENT CORBA EXCEPTION with command"
-    + " exceeding the timeout of 3 seconds"
-)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/load_dish_cfg_command_negative_scenario.feature",
@@ -74,10 +62,6 @@ def test_central_node_return_error_for_duplicate_vcc_id():
     """
 
 
-@pytest.mark.skip(
-    reason="Test fails because of TRANSIENT CORBA EXCEPTION with command"
-    + " exceeding the timeout of 3 seconds"
-)
 @pytest.mark.SKA_mid
 @pytest.mark.skip(
     reason="This will be enable once Dish Vcc feature is integrate."
@@ -89,8 +73,8 @@ def test_central_node_return_error_for_duplicate_vcc_id():
 def test_central_node_handle_exception():
     """This test validate that when exception is raised on csp controller
     device then the csp master should raise the error to central node and
-    sysParam and sourceSysParam attributes are not updated at csp master leaf
-    node device
+    dishVccConfig and sourceDishVccConfig attributes are not updated at
+    csp master leaf node device
     """
 
 
@@ -229,9 +213,11 @@ def invoke_command_load_cfg_on_defective_csp(
     csp_sim = simulator_factory.get_or_create_simulator_device(
         SimulatorDeviceType.MID_CSP_MASTER_DEVICE
     )
-    pytest.initial_sysParam = central_node_mid.csp_master_leaf_node.sysParam
-    pytest.initial_sourceSysParam = (
-        central_node_mid.csp_master_leaf_node.sourceSysParam
+    pytest.initial_dishVccConfig = (
+        central_node_mid.csp_master_leaf_node.dishVccConfig
+    )
+    pytest.initial_sourceDishVccConfig = (
+        central_node_mid.csp_master_leaf_node.sourceDishVccConfig
     )
 
     csp_sim.SetDefective(ERROR_PROPAGATION_DEFECT)
@@ -255,20 +241,20 @@ def invoke_command_load_cfg_on_defective_csp(
 
 
 @then(
-    "sysParam and sourceSysParam attributes "
+    "dishVccConfig and sourceDishVccConfig attributes "
     "remains unchanged on CSP Master Leaf Node"
 )
 def check_sys_param_source_sys_param_attributes(central_node_mid):
-    """Test validate that sysParam and sourceSysParam attributes
+    """Test validate that dishVccConfig and sourceDishVccConfig attributes
     are not updated after error
     """
     assert (
-        pytest.initial_sysParam
-        == central_node_mid.csp_master_leaf_node.sysParam
+        pytest.initial_dishVccConfig
+        == central_node_mid.csp_master_leaf_node.dishVccConfig
     )
     assert (
-        pytest.initial_sourceSysParam
-        == central_node_mid.csp_master_leaf_node.sourceSysParam
+        pytest.initial_sourceDishVccConfig
+        == central_node_mid.csp_master_leaf_node.sourceDishVccConfig
     )
 
 
