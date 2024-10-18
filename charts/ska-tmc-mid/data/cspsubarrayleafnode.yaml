@@ -7,6 +7,8 @@ entrypoints:
 {{- $DelayModelTimeInAdvance := .Values.deviceServers.cspsubarrayleafnode.DelayModelTimeInAdvance }}
 {{- $DelayCadence := .Values.deviceServers.cspsubarrayleafnode.DelayCadence }}
 {{- $DelayValidityPeriod := .Values.deviceServers.cspsubarrayleafnode.DelayValidityPeriod }}
+{{- $TelmodelSource := .Values.deviceServers.cspsubarrayleafnode.TelmodelSource }}
+{{- $TelmodelPath := .Values.deviceServers.cspsubarrayleafnode.TelmodelPath }}
 {{- $CommandTimeOut := .Values.deviceServers.cspsubarrayleafnode.CommandTimeOut}}
 server:
   name: "csp_subarray_leaf_node_mid"
@@ -19,6 +21,12 @@ server:
         devices:
           - name: "ska_mid/tm_leaf_node/csp_subarray{{ printf "%02s" . }}"
             properties:
+            - name: "TelmodelSource"
+                values:
+                - "{{ $TelmodelSource }}"
+              - name: "TelmodelPath"
+                values:
+                - "{{ $TelmodelPath }}"
               - name: "CspSubarrayFQDN"
                 values:
                 - "{{ $csp_sa_fqdn_prefix }}/{{ printf "%02s" . }}"
