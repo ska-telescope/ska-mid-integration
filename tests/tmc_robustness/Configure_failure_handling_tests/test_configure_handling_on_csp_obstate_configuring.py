@@ -16,7 +16,7 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 
-@pytest.mark.skip
+# @pytest.mark.skip
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-28834.feature",
