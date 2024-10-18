@@ -186,8 +186,7 @@ class TestSubarrayNodeNegative(object):
             )
         assert device_received_this_command(dish_sim, "ConfigureBand1", "True")
 
-    @pytest.mark.skip(reason="Fails in assertions after Fault")
-    @pytest.mark.SKA_mid
+    @pytest.mark.SKA_mid1
     def test_subarray_configure_when_csp_goes_to_fault_then_ready(
         self,
         subarray_node,
