@@ -271,33 +271,20 @@ endif
 
 
 # ----------------------------------------------------------------------------
-# generate documentation for steps and feature files
-
-STEP_DOCUMENTATION_OUTPUT_FOLDER ?= tests/tmc_csp_new_ITH/bdd-steps-doc ## The folder where the documentation will be generated
-STEP_DOCUMENTATION_SCRIPT ?= helper_scripts/document_steps.py ## The script that will generate the documentation
-STEP_DOCUMENTATION_TARGET_FOLDER ?= tests/tmc_csp_new_ITH/ # for the moment
-## The target folder where the script will look for the feature files
-
-bdd-steps-doc:
-	rm -rf $(STEP_DOCUMENTATION_OUTPUT_FOLDER)
-	python $(STEP_DOCUMENTATION_SCRIPT) $(STEP_DOCUMENTATION_TARGET_FOLDER) $(STEP_DOCUMENTATION_OUTPUT_FOLDER)
-
-# ----------------------------------------------------------------------------
 # Publish the BDD HTML test report to the just published
 # Jira test execution issue
-
 
 ## General flag to enable/disable the publishing of the BDD HTML test report
 # to the Jira test execution issue. 
 # Set to any value other than "true" to disable it
-DECORATE_TEST_EXECUTIONS ?= true
+ENRICH_TEST_EXECUTIONS ?= true
+ENRICH_TEST_EXECUTIONS_PARAMS ?=
 
 ## Jira configurations for publishing the BDD HTML test report to Jira
 JIRA_URL ?= https://jira.skatelescope.org
 JIRA_PROJECT_KEY ?= XTP
 
-DECORATE_TEST_EXECUTIONS_PARAMS ?=
-DECORATE_TEST_EXECUTIONS_PARAMS += --jira-url="$(strip $(JIRA_URL))" \
+ENRICH_TEST_EXECUTIONS_PARAMS += --jira-url="$(strip $(JIRA_URL))" \
 	--project-key="$(strip $(JIRA_PROJECT_KEY))" \
 	--ci-job-id="$(CI_JOB_ID)" --commit-sha="$(CI_COMMIT_SHA)" \
 	--html-report="$(strip $(HTML_REPORT_TARGET_FILE))"
@@ -309,9 +296,11 @@ DECORATE_TEST_EXECUTIONS_PARAMS += --jira-url="$(strip $(JIRA_URL))" \
 # (Set to false to disable the link to the BDD test documentation 
 # in the Jira test execution issue)
 ADD_DOCS_LINK_TO_JIRA ?= false
+## The folder where the documentation will be generated
+STEP_DOCUMENTATION_OUTPUT_FOLDER ?= tests/tmc_csp_new_ITH/bdd-steps-doc
 
 ifeq ($(ADD_DOCS_LINK_TO_JIRA), true)
-	DECORATE_TEST_EXECUTIONS_PARAMS += --test-docs="$(strip $(STEP_DOCUMENTATION_OUTPUT_FOLDER))"
+	ENRICH_TEST_EXECUTIONS_PARAMS += --test-docs="$(strip $(STEP_DOCUMENTATION_OUTPUT_FOLDER))"
 endif
 
 
@@ -320,16 +309,18 @@ endif
 # the script to publish the HTML report to Jira is available,
 # then publish a link to the HTML report to Jira
 xray-post-publish:
-	if [ -f "$(HTML_REPORT_TARGET_FILE)" ] && [ "$(strip $(DECORATE_TEST_EXECUTIONS))" == "true" ]; then \
+	if [ -f "$(HTML_REPORT_TARGET_FILE)" ] && [ "$(strip $(ENRICH_TEST_EXECUTIONS))" == "true" ]; then \
 		echo "Publishing the BDD HTML test report to the Jira test execution issue"; \
-		xray-enrich-test-execution $(DECORATE_TEST_EXECUTIONS_PARAMS); \
+		xray-enrich-test-execution $(ENRICH_TEST_EXECUTIONS_PARAMS); \
 	fi;
 
 # ----------------------------------------------------------------------------
 # Further customisations of the test command args
 
+$(info MARK: $(MARK))
+
 # Verbose error tracebacks (for now, only for new ITH tests)
 # and also link to test documentation
-ifeq ($(MARK),tmc_csp_new_ITH)
-	PYTHON_VARS_AFTER_PYTEST += --tb=long
+ifeq ($(strip $(MARK)),tmc_csp_new_ITH)
+	PYTHON_VARS_AFTER_PYTEST += -v --tb=long --log-cli-level=INFO
 endif

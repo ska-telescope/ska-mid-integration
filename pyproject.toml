@@ -30,7 +30,7 @@ msgpack = "1.0.7"
 msgpack_numpy = "0.4.8"
 astropy = "^5.0.4"
 ska-telmodel = "1.15.1"
-ska-ser-xray = { git="https://gitlab.com/ska-telescope/ska-ser-xray.git", branch="sst-979-scripts-to-create-update-jira-test-tickets" }
+ska-ser-xray = "^0.6.0"
 ska-integration-test-harness= "0.1.2"
 
 [tool.poetry.dev-dependencies]
