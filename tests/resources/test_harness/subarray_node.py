@@ -607,7 +607,7 @@ class SubarrayNodeWrapper(object):
                 for key in ("ca_offset_arcsec", "ie_offset_arcsec")
             )
             for dish_leaf_node in self.dish_leaf_node_list:
-                wait_and_validate_device_attribute_value(
+                assert wait_and_validate_device_attribute_value(
                     dish_leaf_node,
                     "sourceOffset",
                     f"{[ca_offset, ie_offset]}",
@@ -626,7 +626,7 @@ class SubarrayNodeWrapper(object):
                 "obsState",
                 ObsState.SCANNING,
             )
-            wait_and_validate_device_attribute_value(
+            assert wait_and_validate_device_attribute_value(
                 self.subarray_node, "obsState", ObsState.READY
             )
             event_tracer.clear_events()

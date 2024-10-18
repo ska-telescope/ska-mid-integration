@@ -295,6 +295,13 @@ DEFAULT_DISH_VCC_CONFIG = {
     ),
 }
 
+DEFAULT_DISH_VALIDATION_STATUS = {
+    "dish": "ALL DISH OK",
+    "ska_mid/tm_leaf_node/csp_master": (
+        "TMC and CSP Master Dish Vcc Version " + "is Same"
+    ),
+}
+
 DISH_001_CALIBRATION_DATA = [1.1, 1.2, 1.3]
 DISH_036_CALIBRATION_DATA = [2.1, 2.2, 2.3]
 RESET_OFFSETS = [0.0, 0.0]

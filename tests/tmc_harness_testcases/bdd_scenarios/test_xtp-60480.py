@@ -216,7 +216,7 @@ def a_subarray_after_five_point_calibration(
         ObsState.SCANNING,
     )
 
-    wait_and_validate_device_attribute_value(
+    assert wait_and_validate_device_attribute_value(
         subarray_node.subarray_node, "obsState", ObsState.READY
     )
 

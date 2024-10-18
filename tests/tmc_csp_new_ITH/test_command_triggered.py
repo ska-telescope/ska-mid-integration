@@ -99,6 +99,7 @@ def test_idle_to_resourcing_to_empty():
     """Test IDLE to RESOURCING to EMPTY transitions."""
 
 
+@pytest.mark.skip(reason="issue at CSP for scan after configure (CIP-2967)")
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",
@@ -124,6 +125,7 @@ def test_ready_to_idle():
 #     "since if a subarray is in READY state, by design it should be able "
 #     "to receive the Configure command."
 # )
+@pytest.mark.skip(reason="issue at CSP for scan after configure (CIP-2967)")
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",
@@ -133,6 +135,7 @@ def test_ready_to_configuring_to_ready():
     """Test READY to CONFIGURING to READY transitions."""
 
 
+@pytest.mark.skip(reason="issue at CSP for scan after configure (CIP-2967)")
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",
