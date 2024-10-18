@@ -21,8 +21,7 @@ from tests.resources.test_support.constant import alarm_handler1
 TIMEOUT = 10
 
 
-@pytest.mark.skip
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid1
 @scenario(
     "../features/dish_vcc_initialization/" "xtp_alarm_dish_vcc.feature",
     "TMC validates and raises alarm when K-Value not set in Dish Leaf Nodes",
