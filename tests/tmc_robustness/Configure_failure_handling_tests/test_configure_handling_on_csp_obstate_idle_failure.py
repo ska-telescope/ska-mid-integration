@@ -5,7 +5,6 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from tango import DevState
 
-# from tests.conftest import LOGGER
 from tests.resources.test_harness.constant import (
     COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE,
 )
@@ -285,11 +284,6 @@ def configure_executed_on_subarray(
     )
     subarray_node.execute_transition("Configure", configure_input_json)
 
-    # subarray_node.force_change_of_obs_state("READY")
-    # LOGGER.info(
-    #     f"SubarrayNode ObsState is: {subarray_node.subarray_node.obsState}"
-    # )
-    # assert subarray_node.subarray_node.obsState == ObsState.READY
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",

@@ -4,11 +4,9 @@ import json
 import time
 
 import pytest
-import tango
 from pytest_bdd import given, scenario, then, when
 from tango import DeviceProxy, DevState
 
-from tests.conftest import LOGGER
 from tests.resources.test_harness.helpers import (
     wait_and_validate_device_attribute_value,
 )
@@ -18,10 +16,11 @@ from tests.resources.test_support.common_utils.tmc_helpers import (
 )
 from tests.resources.test_support.constant import alarm_handler1
 
-TIMEOUT = 10
 
-
-@pytest.mark.SKA_mid1
+@pytest.mark.skip(
+    reason="alarm summary key error to be resolved under SAH-1510"
+)
+@pytest.mark.SKA_mid
 @scenario(
     "../features/dish_vcc_initialization/" "xtp_alarm_dish_vcc.feature",
     "TMC validates and raises alarm when K-Value not set in Dish Leaf Nodes",
@@ -81,40 +80,17 @@ def test_load_alarm():
     """A method to load tmc alarm for Alarm handler instance"""
     global alarm_handler, alarm_list
     alarm_handler = DeviceProxy(alarm_handler1)
-
-    start_time = time.time()
-    while time.time() - start_time < TIMEOUT:
-        if alarm_handler.ping() > 0:
-            break
-        time.sleep(0.5)
-
     alarm_formula = (
         "tag=dishleafnode_kvalue_not_set;formula="
         "(ska_mid/tm_leaf_node/d0001/kValueValidationResult == '4' );"
         "priority=log;group=none;message="
-        "alarm for dish validation status raised when k-value is not set"
+        "alarm for dishvalidation status raised when k-value is not set"
     )
     alarm_handler.Load(alarm_formula)
     alarm_list = alarm_handler.alarmList
     assert ("dishleafnode_kvalue_not_set") in alarm_list
-
-    # time.sleep(3)
-    # alarm_summary = alarm_handler.alarmSummary
-    # assert "UNACK" in alarm_summary[0]
-
-    tries = 10
-    for tri in range(tries):
-        try:
-            alarm_summary = alarm_handler.alarmSummary
-        except (Exception, tango.DevFailed) as exception:
-            LOGGER.error(exception)
-            time.sleep(1)
-            if tri < tries - 1:
-                continue
-            else:
-                raise
-        break
-
+    time.sleep(3)
+    alarm_summary = alarm_handler.alarmSummary
     assert "UNACK" in alarm_summary[0]
     # tear_down_configured_alarms(alarm_handler, alarm_list)
 

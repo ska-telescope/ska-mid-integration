@@ -15,7 +15,6 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-# Enabled as part of this story
 @scenario(
     "../features/xtp-28259.feature",
     "TMC behavior when Csp Subarray AssignResources raises exception",
