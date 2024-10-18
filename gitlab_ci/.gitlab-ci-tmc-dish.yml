@@ -41,6 +41,9 @@ k8s-test-dish-lmc:
   environment:
     name: test/dish-$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-test-dish-lmc
+  when: manual
+
+
 
 stop-k8s-test-dish-lmc:
   extends:
