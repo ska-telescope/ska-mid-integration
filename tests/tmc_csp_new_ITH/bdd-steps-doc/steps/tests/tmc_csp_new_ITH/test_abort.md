@@ -1,6 +1,6 @@
 # Test Steps and Scenarios from tests/tmc_csp_new_ITH/test_abort.py
 
-Last updated on: 11 September 2024 13:11:01
+Last updated on: 18 October 2024 17:08:04
 
 ## Scenarios
 
@@ -40,7 +40,7 @@ This step performs the following actions:
 
 **Signature:**
 ```python
-def send_abort_command(context_fixt, subarray_node_facade, csp, sdp, event_tracer):
+def send_abort_command(context_fixt, subarray_node_facade, event_tracer):
 ```
 
 **Description:**
