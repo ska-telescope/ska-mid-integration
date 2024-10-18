@@ -3,6 +3,11 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+[0.22.6-rc.1]
+*************
+* Updated ska-tmc-subarraynode v.0.23.4 to resolve SKB-509
+* TMC supporting TMC-CSP Configure interface v.3.0
+
 [0.22.6]
 **********
 * Updated dish leaf node version to  0.17.6 to resolve SKB-467
