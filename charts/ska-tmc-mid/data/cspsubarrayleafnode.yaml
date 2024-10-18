@@ -21,7 +21,7 @@ server:
         devices:
           - name: "ska_mid/tm_leaf_node/csp_subarray{{ printf "%02s" . }}"
             properties:
-            - name: "TelmodelSource"
+              - name: "TelmodelSource"
                 values:
                 - "{{ $TelmodelSource }}"
               - name: "TelmodelPath"
