@@ -43,8 +43,6 @@ k8s-test-dish-lmc:
     on_stop: stop-k8s-test-dish-lmc
   when: manual
 
-
-
 stop-k8s-test-dish-lmc:
   extends:
   - stop-k8s-test

@@ -13,6 +13,7 @@ from tango.db import Database
 from tests.resources.test_harness.central_node import CentralNodeWrapper
 from tests.resources.test_harness.constant import (
     COMMAND_COMPLETED,
+    DEFAULT_DISH_VALIDATION_STATUS,
     DEFAULT_DISH_VCC_CONFIG,
     centralnode,
     csp_master,
@@ -585,28 +586,36 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                     LOGGER.info("Moving to Off State")
                     self.move_to_off()
 
-            self._clear_command_call_and_transition_data(clear_transition=True)
-            # if source dish vcc config is empty or not matching with default
-            # dish vcc then load default dish vcc config
-            # CSP_SIMULATION_ENABLED condition will be removed after testing
-            # with real csp
-            if (
-                not self.csp_master_leaf_node.sourceDishVccConfig
-                or json.loads(self.csp_master_leaf_node.sourceDishVccConfig)
-                != DEFAULT_DISH_VCC_CONFIG
-            ):
-                _, unique_id = self._load_default_dish_vcc_config()
-                event_recorder = EventRecorder()
-                event_recorder.subscribe_event(
-                    self.central_node, "longRunningCommandResult"
+                self._clear_command_call_and_transition_data(
+                    clear_transition=True
                 )
-                assert event_recorder.has_change_event_occurred(
-                    self.central_node,
-                    "longRunningCommandResult",
-                    (unique_id[0], COMMAND_COMPLETED),
-                    lookahead=10,
-                )
-                event_recorder.clear_events()
+                # if source dish vcc config is empty or not matching
+                # with default
+                # dish vcc then load default dish vcc config
+                # CSP_SIMULATION_ENABLED condition will be removed after
+                # testing with real csp
+                if (
+                    not self.csp_master_leaf_node.sourceDishVccConfig
+                    or json.loads(
+                        self.csp_master_leaf_node.sourceDishVccConfig
+                    )
+                    != DEFAULT_DISH_VCC_CONFIG
+                    or json.loads(self.central_node.DishVccValidationStatus)
+                    != DEFAULT_DISH_VALIDATION_STATUS
+                ):
+                    _, unique_id = self._load_default_dish_vcc_config()
+                    event_recorder = EventRecorder()
+                    event_recorder.subscribe_event(
+                        self.central_node, "longRunningCommandResult"
+                    )
+                    assert event_recorder.has_change_event_occurred(
+                        self.central_node,
+                        "longRunningCommandResult",
+                        (unique_id[0], COMMAND_COMPLETED),
+                        lookahead=10,
+                    )
+                    event_recorder.clear_events()
+
                 LOGGER.info("longRunningCommandResult for Dish VCC verified")
 
         except Exception as e:

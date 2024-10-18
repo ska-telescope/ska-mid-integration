@@ -56,7 +56,6 @@ dish-lmc-dish063:
   when: manual
 
 
-
 dish-lmc-dish100:
   extends:
     - k8s-test
@@ -73,9 +72,6 @@ dish-lmc-dish100:
     name: test/d100-$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-dish-lmc-100
   when: manual
-
-
-
 
 
 stop-k8s-dish-lmc-001:
