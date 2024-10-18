@@ -1,18 +1,18 @@
-release=0.22.7-rc1
-tag=0.22.7-rc1
+release=0.22.7-rc.1
+tag=0.22.7-rc.1
 tag_description=
 **Charts:**
-**1. ska-tmc-integration 0.22.6-rc.1 - 0.22.7-rc1**
+**1. ska-tmc-integration 0.22.6-rc.1 - 0.22.7-rc.1**
 
-    **1.1 ska-tmc-mid - 0.22.6-rc.1 - 0.22.7-rc1:
+    **1.1 ska-tmc-mid - 0.22.6-rc.1 - 0.22.7-rc.1:
         a. Updated ska-tmc-dishleafnode v0.17.4 to resolve SKB-511
         b. Updated ska-tmc-cspleafnode v0.21.0 to resolve SKB-530
 
 
 release_notes=
 **Charts:**
-**1. ska-tmc-integration 0.22.6-rc.1 - 0.22.7-rc1:*
+**1. ska-tmc-integration 0.22.6-rc.1 - 0.22.7-rc.1:*
 
- **1.1 ska-tmc-mid - 0.22.6-rc.1 - 0.22.7-rc1:
+ **1.1 ska-tmc-mid - 0.22.6-rc.1 - 0.22.7-rc.1:
         a. Updated ska-tmc-dishleafnode v0.17.4 to resolve SKB-511
         b. Updated ska-tmc-cspleafnode v0.21.0 to resolve SKB-530
