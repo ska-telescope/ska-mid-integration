@@ -356,7 +356,9 @@ def check_configure_successful_csp(
 
 
 def setup_dish_events(
-    central_node_mid: CentralNodeWrapperMid, event_tracer: TangoEventTracer
+    central_node_mid,
+    event_tracer,
+    dish_ids,
 ) -> None:
     """
     This function will subscribe events for dish attributes
