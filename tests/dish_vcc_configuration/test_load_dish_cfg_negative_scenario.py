@@ -142,7 +142,7 @@ def test_validates_longrunningcommandresult_with_error(
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (pytest.command_result_code[0], error_message),
+        (pytest.command_result_message[0], error_message),
         lookahead=5,
     )
 
