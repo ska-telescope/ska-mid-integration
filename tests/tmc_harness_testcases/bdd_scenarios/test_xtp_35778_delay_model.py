@@ -22,7 +22,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 LOGGER = logging.getLogger(__name__)
 
 
-@pytest.mark.SKA_mid
+@pytest.mark.skip(reason="Move this test to CspSubarrayLeafNode")
 @scenario(
     "../features/test_harness/xtp_35778_test_delay_model.feature",
     "Verify generated delay epoch values are less than delay advance time",
