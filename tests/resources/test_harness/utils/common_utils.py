@@ -399,7 +399,7 @@ def turn_on_telescope(
         assert central_node_mid.dish_master_dict[dish_id].ping() > 0
         assert central_node_mid.dish_leaf_node_dict[dish_id].ping() > 0
 
-    setup_dish_events(central_node_mid, event_tracer)
+    setup_dish_events(central_node_mid, event_tracer, dish_ids)
     event_tracer.subscribe_event(central_node_mid.csp_master, "State")
     event_tracer.subscribe_event(central_node_mid.sdp_master, "State")
     event_tracer.subscribe_event(
