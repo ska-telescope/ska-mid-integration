@@ -2181,7 +2181,7 @@ ska-tango-testing = "^0.7.2"
 type = "git"
 url = "https://gitlab.com/ska-telescope/ska-integration-test-harness.git"
 reference = "sst-975-integrate-k8s-config-exporter"
-resolved_reference = "7c400eb37473278e594b5822df7649b982cb2a84"
+resolved_reference = "89c154b7df44596ebe629e00428b87eaae28c0dd"
 
 [[package]]
 name = "ska-ser-logging"
