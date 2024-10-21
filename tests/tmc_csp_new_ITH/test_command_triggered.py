@@ -96,6 +96,7 @@ def test_ready_to_scanning_to_ready():
 def test_ready_to_idle():
     """Test READY to IDLE transitions."""
 
+
 # @pytest.mark.skip(reason="issue at CSP for scan after configure (CIP-2967)")
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
