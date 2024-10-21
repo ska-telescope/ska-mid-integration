@@ -228,7 +228,7 @@ k8s-pre-test: test-requirements
 PYTHON_TEST_NAME ?= ## -k parameter for pytest
 
 ifneq ($(PYTHON_TEST_NAME),)
-	PYTHON_VARS_AFTER_PYTEST += -k '$(PYTHON_TEST_NAME)'
+PYTHON_VARS_AFTER_PYTEST += -k '$(PYTHON_TEST_NAME)'
 endif
 
 
@@ -265,8 +265,8 @@ PYTHON_VARS_AFTER_PYTEST += \
 	--json-report-file="$(REPORT_JSON_RESULT_FILE)"
 
 # Add BDD HTML test report (if enabled)
-ifneq ($(HTML_REPORT_TARGET_FILE),)
-	PYTHON_VARS_AFTER_PYTEST += --bdd-report="$(HTML_REPORT_TARGET_FILE)"
+ifneq ($(strip $(HTML_REPORT_TARGET_FILE)),)
+PYTHON_VARS_AFTER_PYTEST += --bdd-report="$(HTML_REPORT_TARGET_FILE)"
 endif
 
 
@@ -300,7 +300,7 @@ ADD_DOCS_LINK_TO_JIRA ?= false
 STEP_DOCUMENTATION_OUTPUT_FOLDER ?= tests/tmc_csp_new_ITH/bdd-steps-doc
 
 ifeq ($(ADD_DOCS_LINK_TO_JIRA), true)
-	ENRICH_TEST_EXECUTIONS_PARAMS += --test-docs="$(strip $(STEP_DOCUMENTATION_OUTPUT_FOLDER))"
+ENRICH_TEST_EXECUTIONS_PARAMS += --test-docs="$(strip $(STEP_DOCUMENTATION_OUTPUT_FOLDER))"
 endif
 
 
@@ -317,10 +317,8 @@ xray-post-publish:
 # ----------------------------------------------------------------------------
 # Further customisations of the test command args
 
-$(info MARK: $(MARK))
-
 # Verbose error tracebacks (for now, only for new ITH tests)
 # and also link to test documentation
 ifeq ($(strip $(MARK)),tmc_csp_new_ITH)
-	PYTHON_VARS_AFTER_PYTEST += -v --tb=long --log-cli-level=INFO
+PYTHON_VARS_AFTER_PYTEST += -v --tb=long --log-cli-level=INFO
 endif
