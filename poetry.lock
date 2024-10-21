@@ -2181,7 +2181,7 @@ ska-tango-testing = "^0.7.2"
 type = "git"
 url = "https://gitlab.com/ska-telescope/ska-integration-test-harness.git"
 reference = "sst-975-integrate-k8s-config-exporter"
-resolved_reference = "9d2e7251116a3cc76266614029d2d5093415ced1"
+resolved_reference = "7c400eb37473278e594b5822df7649b982cb2a84"
 
 [[package]]
 name = "ska-ser-logging"
@@ -2790,4 +2790,4 @@ reference = "PyPI-public"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "e76f1d47fc2f4e845b466dddc1f8871cf1bf402de7c7cdaef339d3f403ad81f6"
+content-hash = "21edc58b368326d7ec1d659ac752b3776c5b21ba164835514f639bff3a539351"

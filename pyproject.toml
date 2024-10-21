@@ -30,8 +30,6 @@ msgpack = "1.0.7"
 msgpack_numpy = "0.4.8"
 astropy = "^5.0.4"
 ska-telmodel = "1.15.1"
-
-[tool.poetry.group.test.dependencies]
 ska-integration-test-harness={git = "https://gitlab.com/ska-telescope/ska-integration-test-harness.git", branch = "sst-975-integrate-k8s-config-exporter"}
 
 [tool.poetry.dev-dependencies]
