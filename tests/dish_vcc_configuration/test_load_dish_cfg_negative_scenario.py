@@ -135,6 +135,10 @@ def test_validates_longrunningcommandresult_with_error(
     error_message, central_node_mid, event_recorder
 ):
     """Test validate that command failed with error message"""
+    # Subscribe for longRunningCommandResult attribute
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
