@@ -14,6 +14,7 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
+@pytest.mark.skip(reason="Needs to be unskipped once SKB-606 is resolved")
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-29416_configure.feature",

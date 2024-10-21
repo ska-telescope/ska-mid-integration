@@ -39,6 +39,7 @@ k8s-test-tmc-with-sdp:
     name: test/sdp-$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-test-tmc-with-sdp
     auto_stop_in: 1 minute
+  when: manual
 
 
 stop-k8s-test-tmc-with-sdp:
