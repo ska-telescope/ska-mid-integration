@@ -39,7 +39,6 @@ def test_on_to_off():
     """Test transitioning from ON to OFF."""
 
 
-# @pytest.mark.skip(reason="CBF is not supporting STANDBY command")
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/telescope_state.feature",
