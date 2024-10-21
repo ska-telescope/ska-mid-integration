@@ -19,6 +19,8 @@ from tests.resources.test_harness.utils.common_utils import (
 )
 from tests.resources.test_support.enum import DishMode, PointingState
 
+TIMEOUT = 60
+
 
 @pytest.mark.SKA_mid
 @scenario(
@@ -70,7 +72,7 @@ def move_subarray_obsState_to_ready(
         "TMC Subarray device"
         f"({subarray_node.subarray_node.dev_name()}) "
         "is expected to be in IDLE obstate",
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
@@ -85,7 +87,7 @@ def move_subarray_obsState_to_ready(
         f"({central_node_mid.central_node.dev_name()}) "
         "is expected have longRunningCommand as"
         f"(unique_id,{COMMAND_COMPLETED})",
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
         (pytest.unique_id[0], COMMAND_COMPLETED),
@@ -107,7 +109,7 @@ def move_subarray_obsState_to_ready(
         "TMC CSP Subarray Leaf Node device"
         f"({subarray_node.csp_subarray_leaf_node.dev_name()}) "
         "is expected to be in CONFIGURING obstate",
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.csp_subarray_leaf_node,
         "cspSubarrayObsState",
         ObsState.CONFIGURING,
@@ -119,7 +121,7 @@ def move_subarray_obsState_to_ready(
         "TMC CSP Subarray Leaf Node device"
         f"({subarray_node.sdp_subarray_leaf_node.dev_name()}) "
         "is expected to be in CONFIGURING obstate",
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.sdp_subarray_leaf_node,
         "sdpSubarrayObsState",
         ObsState.CONFIGURING,
@@ -131,7 +133,7 @@ def move_subarray_obsState_to_ready(
         "TMC Subarray device"
         f"({subarray_node.subarray_node.dev_name()}) "
         "is expected to be in CONFIGURING obstate",
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.CONFIGURING,
@@ -178,7 +180,7 @@ def check_dish_mode_and_pointing_state_after_configure(
             "dish device"
             f"({central_node_mid.dish_leaf_node_dict[dish_id].dev_name()}) "
             "is expected to be in OPERATE dishMode",
-        ).within_timeout(60).has_change_event_occurred(
+        ).within_timeout(TIMEOUT).has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "dishMode",
             DishMode.OPERATE,
@@ -190,7 +192,7 @@ def check_dish_mode_and_pointing_state_after_configure(
             "dish device"
             f"({central_node_mid.dish_leaf_node_dict[dish_id].dev_name()}) "
             "is expected to be in TRACK pointingState",
-        ).within_timeout(60).has_change_event_occurred(
+        ).within_timeout(TIMEOUT).has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "pointingState",
             PointingState.READY,
@@ -241,7 +243,7 @@ def check_dish_mode_and_pointing_state_after_abort(
             "dish device"
             f"({central_node_mid.dish_leaf_node_dict[dish_id].dev_name()}) "
             "is expected to be in STANDBY_FP dishMode",
-        ).within_timeout(60).has_change_event_occurred(
+        ).within_timeout(TIMEOUT).has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "dishMode",
             DishMode.STANDBY_FP,
@@ -269,7 +271,7 @@ def check_subarray_obsstate_aborted(
         "TMC Subarray device"
         f"({subarray_node.subarray_node.dev_name()}) "
         "is expected to be in ABORTED obstate",
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.ABORTED,
