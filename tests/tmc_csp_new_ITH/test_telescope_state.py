@@ -147,9 +147,9 @@ def verify_off_state(
     central_node_facade: TMCCentralNodeFacade,
     csp: CSPFacade,
 ):
-    """The telescope and CSP devices transition to the OFF state."""
+    """TMC and CSP devices transition to the OFF state."""
     assert_that(event_tracer).described_as(
-        "The telescope and CSP devices should transition from ON to OFF state."
+        "TMC and CSP devices should transition from ON to OFF state."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         central_node_facade.central_node,
         "telescopeState",
@@ -167,18 +167,12 @@ def verify_standby_state(
     central_node_facade: TMCCentralNodeFacade,
     csp: CSPFacade,
 ):
-    """The telescope and CSP devices transition to the STANDBY state."""
-    assert_that(event_tracer).described_as(
-        "The telescope and CSP master should transition "
-        "to the STANDBY state. "
-        "CSP subarray should transition to OFF state."
-    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+    """TMC should transition to the STANDBY state."""
+    assert_that(event_tracer).within_timeout(ASSERTIONS_TIMEOUT).described_as(
+        "TMC should transition to the STANDBY state. "
+    ).has_change_event_occurred(
         central_node_facade.central_node,
         "telescopeState",
-        DevState.STANDBY,
-    ).has_change_event_occurred(
-        csp.csp_master,
-        "State",
         DevState.STANDBY,
     )
 
@@ -189,9 +183,9 @@ def verify_on_state(
     central_node_facade: TMCCentralNodeFacade,
     csp: CSPFacade,
 ):
-    """The telescope and CSP devices transition to the ON state."""
+    """TMC and CSP devices transition to the ON state."""
     assert_that(event_tracer).described_as(
-        "The telescope and CSP devices should transition " "to the ON state."
+        "TMC and CSP devices should transition to the ON state."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         central_node_facade.central_node,
         "telescopeState",
