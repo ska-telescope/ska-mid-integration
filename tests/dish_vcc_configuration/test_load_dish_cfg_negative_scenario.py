@@ -63,6 +63,9 @@ def test_central_node_return_error_for_duplicate_vcc_id():
 
 
 @pytest.mark.SKA_mid
+@pytest.mark.skip(
+    reason="This will be enable once Dish Vcc feature is integrate."
+)
 @scenario(
     "../features/load_dish_cfg_command_negative_scenario.feature",
     "TMC handling exception from CSP Subarray",
