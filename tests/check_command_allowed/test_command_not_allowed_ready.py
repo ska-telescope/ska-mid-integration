@@ -32,7 +32,6 @@ tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 telescope_control = BaseTelescopeControl()
 
 
-# @pytest.mark.repeat(10)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/check_command_not_allowed.feature",
