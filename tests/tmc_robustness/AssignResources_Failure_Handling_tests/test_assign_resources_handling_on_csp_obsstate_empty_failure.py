@@ -1,5 +1,6 @@
 import json
 
+import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from ska_tango_testing.mock.placeholders import Anything
@@ -15,6 +16,11 @@ from tests.resources.test_harness.helpers import (
 )
 
 
+@pytest.mark.skip(
+    reason="Failure scenario is not getting simulated correctly. The issue "
+    + "will be investigated under SAH-1531."
+)
+@pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-28259.feature",
     "TMC behavior when Csp Subarray AssignResources raises exception",
