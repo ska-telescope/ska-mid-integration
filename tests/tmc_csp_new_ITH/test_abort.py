@@ -118,6 +118,7 @@ def test_scanning_to_aborting_to_aborted():
     """Test SCANNING to ABORTING to ABORTED transitions."""
 
 
+@pytest.mark.skip(reason="Facing issues in new test case harness")
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/abort_restart_subarray.feature",
