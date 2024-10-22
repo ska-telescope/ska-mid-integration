@@ -2,6 +2,8 @@
 Test case to validate negative scenario for
    Dish Vcc map configuration feature
 """
+import json
+
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from tango import DevState
@@ -124,6 +126,30 @@ def test_tmc_rejects_command_with_error(error_message):
     """Test validate that command failed with error message"""
     assert pytest.command_result_code == ResultCode.REJECTED
     assert error_message in pytest.command_result_message[0]
+
+
+@then(
+    parsers.parse(
+        "TMC updates longrunningcommandresult with error {error_message}"
+    )
+)
+def test_validates_longrunningcommandresult_with_error(
+    error_message, central_node_mid, event_recorder
+):
+    """Test validate that command failed with error message"""
+    # Subscribe for longRunningCommandResult attribute
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (
+            pytest.command_result_message[0],
+            json.dumps([ResultCode.FAILED, error_message]),
+        ),
+        lookahead=5,
+    )
 
 
 @then(
