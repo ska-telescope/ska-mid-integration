@@ -30,12 +30,7 @@ result, message = "", ""
 the_waiter = Waiter()
 
 
-@pytest.mark.skip(
-    reason="Test fails as initial telescopeState STANDBY "
-    + "aggregation is taking more than 15 minutes sometimes. "
-    + "Work under SAH-1531"
-)
-@pytest.mark.SKA_mid
+@pytest.mark.skip(reason="Move this test to SubarrayNode")
 @scenario(
     "../features/check_command_not_allowed.feature",
     "Unexpected commands not allowed when TMC subarray is in Resourcing",

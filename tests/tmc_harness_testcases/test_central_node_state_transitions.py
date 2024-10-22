@@ -22,7 +22,7 @@ class TestMidCentralNodeStateTransition(object):
         which provides simulated master devices
         - "event_recorder": fixture for a MockTangoEventCallbackGroup
         for validating the subscribing and receiving events.
-        - "simulator_factory": fixtur for creating simulator devices for
+        - "simulator_factory": fixture for creating simulator devices for
         mid Telescope respectively.
         """
         (

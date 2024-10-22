@@ -103,6 +103,7 @@ SDP_PROCCONTROL_REPLICAS ?= 1
 ifeq ($(MAKECMDGOALS),k8s-test)
 ADD_ARGS +=  --true-context
 MARK ?= $(shell echo $(TELESCOPE) | sed "s/-/_/g")
+
 endif
 
 

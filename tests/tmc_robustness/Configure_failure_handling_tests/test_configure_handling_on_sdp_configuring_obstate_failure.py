@@ -17,10 +17,6 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
-@pytest.mark.skip(
-    reason="Failure scenario is not getting simulated correctly. The issue "
-    + "will be investigated under SAH-1531."
-)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-28836.feature",

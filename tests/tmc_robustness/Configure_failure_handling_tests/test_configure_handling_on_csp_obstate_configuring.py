@@ -16,11 +16,6 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 
-@pytest.mark.skip(
-    reason="Failure scenario is not getting simulated correctly. The issue "
-    + "will be investigated under SAH-1531."
-)
-@pytest.mark.bdd_configure
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-28834.feature",
@@ -264,8 +259,22 @@ def tmc_subarray_transitions_to_empty(subarray_node, event_recorder):
         + "Subarray {subarray_id}"
     )
 )
-def configure_executed_on_subarray(subarray_node, event_recorder):
-    subarray_node.force_change_of_obs_state("READY")
+def configure_executed_on_subarray(
+    subarray_node, event_recorder, command_input_factory, central_node_mid
+):
+    assign_input_json = prepare_json_args_for_centralnode_commands(
+        "assign_resources_mid", command_input_factory
+    )
+    central_node_mid.perform_action("AssignResources", assign_input_json)
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.IDLE,
+    )
+    configure_input_json = prepare_json_args_for_commands(
+        "configure_mid", command_input_factory
+    )
+    subarray_node.execute_transition("Configure", configure_input_json)
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,

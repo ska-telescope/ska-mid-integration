@@ -18,7 +18,6 @@ from tests.resources.test_support.constant import (
     DEVICE_OBS_STATE_EMPTY_INFO,
     DEVICE_OBS_STATE_IDLE_INFO,
     DEVICE_OBS_STATE_READY_INFO,
-    DEVICE_STATE_OFF_INFO,
     DEVICE_STATE_ON_INFO,
     DEVICE_STATE_STANDBY_INFO,
     ON_OFF_DEVICE_COMMAND_DICT,
@@ -30,10 +29,6 @@ tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
 telescope_control = BaseTelescopeControl()
 
 
-@pytest.mark.skip(
-    reason="test fails intermittenlty due to dish"
-    + "unavailability. Work under SAH-1531"
-)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successive_configure.feature",
@@ -154,33 +149,5 @@ def check_for_reconfigure_ready(subarray_node, event_recorder):
 
 
 @then("test goes for the tear down")
-def check_for_tear_down(json_factory):
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        # Invoke End() command
-        LOGGER.info("Invoking End command on TMC SubarrayNode")
-        tmc_helper.end(**ON_OFF_DEVICE_COMMAND_DICT)
-
-        # Verify ObsState is IDLE
-        assert telescope_control.is_in_valid_state(
-            DEVICE_OBS_STATE_IDLE_INFO, "obsState"
-        )
-        # Invoke ReleaseResources() command
-        tmc_helper.invoke_releaseResources(
-            release_json, **ON_OFF_DEVICE_COMMAND_DICT
-        )
-
-        assert telescope_control.is_in_valid_state(
-            DEVICE_OBS_STATE_EMPTY_INFO, "obsState"
-        )
-
-        # Invoke TelescopeOff() command
-        tmc_helper.set_to_off(**ON_OFF_DEVICE_COMMAND_DICT)
-
-        # Verify State transitions after TelescopeOff
-        assert telescope_control.is_in_valid_state(
-            DEVICE_STATE_OFF_INFO, "State"
-        )
-
-    except Exception:
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
+def check_for_tear_down(central_node_mid):
+    central_node_mid.tear_down()
