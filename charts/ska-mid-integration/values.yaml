@@ -72,26 +72,26 @@ ska-tango-base:
     use_pv: false
 
 #=== OSO ===#
-ska-oso-oet:
-  labels:
-    app: ska-mid-integration
-  system: TM-mid
-  telescope: SKA-mid
-  central_node: ska_mid/tm_central/central_node
-  subarray: ska_mid/tm_subarray_node
-  rest:
-    ingress:
-      enabled: false
-    oda:
-      backendType: rest
-      url: http://ska-db-oda-rest-test.button-dev-ska-db-oda:5000/button-dev-ska-db-oda/api/v1
-  resources:
-    requests:
-      cpu: 200m
-      memory: 256Mi
-    limits:
-      cpu: 2000m
-      memory: 1024Mi
+# ska-oso-oet:
+#   labels:
+#     app: ska-mid-integration
+#   system: TM-mid
+#   telescope: SKA-mid
+#   central_node: ska_mid/tm_central/central_node
+#   subarray: ska_mid/tm_subarray_node
+#   rest:
+#     ingress:
+#       enabled: false
+#     oda:
+#       backendType: rest
+#       url: http://ska-db-oda-rest-test.button-dev-ska-db-oda:5000/button-dev-ska-db-oda/api/v1
+#   resources:
+#     requests:
+#       cpu: 200m
+#       memory: 256Mi
+#     limits:
+#       cpu: 2000m
+#       memory: 1024Mi
 
 
 #=== SDP ===#
@@ -138,6 +138,14 @@ ska-csp-lmc-mid:
     app: ska-tmc-mid-integration
   enabled: true
 
+ska-mid-cbf-mcs:
+  enabled: true
+
+ska-pst-lmc:
+  enabled: false
+
+ska-mid-cbf-tmleafnode:
+  enabled : true
 
 #=== DISH ===#
 ska-dish-lmc:
