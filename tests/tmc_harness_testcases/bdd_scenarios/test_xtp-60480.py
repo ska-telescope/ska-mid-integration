@@ -13,6 +13,7 @@ from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.constant import (
     COMMAND_COMPLETED,
     RESET_OFFSETS,
+    CorrectionKey,
 )
 from tests.resources.test_harness.helpers import (
     check_subarray_obs_state,
@@ -230,6 +231,7 @@ def a_subarray_after_five_point_calibration(
         partial_configuration_jsons,
         event_tracer,
         command_input_factory,
+        correction_key=CorrectionKey.RESET,
     )
 
     # Set pointing calibration data

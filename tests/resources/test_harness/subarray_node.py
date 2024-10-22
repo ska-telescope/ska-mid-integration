@@ -13,6 +13,7 @@ from tests.resources.test_harness.constant import (
     COMMAND_COMPLETED,
     DISH_001_CALIBRATION_DATA,
     DISH_036_CALIBRATION_DATA,
+    CorrectionKey,
     centralnode,
     csp_master,
     csp_subarray1,
@@ -528,6 +529,7 @@ class SubarrayNodeWrapper(object):
         partial_configure_jsons: list[str],
         event_tracer,
         command_input_factory,
+        correction_key=CorrectionKey.UPDATE,
     ) -> None:
         """Perform a five point calibration scan on Subarray Node using the
         partial configuration jsons and scan jsons provided as inputs.
@@ -602,10 +604,15 @@ class SubarrayNodeWrapper(object):
             event_tracer.clear_events()
 
             # assert sourceOffset gets populated as expected
-            ca_offset, ie_offset = (
-                json.loads(partial_configure_json)["pointing"]["target"][key]
-                for key in ("ca_offset_arcsec", "ie_offset_arcsec")
-            )
+            if correction_key == CorrectionKey.UPDATE:
+                ca_offset, ie_offset = (
+                    json.loads(partial_configure_json)["pointing"]["target"][
+                        key
+                    ]
+                    for key in ("ca_offset_arcsec", "ie_offset_arcsec")
+                )
+            elif correction_key == CorrectionKey.RESET:
+                ca_offset, ie_offset = 0.0, 0.0
             for dish_leaf_node in self.dish_leaf_node_list:
                 assert wait_and_validate_device_attribute_value(
                     dish_leaf_node,

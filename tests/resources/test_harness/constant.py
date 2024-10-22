@@ -1,6 +1,7 @@
 """Define Constants
 """
 import json
+from enum import IntEnum
 
 import numpy as np
 from ska_control_model import ObsState
@@ -33,6 +34,15 @@ sdp_queue_connector = "mid-sdp/queueconnector/01"
 COMMAND_COMPLETED = json.dumps([ResultCode.OK, "Command Completed"])
 
 TIMEOUT = 100
+
+
+class CorrectionKey(IntEnum):
+    """An enum class for correction keys"""
+
+    MAINTAIN = 0
+    UPDATE = 1
+    RESET = 2
+
 
 COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE = {
     "enabled": True,
