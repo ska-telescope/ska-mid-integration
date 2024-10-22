@@ -113,13 +113,13 @@ dishleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-dishleafnode
-    tag: 0.17.5
+    tag: 0.17.7
     pullPolicy: IfNotPresent
 
 resources:
   requests:
-    cpu: 200m
-    memory: 200Mi
+    cpu: 1000m
+    memory: 300Mi
 
 
 deviceServers:
@@ -142,6 +142,7 @@ deviceServers:
       max: 1177
     CommandTimeOut: 120
     DishVccInitTimeout: 180
+    SleepTime: 1
 
   subarraynode:
     enabled: true
@@ -155,21 +156,25 @@ deviceServers:
     SdpScanInterfaceURL: "https://schema.skao.int/ska-sdp-scan/0.4"
     CommandTimeOut: 110
     AbortCommandTimeout: 100
+    SleepTime: 1
 
   sdpsubarrayleafnode:
     enabled: true
     file: "data/sdpsubarrayleafnode.yaml"
     CommandTimeOut: 50
+    SleepTime: 1
 
   sdpmasterleafnode:
     enabled: true
     instances: ["01"]
     file: "data/sdpmasterleafnode.yaml"
+    SleepTime: 1
 
   cspmasterleafnode:
     enabled: true
     instances: ["01"]
     file: "data/cspmasterleafnode.yaml"
+    SleepTime: 1
 
 
   cspsubarrayleafnode:
@@ -179,6 +184,7 @@ deviceServers:
     DelayValidityPeriod: 20.0
     DelayModelTimeInAdvance: 30
     CommandTimeOut: 50
+    SleepTime: 1
   dishleafnode:
     enabled: true
     file: "data/dishleafnode.yaml"
@@ -187,10 +193,11 @@ deviceServers:
       limits:
         memory: 3000Mi
       requests:
-        cpu: 1500m
-        memory: 2800Mi
+        cpu: 2000m
+        memory: 280Mi
     CommandTimeOut: 90
     TrackTableInAdvance: 7
+    SleepTime: 1
   mocks:
     enabled: false
     file: "data/mocks.yaml"

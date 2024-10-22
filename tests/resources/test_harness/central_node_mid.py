@@ -551,58 +551,75 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
 
     def tear_down(self) -> None:
         """Handle Tear down of central Node"""
-        Subarray_node_obsstate = self.subarray_node.obsState
-        LOGGER.info(
-            f"Calling tear down for CentralNode for SubarrayNode's \
-                {Subarray_node_obsstate} obsstate."
-        )
-        # reset HealthState.UNKNOWN for mock devices
-        self._reset_health_state_for_mock_devices()
-        if self.subarray_node.obsState == ObsState.IDLE:
-            LOGGER.info("Calling Release Resource on centralnode")
-            self.invoke_release_resources(self.release_input)
-        elif self.subarray_node.obsState in [
-            ObsState.RESOURCING,
-            ObsState.SCANNING,
-            ObsState.CONFIGURING,
-            ObsState.READY,
-            ObsState.IDLE,
-        ]:
-            LOGGER.info("Calling Abort and Restart on SubarrayNode")
-            self.subarray_abort()
-            self.subarray_restart()
-        elif self.subarray_node.obsState == ObsState.ABORTED:
-            self.subarray_restart()
-        if self.telescope_state != "OFF":
-            if (SIMULATED_DEVICES_DICT["sdp"]) and not SIMULATED_DEVICES_DICT[
-                "all_mocks"
+        try:
+            Subarray_node_obsstate = self.subarray_node.obsState
+            LOGGER.info(
+                f"Calling tear down for CentralNode for SubarrayNode's \
+                    {Subarray_node_obsstate} obsstate."
+            )
+            # reset HealthState.UNKNOWN for mock devices
+            self._reset_health_state_for_mock_devices()
+            if self.subarray_node.obsState == ObsState.IDLE:
+                LOGGER.info("Calling Release Resource on centralnode")
+                self.invoke_release_resources(self.release_input)
+            elif self.subarray_node.obsState in [
+                ObsState.RESOURCING,
+                ObsState.SCANNING,
+                ObsState.CONFIGURING,
+                ObsState.READY,
+                ObsState.IDLE,
             ]:
-                LOGGER.info("Tear down is not required.")
+                LOGGER.info("Calling Abort and Restart on SubarrayNode")
+                self.subarray_abort()
+                self.subarray_restart()
+            elif self.subarray_node.obsState == ObsState.ABORTED:
+                self.subarray_restart()
 
-            else:
-                self.move_to_off()
+            LOGGER.info("telescope_state - %s", self.telescope_state)
+            if self.telescope_state != "OFF":
+                if (
+                    SIMULATED_DEVICES_DICT["sdp"]
+                ) and not SIMULATED_DEVICES_DICT["all_mocks"]:
+                    LOGGER.info("Tear down is not required.")
 
-        self._clear_command_call_and_transition_data(clear_transition=True)
-        # if source dish vcc config is empty or not matching with default
-        # dish vcc then load default dish vcc config
-        # CSP_SIMULATION_ENABLED condition will be removed after testing
-        # with real csp
-        if (
-            not self.csp_master_leaf_node.sourceDishVccConfig
-            or json.loads(self.csp_master_leaf_node.sourceDishVccConfig)
-            != DEFAULT_DISH_VCC_CONFIG
-            or json.loads(self.central_node.DishVccValidationStatus)
-            != DEFAULT_DISH_VALIDATION_STATUS
-        ):
-            _, unique_id = self._load_default_dish_vcc_config()
-            event_recorder = EventRecorder()
-            event_recorder.subscribe_event(
-                self.central_node, "longRunningCommandResult"
-            )
-            assert event_recorder.has_change_event_occurred(
-                self.central_node,
-                "longRunningCommandResult",
-                (unique_id[0], COMMAND_COMPLETED),
-                lookahead=10,
-            )
-            event_recorder.clear_events()
+                else:
+                    LOGGER.info("Moving to Off State")
+                    self.move_to_off()
+
+                self._clear_command_call_and_transition_data(
+                    clear_transition=True
+                )
+                # if source dish vcc config is empty or not matching
+                # with default
+                # dish vcc then load default dish vcc config
+                # CSP_SIMULATION_ENABLED condition will be removed after
+                # testing with real csp
+                if (
+                    not self.csp_master_leaf_node.sourceDishVccConfig
+                    or json.loads(
+                        self.csp_master_leaf_node.sourceDishVccConfig
+                    )
+                    != DEFAULT_DISH_VCC_CONFIG
+                    or json.loads(self.central_node.DishVccValidationStatus)
+                    != DEFAULT_DISH_VALIDATION_STATUS
+                ):
+                    _, unique_id = self._load_default_dish_vcc_config()
+                    event_recorder = EventRecorder()
+                    event_recorder.subscribe_event(
+                        self.central_node, "longRunningCommandResult"
+                    )
+                    assert event_recorder.has_change_event_occurred(
+                        self.central_node,
+                        "longRunningCommandResult",
+                        (unique_id[0], COMMAND_COMPLETED),
+                        lookahead=10,
+                    )
+                    event_recorder.clear_events()
+
+                LOGGER.info("longRunningCommandResult for Dish VCC verified")
+
+        except Exception as e:
+            LOGGER.exception("The exception is: %s", e)
+            raise Exception(e)
+
+        LOGGER.info("Tear Down complete")
