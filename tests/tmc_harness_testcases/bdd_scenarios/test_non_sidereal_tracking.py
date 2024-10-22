@@ -22,6 +22,10 @@ TIMEOUT = 50
 PROGRAM_TRACK_TABLE_LENGTH = 75
 
 
+@pytest.mark.skip(
+    reason="The test can be unskipped when Dish Error propagation is enabled "
+    + "as a part of SAH-1570"
+)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp_59647_non_sidereal_tracking.feature",
@@ -134,14 +138,15 @@ def configure_the_subarray(
     object_list = non_sidereal_objects.split(",")
     configure_input_json, object_name = get_non_sidereal_json_for_now()
     pytest.OBJECT_NAME = object_name
-    if configure_input_json:
-        assert object_name in object_list
-        LOGGER.info(
-            "The non-sidereal object selected for observation for the Dish "
-            + "SKA001 is: %s",
-            object_name,
-        )
-        subarray_node.store_configuration_data(configure_input_json)
+    assert object_name in object_list
+    LOGGER.info(
+        "The non-sidereal object selected for observation for the Dish "
+        + "SKA001 is: %s",
+        object_name,
+    )
+    _, pytest.unique_id = subarray_node.execute_transitione(
+        "Configure", configure_input_json
+    )
 
 
 @then("the Subarray is configured successfully")
@@ -150,7 +155,7 @@ def subarray_that_is_configured(
     event_tracer: TangoEventTracer,
 ):
     """A configured subarray"""
-    if pytest.OBJECT_NAME:
+    try:
         # Assertions for Configure
         assert_that(event_tracer).described_as(
             "FAILED ASSUMPTION AFTER CONFIGURE COMMAND: "
@@ -162,8 +167,33 @@ def subarray_that_is_configured(
             "obsState",
             ObsState.READY,
         )
-    else:
-        LOGGER.info("No source is visible within Elevation limits right now")
+        pytest.SOURCE_VISIBILITY = True
+
+    except Exception as exception:
+        LOGGER.info(
+            "No source is visible within Elevation limits right now."
+            + "Error occurred in initial assertion: %s",
+            exception,
+        )
+        # Assertions for LRCR
+        expected_error_result = json.dumps(
+            (
+                ResultCode.FAILED,
+                "No source is visible within Elevation limits right now",
+            )
+        )
+        assert_that(event_tracer).described_as(
+            "FAILED ASSUMPTION AFTER CONFIGURE COMMAND: "
+            "Subarray Node device"
+            f"({subarray_node.subarray_node.dev_name()}) "
+            "is expected to have the LRCR attribute value as "
+            f"({pytest.unique_id[0]},{expected_error_result})",
+        ).within_timeout(TIMEOUT).has_change_event_occurred(
+            subarray_node.subarray_node,
+            "longRunningCommandResult",
+            (pytest.unique_id[0], expected_error_result),
+        )
+        pytest.SOURCE_VISIBILITY = False
 
 
 @then("the dish is tracking the object")
@@ -171,7 +201,7 @@ def dish_that_is_tracking(
     central_node_mid: CentralNodeWrapperMid,
 ):
     """A configured subarray"""
-    if pytest.OBJECT_NAME:
+    if pytest.SOURCE_VISIBILITY:
         programTrackTable = central_node_mid.get_track_table_for_dish_id(
             "SKA001"
         )

@@ -174,7 +174,7 @@ def get_non_sidereal_json_for_now() -> tuple[str, str]:
     # The data below is losely based on information found from the web, and has
     # loose limits such that elevation is >= 17.5 for the source at
     # "lat": -30.71329, "lon": 21.449412 and "h": 1098.074 for dish SKA001
-    # based on TelModel-data
+    # based on TelModel-data. Default value is Sun for the negative scenario
     if 8 <= current_time <= 14:
         configure_input_json["pointing"]["target"]["target_name"] = "Sun"
         return (json.dumps(configure_input_json), "Sun")
@@ -190,7 +190,8 @@ def get_non_sidereal_json_for_now() -> tuple[str, str]:
     if 14 <= current_time <= 15:
         configure_input_json["pointing"]["target"]["target_name"] = "Venus"
         return (json.dumps(configure_input_json), "Venus")
-    return ("", "")
+    configure_input_json["pointing"]["target"]["target_name"] = "Sun"
+    return (json.dumps(configure_input_json), "Sun")
 
 
 def get_device_simulator_with_given_name(simulator_factory, devices):
@@ -279,7 +280,7 @@ def get_boolean_command_call_info(device: SimulatorFactory, command_name: str):
     ]
 
     received_command_call_data = (
-        command_call_info[0][0],
+        command_info[0][0],
         command_info[0][1],
     )
 
