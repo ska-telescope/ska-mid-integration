@@ -2,6 +2,8 @@
 Test case to validate negative scenario for
    Dish Vcc map configuration feature
 """
+import json
+
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from tango import DevState
@@ -142,7 +144,10 @@ def test_validates_longrunningcommandresult_with_error(
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (pytest.command_result_message[0], error_message),
+        (
+            pytest.command_result_message[0],
+            json.dumps([ResultCode.FAILED, error_message]),
+        ),
         lookahead=5,
     )
 
