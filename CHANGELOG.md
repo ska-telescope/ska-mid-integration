@@ -5,10 +5,15 @@ Added
 -----
 [unreleased]
 ************
-* Updated Subarray Node to v0.23.3 to fix SKB-512
+* Added test to verify SKB-512
+
+[0.22.8-rc.1]
+*************
+* Updated ska-tmc-centralnode v0.16.8 to resolve skb-495
+* Updated ska-tmc-cspleafnode v0.21.2 to resolve skb-495 and skb-530
 
 [0.22.7-rc.1]
-**********
+*************
 * Updated ska-tmc-dishleafnode v0.17.6 to resolve SKB-511 and SKB-467
 * Track command will not be invoked from Dish leaf node if pointingState of Dish is TRACK/SLEW
 
