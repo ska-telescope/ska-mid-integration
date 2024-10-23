@@ -39,7 +39,7 @@ dependencies:
     version: 1.0.0
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-mid-cbf-tmleafnode.enabled
-    alias: mid-cbf
+    #alias: mid-cbf
   # - name: ska-oso-oet
   #   version: 6.2.0
   #   repository: https://artefact.skao.int/repository/helm-internal
