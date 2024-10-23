@@ -93,7 +93,7 @@ DISH_NAMESPACE_4 ?= ${KUBE_NAMESPACE}
 DISH_NAME_1 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_1).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA001
 DISH_NAME_36 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_2).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA036
 DISH_NAME_63 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_3).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA063
-DISH_NAME_100 ?= "tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_4).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA100"
+DISH_NAME_100 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_4).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA100
 SDP_DEPLOY ?= true
 
 ifeq ($(SDP_SIMULATION_ENABLED),false)
@@ -169,7 +169,7 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set global.namespace_dish.dish_names[0]="$(DISH_NAME_1)"\
 	--set global.namespace_dish.dish_names[1]="$(DISH_NAME_36)"\
 	--set global.namespace_dish.dish_names[2]="$(DISH_NAME_63)"\
-	--set global.namespace_dish.dish_names[3]=$(DISH_NAME_100)\
+	--set global.namespace_dish.dish_names[3]="$(DISH_NAME_100)"\
 	--set ska-oso-oet.rest.ingress.enabled=$(OET_INGRESS_ENABLED) \
 	--set ska-oso-oet.rest.oda.url=$(ODA_URI) \
 	--set ska-db-oda.rest.backend.type=filesystem \
