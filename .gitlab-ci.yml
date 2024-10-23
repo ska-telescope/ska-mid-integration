@@ -134,7 +134,7 @@ deploy-tmc-with-sdp:
     on_stop: stop-k8s-test-tmc-with-sdp
   rules:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
-  
+
 stop-k8s-test-tmc-with-sdp:
   extends:
     - stop-integration
@@ -236,7 +236,7 @@ deploy-mid-integration:
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   variables:
-    KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
+    KUBE_NAMESPACE: "integration-ska-mid" #changing namespace
   environment:
     name: integration-ska-mid
     on_stop: stop-mid-integration
@@ -249,7 +249,7 @@ info-mid-integration:
   needs:
     - deploy-mid-integration
   variables:
-    KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
+    KUBE_NAMESPACE: "integration-ska-mid" #changing namespace
   environment:
     name: integration-ska-mid
 
@@ -261,7 +261,7 @@ stop-mid-integration:
   needs:
     - deploy-mid-integration
   variables:
-    KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
+    KUBE_NAMESPACE: "integration-ska-mid" #changing namespace
   environment:
     name: integration-ska-mid
     action: stop
@@ -272,6 +272,6 @@ redeploy-mid-integration:
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   variables:
-    KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
+    KUBE_NAMESPACE: "integration-ska-mid" #changing namespace
   environment:
     name: integration-ska-mid
