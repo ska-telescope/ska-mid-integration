@@ -1,17 +1,17 @@
-release=0.22.8-rc.1
-tag=0.22.8-rc.1
+release=0.22.9-rc.1
+tag=0.22.9-rc.1
 tag_description=
 **Charts:**
-**1. ska-tmc-integration 0.22.7-rc.1 - 0.22.8-rc.1**
+**1. ska-tmc-integration 0.22.8-rc.1 - 0.22.9-rc.1**
 
-    **1.1 ska-tmc-mid - 0.22.7-rc.1 - 0.22.8-rc.1:
-        a. Updated ska-tmc-centralnode v0.16.8 to resolve skb-495
-        b. Updated ska-tmc-cspleafnode v0.21.2 to resolve skb-495 and skb-530
+    **1.1 ska-tmc-mid - 0.22.8-rc.1 - 0.22.9-rc.1:
+        a. Updated Subarray Node to v0.25.1 to resolve a bug in is_operation_aborted flag
+        b. Added test case for SKB-512
 
 release_notes=
 **Charts:**
-**1. ska-tmc-integration 0.22.7-rc.1 - 0.22.8-rc.1:*
+**1. ska-tmc-integration 0.22.8-rc.1 - 0.22.9-rc.1:*
 
- **1.1 ska-tmc-mid - 0.22.7-rc.1 - 0.22.8-rc.1:
-        a. Updated ska-tmc-centralnode v0.16.8 to resolve skb-495
-        b. Updated ska-tmc-cspleafnode v0.21.2 to resolve skb-495 and skb-530
+ **1.1 ska-tmc-mid - 0.22.8-rc.1 - 0.22.9-rc.1:
+        a. Updated Subarray Node to v0.25.1 to resolve a bug in is_operation_aborted flag
+        b. Added test case for SKB-512

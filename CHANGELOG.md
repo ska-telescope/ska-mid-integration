@@ -3,9 +3,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
-[unreleased]
+[0.22.9-rc.1]
 ************
 * Added test to verify SKB-512
+* Updated Subarray Node to 0.25.1 to fix a bug in usage of is_operation_aborted flag
 
 [0.22.8-rc.1]
 *************
