@@ -19,7 +19,7 @@ Last updated on: 11 September 2024 13:11:01
 
 **Signature:**
 ```python
-def subarray_in_aborted_state(context_fixt, subarray_node_facade, default_commands_inputs):
+def subarray_in_aborted_state(context_fixt, tmc, default_commands_inputs):
 ```
 
 **Description:**
@@ -40,7 +40,7 @@ This step performs the following actions:
 
 **Signature:**
 ```python
-def send_abort_command(context_fixt, subarray_node_facade, csp, sdp, event_tracer):
+def send_abort_command(context_fixt, tmc, csp, sdp, event_tracer):
 ```
 
 **Description:**
@@ -58,7 +58,7 @@ expected state transition hasn't occurred prematurely.
 
 **Signature:**
 ```python
-def send_restart_command(context_fixt, subarray_node_facade):
+def send_restart_command(context_fixt, tmc):
 ```
 
 **Description:**
@@ -74,7 +74,7 @@ This step sends the Restart command without waiting for termination.
 
 **Signature:**
 ```python
-def verify_aborting_state(context_fixt, subarray_node_facade, csp, sdp, event_tracer):
+def verify_aborting_state(context_fixt, tmc, csp, sdp, event_tracer):
 ```
 
 **Description:**
@@ -92,7 +92,7 @@ It verifies the previous state for the TMC Subarray Node.
 
 **Signature:**
 ```python
-def verify_aborted_state(context_fixt, subarray_node_facade, csp, sdp, event_tracer):
+def verify_aborted_state(context_fixt, tmc, csp, sdp, event_tracer):
 ```
 
 **Description:**
@@ -109,7 +109,7 @@ ABORTING to ABORTED state within the specified timeout.
 
 **Signature:**
 ```python
-def verify_restarting_state(context_fixt, subarray_node_facade, csp, sdp, event_tracer):
+def verify_restarting_state(context_fixt, tmc, csp, sdp, event_tracer):
 ```
 
 **Description:**
@@ -131,7 +131,7 @@ This step performs the following actions:
 
 **Signature:**
 ```python
-def verify_empty_state(context_fixt, subarray_node_facade, csp, sdp, event_tracer):
+def verify_empty_state(context_fixt, tmc, csp, sdp, event_tracer):
 ```
 
 **Description:**

@@ -21,7 +21,7 @@ Last updated on: 11 September 2024 13:11:01
 
 **Signature:**
 ```python
-def subarray_in_empty_state(context_fixt, subarray_node_facade):
+def subarray_in_empty_state(context_fixt, tmc):
 ```
 
 **Description:**
@@ -46,13 +46,13 @@ or subsequent test steps.
 
 **Signature:**
 ```python
-def send_assign_resources_command(context_fixt, central_node_facade):
+def send_assign_resources_command(context_fixt, tmc):
 ```
 
 **Description:**
 Send the AssignResources command to the subarray.
 
-This step uses the central_node_facade to send an AssignResources command
+This step uses the tmc to send an AssignResources command
 to the specified subarray. It uses a pre-defined JSON input file,
 modifies the subarray_id, and sends the command without waiting for
 termination. The action result is stored in the context fixture.
@@ -65,7 +65,7 @@ termination. The action result is stored in the context fixture.
 
 **Signature:**
 ```python
-def send_assign_additional_resources_command(context_fixt, central_node_facade):
+def send_assign_additional_resources_command(context_fixt, tmc):
 ```
 
 **Description:**
@@ -84,13 +84,13 @@ needing to be changed in the future.
 
 **Signature:**
 ```python
-def send_release_resources_command(context_fixt, central_node_facade):
+def send_release_resources_command(context_fixt, tmc):
 ```
 
 **Description:**
 Send the ReleaseResources command to the subarray.
 
-This step uses the central_node_facade to send a ReleaseResources
+This step uses the tmc to send a ReleaseResources
 command to the specified subarray. It uses a pre-defined JSON input
 file, modifies the subarray_id, and sends the command without waiting
 for termination. The action result is stored in the context fixture.
@@ -103,13 +103,13 @@ for termination. The action result is stored in the context fixture.
 
 **Signature:**
 ```python
-def send_configure_command(context_fixt, subarray_node_facade):
+def send_configure_command(context_fixt, tmc):
 ```
 
 **Description:**
 Send the Configure command to the subarray.
 
-This step uses the subarray_node_facade to send a Configure command
+This step uses the tmc to send a Configure command
 to the specified subarray. It uses a pre-defined JSON input file and
 sends the command without waiting for termination. The action result
 is stored in the context fixture.
@@ -122,13 +122,13 @@ is stored in the context fixture.
 
 **Signature:**
 ```python
-def send_scan_command(context_fixt, subarray_node_facade):
+def send_scan_command(context_fixt, tmc):
 ```
 
 **Description:**
 Send the Scan command to the subarray.
 
-This step uses the subarray_node_facade to send a Scan command to the
+This step uses the tmc to send a Scan command to the
 specified subarray. It uses a pre-defined JSON input file and sends
 the command without waiting for termination. The action result is
 stored in the context fixture.
@@ -141,13 +141,13 @@ stored in the context fixture.
 
 **Signature:**
 ```python
-def send_end_command(context_fixt, subarray_node_facade):
+def send_end_command(context_fixt, tmc):
 ```
 
 **Description:**
 Send the End command to the subarray.
 
-This step uses the subarray_node_facade to send an End command to the
+This step uses the tmc to send an End command to the
 specified subarray. It sends the command without waiting for termination
 and stores the action result in the context fixture.
 
@@ -159,13 +159,13 @@ and stores the action result in the context fixture.
 
 **Signature:**
 ```python
-def send_end_scan_command(context_fixt, subarray_node_facade):
+def send_end_scan_command(context_fixt, tmc):
 ```
 
 **Description:**
 Send the EndScan command to the subarray.
 
-This step uses the subarray_node_facade to send an EndScan command to
+This step uses the tmc to send an EndScan command to
 the specified subarray. It sends the command without waiting for
 termination and stores the action result in the context fixture.
 
@@ -177,7 +177,7 @@ termination and stores the action result in the context fixture.
 
 **Signature:**
 ```python
-def verify_resourcing_state(context_fixt, subarray_node_facade, csp, sdp, event_tracer):
+def verify_resourcing_state(context_fixt, tmc, csp, sdp, event_tracer):
 ```
 
 **Description:**
@@ -198,7 +198,7 @@ it updates the starting state in the context fixture for subsequent steps.
 
 **Signature:**
 ```python
-def verify_idle_state(context_fixt, subarray_node_facade, csp, sdp, event_tracer):
+def verify_idle_state(context_fixt, tmc, csp, sdp, event_tracer):
 ```
 
 **Description:**
@@ -217,7 +217,7 @@ state changes occur within a specified timeout.
 
 **Signature:**
 ```python
-def verify_empty_state(context_fixt, subarray_node_facade, csp, sdp, event_tracer):
+def verify_empty_state(context_fixt, tmc, csp, sdp, event_tracer):
 ```
 
 **Description:**
@@ -236,7 +236,7 @@ state changes occur within a specified timeout.
 
 **Signature:**
 ```python
-def verify_configuring_state(context_fixt, subarray_node_facade, csp, sdp, event_tracer):
+def verify_configuring_state(context_fixt, tmc, csp, sdp, event_tracer):
 ```
 
 **Description:**
@@ -256,7 +256,7 @@ it updates the starting state in the context fixture for subsequent steps.
 
 **Signature:**
 ```python
-def verify_ready_state(context_fixt, subarray_node_facade, csp, sdp, event_tracer):
+def verify_ready_state(context_fixt, tmc, csp, sdp, event_tracer):
 ```
 
 **Description:**
@@ -276,7 +276,7 @@ updates the starting state in the context fixture for subsequent steps.
 
 **Signature:**
 ```python
-def verify_scanning_state(context_fixt, subarray_node_facade, csp, sdp, event_tracer):
+def verify_scanning_state(context_fixt, tmc, csp, sdp, event_tracer):
 ```
 
 **Description:**
@@ -296,7 +296,7 @@ updates the starting state in the context fixture for subsequent steps.
 
 **Signature:**
 ```python
-def verify_long_running_command_result_on_central_node(context_fixt, central_node_facade, event_tracer):
+def verify_long_running_command_result_on_central_node(context_fixt, tmc, event_tracer):
 ```
 
 **Description:**
@@ -315,7 +315,7 @@ timeout. The expected result is derived from the context fixture.
 
 **Signature:**
 ```python
-def verify_long_running_command_result_on_subarray(context_fixt, subarray_node_facade, event_tracer):
+def verify_long_running_command_result_on_subarray(context_fixt, tmc, event_tracer):
 ```
 
 **Description:**
