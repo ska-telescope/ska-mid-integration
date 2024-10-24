@@ -17,10 +17,6 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-@pytest.mark.skip(
-    reason="Failure scenario is not getting simulated correctly. The issue "
-    + "will be investigated under SAH-1531."
-)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-29011.feature",

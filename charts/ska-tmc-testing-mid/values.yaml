@@ -65,6 +65,8 @@ tmc-mid:
   enabled: true
   
   cspsubarrayleafnode:
+    TelmodelSource: gitlab://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata
+    TelmodelPath: instrument/ska1_mid/layout/mid-layout.json
     DelayCadence: 10
     DelayValidityPeriod: 20
     DelayModelTimeInAdvance: 30

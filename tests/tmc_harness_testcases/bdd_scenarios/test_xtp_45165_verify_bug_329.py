@@ -19,7 +19,7 @@ from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 
 
-@pytest.mark.SKA_mid
+@pytest.mark.skip(reason="Move this test to CspSubarrayLeafNode")
 @scenario(
     "../features/test_harness/xtp_45165_verify_bug.feature",
     "Verify SKB-329",

@@ -151,7 +151,6 @@ class TestSubarrayNodeNegative(object):
         )
         assert len(get_recorded_commands(sdp_sim)) == 1
 
-    @pytest.mark.skip(reason="Skipped due to SKB-373")
     @pytest.mark.SKA_mid
     def test_subarray_configure_when_dish_stuck_in_slew(
         self,
@@ -187,6 +186,9 @@ class TestSubarrayNodeNegative(object):
             )
         assert device_received_this_command(dish_sim, "ConfigureBand1", "True")
 
+    # As per Initial analysis, push_obs_state_event() method required to set
+    # obsState is not present in HelperSubArrayDevice, hence obsState of
+    # CspSubarray is not getting updated and test fails.
     @pytest.mark.skip(reason="Fails in assertions after Fault")
     @pytest.mark.SKA_mid
     def test_subarray_configure_when_csp_goes_to_fault_then_ready(
