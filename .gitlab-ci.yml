@@ -169,7 +169,7 @@ stop-k8s-test-tmc-with-csp:
     - stop-integration
   variables:
     rules:
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCHKUBE_NAMESPACE: 'integration-ska-mid-tmc-csp'
+    KUBE_NAMESPACE: 'integration-ska-mid-tmc-csp'
     CSP_SIMULATION_ENABLED: 'false'
     SDP_DEPLOY: false  
   environment:
