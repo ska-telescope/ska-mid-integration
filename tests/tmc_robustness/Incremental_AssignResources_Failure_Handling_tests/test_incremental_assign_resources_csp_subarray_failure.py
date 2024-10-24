@@ -61,6 +61,7 @@ def given_tmc(central_node_mid, event_recorder):
         "obsState",
         ObsState.EMPTY,
     )
+    event_recorder.clear_events()
 
 
 @given(
@@ -93,6 +94,7 @@ def given_assign_resources_executed_on_tmc_subarray(
         "longRunningCommandResult",
         (unique_id[0], Anything),
     )
+    event_recorder.clear_events()
 
 
 @given(
@@ -132,6 +134,7 @@ def given_tmc_subarray_incremental_assign_resources_is_in_progress(
         "longRunningCommandResult",
         (unique_id[0], Anything),
     )
+    event_recorder.clear_events()
 
 
 @given(
@@ -148,6 +151,7 @@ def sdp_subarray_assign_resources_complete(event_recorder, simulator_factory):
         "obsState",
         ObsState.IDLE,
     )
+    event_recorder.clear_events()
 
 
 @given(
@@ -164,6 +168,7 @@ def csp_subarray_assign_resources_complete(event_recorder, simulator_factory):
         "obsState",
         ObsState.IDLE,
     )
+    event_recorder.clear_events()
 
 
 @given(
@@ -179,6 +184,7 @@ def given_tmc_subarray_stuck_resourcing(
     assert central_node_mid.subarray_node.obsState == ObsState.RESOURCING
     csp_sim, _, _, _, _, _ = get_device_simulators(simulator_factory)
     csp_sim.SetDefective(json.dumps({"enabled": False}))
+    event_recorder.clear_events()
 
 
 @when(
@@ -218,6 +224,7 @@ def subarray_transitions_to_aborted(
         "obsState",
         ObsState.ABORTED,
     )
+    event_recorder.clear_events()
 
 
 @when(
@@ -257,6 +264,7 @@ def subarray_transitions_to_empty(
         "obsState",
         ObsState.EMPTY,
     )
+    event_recorder.clear_events()
 
 
 @then(
@@ -289,3 +297,4 @@ def assign_resources_executed_on_subarray(
         "longRunningCommandResult",
         (unique_id[0], Anything),
     )
+    event_recorder.clear_events()
