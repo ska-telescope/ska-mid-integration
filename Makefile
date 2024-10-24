@@ -85,15 +85,15 @@ K8S_EXTRA_PARAMS ?=
 #dish variables 
 DISH_INDICES ?= "001 036 063 100"
 DISH_NAMESPACES ?= "integration-ska-mid-tmc-dish01 integration-ska-mid-tmc-dish36 integration-ska-mid-tmc-dish36 integration-ska-mid-tmc-dish100"
-DISH_TANGO_HOST ?= databaseds
+DISH_TANGO_HOST ?=  $(TANGO_HOST_NAME)
 DISH_NAMESPACE_1 ?= ${KUBE_NAMESPACE}
 DISH_NAMESPACE_2 ?= ${KUBE_NAMESPACE}
 DISH_NAMESPACE_3 ?= ${KUBE_NAMESPACE}
 DISH_NAMESPACE_4 ?= ${KUBE_NAMESPACE}
-DISH_NAME_1 ?= mid-dish/dish-manager/SKA001
-DISH_NAME_36 ?= mid-dish/dish-manager/SKA036
-DISH_NAME_63 ?= mid-dish/dish-manager/SKA063
-DISH_NAME_100 ?= mid-dish/dish-manager/SKA100
+DISH_NAME_1 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_1).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA001
+DISH_NAME_36 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_2).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA036
+DISH_NAME_63 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_3).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA063
+DISH_NAME_100 ?= "tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_4).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA100"
 #tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_4).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA100
 SDP_DEPLOY ?= true
 
@@ -170,7 +170,7 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set global.namespace_dish.dish_names[0]="$(DISH_NAME_1)"\
 	--set global.namespace_dish.dish_names[1]="$(DISH_NAME_36)"\
 	--set global.namespace_dish.dish_names[2]="$(DISH_NAME_63)"\
-	--set global.namespace_dish.dish_names[3]="$(DISH_NAME_100)"\
+	--set global.namespace_dish.dish_names[3]=$(DISH_NAME_100)\
 	--set ska-oso-oet.rest.ingress.enabled=$(OET_INGRESS_ENABLED) \
 	--set ska-oso-oet.rest.oda.url=$(ODA_URI) \
 	--set ska-db-oda.rest.backend.type=filesystem \
