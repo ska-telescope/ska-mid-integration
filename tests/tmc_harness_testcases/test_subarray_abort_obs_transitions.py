@@ -83,6 +83,15 @@ class TestSubarrayNodeAbortCommandObsStateTransitions(object):
             ObsState[source_obs_state],
             lookahead=15,
         )
+        event_recorder.clear_events()
+
+        event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
+        event_recorder.subscribe_event(
+            subarray_node.csp_subarray_leaf_node, "cspSubarrayObsState"
+        )
+        event_recorder.subscribe_event(
+            subarray_node.sdp_subarray_leaf_node, "sdpSubarrayObsState"
+        )
 
         subarray_node.execute_transition("Abort", argin=None)
 
@@ -106,3 +115,4 @@ class TestSubarrayNodeAbortCommandObsStateTransitions(object):
             lookahead=15,
         )
         assert check_subarray_obs_state(obs_state="ABORTED")
+        event_recorder.clear_events()
