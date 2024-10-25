@@ -275,5 +275,3 @@ redeploy-mid-integration:
     KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
   environment:
     name: integration-ska-mid-test
-
-
