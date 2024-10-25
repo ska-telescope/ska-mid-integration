@@ -3,7 +3,17 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
-[0.22.8-rc.1]
+[0.22.8]
+********
+* Resolved SKB-467, SKB-495, SKB-511 and SKB-530
+* Track command will not be invoked from Dish leaf node if pointingState of Dish is TRACK/SLEW
+
+[0.22.6]
+********
+* Resolved SKB-509
+* Updated TMC to support TMC-CSP Configure interface v.3.0
+
+[0.22.8]
 *************
 * Updated ska-tmc-centralnode v0.16.8 to resolve skb-495
 * Updated ska-tmc-cspleafnode v0.21.2 to resolve skb-495 and skb-530 
