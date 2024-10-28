@@ -32,6 +32,7 @@ from tests.resources.test_harness.constant import (
     tmc_sdp_subarray_leaf_node,
     tmc_subarraynode1,
 )
+from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     SIMULATED_DEVICES_DICT,
     check_subarray_obs_state,
@@ -46,7 +47,11 @@ from tests.resources.test_harness.utils.constant import (
     ON,
     READY,
 )
-from tests.resources.test_harness.utils.enums import DishMode, SubarrayObsState
+from tests.resources.test_harness.utils.enums import (
+    DishMode,
+    PointingState,
+    SubarrayObsState,
+)
 from tests.resources.test_harness.utils.obs_state_resetter import (
     ObsStateResetterFactory,
 )
@@ -59,7 +64,6 @@ from tests.resources.test_harness.utils.sync_decorators import (
     sync_release_resources,
     sync_restart,
 )
-from tests.resources.test_harness.utils.wait_helpers import Waiter
 from tests.resources.test_support.common_utils.common_helpers import Resource
 
 configure_logging(logging.DEBUG)
@@ -109,12 +113,6 @@ class SubarrayNodeWrapper(object):
         self.csp_subarray_leaf_node = DeviceProxy(tmc_csp_subarray_leaf_node)
         self.sdp_subarray_leaf_node = DeviceProxy(tmc_sdp_subarray_leaf_node)
         self.sdp_qc = DeviceProxy(sdp_queue_connector)
-        self.dish_leaf_node_list = [
-            DeviceProxy(tmc_dish_leaf_node1),
-            DeviceProxy(tmc_dish_leaf_node2),
-        ]
-        for dish_leaf_node in self.dish_leaf_node_list:
-            dish_leaf_node.set_timeout_millis(5000)
 
         if (
             SIMULATED_DEVICES_DICT["csp_and_sdp"]
@@ -149,6 +147,8 @@ class SubarrayNodeWrapper(object):
             DeviceProxy(tmc_dish_leaf_node3),
             DeviceProxy(tmc_dish_leaf_node4),
         ]
+        for dish_leaf_node in self.dish_leaf_node_list:
+            dish_leaf_node.set_timeout_millis(5000)
 
         self.subarray_devices = {
             "csp_subarray": DeviceProxy(csp_subarray1),
@@ -436,28 +436,54 @@ class SubarrayNodeWrapper(object):
         LOGGER.info("Calling Tear down for subarray")
         self._clear_command_call_and_transition_data(clear_transition=True)
 
-        if self.obs_state in (
-            "RESOURCING",
-            "CONFIGURING",
-            "SCANNING",
-            "READY",
-            "IDLE",
-        ):
+        if self.obs_state == "RESOURCING":
             """Invoke Abort and Restart"""
             LOGGER.info("Invoking Abort on Subarray")
-            # Waiting for few seconds as the SubarrayNode End command
-            # completion does not consider Dishes pointingState transition
-            # to READY
-            the_waiter = Waiter()
-            the_waiter.wait(5)
-
             self.execute_transition("Abort")
             wait_for_partial_or_complete_abort()
             self.restart_subarray()
+
+        elif self.obs_state in ("CONFIGURING", "SCANNING"):
+            LOGGER.info("Invoking Abort on Subarray")
+            self.execute_transition("Abort")
+            wait_for_partial_or_complete_abort()
+            # Waiting for pointingStates of dishes to go to READY/NONE as Abort
+            # on Subarray does not consider pointingStates.
+            event_recorder = EventRecorder()
+            for dish_leaf_node in self.dish_leaf_node_list:
+                event_recorder.subscribe_event(dish_leaf_node, "pointingState")
+
+            for dish_leaf_node in self.dish_leaf_node_list:
+                event_recorder.has_change_event_occurred_for_given_values(
+                    dish_leaf_node,
+                    "pointingState",
+                    [PointingState.NONE, PointingState.READY],
+                )
+            event_recorder.clear_events()
+            self.restart_subarray()
+
+        elif self.obs_state == "IDLE":
+            # Waiting for few seconds as the SubarrayNode End command
+            # completion does not consider Dishes pointingState transition
+            # to READY
+            event_recorder = EventRecorder()
+            for dish_leaf_node in self.dish_leaf_node_list:
+                event_recorder.subscribe_event(dish_leaf_node, "pointingState")
+
+            for dish_leaf_node in self.dish_leaf_node_list:
+                event_recorder.has_change_event_occurred_for_given_values(
+                    dish_leaf_node,
+                    "pointingState",
+                    [PointingState.NONE, PointingState.READY],
+                )
+            event_recorder.clear_events()
+            self.release_resources_subarray()
+
         elif self.obs_state in ["ABORTED", "FAULT"]:
             """Invoke Restart"""
             LOGGER.info("Invoking Restart on Subarray")
             self.restart_subarray()
+
         else:
             self.force_change_of_obs_state("EMPTY")
 

@@ -22,6 +22,20 @@ class DishMode(IntEnum):
 
 
 @unique
+class PointingState(IntEnum):
+    """
+    This is an enumerator class that contains PointingState values.
+    """
+
+    READY = 0
+    SLEW = 1
+    TRACK = 2
+    SCAN = 3
+    UNKNOWN = 4
+    NONE = 5
+
+
+@unique
 class SubarrayState(IntEnum):
     ON = 0
     OFF = 1
