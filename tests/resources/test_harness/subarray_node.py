@@ -490,6 +490,14 @@ class SubarrayNodeWrapper(object):
             event_recorder = EventRecorder()
             dish_leaf_node_list = self.get_assigned_dish_leaf_nodes_list()
             for dish_leaf_node in dish_leaf_node_list:
+                try:
+                    dish_leaf_node.TrackStop()
+                except Exception as exception:
+                    LOGGER.debug(
+                        "TrackStop not executed on: %s due to: %s",
+                        dish_leaf_node.dev_name(),
+                        exception,
+                    )
                 event_recorder.subscribe_event(dish_leaf_node, "pointingState")
                 event_recorder.has_change_event_occurred_for_given_values(
                     dish_leaf_node,
