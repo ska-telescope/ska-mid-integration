@@ -156,6 +156,7 @@ class SubarrayNodeWrapper(object):
         }
         self._state = DevState.OFF
         self.obs_state = SubarrayObsState.EMPTY
+        self._assigned_resources = []
         # setup subarray
         self._setup()
         # Subarray state
@@ -193,6 +194,14 @@ class SubarrayNodeWrapper(object):
             value (DevState): operational state value
         """
         self._state = value
+
+    @property
+    def assigned_resources(self) -> list:
+        """TMC SubarrayNode assignedResources"""
+        self._assigned_resources = Resource(self.tmc_subarraynode1).get(
+            "assignedResources"
+        )
+        return self._assigned_resources
 
     @property
     def obs_state(self):
@@ -430,6 +439,19 @@ class SubarrayNodeWrapper(object):
         else:
             LOGGER.info("Devices deployed are real")
 
+    def get_assigned_dish_leaf_nodes_list(self) -> list:
+        """Returns a list of all the dish leaf nodes corresponding to the
+        dishes that are assigned"""
+        assigned_receptors = self.assigned_resources
+        assigned_receptors = [receptor[3:] for receptor in assigned_receptors]
+        assigned_dish_leaf_nodes = []
+        for receptor in assigned_receptors:
+            for dish_leaf_node in self.dish_leaf_node_list:
+                if receptor in dish_leaf_node.dev_name():
+                    assigned_dish_leaf_nodes.append(dish_leaf_node)
+                    break
+        return assigned_dish_leaf_nodes
+
     def tear_down(self):
         """Tear down after each test run"""
 
@@ -450,10 +472,9 @@ class SubarrayNodeWrapper(object):
             # Waiting for pointingStates of dishes to go to READY/NONE as Abort
             # on Subarray does not consider pointingStates.
             event_recorder = EventRecorder()
-            for dish_leaf_node in self.dish_leaf_node_list:
+            dish_leaf_node_list = self.get_assigned_dish_leaf_nodes_list()
+            for dish_leaf_node in dish_leaf_node_list:
                 event_recorder.subscribe_event(dish_leaf_node, "pointingState")
-
-            for dish_leaf_node in self.dish_leaf_node_list:
                 event_recorder.has_change_event_occurred_for_given_values(
                     dish_leaf_node,
                     "pointingState",
@@ -467,10 +488,9 @@ class SubarrayNodeWrapper(object):
             # completion does not consider Dishes pointingState transition
             # to READY
             event_recorder = EventRecorder()
-            for dish_leaf_node in self.dish_leaf_node_list:
+            dish_leaf_node_list = self.get_assigned_dish_leaf_nodes_list()
+            for dish_leaf_node in dish_leaf_node_list:
                 event_recorder.subscribe_event(dish_leaf_node, "pointingState")
-
-            for dish_leaf_node in self.dish_leaf_node_list:
                 event_recorder.has_change_event_occurred_for_given_values(
                     dish_leaf_node,
                     "pointingState",
