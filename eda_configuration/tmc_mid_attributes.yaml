@@ -38,7 +38,7 @@ configuration:
       isSubsystemAvailable:
         code_push_event: true
 
-  - class: CspSubarrayLeafNodeMid 
+  - class: CspSubarrayLeafNodeMid
     attributes:
       state:
         code_push_event: true
@@ -50,7 +50,7 @@ configuration:
         code_push_event: true
       cspSubarrayObsState:
         code_push_event: true
-        
+
   - class: SdpMasterLeafNode
     attributes:
       state:
@@ -75,7 +75,7 @@ configuration:
   - class: DishLeafNode
     attributes:
       state:
-      code_push_event: true
+        code_push_event: true
       healthState:
         code_push_event: true
       isSubsystemAvailable:
@@ -83,4 +83,4 @@ configuration:
       kValueValidationResult:
         code_push_event: true
       kValue:
-        code_push_event: true
+        archive_abs_change: 1
