@@ -1,6 +1,6 @@
 # Test Steps and Scenarios from tests/tmc_csp_new_ITH/test_abort.py
 
-Last updated on: 11 September 2024 13:11:01
+Last updated on: 29 October 2024 12:07:20
 
 ## Scenarios
 
@@ -40,7 +40,7 @@ This step performs the following actions:
 
 **Signature:**
 ```python
-def send_abort_command(context_fixt, tmc, csp, sdp, event_tracer):
+def send_abort_command(context_fixt, tmc, event_tracer):
 ```
 
 **Description:**
@@ -92,7 +92,7 @@ It verifies the previous state for the TMC Subarray Node.
 
 **Signature:**
 ```python
-def verify_aborted_state(context_fixt, tmc, csp, sdp, event_tracer):
+def verify_aborted_state(tmc, csp, sdp, event_tracer):
 ```
 
 **Description:**

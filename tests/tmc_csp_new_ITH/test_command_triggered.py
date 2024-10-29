@@ -46,13 +46,6 @@ def test_empty_to_resourcing_to_idle():
     """Test EMPTY to RESOURCING to IDLE transitions."""
 
 
-# @pytest.mark.xfail(
-#     reason="Without a time.sleep after the telescope "
-#     "reached the IDLE state, "
-#     "the test fails. But the test should pass without the time.sleep "
-#     "since if a subarray is in IDLE state, by design it should be able "
-#     "to receive the Configure command at any time."
-# )
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",
@@ -62,13 +55,6 @@ def test_idle_to_configuring_to_ready():
     """Test IDLE to CONFIGURING to READY transitions."""
 
 
-# @pytest.mark.xfail(
-#     reason="Without a time.sleep after the telescope "
-#     "reached the IDLE state, "
-#     "the test fails. But the test should pass without the time.sleep "
-#     "since if a subarray is in IDLE state, by design it should be able "
-#     "to receive the Configure command at any time."
-# )
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",
@@ -78,13 +64,6 @@ def test_idle_to_resourcing_to_idle():
     """Test IDLE to RESOURCING to IDLE transitions."""
 
 
-# @pytest.mark.xfail(
-#     reason="Without a time.sleep after the telescope "
-#     "reached the IDLE state, "
-#     "the test fails. But the test should pass without the time.sleep "
-#     "since if a subarray is in IDLE state, by design it should be able "
-#     "to receive the Configure command."
-# )
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",
@@ -94,7 +73,7 @@ def test_idle_to_resourcing_to_empty():
     """Test IDLE to RESOURCING to EMPTY transitions."""
 
 
-@pytest.mark.skip(reason="issue at CSP for scan after configure (CIP-2967)")
+# @pytest.mark.skip(reason="issue at CSP for scan after configure (CIP-2967)")
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",
@@ -113,14 +92,7 @@ def test_ready_to_idle():
     """Test READY to IDLE transitions."""
 
 
-# @pytest.mark.xfail(
-#     reason="Without a time.sleep after the telescope "
-#     "reached the READY state, "
-#     "the test fails. But the test should pass without the time.sleep "
-#     "since if a subarray is in READY state, by design it should be able "
-#     "to receive the Configure command."
-# )
-@pytest.mark.skip(reason="issue at CSP for scan after configure (CIP-2967)")
+# @pytest.mark.skip(reason="issue at CSP for scan after configure (CIP-2967)")
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",
@@ -130,7 +102,7 @@ def test_ready_to_configuring_to_ready():
     """Test READY to CONFIGURING to READY transitions."""
 
 
-@pytest.mark.skip(reason="issue at CSP for scan after configure (CIP-2967)")
+# @pytest.mark.skip(reason="issue at CSP for scan after configure (CIP-2967)")
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",

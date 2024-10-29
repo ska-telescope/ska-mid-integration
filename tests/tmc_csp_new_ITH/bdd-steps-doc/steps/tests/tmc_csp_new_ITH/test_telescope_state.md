@@ -1,6 +1,6 @@
 # Test Steps and Scenarios from tests/tmc_csp_new_ITH/test_telescope_state.py
 
-Last updated on: 11 September 2024 13:11:01
+Last updated on: 18 October 2024 17:08:04
 
 ## Scenarios
 

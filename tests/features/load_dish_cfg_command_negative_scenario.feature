@@ -4,10 +4,10 @@ Feature: TMC is able to handle the failure when load dish cfg command fails
         Given a TMC
         And Telescope is in ON state 
         When I issue the command LoadDishCfg on TMC with non existent file <file_name> in configuration    
-        Then TMC rejects the command with error <error_message>
+        Then TMC updates longrunningcommandresult with error <error_message>
         Examples:
         | file_name                         | error_message                                                                                                      |
-        | invalid_file_name                 | No telescope model data with key instrument/dishid_vcc_configuration/invalid_file_name.json exists! |
+        | invalid_file_name                 | Error in Loading Dish VCC map json file 'No telescope model data with key instrument/dishid_vcc_configuration/invalid_file_name.json exists!' |
 
     @XTP-28682
     Scenario Outline: TMC returns error when invalid dish id is provided in configuration

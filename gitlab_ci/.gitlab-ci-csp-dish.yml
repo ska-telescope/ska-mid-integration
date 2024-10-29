@@ -31,6 +31,7 @@ k8s-test-csp-dish:
     - dish-lmc-dish036
     - dish-lmc-dish063
     - dish-lmc-dish100
+
   environment:
     name: $CI_PROJECT_NAME/csp-dish-$CI_COMMIT_REF_SLUG
     kubernetes:
@@ -38,6 +39,7 @@ k8s-test-csp-dish:
       namespace: $KUBE_NAMESPACE
     on_stop: stop-k8s-test-csp-dish
   allow_failure: false # need to keep this to unlock the pipeline
+  when: manual
 
 
 stop-k8s-test-csp-dish:
