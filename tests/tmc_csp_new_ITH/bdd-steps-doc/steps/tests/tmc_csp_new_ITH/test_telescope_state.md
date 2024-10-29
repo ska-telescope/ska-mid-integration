@@ -1,6 +1,6 @@
 # Test Steps and Scenarios from tests/tmc_csp_new_ITH/test_telescope_state.py
 
-Last updated on: 18 October 2024 17:08:04
+Last updated on: 29 October 2024 12:07:20
 
 ## Scenarios
 
@@ -91,7 +91,7 @@ def verify_off_state(event_tracer, tmc, csp):
 ```
 
 **Description:**
-The telescope and CSP devices transition to the OFF state.
+TMC and CSP devices transition to the OFF state.
 
 ---
 
@@ -105,7 +105,7 @@ def verify_standby_state(event_tracer, tmc, csp):
 ```
 
 **Description:**
-The telescope and CSP devices transition to the STANDBY state.
+TMC should transition to the STANDBY state.
 
 ---
 
@@ -119,7 +119,7 @@ def verify_on_state(event_tracer, tmc, csp):
 ```
 
 **Description:**
-The telescope and CSP devices transition to the ON state.
+TMC and CSP devices transition to the ON state.
 
 ---
 

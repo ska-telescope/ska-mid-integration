@@ -1,6 +1,6 @@
 # Test Steps and Scenarios from tests/tmc_csp_new_ITH/conftest.py
 
-Last updated on: 18 October 2024 17:08:04
+Last updated on: 29 October 2024 12:07:20
 
 ## Steps
 
@@ -24,7 +24,7 @@ Ensure the telescope is in ON state.
 
 **Signature:**
 ```python
-def subarray_can_be_used(subarray_id, tmc, tmc, csp, sdp, event_tracer):
+def subarray_can_be_used(subarray_id, tmc, csp, sdp, event_tracer):
 ```
 
 **Description:**
@@ -52,7 +52,7 @@ Ensure the subarray is in the RESOURCING state.
 
 **Signature:**
 ```python
-def subarray_in_idle_state(context_fixt, tmc, tmc, default_commands_inputs):
+def subarray_in_idle_state(context_fixt, tmc, default_commands_inputs):
 ```
 
 **Description:**

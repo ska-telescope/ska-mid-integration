@@ -1,6 +1,6 @@
 # Test Steps and Scenarios from tests/tmc_csp_new_ITH/test_command_triggered.py
 
-Last updated on: 18 October 2024 17:08:04
+Last updated on: 29 October 2024 12:07:20
 
 ## Scenarios
 
