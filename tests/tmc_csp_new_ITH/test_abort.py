@@ -41,12 +41,12 @@ ASSERTIONS_TIMEOUT = 60
 # Scenario Definition
 
 
-@pytest.mark.xfail(
-    reason=(
-        "It may fail because right now we cannot detect the passage "
-        "trough an 'ABORTING' state in the SDP emulator subarray."
-    )
-)
+# @pytest.mark.xfail(
+#     reason=(
+#         "It may fail because right now we cannot detect the passage "
+#         "trough an 'ABORTING' state in the SDP emulator subarray."
+#     )
+# )
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/abort_restart_subarray.feature",
@@ -56,12 +56,12 @@ def test_resourcing_to_aborting_to_aborted():
     """Test RESOURCING to ABORTING to ABORTED transitions."""
 
 
-@pytest.mark.xfail(
-    reason=(
-        "It may fail because right now we cannot detect the passage "
-        "trough an 'ABORTING' state in the SDP emulator subarray."
-    )
-)
+# @pytest.mark.xfail(
+#     reason=(
+#         "It may fail because right now we cannot detect the passage "
+#         "trough an 'ABORTING' state in the SDP emulator subarray."
+#     )
+# )
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/abort_restart_subarray.feature",
@@ -71,12 +71,12 @@ def test_idle_to_aborting_to_aborted():
     """Test IDLE to ABORTING to ABORTED transitions."""
 
 
-@pytest.mark.xfail(
-    reason=(
-        "It may fail because right now we cannot detect the passage "
-        "trough an 'ABORTING' state in the SDP emulator subarray."
-    )
-)
+# @pytest.mark.xfail(
+#     reason=(
+#         "It may fail because right now we cannot detect the passage "
+#         "trough an 'ABORTING' state in the SDP emulator subarray."
+#     )
+# )
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/abort_restart_subarray.feature",
@@ -86,12 +86,12 @@ def test_configuring_to_aborting_to_aborted():
     """Test CONFIGURING to ABORTING to ABORTED transitions."""
 
 
-@pytest.mark.xfail(
-    reason=(
-        "It may fail because right now we cannot detect the passage "
-        "trough an 'ABORTING' state in the SDP emulator subarray."
-    )
-)
+# @pytest.mark.xfail(
+#     reason=(
+#         "It may fail because right now we cannot detect the passage "
+#         "trough an 'ABORTING' state in the SDP emulator subarray."
+#     )
+# )
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/abort_restart_subarray.feature",
@@ -101,12 +101,12 @@ def test_ready_to_aborting_to_aborted():
     """Test READY to ABORTING to ABORTED transitions."""
 
 
-@pytest.mark.xfail(
-    reason=(
-        "It may fail because right now we cannot detect the passage "
-        "trough an 'ABORTING' state in the SDP emulator subarray."
-    )
-)
+# @pytest.mark.xfail(
+#     reason=(
+#         "It may fail because right now we cannot detect the passage "
+#         "trough an 'ABORTING' state in the SDP emulator subarray."
+#     )
+# )
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/abort_restart_subarray.feature",
@@ -116,7 +116,7 @@ def test_scanning_to_aborting_to_aborted():
     """Test SCANNING to ABORTING to ABORTED transitions."""
 
 
-@pytest.mark.skip(reason="Facing issues in new test case harness")
+# @pytest.mark.skip(reason="Facing issues in new test case harness")
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/abort_restart_subarray.feature",
