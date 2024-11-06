@@ -75,7 +75,7 @@ configuration:
   - class: DishLeafNode
     attributes:
       state:
-      code_push_event: true
+        code_push_event: true
       healthState:
         code_push_event: true
       isSubsystemAvailable:
@@ -83,4 +83,4 @@ configuration:
       kValueValidationResult:
         code_push_event: true
       kValue:
-        code_push_event: true
+        archive_abs_change: 1

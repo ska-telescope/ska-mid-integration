@@ -1,17 +1,17 @@
-release=0.22.8-rc.1
-tag=0.22.8-rc.1
+release=0.22.8
+tag=0.22.8
 tag_description=
 **Charts:**
-**1. ska-tmc-integration 0.22.7-rc.1 - 0.22.8-rc.1**
+**1. ska-tmc-integration 0.22.8-rc.1 - 0.22.8**
 
-    **1.1 ska-tmc-mid - 0.22.7-rc.1 - 0.22.8-rc.1:
-        a. Updated ska-tmc-centralnode v0.16.8 to resolve skb-495
-        b. Updated ska-tmc-cspleafnode v0.21.2 to resolve skb-495 and skb-530
+    **1.1 ska-tmc-mid - 0.22.8-rc.1 - 0.22.8:
+        a. Resolved SKB-467, SKB-495, SKB-511 and SKB-530
+        b. Track command will not be invoked from Dish leaf node if pointingState of Dish is TRACK/SLEW
 
 release_notes=
 **Charts:**
-**1. ska-tmc-integration 0.22.7-rc.1 - 0.22.8-rc.1:*
+**1. ska-tmc-integration 0.22.8-rc.1 - 0.22.8:*
 
- **1.1 ska-tmc-mid - 0.22.7-rc.1 - 0.22.8-rc.1:
-        a. Updated ska-tmc-centralnode v0.16.8 to resolve skb-495
-        b. Updated ska-tmc-cspleafnode v0.21.2 to resolve skb-495 and skb-530
+ **1.1 ska-tmc-mid - 0.22.8-rc.1 - 0.22.8:
+        a. Resolved SKB-467, SKB-495, SKB-511 and SKB-530
+        b. Track command will not be invoked from Dish leaf node if pointingState of Dish is TRACK/SLEW
