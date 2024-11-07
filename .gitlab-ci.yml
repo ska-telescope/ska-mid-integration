@@ -187,6 +187,7 @@ stop-k8s-test-tmc-with-csp:
 deploy-tmc-with-dish:
   extends: deploy-mid-integration
   variables:
+    DISH_TANGO_HOST: "databaseds"
     DISH_INDICES: "001 036 063 100"
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-dish'
     DISH_HELM_RELEASE: "4.1.0"
