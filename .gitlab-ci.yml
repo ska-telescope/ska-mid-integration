@@ -133,7 +133,7 @@ deploy-tmc-with-sdp:
     name: integration-mid-sdp-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-sdp
   rules:
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+  - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
   
 stop-k8s-test-tmc-with-sdp:
@@ -149,7 +149,7 @@ stop-k8s-test-tmc-with-sdp:
     - deploy-tmc-with-sdp
   when: manual
   rules:
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+  - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
  
 deploy-tmc-with-csp:
@@ -159,12 +159,12 @@ deploy-tmc-with-csp:
     PORT: "10000"
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-csp'
     CSP_SIMULATION_ENABLED: 'false'
-    SDP_DEPLOY: false  
+    SDP_DEPLOY: 'false'  
   environment:
     name: integration-mid-csp-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-csp
   rules:
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+  - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 
 stop-k8s-test-tmc-with-csp:
@@ -173,7 +173,7 @@ stop-k8s-test-tmc-with-csp:
   variables:
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-csp'
     CSP_SIMULATION_ENABLED: 'false'
-    SDP_DEPLOY: false  
+    SDP_DEPLOY: 'false'  
   environment:
     name: integration-mid-csp-$CI_PROJECT_NAME
     action: stop
@@ -181,7 +181,7 @@ stop-k8s-test-tmc-with-csp:
     - deploy-tmc-with-csp
   when: manual
   rules:
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+  - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 
 deploy-tmc-with-dish:
@@ -192,7 +192,7 @@ deploy-tmc-with-dish:
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-dish'
     DISH_HELM_RELEASE: "4.1.0"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
-    DISH_SIMULATION_ENABLED: false
+    DISH_SIMULATION_ENABLED: 'false'
     DISH_NAMESPACE_1: "integration-ska-mid-tmc-dish001"
     DISH_NAMESPACE_2: "integration-ska-mid-tmc-dish036"
     DISH_NAMESPACE_3: "integration-ska-mid-tmc-dish063"
@@ -206,7 +206,7 @@ deploy-tmc-with-dish:
     on_stop: stop-k8s-test-tmc-with-dish
   allow_failure: true
   rules:
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+  - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 
 stop-k8s-test-tmc-with-dish:
