@@ -132,6 +132,8 @@ deploy-tmc-with-sdp:
   environment:
     name: integration-mid-sdp-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-sdp
+  rules:
+  - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   
 stop-k8s-test-tmc-with-sdp:
   extends:
@@ -145,6 +147,8 @@ stop-k8s-test-tmc-with-sdp:
   needs:
     - deploy-tmc-with-sdp
   when: manual
+  rules:
+  - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
  
 deploy-tmc-with-csp:
   extends: deploy-mid-integration
@@ -157,6 +161,8 @@ deploy-tmc-with-csp:
   environment:
     name: integration-mid-csp-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-csp
+  rules:
+  - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 stop-k8s-test-tmc-with-csp:
   extends:
@@ -171,6 +177,8 @@ stop-k8s-test-tmc-with-csp:
   needs:
     - deploy-tmc-with-csp
   when: manual
+  rules:
+  - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 deploy-tmc-with-dish:
   extends: deploy-mid-integration
@@ -192,6 +200,8 @@ deploy-tmc-with-dish:
     name: integration-mid-dish-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-dish
   allow_failure: true
+  rules:
+  - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 stop-k8s-test-tmc-with-dish:
   extends: 
@@ -216,6 +226,8 @@ stop-k8s-test-tmc-with-dish:
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
     - make k8s-delete-namespace 
   when: manual
+  rules:
+  - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
 
 deploy-mid-integration:
   extends: deploy-integration
