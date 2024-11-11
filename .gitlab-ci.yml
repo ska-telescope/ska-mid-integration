@@ -151,7 +151,7 @@ deploy-tmc-with-csp:
   variables:
     TELESCOPE: 'SKA-mid'
     PORT: "10000"
-    KUBE_NAMESPACE: 'integration-ska-mid-tmc-csp'
+    KUBE_NAMESPACE: 'integration-ska-mid-tmc-csp-subarray-tests'
     CSP_SIMULATION_ENABLED: 'false'
     SDP_DEPLOY: false  
   environment:
@@ -162,7 +162,7 @@ stop-k8s-test-tmc-with-csp:
   extends:
     - stop-integration
   variables:
-    KUBE_NAMESPACE: 'integration-ska-mid-tmc-csp'
+    KUBE_NAMESPACE: 'integration-ska-mid-tmc-csp-subarray-tests'
     CSP_SIMULATION_ENABLED: 'false'
     SDP_DEPLOY: false  
   environment:
@@ -221,9 +221,9 @@ deploy-mid-integration:
   extends: deploy-integration
   when: manual
   rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
-    KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
+    KUBE_NAMESPACE: "integration-ska-mid-test-subarray-tests"
   environment:
     name: integration-ska-mid-test
     on_stop: stop-mid-integration
@@ -232,11 +232,11 @@ info-mid-integration:
   extends: info-integration
   when: manual
   rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   needs:
     - deploy-mid-integration
   variables:
-    KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
+    KUBE_NAMESPACE: "integration-ska-mid-test-subarray-tests" #changing namespace
   environment:
     name: integration-ska-mid-test
 
@@ -244,11 +244,11 @@ stop-mid-integration:
   extends: stop-integration
   when: manual
   rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   needs:
     - deploy-mid-integration
   variables:
-    KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
+    KUBE_NAMESPACE: "integration-ska-mid-test-subarray-tests" #changing namespace
   environment:
     name: integration-ska-mid-test
     action: stop
@@ -257,9 +257,9 @@ redeploy-mid-integration:
   extends: redeploy-integration
   when: manual
   rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
-    KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
+    KUBE_NAMESPACE: "integration-ska-mid-test-subarray-tests" #changing namespace
   environment:
     name: integration-ska-mid-test
 
