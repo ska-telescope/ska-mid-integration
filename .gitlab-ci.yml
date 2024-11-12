@@ -128,7 +128,7 @@ deploy-tmc-with-sdp:
     KUBE_NAMESPACE_SDP: 'integration-ska-tmc-mid-sdp-subarray-tests'
     SDP_SIMULATION_ENABLED: 'false' 
   environment:
-    name: $KUBE_NAMESPACE
+    name: "integration-ska-mid-tmc-sdp-subarray-tests"
     on_stop: stop-k8s-test-tmc-with-sdp
 
 stop-k8s-test-tmc-with-sdp:
@@ -138,7 +138,7 @@ stop-k8s-test-tmc-with-sdp:
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-sdp-subarray-tests'
     SDP_SIMULATION_ENABLED: 'false'
   environment:
-    name: $KUBE_NAMESPACE
+    name: "integration-ska-mid-tmc-sdp-subarray-tests"
     action: stop
   needs:
     - deploy-tmc-with-sdp
@@ -153,7 +153,7 @@ deploy-tmc-with-csp:
     CSP_SIMULATION_ENABLED: 'false'
     SDP_DEPLOY: false  
   environment:
-    name: $KUBE_NAMESPACE
+    name: "integration-ska-mid-tmc-csp-subarray-tests"
     on_stop: stop-k8s-test-tmc-with-csp
 
 stop-k8s-test-tmc-with-csp:
@@ -164,7 +164,7 @@ stop-k8s-test-tmc-with-csp:
     CSP_SIMULATION_ENABLED: 'false'
     SDP_DEPLOY: false  
   environment:
-    name: $KUBE_NAMESPACE
+    name: "integration-ska-mid-tmc-csp-subarray-tests"
     action: stop
   needs:
     - deploy-tmc-with-csp
@@ -187,7 +187,7 @@ deploy-tmc-with-dish:
     - make deploy-dishes 
     - make k8s-install-chart 
   environment:
-    name: $KUBE_NAMESPACE
+    name: "integration-ska-mid-tmc-dish-subarray-tests"
     on_stop: stop-k8s-test-tmc-with-dish
   allow_failure: true
 
@@ -204,7 +204,7 @@ stop-k8s-test-tmc-with-dish:
     DISH_NAMESPACE_4: "integration-ska-mid-tmc-dish100"
     SDP_DEPLOY: false  
   environment:
-    name: $KUBE_NAMESPACE
+    name: "integration-ska-mid-tmc-dish-subarray-tests"
     action: stop
   needs:
     - deploy-tmc-with-dish
@@ -223,7 +223,7 @@ deploy-mid-integration:
   variables:
     KUBE_NAMESPACE: "integration-ska-mid-test-subarray-tests"
   environment:
-    name: $KUBE_NAMESPACE
+    name: "integration-ska-mid-test"
     on_stop: stop-mid-integration
 
 info-mid-integration:
@@ -236,7 +236,7 @@ info-mid-integration:
   variables:
     KUBE_NAMESPACE: "integration-ska-mid-test-subarray-tests"
   environment:
-    name: $KUBE_NAMESPACE
+    name: "integration-ska-mid-test"
 
 stop-mid-integration:
   extends: stop-integration
@@ -248,7 +248,7 @@ stop-mid-integration:
   variables:
     KUBE_NAMESPACE: "integration-ska-mid-test-subarray-tests"
   environment:
-    name: $KUBE_NAMESPACE
+    name: "integration-ska-mid-test"
     action: stop
 
 redeploy-mid-integration:
@@ -259,7 +259,7 @@ redeploy-mid-integration:
   variables:
     KUBE_NAMESPACE: "integration-ska-mid-test-subarray-tests"
   environment:
-    name: $KUBE_NAMESPACE
+    name: "integration-ska-mid-test"
 
 deploy-dev-environment:
   image: $SKA_K8S_TOOLS_BUILD_DEPLOY
@@ -274,6 +274,6 @@ deploy-dev-environment:
     - make k8s-install-chart
     - make k8s-wait
   environment:
-    name: $KUBE_NAMESPACE
+    name: "ci-dev-ska-mid-test-subarray-tests"
     on_stop: stop-dev-environment
     auto_stop_in: 4 hours
