@@ -20,7 +20,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 
 @pytest.mark.tmc_dish
 @scenario(
-    "../features/skb-469.feature",
+    "../features/skb_469.feature",
     "Verify SKB-469",
 )
 def test_skb_469():
