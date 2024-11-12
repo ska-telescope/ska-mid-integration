@@ -223,7 +223,7 @@ deploy-mid-integration:
   variables:
     KUBE_NAMESPACE: "integration-ska-mid-test-subarray-tests"
   environment:
-    name: "integration-ska-mid-test"
+    name: "integration-ska-mid-test-subarray-tests"
     on_stop: stop-mid-integration
 
 info-mid-integration:
@@ -236,7 +236,7 @@ info-mid-integration:
   variables:
     KUBE_NAMESPACE: "integration-ska-mid-test-subarray-tests"
   environment:
-    name: "integration-ska-mid-test"
+    name: "integration-ska-mid-test-subarray-tests"
 
 stop-mid-integration:
   extends: stop-integration
@@ -248,7 +248,7 @@ stop-mid-integration:
   variables:
     KUBE_NAMESPACE: "integration-ska-mid-test-subarray-tests"
   environment:
-    name: "integration-ska-mid-test"
+    name: "integration-ska-mid-test-subarray-tests"
     action: stop
 
 redeploy-mid-integration:
@@ -259,7 +259,7 @@ redeploy-mid-integration:
   variables:
     KUBE_NAMESPACE: "integration-ska-mid-test-subarray-tests"
   environment:
-    name: "integration-ska-mid-test"
+    name: "integration-ska-mid-test-subarray-tests"
 
 deploy-dev-environment:
   image: $SKA_K8S_TOOLS_BUILD_DEPLOY
