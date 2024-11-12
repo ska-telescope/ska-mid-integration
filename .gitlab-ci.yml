@@ -22,7 +22,6 @@ stages:
 # Include CI templates
 include:
 # OCI Images
-# do a custom set of build and publish stages
   - project: 'ska-telescope/templates-repository'
     file: 'gitlab-ci/includes/oci-image.gitlab-ci.yml'
 
@@ -32,7 +31,7 @@ include:
 
 # Jupyter notebook linting and testing
   - project: 'ska-telescope/templates-repository'
-    file: 'gitlab-ci/includes/notebook.gitlab-ci.yml' # this is for using jupyter notebooks
+    file: 'gitlab-ci/includes/notebook.gitlab-ci.yml'
 
 # Helm Charts
   - project: 'ska-telescope/templates-repository'
@@ -52,11 +51,11 @@ include:
 
 # changelog release page
   - project: 'ska-telescope/templates-repository'
-    file: 'gitlab-ci/includes/release.gitlab-ci.yml' 
+    file: 'gitlab-ci/includes/release.gitlab-ci.yml'
 
 # deploy steps
   - project: 'ska-telescope/templates-repository'
-    file: 'gitlab-ci/includes/deploy.gitlab-ci.yml' 
+    file: 'gitlab-ci/includes/deploy.gitlab-ci.yml'
 
   - project: 'ska-telescope/templates-repository'
     file: 'gitlab-ci/includes/docs-pages.gitlab-ci.yml'
@@ -65,9 +64,8 @@ include:
     file: 'gitlab-ci/includes/deploy.integration.gitlab-ci.yml'
 
 
-
 notebook-lint:
-  allow_failure: true 
+  allow_failure: true
 
 notebook-test:
   rules:
@@ -77,11 +75,11 @@ python-gemnasium-scan:
   rules:
     - when: never
 
-python-test: 
+python-test:
   rules:
     - when: never
 
-k8s-test: 
+k8s-test:
   rules:
     - when: never
 
@@ -89,7 +87,7 @@ deploy-integration:
   rules:
     - when: never
 
-stop-k8s-test: 
+stop-k8s-test:
   rules:
     - when: never
 
@@ -130,9 +128,9 @@ deploy-tmc-with-sdp:
     KUBE_NAMESPACE_SDP: 'integration-ska-tmc-mid-sdp-subarray-tests'
     SDP_SIMULATION_ENABLED: 'false' 
   environment:
-    name: integration-mid-sdp-$CI_PROJECT_NAME
+    name: $KUBE_NAMESPACE
     on_stop: stop-k8s-test-tmc-with-sdp
-  
+
 stop-k8s-test-tmc-with-sdp:
   extends:
     - stop-integration
@@ -140,12 +138,12 @@ stop-k8s-test-tmc-with-sdp:
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-sdp-subarray-tests'
     SDP_SIMULATION_ENABLED: 'false'
   environment:
-    name: integration-mid-sdp-$CI_PROJECT_NAME
+    name: $KUBE_NAMESPACE
     action: stop
   needs:
     - deploy-tmc-with-sdp
   when: manual
- 
+
 deploy-tmc-with-csp:
   extends: deploy-mid-integration
   variables:
@@ -155,7 +153,7 @@ deploy-tmc-with-csp:
     CSP_SIMULATION_ENABLED: 'false'
     SDP_DEPLOY: false  
   environment:
-    name: integration-mid-csp-$CI_PROJECT_NAME
+    name: $KUBE_NAMESPACE
     on_stop: stop-k8s-test-tmc-with-csp
 
 stop-k8s-test-tmc-with-csp:
@@ -166,7 +164,7 @@ stop-k8s-test-tmc-with-csp:
     CSP_SIMULATION_ENABLED: 'false'
     SDP_DEPLOY: false  
   environment:
-    name: integration-mid-csp-$CI_PROJECT_NAME
+    name: $KUBE_NAMESPACE
     action: stop
   needs:
     - deploy-tmc-with-csp
@@ -189,7 +187,7 @@ deploy-tmc-with-dish:
     - make deploy-dishes 
     - make k8s-install-chart 
   environment:
-    name: integration-mid-dish-$CI_PROJECT_NAME
+    name: $KUBE_NAMESPACE
     on_stop: stop-k8s-test-tmc-with-dish
   allow_failure: true
 
@@ -206,7 +204,7 @@ stop-k8s-test-tmc-with-dish:
     DISH_NAMESPACE_4: "integration-ska-mid-tmc-dish100"
     SDP_DEPLOY: false  
   environment:
-    name: integration-mid-dish-$CI_PROJECT_NAME
+    name: $KUBE_NAMESPACE
     action: stop
   needs:
     - deploy-tmc-with-dish
@@ -225,7 +223,7 @@ deploy-mid-integration:
   variables:
     KUBE_NAMESPACE: "integration-ska-mid-test-subarray-tests"
   environment:
-    name: integration-ska-mid-test
+    name: $KUBE_NAMESPACE
     on_stop: stop-mid-integration
 
 info-mid-integration:
@@ -236,9 +234,9 @@ info-mid-integration:
   needs:
     - deploy-mid-integration
   variables:
-    KUBE_NAMESPACE: "integration-ska-mid-test-subarray-tests" #changing namespace
+    KUBE_NAMESPACE: "integration-ska-mid-test-subarray-tests"
   environment:
-    name: integration-ska-mid-test
+    name: $KUBE_NAMESPACE
 
 stop-mid-integration:
   extends: stop-integration
@@ -248,9 +246,9 @@ stop-mid-integration:
   needs:
     - deploy-mid-integration
   variables:
-    KUBE_NAMESPACE: "integration-ska-mid-test-subarray-tests" #changing namespace
+    KUBE_NAMESPACE: "integration-ska-mid-test-subarray-tests"
   environment:
-    name: integration-ska-mid-test
+    name: $KUBE_NAMESPACE
     action: stop
 
 redeploy-mid-integration:
@@ -259,8 +257,23 @@ redeploy-mid-integration:
   rules:
     - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
   variables:
-    KUBE_NAMESPACE: "integration-ska-mid-test-subarray-tests" #changing namespace
+    KUBE_NAMESPACE: "integration-ska-mid-test-subarray-tests"
   environment:
-    name: integration-ska-mid-test
+    name: $KUBE_NAMESPACE
 
-
+deploy-dev-environment:
+  image: $SKA_K8S_TOOLS_BUILD_DEPLOY
+  tags:
+    - ska-k8s
+  stage: deploy
+  when: manual
+  variables:
+    SKIP_CI: 1
+    KUBE_NAMESPACE: "ci-dev-ska-mid-test-subarray-tests"
+  script:
+    - make k8s-install-chart
+    - make k8s-wait
+  environment:
+    name: $KUBE_NAMESPACE
+    on_stop: stop-dev-environment
+    auto_stop_in: 4 hours
