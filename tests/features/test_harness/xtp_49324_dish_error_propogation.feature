@@ -5,6 +5,10 @@ Feature: Default
 	Scenario: Verify error propogation with defective dish
 		Given the telescope is in ON state
 		And TMC subarray is in ObsState IDLE
-		When Dish 1 is set defective
+		When Dish 1 is set defective with <defect>
 		And I issue the Configure command to the TMC subarray
-		Then Exception is propagated to TMC subarray on longRunningCommandResult
+		Then Exception <exception_message> is propagated to TMC subarray on longRunningCommandResult
+		Examples:
+        | defect                       | exception_message               | 
+        | ERROR_PROPAGATION_DEFECT     | DISH_ERROR_MESSAGE              |
+		| DISH_TIMEOUT_DEFECT          | TIMOUT_ERROR                    |

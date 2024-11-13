@@ -2,13 +2,13 @@
 import json
 
 import pytest
-from pytest_bdd import scenario, then, when
+from pytest_bdd import parsers, scenario, then, when
 from ska_tango_testing.mock.placeholders import Anything
 
 from tests.resources.test_harness.constant import (
+    DISH_TIMEOUT_DEFECT,
     ERROR_PROPAGATION_DEFECT,
     RESET_DEFECT,
-    tmc_dish_leaf_node1,
 )
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import prepare_json_args_for_commands
@@ -18,6 +18,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 
+@pytest.mark.sah1623
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp_49324_dish_" + "error_propogation.feature",
@@ -38,8 +39,8 @@ def test_dish_configure_error_propagation():
 # @given("TMC subarray is in ObsState IDLE")
 
 
-@when("Dish 1 is set defective")
-def set_dish_defective(simulator_factory: SimulatorFactory):
+@when(parsers.parse("Dish 1 is set defective with {defect}"))
+def set_dish_defective(simulator_factory: SimulatorFactory, defect):
     """A method to set defect on simulated Dish 1
 
     Args:
@@ -50,7 +51,10 @@ def set_dish_defective(simulator_factory: SimulatorFactory):
         SimulatorDeviceType.DISH_DEVICE
     )
     # Set dish 1 defective
-    pytest.dish_sim_1.SetDefective(json.dumps(ERROR_PROPAGATION_DEFECT))
+    if defect == "ERROR_PROPAGATION_DEFECT":
+        pytest.dish_sim_1.SetDefective(json.dumps(ERROR_PROPAGATION_DEFECT))
+    elif defect == "DISH_TIMEOUT_DEFECT":
+        pytest.dish_sim_1.SetDefective(json.dumps(DISH_TIMEOUT_DEFECT))
 
 
 @when("I issue the Configure command to the TMC subarray")
@@ -73,9 +77,16 @@ def invoke_configure(
     )
 
 
-@then("Exception is propagated to TMC subarray on longRunningCommandResult")
+@then(
+    parsers.parse(
+        "Exception {exception_message} is propagated to TMC subarray on "
+        + "longRunningCommandResult"
+    )
+)
 def check_timeout_error(
-    subarray_node: SubarrayNodeWrapper, event_recorder: EventRecorder
+    subarray_node: SubarrayNodeWrapper,
+    event_recorder: EventRecorder,
+    exception_message,
 ):
     """A method to check SubarrayNode.longRunningCommandResult attribute
     change for exception
@@ -90,10 +101,10 @@ def check_timeout_error(
         (pytest.command_result[1][0], Anything),
         lookahead=15,
     )
-    exception_message = (
-        "Exception occurred on the following devices: "
-        + f"{tmc_dish_leaf_node1}:"
-    )
+    # exception_message = (
+    #     "Exception occurred on the following devices: "
+    #     + f"{tmc_dish_leaf_node1}:"
+    # )
     assert (
         exception_message
         in json.loads(assertion_data["attribute_value"][1])[1]

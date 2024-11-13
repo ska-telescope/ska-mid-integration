@@ -10,6 +10,7 @@ from tests.resources.test_harness.utils.enums import (
     ResultCode,
     SimulatorDeviceType,
 )
+from tests.resources.test_support.enum import PointingState
 
 centralnode = "ska_mid/tm_central/central_node"
 tmc_subarraynode1 = "ska_mid/tm_subarray_node/1"
@@ -32,6 +33,10 @@ dish_master4 = "ska100/elt/master"
 sdp_queue_connector = "mid-sdp/queueconnector/01"
 COMMAND_COMPLETED = json.dumps([ResultCode.OK, "Command Completed"])
 
+DISH_ERROR_MESSAGE = (
+    "Exception occurred on the following devices: " + f"{tmc_dish_leaf_node1}:"
+)
+TIMOUT_ERROR = "Timeout has occurred, command failed"
 
 COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE = {
     "enabled": True,
@@ -182,6 +187,15 @@ ERROR_PROPAGATION_DEFECT = json.dumps(
         "fault_type": FaultType.LONG_RUNNING_EXCEPTION,
         "error_message": "Exception occurred, command failed.",
         "result": ResultCode.FAILED,
+    }
+)
+DISH_TIMEOUT_DEFECT = json.dumps(
+    {
+        "enabled": True,
+        "fault_type": FaultType.STUCK_IN_INTERMEDIATE_STATE,
+        "error_message": "Device stuck in intermediate state",
+        "result": ResultCode.FAILED,
+        "intermediate_state": PointingState.READY,
     }
 )
 RESET_DEFECT = json.dumps(
