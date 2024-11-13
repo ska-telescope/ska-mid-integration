@@ -487,7 +487,9 @@ def invoke_next_configure(
 #     event_tracer.clear_events()
 
 
-@then("with command AssignResources TMC subarray transitions to obsState IDLE")
+@given(
+    "with command AssignResources TMC subarray transitions to obsState IDLE"
+)
 @given("the subarray is in IDLE obsState")
 def given_subarray_in_idle(
     central_node_mid,
