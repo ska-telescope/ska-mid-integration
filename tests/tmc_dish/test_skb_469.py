@@ -376,7 +376,7 @@ def invoke_end_command(
 
 @when(
     parsers.parse(
-        "the next configure command is issued to the TMC"
+        "the command Configure is issued again to the TMC"
         + " subarray with {receiver_band2} and {scan_duration2} sec"
     )
 )
