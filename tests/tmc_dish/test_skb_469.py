@@ -407,9 +407,88 @@ def invoke_next_configure(
     )
 
 
-@given(
-    "with command AssignResources TMC subarray transitions to obsState IDLE"
-)
+# @given(
+#     "with command AssignResources TMC subarray transitions to obsState IDLE"
+# )
+# def given_subarray_in_idle(
+#     central_node_mid,
+#     subarray_node,
+#     event_tracer: TangoEventTracer,
+#     command_input_factory,
+# ):
+#     event_tracer.subscribe_event(
+#         subarray_node.subarray_devices["sdp_subarray"], "obsState"
+#     )
+#     event_tracer.subscribe_event(
+#         subarray_node.subarray_devices["csp_subarray"], "obsState"
+#     )
+#     event_tracer.subscribe_event(subarray_node.subarray_node, "obsState")
+#     event_tracer.subscribe_event(
+#         central_node_mid.central_node, "longRunningCommandResult"
+#     )
+
+#     assign_input_json = prepare_json_args_for_centralnode_commands(
+#         "multiple_assign1", command_input_factory
+#     )
+#     _, pytest.unique_id = central_node_mid.store_resources(assign_input_json)
+
+#     csp = subarray_node.subarray_devices.get("csp_subarray")
+#     sdp = subarray_node.subarray_devices.get("sdp_subarray")
+
+#     assert_that(event_tracer).described_as(
+#         'FAILED ASSUMPTION IN "GIVEN" STEP: '
+#         "'the subarray must be in the IDLE obsState'"
+#         "SDP Subarray device"
+#         f"({sdp.dev_name()}) "
+#         "is expected to be in IDLE obstate",
+#     ).within_timeout(60).has_change_event_occurred(
+#         subarray_node.subarray_devices["sdp_subarray"],
+#         "obsState",
+#         ObsState.IDLE,
+#     )
+
+#     assert_that(event_tracer).described_as(
+#         'FAILED ASSUMPTION IN "Given" STEP: '
+#         "'the subarray must be in the IDLE obsState'"
+#         "CSP Subarray device"
+#         f"({csp.dev_name()}) "
+#         "is expected to be in IDLE obstate",
+#     ).within_timeout(60).has_change_event_occurred(
+#         subarray_node.subarray_devices["csp_subarray"],
+#         "obsState",
+#         ObsState.IDLE,
+#     )
+
+#     assert_that(event_tracer).described_as(
+#         'FAILED ASSUMPTION IN "GIVEN" STEP: '
+#         "'the subarray must be in the IDLE obsState'"
+#         "TMC Subarray device"
+#         f"({subarray_node.subarray_node.dev_name()}) "
+#         "is expected to be in IDLE obstate",
+#     ).within_timeout(60).has_change_event_occurred(
+#         subarray_node.subarray_node,
+#         "obsState",
+#         ObsState.IDLE,
+#     )
+
+#     assert_that(event_tracer).described_as(
+#         'FAILED ASSUMPTION IN "GIVEN" STEP: '
+#         "'the subarray is in IDLE obsState'"
+#         "TMC Central Node device"
+#         f"({central_node_mid.central_node.dev_name()}) "
+#         "is expected have longRunningCommand as"
+#         '(unique_id,(ResultCode.OK,"Command Completed"))',
+#     ).within_timeout(60).has_change_event_occurred(
+#         central_node_mid.central_node,
+#         "longRunningCommandResult",
+#         (pytest.unique_id[0], COMMAND_COMPLETED),
+#     )
+
+#     event_tracer.clear_events()
+
+
+@then("with command AssignResources TMC subarray transitions to obsState IDLE")
+@given("the subarray is in IDLE obsState")
 def given_subarray_in_idle(
     central_node_mid,
     subarray_node,
@@ -430,7 +509,16 @@ def given_subarray_in_idle(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "multiple_assign1", command_input_factory
     )
-    _, pytest.unique_id = central_node_mid.store_resources(assign_input_json)
+    assign_res = json.loads(assign_input_json)
+    assign_res["dish"]["receptor_ids"] = [
+        "SKA001",
+        "SKA036",
+        "SKA063",
+        "SKA100",
+    ]
+    _, pytest.unique_id = central_node_mid.store_resources(
+        json.dumps(assign_res)
+    )
 
     csp = subarray_node.subarray_devices.get("csp_subarray")
     sdp = subarray_node.subarray_devices.get("sdp_subarray")

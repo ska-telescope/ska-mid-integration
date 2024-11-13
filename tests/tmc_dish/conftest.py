@@ -100,9 +100,6 @@ def turn_on_telescope(central_node_mid, event_recorder):
     )
 
 
-@given(
-    "with command AssignResources TMC subarray transitions to obsState IDLE"
-)
 @given("the subarray is in IDLE obsState")
 def given_subarray_in_idle(
     central_node_mid,
