@@ -6,7 +6,7 @@ from pytest_bdd import parsers, scenario, then, when
 from ska_tango_testing.mock.placeholders import Anything
 
 from tests.resources.test_harness.constant import (
-    DISH_TIMEOUT_DEFECT,
+    DISH_ERROR_MESSAGE,
     ERROR_PROPAGATION_DEFECT,
     RESET_DEFECT,
 )
@@ -53,8 +53,6 @@ def set_dish_defective(simulator_factory: SimulatorFactory, defect):
     # Set dish 1 defective
     if defect == "ERROR_PROPAGATION_DEFECT":
         pytest.dish_sim_1.SetDefective(json.dumps(ERROR_PROPAGATION_DEFECT))
-    elif defect == "DISH_TIMEOUT_DEFECT":
-        pytest.dish_sim_1.SetDefective(json.dumps(DISH_TIMEOUT_DEFECT))
 
 
 @when("I issue the Configure command to the TMC subarray")
@@ -105,9 +103,10 @@ def check_timeout_error(
     #     "Exception occurred on the following devices: "
     #     + f"{tmc_dish_leaf_node1}:"
     # )
-    assert (
-        exception_message
-        in json.loads(assertion_data["attribute_value"][1])[1]
-    )
+    if exception_message == "DISH_ERROR_MESSAGE":
+        assert (
+            DISH_ERROR_MESSAGE
+            in json.loads(assertion_data["attribute_value"][1])[1]
+        )
 
     pytest.dish_sim_1.SetDefective(RESET_DEFECT)

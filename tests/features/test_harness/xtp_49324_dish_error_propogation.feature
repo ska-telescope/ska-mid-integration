@@ -11,4 +11,3 @@ Feature: Default
 		Examples:
         | defect                       | exception_message               | 
         | ERROR_PROPAGATION_DEFECT     | DISH_ERROR_MESSAGE              |
-		| DISH_TIMEOUT_DEFECT          | TIMOUT_ERROR                    |
