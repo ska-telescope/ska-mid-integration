@@ -159,7 +159,7 @@ deploy-tmc-with-csp:
     PORT: "10000"
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-csp'
     CSP_SIMULATION_ENABLED: 'false'
-    SDP_DEPLOY: 'false'  
+    SDP_DEPLOY: false  
   environment:
     name: integration-mid-csp-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-csp
@@ -173,7 +173,7 @@ stop-k8s-test-tmc-with-csp:
   variables:
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-csp'
     CSP_SIMULATION_ENABLED: 'false'
-    SDP_DEPLOY: 'false'  
+    SDP_DEPLOY: false  
   environment:
     name: integration-mid-csp-$CI_PROJECT_NAME
     action: stop
