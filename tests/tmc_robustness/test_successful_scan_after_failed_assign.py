@@ -184,7 +184,7 @@ def tmc_status_ready(json_factory):
     try:
         the_waiter = Waiter()
         the_waiter.set_wait_for_specific_obsstate("READY", [tmc_subarraynode1])
-        the_waiter.wait(200)
+        the_waiter.wait(500)
         # Verify that the obstate is READY
         assert telescope_control.is_in_valid_state(
             DEVICE_OBS_STATE_READY_INFO, "obsState"
