@@ -22,7 +22,7 @@ ska-csp-lmc-mid:
   enabled : false
 
 ska-taranta:
-  enabled : false 
+  enabled : true 
   
   
 ska-ser-skuid:
