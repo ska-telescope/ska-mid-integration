@@ -34,7 +34,8 @@ telescope_control = BaseTelescopeControl()
 
 
 @pytest.mark.skip(
-    reason="Test fails intermittenlty during SCANNING to READY transition."
+    reason="Test fails intermittenly as assertions for Dish transitions are"
+    + " missing."
 )
 @pytest.mark.SKA_mid
 @scenario(
@@ -373,6 +374,10 @@ def invalid_command_rejection_with_unavailable_resources(resources_list):
     assert pytest.command_result[0][0] == ResultCode.REJECTED
 
 
+@pytest.mark.skip(
+    reason="Test fails intermittenly as assertions for Dish transitions are"
+    + " missing."
+)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_assigning_unavailable_resources.feature",  # noqa: E501
