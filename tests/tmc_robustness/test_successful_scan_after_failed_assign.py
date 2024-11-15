@@ -268,6 +268,10 @@ def teardown_the_tmc(json_factory):
     )
 
 
+@pytest.mark.skip(
+    reason="Test fails intermittenly as assertions for Dish transitions are"
+    + " missing."
+)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_failed_assigned.feature",

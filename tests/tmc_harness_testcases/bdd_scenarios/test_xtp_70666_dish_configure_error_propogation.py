@@ -18,10 +18,9 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 
-@pytest.mark.sah1623
 @pytest.mark.SKA_mid
 @scenario(
-    "../features/test_harness/xtp_49324_dish_" + "error_propogation.feature",
+    "../features/test_harness/xtp_70666_dish_" + "error_propogation.feature",
     "Verify error propogation with defective dish",
 )
 def test_dish_configure_error_propagation():
