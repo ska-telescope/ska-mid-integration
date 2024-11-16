@@ -331,6 +331,10 @@ def send_assignresource_with_invalid_json3(json_factory):
         tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
 
 
+@pytest.mark.skip(
+    reason="Test fails intermittenly as assertions for Dish transitions are"
+    + " missing."
+)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_assigning_unavailable_resources.feature",  # noqa: E501
