@@ -113,7 +113,7 @@ dishleafnode:
   image:
     registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-dishleafnode
     image: ska-tmc-dishleafnode
-    tag: 0.18.1-dev.cf54b956d
+    tag: 0.18.1-dev.c8559649a
     pullPolicy: IfNotPresent
 
 resources:
@@ -187,6 +187,7 @@ deviceServers:
     DelayModelTimeInAdvance: 30
     CommandTimeOut: 50
     SleepTime: 1
+  
   dishleafnode:
     enabled: true
     file: "data/dishleafnode.yaml"
