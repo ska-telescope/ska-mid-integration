@@ -27,7 +27,7 @@
     "midcbf": {
         "correlation": {
             "processing_regions": [{
-                "fsp_ids": [1,2],
+                "fsp_ids": [1],
                 "receptors": ["SKA001", "SKA063"],
                 "start_freq" : 950000000,
                 "channel_width" : 13440,
