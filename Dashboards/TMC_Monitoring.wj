@@ -4,7 +4,7 @@
   "version": "2.6.0",
   "user": "user1",
   "insertTime": "2024-11-18T13:15:57.082Z",
-  "updateTime": "2024-11-18T13:58:01.923Z",
+  "updateTime": "2024-11-18T14:13:24.185Z",
   "group": null,
   "groupWriteAccess": false,
   "lastUpdatedBy": "user1",
@@ -161,7 +161,7 @@
       "valid": 1,
       "id": "8",
       "x": 1,
-      "y": 10,
+      "y": 47,
       "canvas": "0",
       "width": 19,
       "height": 4,
@@ -184,10 +184,10 @@
       "valid": 1,
       "id": "9",
       "x": 20,
-      "y": 10,
+      "y": 47,
       "canvas": "0",
       "width": 16,
-      "height": 4,
+      "height": 9,
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
@@ -217,7 +217,7 @@
     {
       "valid": 1,
       "id": "10",
-      "x": 37,
+      "x": 1,
       "y": 10,
       "canvas": "0",
       "width": 19,
@@ -240,7 +240,7 @@
     {
       "valid": 1,
       "id": "11",
-      "x": 56,
+      "x": 20,
       "y": 10,
       "canvas": "0",
       "width": 14,
@@ -274,10 +274,10 @@
     {
       "valid": 1,
       "id": "12",
-      "x": 108,
+      "x": 71,
       "y": 10,
       "canvas": "0",
-      "width": 33,
+      "width": 21,
       "height": 4,
       "type": "LABEL",
       "inputs": {
@@ -297,10 +297,10 @@
     {
       "valid": 1,
       "id": "13",
-      "x": 141,
+      "x": 92,
       "y": 10,
       "canvas": "0",
-      "width": 34,
+      "width": 15,
       "height": 4,
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
@@ -2872,7 +2872,7 @@
     {
       "valid": 1,
       "id": "128",
-      "x": 71,
+      "x": 37,
       "y": 10,
       "canvas": "0",
       "width": 20,
@@ -2895,10 +2895,10 @@
     {
       "valid": 1,
       "id": "129",
-      "x": 89,
+      "x": 57,
       "y": 10,
       "canvas": "0",
-      "width": 18,
+      "width": 13,
       "height": 4,
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
@@ -3161,7 +3161,7 @@
       "y": 41,
       "canvas": "0",
       "width": 35,
-      "height": 8,
+      "height": 6,
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
