@@ -27,7 +27,7 @@
     "midcbf": {
         "correlation": {
             "processing_regions": [{
-                "fsp_ids": [1],
+                "fsp_ids": [1,2],
                 "start_freq" : 950000000,
                 "channel_width" : 13440,
                 "channel_count" : 14000,
