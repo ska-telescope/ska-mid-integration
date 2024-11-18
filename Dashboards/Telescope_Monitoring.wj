@@ -4,7 +4,7 @@
   "version": "2.6.0",
   "user": "user1",
   "insertTime": "2024-11-18T09:09:04.883Z",
-  "updateTime": "2024-11-18T09:47:04.790Z",
+  "updateTime": "2024-11-18T11:39:21.989Z",
   "group": null,
   "groupWriteAccess": false,
   "lastUpdatedBy": "user1",
@@ -43,7 +43,7 @@
       "type": "LABEL",
       "inputs": {
         "text": "TMC",
-        "textColor": "#000000",
+        "textColor": "#ffffff",
         "backgroundColor": "#070068",
         "borderWidth": 0,
         "borderColor": "#000000",
@@ -214,7 +214,7 @@
       "type": "LABEL",
       "inputs": {
         "text": "DISH",
-        "textColor": "#ffff02",
+        "textColor": "#ffffff",
         "backgroundColor": "#070068",
         "borderWidth": 0,
         "borderColor": "#000000",
@@ -329,7 +329,7 @@
       "type": "LABEL",
       "inputs": {
         "text": "CSP",
-        "textColor": "#000000",
+        "textColor": "#ffffff",
         "backgroundColor": "#070068",
         "borderWidth": 0,
         "borderColor": "#000000",
@@ -352,8 +352,8 @@
       "type": "LABEL",
       "inputs": {
         "text": "SDP",
-        "textColor": "#000000",
-        "backgroundColor": "#070068",
+        "textColor": "#ffffff",
+        "backgroundColor": "#04006b",
         "borderWidth": 0,
         "borderColor": "#000000",
         "font": "Helvetica",
@@ -536,7 +536,7 @@
       "type": "LABEL",
       "inputs": {
         "text": "Versions",
-        "textColor": "#000000",
+        "textColor": "#ffffff",
         "backgroundColor": "#070068",
         "borderWidth": 0,
         "borderColor": "#000000",
