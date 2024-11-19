@@ -309,6 +309,7 @@ def check_automatic_endscan_with_scan_duration2(
     )
 
 
+@then("with command End TMC subarray transitions to obsState IDLE")
 @given("with command End TMC subarray transitions to obsState IDLE")
 def invoke_end_command(
     subarray_node, event_tracer: TangoEventTracer, central_node_mid
