@@ -33,7 +33,7 @@ global:
   # List the dishes, if set, then this list will be applied to instances of:
   # deviceServers.dishmaster, deviceServers.dishleafnode
   dish_devices: ["dishmaster", "dishleafnode"]
-  dishes: ["001"]
+  dishes: ["001", "036", "063", "100"]
 
   namespace_dish:
     dish_names: []
