@@ -1,7 +1,7 @@
 name: "dishleafnode-test"
 function: telescope-monitoring
 domain: general-monitoring
-instances: ["001", "036", "063", "100"]
+instances: ["001"]
 entrypoints:
   - name: "ska_tmc_dishleafnode.dish_leaf_node.DishLeafNode"
 server:
