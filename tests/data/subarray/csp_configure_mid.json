@@ -1,86 +1,71 @@
 {
-    "interface": "https://schema.skao.int/ska-csp-configurescan/3.0",
-    "common": {
+  "interface": "https://schema.skao.int/ska-csp-configurescan/4.1",
+  "common": {
       "config_id": "sbi-mvp01-20200325-00001-science_A",
       "frequency_band": "1",
-      "subarray_id": 1
-    },
-    "cbf": {
-      "fsp": [
-        {
-          "fsp_id": 1,
-          "function_mode": "CORR",
-          "frequency_slice_id": 1,
-          "integration_factor": 1,
-          "channel_averaging_map": [
-            [
-              0,
-              2
-            ],
-            [
-              744,
-              0
-            ]
-          ],
-          "output_link_map": [
-            [
-              200,
-              1
-            ]
-          ],
-          "channel_offset": 0,
-          "output_host": [
-            [
-              0,
-              "192.168.0.1"
-            ]
-          ],
-          "output_port": [
-            [
-              0,
-              9000
-            ]
-          ]
-        },
-        {
-          "fsp_id": 2,
-          "function_mode": "CORR",
-          "frequency_slice_id": 2,
-          "integration_factor": 1,
-          "channel_averaging_map": [
-            [
-              0,
-              2
-            ],
-            [
-              744,
-              0
-            ]
-          ],
-          "output_link_map": [
-            [
-              200,
-              1
-            ]
-          ],
-          "channel_offset": 740,
-          "output_host": [
-            [
-              0,
-              "192.168.0.1"
-            ]
-          ],
-          "output_port": [
-            [
-              0,
-              9000
-            ]
-          ]
-        }
-      ],
-      "vlbi": {
-        
-      },
-      "delay_model_subscription_point": "ska_mid/tm_leaf_node/csp_subarray01/delayModel"
-    }
+      "subarray_id": 1,
+      "eb_id": "eb-m001-20230712-56789"
+  },
+  "pst": {},
+  "transaction_id": "txn-....-00001",
+  "midcbf": {
+      "vlbi": {},
+      "delay_model_subscription_point": "ska_mid/tm_leaf_node/csp_subarray_01/delayModel",
+      "correlation": {
+          "processing_regions": [{
+              "fsp_ids": [1],
+              "start_freq": 350000000,
+              "channel_width": 13440,
+              "channel_count": 740,
+              "sdp_start_channel_id": 0,
+              "integration_factor": 1,
+              "output_link_map": [
+                  [0, 1]
+              ],
+              "output_port": [
+                  [0, 9000],
+                  [20, 9001],
+                  [40, 9002],
+                  [60, 9003],
+                  [80, 9004],
+                  [100, 9005],
+                  [120, 9006],
+                  [140, 9007],
+                  [160, 9008],
+                  [180, 9009],
+                  [200, 9010],
+                  [220, 9011],
+                  [240, 9012],
+                  [260, 9013],
+                  [280, 9014],
+                  [300, 9015],
+                  [320, 9016],
+                  [340, 9017],
+                  [360, 9018],
+                  [380, 9019],
+                  [400, 9000],
+                  [420, 9001],
+                  [440, 9002],
+                  [460, 9003],
+                  [480, 9004],
+                  [500, 9005],
+                  [520, 9006],
+                  [540, 9007],
+                  [560, 9008],
+                  [580, 9009],
+                  [600, 9010],
+                  [620, 9011],
+                  [640, 9012],
+                  [660, 9013],
+                  [680, 9014],
+                  [700, 9015],
+                  [720, 9016]
+              ],
+              "output_host": [
+                  [0, "192.168.0.1"],
+                  [400, "192.168.0.2"]
+              ]
+          }]
+      }
   }
+}

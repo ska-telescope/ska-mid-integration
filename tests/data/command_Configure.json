@@ -1,103 +1,49 @@
 {
-  "interface": "https://schema.skao.int/ska-tmc-configure/2.0",
+  "interface": "https://schema.skao.int/ska-tmc-configure/4.1",
   "transaction_id": "txn-....-00001",
   "pointing": {
-    "target": {
-      "reference_frame": "ICRS",
-      "target_name": "Polaris Australis",
-      "ra": "21:08:47.92",
-      "dec": "-88:57:22.9"
-    }
+      "target": {
+          "reference_frame": "ICRS",
+          "target_name": "Polaris Australis",
+          "ra": "21:08:47.92",
+          "dec": "-88:57:22.9",
+          "ca_offset_arcsec": 0.0,
+          "ie_offset_arcsec": 0.0
+      },
+      "correction": "UPDATE"
   },
   "dish": {
-    "receiver_band": "1"
+      "receiver_band": "2"
   },
   "csp": {
-    "interface": "https://schema.skao.int/ska-csp-configure/2.0",
-    "subarray": {
-      "subarray_name": "science period 23"
-    },
+    "interface": "https://schema.skao.int/ska-csp-configurescan/4.1",
     "common": {
-      "config_id": "sbi-mvp01-20200325-00001-science_A",
-      "frequency_band": "1",
-      "subarray_id": 1
+        "config_id": "sbi-mvp01-20200325-00002-science_A",
+        "frequency_band": "2",
+        "eb_id": "eb-m001-20230712-56789"
     },
-    "cbf": {
-      "fsp": [
-        {
-          "fsp_id": 1,
-          "function_mode": "CORR",
-          "frequency_slice_id": 1,
-          "integration_factor": 1,
-          "zoom_factor": 0,
-          "channel_averaging_map": [
-            [
-              0,
-              2
-            ],
-            [
-              744,
-              0
-            ]
-          ],
-          "channel_offset": 0,
-          "output_link_map": [
-            [
-              0,
-              0
-            ],
-            [
-              200,
-              1
-            ]
-          ]
-        },
-        {
-          "fsp_id": 2,
-          "function_mode": "CORR",
-          "frequency_slice_id": 2,
-          "integration_factor": 1,
-          "zoom_factor": 1,
-          "channel_averaging_map": [
-            [
-              0,
-              2
-            ],
-            [
-              744,
-              0
-            ]
-          ],
-          "channel_offset": 744,
-          "output_link_map": [
-            [
-              0,
-              4
-            ],
-            [
-              200,
-              5
-            ]
-          ],
-          "zoom_window_tuning": 650000
+    "pst": {},
+    "transaction_id": "txn-....-00001",
+    "midcbf": {
+        "correlation": {
+            "processing_regions": [{
+                "fsp_ids": [1],
+                "receptors": ["SKA001", "SKA063"],
+                "start_freq" : 950000000,
+                "channel_width" : 13440,
+                "channel_count" : 20,
+                "sdp_start_channel_id": 0,
+                "integration_factor": 1
+            }]
         }
-      ],
-      "vlbi": {
-
-      }
-    },
-    "pss": {
-
-    },
-    "pst": {
-
     }
-  },
+},
   "sdp": {
-    "interface": "https://schema.skao.int/ska-sdp-configure/0.4",
-    "scan_type": "target:a"
+      "interface": "https://schema.skao.int/ska-sdp-configure/0.4",
+      "scan_type": "target:a"
   },
   "tmc": {
-    "scan_duration": 10.0
+      "scan_duration": 10.0,
+      "partial_configuration": false
   }
 }

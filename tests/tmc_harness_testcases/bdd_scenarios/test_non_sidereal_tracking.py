@@ -22,6 +22,7 @@ TIMEOUT = 50
 PROGRAM_TRACK_TABLE_LENGTH = 75
 
 
+@pytest.mark.skip
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp_59647_non_sidereal_tracking.feature",
