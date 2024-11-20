@@ -13,10 +13,15 @@ Added
 * Resolved SKB-509
 * Updated TMC to support TMC-CSP Configure interface v.3.0
 
-[0.22.8]
+[0.22.9-rc.1]
+************
+* Added test to verify SKB-512
+* Updated Subarray Node to 0.25.1 to fix a bug in usage of is_operation_aborted flag
+
+[0.22.8-rc.1]
 *************
 * Updated ska-tmc-centralnode v0.16.8 to resolve skb-495
-* Updated ska-tmc-cspleafnode v0.21.2 to resolve skb-495 and skb-530 
+* Updated ska-tmc-cspleafnode v0.21.2 to resolve skb-495 and skb-530
 
 [0.22.7-rc.1]
 *************
@@ -31,7 +36,7 @@ Added
 [0.22.5]
 **********
 * Updated dish leaf node version 0.17.3 to resolve SKB-502
-* Updated central node to 0.16.4 to resolve SKB-434   
+* Updated central node to 0.16.4 to resolve SKB-434
 
 [0.22.4]
 ************
