@@ -2,7 +2,7 @@ global:
   taranta_dashboard_enabled: false
   taranta_auth_enabled: false
 
-tmc-mid:
+ska-tmc-mid:
   enabled: true
   deviceServers:
     mocks:
@@ -22,7 +22,7 @@ ska-csp-lmc-mid:
   enabled : false
 
 ska-taranta:
-  enabled : false 
+  enabled : true 
   
   
 ska-ser-skuid:

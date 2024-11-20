@@ -18,8 +18,8 @@ CSP_SIMULATION_ENABLED ?= true
 DISH_SIMULATION_ENABLED ?= true
 CI_PROJECT_DIR ?= .
 
-MINIKUBE ?= true ## Minikube or not
-EXPOSE_All_DS ?= true ## Expose All Tango Services to the external network (enable Loadbalancer service)
+MINIKUBE ?= false ## Minikube or not
+EXPOSE_All_DS ?= false ## Expose All Tango Services to the external network (enable Loadbalancer service)
 SKA_TANGO_OPERATOR ?= true
 ODA_URI ?= http://ska-db-oda-rest-$(HELM_RELEASE).$(KUBE_NAMESPACE).svc.$(CLUSTER_DOMAIN):5000/$(KUBE_NAMESPACE)/api/v1
 
@@ -84,28 +84,28 @@ K8S_EXTRA_PARAMS ?=
 
 #dish variables 
 DISH_INDICES ?= "001 036 063 100"
-DISH_NAMESPACES ?= "integration-ska-mid-tmc-dish01 integration-ska-mid-tmc-dish36 integration-ska-mid-tmc-dish36 integration-ska-mid-tmc-dish100"
-DISH_TANGO_HOST ?= databaseds
+DISH_NAMESPACES ?= "integration-ska-mid-tmc-dish01 integration-ska-mid-tmc-dish36 integration-ska-mid-tmc-dish63 integration-ska-mid-tmc-dish100"
+DISH_TANGO_HOST ?=  $(TANGO_HOST_NAME)
 DISH_NAMESPACE_1 ?= ${KUBE_NAMESPACE}
 DISH_NAMESPACE_2 ?= ${KUBE_NAMESPACE}
 DISH_NAMESPACE_3 ?= ${KUBE_NAMESPACE}
 DISH_NAMESPACE_4 ?= ${KUBE_NAMESPACE}
-DISH_NAME_1 ?= mid-dish/dish-manager/SKA001
-DISH_NAME_36 ?= mid-dish/dish-manager/SKA036
-DISH_NAME_63 ?= mid-dish/dish-manager/SKA063
-DISH_NAME_100 ?= mid-dish/dish-manager/SKA100
+DISH_NAME_1 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_1).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA001
+DISH_NAME_36 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_2).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA036
+DISH_NAME_63 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_3).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA063
+DISH_NAME_100 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_4).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA100
 #tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_4).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA100
 SDP_DEPLOY ?= true
 
 ifeq ($(SDP_SIMULATION_ENABLED),false)
 K8S_EXTRA_PARAMS=	-f charts/ska-mid-integration/tmc_pairwise/tmc_sdp_values.yaml \
-	--set tmc-mid.deviceServers.mocks.sdp=$(SDP_SIMULATION_ENABLED)\
+	--set ska-tmc-mid.deviceServers.mocks.sdp=$(SDP_SIMULATION_ENABLED)\
 	--set global.sdp_master="$(SDP_MASTER)"\
 	--set global.sdp_subarray_prefix="$(SDP_SUBARRAY_PREFIX)"\
 	--set ska-sdp.enabled=true\
 	--set ska-sdp.lmc.loadBalancer=true\
 	--set global.operator=true \
-	--set tmc-mid.subarray_count=1\
+	--set ska-tmc-mid.subarray_count=1\
 	--set ska-sdp.lmc.nsubarray=1
 endif
 

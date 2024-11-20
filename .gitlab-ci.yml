@@ -132,6 +132,9 @@ deploy-tmc-with-sdp:
   environment:
     name: integration-mid-sdp-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-sdp
+  rules:
+  - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+
   
 stop-k8s-test-tmc-with-sdp:
   extends:
@@ -145,6 +148,9 @@ stop-k8s-test-tmc-with-sdp:
   needs:
     - deploy-tmc-with-sdp
   when: manual
+  rules:
+  - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+
  
 deploy-tmc-with-csp:
   extends: deploy-mid-integration
@@ -157,6 +163,9 @@ deploy-tmc-with-csp:
   environment:
     name: integration-mid-csp-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-csp
+  rules:
+  - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+
 
 stop-k8s-test-tmc-with-csp:
   extends:
@@ -171,15 +180,18 @@ stop-k8s-test-tmc-with-csp:
   needs:
     - deploy-tmc-with-csp
   when: manual
+  rules:
+  - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+
 
 deploy-tmc-with-dish:
   extends: deploy-mid-integration
   variables:
+    DISH_TANGO_HOST: "databaseds"
     DISH_INDICES: "001 036 063 100"
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-dish'
-    DISH_HELM_RELEASE: "4.1.0"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
-    DISH_SIMULATION_ENABLED: false
+    DISH_SIMULATION_ENABLED: 'false'
     DISH_NAMESPACE_1: "integration-ska-mid-tmc-dish001"
     DISH_NAMESPACE_2: "integration-ska-mid-tmc-dish036"
     DISH_NAMESPACE_3: "integration-ska-mid-tmc-dish063"
@@ -192,6 +204,9 @@ deploy-tmc-with-dish:
     name: integration-mid-dish-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-dish
   allow_failure: true
+  rules:
+  - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+
 
 stop-k8s-test-tmc-with-dish:
   extends: 
@@ -216,6 +231,9 @@ stop-k8s-test-tmc-with-dish:
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
     - make k8s-delete-namespace 
   when: manual
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+
 
 deploy-mid-integration:
   extends: deploy-integration
@@ -223,9 +241,9 @@ deploy-mid-integration:
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   variables:
-    KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
+    KUBE_NAMESPACE: "integration-ska-mid"
   environment:
-    name: integration-ska-mid-test
+    name: integration-ska-mid
     on_stop: stop-mid-integration
 
 info-mid-integration:
@@ -236,9 +254,9 @@ info-mid-integration:
   needs:
     - deploy-mid-integration
   variables:
-    KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
+    KUBE_NAMESPACE: "integration-ska-mid"
   environment:
-    name: integration-ska-mid-test
+    name: integration-ska-mid
 
 stop-mid-integration:
   extends: stop-integration
@@ -248,9 +266,9 @@ stop-mid-integration:
   needs:
     - deploy-mid-integration
   variables:
-    KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
+    KUBE_NAMESPACE: "integration-ska-mid"
   environment:
-    name: integration-ska-mid-test
+    name: integration-ska-mid
     action: stop
 
 redeploy-mid-integration:
@@ -259,8 +277,8 @@ redeploy-mid-integration:
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   variables:
-    KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
+    KUBE_NAMESPACE: "integration-ska-mid"
   environment:
-    name: integration-ska-mid-test
+    name: integration-ska-mid
 
 
