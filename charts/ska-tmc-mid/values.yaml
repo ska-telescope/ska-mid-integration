@@ -111,9 +111,9 @@ cspsubarrayleafnode:
 
 dishleafnode:
   image:
-    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-dishleafnode
+    registry: artefact.skao.int
     image: ska-tmc-dishleafnode
-    tag: 0.18.1-dev.c86bebc53
+    tag: 0.19.1
     pullPolicy: IfNotPresent
 
 resources:
@@ -199,6 +199,8 @@ deviceServers:
         cpu: 2000m
         memory: 280Mi
     CommandTimeOut: 90
+    TrackTableEntries: 5
+    PointingCalculationPeriod: 500
     TrackTableInAdvance: 7
     SleepTime: 1
   mocks:
