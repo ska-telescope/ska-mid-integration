@@ -243,7 +243,7 @@ deploy-mid-integration:
   variables:
     KUBE_NAMESPACE: "integration-ska-mid"
   environment:
-    name: integration-ska-mid"
+    name: integration-ska-mid
     on_stop: stop-mid-integration
 
 info-mid-integration:
@@ -256,7 +256,7 @@ info-mid-integration:
   variables:
     KUBE_NAMESPACE: "integration-ska-mid"
   environment:
-    name: integration-ska-mid"
+    name: integration-ska-mid
 
 stop-mid-integration:
   extends: stop-integration
@@ -268,7 +268,7 @@ stop-mid-integration:
   variables:
     KUBE_NAMESPACE: "integration-ska-mid"
   environment:
-    name: integration-ska-mid"
+    name: integration-ska-mid
     action: stop
 
 redeploy-mid-integration:
@@ -279,6 +279,6 @@ redeploy-mid-integration:
   variables:
     KUBE_NAMESPACE: "integration-ska-mid"
   environment:
-    name: integration-ska-mid"
+    name: integration-ska-mid
 
 
