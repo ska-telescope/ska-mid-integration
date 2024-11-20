@@ -1,6 +1,6 @@
 {
     "zzzzzzz_Z": {
-      "output_host": [
+      "host": [
         [
           0,
           "192.168.0.1"
@@ -10,7 +10,7 @@
           "192.168.0.1"
         ]
       ],
-      "output_port": [
+      "port": [
         [
           0,
           9000
@@ -24,13 +24,13 @@
     "target:a": {
       "vis0": {
         "function": "visibilities",
-        "output_host": [
+        "host": [
           [
             0,
             "proc-pb-test-20220916-00000-test-receive-0.receive.test-sdp"
           ]
         ],
-        "output_port": [
+        "port": [
           [
             0,
             9000
