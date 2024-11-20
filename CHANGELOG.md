@@ -3,6 +3,11 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+[0.23.0]
+************
+* Added test to verify SKB-512
+* Updated Subarray Node to 0.25.1 to fix a bug in usage of is_operation_aborted flag
+
 [0.22.8]
 ********
 * Resolved SKB-467, SKB-495, SKB-511 and SKB-530
@@ -12,11 +17,6 @@ Added
 ********
 * Resolved SKB-509
 * Updated TMC to support TMC-CSP Configure interface v.3.0
-
-[0.22.9-rc.1]
-************
-* Added test to verify SKB-512
-* Updated Subarray Node to 0.25.1 to fix a bug in usage of is_operation_aborted flag
 
 [0.22.8-rc.1]
 *************

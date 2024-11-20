@@ -1,34 +1,17 @@
-release=0.22.8
-tag=0.22.8
+release=0.23.0
+tag=0.23.0
 tag_description=
 **Charts:**
-**1. ska-tmc-integration 0.22.8-rc.1 - 0.22.8**
+**1. ska-tmc-integration 0.22.8-rc.1 - 0.23.0**
 
-    **1.1 ska-tmc-mid - 0.22.8-rc.1 - 0.22.8:
-        a. Resolved SKB-467, SKB-495, SKB-511 and SKB-530
-        b. Track command will not be invoked from Dish leaf node if pointingState of Dish is TRACK/SLEW
-
-release_notes=
-**Charts:**
-**1. ska-tmc-integration 0.22.8-rc.1 - 0.22.8:*
-
- **1.1 ska-tmc-mid - 0.22.8-rc.1 - 0.22.8:
-        a. Resolved SKB-467, SKB-495, SKB-511 and SKB-530
-        b. Track command will not be invoked from Dish leaf node if pointingState of Dish is TRACK/SLEW
-release=0.22.9-rc.1
-tag=0.22.9-rc.1
-tag_description=
-**Charts:**
-**1. ska-tmc-integration 0.22.8-rc.1 - 0.22.9-rc.1**
-
-    **1.1 ska-tmc-mid - 0.22.8-rc.1 - 0.22.9-rc.1:
+    **1.1 ska-tmc-mid - 0.22.8-rc.1 - 0.23.0:
         a. Updated Subarray Node to v0.25.1 to resolve a bug in is_operation_aborted flag
         b. Added test case for SKB-512
 
 release_notes=
 **Charts:**
-**1. ska-tmc-integration 0.22.8-rc.1 - 0.22.9-rc.1:*
+**1. ska-tmc-integration 0.22.8-rc.1 - 0.23.0:*
 
- **1.1 ska-tmc-mid - 0.22.8-rc.1 - 0.22.9-rc.1:
+ **1.1 ska-tmc-mid - 0.22.8-rc.1 - 0.23.0:
         a. Updated Subarray Node to v0.25.1 to resolve a bug in is_operation_aborted flag
         b. Added test case for SKB-512
