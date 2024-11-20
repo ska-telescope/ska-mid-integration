@@ -133,7 +133,7 @@ deploy-tmc-with-sdp:
     name: integration-mid-sdp-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-sdp
   rules:
-  - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+  - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
 
   
 stop-k8s-test-tmc-with-sdp:
@@ -149,7 +149,7 @@ stop-k8s-test-tmc-with-sdp:
     - deploy-tmc-with-sdp
   when: manual
   rules:
-  - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+  - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
 
  
 deploy-tmc-with-csp:
@@ -164,7 +164,7 @@ deploy-tmc-with-csp:
     name: integration-mid-csp-$CI_PROJECT_NAME
     on_stop: stop-k8s-test-tmc-with-csp
   rules:
-  - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+  - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
 
 
 stop-k8s-test-tmc-with-csp:
@@ -181,7 +181,7 @@ stop-k8s-test-tmc-with-csp:
     - deploy-tmc-with-csp
   when: manual
   rules:
-  - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+  - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
 
 
 deploy-tmc-with-dish:
@@ -205,7 +205,7 @@ deploy-tmc-with-dish:
     on_stop: stop-k8s-test-tmc-with-dish
   allow_failure: true
   rules:
-  - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+  - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
 
 
 stop-k8s-test-tmc-with-dish:
@@ -232,14 +232,14 @@ stop-k8s-test-tmc-with-dish:
     - make k8s-delete-namespace 
   when: manual
   rules:
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
 
 
 deploy-mid-integration:
   extends: deploy-integration
   when: manual
   rules:
-    - if: $CI_COMMIT_REF_NAME != $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   variables:
     KUBE_NAMESPACE: "integration-ska-mid-test" #changing namespace
   environment:
