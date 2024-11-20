@@ -190,7 +190,6 @@ deploy-tmc-with-dish:
     DISH_TANGO_HOST: "databaseds"
     DISH_INDICES: "001 036 063 100"
     KUBE_NAMESPACE: 'integration-ska-mid-tmc-dish'
-    DISH_HELM_RELEASE: "4.1.0"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
     DISH_SIMULATION_ENABLED: 'false'
     DISH_NAMESPACE_1: "integration-ska-mid-tmc-dish001"
