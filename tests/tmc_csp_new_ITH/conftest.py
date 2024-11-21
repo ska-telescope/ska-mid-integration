@@ -6,7 +6,6 @@ from dataclasses import dataclass
 from typing import Any
 
 import pytest
-import requests
 from pytest_bdd import given, parsers
 from ska_control_model import ObsState
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
