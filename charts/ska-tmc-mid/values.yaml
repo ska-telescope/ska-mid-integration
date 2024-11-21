@@ -199,10 +199,21 @@ deviceServers:
         cpu: 2000m
         memory: 280Mi
     CommandTimeOut: 90
+    SleepTime: 1
+
+  dishpointingdevice:
+    enabled: true
+    instances: ["001", "036", "063", "100"]
+    file: "data/dishpointingdevice.yaml"
     TrackTableEntries: 5
     PointingCalculationPeriod: 500
     TrackTableInAdvance: 7
-    SleepTime: 1
+    Elevation: 30.0
+    Azimuth: 0.0
+    ElevationMaxLimit: 90.0
+    ElevationMinLimit: 15.0
+
+
   mocks:
     enabled: false
     file: "data/mocks.yaml"
