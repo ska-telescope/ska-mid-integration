@@ -432,11 +432,9 @@ class SubarrayNodeWrapper(object):
         self._clear_command_call_and_transition_data(clear_transition=True)
 
         if self.obs_state in (
-            "RESOURCING",
-            "CONFIGURING",
-            "SCANNING",
-            "READY",
-            "IDLE",
+            ObsState.RESOURCING,
+            ObsState.CONFIGURING,
+            ObsState.SCANNING,
         ):
             """Invoke Abort and Restart"""
             LOGGER.info("Invoking Abort on Subarray")
@@ -446,19 +444,39 @@ class SubarrayNodeWrapper(object):
             the_waiter = Waiter()
             the_waiter.wait(5)
 
-            _, unique_id = self.abort_subarray()
+            _, unique = self.abort_subarray()
             assert self.event_recorder.has_change_event_occurred(
                 self.subarray_node,
                 "longRunningCommandResult",
-                (unique_id[0], ABORT_COMPLETED),
+                (unique[0], ABORT_COMPLETED),
             )
-            _, unique_id = self.restart_subarray()
+            _, unique_restart = self.restart_subarray()
             assert self.event_recorder.has_change_event_occurred(
                 self.subarray_node,
                 "longRunningCommandResult",
-                (unique_id[0], COMMAND_COMPLETED),
+                (unique_restart[0], COMMAND_COMPLETED),
             )
             self.check_if_dishes_are_ready(the_waiter)
+        elif self.obs_state == ObsState.READY:
+            _, unique_end = self.end_observation()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique_end[0], COMMAND_COMPLETED),
+            )
+            _, unique_release = self.release_resources_subarray()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique_release[0], COMMAND_COMPLETED),
+            )
+        elif self.obs_state == ObsState.IDLE:
+            _, unique_release_resource = self.release_resources_subarray()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique_release_resource[0], COMMAND_COMPLETED),
+            )
         elif self.obs_state == "ABORTED":
             """Invoke Restart"""
             LOGGER.info("Invoking Restart on Subarray")
