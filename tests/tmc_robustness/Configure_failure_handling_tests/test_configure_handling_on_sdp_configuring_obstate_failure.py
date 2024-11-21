@@ -6,7 +6,10 @@ from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
 from tango import DevState
 
-from tests.resources.test_harness.constant import COMMAND_COMPLETED
+from tests.resources.test_harness.constant import (
+    ABORT_COMPLETED,
+    COMMAND_COMPLETED,
+)
 from tests.resources.test_harness.helpers import (
     check_for_device_command_event,
     get_device_simulators,
@@ -223,7 +226,7 @@ def tmc_subarray_transitions_to_aborted(subarray_node, event_recorder):
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
-        (pytest.unique_id[0], COMMAND_COMPLETED),
+        (pytest.unique_id[0], ABORT_COMPLETED),
     )
 
 

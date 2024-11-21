@@ -31,7 +31,7 @@ dish_master3 = "ska063/elt/master"
 dish_master4 = "ska100/elt/master"
 sdp_queue_connector = "mid-sdp/queueconnector/01"
 COMMAND_COMPLETED = json.dumps([ResultCode.OK, "Command Completed"])
-
+ABORT_COMPLETED = json.dumps([ResultCode.STARTED, "Command Started"])
 DISH_ERROR_MESSAGE = (
     "Exception occurred on the following devices: " + f"{tmc_dish_leaf_node1}:"
 )

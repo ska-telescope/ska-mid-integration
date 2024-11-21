@@ -6,6 +6,7 @@ from ska_control_model import ObsState
 from tango import DevState
 
 from tests.resources.test_harness.constant import (
+    ABORT_COMPLETED,
     COMMAND_COMPLETED,
     COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE,
 )
@@ -231,7 +232,7 @@ def tmc_subarray_transitions_to_aborted(subarray_node, event_recorder):
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
-        (pytest.unique_id[0], COMMAND_COMPLETED),
+        (pytest.unique_id[0], ABORT_COMPLETED),
     )
 
 
