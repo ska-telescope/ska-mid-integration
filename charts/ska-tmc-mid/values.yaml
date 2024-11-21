@@ -92,7 +92,7 @@ sdpleafnodes:
   image:
     registry: artefact.skao.int
     image: ska-tmc-sdpleafnodes
-    tag: 0.16.5
+    tag: 0.17.2 # 0.16.5
     pullPolicy: IfNotPresent
 
 cspmasterleafnode:
@@ -212,3 +212,13 @@ nodeSelector: {}
 affinity: {}
 
 tolerations: []
+
+# not needed, already available in CI/CD
+# ingress:
+#   enabled: true
+#   annotations:
+#     nginx.ingress.kubernetes.io/rewrite-target: /
+#   host: ""  # You can put your domain here or leave it blank for IP-based access
+#   path: /
+#   serviceName: ska-k8s-config-exporter-service
+#   servicePort: 8080

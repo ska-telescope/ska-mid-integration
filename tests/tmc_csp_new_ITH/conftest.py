@@ -1,20 +1,18 @@
 """Configurations needed for the tests using the new harness."""
 
+import logging
+import os
 from dataclasses import dataclass
 from typing import Any
 
 import pytest
+import requests
 from pytest_bdd import given, parsers
 from ska_control_model import ObsState
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
 from ska_integration_test_harness.facades.dishes_facade import DishesFacade
 from ska_integration_test_harness.facades.sdp_facade import SDPFacade
-from ska_integration_test_harness.facades.tmc_central_node_facade import (
-    TMCCentralNodeFacade,
-)
-from ska_integration_test_harness.facades.tmc_subarray_node_facade import (
-    TMCSubarrayNodeFacade,
-)
+from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_integration_test_harness.init.test_harness_builder import (
     TestHarnessBuilder,
 )
@@ -58,11 +56,53 @@ def default_commands_inputs() -> TestHarnessInputs:
     )
 
 
+def check_active_devices() -> None:
+    """Check active Tango devices trough ska-k8s-config-exporter-service.
+
+    Experimental function to check the active Tango devices
+    in the Kubernetes cluster. It uses the service
+    ska-k8s-config-exporter-service in the namespace
+    ska-tmc-integration. Let's see if it works in the
+    CI/CD pipeline too.
+    """
+    logger = logging.getLogger()
+    logger.info(
+        "BEFORE BUILDING THE TELESCOPE WRAPPER, "
+        "LET'S CHECK ACTIVE TANGO DEVICES:"
+    )
+
+    # Service URL using internal Kubernetes DNS
+    service_name = "ska-k8s-config-exporter-service"
+
+    # I am in a CI-enviroment, so I need to use the commit ID
+    # as namespace to access the service
+    # namespace = "ska-tmc-integration"
+
+    # get namespace from environment variable
+    namespace = os.getenv("KUBE_NAMESPACE")
+    if namespace is None:
+        raise ValueError("Environment variable KUBE_NAMESPACE is not set")
+
+    port = 8080
+    path = "tango_devices"
+    url = f"http://{service_name}.{namespace}:{port}/{path}"
+
+    # Make the GET request
+    response = requests.get(url)
+
+    # Print the response (status code and body)
+    logger.info(f"Status code: {response.status_code}")
+    logger.info(f"Response body: {response.text}")
+
+
 @pytest.fixture
 def telescope_wrapper(
     default_commands_inputs: TestHarnessInputs,
 ) -> TelescopeWrapper:
     """Create an unique test harness with proxies to all devices."""
+    # EXPERIMENTAL: Check active Tango devices
+    # check_active_devices()
+
     test_harness_builder = TestHarnessBuilder()
 
     # import from a configuration file device names and emulation directives
@@ -76,6 +116,7 @@ def telescope_wrapper(
     # which will be used for teardown procedures
     test_harness_builder.set_default_inputs(default_commands_inputs)
     test_harness_builder.validate_default_inputs()
+    test_harness_builder.set_kubernetes_namespace(os.getenv("KUBE_NAMESPACE"))
 
     # build the wrapper of the telescope and it's sub-systems
     telescope = test_harness_builder.build()
@@ -92,17 +133,23 @@ def telescope_wrapper(
 
 
 @pytest.fixture
-def central_node_facade(telescope_wrapper: TelescopeWrapper):
-    """Create a facade to TMC central node and all its operations."""
-    central_node_facade = TMCCentralNodeFacade(telescope_wrapper)
-    yield central_node_facade
+def tmc(telescope_wrapper: TelescopeWrapper) -> TMCFacade:
+    """Create a facade to TMC devices."""
+    return TMCFacade(telescope_wrapper)
 
 
-@pytest.fixture
-def subarray_node_facade(telescope_wrapper: TelescopeWrapper):
-    """Create a facade to TMC subarray node and all its operations."""
-    subarray_node = TMCSubarrayNodeFacade(telescope_wrapper)
-    yield subarray_node
+# @pytest.fixture
+# def tmc(telescope_wrapper: TelescopeWrapper):
+#     """Create a facade to TMC central node and all its operations."""
+#     tmc = TMCCentralNodeFacade(telescope_wrapper)
+#     yield tmc
+
+
+# @pytest.fixture
+# def tmc(telescope_wrapper: TelescopeWrapper):
+#     """Create a facade to TMC subarray node and all its operations."""
+#     subarray_node = TMCSubarrayNodeFacade(telescope_wrapper)
+#     yield subarray_node
 
 
 @pytest.fixture
@@ -184,40 +231,33 @@ def context_fixt() -> SubarrayTestContextData:
 
 
 def _setup_event_subscriptions(
-    central_node_facade: TMCCentralNodeFacade,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
 ):
-    """Set up event subscriptions for the test.
+    """Subscribe TMC, CSP and SDP devices to track and log obsState events.
 
-    Args:
-        subarray_node_facade: Facade for the TMC subarray node.
-        csp: Facade for the CSP.
-        event_tracer: Event tracer for capturing events.
+    :param tmc: the TMC facade.
+    :param csp: the CSP facade.
+    :param sdp: the SDP facade.
+    :param event_tracer: the event tracer.
     """
-    event_tracer.subscribe_event(
-        subarray_node_facade.subarray_node, "obsState"
-    )
+    event_tracer.subscribe_event(tmc.subarray_node, "obsState")
     event_tracer.subscribe_event(csp.csp_subarray, "obsState")
     event_tracer.subscribe_event(sdp.sdp_subarray, "obsState")
-    event_tracer.subscribe_event(
-        central_node_facade.central_node, "longRunningCommandResult"
-    )
-    event_tracer.subscribe_event(
-        subarray_node_facade.subarray_node, "longRunningCommandResult"
-    )
+    event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
+    event_tracer.subscribe_event(tmc.subarray_node, "longRunningCommandResult")
 
     log_events(
         {
-            subarray_node_facade.subarray_node: [
+            tmc.subarray_node: [
                 "obsState",
                 "longRunningCommandResult",
             ],
             csp.csp_subarray: ["obsState"],
             sdp.sdp_subarray: ["obsState", "commandCallInfo"],
-            central_node_facade.central_node: ["longRunningCommandResult"],
+            tmc.central_node: ["longRunningCommandResult"],
         },
         event_enum_mapping={"obsState": ObsState},
     )
@@ -225,40 +265,36 @@ def _setup_event_subscriptions(
 
 @given("the telescope is in ON state")
 def given_the_telescope_is_in_on_state(
-    central_node_facade: TMCCentralNodeFacade,
+    tmc: TMCFacade,
 ):
     """Ensure the telescope is in ON state."""
-    central_node_facade.move_to_on(wait_termination=True)
+    tmc.move_to_on(wait_termination=True)
 
 
 @given(parsers.parse("the subarray {subarray_id} can be used"))
 def subarray_can_be_used(
     subarray_id: str,
-    central_node_facade: TMCCentralNodeFacade,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
 ):
     """Set up the subarray (and the subscriptions) to be used in the test."""
-    subarray_node_facade.set_subarray_id(int(subarray_id))
-    _setup_event_subscriptions(
-        central_node_facade, subarray_node_facade, csp, sdp, event_tracer
-    )
+    tmc.set_subarray_id(int(subarray_id))
+    _setup_event_subscriptions(tmc, csp, sdp, event_tracer)
 
 
 @given(parsers.parse("the subarray {subarray} is in the RESOURCING state"))
 def subarray_in_resourcing_state(
     context_fixt: SubarrayTestContextData,
-    # subarray_id: str,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
     default_commands_inputs: TestHarnessInputs,
 ):
     """Ensure the subarray is in the RESOURCING state."""
     context_fixt.starting_state = ObsState.RESOURCING
     context_fixt.expected_next_state = ObsState.IDLE
 
-    subarray_node_facade.force_change_of_obs_state(
+    tmc.force_change_of_obs_state(
         ObsState.RESOURCING,
         default_commands_inputs,
         wait_termination=True,
@@ -268,15 +304,13 @@ def subarray_in_resourcing_state(
 @given(parsers.parse("the subarray {subarray} is in the IDLE state"))
 def subarray_in_idle_state(
     context_fixt: SubarrayTestContextData,
-    # subarray_id: str,
-    subarray_node_facade: TMCSubarrayNodeFacade,
-    central_node_facade: TMCCentralNodeFacade,
+    tmc: TMCFacade,
     default_commands_inputs: TestHarnessInputs,
 ):
     """Ensure the subarray is in the IDLE state."""
     context_fixt.starting_state = ObsState.IDLE
 
-    subarray_node_facade.force_change_of_obs_state(
+    tmc.force_change_of_obs_state(
         ObsState.EMPTY,
         default_commands_inputs,
         wait_termination=True,
@@ -286,7 +320,7 @@ def subarray_in_idle_state(
         "centralnode", "assign_resources_mid"
     ).with_attribute("subarray_id", 1)
 
-    context_fixt.when_action_result = central_node_facade.assign_resources(
+    context_fixt.when_action_result = tmc.assign_resources(
         json_input,
         wait_termination=True,
     )
@@ -296,7 +330,7 @@ def subarray_in_idle_state(
     # instead of on central node.
 
     # TODO: fix the above issue and use the following line instead:
-    # subarray_node_facade.force_change_of_obs_state(
+    # tmc.force_change_of_obs_state(
     #     ObsState.IDLE,
     #     default_commands_inputs,
     #     wait_termination=True,
@@ -306,15 +340,14 @@ def subarray_in_idle_state(
 @given(parsers.parse("the subarray {subarray} is in the CONFIGURING state"))
 def subarray_in_configuring_state(
     context_fixt: SubarrayTestContextData,
-    # subarray_id: str,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
     default_commands_inputs: TestHarnessInputs,
 ):
     """Ensure the subarray is in the CONFIGURING state."""
     context_fixt.starting_state = ObsState.CONFIGURING
     context_fixt.expected_next_state = ObsState.READY
 
-    subarray_node_facade.force_change_of_obs_state(
+    tmc.force_change_of_obs_state(
         ObsState.CONFIGURING,
         default_commands_inputs,
         wait_termination=True,
@@ -324,14 +357,13 @@ def subarray_in_configuring_state(
 @given(parsers.parse("the subarray {subarray} is in the READY state"))
 def subarray_in_ready_state(
     context_fixt: SubarrayTestContextData,
-    # subarray_id: str,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
     default_commands_inputs: TestHarnessInputs,
 ):
     """Ensure the subarray is in the READY state."""
     context_fixt.starting_state = ObsState.READY
 
-    subarray_node_facade.force_change_of_obs_state(
+    tmc.force_change_of_obs_state(
         ObsState.READY,
         default_commands_inputs,
         wait_termination=True,
@@ -341,15 +373,14 @@ def subarray_in_ready_state(
 @given(parsers.parse("the subarray {subarray} is in the SCANNING state"))
 def subarray_in_scanning_state(
     context_fixt: SubarrayTestContextData,
-    # subarray_id: str,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
     default_commands_inputs: TestHarnessInputs,
 ):
     """Ensure the subarray is in the SCANNING state."""
     context_fixt.starting_state = ObsState.SCANNING
     context_fixt.expected_next_state = ObsState.READY
 
-    subarray_node_facade.force_change_of_obs_state(
+    tmc.force_change_of_obs_state(
         ObsState.SCANNING,
         default_commands_inputs,
         wait_termination=True,

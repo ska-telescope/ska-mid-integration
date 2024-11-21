@@ -22,12 +22,7 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState, ResultCode
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
 from ska_integration_test_harness.facades.sdp_facade import SDPFacade
-from ska_integration_test_harness.facades.tmc_central_node_facade import (
-    TMCCentralNodeFacade,
-)
-from ska_integration_test_harness.facades.tmc_subarray_node_facade import (
-    TMCSubarrayNodeFacade,
-)
+from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_integration_test_harness.inputs.test_harness_inputs import (
     TestHarnessInputs,
 )
@@ -51,13 +46,6 @@ def test_empty_to_resourcing_to_idle():
     """Test EMPTY to RESOURCING to IDLE transitions."""
 
 
-# @pytest.mark.xfail(
-#     reason="Without a time.sleep after the telescope "
-#     "reached the IDLE state, "
-#     "the test fails. But the test should pass without the time.sleep "
-#     "since if a subarray is in IDLE state, by design it should be able "
-#     "to receive the Configure command at any time."
-# )
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",
@@ -67,13 +55,6 @@ def test_idle_to_configuring_to_ready():
     """Test IDLE to CONFIGURING to READY transitions."""
 
 
-# @pytest.mark.xfail(
-#     reason="Without a time.sleep after the telescope "
-#     "reached the IDLE state, "
-#     "the test fails. But the test should pass without the time.sleep "
-#     "since if a subarray is in IDLE state, by design it should be able "
-#     "to receive the Configure command at any time."
-# )
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",
@@ -83,13 +64,6 @@ def test_idle_to_resourcing_to_idle():
     """Test IDLE to RESOURCING to IDLE transitions."""
 
 
-# @pytest.mark.xfail(
-#     reason="Without a time.sleep after the telescope "
-#     "reached the IDLE state, "
-#     "the test fails. But the test should pass without the time.sleep "
-#     "since if a subarray is in IDLE state, by design it should be able "
-#     "to receive the Configure command."
-# )
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",
@@ -99,7 +73,7 @@ def test_idle_to_resourcing_to_empty():
     """Test IDLE to RESOURCING to EMPTY transitions."""
 
 
-@pytest.mark.skip(reason="issue at CSP for scan after configure (CIP-2967)")
+# @pytest.mark.skip(reason="issue at CSP for scan after configure (CIP-2967)")
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",
@@ -118,14 +92,7 @@ def test_ready_to_idle():
     """Test READY to IDLE transitions."""
 
 
-# @pytest.mark.xfail(
-#     reason="Without a time.sleep after the telescope "
-#     "reached the READY state, "
-#     "the test fails. But the test should pass without the time.sleep "
-#     "since if a subarray is in READY state, by design it should be able "
-#     "to receive the Configure command."
-# )
-@pytest.mark.skip(reason="issue at CSP for scan after configure (CIP-2967)")
+# @pytest.mark.skip(reason="issue at CSP for scan after configure (CIP-2967)")
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",
@@ -135,7 +102,7 @@ def test_ready_to_configuring_to_ready():
     """Test READY to CONFIGURING to READY transitions."""
 
 
-@pytest.mark.skip(reason="issue at CSP for scan after configure (CIP-2967)")
+# @pytest.mark.skip(reason="issue at CSP for scan after configure (CIP-2967)")
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",
@@ -156,7 +123,7 @@ def test_scanning_to_ready():
 @given(parsers.parse("the subarray {subarray} is in the EMPTY state"))
 def subarray_in_empty_state(
     context_fixt: SubarrayTestContextData,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
 ):
     """
     Set the specified subarray to the EMPTY state.
@@ -174,7 +141,7 @@ def subarray_in_empty_state(
     """
     context_fixt.starting_state = ObsState.EMPTY
 
-    subarray_node_facade.force_change_of_obs_state(
+    tmc.force_change_of_obs_state(
         ObsState.EMPTY,
         TestHarnessInputs(),
         wait_termination=True,
@@ -193,11 +160,11 @@ def subarray_in_empty_state(
 )
 def send_assign_resources_command(
     context_fixt: SubarrayTestContextData,
-    central_node_facade: TMCCentralNodeFacade,
+    tmc: TMCFacade,
 ):
     """Send the AssignResources command to the subarray.
 
-    This step uses the central_node_facade to send an AssignResources command
+    This step uses the tmc to send an AssignResources command
     to the specified subarray. It uses a pre-defined JSON input file,
     modifies the subarray_id, and sends the command without waiting for
     termination. The action result is stored in the context fixture."""
@@ -207,7 +174,7 @@ def send_assign_resources_command(
         "centralnode", "assign_resources_mid"
     ).with_attribute("subarray_id", 1)
 
-    context_fixt.when_action_result = central_node_facade.assign_resources(
+    context_fixt.when_action_result = tmc.assign_resources(
         json_input,
         wait_termination=False,
     )
@@ -221,7 +188,7 @@ def send_assign_resources_command(
 )
 def send_assign_additional_resources_command(
     context_fixt: SubarrayTestContextData,
-    central_node_facade: TMCCentralNodeFacade,
+    tmc: TMCFacade,
 ):
     """
     Send the AssignResources command to assign additional resources.
@@ -238,7 +205,7 @@ def send_assign_additional_resources_command(
         "centralnode", "assign_resources_mid"
     ).with_attribute("subarray_id", 1)
 
-    context_fixt.when_action_result = central_node_facade.assign_resources(
+    context_fixt.when_action_result = tmc.assign_resources(
         json_input,
         wait_termination=False,
     )
@@ -252,12 +219,12 @@ def send_assign_additional_resources_command(
 )
 def send_release_resources_command(
     context_fixt: SubarrayTestContextData,
-    central_node_facade: TMCCentralNodeFacade,
+    tmc: TMCFacade,
 ):
     """
     Send the ReleaseResources command to the subarray.
 
-    This step uses the central_node_facade to send a ReleaseResources
+    This step uses the tmc to send a ReleaseResources
     command to the specified subarray. It uses a pre-defined JSON input
     file, modifies the subarray_id, and sends the command without waiting
     for termination. The action result is stored in the context fixture.
@@ -268,7 +235,7 @@ def send_release_resources_command(
         "centralnode", "release_resources_mid"
     ).with_attribute("subarray_id", 1)
 
-    context_fixt.when_action_result = central_node_facade.release_resources(
+    context_fixt.when_action_result = tmc.release_resources(
         json_input,
         wait_termination=False,
     )
@@ -279,12 +246,12 @@ def send_release_resources_command(
 )
 def send_configure_command(
     context_fixt: SubarrayTestContextData,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
 ):
     """
     Send the Configure command to the subarray.
 
-    This step uses the subarray_node_facade to send a Configure command
+    This step uses the tmc to send a Configure command
     to the specified subarray. It uses a pre-defined JSON input file and
     sends the command without waiting for termination. The action result
     is stored in the context fixture.
@@ -293,7 +260,7 @@ def send_configure_command(
 
     json_input = MyFileJSONInput("subarray", "configure_mid")
 
-    context_fixt.when_action_result = subarray_node_facade.configure(
+    context_fixt.when_action_result = tmc.configure(
         json_input,
         wait_termination=False,
     )
@@ -302,12 +269,12 @@ def send_configure_command(
 @when(parsers.parse("the Scan command is sent to the subarray {subarray}"))
 def send_scan_command(
     context_fixt: SubarrayTestContextData,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
 ):
     """
     Send the Scan command to the subarray.
 
-    This step uses the subarray_node_facade to send a Scan command to the
+    This step uses the tmc to send a Scan command to the
     specified subarray. It uses a pre-defined JSON input file and sends
     the command without waiting for termination. The action result is
     stored in the context fixture.
@@ -316,7 +283,7 @@ def send_scan_command(
 
     json_input = MyFileJSONInput("subarray", "scan_mid")
 
-    context_fixt.when_action_result = subarray_node_facade.scan(
+    context_fixt.when_action_result = tmc.scan(
         json_input,
         wait_termination=False,
     )
@@ -325,18 +292,18 @@ def send_scan_command(
 @when(parsers.parse("the End command is sent to the subarray {subarray}"))
 def send_end_command(
     context_fixt: SubarrayTestContextData,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
 ):
     """
     Send the End command to the subarray.
 
-    This step uses the subarray_node_facade to send an End command to the
+    This step uses the tmc to send an End command to the
     specified subarray. It sends the command without waiting for termination
     and stores the action result in the context fixture.
     """
     context_fixt.when_action_name = "End"
 
-    context_fixt.when_action_result = subarray_node_facade.end_observation(
+    context_fixt.when_action_result = tmc.end_observation(
         wait_termination=False,
     )
 
@@ -344,18 +311,18 @@ def send_end_command(
 @when(parsers.parse("the EndScan command is sent to the subarray {subarray}"))
 def send_end_scan_command(
     context_fixt: SubarrayTestContextData,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
 ):
     """
     Send the EndScan command to the subarray.
 
-    This step uses the subarray_node_facade to send an EndScan command to
+    This step uses the tmc to send an EndScan command to
     the specified subarray. It sends the command without waiting for
     termination and stores the action result in the context fixture.
     """
     context_fixt.when_action_name = "EndScan"
 
-    context_fixt.when_action_result = subarray_node_facade.end_scan(
+    context_fixt.when_action_result = tmc.end_scan(
         wait_termination=False,
     )
 
@@ -371,7 +338,7 @@ def send_end_scan_command(
 )
 def verify_resourcing_state(
     context_fixt: SubarrayTestContextData,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
@@ -387,13 +354,13 @@ def verify_resourcing_state(
     it updates the starting state in the context fixture for subsequent steps.
     """
     assert_that(event_tracer).described_as(
-        f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
+        f"Both TMC Subarray Node device ({tmc.subarray_node})"
         f", CSP Subarray device ({csp.csp_subarray}) "
         f"and SDP Subarray device ({sdp.sdp_subarray}) "
         "ObsState attribute values should move "
         f"from {str(context_fixt.starting_state)} to RESOURCING."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        subarray_node_facade.subarray_node,
+        tmc.subarray_node,
         "obsState",
         ObsState.RESOURCING,
         previous_value=context_fixt.starting_state,
@@ -420,7 +387,7 @@ def verify_resourcing_state(
 )
 def verify_idle_state(
     context_fixt: SubarrayTestContextData,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
@@ -434,13 +401,13 @@ def verify_idle_state(
     state changes occur within a specified timeout.
     """
     assert_that(event_tracer).described_as(
-        f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
+        f"Both TMC Subarray Node device ({tmc.subarray_node})"
         f", CSP Subarray device ({csp.csp_subarray}) "
         f"and SDP Subarray device ({sdp.sdp_subarray}) "
         "ObsState attribute values should move "
         f"from {str(context_fixt.starting_state)} to IDLE."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        subarray_node_facade.subarray_node,
+        tmc.subarray_node,
         "obsState",
         ObsState.IDLE,
         previous_value=context_fixt.starting_state,
@@ -464,8 +431,7 @@ def verify_idle_state(
 )
 def verify_empty_state(
     context_fixt,
-    # subarray_id: str,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
@@ -479,13 +445,13 @@ def verify_empty_state(
     state changes occur within a specified timeout.
     """
     assert_that(event_tracer).described_as(
-        f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
+        f"Both TMC Subarray Node device ({tmc.subarray_node})"
         f", CSP Subarray device ({csp.csp_subarray}) "
         f"and SDP Subarray device ({sdp.sdp_subarray}) "
         "ObsState attribute values should move "
         f"from {str(context_fixt.starting_state)} to EMPTY."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        subarray_node_facade.subarray_node,
+        tmc.subarray_node,
         "obsState",
         ObsState.EMPTY,
         previous_value=context_fixt.starting_state,
@@ -509,7 +475,7 @@ def verify_empty_state(
 )
 def verify_configuring_state(
     context_fixt: SubarrayTestContextData,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
@@ -524,13 +490,13 @@ def verify_configuring_state(
     it updates the starting state in the context fixture for subsequent steps.
     """
     assert_that(event_tracer).described_as(
-        f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
+        f"Both TMC Subarray Node device ({tmc.subarray_node})"
         f", CSP Subarray device ({csp.csp_subarray}) "
         f"and SDP Subarray device ({sdp.sdp_subarray}) "
         "ObsState attribute values should move "
         f"from {str(context_fixt.starting_state)} to CONFIGURING."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        subarray_node_facade.subarray_node,
+        tmc.subarray_node,
         "obsState",
         ObsState.CONFIGURING,
         previous_value=context_fixt.starting_state,
@@ -557,7 +523,7 @@ def verify_configuring_state(
 )
 def verify_ready_state(
     context_fixt: SubarrayTestContextData,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
@@ -572,13 +538,13 @@ def verify_ready_state(
     updates the starting state in the context fixture for subsequent steps.
     """
     assert_that(event_tracer).described_as(
-        f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
+        f"Both TMC Subarray Node device ({tmc.subarray_node})"
         f", CSP Subarray device ({csp.csp_subarray}) "
         f"and SDP Subarray device ({sdp.sdp_subarray}) "
         "ObsState attribute values should move "
         f"from {str(context_fixt.starting_state)} to READY."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        subarray_node_facade.subarray_node,
+        tmc.subarray_node,
         "obsState",
         ObsState.READY,
         previous_value=context_fixt.starting_state,
@@ -605,7 +571,7 @@ def verify_ready_state(
 )
 def verify_scanning_state(
     context_fixt: SubarrayTestContextData,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
@@ -620,13 +586,13 @@ def verify_scanning_state(
     updates the starting state in the context fixture for subsequent steps.
     """
     assert_that(event_tracer).described_as(
-        f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
+        f"Both TMC Subarray Node device ({tmc.subarray_node})"
         f", CSP Subarray device ({csp.csp_subarray}) "
         f"and SDP Subarray device ({sdp.sdp_subarray}) "
         "ObsState attribute values should move "
         f"from {str(context_fixt.starting_state)} to SCANNING."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        subarray_node_facade.subarray_node,
+        tmc.subarray_node,
         "obsState",
         ObsState.SCANNING,
         previous_value=context_fixt.starting_state,
@@ -664,7 +630,7 @@ def _get_expected_long_run_command_result(context_fixt) -> tuple[str, str]:
 )
 def verify_long_running_command_result_on_central_node(
     context_fixt,
-    central_node_facade: TMCCentralNodeFacade,
+    tmc: TMCFacade,
     event_tracer: TangoEventTracer,
 ):
     """
@@ -677,11 +643,11 @@ def verify_long_running_command_result_on_central_node(
     """
     assert_that(event_tracer).described_as(
         "TMC Central Node "
-        f"({central_node_facade.central_node}) "
+        f"({tmc.central_node}) "
         "is expected to report a"
         "longRunningCommand successful completion."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        central_node_facade.central_node,
+        tmc.central_node,
         "longRunningCommandResult",
         _get_expected_long_run_command_result(context_fixt),
     )
@@ -695,7 +661,7 @@ def verify_long_running_command_result_on_central_node(
 )
 def verify_long_running_command_result_on_subarray(
     context_fixt,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
     event_tracer: TangoEventTracer,
 ):
     """
@@ -708,11 +674,11 @@ def verify_long_running_command_result_on_subarray(
     """
     assert_that(event_tracer).described_as(
         "TMC Subarray Node "
-        f"({subarray_node_facade.subarray_node}) "
+        f"({tmc.subarray_node}) "
         "is expected to report a"
         "longRunningCommand successful completion."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        subarray_node_facade.subarray_node,
+        tmc.subarray_node,
         "longRunningCommandResult",
         _get_expected_long_run_command_result(context_fixt),
     )
