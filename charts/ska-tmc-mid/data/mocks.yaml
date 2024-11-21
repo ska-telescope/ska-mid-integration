@@ -1,7 +1,7 @@
 name: "mocks-{{.Release.Name}}"
 function: testing
 domain: mocks
-instances: ["01","02","03","04","05","06"]
+instances: ["01","02","03","04","05","06","001","036","063","100"]
 entrypoints:
   - name: "ska_tmc_common.test_helpers.helper_base_device.HelperBaseDevice"
   - name: "ska_tmc_common.test_helpers.helper_dish_device.HelperDishDevice"
