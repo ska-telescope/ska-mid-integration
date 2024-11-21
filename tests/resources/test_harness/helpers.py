@@ -276,6 +276,7 @@ def get_boolean_command_call_info(device: SimulatorFactory, command_name: str):
         for command_info in command_call_info
         if command_info[0] == command_name
     ]
+
     received_command_call_data = (
         command_info[0][0],
         command_info[0][1],
