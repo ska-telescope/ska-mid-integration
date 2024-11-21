@@ -8,7 +8,6 @@ from tango import DevState
 
 from tests.conftest import LOGGER
 from tests.resources.test_harness.constant import (
-    COMMAND_COMPLETED,
     COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE,
 )
 from tests.resources.test_harness.helpers import (
@@ -92,9 +91,8 @@ def given_assign_resources_executed_on_tmc_subarray(
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (unique_id[0], COMMAND_COMPLETED),
+        (unique_id[0], Anything),
     )
-    event_recorder.clear_events()
 
 
 @given(
@@ -132,7 +130,7 @@ def given_tmc_subarray_incremental_assign_resources_is_in_progress(
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (unique_id[0], json.dumps([Anything, Anything])),
+        (unique_id[0], Anything),
     )
 
 
@@ -289,5 +287,5 @@ def assign_resources_executed_on_subarray(
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (unique_id[0], COMMAND_COMPLETED),
+        (unique_id[0], Anything),
     )

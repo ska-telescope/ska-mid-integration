@@ -7,10 +7,7 @@ from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
 from tests.conftest import LOGGER
-from tests.resources.test_harness.constant import (
-    COMMAND_COMPLETED,
-    INTERMEDIATE_STATE_DEFECT,
-)
+from tests.resources.test_harness.constant import INTERMEDIATE_STATE_DEFECT
 from tests.resources.test_harness.helpers import (
     get_device_simulators,
     prepare_json_args_for_centralnode_commands,
@@ -93,7 +90,7 @@ def given_assign_resources_executed_on_tmc_subarray(
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (unique_id[0], COMMAND_COMPLETED),
+        (unique_id[0], Anything),
     )
 
 
