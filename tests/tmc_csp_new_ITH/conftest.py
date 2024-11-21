@@ -55,6 +55,7 @@ def default_commands_inputs() -> TestHarnessInputs:
         default_vcc_config_input=DEFAULT_VCC_CONFIG_INPUT,
     )
 
+
 @pytest.fixture
 def telescope_wrapper(
     default_commands_inputs: TestHarnessInputs,
@@ -93,20 +94,24 @@ def telescope_wrapper(
             if i == n_tries - 1:
                 raise e
 
+
 @pytest.fixture
 def tmc(telescope_wrapper: TelescopeWrapper) -> TMCFacade:
     """Create a facade to TMC devices."""
     return TMCFacade(telescope_wrapper)
+
 
 @pytest.fixture
 def csp(telescope_wrapper: TelescopeWrapper):
     """Create a facade to CSP devices."""
     return CSPFacade(telescope_wrapper)
 
+
 @pytest.fixture
 def sdp(telescope_wrapper: TelescopeWrapper):
     """Create a facade to SDP devices."""
     return SDPFacade(telescope_wrapper)
+
 
 @pytest.fixture
 def dishes(telescope_wrapper: TelescopeWrapper):
@@ -268,6 +273,7 @@ def subarray_in_idle_state(
         json_input,
         wait_termination=True,
     )
+
 
 @given(parsers.parse("the subarray {subarray} is in the CONFIGURING state"))
 def subarray_in_configuring_state(
