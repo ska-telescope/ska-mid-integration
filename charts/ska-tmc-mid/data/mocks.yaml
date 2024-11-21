@@ -47,11 +47,11 @@ server:
           - name: "mid-csp/subarray/02"
         {{- end }}
         {{- if eq $isSimulatedDish true }}
-    {{- range .Values.global.dishes }}
-    - name: "{{ . }}"
+    - name: "06"
       classes:
         - name: "HelperDishDevice"
           devices:
+          {{- range .Values.global.dishes }}
           - name: "ska{{ printf . }}/elt/master"
           {{- end }}
         {{- end }}
