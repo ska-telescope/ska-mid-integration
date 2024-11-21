@@ -10,6 +10,7 @@ from ska_tango_base.control_model import HealthState
 from tango import DeviceProxy, DevState
 
 from tests.resources.test_harness.constant import (
+    ABORT_COMPLETED,
     COMMAND_COMPLETED,
     DISH_001_CALIBRATION_DATA,
     DISH_036_CALIBRATION_DATA,
@@ -31,6 +32,7 @@ from tests.resources.test_harness.constant import (
     tmc_sdp_subarray_leaf_node,
     tmc_subarraynode1,
 )
+from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     SIMULATED_DEVICES_DICT,
     check_subarray_obs_state,
@@ -162,6 +164,10 @@ class SubarrayNodeWrapper(object):
         self.sdp_subarray1 = sdp_subarray1
         device_dict["dish_master_list"] = self.dish_master_list
         device_dict["dish_leaf_node_list"] = self.dish_leaf_node_list
+        self.event_recorder = EventRecorder()
+        self.event_recorder.subscribe_event(
+            self.subarray_node, "longRunningCommandResult"
+        )
 
     def _setup(self):
         """ """
@@ -440,13 +446,28 @@ class SubarrayNodeWrapper(object):
             the_waiter = Waiter()
             the_waiter.wait(5)
 
-            self.abort_subarray()
-            self.restart_subarray()
+            _, unique_id = self.abort_subarray()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique_id[0], ABORT_COMPLETED),
+            )
+            _, unique_id = self.restart_subarray()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique_id[0], COMMAND_COMPLETED),
+            )
             self.check_if_dishes_are_ready(the_waiter)
         elif self.obs_state == "ABORTED":
             """Invoke Restart"""
             LOGGER.info("Invoking Restart on Subarray")
-            self.restart_subarray()
+            _, unique_id = self.restart_subarray()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique_id[0], COMMAND_COMPLETED),
+            )
         else:
             self.force_change_of_obs_state("EMPTY")
 
