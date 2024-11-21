@@ -242,7 +242,7 @@ def tmc_subarray_transitions_to_aborted(subarray_node, event_recorder):
     )
 )
 def send_command_restart(subarray_node, event_recorder, simulator_factory):
-    _, pytest.unique_id = subarray_node.execute_transition(
+    _, pytest.restart_unqiue_id = subarray_node.execute_transition(
         "Restart", argin=None
     )
     assert event_recorder.has_change_event_occurred(
@@ -298,7 +298,7 @@ def tmc_subarray_transitions_to_empty(subarray_node, event_recorder):
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
-        (pytest.unique_id[0], COMMAND_COMPLETED),
+        (pytest.restart_unqiue_id[0], COMMAND_COMPLETED),
     )
 
 
