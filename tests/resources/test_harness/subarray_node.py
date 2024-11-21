@@ -437,7 +437,7 @@ class SubarrayNodeWrapper(object):
             # Waiting for few seconds as the SubarrayNode End command
             # completion does not consider Dishes pointingState transition
             # to READY
-            the_waiter = Waiter()
+            the_waiter = Waiter(**device_dict)
             the_waiter.wait(5)
 
             self.abort_subarray()
@@ -457,7 +457,12 @@ class SubarrayNodeWrapper(object):
         assert check_subarray_obs_state("EMPTY")
 
     def check_if_dishes_are_ready(self, waiter):
+        LOGGER.info("waiter.dish_master_list: %s", waiter.dish_master_list)
+        LOGGER.info(
+            "waiter.dish_leaf_node_list: %s", waiter.dish_leaf_node_list
+        )
         if waiter.dish_master_list and waiter.dish_leaf_node_list:
+            LOGGER.info("Check for PS READY")
             waiter.set_wait_for_dish("pointingState", "READY")
 
     def clear_all_data(self):
