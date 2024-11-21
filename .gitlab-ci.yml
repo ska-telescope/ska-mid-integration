@@ -20,68 +20,13 @@ cache:
 # It is also specified that only the master branch will be subject of this job.
 
 stages:
-  - lint
-  - build
-  - on-demand
   - test
-  - integration
-  - publish
-  - staging
-  - pages
-  - scan
-  - lifecycle
 
 include:
-# Docs Pages
-- project: 'ska-telescope/templates-repository'
-  file: 'gitlab-ci/includes/docs.gitlab-ci.yml'
-
-# Release Automation
-- project: 'ska-telescope/templates-repository'
-  file: 'gitlab-ci/includes/release.gitlab-ci.yml'
-
-# Python packages build,lint, test and publish
-- project: 'ska-telescope/templates-repository'
-  file: 'gitlab-ci/includes/python-lint.gitlab-ci.yml'
-
-# # Helm Chart linting and Publish
-- project: 'ska-telescope/templates-repository'
-  file: 'gitlab-ci/includes/helm-chart.gitlab-ci.yml'
 
 # k8s steps
 - project: 'ska-telescope/templates-repository'
   file: 'gitlab-ci/includes/k8s.gitlab-ci.yml'
-
-# integration job
-- project: 'ska-telescope/templates-repository'
-  file: 'gitlab-ci/includes/deploy.integration.gitlab-ci.yml'
-
-# staging job
-- project: "ska-telescope/templates-repository"
-  file: "gitlab-ci/includes/deploy.staging.gitlab-ci.yml"
-
-# Create Gitlab CI badges from CI metrics
-# https://developer.skatelescope.org/en/latest/tools/continuousintegration.html#automated-collection-of-ci-health-metrics-as-part-of-the-ci-pipeline
-- project: 'ska-telescope/templates-repository'
-  file: 'gitlab-ci/includes/finaliser.gitlab-ci.yml'
-
-# # Publish bdd test results on Jira.
-# - project: 'ska-telescope/templates-repository'
-#   file: 'gitlab-ci/includes/xray-publish.gitlab-ci.yml'
-
-- local: '/gitlab_ci/.gitlab-ci-tmc-csp-new-ith.yml'
-- local: '/gitlab_ci/.gitlab-ci-on-demand.yml'
-- local: '/gitlab_ci/.gitlab-ci-dish.yml'
-- local: '/gitlab_ci/.gitlab-ci-csp-dish.yml'
-- local: '/gitlab_ci/.gitlab-ci-tmc-dish.yml'
-- local: '/gitlab_ci/.gitlab-ci-tmc-sdp.yml'
-- local: '/gitlab_ci/.gitlab-ci-tmc-csp.yml'
-- local: '/gitlab_ci/.gitlab-ci-integration.yml'
-- local: '/gitlab_ci/.gitlab-ci-staging.yml'
-
-# https://skao.slack.com/archives/CEMF9HXUZ/p1722252553476609
-python-lint:
-  image: artefact.skao.int/ska-tango-images-pytango-builder:9.3.35
 
 k8s-test:
   tags:
@@ -90,14 +35,11 @@ k8s-test:
     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA"
     DISH_SIMULATION_ENABLED: "true"
     SUBARRAY_COUNT: 2
-    COUNT: 1
+    COUNT: 10
     KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA'
-    ADDMARK: ""
+    ADDMARK: "and handling"
     # MARK: 'temp'
   after_script:
     - pip3 install -q -U ska-ser-xray
     - XRAY_TEST_RESULT_FILE="build/cucumber.json" make xray-publish
 
-docs-build-rtd:
-  rules:
-    - when: never
