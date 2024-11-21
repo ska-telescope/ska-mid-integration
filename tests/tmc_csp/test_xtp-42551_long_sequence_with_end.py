@@ -22,7 +22,6 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
-# @pytest.mark.skip(reason="issue at CSP for scan after configure (CIP-2967)")
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/xtp_40175_long_sequence_configure_scan.feature",
