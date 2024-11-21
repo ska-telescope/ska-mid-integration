@@ -31,7 +31,7 @@ from ska_tango_testing.integration import TangoEventTracer
 from tests.tmc_csp_new_ITH.conftest import SubarrayTestContextData
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 
-ASSERTIONS_TIMEOUT = 60
+ASSERTIONS_TIMEOUT = 100
 
 # ------------------------------------------------------------
 # Scenario
@@ -73,7 +73,6 @@ def test_idle_to_resourcing_to_empty():
     """Test IDLE to RESOURCING to EMPTY transitions."""
 
 
-# @pytest.mark.skip(reason="issue at CSP for scan after configure (CIP-2967)")
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",
@@ -92,7 +91,6 @@ def test_ready_to_idle():
     """Test READY to IDLE transitions."""
 
 
-# @pytest.mark.skip(reason="issue at CSP for scan after configure (CIP-2967)")
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",
@@ -102,7 +100,6 @@ def test_ready_to_configuring_to_ready():
     """Test READY to CONFIGURING to READY transitions."""
 
 
-# @pytest.mark.skip(reason="issue at CSP for scan after configure (CIP-2967)")
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",

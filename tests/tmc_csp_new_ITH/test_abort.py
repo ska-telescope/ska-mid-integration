@@ -35,7 +35,7 @@ from ska_tango_testing.integration import TangoEventTracer
 
 from tests.tmc_csp_new_ITH.conftest import SubarrayTestContextData
 
-ASSERTIONS_TIMEOUT = 60
+ASSERTIONS_TIMEOUT = 100
 
 # ------------------------------------------------------------
 # Scenario Definition

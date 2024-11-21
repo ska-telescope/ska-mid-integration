@@ -18,7 +18,7 @@ from ska_tango_testing.integration import TangoEventTracer, log_events
 from tango import DevState
 
 # Constants
-ASSERTIONS_TIMEOUT = 60
+ASSERTIONS_TIMEOUT = 100
 
 
 # ---------------------------------

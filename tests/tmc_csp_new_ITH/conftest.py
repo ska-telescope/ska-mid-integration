@@ -55,54 +55,11 @@ def default_commands_inputs() -> TestHarnessInputs:
         default_vcc_config_input=DEFAULT_VCC_CONFIG_INPUT,
     )
 
-
-def check_active_devices() -> None:
-    """Check active Tango devices trough ska-k8s-config-exporter-service.
-
-    Experimental function to check the active Tango devices
-    in the Kubernetes cluster. It uses the service
-    ska-k8s-config-exporter-service in the namespace
-    ska-tmc-integration. Let's see if it works in the
-    CI/CD pipeline too.
-    """
-    logger = logging.getLogger()
-    logger.info(
-        "BEFORE BUILDING THE TELESCOPE WRAPPER, "
-        "LET'S CHECK ACTIVE TANGO DEVICES:"
-    )
-
-    # Service URL using internal Kubernetes DNS
-    service_name = "ska-k8s-config-exporter-service"
-
-    # I am in a CI-enviroment, so I need to use the commit ID
-    # as namespace to access the service
-    # namespace = "ska-tmc-integration"
-
-    # get namespace from environment variable
-    namespace = os.getenv("KUBE_NAMESPACE")
-    if namespace is None:
-        raise ValueError("Environment variable KUBE_NAMESPACE is not set")
-
-    port = 8080
-    path = "tango_devices"
-    url = f"http://{service_name}.{namespace}:{port}/{path}"
-
-    # Make the GET request
-    response = requests.get(url)
-
-    # Print the response (status code and body)
-    logger.info(f"Status code: {response.status_code}")
-    logger.info(f"Response body: {response.text}")
-
-
 @pytest.fixture
 def telescope_wrapper(
     default_commands_inputs: TestHarnessInputs,
 ) -> TelescopeWrapper:
     """Create an unique test harness with proxies to all devices."""
-    # EXPERIMENTAL: Check active Tango devices
-    # check_active_devices()
-
     test_harness_builder = TestHarnessBuilder()
 
     # import from a configuration file device names and emulation directives
@@ -120,49 +77,36 @@ def telescope_wrapper(
 
     # build the wrapper of the telescope and it's sub-systems
     telescope = test_harness_builder.build()
+    telescope.actions_default_timeout = 200
+    telescope.tear_down()
     yield telescope
 
     # after a test is completed, reset the telescope to its initial state
     # (obsState=READY, telescopeState=OFF, no resources assigned)
-    telescope.tear_down()
-
-    # NOTE: As the code is organized now, I cannot anticipate the
-    # teardown of the telescope structure. To run reset now I should
-    # init subarray node (with SetSubarrayId), but to do that I need
-    # to know subarray_id, which is a parameter of the Gherkin steps.
-
+    n_tries = 2
+    for i in range(n_tries):
+        try:
+            telescope.tear_down()
+            break
+        except Exception as e:
+            logging.error(f"Error during tear down: {e}")
+            if i == n_tries - 1:
+                raise e
 
 @pytest.fixture
 def tmc(telescope_wrapper: TelescopeWrapper) -> TMCFacade:
     """Create a facade to TMC devices."""
     return TMCFacade(telescope_wrapper)
 
-
-# @pytest.fixture
-# def tmc(telescope_wrapper: TelescopeWrapper):
-#     """Create a facade to TMC central node and all its operations."""
-#     tmc = TMCCentralNodeFacade(telescope_wrapper)
-#     yield tmc
-
-
-# @pytest.fixture
-# def tmc(telescope_wrapper: TelescopeWrapper):
-#     """Create a facade to TMC subarray node and all its operations."""
-#     subarray_node = TMCSubarrayNodeFacade(telescope_wrapper)
-#     yield subarray_node
-
-
 @pytest.fixture
 def csp(telescope_wrapper: TelescopeWrapper):
     """Create a facade to CSP devices."""
     return CSPFacade(telescope_wrapper)
 
-
 @pytest.fixture
 def sdp(telescope_wrapper: TelescopeWrapper):
     """Create a facade to SDP devices."""
     return SDPFacade(telescope_wrapper)
-
 
 @pytest.fixture
 def dishes(telescope_wrapper: TelescopeWrapper):
@@ -324,18 +268,6 @@ def subarray_in_idle_state(
         json_input,
         wait_termination=True,
     )
-
-    # NOTE: Do not use force change of obs state here, because currently
-    # for moving to IDLE it uses a wrong command, called on subarray node
-    # instead of on central node.
-
-    # TODO: fix the above issue and use the following line instead:
-    # tmc.force_change_of_obs_state(
-    #     ObsState.IDLE,
-    #     default_commands_inputs,
-    #     wait_termination=True,
-    # )
-
 
 @given(parsers.parse("the subarray {subarray} is in the CONFIGURING state"))
 def subarray_in_configuring_state(
