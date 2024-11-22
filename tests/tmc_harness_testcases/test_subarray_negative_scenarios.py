@@ -67,6 +67,7 @@ class TestSubarrayNodeNegative(object):
 
         csp_sim.SetDefective(RESET_DEFECT)
 
+    @pytest.mark.test1
     @pytest.mark.SKA_mid
     def test_subarray_configure_when_csp_stuck_in_configuring(
         self,
@@ -106,6 +107,7 @@ class TestSubarrayNodeNegative(object):
             )
 
         # Add assert for commandCallInfo data
+
         assert device_received_this_command(
             csp_sim, "Configure", csp_input_json
         )
