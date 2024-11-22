@@ -6,7 +6,6 @@
       "subarray_id": 1,
       "eb_id": "eb-m001-20230712-56789"
   },
-  "pst": {},
   "midcbf": {
       "vlbi": {},
       "delay_model_subscription_point": "ska_mid/tm_leaf_node/csp_subarray_01/delayModel",

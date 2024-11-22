@@ -22,8 +22,6 @@
         "frequency_band": "2",
         "eb_id": "eb-m001-20230712-56789"
     },
-    "pst": {},
-    "transaction_id": "txn-....-00001",
     "midcbf": {
         "frequency_band_offset_stream1": 80,
         "frequency_band_offset_stream2": 80,
