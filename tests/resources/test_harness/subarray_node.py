@@ -107,12 +107,6 @@ class SubarrayNodeWrapper(object):
         self.csp_subarray_leaf_node = DeviceProxy(tmc_csp_subarray_leaf_node)
         self.sdp_subarray_leaf_node = DeviceProxy(tmc_sdp_subarray_leaf_node)
         self.sdp_qc = DeviceProxy(sdp_queue_connector)
-        self.dish_leaf_node_list = [
-            DeviceProxy(tmc_dish_leaf_node1),
-            DeviceProxy(tmc_dish_leaf_node2),
-        ]
-        for dish_leaf_node in self.dish_leaf_node_list:
-            dish_leaf_node.set_timeout_millis(5000)
 
         if (
             SIMULATED_DEVICES_DICT["csp_and_sdp"]
@@ -147,6 +141,9 @@ class SubarrayNodeWrapper(object):
             DeviceProxy(tmc_dish_leaf_node3),
             DeviceProxy(tmc_dish_leaf_node4),
         ]
+
+        for dish_leaf_node in self.dish_leaf_node_list:
+            dish_leaf_node.set_timeout_millis(5000)
 
         self.subarray_devices = {
             "csp_subarray": DeviceProxy(csp_subarray1),
@@ -440,11 +437,12 @@ class SubarrayNodeWrapper(object):
             # Waiting for few seconds as the SubarrayNode End command
             # completion does not consider Dishes pointingState transition
             # to READY
-            the_waiter = Waiter()
+            the_waiter = Waiter(**device_dict)
             the_waiter.wait(5)
 
             self.abort_subarray()
             self.restart_subarray()
+            self.check_if_dishes_are_ready(the_waiter)
         elif self.obs_state == "ABORTED":
             """Invoke Restart"""
             LOGGER.info("Invoking Restart on Subarray")
@@ -457,6 +455,15 @@ class SubarrayNodeWrapper(object):
         self._reset_dishes()
         self._reset_simulator_devices()
         assert check_subarray_obs_state("EMPTY")
+
+    def check_if_dishes_are_ready(self, waiter):
+        LOGGER.info("waiter.dish_master_list: %s", waiter.dish_master_list)
+        LOGGER.info(
+            "waiter.dish_leaf_node_list: %s", waiter.dish_leaf_node_list
+        )
+        if waiter.dish_master_list and waiter.dish_leaf_node_list:
+            LOGGER.info("Check for PS READY")
+            waiter.set_wait_for_dish("pointingState", "READY")
 
     def clear_all_data(self):
         """Method to clear the observations
