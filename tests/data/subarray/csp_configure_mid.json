@@ -7,7 +7,6 @@
       "eb_id": "eb-m001-20230712-56789"
   },
   "pst": {},
-  "transaction_id": "txn-....-00001",
   "midcbf": {
       "vlbi": {},
       "delay_model_subscription_point": "ska_mid/tm_leaf_node/csp_subarray_01/delayModel",
@@ -68,7 +67,6 @@
                   [400, "192.168.0.2"]
               ]
           }]
-      },
-      "pst": {}
+      }
   }
 }
