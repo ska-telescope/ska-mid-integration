@@ -14,6 +14,7 @@ from tests.resources.test_harness.helpers import (
     check_subarray_instance,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
+    wait_till_delay_values_are_populated,
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
@@ -159,6 +160,7 @@ def check_subarray_is_in_ready_obsstate(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
     check_subarray_instance(subarray_node.subarray_node, subarray_id)
+    wait_till_delay_values_are_populated(subarray_node.csp_subarray_leaf_node)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
