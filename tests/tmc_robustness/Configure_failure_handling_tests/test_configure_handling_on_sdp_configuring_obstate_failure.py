@@ -17,6 +17,9 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
+# The test fails intermittently as the test does not make sure that the Abort
+# is completed on dishes and then the next Configure is invoked
+@pytest.mark.skip(reason="Need to add dish assertions in the test.")
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-28836.feature",

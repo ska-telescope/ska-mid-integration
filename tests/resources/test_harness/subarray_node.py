@@ -150,6 +150,9 @@ class SubarrayNodeWrapper(object):
         for dish_leaf_node in self.dish_leaf_node_list:
             dish_leaf_node.set_timeout_millis(5000)
 
+        for dish_leaf_node in self.dish_leaf_node_list:
+            dish_leaf_node.set_timeout_millis(5000)
+
         self.subarray_devices = {
             "csp_subarray": DeviceProxy(csp_subarray1),
             "sdp_subarray": DeviceProxy(sdp_subarray1),
@@ -507,7 +510,7 @@ class SubarrayNodeWrapper(object):
             event_recorder.clear_events()
             self.release_resources_subarray()
 
-        elif self.obs_state in ["ABORTED", "FAULT"]:
+        elif self.obs_state == "ABORTED":
             """Invoke Restart"""
             LOGGER.info("Invoking Restart on Subarray")
             self.restart_subarray()
@@ -520,6 +523,15 @@ class SubarrayNodeWrapper(object):
         self._reset_dishes()
         self._reset_simulator_devices()
         assert check_subarray_obs_state("EMPTY")
+
+    def check_if_dishes_are_ready(self, waiter):
+        LOGGER.info("waiter.dish_master_list: %s", waiter.dish_master_list)
+        LOGGER.info(
+            "waiter.dish_leaf_node_list: %s", waiter.dish_leaf_node_list
+        )
+        if waiter.dish_master_list and waiter.dish_leaf_node_list:
+            LOGGER.info("Check for PS READY")
+            waiter.set_wait_for_dish("pointingState", "READY")
 
     def clear_all_data(self):
         """Method to clear the observations

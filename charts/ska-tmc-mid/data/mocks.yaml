@@ -46,11 +46,10 @@ server:
           devices:
           - name: "mid-csp/subarray/01"
           - name: "mid-csp/subarray/02"
-      {{- end }}
-
-      {{- if eq $isSimulatedDish true }}
-      {{- range .Values.global.dishes }}
-    - name: "{{ printf . }}"
+        {{- end }}
+        {{- if eq $isSimulatedDish true }}
+    {{- range .Values.global.dishes }}
+    - name: "{{ . }}"
       classes:
         - name: "HelperDishDevice"
           devices:

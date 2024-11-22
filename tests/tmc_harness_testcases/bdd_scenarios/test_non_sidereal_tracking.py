@@ -22,10 +22,7 @@ TIMEOUT = 50
 PROGRAM_TRACK_TABLE_LENGTH = 75
 
 
-@pytest.mark.skip(
-    reason="The test can be unskipped when Dish Error propagation is enabled "
-    + "as a part of SAH-1570"
-)
+@pytest.mark.xfail(reason="Test fails if the source provided is not visible.")
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp_59647_non_sidereal_tracking.feature",

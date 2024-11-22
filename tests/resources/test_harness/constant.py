@@ -44,6 +44,11 @@ class CorrectionKey(IntEnum):
     RESET = 2
 
 
+DISH_ERROR_MESSAGE = (
+    "Exception occurred on the following devices: " + f"{tmc_dish_leaf_node1}:"
+)
+TIMOUT_ERROR = "Timeout has occurred, command failed"
+
 COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE = {
     "enabled": True,
     "fault_type": FaultType.FAILED_RESULT,
