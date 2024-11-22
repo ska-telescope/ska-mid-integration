@@ -1,10 +1,10 @@
 {
-  "id": "65d6e8084f0b050019dbfb3d",
-  "name": "Telescope_Monitoring copy 1",
+  "id": "673b3a84a978370012e7a9b7",
+  "name": "himalaya - copy",
   "version": "2.6.0",
   "user": "user1",
-  "insertTime": "2024-02-22T06:22:00.148Z",
-  "updateTime": "2024-02-22T13:00:39.300Z",
+  "insertTime": "2024-11-18T13:00:52.342Z",
+  "updateTime": "2024-11-18T14:01:14.278Z",
   "group": null,
   "groupWriteAccess": false,
   "lastUpdatedBy": "user1",
@@ -12,54 +12,31 @@
     {
       "valid": 1,
       "id": "1",
-      "x": 65,
-      "y": 8,
+      "x": 0,
+      "y": 0,
       "canvas": "0",
-      "width": 219,
-      "height": 6,
+      "width": 272,
+      "height": 5,
       "type": "LABEL",
       "inputs": {
         "text": "MID TELESCOPE MONITORING DASHBOARD",
         "textColor": "#ffffff",
-        "backgroundColor": "#000000",
+        "backgroundColor": "#070068",
         "borderWidth": 0,
         "borderColor": "#000000",
         "font": "Helvetica",
         "automaticResize": "Disabled",
         "size": 1.8,
         "linkTo": "",
-        "customCss": "text-align: center;\n  background-image: url('https://www.skao.int/sites/default/files/styles/ti_1500/public/2022-02/skao_logo_2021_colour_rgb_2500x1058px.jpg?itok=IceNzaEw');\n  background-size: 8% auto;\nbackground-repeat: no-repeat;"
+        "customCss": "text-align: center;\n  background-image: url('https://www.skao.int/sites/default/files/styles/ti_1500/public/2022-02/skao_logo_2021_colour_rgb_2500x1058px.jpg?itok=IceNzaEw');\n  background-size: contain;\n  background-repeat: no-repeat;\n  background-position: left center; /* Changed from 'center' to 'left center' */\n  width: 100%;\n  height: auto;\n"
       },
       "order": 0
     },
     {
       "valid": 1,
-      "id": "2",
-      "x": 65,
-      "y": 14,
-      "canvas": "0",
-      "width": 219,
-      "height": 262,
-      "type": "LABEL",
-      "inputs": {
-        "text": "",
-        "textColor": "#000000",
-        "backgroundColor": "#f1ead5",
-        "borderWidth": 0,
-        "borderColor": "#000000",
-        "font": "Helvetica",
-        "automaticResize": "Disabled",
-        "size": 1,
-        "linkTo": "",
-        "customCss": "background: linear-gradient(to top right, #E50869 0%, #E50869 20%, #070068 50%, #070068 100%);"
-      },
-      "order": 1
-    },
-    {
-      "valid": 1,
       "id": "3",
-      "x": 68,
-      "y": 29,
+      "x": 1,
+      "y": 11,
       "canvas": "0",
       "width": 54,
       "height": 57,
@@ -67,7 +44,7 @@
       "inputs": {
         "text": "TMC",
         "textColor": "#000000",
-        "backgroundColor": "#ffdfdf",
+        "backgroundColor": "#ffffff",
         "borderWidth": 0,
         "borderColor": "#000000",
         "font": "Helvetica",
@@ -76,16 +53,16 @@
         "linkTo": "",
         "customCss": "text-align: center;"
       },
-      "order": 2
+      "order": 1
     },
     {
       "valid": 1,
       "id": "9",
-      "x": 92,
-      "y": 16,
+      "x": 23,
+      "y": 6,
       "canvas": "0",
-      "width": 28,
-      "height": 9,
+      "width": 32,
+      "height": 4,
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
@@ -110,13 +87,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 3
+      "order": 2
     },
     {
       "valid": 1,
       "id": "10",
-      "x": 70,
-      "y": 34,
+      "x": 2,
+      "y": 16,
       "canvas": "0",
       "width": 22,
       "height": 4,
@@ -133,13 +110,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 4
+      "order": 3
     },
     {
       "valid": 1,
       "id": "11",
-      "x": 165,
-      "y": 16,
+      "x": 79,
+      "y": 6,
       "canvas": "0",
       "width": 28,
       "height": 4,
@@ -167,13 +144,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 5
+      "order": 4
     },
     {
       "valid": 1,
       "id": "12",
-      "x": 70,
-      "y": 40,
+      "x": 2,
+      "y": 21,
       "canvas": "0",
       "width": 22,
       "height": 4,
@@ -190,13 +167,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 6
+      "order": 5
     },
     {
       "valid": 1,
       "id": "13",
-      "x": 243,
-      "y": 16,
+      "x": 188,
+      "y": 6,
       "canvas": "0",
       "width": 21,
       "height": 4,
@@ -224,21 +201,21 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 7
+      "order": 6
     },
     {
       "valid": 1,
       "id": "43",
-      "x": 68,
-      "y": 92,
+      "x": 2,
+      "y": 70,
       "canvas": "0",
-      "width": 166,
-      "height": 76,
+      "width": 163,
+      "height": 81,
       "type": "LABEL",
       "inputs": {
         "text": "DISH",
         "textColor": "#000000",
-        "backgroundColor": "#ffffff",
+        "backgroundColor": "#fcfcfc",
         "borderWidth": 0,
         "borderColor": "#000000",
         "font": "Helvetica",
@@ -247,21 +224,44 @@
         "linkTo": "",
         "customCss": "text-align: center;"
       },
-      "order": 8
+      "order": 7
     },
     {
       "valid": 1,
       "id": "44",
-      "x": 72,
-      "y": 97,
+      "x": 2,
+      "y": 75,
       "canvas": "0",
-      "width": 37,
-      "height": 69,
+      "width": 38,
+      "height": 76,
       "type": "LABEL",
       "inputs": {
         "text": "Dish001",
         "textColor": "#000000",
-        "backgroundColor": "#ffdfdf",
+        "backgroundColor": "#ffffff",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.4,
+        "linkTo": "",
+        "customCss": "text-align: center;"
+      },
+      "order": 8
+    },
+    {
+      "valid": 1,
+      "id": "45",
+      "x": 43,
+      "y": 75,
+      "canvas": "0",
+      "width": 38,
+      "height": 76,
+      "type": "LABEL",
+      "inputs": {
+        "text": "Dish036",
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
         "borderWidth": 0,
         "borderColor": "#000000",
         "font": "Helvetica",
@@ -274,17 +274,17 @@
     },
     {
       "valid": 1,
-      "id": "45",
-      "x": 114,
-      "y": 97,
+      "id": "46",
+      "x": 83,
+      "y": 75,
       "canvas": "0",
-      "width": 37,
-      "height": 69,
+      "width": 39,
+      "height": 76,
       "type": "LABEL",
       "inputs": {
-        "text": "Dish036",
+        "text": "Dish063",
         "textColor": "#000000",
-        "backgroundColor": "#ffdfdf",
+        "backgroundColor": "#ffffff",
         "borderWidth": 0,
         "borderColor": "#000000",
         "font": "Helvetica",
@@ -297,17 +297,17 @@
     },
     {
       "valid": 1,
-      "id": "46",
-      "x": 155,
-      "y": 97,
+      "id": "47",
+      "x": 125,
+      "y": 75,
       "canvas": "0",
-      "width": 37,
-      "height": 69,
+      "width": 40,
+      "height": 76,
       "type": "LABEL",
       "inputs": {
-        "text": "Dish063",
+        "text": "Dish100",
         "textColor": "#000000",
-        "backgroundColor": "#ffdfdf",
+        "backgroundColor": "#ffffff",
         "borderWidth": 0,
         "borderColor": "#000000",
         "font": "Helvetica",
@@ -320,32 +320,9 @@
     },
     {
       "valid": 1,
-      "id": "47",
-      "x": 196,
-      "y": 97,
-      "canvas": "0",
-      "width": 37,
-      "height": 69,
-      "type": "LABEL",
-      "inputs": {
-        "text": "Dish100",
-        "textColor": "#000000",
-        "backgroundColor": "#ffdfdf",
-        "borderWidth": 0,
-        "borderColor": "#000000",
-        "font": "Helvetica",
-        "automaticResize": "Disabled",
-        "size": 1.4,
-        "linkTo": "",
-        "customCss": "text-align: center;"
-      },
-      "order": 12
-    },
-    {
-      "valid": 1,
       "id": "50",
-      "x": 124,
-      "y": 29,
+      "x": 56,
+      "y": 11,
       "canvas": "0",
       "width": 54,
       "height": 57,
@@ -353,7 +330,30 @@
       "inputs": {
         "text": "CSP",
         "textColor": "#000000",
-        "backgroundColor": "#ffdfdf",
+        "backgroundColor": "#ffffff",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.5,
+        "linkTo": "",
+        "customCss": "text-align: center;"
+      },
+      "order": 12
+    },
+    {
+      "valid": 1,
+      "id": "51",
+      "x": 111,
+      "y": 11,
+      "canvas": "0",
+      "width": 54,
+      "height": 57,
+      "type": "LABEL",
+      "inputs": {
+        "text": "SDP",
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
         "borderWidth": 0,
         "borderColor": "#000000",
         "font": "Helvetica",
@@ -366,32 +366,9 @@
     },
     {
       "valid": 1,
-      "id": "51",
-      "x": 180,
-      "y": 29,
-      "canvas": "0",
-      "width": 54,
-      "height": 57,
-      "type": "LABEL",
-      "inputs": {
-        "text": "SDP",
-        "textColor": "#000000",
-        "backgroundColor": "#ffdfdf",
-        "borderWidth": 0,
-        "borderColor": "#000000",
-        "font": "Helvetica",
-        "automaticResize": "Disabled",
-        "size": 1.5,
-        "linkTo": "",
-        "customCss": "text-align: center;"
-      },
-      "order": 14
-    },
-    {
-      "valid": 1,
       "id": "54",
-      "x": 126,
-      "y": 34,
+      "x": 56,
+      "y": 16,
       "canvas": "0",
       "width": 22,
       "height": 4,
@@ -408,13 +385,36 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 15
+      "order": 14
     },
     {
       "valid": 1,
       "id": "55",
-      "x": 126,
-      "y": 40,
+      "x": 56,
+      "y": 21,
+      "canvas": "0",
+      "width": 22,
+      "height": 4,
+      "type": "LABEL",
+      "inputs": {
+        "text": "Health State",
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.2,
+        "linkTo": "",
+        "customCss": ""
+      },
+      "order": 15
+    },
+    {
+      "valid": 1,
+      "id": "56",
+      "x": 111,
+      "y": 21,
       "canvas": "0",
       "width": 22,
       "height": 4,
@@ -435,32 +435,9 @@
     },
     {
       "valid": 1,
-      "id": "56",
-      "x": 182,
-      "y": 41,
-      "canvas": "0",
-      "width": 22,
-      "height": 4,
-      "type": "LABEL",
-      "inputs": {
-        "text": "Health State",
-        "textColor": "#000000",
-        "backgroundColor": "#ffffff",
-        "borderWidth": 0,
-        "borderColor": "#000000",
-        "font": "Helvetica",
-        "automaticResize": "Disabled",
-        "size": 1.2,
-        "linkTo": "",
-        "customCss": ""
-      },
-      "order": 17
-    },
-    {
-      "valid": 1,
       "id": "57",
-      "x": 182,
-      "y": 35,
+      "x": 111,
+      "y": 16,
       "canvas": "0",
       "width": 22,
       "height": 4,
@@ -477,16 +454,16 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 18
+      "order": 17
     },
     {
       "valid": 1,
       "id": "69",
-      "x": 72,
-      "y": 16,
+      "x": 1,
+      "y": 6,
       "canvas": "0",
-      "width": 20,
-      "height": 9,
+      "width": 21,
+      "height": 4,
       "type": "LABEL",
       "inputs": {
         "text": "Telescope Availability",
@@ -500,13 +477,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 19
+      "order": 18
     },
     {
       "valid": 1,
       "id": "70",
-      "x": 145,
-      "y": 16,
+      "x": 59,
+      "y": 6,
       "canvas": "0",
       "width": 20,
       "height": 4,
@@ -523,15 +500,15 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 20
+      "order": 19
     },
     {
       "valid": 1,
       "id": "71",
-      "x": 220,
-      "y": 16,
+      "x": 166,
+      "y": 6,
       "canvas": "0",
-      "width": 23,
+      "width": 21,
       "height": 4,
       "type": "LABEL",
       "inputs": {
@@ -546,21 +523,21 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 21
+      "order": 20
     },
     {
       "valid": 1,
       "id": "72",
-      "x": 237,
-      "y": 29,
+      "x": 166,
+      "y": 11,
       "canvas": "0",
       "width": 44,
-      "height": 138,
+      "height": 139,
       "type": "LABEL",
       "inputs": {
         "text": "Versions",
         "textColor": "#000000",
-        "backgroundColor": "#eeddbe",
+        "backgroundColor": "#ffffff",
         "borderWidth": 0,
         "borderColor": "#000000",
         "font": "Helvetica",
@@ -569,13 +546,13 @@
         "linkTo": "",
         "customCss": "text-align: center;"
       },
-      "order": 22
+      "order": 21
     },
     {
       "valid": 1,
       "id": "73",
-      "x": 239,
-      "y": 40,
+      "x": 167,
+      "y": 16,
       "canvas": "0",
       "width": 40,
       "height": 33,
@@ -583,7 +560,30 @@
       "inputs": {
         "text": "TMC",
         "textColor": "#000000",
-        "backgroundColor": "#ffdfdf",
+        "backgroundColor": "#ffffff",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.4,
+        "linkTo": "",
+        "customCss": "text-align: center;"
+      },
+      "order": 22
+    },
+    {
+      "valid": 1,
+      "id": "74",
+      "x": 167,
+      "y": 51,
+      "canvas": "0",
+      "width": 40,
+      "height": 14,
+      "type": "LABEL",
+      "inputs": {
+        "text": "SDP",
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
         "borderWidth": 0,
         "borderColor": "#000000",
         "font": "Helvetica",
@@ -596,32 +596,9 @@
     },
     {
       "valid": 1,
-      "id": "74",
-      "x": 239,
-      "y": 76,
-      "canvas": "0",
-      "width": 40,
-      "height": 14,
-      "type": "LABEL",
-      "inputs": {
-        "text": "SDP",
-        "textColor": "#000000",
-        "backgroundColor": "#ffdfdf",
-        "borderWidth": 0,
-        "borderColor": "#000000",
-        "font": "Helvetica",
-        "automaticResize": "Disabled",
-        "size": 1.4,
-        "linkTo": "",
-        "customCss": "text-align: center;"
-      },
-      "order": 24
-    },
-    {
-      "valid": 1,
       "id": "76",
-      "x": 92,
-      "y": 34,
+      "x": 25,
+      "y": 16,
       "canvas": "0",
       "width": 28,
       "height": 4,
@@ -631,6 +608,40 @@
           "device": "taranta://ska_mid/tm_central/central_node",
           "attribute": "state",
           "label": "State"
+        },
+        "precision": 2,
+        "format": "",
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "None",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": ""
+      },
+      "order": 24
+    },
+    {
+      "valid": 1,
+      "id": "77",
+      "x": 25,
+      "y": 21,
+      "canvas": "0",
+      "width": 28,
+      "height": 3,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska_mid/tm_central/central_node",
+          "attribute": "healthstate",
+          "label": "healthState"
         },
         "precision": 2,
         "format": "",
@@ -653,43 +664,9 @@
     },
     {
       "valid": 1,
-      "id": "77",
-      "x": 92,
-      "y": 40,
-      "canvas": "0",
-      "width": 28,
-      "height": 4,
-      "type": "ATTRIBUTE_DISPLAY",
-      "inputs": {
-        "attribute": {
-          "device": "taranta://ska_mid/tm_central/central_node",
-          "attribute": "healthstate",
-          "label": "healthState"
-        },
-        "precision": 2,
-        "format": "",
-        "showDevice": false,
-        "jsonCollapsed": true,
-        "showTangoDB": false,
-        "showAttribute": "None",
-        "alignTextCenter": false,
-        "alignValueRight": true,
-        "scientificNotation": false,
-        "showEnumLabels": true,
-        "showAttrQuality": false,
-        "textColor": "#000000",
-        "backgroundColor": "#ffffff",
-        "size": 1,
-        "font": "Helvetica",
-        "widgetCss": ""
-      },
-      "order": 26
-    },
-    {
-      "valid": 1,
       "id": "78",
-      "x": 148,
-      "y": 34,
+      "x": 78,
+      "y": 16,
       "canvas": "0",
       "width": 28,
       "height": 4,
@@ -717,13 +694,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 27
+      "order": 26
     },
     {
       "valid": 1,
       "id": "79",
-      "x": 148,
-      "y": 40,
+      "x": 78,
+      "y": 21,
       "canvas": "0",
       "width": 28,
       "height": 4,
@@ -751,13 +728,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 28
+      "order": 27
     },
     {
       "valid": 1,
       "id": "80",
-      "x": 204,
-      "y": 35,
+      "x": 134,
+      "y": 16,
       "canvas": "0",
       "width": 28,
       "height": 4,
@@ -785,13 +762,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 29
+      "order": 28
     },
     {
       "valid": 1,
       "id": "81",
-      "x": 126,
-      "y": 46,
+      "x": 56,
+      "y": 26,
       "canvas": "0",
       "width": 22,
       "height": 4,
@@ -808,13 +785,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 30
+      "order": 29
     },
     {
       "valid": 1,
       "id": "82",
-      "x": 148,
-      "y": 46,
+      "x": 78,
+      "y": 26,
       "canvas": "0",
       "width": 28,
       "height": 4,
@@ -842,13 +819,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 31
+      "order": 30
     },
     {
       "valid": 1,
       "id": "83",
-      "x": 204,
-      "y": 41,
+      "x": 134,
+      "y": 21,
       "canvas": "0",
       "width": 28,
       "height": 4,
@@ -876,13 +853,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 32
+      "order": 31
     },
     {
       "valid": 1,
       "id": "88",
-      "x": 242,
-      "y": 45,
+      "x": 168,
+      "y": 20,
       "canvas": "0",
       "width": 20,
       "height": 4,
@@ -899,13 +876,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 33
+      "order": 32
     },
     {
       "valid": 1,
       "id": "89",
-      "x": 242,
-      "y": 50,
+      "x": 168,
+      "y": 25,
       "canvas": "0",
       "width": 20,
       "height": 4,
@@ -922,13 +899,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 34
+      "order": 33
     },
     {
       "valid": 1,
       "id": "90",
-      "x": 242,
-      "y": 55,
+      "x": 168,
+      "y": 30,
       "canvas": "0",
       "width": 20,
       "height": 4,
@@ -945,13 +922,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 35
+      "order": 34
     },
     {
       "valid": 1,
       "id": "91",
-      "x": 242,
-      "y": 60,
+      "x": 168,
+      "y": 35,
       "canvas": "0",
       "width": 20,
       "height": 4,
@@ -968,13 +945,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 36
+      "order": 35
     },
     {
       "valid": 1,
       "id": "92",
-      "x": 242,
-      "y": 65,
+      "x": 168,
+      "y": 40,
       "canvas": "0",
       "width": 20,
       "height": 4,
@@ -991,13 +968,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 37
+      "order": 36
     },
     {
       "valid": 1,
       "id": "93",
-      "x": 241,
-      "y": 80,
+      "x": 168,
+      "y": 55,
       "canvas": "0",
       "width": 20,
       "height": 4,
@@ -1014,13 +991,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 38
+      "order": 37
     },
     {
       "valid": 1,
       "id": "94",
-      "x": 241,
-      "y": 85,
+      "x": 168,
+      "y": 60,
       "canvas": "0",
       "width": 20,
       "height": 4,
@@ -1037,13 +1014,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 39
+      "order": 38
     },
     {
       "valid": 1,
       "id": "95",
-      "x": 239,
-      "y": 92,
+      "x": 167,
+      "y": 67,
       "canvas": "0",
       "width": 40,
       "height": 14,
@@ -1051,7 +1028,30 @@
       "inputs": {
         "text": "CSP",
         "textColor": "#000000",
-        "backgroundColor": "#ffdfdf",
+        "backgroundColor": "#ffffff",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.4,
+        "linkTo": "",
+        "customCss": "text-align: center;"
+      },
+      "order": 39
+    },
+    {
+      "valid": 1,
+      "id": "96",
+      "x": 167,
+      "y": 83,
+      "canvas": "0",
+      "width": 40,
+      "height": 27,
+      "type": "LABEL",
+      "inputs": {
+        "text": "DISH",
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
         "borderWidth": 0,
         "borderColor": "#000000",
         "font": "Helvetica",
@@ -1064,32 +1064,9 @@
     },
     {
       "valid": 1,
-      "id": "96",
-      "x": 239,
-      "y": 108,
-      "canvas": "0",
-      "width": 40,
-      "height": 28,
-      "type": "LABEL",
-      "inputs": {
-        "text": "DISH",
-        "textColor": "#000000",
-        "backgroundColor": "#ffdfdf",
-        "borderWidth": 0,
-        "borderColor": "#000000",
-        "font": "Helvetica",
-        "automaticResize": "Disabled",
-        "size": 1.4,
-        "linkTo": "",
-        "customCss": "text-align: center;"
-      },
-      "order": 41
-    },
-    {
-      "valid": 1,
       "id": "98",
-      "x": 241,
-      "y": 101,
+      "x": 168,
+      "y": 76,
       "canvas": "0",
       "width": 21,
       "height": 4,
@@ -1106,13 +1083,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 42
+      "order": 41
     },
     {
       "valid": 1,
       "id": "99",
-      "x": 241,
-      "y": 96,
+      "x": 168,
+      "y": 71,
       "canvas": "0",
       "width": 21,
       "height": 4,
@@ -1129,19 +1106,42 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 43
+      "order": 42
     },
     {
       "valid": 1,
       "id": "100",
-      "x": 73,
-      "y": 103,
+      "x": 3,
+      "y": 80,
       "canvas": "0",
       "width": 16,
       "height": 4,
       "type": "LABEL",
       "inputs": {
         "text": "State",
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.2,
+        "linkTo": "",
+        "customCss": ""
+      },
+      "order": 43
+    },
+    {
+      "valid": 1,
+      "id": "102",
+      "x": 3,
+      "y": 85,
+      "canvas": "0",
+      "width": 16,
+      "height": 4,
+      "type": "LABEL",
+      "inputs": {
+        "text": "HealthState",
         "textColor": "#000000",
         "backgroundColor": "#ffffff",
         "borderWidth": 0,
@@ -1156,32 +1156,9 @@
     },
     {
       "valid": 1,
-      "id": "102",
-      "x": 73,
-      "y": 108,
-      "canvas": "0",
-      "width": 16,
-      "height": 4,
-      "type": "LABEL",
-      "inputs": {
-        "text": "HealthState",
-        "textColor": "#000000",
-        "backgroundColor": "#ffffff",
-        "borderWidth": 0,
-        "borderColor": "#000000",
-        "font": "Helvetica",
-        "automaticResize": "Disabled",
-        "size": 1.2,
-        "linkTo": "",
-        "customCss": ""
-      },
-      "order": 45
-    },
-    {
-      "valid": 1,
       "id": "103",
-      "x": 73,
-      "y": 113,
+      "x": 3,
+      "y": 89,
       "canvas": "0",
       "width": 16,
       "height": 4,
@@ -1198,13 +1175,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 46
+      "order": 45
     },
     {
       "valid": 1,
       "id": "104",
-      "x": 73,
-      "y": 118,
+      "x": 3,
+      "y": 93,
       "canvas": "0",
       "width": 16,
       "height": 4,
@@ -1221,13 +1198,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 47
+      "order": 46
     },
     {
       "valid": 1,
       "id": "106",
-      "x": 115,
-      "y": 103,
+      "x": 44,
+      "y": 80,
       "canvas": "0",
       "width": 16,
       "height": 4,
@@ -1244,13 +1221,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 48
+      "order": 47
     },
     {
       "valid": 1,
       "id": "107",
-      "x": 115,
-      "y": 108,
+      "x": 44,
+      "y": 84,
       "canvas": "0",
       "width": 16,
       "height": 4,
@@ -1267,13 +1244,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 49
+      "order": 48
     },
     {
       "valid": 1,
       "id": "108",
-      "x": 115,
-      "y": 113,
+      "x": 44,
+      "y": 88,
       "canvas": "0",
       "width": 16,
       "height": 4,
@@ -1290,13 +1267,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 50
+      "order": 49
     },
     {
       "valid": 1,
       "id": "109",
-      "x": 115,
-      "y": 118,
+      "x": 44,
+      "y": 93,
       "canvas": "0",
       "width": 16,
       "height": 4,
@@ -1313,13 +1290,36 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 51
+      "order": 50
     },
     {
       "valid": 1,
       "id": "112",
-      "x": 197,
-      "y": 103,
+      "x": 126,
+      "y": 79,
+      "canvas": "0",
+      "width": 16,
+      "height": 4,
+      "type": "LABEL",
+      "inputs": {
+        "text": "State",
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.2,
+        "linkTo": "",
+        "customCss": ""
+      },
+      "order": 51
+    },
+    {
+      "valid": 1,
+      "id": "113",
+      "x": 84,
+      "y": 80,
       "canvas": "0",
       "width": 16,
       "height": 4,
@@ -1340,15 +1340,15 @@
     },
     {
       "valid": 1,
-      "id": "113",
-      "x": 156,
-      "y": 103,
+      "id": "114",
+      "x": 126,
+      "y": 83,
       "canvas": "0",
       "width": 16,
       "height": 4,
       "type": "LABEL",
       "inputs": {
-        "text": "State",
+        "text": "HealthState",
         "textColor": "#000000",
         "backgroundColor": "#ffffff",
         "borderWidth": 0,
@@ -1363,9 +1363,9 @@
     },
     {
       "valid": 1,
-      "id": "114",
-      "x": 197,
-      "y": 108,
+      "id": "115",
+      "x": 84,
+      "y": 84,
       "canvas": "0",
       "width": 16,
       "height": 4,
@@ -1386,15 +1386,15 @@
     },
     {
       "valid": 1,
-      "id": "115",
-      "x": 156,
-      "y": 108,
+      "id": "116",
+      "x": 84,
+      "y": 88,
       "canvas": "0",
       "width": 16,
       "height": 4,
       "type": "LABEL",
       "inputs": {
-        "text": "HealthState",
+        "text": "Pointing State",
         "textColor": "#000000",
         "backgroundColor": "#ffffff",
         "borderWidth": 0,
@@ -1409,9 +1409,9 @@
     },
     {
       "valid": 1,
-      "id": "116",
-      "x": 156,
-      "y": 113,
+      "id": "117",
+      "x": 126,
+      "y": 87,
       "canvas": "0",
       "width": 16,
       "height": 4,
@@ -1432,15 +1432,15 @@
     },
     {
       "valid": 1,
-      "id": "117",
-      "x": 197,
-      "y": 113,
+      "id": "118",
+      "x": 84,
+      "y": 92,
       "canvas": "0",
       "width": 16,
       "height": 4,
       "type": "LABEL",
       "inputs": {
-        "text": "Pointing State",
+        "text": "Dish Mode",
         "textColor": "#000000",
         "backgroundColor": "#ffffff",
         "borderWidth": 0,
@@ -1455,9 +1455,9 @@
     },
     {
       "valid": 1,
-      "id": "118",
-      "x": 156,
-      "y": 118,
+      "id": "119",
+      "x": 126,
+      "y": 91,
       "canvas": "0",
       "width": 16,
       "height": 4,
@@ -1478,32 +1478,9 @@
     },
     {
       "valid": 1,
-      "id": "119",
-      "x": 197,
-      "y": 118,
-      "canvas": "0",
-      "width": 16,
-      "height": 4,
-      "type": "LABEL",
-      "inputs": {
-        "text": "Dish Mode",
-        "textColor": "#000000",
-        "backgroundColor": "#ffffff",
-        "borderWidth": 0,
-        "borderColor": "#000000",
-        "font": "Helvetica",
-        "automaticResize": "Disabled",
-        "size": 1.2,
-        "linkTo": "",
-        "customCss": ""
-      },
-      "order": 59
-    },
-    {
-      "valid": 1,
       "id": "121",
-      "x": 89,
-      "y": 103,
+      "x": 20,
+      "y": 80,
       "canvas": "0",
       "width": 19,
       "height": 4,
@@ -1513,6 +1490,40 @@
           "device": "taranta://ska001/elt/master",
           "attribute": "state",
           "label": "State"
+        },
+        "precision": 2,
+        "format": "",
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "None",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": ""
+      },
+      "order": 59
+    },
+    {
+      "valid": 1,
+      "id": "122",
+      "x": 20,
+      "y": 85,
+      "canvas": "0",
+      "width": 19,
+      "height": 4,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska001/elt/master",
+          "attribute": "healthstate",
+          "label": "healthState"
         },
         "precision": 2,
         "format": "",
@@ -1535,9 +1546,9 @@
     },
     {
       "valid": 1,
-      "id": "122",
-      "x": 89,
-      "y": 108,
+      "id": "123",
+      "x": 20,
+      "y": 89,
       "canvas": "0",
       "width": 19,
       "height": 4,
@@ -1545,8 +1556,8 @@
       "inputs": {
         "attribute": {
           "device": "taranta://ska001/elt/master",
-          "attribute": "healthstate",
-          "label": "healthState"
+          "attribute": "pointingstate",
+          "label": "pointingState"
         },
         "precision": 2,
         "format": "",
@@ -1569,9 +1580,9 @@
     },
     {
       "valid": 1,
-      "id": "123",
-      "x": 89,
-      "y": 113,
+      "id": "124",
+      "x": 20,
+      "y": 93,
       "canvas": "0",
       "width": 19,
       "height": 4,
@@ -1579,8 +1590,8 @@
       "inputs": {
         "attribute": {
           "device": "taranta://ska001/elt/master",
-          "attribute": "pointingstate",
-          "label": "pointingState"
+          "attribute": "dishmode",
+          "label": "dishMode"
         },
         "precision": 2,
         "format": "",
@@ -1603,18 +1614,18 @@
     },
     {
       "valid": 1,
-      "id": "124",
-      "x": 89,
-      "y": 118,
+      "id": "126",
+      "x": 60,
+      "y": 80,
       "canvas": "0",
       "width": 19,
       "height": 4,
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska001/elt/master",
-          "attribute": "dishmode",
-          "label": "dishMode"
+          "device": "taranta://ska036/elt/master",
+          "attribute": "state",
+          "label": "State"
         },
         "precision": 2,
         "format": "",
@@ -1637,9 +1648,9 @@
     },
     {
       "valid": 1,
-      "id": "126",
-      "x": 131,
-      "y": 103,
+      "id": "127",
+      "x": 60,
+      "y": 84,
       "canvas": "0",
       "width": 19,
       "height": 4,
@@ -1647,8 +1658,8 @@
       "inputs": {
         "attribute": {
           "device": "taranta://ska036/elt/master",
-          "attribute": "state",
-          "label": "State"
+          "attribute": "healthstate",
+          "label": "healthState"
         },
         "precision": 2,
         "format": "",
@@ -1671,9 +1682,9 @@
     },
     {
       "valid": 1,
-      "id": "127",
-      "x": 131,
-      "y": 108,
+      "id": "128",
+      "x": 60,
+      "y": 88,
       "canvas": "0",
       "width": 19,
       "height": 4,
@@ -1681,8 +1692,8 @@
       "inputs": {
         "attribute": {
           "device": "taranta://ska036/elt/master",
-          "attribute": "healthstate",
-          "label": "healthState"
+          "attribute": "pointingstate",
+          "label": "pointingState"
         },
         "precision": 2,
         "format": "",
@@ -1705,9 +1716,9 @@
     },
     {
       "valid": 1,
-      "id": "128",
-      "x": 131,
-      "y": 113,
+      "id": "129",
+      "x": 60,
+      "y": 93,
       "canvas": "0",
       "width": 19,
       "height": 4,
@@ -1715,8 +1726,8 @@
       "inputs": {
         "attribute": {
           "device": "taranta://ska036/elt/master",
-          "attribute": "pointingstate",
-          "label": "pointingState"
+          "attribute": "dishmode",
+          "label": "dishMode"
         },
         "precision": 2,
         "format": "",
@@ -1739,18 +1750,18 @@
     },
     {
       "valid": 1,
-      "id": "129",
-      "x": 131,
-      "y": 118,
+      "id": "131",
+      "x": 101,
+      "y": 80,
       "canvas": "0",
       "width": 19,
       "height": 4,
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska036/elt/master",
-          "attribute": "dishmode",
-          "label": "dishMode"
+          "device": "taranta://ska063/elt/master",
+          "attribute": "state",
+          "label": "State"
         },
         "precision": 2,
         "format": "",
@@ -1773,9 +1784,9 @@
     },
     {
       "valid": 1,
-      "id": "131",
-      "x": 172,
-      "y": 103,
+      "id": "132",
+      "x": 101,
+      "y": 84,
       "canvas": "0",
       "width": 19,
       "height": 4,
@@ -1783,8 +1794,8 @@
       "inputs": {
         "attribute": {
           "device": "taranta://ska063/elt/master",
-          "attribute": "state",
-          "label": "State"
+          "attribute": "healthstate",
+          "label": "healthState"
         },
         "precision": 2,
         "format": "",
@@ -1807,43 +1818,9 @@
     },
     {
       "valid": 1,
-      "id": "132",
-      "x": 172,
-      "y": 108,
-      "canvas": "0",
-      "width": 19,
-      "height": 4,
-      "type": "ATTRIBUTE_DISPLAY",
-      "inputs": {
-        "attribute": {
-          "device": "taranta://ska063/elt/master",
-          "attribute": "healthstate",
-          "label": "healthState"
-        },
-        "precision": 2,
-        "format": "",
-        "showDevice": false,
-        "jsonCollapsed": true,
-        "showTangoDB": false,
-        "showAttribute": "None",
-        "alignTextCenter": false,
-        "alignValueRight": true,
-        "scientificNotation": false,
-        "showEnumLabels": true,
-        "showAttrQuality": false,
-        "textColor": "#000000",
-        "backgroundColor": "#ffffff",
-        "size": 1,
-        "font": "Helvetica",
-        "widgetCss": ""
-      },
-      "order": 69
-    },
-    {
-      "valid": 1,
       "id": "133",
-      "x": 172,
-      "y": 113,
+      "x": 101,
+      "y": 88,
       "canvas": "0",
       "width": 19,
       "height": 4,
@@ -1871,13 +1848,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 70
+      "order": 69
     },
     {
       "valid": 1,
       "id": "134",
-      "x": 172,
-      "y": 118,
+      "x": 101,
+      "y": 92,
       "canvas": "0",
       "width": 19,
       "height": 4,
@@ -1905,13 +1882,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 71
+      "order": 70
     },
     {
       "valid": 1,
       "id": "136",
-      "x": 213,
-      "y": 103,
+      "x": 143,
+      "y": 79,
       "canvas": "0",
       "width": 19,
       "height": 4,
@@ -1939,13 +1916,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 72
+      "order": 71
     },
     {
       "valid": 1,
       "id": "137",
-      "x": 213,
-      "y": 108,
+      "x": 143,
+      "y": 83,
       "canvas": "0",
       "width": 19,
       "height": 4,
@@ -1973,13 +1950,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 73
+      "order": 72
     },
     {
       "valid": 1,
       "id": "138",
-      "x": 213,
-      "y": 113,
+      "x": 143,
+      "y": 87,
       "canvas": "0",
       "width": 19,
       "height": 4,
@@ -2007,13 +1984,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 74
+      "order": 73
     },
     {
       "valid": 1,
       "id": "139",
-      "x": 213,
-      "y": 118,
+      "x": 143,
+      "y": 91,
       "canvas": "0",
       "width": 19,
       "height": 4,
@@ -2041,13 +2018,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 75
+      "order": 74
     },
     {
       "valid": 1,
       "id": "140",
-      "x": 262,
-      "y": 45,
+      "x": 189,
+      "y": 20,
       "canvas": "0",
       "width": 13,
       "height": 4,
@@ -2075,13 +2052,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 76
+      "order": 75
     },
     {
       "valid": 1,
       "id": "141",
-      "x": 262,
-      "y": 50,
+      "x": 189,
+      "y": 25,
       "canvas": "0",
       "width": 13,
       "height": 4,
@@ -2109,13 +2086,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 77
+      "order": 76
     },
     {
       "valid": 1,
       "id": "142",
-      "x": 262,
-      "y": 55,
+      "x": 189,
+      "y": 30,
       "canvas": "0",
       "width": 13,
       "height": 4,
@@ -2143,13 +2120,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 78
+      "order": 77
     },
     {
       "valid": 1,
       "id": "143",
-      "x": 262,
-      "y": 60,
+      "x": 189,
+      "y": 35,
       "canvas": "0",
       "width": 13,
       "height": 4,
@@ -2177,13 +2154,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 79
+      "order": 78
     },
     {
       "valid": 1,
       "id": "144",
-      "x": 262,
-      "y": 65,
+      "x": 189,
+      "y": 40,
       "canvas": "0",
       "width": 13,
       "height": 4,
@@ -2211,13 +2188,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 80
+      "order": 79
     },
     {
       "valid": 1,
       "id": "145",
-      "x": 262,
-      "y": 80,
+      "x": 190,
+      "y": 55,
       "canvas": "0",
       "width": 13,
       "height": 4,
@@ -2245,13 +2222,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 81
+      "order": 80
     },
     {
       "valid": 1,
       "id": "146",
-      "x": 262,
-      "y": 85,
+      "x": 190,
+      "y": 60,
       "canvas": "0",
       "width": 13,
       "height": 4,
@@ -2279,13 +2256,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 82
+      "order": 81
     },
     {
       "valid": 1,
       "id": "147",
-      "x": 264,
-      "y": 96,
+      "x": 190,
+      "y": 71,
       "canvas": "0",
       "width": 13,
       "height": 4,
@@ -2313,13 +2290,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 83
+      "order": 82
     },
     {
       "valid": 1,
       "id": "148",
-      "x": 264,
-      "y": 101,
+      "x": 190,
+      "y": 76,
       "canvas": "0",
       "width": 13,
       "height": 4,
@@ -2347,13 +2324,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 84
+      "order": 83
     },
     {
       "valid": 1,
       "id": "149",
-      "x": 264,
-      "y": 112,
+      "x": 189,
+      "y": 87,
       "canvas": "0",
       "width": 14,
       "height": 4,
@@ -2381,21 +2358,21 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 85
+      "order": 84
     },
     {
       "valid": 1,
       "id": "150",
-      "x": 65,
-      "y": 173,
+      "x": 210,
+      "y": 5,
       "canvas": "0",
-      "width": 219,
-      "height": 6,
+      "width": 62,
+      "height": 5,
       "type": "LABEL",
       "inputs": {
         "text": "Subarray View",
         "textColor": "#ffffff",
-        "backgroundColor": "#000000",
+        "backgroundColor": "#070068",
         "borderWidth": 0,
         "borderColor": "#000000",
         "font": "Helvetica",
@@ -2404,13 +2381,13 @@
         "linkTo": "",
         "customCss": "text-align: center;"
       },
-      "order": 86
+      "order": 85
     },
     {
       "valid": 1,
       "id": "151",
-      "x": 66,
-      "y": 189,
+      "x": 211,
+      "y": 17,
       "canvas": "0",
       "width": 25,
       "height": 4,
@@ -2427,13 +2404,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 87
+      "order": 86
     },
     {
       "valid": 1,
       "id": "152",
-      "x": 140,
-      "y": 189,
+      "x": 211,
+      "y": 58,
       "canvas": "0",
       "width": 25,
       "height": 4,
@@ -2450,13 +2427,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 88
+      "order": 87
     },
     {
       "valid": 1,
       "id": "153",
-      "x": 215,
-      "y": 189,
+      "x": 211,
+      "y": 100,
       "canvas": "0",
       "width": 25,
       "height": 4,
@@ -2473,13 +2450,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 89
+      "order": 88
     },
     {
       "valid": 1,
       "id": "154",
-      "x": 66,
-      "y": 195,
+      "x": 211,
+      "y": 22,
       "canvas": "0",
       "width": 25,
       "height": 4,
@@ -2496,15 +2473,15 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 90
+      "order": 89
     },
     {
       "valid": 1,
       "id": "156",
-      "x": 165,
-      "y": 189,
+      "x": 237,
+      "y": 58,
       "canvas": "0",
-      "width": 40,
+      "width": 35,
       "height": 4,
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
@@ -2530,15 +2507,15 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 91
+      "order": 90
     },
     {
       "valid": 1,
       "id": "157",
-      "x": 242,
-      "y": 189,
+      "x": 238,
+      "y": 100,
       "canvas": "0",
-      "width": 38,
+      "width": 34,
       "height": 4,
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
@@ -2564,15 +2541,15 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 92
+      "order": 91
     },
     {
       "valid": 1,
       "id": "158",
-      "x": 91,
-      "y": 195,
+      "x": 237,
+      "y": 22,
       "canvas": "0",
-      "width": 40,
+      "width": 35,
       "height": 4,
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
@@ -2598,13 +2575,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 93
+      "order": 92
     },
     {
       "valid": 1,
       "id": "159",
-      "x": 140,
-      "y": 195,
+      "x": 211,
+      "y": 63,
       "canvas": "0",
       "width": 25,
       "height": 4,
@@ -2621,13 +2598,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 94
+      "order": 93
     },
     {
       "valid": 1,
       "id": "160",
-      "x": 215,
-      "y": 195,
+      "x": 211,
+      "y": 105,
       "canvas": "0",
       "width": 25,
       "height": 4,
@@ -2644,20 +2621,54 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 95
+      "order": 94
     },
     {
       "valid": 1,
       "id": "161",
-      "x": 165,
-      "y": 195,
+      "x": 237,
+      "y": 63,
       "canvas": "0",
-      "width": 40,
+      "width": 35,
       "height": 4,
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
           "device": "taranta://mid-csp/subarray/01",
+          "attribute": "obsstate",
+          "label": "obsState"
+        },
+        "precision": 2,
+        "format": "",
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "None",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": ""
+      },
+      "order": 95
+    },
+    {
+      "valid": 1,
+      "id": "162",
+      "x": 238,
+      "y": 105,
+      "canvas": "0",
+      "width": 34,
+      "height": 4,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://mid-sdp/subarray/01",
           "attribute": "obsstate",
           "label": "obsState"
         },
@@ -2682,45 +2693,11 @@
     },
     {
       "valid": 1,
-      "id": "162",
-      "x": 242,
-      "y": 194,
-      "canvas": "0",
-      "width": 38,
-      "height": 4,
-      "type": "ATTRIBUTE_DISPLAY",
-      "inputs": {
-        "attribute": {
-          "device": "taranta://mid-csp/subarray/01",
-          "attribute": "obsstate",
-          "label": "obsState"
-        },
-        "precision": 2,
-        "format": "",
-        "showDevice": false,
-        "jsonCollapsed": true,
-        "showTangoDB": false,
-        "showAttribute": "None",
-        "alignTextCenter": false,
-        "alignValueRight": true,
-        "scientificNotation": false,
-        "showEnumLabels": true,
-        "showAttrQuality": false,
-        "textColor": "#000000",
-        "backgroundColor": "#ffffff",
-        "size": 1,
-        "font": "Helvetica",
-        "widgetCss": ""
-      },
-      "order": 97
-    },
-    {
-      "valid": 1,
       "id": "163",
-      "x": 140,
-      "y": 199,
+      "x": 211,
+      "y": 68,
       "canvas": "0",
-      "width": 65,
+      "width": 61,
       "height": 30,
       "type": "TIMELINE",
       "inputs": {
@@ -2740,15 +2717,15 @@
           }
         ]
       },
-      "order": 98
+      "order": 97
     },
     {
       "valid": 1,
       "id": "164",
-      "x": 66,
-      "y": 199,
+      "x": 211,
+      "y": 26,
       "canvas": "0",
-      "width": 65,
+      "width": 61,
       "height": 30,
       "type": "TIMELINE",
       "inputs": {
@@ -2768,16 +2745,16 @@
           }
         ]
       },
-      "order": 99
+      "order": 98
     },
     {
       "valid": 1,
       "id": "165",
-      "x": 215,
-      "y": 199,
+      "x": 211,
+      "y": 110,
       "canvas": "0",
-      "width": 63,
-      "height": 30,
+      "width": 61,
+      "height": 42,
       "type": "TIMELINE",
       "inputs": {
         "timeWindow": 120,
@@ -2796,15 +2773,15 @@
           }
         ]
       },
-      "order": 100
+      "order": 99
     },
     {
       "valid": 1,
       "id": "166",
-      "x": 144,
-      "y": 180,
+      "x": 210,
+      "y": 10,
       "canvas": "0",
-      "width": 63,
+      "width": 62,
       "height": 6,
       "type": "LABEL",
       "inputs": {
@@ -2819,13 +2796,13 @@
         "linkTo": "",
         "customCss": "text-align: center;"
       },
-      "order": 101
+      "order": 100
     },
     {
       "valid": 1,
       "id": "167",
-      "x": 66,
-      "y": 236,
+      "x": 167,
+      "y": 113,
       "canvas": "0",
       "width": 22,
       "height": 4,
@@ -2842,13 +2819,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 102
+      "order": 101
     },
     {
       "valid": 1,
       "id": "168",
-      "x": 88,
-      "y": 233,
+      "x": 167,
+      "y": 118,
       "canvas": "0",
       "width": 43,
       "height": 10,
@@ -2869,13 +2846,13 @@
         "fontSize": 16,
         "customCss": ""
       },
-      "order": 103
+      "order": 102
     },
     {
       "valid": 1,
       "id": "169",
-      "x": 66,
-      "y": 248,
+      "x": 167,
+      "y": 129,
       "canvas": "0",
       "width": 22,
       "height": 4,
@@ -2892,15 +2869,15 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 104
+      "order": 103
     },
     {
       "valid": 1,
       "id": "170",
-      "x": 88,
-      "y": 245,
+      "x": 167,
+      "y": 134,
       "canvas": "0",
-      "width": 74,
+      "width": 42,
       "height": 10,
       "type": "SPECTRUM_TABLE",
       "inputs": {
@@ -2919,16 +2896,16 @@
         "fontSize": 16,
         "customCss": ""
       },
-      "order": 105
+      "order": 104
     },
     {
       "valid": 1,
       "id": "175",
-      "x": 88,
-      "y": 125,
+      "x": 20,
+      "y": 98,
       "canvas": "0",
-      "width": 20,
-      "height": 15,
+      "width": 19,
+      "height": 24,
       "type": "SPECTRUM_TABLE",
       "inputs": {
         "attribute": {
@@ -2947,15 +2924,15 @@
         "customCss": "background-color: white",
         "showSpecificIndexValue": ""
       },
-      "order": 106
+      "order": 105
     },
     {
       "valid": 1,
       "id": "176",
-      "x": 73,
-      "y": 125,
+      "x": 3,
+      "y": 98,
       "canvas": "0",
-      "width": 15,
+      "width": 16,
       "height": 6,
       "type": "LABEL",
       "inputs": {
@@ -2970,16 +2947,16 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 107
+      "order": 106
     },
     {
       "valid": 1,
       "id": "177",
-      "x": 88,
-      "y": 142,
+      "x": 20,
+      "y": 123,
       "canvas": "0",
-      "width": 20,
-      "height": 15,
+      "width": 19,
+      "height": 24,
       "type": "SPECTRUM_TABLE",
       "inputs": {
         "attribute": {
@@ -2998,15 +2975,15 @@
         "customCss": "background-color: white",
         "showSpecificIndexValue": ""
       },
-      "order": 108
+      "order": 107
     },
     {
       "valid": 1,
       "id": "179",
-      "x": 115,
-      "y": 123,
+      "x": 44,
+      "y": 98,
       "canvas": "0",
-      "width": 15,
+      "width": 16,
       "height": 6,
       "type": "LABEL",
       "inputs": {
@@ -3021,22 +2998,50 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 109
+      "order": 108
     },
     {
       "valid": 1,
       "id": "180",
-      "x": 130,
-      "y": 123,
+      "x": 60,
+      "y": 98,
       "canvas": "0",
       "width": 20,
-      "height": 15,
+      "height": 24,
       "type": "SPECTRUM_TABLE",
       "inputs": {
         "attribute": {
           "device": "taranta://ska036/elt/master",
           "attribute": "achievedpointing",
           "label": "achievedPointing"
+        },
+        "precision": 3,
+        "layout": "vertical",
+        "showDevice": false,
+        "showTangoDB": false,
+        "showAttribute": "None",
+        "showIndex": false,
+        "showLabel": false,
+        "fontSize": 16,
+        "customCss": "background-color: white",
+        "showSpecificIndexValue": ""
+      },
+      "order": 109
+    },
+    {
+      "valid": 1,
+      "id": "181",
+      "x": 60,
+      "y": 123,
+      "canvas": "0",
+      "width": 20,
+      "height": 24,
+      "type": "SPECTRUM_TABLE",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska036/elt/master",
+          "attribute": "desiredpointing",
+          "label": "desiredPointing"
         },
         "precision": 3,
         "layout": "vertical",
@@ -3053,39 +3058,11 @@
     },
     {
       "valid": 1,
-      "id": "181",
-      "x": 130,
-      "y": 141,
-      "canvas": "0",
-      "width": 20,
-      "height": 15,
-      "type": "SPECTRUM_TABLE",
-      "inputs": {
-        "attribute": {
-          "device": "taranta://ska036/elt/master",
-          "attribute": "desiredpointing",
-          "label": "desiredPointing"
-        },
-        "precision": 3,
-        "layout": "vertical",
-        "showDevice": false,
-        "showTangoDB": false,
-        "showAttribute": "None",
-        "showIndex": false,
-        "showLabel": false,
-        "fontSize": 16,
-        "customCss": "background-color: white",
-        "showSpecificIndexValue": ""
-      },
-      "order": 111
-    },
-    {
-      "valid": 1,
       "id": "183",
-      "x": 156,
-      "y": 123,
+      "x": 84,
+      "y": 97,
       "canvas": "0",
-      "width": 15,
+      "width": 16,
       "height": 6,
       "type": "LABEL",
       "inputs": {
@@ -3100,22 +3077,50 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 112
+      "order": 111
     },
     {
       "valid": 1,
       "id": "184",
-      "x": 171,
-      "y": 123,
+      "x": 101,
+      "y": 97,
       "canvas": "0",
-      "width": 20,
-      "height": 15,
+      "width": 19,
+      "height": 24,
       "type": "SPECTRUM_TABLE",
       "inputs": {
         "attribute": {
           "device": "taranta://ska063/elt/master",
           "attribute": "achievedpointing",
           "label": "achievedPointing"
+        },
+        "precision": 3,
+        "layout": "vertical",
+        "showDevice": false,
+        "showTangoDB": false,
+        "showAttribute": "None",
+        "showIndex": false,
+        "showLabel": false,
+        "fontSize": 16,
+        "customCss": "background-color: white",
+        "showSpecificIndexValue": ""
+      },
+      "order": 112
+    },
+    {
+      "valid": 1,
+      "id": "186",
+      "x": 101,
+      "y": 122,
+      "canvas": "0",
+      "width": 19,
+      "height": 24,
+      "type": "SPECTRUM_TABLE",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska063/elt/master",
+          "attribute": "desiredpointing",
+          "label": "desiredPointing"
         },
         "precision": 3,
         "layout": "vertical",
@@ -3132,37 +3137,9 @@
     },
     {
       "valid": 1,
-      "id": "186",
-      "x": 171,
-      "y": 141,
-      "canvas": "0",
-      "width": 21,
-      "height": 15,
-      "type": "SPECTRUM_TABLE",
-      "inputs": {
-        "attribute": {
-          "device": "taranta://ska063/elt/master",
-          "attribute": "desiredpointing",
-          "label": "desiredPointing"
-        },
-        "precision": 3,
-        "layout": "vertical",
-        "showDevice": false,
-        "showTangoDB": false,
-        "showAttribute": "None",
-        "showIndex": false,
-        "showLabel": false,
-        "fontSize": 16,
-        "customCss": "background-color: white",
-        "showSpecificIndexValue": ""
-      },
-      "order": 114
-    },
-    {
-      "valid": 1,
       "id": "187",
-      "x": 197,
-      "y": 141,
+      "x": 127,
+      "y": 122,
       "canvas": "0",
       "width": 15,
       "height": 3,
@@ -3179,15 +3156,15 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 115
+      "order": 114
     },
     {
       "valid": 1,
       "id": "189",
-      "x": 197,
-      "y": 123,
+      "x": 126,
+      "y": 96,
       "canvas": "0",
-      "width": 15,
+      "width": 16,
       "height": 5,
       "type": "LABEL",
       "inputs": {
@@ -3202,16 +3179,16 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 116
+      "order": 115
     },
     {
       "valid": 1,
       "id": "190",
-      "x": 212,
-      "y": 123,
+      "x": 143,
+      "y": 96,
       "canvas": "0",
-      "width": 20,
-      "height": 15,
+      "width": 19,
+      "height": 24,
       "type": "SPECTRUM_TABLE",
       "inputs": {
         "attribute": {
@@ -3230,16 +3207,16 @@
         "customCss": "background-color: white",
         "showSpecificIndexValue": ""
       },
-      "order": 117
+      "order": 116
     },
     {
       "valid": 1,
       "id": "191",
-      "x": 212,
-      "y": 141,
+      "x": 143,
+      "y": 122,
       "canvas": "0",
       "width": 19,
-      "height": 15,
+      "height": 24,
       "type": "SPECTRUM_TABLE",
       "inputs": {
         "attribute": {
@@ -3258,15 +3235,15 @@
         "customCss": "background-color: white",
         "showSpecificIndexValue": ""
       },
-      "order": 118
+      "order": 117
     },
     {
       "valid": 1,
       "id": "192",
-      "x": 241,
-      "y": 112,
+      "x": 168,
+      "y": 87,
       "canvas": "0",
-      "width": 21,
+      "width": 20,
       "height": 4,
       "type": "LABEL",
       "inputs": {
@@ -3281,15 +3258,15 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 119
+      "order": 118
     },
     {
       "valid": 1,
       "id": "193",
-      "x": 241,
-      "y": 127,
+      "x": 168,
+      "y": 102,
       "canvas": "0",
-      "width": 21,
+      "width": 20,
       "height": 4,
       "type": "LABEL",
       "inputs": {
@@ -3304,15 +3281,15 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 120
+      "order": 119
     },
     {
       "valid": 1,
       "id": "194",
-      "x": 241,
-      "y": 122,
+      "x": 168,
+      "y": 97,
       "canvas": "0",
-      "width": 21,
+      "width": 20,
       "height": 4,
       "type": "LABEL",
       "inputs": {
@@ -3327,15 +3304,15 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 121
+      "order": 120
     },
     {
       "valid": 1,
       "id": "195",
-      "x": 241,
-      "y": 117,
+      "x": 168,
+      "y": 92,
       "canvas": "0",
-      "width": 21,
+      "width": 20,
       "height": 4,
       "type": "LABEL",
       "inputs": {
@@ -3350,13 +3327,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 122
+      "order": 121
     },
     {
       "valid": 1,
       "id": "196",
-      "x": 264,
-      "y": 117,
+      "x": 189,
+      "y": 92,
       "canvas": "0",
       "width": 14,
       "height": 4,
@@ -3364,6 +3341,40 @@
       "inputs": {
         "attribute": {
           "device": "taranta://ska036/elt/master",
+          "attribute": "versionid",
+          "label": "versionId"
+        },
+        "precision": 2,
+        "format": "",
+        "showDevice": false,
+        "jsonCollapsed": true,
+        "showTangoDB": false,
+        "showAttribute": "None",
+        "alignTextCenter": false,
+        "alignValueRight": true,
+        "scientificNotation": false,
+        "showEnumLabels": true,
+        "showAttrQuality": false,
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "size": 1,
+        "font": "Helvetica",
+        "widgetCss": ""
+      },
+      "order": 122
+    },
+    {
+      "valid": 1,
+      "id": "197",
+      "x": 189,
+      "y": 97,
+      "canvas": "0",
+      "width": 14,
+      "height": 4,
+      "type": "ATTRIBUTE_DISPLAY",
+      "inputs": {
+        "attribute": {
+          "device": "taranta://ska063/elt/master",
           "attribute": "versionid",
           "label": "versionId"
         },
@@ -3388,43 +3399,9 @@
     },
     {
       "valid": 1,
-      "id": "197",
-      "x": 264,
-      "y": 122,
-      "canvas": "0",
-      "width": 14,
-      "height": 4,
-      "type": "ATTRIBUTE_DISPLAY",
-      "inputs": {
-        "attribute": {
-          "device": "taranta://ska063/elt/master",
-          "attribute": "versionid",
-          "label": "versionId"
-        },
-        "precision": 2,
-        "format": "",
-        "showDevice": false,
-        "jsonCollapsed": true,
-        "showTangoDB": false,
-        "showAttribute": "None",
-        "alignTextCenter": false,
-        "alignValueRight": true,
-        "scientificNotation": false,
-        "showEnumLabels": true,
-        "showAttrQuality": false,
-        "textColor": "#000000",
-        "backgroundColor": "#ffffff",
-        "size": 1,
-        "font": "Helvetica",
-        "widgetCss": ""
-      },
-      "order": 124
-    },
-    {
-      "valid": 1,
       "id": "198",
-      "x": 264,
-      "y": 127,
+      "x": 189,
+      "y": 102,
       "canvas": "0",
       "width": 14,
       "height": 4,
@@ -3452,15 +3429,15 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 125
+      "order": 124
     },
     {
       "valid": 1,
       "id": "203",
-      "x": 91,
-      "y": 189,
+      "x": 237,
+      "y": 17,
       "canvas": "0",
-      "width": 40,
+      "width": 35,
       "height": 4,
       "type": "LED_DISPLAY",
       "inputs": {
@@ -3483,15 +3460,15 @@
         "alignValueRight": true,
         "customCss": ""
       },
-      "order": 126
+      "order": 125
     },
     {
       "valid": 1,
       "id": "204",
-      "x": 165,
-      "y": 21,
+      "x": 136,
+      "y": 6,
       "canvas": "0",
-      "width": 28,
+      "width": 27,
       "height": 4,
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
@@ -3517,15 +3494,15 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 127
+      "order": 126
     },
     {
       "valid": 1,
       "id": "205",
-      "x": 145,
-      "y": 21,
+      "x": 112,
+      "y": 6,
       "canvas": "0",
-      "width": 20,
+      "width": 23,
       "height": 4,
       "type": "LABEL",
       "inputs": {
@@ -3540,13 +3517,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 128
+      "order": 127
     },
     {
       "valid": 1,
       "id": "206",
-      "x": 126,
-      "y": 55,
+      "x": 56,
+      "y": 34,
       "canvas": "0",
       "width": 51,
       "height": 9,
@@ -3574,13 +3551,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 129
+      "order": 128
     },
     {
       "valid": 1,
       "id": "207",
-      "x": 126,
-      "y": 51,
+      "x": 56,
+      "y": 31,
       "canvas": "0",
       "width": 22,
       "height": 3,
@@ -3597,13 +3574,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 130
+      "order": 129
     },
     {
       "valid": 1,
       "id": "208",
-      "x": 70,
-      "y": 49,
+      "x": 2,
+      "y": 30,
       "canvas": "0",
       "width": 51,
       "height": 15,
@@ -3631,15 +3608,15 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 131
+      "order": 130
     },
     {
       "valid": 1,
       "id": "209",
-      "x": 70,
-      "y": 45,
+      "x": 2,
+      "y": 26,
       "canvas": "0",
-      "width": 21,
+      "width": 22,
       "height": 3,
       "type": "LABEL",
       "inputs": {
@@ -3654,13 +3631,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 132
+      "order": 131
     },
     {
       "valid": 1,
       "id": "210",
-      "x": 126,
-      "y": 71,
+      "x": 56,
+      "y": 46,
       "canvas": "0",
       "width": 50,
       "height": 14,
@@ -3688,13 +3665,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 133
+      "order": 132
     },
     {
       "valid": 1,
       "id": "211",
-      "x": 126,
-      "y": 67,
+      "x": 56,
+      "y": 43,
       "canvas": "0",
       "width": 20,
       "height": 3,
@@ -3711,13 +3688,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 134
+      "order": 133
     },
     {
       "valid": 1,
       "id": "212",
-      "x": 89,
-      "y": 158,
+      "x": 19,
+      "y": 148,
       "canvas": "0",
       "width": 20,
       "height": 3,
@@ -3745,13 +3722,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 135
+      "order": 134
     },
     {
       "valid": 1,
       "id": "213",
-      "x": 73,
-      "y": 158,
+      "x": 3,
+      "y": 148,
       "canvas": "0",
       "width": 16,
       "height": 3,
@@ -3768,13 +3745,13 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 136
+      "order": 135
     },
     {
       "valid": 1,
       "id": "214",
-      "x": 131,
-      "y": 158,
+      "x": 60,
+      "y": 148,
       "canvas": "0",
       "width": 20,
       "height": 3,
@@ -3802,13 +3779,36 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 137
+      "order": 136
     },
     {
       "valid": 1,
       "id": "217",
-      "x": 115,
-      "y": 158,
+      "x": 44,
+      "y": 148,
+      "canvas": "0",
+      "width": 16,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "kValue",
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1,
+        "linkTo": "",
+        "customCss": ""
+      },
+      "order": 137
+    },
+    {
+      "valid": 1,
+      "id": "220",
+      "x": 84,
+      "y": 148,
       "canvas": "0",
       "width": 16,
       "height": 3,
@@ -3829,32 +3829,9 @@
     },
     {
       "valid": 1,
-      "id": "220",
-      "x": 156,
-      "y": 158,
-      "canvas": "0",
-      "width": 16,
-      "height": 3,
-      "type": "LABEL",
-      "inputs": {
-        "text": "kValue",
-        "textColor": "#000000",
-        "backgroundColor": "#ffffff",
-        "borderWidth": 0,
-        "borderColor": "#000000",
-        "font": "Helvetica",
-        "automaticResize": "Disabled",
-        "size": 1,
-        "linkTo": "",
-        "customCss": ""
-      },
-      "order": 139
-    },
-    {
-      "valid": 1,
       "id": "221",
-      "x": 172,
-      "y": 158,
+      "x": 101,
+      "y": 148,
       "canvas": "0",
       "width": 20,
       "height": 3,
@@ -3882,13 +3859,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 140
+      "order": 139
     },
     {
       "valid": 1,
       "id": "222",
-      "x": 213,
-      "y": 158,
+      "x": 142,
+      "y": 148,
       "canvas": "0",
       "width": 20,
       "height": 3,
@@ -3916,13 +3893,13 @@
         "font": "Helvetica",
         "widgetCss": ""
       },
-      "order": 141
+      "order": 140
     },
     {
       "valid": 1,
       "id": "223",
-      "x": 197,
-      "y": 158,
+      "x": 125,
+      "y": 148,
       "canvas": "0",
       "width": 16,
       "height": 3,
@@ -3939,13 +3916,36 @@
         "linkTo": "",
         "customCss": ""
       },
-      "order": 142
+      "order": 141
     },
     {
       "valid": 1,
       "id": "224",
-      "x": 156,
-      "y": 141,
+      "x": 84,
+      "y": 122,
+      "canvas": "0",
+      "width": 16,
+      "height": 3,
+      "type": "LABEL",
+      "inputs": {
+        "text": "Desired Pointing",
+        "textColor": "#000000",
+        "backgroundColor": "#ffffff",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.2,
+        "linkTo": "",
+        "customCss": ""
+      },
+      "order": 142
+    },
+    {
+      "valid": 1,
+      "id": "225",
+      "x": 44,
+      "y": 123,
       "canvas": "0",
       "width": 15,
       "height": 3,
@@ -3966,11 +3966,11 @@
     },
     {
       "valid": 1,
-      "id": "225",
-      "x": 115,
-      "y": 141,
+      "id": "226",
+      "x": 3,
+      "y": 123,
       "canvas": "0",
-      "width": 15,
+      "width": 16,
       "height": 3,
       "type": "LABEL",
       "inputs": {
@@ -3989,27 +3989,306 @@
     },
     {
       "valid": 1,
-      "id": "226",
-      "x": 73,
-      "y": 142,
+      "id": "227",
+      "x": 2,
+      "y": 70,
       "canvas": "0",
-      "width": 15,
-      "height": 3,
+      "width": 163,
+      "height": 4,
       "type": "LABEL",
       "inputs": {
-        "text": "Desired Pointing",
-        "textColor": "#000000",
-        "backgroundColor": "#ffffff",
+        "text": "Dish",
+        "textColor": "#ffffff",
+        "backgroundColor": "#070068",
         "borderWidth": 0,
         "borderColor": "#000000",
         "font": "Helvetica",
         "automaticResize": "Disabled",
-        "size": 1.2,
+        "size": 1.8,
         "linkTo": "",
-        "customCss": ""
+        "customCss": "text-align: center;"
       },
       "order": 145
+    },
+    {
+      "valid": 1,
+      "id": "228",
+      "x": 111,
+      "y": 11,
+      "canvas": "0",
+      "width": 54,
+      "height": 4,
+      "type": "LABEL",
+      "inputs": {
+        "text": "SDP",
+        "textColor": "#ffffff",
+        "backgroundColor": "#070068",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.8,
+        "linkTo": "",
+        "customCss": "text-align: center;"
+      },
+      "order": 146
+    },
+    {
+      "valid": 1,
+      "id": "229",
+      "x": 56,
+      "y": 11,
+      "canvas": "0",
+      "width": 54,
+      "height": 4,
+      "type": "LABEL",
+      "inputs": {
+        "text": "CSP",
+        "textColor": "#ffffff",
+        "backgroundColor": "#070068",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.8,
+        "linkTo": "",
+        "customCss": "text-align: center;"
+      },
+      "order": 147
+    },
+    {
+      "valid": 1,
+      "id": "230",
+      "x": 1,
+      "y": 11,
+      "canvas": "0",
+      "width": 54,
+      "height": 4,
+      "type": "LABEL",
+      "inputs": {
+        "text": "TMC",
+        "textColor": "#ffffff",
+        "backgroundColor": "#070068",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.8,
+        "linkTo": "",
+        "customCss": "text-align: center;"
+      },
+      "order": 148
+    },
+    {
+      "valid": 1,
+      "id": "231",
+      "x": 166,
+      "y": 11,
+      "canvas": "0",
+      "width": 43,
+      "height": 4,
+      "type": "LABEL",
+      "inputs": {
+        "text": "Version",
+        "textColor": "#ffffff",
+        "backgroundColor": "#070068",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.8,
+        "linkTo": "",
+        "customCss": "text-align: center;"
+      },
+      "order": 149
+    },
+    {
+      "valid": 1,
+      "id": "232",
+      "x": 168,
+      "y": 16,
+      "canvas": "0",
+      "width": 38,
+      "height": 4,
+      "type": "LABEL",
+      "inputs": {
+        "text": "TMC",
+        "textColor": "#ffffff",
+        "backgroundColor": "#070068",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.8,
+        "linkTo": "",
+        "customCss": "text-align: center;"
+      },
+      "order": 150
+    },
+    {
+      "valid": 1,
+      "id": "233",
+      "x": 168,
+      "y": 51,
+      "canvas": "0",
+      "width": 38,
+      "height": 4,
+      "type": "LABEL",
+      "inputs": {
+        "text": "SDP",
+        "textColor": "#ffffff",
+        "backgroundColor": "#070068",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.8,
+        "linkTo": "",
+        "customCss": "text-align: center;"
+      },
+      "order": 151
+    },
+    {
+      "valid": 1,
+      "id": "234",
+      "x": 168,
+      "y": 67,
+      "canvas": "0",
+      "width": 38,
+      "height": 4,
+      "type": "LABEL",
+      "inputs": {
+        "text": "CSP",
+        "textColor": "#ffffff",
+        "backgroundColor": "#070068",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.8,
+        "linkTo": "",
+        "customCss": "text-align: center;"
+      },
+      "order": 152
+    },
+    {
+      "valid": 1,
+      "id": "235",
+      "x": 168,
+      "y": 83,
+      "canvas": "0",
+      "width": 38,
+      "height": 4,
+      "type": "LABEL",
+      "inputs": {
+        "text": "DISH",
+        "textColor": "#ffffff",
+        "backgroundColor": "#070068",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.8,
+        "linkTo": "",
+        "customCss": "text-align: center;"
+      },
+      "order": 153
+    },
+    {
+      "valid": 1,
+      "id": "236",
+      "x": 125,
+      "y": 75,
+      "canvas": "0",
+      "width": 38,
+      "height": 4,
+      "type": "LABEL",
+      "inputs": {
+        "text": "Dish100",
+        "textColor": "#ffffff",
+        "backgroundColor": "#070068",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.8,
+        "linkTo": "",
+        "customCss": "text-align: center;"
+      },
+      "order": 154
+    },
+    {
+      "valid": 1,
+      "id": "237",
+      "x": 83,
+      "y": 75,
+      "canvas": "0",
+      "width": 38,
+      "height": 4,
+      "type": "LABEL",
+      "inputs": {
+        "text": "Dish063",
+        "textColor": "#ffffff",
+        "backgroundColor": "#070068",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.8,
+        "linkTo": "",
+        "customCss": "text-align: center;"
+      },
+      "order": 155
+    },
+    {
+      "valid": 1,
+      "id": "238",
+      "x": 43,
+      "y": 75,
+      "canvas": "0",
+      "width": 38,
+      "height": 4,
+      "type": "LABEL",
+      "inputs": {
+        "text": "Dish036",
+        "textColor": "#ffffff",
+        "backgroundColor": "#070068",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.8,
+        "linkTo": "",
+        "customCss": "text-align: center;"
+      },
+      "order": 156
+    },
+    {
+      "valid": 1,
+      "id": "239",
+      "x": 2,
+      "y": 75,
+      "canvas": "0",
+      "width": 38,
+      "height": 4,
+      "type": "LABEL",
+      "inputs": {
+        "text": "Dish001",
+        "textColor": "#ffffff",
+        "backgroundColor": "#070068",
+        "borderWidth": 0,
+        "borderColor": "#000000",
+        "font": "Helvetica",
+        "automaticResize": "Disabled",
+        "size": 1.8,
+        "linkTo": "",
+        "customCss": "text-align: center;"
+      },
+      "order": 157
     }
   ],
-  "variables": []
+  "variables": [],
+  "environment": [
+    "*/*"
+  ]
 }
