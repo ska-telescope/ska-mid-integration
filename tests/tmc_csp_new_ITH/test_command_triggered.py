@@ -91,6 +91,7 @@ def test_ready_to_idle():
     """Test READY to IDLE transitions."""
 
 
+@pytest.mark.xfail(reason="issue at CSP for succesive configure (CIP-2967)")
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/subarray_commands.feature",
