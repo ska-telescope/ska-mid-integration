@@ -16,6 +16,7 @@ target state, eventually checking the intermediate transient states
 and the longRunningCommand completion.
 """
 
+import logging
 import pytest
 from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when

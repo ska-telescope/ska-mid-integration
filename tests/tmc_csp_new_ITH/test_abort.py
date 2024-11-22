@@ -21,6 +21,7 @@ to the RESTARTING state, and then to the EMPTY state.
 """
 
 
+import logging
 import pytest
 from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
