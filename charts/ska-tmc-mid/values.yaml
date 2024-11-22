@@ -113,7 +113,7 @@ dishleafnode:
   image:
     registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-dishleafnode
     image: ska-tmc-dishleafnode
-    tag: 0.19.1-dev.ccbeca951
+    tag: 0.19.1-dev.c04364ae8
     pullPolicy: IfNotPresent
 
 resources:
@@ -200,6 +200,8 @@ deviceServers:
         memory: 280Mi
     CommandTimeOut: 90
     SleepTime: 1
+    MaxTrackTableRetry: 3
+    TrackTableRetryDuration: 0.2
 
   dishpointingdevice:
     enabled: true
