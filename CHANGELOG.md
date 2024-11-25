@@ -3,6 +3,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+[0.24.0-rc.1]
+********
+* Verified the TMC-CSP with ADR-99 interface updates
+
 [0.23.0-rc.1]
 ********
 * Verified the TMC-Dish interface timeout and error propagation functionality
