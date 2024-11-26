@@ -2390,7 +2390,7 @@ ska-tango-testing = "^0.7.2"
 type = "git"
 url = "https://gitlab.com/ska-telescope/ska-integration-test-harness.git"
 reference = "sst-982-lrc-is-verified-in-actions"
-resolved_reference = "214184a7714c05840781cb8a6a9a1586540a1b0f"
+resolved_reference = "f02f1fe0aba51db907ac7a8b63b62138216c2eff"
 
 [[package]]
 name = "ska-ser-logging"
