@@ -2371,7 +2371,7 @@ reference = "ska-nexus"
 
 [[package]]
 name = "ska-integration-test-harness"
-version = "0.2.2"
+version = "0.2.3"
 description = "Currently, a test harness for TMC-CSP integration tests. In future, a generic test harness integration testing an arbitrary combination of production or emulated SKA subsystems."
 optional = false
 python-versions = "^3.10"
@@ -2390,7 +2390,7 @@ ska-tango-testing = "^0.7.2"
 type = "git"
 url = "https://gitlab.com/ska-telescope/ska-integration-test-harness.git"
 reference = "sst-982-lrc-is-verified-in-actions"
-resolved_reference = "f02f1fe0aba51db907ac7a8b63b62138216c2eff"
+resolved_reference = "45823a1f61de5c9a965df6d353f2f390bb302241"
 
 [[package]]
 name = "ska-ser-logging"
