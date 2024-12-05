@@ -101,7 +101,7 @@ class TestSubarrayNodeNegative(object):
         )
 
         with pytest.raises(AssertionError):
-            event_recorder.has_change_event_occurred(
+            assert event_recorder.has_change_event_occurred(
                 subarray_node.subarray_node, "obsState", ObsState.READY
             )
 
@@ -143,7 +143,7 @@ class TestSubarrayNodeNegative(object):
             subarray_node.subarray_node, "obsState", ObsState.CONFIGURING
         )
         with pytest.raises(AssertionError):
-            event_recorder.has_change_event_occurred(
+            assert event_recorder.has_change_event_occurred(
                 subarray_node.subarray_node, "obsState", ObsState.READY
             )
         assert device_received_this_command(
@@ -181,7 +181,7 @@ class TestSubarrayNodeNegative(object):
             subarray_node.subarray_node, "obsState", ObsState.CONFIGURING
         )
         with pytest.raises(AssertionError):
-            event_recorder.has_change_event_occurred(
+            assert event_recorder.has_change_event_occurred(
                 subarray_node.subarray_node, "obsState", ObsState.READY
             )
         assert device_received_this_command(dish_sim, "ConfigureBand1", "True")
