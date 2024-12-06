@@ -151,8 +151,8 @@ class TestSubarrayNodeNegative(object):
         )
         assert len(get_recorded_commands(sdp_sim)) == 1
 
-    @pytest.mark.sah1630
-    @pytest.mark.repeat(50)
+    # @pytest.mark.sah1630
+    # @pytest.mark.repeat(50)
     @pytest.mark.SKA_mid
     def test_subarray_configure_when_dish_stuck_in_slew(
         self,
