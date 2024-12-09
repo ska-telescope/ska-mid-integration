@@ -32,41 +32,41 @@ server:
         devices:
         - name: "ska_mid/tm_leaf_node/d0{{ $number }}"
           properties:
-          - name: "DishMasterFQDN"
-            values:
-              {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true)  }}
-              - "SKA{{ printf $number }}/elt/master" # Mock device FQDN
-              {{- else }}
-              {{- range $index_real, $instance_real := $real_dish_name }}
-              {{- if eq $index_real $index }}
-              - "{{ $instance_real }}"
-              {{- end }}
-              {{- end }}
-              {{- end }}
-          - name: "DishlnPointingDeviceFQDN"
-            values:
-              - "mid-tmc/dish-pointing/d0{{ $number }}"
-          - name: "SkaLevel"
-            values:
-              - "3"
-          - name: "LoggingTargetsDefault"
-            values:
-              - "tango::logger"
-          - name: "LoggingLevelDefault"
-            values:
-              - "5"
-          - name: "CommandTimeOut"
-            values:
-              - "{{$CommandTimeOut}}"
-          - name: "IsDishAbortCommandsEnabled"
-            values:
-              - "{{ $IsDishAbortCommandsEnabled }}"
-          - name: "MaxTrackTableRetry"
-            values:
-              - "{{ $MaxTrackTableRetry }}"
-          - name: "TrackTableRetryDuration"
-            values:
-              - "{{ $TrackTableRetryDuration }}"
+            - name: "DishMasterFQDN"
+              values:
+                {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true)  }}
+                - "SKA{{ printf $number }}/elt/master" # Mock device FQDN
+                {{- else }}
+                {{- range $index_real, $instance_real := $real_dish_name }}
+                {{- if eq $index_real $index }}
+                - "{{ $instance_real }}"
+                {{- end }}
+                {{- end }}
+                {{- end }}
+            - name: "DishlnPointingDeviceFQDN"
+              values:
+                - "mid-tmc/dish-pointing/d0{{ $number }}"
+            - name: "SkaLevel"
+              values:
+                - "3"
+            - name: "LoggingTargetsDefault"
+              values:
+                - "tango::logger"
+            - name: "LoggingLevelDefault"
+              values:
+                - "5"
+            - name: "CommandTimeOut"
+              values:
+                - "{{ $CommandTimeOut }}"
+            - name: "IsDishAbortCommandsEnabled"
+              values:
+                - "{{ $isDishAbortCommandsEnabled }}"
+            - name: "MaxTrackTableRetry"
+              values:
+                - "{{ $MaxTrackTableRetry }}"
+            - name: "TrackTableRetryDuration"
+              values:
+                - "{{ $TrackTableRetryDuration }}"
 
   {{- end }}
 depends_on:
