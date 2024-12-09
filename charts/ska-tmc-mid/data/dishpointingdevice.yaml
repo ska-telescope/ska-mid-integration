@@ -1,6 +1,7 @@
 name: "dishpointingdevice-test"
 function: dish-pointing
 domain: pattern-mapping
+instances: ["001", "036", "063", "100"]
 entrypoints:
   - name: "ska_dishln_pointing_device.dishln_pointing_device.DishPointingDevice"
 {{- $TrackTableEntries := .Values.deviceServers.dishpointingdevice.TrackTableEntries }}

@@ -204,7 +204,6 @@ deviceServers:
 
   dishpointingdevice:
     enabled: true
-    instances: ["01", "02"]
     TrackTableEntries: 50
     PointingCalculationPeriod: 50
     TrackTableInAdvance: 7
