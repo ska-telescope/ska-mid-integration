@@ -43,9 +43,9 @@ server:
               {{- end }}
               {{- end }}
               {{- end }}
-        - name: "DishlnPointingDeviceFQDN"
-          values:
-            - "mid-tmc/dish-pointing/d0{{ $number }}"
+          - name: "DishlnPointingDeviceFQDN"
+            values:
+              - "mid-tmc/dish-pointing/d0{{ $number }}"
           - name: "SkaLevel"
             values:
               - "3"

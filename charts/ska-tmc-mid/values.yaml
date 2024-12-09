@@ -187,6 +187,7 @@ deviceServers:
     DelayModelTimeInAdvance: 30
     CommandTimeOut: 50
     SleepTime: 1
+
   dishleafnode:
     enabled: true
     file: "data/dishleafnode.yaml"
@@ -201,6 +202,7 @@ deviceServers:
     MaxTrackTableRetry: 3
     TrackTableRetryDuration: 0.2
     SleepTime: 1
+
 
   dishpointingdevice:
     enabled: true
