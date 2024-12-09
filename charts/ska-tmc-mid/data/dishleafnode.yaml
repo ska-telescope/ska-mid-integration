@@ -7,8 +7,9 @@ entrypoints:
 server:
   name: "dish_leaf_node"
   instances:
+  {{- $MaxTrackTableRetry := .Values.deviceServers.dishleafnode.MaxTrackTableRetry }}
+  {{- $TrackTableRetryDuration := .Values.deviceServers.dishleafnode.TrackTableRetryDuration }}
   {{- $CommandTimeOut := .Values.deviceServers.dishleafnode.CommandTimeOut }}
-  {{- $TrackTableInAdvance := .Values.deviceServers.dishleafnode.TrackTableInAdvance }}
   {{- $instance_list := list -}}
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
   {{- $isSimulatedDish := .Values.deviceServers.mocks.dish }}
@@ -42,6 +43,9 @@ server:
               {{- end }}
               {{- end }}
               {{- end }}
+        - name: "DishlnPointingDeviceFQDN"
+          values:
+            - "mid-tmc/dish-pointing/d0{{ $number }}"
           - name: "SkaLevel"
             values:
               - "3"
@@ -54,12 +58,16 @@ server:
           - name: "CommandTimeOut"
             values:
               - "{{$CommandTimeOut}}"
-          - name: "TrackTableInAdvance"
-            values:
-              - "6"
           - name: "IsDishAbortCommandsEnabled"
             values:
-              - "{{ $isDishAbortCommandsEnabled }}"
+              - "{{ $IsDishAbortCommandsEnabled }}"
+          - name: "MaxTrackTableRetry"
+            values:
+              - "{{ $MaxTrackTableRetry }}"
+          - name: "TrackTableRetryDuration"
+            values:
+              - "{{ $TrackTableRetryDuration }}"
+
   {{- end }}
 depends_on:
   - device: sys/database/2
