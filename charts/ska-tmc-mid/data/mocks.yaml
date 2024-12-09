@@ -48,7 +48,7 @@ server:
           - name: "mid-csp/subarray/02"
         {{- end }}
         {{- if eq $isSimulatedDish true }}
-    {{- range .Values.global.dishes }}
+  {{- range .Values.global.dishes }}
     - name: "{{ . }}"
       classes:
         - name: "HelperDishDevice"

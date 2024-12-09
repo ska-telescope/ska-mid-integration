@@ -10,6 +10,7 @@ from ska_tango_base.control_model import HealthState
 from tango import DeviceProxy, DevState
 
 from tests.resources.test_harness.constant import (
+    ABORT_COMPLETED,
     COMMAND_COMPLETED,
     DISH_001_CALIBRATION_DATA,
     DISH_036_CALIBRATION_DATA,
@@ -171,6 +172,10 @@ class SubarrayNodeWrapper(object):
         self.sdp_subarray1 = sdp_subarray1
         device_dict["dish_master_list"] = self.dish_master_list
         device_dict["dish_leaf_node_list"] = self.dish_leaf_node_list
+        self.event_recorder = EventRecorder()
+        self.event_recorder.subscribe_event(
+            self.subarray_node, "longRunningCommandResult"
+        )
 
     def _setup(self):
         """ """
@@ -461,7 +466,9 @@ class SubarrayNodeWrapper(object):
         LOGGER.info("Calling Tear down for subarray")
         self._clear_command_call_and_transition_data(clear_transition=True)
 
-        if self.obs_state == "RESOURCING":
+        if self.obs_state in (
+            ObsState.RESOURCING,
+        ):
             """Invoke Abort and Restart"""
             LOGGER.info("Invoking Abort on Subarray")
             self.execute_transition("Abort")
@@ -510,11 +517,47 @@ class SubarrayNodeWrapper(object):
             event_recorder.clear_events()
             self.release_resources_subarray()
 
+            _, unique = self.abort_subarray()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique[0], ABORT_COMPLETED),
+            )
+            _, unique_restart = self.restart_subarray()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique_restart[0], COMMAND_COMPLETED),
+            )
+        elif self.obs_state == ObsState.READY:
+            _, unique_end = self.end_observation()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique_end[0], COMMAND_COMPLETED),
+            )
+            _, unique_release = self.release_resources_subarray()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique_release[0], COMMAND_COMPLETED),
+            )
+        elif self.obs_state == ObsState.IDLE:
+            _, unique_release_resource = self.release_resources_subarray()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique_release_resource[0], COMMAND_COMPLETED),
+            )
         elif self.obs_state == "ABORTED":
             """Invoke Restart"""
             LOGGER.info("Invoking Restart on Subarray")
-            self.restart_subarray()
-
+            _, unique_id = self.restart_subarray()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique_id[0], COMMAND_COMPLETED),
+            )
         else:
             self.force_change_of_obs_state("EMPTY")
 

@@ -6,9 +6,11 @@ from ska_control_model import ObsState
 from tango import DevState
 
 from tests.resources.test_harness.constant import (
+    COMMAND_COMPLETED,
     COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE,
 )
 from tests.resources.test_harness.helpers import (
+    check_for_device_command_event,
     get_device_simulators,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
@@ -18,7 +20,7 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 # The test fails intermittently as the test does not make sure that the Abort
 # is completed on dishes and then the next Configure is invoked
-@pytest.mark.skip(reason="Need to add dish assertions in the test.")
+@pytest.mark.handling
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-28837.feature",
@@ -39,6 +41,12 @@ def test_configure_handling_on_csp_sdp_subarray_obsstate_idle_failure():
 def given_tmc(central_node_mid, subarray_node, event_recorder):
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
     )
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     central_node_mid.move_to_on()
@@ -75,6 +83,19 @@ def given_tmc_subarray_assign_resources(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
+    )
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (unique_id[0], COMMAND_COMPLETED),
+    )
+    assert check_for_device_command_event(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        COMMAND_COMPLETED,
+        event_recorder,
+        "AssignResources",
     )
 
 

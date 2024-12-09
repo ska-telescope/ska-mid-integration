@@ -44,6 +44,7 @@ class CorrectionKey(IntEnum):
     RESET = 2
 
 
+ABORT_COMPLETED = json.dumps([ResultCode.STARTED, "Command Started"])
 DISH_ERROR_MESSAGE = (
     "Exception occurred on the following devices: " + f"{tmc_dish_leaf_node1}:"
 )
