@@ -75,10 +75,9 @@ def tracked_telescope(
 
     log_events(
         {
-            tmc.central_node: ["telescopeState"],
+            tmc.central_node: ["telescopeState", "longRunningCommandResult"],
             csp.csp_master: ["State"],
             csp.csp_subarray: ["State"],
-            tmc.central_node: ["longRunningCommandResult"],
         }
     )
 
