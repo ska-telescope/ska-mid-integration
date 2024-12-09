@@ -27,8 +27,8 @@ entrypoints:
 {{- end }}
 server:
   name: "dishpointing"
-{{- range $index, $number := $instance_list }}
   instances:
+{{- range $index, $number := $instance_list }}
     - name: "{{ $number }}"
       classes:
       - name: "DishPointingDevice"
