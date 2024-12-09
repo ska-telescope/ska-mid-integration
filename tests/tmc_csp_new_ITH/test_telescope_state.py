@@ -71,12 +71,14 @@ def tracked_telescope(
     event_tracer.subscribe_event(tmc.central_node, "telescopeState")
     event_tracer.subscribe_event(csp.csp_master, "State")
     event_tracer.subscribe_event(csp.csp_subarray, "State")
+    event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
 
     log_events(
         {
             tmc.central_node: ["telescopeState"],
             csp.csp_master: ["State"],
             csp.csp_subarray: ["State"],
+            tmc.central_node: ["longRunningCommandResult"],
         }
     )
 
