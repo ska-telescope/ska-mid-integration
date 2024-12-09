@@ -32,6 +32,10 @@ dish_master4 = "ska100/elt/master"
 sdp_queue_connector = "mid-sdp/queueconnector/01"
 COMMAND_COMPLETED = json.dumps([ResultCode.OK, "Command Completed"])
 
+DISH_ERROR_MESSAGE = (
+    "Exception occurred on the following devices: " + f"{tmc_dish_leaf_node1}:"
+)
+TIMOUT_ERROR = "Timeout has occurred, command failed"
 
 COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE = {
     "enabled": True,

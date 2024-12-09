@@ -3,6 +3,14 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+[0.24.0-rc.1]
+*************
+* Verified the TMC-CSP with ADR-99 interface updates
+
+[0.23.0-rc.1]
+*************
+* Verified the TMC-Dish interface timeout and error propagation functionality
+
 [0.22.8]
 ********
 * Resolved SKB-467, SKB-495, SKB-511 and SKB-530
@@ -13,7 +21,7 @@ Added
 * Resolved SKB-509
 * Updated TMC to support TMC-CSP Configure interface v.3.0
 
-[0.22.8]
+[0.22.8-rc.1]
 *************
 * Updated ska-tmc-centralnode v0.16.8 to resolve skb-495
 * Updated ska-tmc-cspleafnode v0.21.2 to resolve skb-495 and skb-530 
