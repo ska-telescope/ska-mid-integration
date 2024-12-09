@@ -25,15 +25,15 @@ entrypoints:
 {{- $instance_list = append $instance_list (trimPrefix "SKA" $match) }}
 {{- end }}
 {{- end }}
-{{- range $index, $number := $instance_list }}
 server:
   name: "dishpointing"
+{{- range $index, $number := $instance_list }}
   instances:
     - name: "{{ $number }}"
       classes:
       - name: "DishPointingDevice"
         devices:
-        - name: "mid-tmc/dish-pointing/d0{{ $number }}"
+          - name: "mid-tmc/dish-pointing/d0{{ $number }}"
           properties:
             - name: "TrackTableEntries"
               values:
