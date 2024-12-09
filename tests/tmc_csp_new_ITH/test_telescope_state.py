@@ -17,9 +17,10 @@ from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_tango_testing.integration import TangoEventTracer, log_events
 from tango import DevState
 
-from tests.tmc_csp_new_ITH.conftest import ASSERTIONS_TIMEOUT
-
-
+from tests.tmc_csp_new_ITH.conftest import (
+    ASSERTIONS_TIMEOUT,
+    SubarrayTestContextData,
+)
 
 # ---------------------------------
 # Scenario Definitions
@@ -96,10 +97,15 @@ def telescope_in_off_state(tmc: TMCFacade):
         "the TelescopeOff command is sent to the telescope central node"
     )
 )
-def send_telescope_off_command(event_tracer: TangoEventTracer, tmc: TMCFacade):
+def send_telescope_off_command(
+    context_fixt: SubarrayTestContextData,
+    event_tracer: TangoEventTracer,
+    tmc: TMCFacade,
+):
     """Send the TelescopeOff command to the telescope."""
     event_tracer.clear_events()
-    tmc.move_to_off(wait_termination=False)
+    context_fixt.when_action_name = "TelescopeOff"
+    context_fixt.when_action_result = tmc.move_to_off(wait_termination=False)
 
 
 @when(
@@ -108,11 +114,14 @@ def send_telescope_off_command(event_tracer: TangoEventTracer, tmc: TMCFacade):
     )
 )
 def send_telescope_standby_command(
-    event_tracer: TangoEventTracer, tmc: TMCFacade
+    context_fixt: SubarrayTestContextData,
+    event_tracer: TangoEventTracer,
+    tmc: TMCFacade,
 ):
     """Send the TelescopeStandby command to the telescope."""
     event_tracer.clear_events()
-    tmc.set_standby(wait_termination=False)
+    context_fixt.when_action_name = "TelescopeStandby"
+    context_fixt.when_action_result = tmc.set_standby(wait_termination=False)
 
 
 @when(
@@ -120,10 +129,15 @@ def send_telescope_standby_command(
         "the TelescopeOn command is sent to the telescope central node"
     )
 )
-def send_telescope_on_command(event_tracer: TangoEventTracer, tmc: TMCFacade):
+def send_telescope_on_command(
+    context_fixt: SubarrayTestContextData,
+    event_tracer: TangoEventTracer,
+    tmc: TMCFacade,
+):
     """Send the TelescopeOn command to the telescope."""
     event_tracer.clear_events()
-    tmc.move_to_on(wait_termination=False)
+    context_fixt.when_action_name = "TelescopeOn"
+    context_fixt.when_action_result = tmc.move_to_on(wait_termination=False)
 
 
 # ---------------------------------
@@ -155,7 +169,6 @@ def verify_off_state(
 def verify_standby_state(
     event_tracer: TangoEventTracer,
     tmc: TMCFacade,
-    csp: CSPFacade,
 ):
     """TMC should transition to the STANDBY state."""
     assert_that(event_tracer).within_timeout(ASSERTIONS_TIMEOUT).described_as(

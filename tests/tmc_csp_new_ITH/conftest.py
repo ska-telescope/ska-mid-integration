@@ -5,8 +5,8 @@ import os
 from dataclasses import dataclass
 from typing import Any
 
-from assertpy import assert_that
 import pytest
+from assertpy import assert_that
 from pytest_bdd import given, parsers, then
 from ska_control_model import ObsState, ResultCode
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
@@ -325,8 +325,10 @@ def subarray_in_scanning_state(
         wait_termination=True,
     )
 
+
 # ----------------------------------------------------------
 # Common Then steps (verify LRC completion)
+
 
 def _get_long_run_command_id(context_fixt: SubarrayTestContextData) -> str:
     return context_fixt.when_action_result[1][0]

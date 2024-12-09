@@ -33,7 +33,10 @@ from ska_integration_test_harness.inputs.test_harness_inputs import (
 )
 from ska_tango_testing.integration import TangoEventTracer
 
-from tests.tmc_csp_new_ITH.conftest import ASSERTIONS_TIMEOUT, SubarrayTestContextData
+from tests.tmc_csp_new_ITH.conftest import (
+    ASSERTIONS_TIMEOUT,
+    SubarrayTestContextData,
+)
 
 # ------------------------------------------------------------
 # Scenario Definition
