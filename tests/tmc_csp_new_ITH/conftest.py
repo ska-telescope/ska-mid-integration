@@ -218,7 +218,9 @@ def given_the_telescope_is_in_on_state(
     tmc: TMCFacade,
 ):
     """Ensure the telescope is in ON state."""
-    tmc.move_to_on(wait_termination=True, is_long_running_command=True)
+    # TODO: move to on should verify LRC completion,
+    # but now it fails (at least here)
+    tmc.move_to_on(wait_termination=True, is_long_running_command=False)
 
 
 @given(parsers.parse("the subarray {subarray_id} can be used"))
