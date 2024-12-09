@@ -29,7 +29,6 @@ entrypoints:
 server:
   name: "dishpointing"
   instances:
-  {{- range  .Values.deviceServers.dishleafnode.instances }}
     - name: "{{ $number }}"
       classes:
       - name: "DishPointingDevice"
