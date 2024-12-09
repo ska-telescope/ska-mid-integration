@@ -173,8 +173,8 @@ class TestSubarrayNodeNegative(object):
         subarray_node.move_to_on()
         subarray_node.force_change_of_obs_state("IDLE")
 
-        # Dish master should go to slew in no more than 0.1 sec
-        pointing_state_duration_params = '[["SLEW",0.1]]'
+        # Dish master should go to Ready in no more than 0.1 sec
+        pointing_state_duration_params = '[["READY",0.1]]'
         dish_sim.AddTransition(pointing_state_duration_params)
 
         subarray_node.execute_transition("Configure", argin=input_json)
