@@ -10,7 +10,13 @@ entrypoints:
 {{- $Elevation := .Values.deviceServers.dishpointingdevice.Elevation }}
 {{- $Azimuth := .Values.deviceServers.dishpointingdevice.Azimuth }}
 {{- $ElevationMaxLimit := .Values.deviceServers.dishpointingdevice.ElevationMaxLimit }}
-{{- $ElevationMinLimit := .Values.deviceServers.dishpointingdevice.ElevationMinLimit }} {{- range $instance := .Values.global.dishes }}
+{{- $ElevationMinLimit := .Values.deviceServers.dishpointingdevice.ElevationMinLimit }} 
+{{- $instance_list := list -}}
+{{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
+{{- $isSimulatedDish := .Values.deviceServers.mocks.dish }}
+{{- $real_dish_name := .Values.global.namespace_dish.dish_names }}
+{{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true)  }}
+{{- range $instance := .Values.global.dishes }}
 {{- $instance_list = append $instance_list ($instance) }}
 {{- end }}
 {{- else }}
