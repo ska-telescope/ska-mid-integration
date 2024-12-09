@@ -17,8 +17,8 @@ from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_tango_testing.integration import TangoEventTracer, log_events
 from tango import DevState
 
-# Constants
-ASSERTIONS_TIMEOUT = 100
+from tests.tmc_csp_new_ITH.conftest import ASSERTIONS_TIMEOUT
+
 
 
 # ---------------------------------

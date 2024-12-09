@@ -5,9 +5,10 @@ import os
 from dataclasses import dataclass
 from typing import Any
 
+from assertpy import assert_that
 import pytest
-from pytest_bdd import given, parsers
-from ska_control_model import ObsState
+from pytest_bdd import given, parsers, then
+from ska_control_model import ObsState, ResultCode
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
 from ska_integration_test_harness.facades.dishes_facade import DishesFacade
 from ska_integration_test_harness.facades.sdp_facade import SDPFacade
@@ -25,6 +26,8 @@ from ska_integration_test_harness.structure.telescope_wrapper import (
 from ska_tango_testing.integration import TangoEventTracer, log_events
 
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
+
+ASSERTIONS_TIMEOUT = 60
 
 # ------------------------------------------------------------
 # Test Harness fixtures
@@ -320,4 +323,78 @@ def subarray_in_scanning_state(
         ObsState.SCANNING,
         default_commands_inputs,
         wait_termination=True,
+    )
+
+# ----------------------------------------------------------
+# Common Then steps (verify LRC completion)
+
+def _get_long_run_command_id(context_fixt: SubarrayTestContextData) -> str:
+    return context_fixt.when_action_result[1][0]
+
+
+def _get_expected_long_run_command_result(context_fixt) -> tuple[str, str]:
+    return (
+        _get_long_run_command_id(context_fixt),
+        f'[{ResultCode.OK.value}, "Command Completed"]',
+    )
+
+
+@then(
+    parsers.parse(
+        "the central node reports a longRunningCommand successful completion"
+    )
+)
+def verify_long_running_command_result_on_central_node(
+    context_fixt,
+    tmc: TMCFacade,
+    event_tracer: TangoEventTracer,
+):
+    """
+    Verify the successful completion of a longRunningCommand on central node.
+
+    This step checks that the TMC Central Node reports a successful completion
+    of a longRunningCommand. It uses the event_tracer to assert that a change
+    event occurred on the longRunningCommandResult attribute within a specified
+    timeout. The expected result is derived from the context fixture.
+    """
+    assert_that(event_tracer).described_as(
+        "TMC Central Node "
+        f"({tmc.central_node}) "
+        "is expected to report a"
+        "longRunningCommand successful completion."
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        tmc.central_node,
+        "longRunningCommandResult",
+        _get_expected_long_run_command_result(context_fixt),
+    )
+
+
+@then(
+    parsers.parse(
+        "the subarray {subarray} reports "
+        "a longRunningCommand successful completion"
+    )
+)
+def verify_long_running_command_result_on_subarray(
+    context_fixt,
+    tmc: TMCFacade,
+    event_tracer: TangoEventTracer,
+):
+    """
+    Verify the successful completion of a longRunningCommand on the subarray.
+
+    This step checks that the TMC Subarray Node reports a successful completion
+    of a longRunningCommand. It uses the event_tracer to assert that a change
+    event occurred on the longRunningCommandResult attribute within a specified
+    timeout. The expected result is derived from the context fixture.
+    """
+    assert_that(event_tracer).described_as(
+        "TMC Subarray Node "
+        f"({tmc.subarray_node}) "
+        "is expected to report a"
+        "longRunningCommand successful completion."
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        tmc.subarray_node,
+        "longRunningCommandResult",
+        _get_expected_long_run_command_result(context_fixt),
     )
