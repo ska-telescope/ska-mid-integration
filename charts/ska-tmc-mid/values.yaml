@@ -118,8 +118,8 @@ dishleafnode:
 
 resources:
   requests:
-    # cpu: 1000m
-    cpu: 500m
+    cpu: 1000m
+    # cpu: 500m
     memory: 300Mi
 
 
@@ -196,8 +196,8 @@ deviceServers:
       limits:
         memory: 3000Mi
       requests:
-        # cpu: 2000m
-        cpu: 1000m
+        cpu: 2000m
+        # cpu: 1000m
         memory: 280Mi
     CommandTimeOut: 90
     TrackTableInAdvance: 7
