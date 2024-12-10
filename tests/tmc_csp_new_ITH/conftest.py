@@ -1,6 +1,5 @@
 """Configurations needed for the tests using the new harness."""
 
-import logging
 import os
 from dataclasses import dataclass
 from typing import Any
