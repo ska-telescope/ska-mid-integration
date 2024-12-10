@@ -152,7 +152,7 @@ def central_node_mid() -> Generator[CentralNodeWrapperMid, None, None]:
     central_node = CentralNodeWrapperMid()
     yield central_node
     # this will call after test complete
-    central_node.tear_down()
+    # central_node.tear_down()
 
 
 @pytest.fixture()
@@ -169,7 +169,7 @@ def subarray_node() -> Generator[SubarrayNodeWrapper, None, None]:
     subarray = SubarrayNodeWrapper()
     yield subarray
     # this will call after test complete
-    subarray.tear_down()
+    # subarray.tear_down()
 
 
 @pytest.fixture()
