@@ -40,7 +40,6 @@ from tests.resources.test_harness.helpers import (
     generate_eb_pb_ids,
     prepare_json_args_for_commands,
     wait_and_validate_device_attribute_value,
-    wait_for_partial_or_complete_abort,
 )
 from tests.resources.test_harness.utils.constant import (
     ABORTED,
@@ -466,55 +465,9 @@ class SubarrayNodeWrapper(object):
         LOGGER.info("Calling Tear down for subarray")
         self._clear_command_call_and_transition_data(clear_transition=True)
 
-        if self.obs_state in (ObsState.RESOURCING,):
+        if self.obs_state in (ObsState.RESOURCING):
             """Invoke Abort and Restart"""
             LOGGER.info("Invoking Abort on Subarray")
-            self.execute_transition("Abort")
-            wait_for_partial_or_complete_abort()
-            self.restart_subarray()
-
-        elif self.obs_state in ("CONFIGURING", "SCANNING"):
-            LOGGER.info("Invoking Abort on Subarray")
-            self.execute_transition("Abort")
-            wait_for_partial_or_complete_abort()
-            # Waiting for pointingStates of dishes to go to READY/NONE as Abort
-            # on Subarray does not consider pointingStates.
-            event_recorder = EventRecorder()
-            dish_leaf_node_list = self.get_assigned_dish_leaf_nodes_list()
-            for dish_leaf_node in dish_leaf_node_list:
-                event_recorder.subscribe_event(dish_leaf_node, "pointingState")
-                event_recorder.has_change_event_occurred_for_given_values(
-                    dish_leaf_node,
-                    "pointingState",
-                    [PointingState.NONE, PointingState.READY],
-                )
-            event_recorder.clear_events()
-            self.restart_subarray()
-
-        elif self.obs_state == "IDLE":
-            # Waiting for few seconds as the SubarrayNode End command
-            # completion does not consider Dishes pointingState transition
-            # to READY
-            event_recorder = EventRecorder()
-            dish_leaf_node_list = self.get_assigned_dish_leaf_nodes_list()
-            for dish_leaf_node in dish_leaf_node_list:
-                try:
-                    dish_leaf_node.TrackStop()
-                except Exception as exception:
-                    LOGGER.debug(
-                        "TrackStop not executed on: %s due to: %s",
-                        dish_leaf_node.dev_name(),
-                        exception,
-                    )
-                event_recorder.subscribe_event(dish_leaf_node, "pointingState")
-                event_recorder.has_change_event_occurred_for_given_values(
-                    dish_leaf_node,
-                    "pointingState",
-                    [PointingState.NONE, PointingState.READY],
-                )
-            event_recorder.clear_events()
-            self.release_resources_subarray()
-
             _, unique = self.abort_subarray()
             assert self.event_recorder.has_change_event_occurred(
                 self.subarray_node,
@@ -527,6 +480,37 @@ class SubarrayNodeWrapper(object):
                 "longRunningCommandResult",
                 (unique_restart[0], COMMAND_COMPLETED),
             )
+
+            self.event_recorder.clear_events()
+
+        elif self.obs_state in ("CONFIGURING", "SCANNING"):
+            LOGGER.info("Invoking Abort on Subarray")
+            _, unique_abort = self.abort_subarray()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique_abort[0], ABORT_COMPLETED),
+            )
+            # Waiting for pointingStates of dishes to go to READY/NONE as Abort
+            # on Subarray does not consider pointingStates.
+            dish_leaf_node_list = self.get_assigned_dish_leaf_nodes_list()
+            for dish_leaf_node in dish_leaf_node_list:
+                self.event_recorder.subscribe_event(
+                    dish_leaf_node, "pointingState"
+                )
+                self.event_recorder.has_change_event_occurred_for_given_values(
+                    dish_leaf_node,
+                    "pointingState",
+                    [PointingState.NONE, PointingState.READY],
+                )
+            self.event_recorder.clear_events()
+            _, unique_restart = self.restart_subarray()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique_restart[0], COMMAND_COMPLETED),
+            )
+
         elif self.obs_state == ObsState.READY:
             _, unique_end = self.end_observation()
             assert self.event_recorder.has_change_event_occurred(
@@ -540,13 +524,36 @@ class SubarrayNodeWrapper(object):
                 "longRunningCommandResult",
                 (unique_release[0], COMMAND_COMPLETED),
             )
+            self.event_recorder.clear_events()
+
         elif self.obs_state == ObsState.IDLE:
+            dish_leaf_node_list = self.get_assigned_dish_leaf_nodes_list()
+            for dish_leaf_node in dish_leaf_node_list:
+                try:
+                    dish_leaf_node.TrackStop()
+                except Exception as exception:
+                    LOGGER.debug(
+                        "TrackStop not executed on: %s due to: %s",
+                        dish_leaf_node.dev_name(),
+                        exception,
+                    )
+                self.event_recorder.subscribe_event(
+                    dish_leaf_node, "pointingState"
+                )
+                self.event_recorder.has_change_event_occurred_for_given_values(
+                    dish_leaf_node,
+                    "pointingState",
+                    [PointingState.NONE, PointingState.READY],
+                )
+
             _, unique_release_resource = self.release_resources_subarray()
             assert self.event_recorder.has_change_event_occurred(
                 self.subarray_node,
                 "longRunningCommandResult",
                 (unique_release_resource[0], COMMAND_COMPLETED),
             )
+            self.event_recorder.clear_events()
+
         elif self.obs_state == "ABORTED":
             """Invoke Restart"""
             LOGGER.info("Invoking Restart on Subarray")
@@ -558,12 +565,12 @@ class SubarrayNodeWrapper(object):
             )
         else:
             self.force_change_of_obs_state("EMPTY")
-
         # Move Subarray to OFF state
         self.move_to_off()
         self._reset_dishes()
         self._reset_simulator_devices()
         assert check_subarray_obs_state("EMPTY")
+        self.event_recorder.clear_events()
 
     def check_if_dishes_are_ready(self, waiter):
         LOGGER.info("waiter.dish_master_list: %s", waiter.dish_master_list)
