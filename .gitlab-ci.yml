@@ -32,11 +32,11 @@ k8s-test:
   tags:
     - ska-k8s
   variables:
-    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA"
+    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_JOB_ID"
     DISH_SIMULATION_ENABLED: "true"
     SUBARRAY_COUNT: 2
     COUNT: 10
-    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA'
+    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_JOB_ID'
     ADDMARK: "and handling"
     # MARK: 'temp'
   after_script:
