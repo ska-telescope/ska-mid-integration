@@ -428,7 +428,7 @@ def verify_idle_state(
     )
 )
 def verify_empty_state(
-    context_fixt,
+    context_fixt: SubarrayTestContextData,
     tmc: TMCFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
