@@ -503,13 +503,13 @@ class SubarrayNodeWrapper(object):
                     "pointingState",
                     [PointingState.NONE, PointingState.READY],
                 )
-            self.event_recorder.clear_events()
             _, unique_restart = self.restart_subarray()
             assert self.event_recorder.has_change_event_occurred(
                 self.subarray_node,
                 "longRunningCommandResult",
                 (unique_restart[0], COMMAND_COMPLETED),
             )
+            self.event_recorder.clear_events()
 
         elif self.obs_state == ObsState.READY:
             _, unique_end = self.end_observation()
