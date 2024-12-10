@@ -466,9 +466,7 @@ class SubarrayNodeWrapper(object):
         LOGGER.info("Calling Tear down for subarray")
         self._clear_command_call_and_transition_data(clear_transition=True)
 
-        if self.obs_state in (
-            ObsState.RESOURCING,
-        ):
+        if self.obs_state in (ObsState.RESOURCING,):
             """Invoke Abort and Restart"""
             LOGGER.info("Invoking Abort on Subarray")
             self.execute_transition("Abort")

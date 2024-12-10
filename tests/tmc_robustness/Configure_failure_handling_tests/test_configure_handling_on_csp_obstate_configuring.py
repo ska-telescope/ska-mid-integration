@@ -55,6 +55,7 @@ def given_tmc(central_node_mid, subarray_node, event_recorder):
         central_node_mid.central_node,
         "telescopeState",
         DevState.ON,
+        lookahead=10,
     )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
