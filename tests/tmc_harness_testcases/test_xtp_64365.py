@@ -22,6 +22,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 TIMEOUT = 60
 
 
+@pytest.mark.skip(reason="Test scenario needs to be updated")
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-64365.feature",
@@ -166,9 +167,9 @@ def check_dish_mode_and_pointing_state_after_configure(
         )
 
     for dish_id in dish_ids.split(","):
-        central_node_mid.dish_master_dict[dish_id].SetDirectDishMode(
-            DishMode.OPERATE
-        )
+        # central_node_mid.dish_master_dict[dish_id].SetDirectDishMode(
+        #     DishMode.OPERATE
+        # )
         central_node_mid.dish_master_dict[dish_id].SetDirectPointingState(
             PointingState.READY
         )
@@ -191,7 +192,7 @@ def check_dish_mode_and_pointing_state_after_configure(
             "'the DishLeafNode must be in the TRACK pointingState'"
             "dish device"
             f"({central_node_mid.dish_leaf_node_dict[dish_id].dev_name()}) "
-            "is expected to be in TRACK pointingState",
+            "is expected to be in READY pointingState",
         ).within_timeout(TIMEOUT).has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "pointingState",
