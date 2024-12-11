@@ -39,7 +39,7 @@ DEFAULT_VCC_CONFIG_INPUT = DictJSONInput(
             + "ska-sdp-tmlite-repository-1.0.0#tmdata"
         ],
         "tm_data_filepath": (
-            "instrument/ska1_mid_psi/ska-mid-cbf-system-parameters.json",
+            "instrument/ska1_mid_psi/ska-mid-cbf-system-parameters.json"
         ),
     }
 )
@@ -90,6 +90,12 @@ def telescope_wrapper(
 @pytest.fixture
 def tmc(telescope_wrapper: TelescopeWrapper) -> TMCFacade:
     """Create a facade to TMC devices."""
+    TMCFacade(telescope_wrapper).load_dish_vcc_configuration(
+        DEFAULT_VCC_CONFIG_INPUT,
+        wait_termination=True,
+        custom_timeout=10,
+        is_long_running_command=True,
+    )
     return TMCFacade(telescope_wrapper)
 
 
