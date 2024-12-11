@@ -166,6 +166,9 @@ class SubarrayNodeWrapper(object):
         device_dict["dish_master_list"] = self.dish_master_list
         device_dict["dish_leaf_node_list"] = self.dish_leaf_node_list
         self.event_recorder = EventRecorder()
+        self.event_recorder.subscribe_event(
+            self.subarray_node, "longRunningCommandResult"
+        )
 
     def _setup(self):
         """ """
@@ -447,25 +450,8 @@ class SubarrayNodeWrapper(object):
         #     self.abort_subarray()
         #     self.restart_subarray()
         #     self.check_if_dishes_are_ready(the_waiter)
-        if self.obs_state == ObsState.RESOURCING:
-            """Invoke Abort and Restart"""
-            LOGGER.info("Invoking Abort on Subarray")
-            _, unique = self.abort_subarray()
-            assert self.event_recorder.has_change_event_occurred(
-                self.subarray_node,
-                "longRunningCommandResult",
-                (unique[0], ABORT_COMPLETED),
-            )
-            _, unique_restart = self.restart_subarray()
-            assert self.event_recorder.has_change_event_occurred(
-                self.subarray_node,
-                "longRunningCommandResult",
-                (unique_restart[0], COMMAND_COMPLETED),
-            )
 
-            self.event_recorder.clear_events()
-
-        elif self.obs_state in ("CONFIGURING", "SCANNING"):
+        if self.obs_state in ("RESOURCING", "CONFIGURING", "SCANNING"):
             LOGGER.info("Invoking Abort on Subarray")
             _, unique_abort = self.abort_subarray()
             assert self.event_recorder.has_change_event_occurred(
