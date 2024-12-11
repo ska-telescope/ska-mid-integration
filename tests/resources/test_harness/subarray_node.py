@@ -10,6 +10,7 @@ from ska_tango_base.control_model import HealthState
 from tango import DeviceProxy, DevState
 
 from tests.resources.test_harness.constant import (
+    ABORT_COMPLETED,
     COMMAND_COMPLETED,
     DISH_001_CALIBRATION_DATA,
     DISH_036_CALIBRATION_DATA,
@@ -31,6 +32,7 @@ from tests.resources.test_harness.constant import (
     tmc_sdp_subarray_leaf_node,
     tmc_subarraynode1,
 )
+from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     SIMULATED_DEVICES_DICT,
     check_subarray_obs_state,
@@ -57,7 +59,8 @@ from tests.resources.test_harness.utils.sync_decorators import (
     sync_release_resources,
     sync_restart,
 )
-from tests.resources.test_harness.utils.wait_helpers import Waiter
+
+# from tests.resources.test_harness.utils.wait_helpers import Waiter
 from tests.resources.test_support.common_utils.common_helpers import Resource
 
 configure_logging(logging.DEBUG)
@@ -162,6 +165,7 @@ class SubarrayNodeWrapper(object):
         self.sdp_subarray1 = sdp_subarray1
         device_dict["dish_master_list"] = self.dish_master_list
         device_dict["dish_leaf_node_list"] = self.dish_leaf_node_list
+        self.event_recorder = EventRecorder()
 
     def _setup(self):
         """ """
@@ -425,28 +429,91 @@ class SubarrayNodeWrapper(object):
         LOGGER.info("Calling Tear down for subarray")
         self._clear_command_call_and_transition_data(clear_transition=True)
 
-        if self.obs_state in (
-            "RESOURCING",
-            "CONFIGURING",
-            "SCANNING",
-            "READY",
-            "IDLE",
-        ):
+        # if self.obs_state in (
+        #     "RESOURCING",
+        #     "CONFIGURING",
+        #     "SCANNING",
+        #     "READY",
+        #     "IDLE",
+        # ):
+        #     """Invoke Abort and Restart"""
+        #     LOGGER.info("Invoking Abort on Subarray")
+        #     # Waiting for few seconds as the SubarrayNode End command
+        #     # completion does not consider Dishes pointingState transition
+        #     # to READY
+        #     the_waiter = Waiter(**device_dict)
+        #     the_waiter.wait(5)
+
+        #     self.abort_subarray()
+        #     self.restart_subarray()
+        #     self.check_if_dishes_are_ready(the_waiter)
+        if self.obs_state == ObsState.RESOURCING:
             """Invoke Abort and Restart"""
             LOGGER.info("Invoking Abort on Subarray")
-            # Waiting for few seconds as the SubarrayNode End command
-            # completion does not consider Dishes pointingState transition
-            # to READY
-            the_waiter = Waiter(**device_dict)
-            the_waiter.wait(5)
+            _, unique = self.abort_subarray()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique[0], ABORT_COMPLETED),
+            )
+            _, unique_restart = self.restart_subarray()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique_restart[0], COMMAND_COMPLETED),
+            )
 
-            self.abort_subarray()
-            self.restart_subarray()
-            self.check_if_dishes_are_ready(the_waiter)
+            self.event_recorder.clear_events()
+
+        elif self.obs_state in ("CONFIGURING", "SCANNING"):
+            LOGGER.info("Invoking Abort on Subarray")
+            _, unique_abort = self.abort_subarray()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique_abort[0], ABORT_COMPLETED),
+            )
+
+            _, unique_restart = self.restart_subarray()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique_restart[0], COMMAND_COMPLETED),
+            )
+            self.event_recorder.clear_events()
+
+        elif self.obs_state == ObsState.READY:
+            _, unique_end = self.end_observation()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique_end[0], COMMAND_COMPLETED),
+            )
+            _, unique_release = self.release_resources_subarray()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique_release[0], COMMAND_COMPLETED),
+            )
+            self.event_recorder.clear_events()
+
+        elif self.obs_state == ObsState.IDLE:
+            _, unique_release_resource = self.release_resources_subarray()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique_release_resource[0], COMMAND_COMPLETED),
+            )
+
         elif self.obs_state == "ABORTED":
             """Invoke Restart"""
             LOGGER.info("Invoking Restart on Subarray")
-            self.restart_subarray()
+            _, unique_id = self.restart_subarray()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique_id[0], COMMAND_COMPLETED),
+            )
         else:
             self.force_change_of_obs_state("EMPTY")
 
@@ -455,6 +522,7 @@ class SubarrayNodeWrapper(object):
         self._reset_dishes()
         self._reset_simulator_devices()
         assert check_subarray_obs_state("EMPTY")
+        self.event_recorder.clear_events()
 
     def check_if_dishes_are_ready(self, waiter):
         LOGGER.info("waiter.dish_master_list: %s", waiter.dish_master_list)
