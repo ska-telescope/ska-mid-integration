@@ -8,6 +8,7 @@ from typing import Any, List
 
 from astropy.time import Time
 from numpy import array_equal
+from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
 from ska_tango_base.commands import ResultCode
 from ska_tango_base.control_model import HealthState
@@ -173,7 +174,7 @@ def get_non_sidereal_json_for_now() -> tuple[str, str]:
     # The data below is losely based on information found from the web, and has
     # loose limits such that elevation is >= 17.5 for the source at
     # "lat": -30.71329, "lon": 21.449412 and "h": 1098.074 for dish SKA001
-    # based on TelModel-data
+    # based on TelModel-data. Default value is Sun for the negative scenario
     if 8 <= current_time <= 14:
         configure_input_json["pointing"]["target"]["target_name"] = "Sun"
         return (json.dumps(configure_input_json), "Sun")
@@ -189,7 +190,8 @@ def get_non_sidereal_json_for_now() -> tuple[str, str]:
     if 14 <= current_time <= 15:
         configure_input_json["pointing"]["target"]["target_name"] = "Venus"
         return (json.dumps(configure_input_json), "Venus")
-    return ("", "")
+    configure_input_json["pointing"]["target"]["target_name"] = "Sun"
+    return (json.dumps(configure_input_json), "Sun")
 
 
 def get_device_simulator_with_given_name(simulator_factory, devices):
@@ -853,3 +855,37 @@ def wait_until_devices_operational(devices_to_monitor):
         "Timeout of %d seconds reached. Devices are not operational.", TIMEOUT
     )
     return False
+
+
+def wait_for_partial_or_complete_abort() -> None:
+    """Wait for completion of Partial/Full abort on SubarrayNode by waiting for
+    one of 3 states on all the devices - ABORTED, EMPTY or FAULT until
+    occurance of timeout.
+
+    :param timeout: Timeout value to wait for.
+    """
+    event_recorder = EventRecorder()
+    DEVICE_ATTRIBUTE_MAP: dict[DeviceProxy, str] = {
+        DeviceProxy(tmc_csp_subarray_leaf_node): "cspSubarrayObsState",
+        DeviceProxy(tmc_sdp_subarray_leaf_node): "sdpSubarrayObsState",
+        DeviceProxy(tmc_subarraynode1): "obsState",
+    }
+
+    # Subscribing to events
+    for dev_proxy, attribute_name in DEVICE_ATTRIBUTE_MAP.items():
+        event_recorder.subscribe_event(dev_proxy, attribute_name, timeout=120)
+
+    # Asserting Events
+    for dev_proxy, attribute_name in DEVICE_ATTRIBUTE_MAP.items():
+        if dev_proxy.dev_name() == tmc_subarraynode1:
+            assert event_recorder.has_change_event_occurred_for_given_values(
+                dev_proxy,
+                attribute_name,
+                [ObsState.FAULT, ObsState.ABORTED],
+            )
+        else:
+            assert event_recorder.has_change_event_occurred_for_given_values(
+                dev_proxy,
+                attribute_name,
+                [ObsState.FAULT, ObsState.ABORTED, ObsState.EMPTY],
+            )

@@ -3,7 +3,12 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from tango import DevState
 
+from tests.resources.test_harness.constant import (
+    ABORT_COMPLETED,
+    COMMAND_COMPLETED,
+)
 from tests.resources.test_harness.helpers import (
+    check_for_device_command_event,
     get_device_simulators,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
@@ -13,7 +18,7 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 # The test fails intermittently as the test does not make sure that the Abort
 # is completed on dishes and then the next Configure is invoked
-@pytest.mark.skip(reason="Need to add dish assertions in the test.")
+@pytest.mark.handling
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-28835.feature",
@@ -40,6 +45,12 @@ def given_tmc(central_node_mid, subarray_node, event_recorder):
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     event_recorder.subscribe_event(
         subarray_node.subarray_devices["csp_subarray"], "obsState"
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
     )
     event_recorder.subscribe_event(
         subarray_node.subarray_devices["sdp_subarray"], "obsState"
@@ -72,7 +83,7 @@ def given_tmc_subarray_assign_resources(
     invalid_receiptor_json = prepare_json_args_for_commands(
         "invalid_receiver_address2", command_input_factory
     )
-    _, _ = central_node_mid.perform_action(
+    _, unique_id = central_node_mid.perform_action(
         "AssignResources", assign_input_json
     )
     sdp_sim.SetDirectreceiveAddresses(invalid_receiptor_json)
@@ -93,6 +104,18 @@ def given_tmc_subarray_assign_resources(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (unique_id[0], COMMAND_COMPLETED),
+    )
+    assert check_for_device_command_event(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        COMMAND_COMPLETED,
+        event_recorder,
+        "AssignResources",
     )
 
 
@@ -163,7 +186,7 @@ def given_tmc_subarray_stuck_configuring(
     )
 )
 def send_command_abort(subarray_node, event_recorder):
-    subarray_node.execute_transition("Abort", argin=None)
+    _, pytest.unique_id = subarray_node.execute_transition("Abort", argin=None)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
@@ -215,6 +238,11 @@ def tmc_subarray_transitions_to_aborted(subarray_node, event_recorder):
         ObsState.ABORTED,
         lookahead=18,
     )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.unique_id[0], ABORT_COMPLETED),
+    )
 
 
 @when(
@@ -223,7 +251,9 @@ def tmc_subarray_transitions_to_aborted(subarray_node, event_recorder):
     )
 )
 def send_command_restart(subarray_node, event_recorder):
-    subarray_node.execute_transition("Restart", argin=None)
+    _, pytest.restart_unqiue_id = subarray_node.execute_transition(
+        "Restart", argin=None
+    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
@@ -275,6 +305,12 @@ def tmc_subarray_transitions_to_empty(subarray_node, event_recorder):
         ObsState.EMPTY,
     )
 
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.restart_unqiue_id[0], COMMAND_COMPLETED),
+    )
+
 
 @then(
     parsers.parse(
@@ -320,21 +356,15 @@ def configure_executed_on_subarray(
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    subarray_node.store_configuration_data(configure_input_json)
+    _, unique_id = subarray_node.store_configuration_data(configure_input_json)
 
-    # assert event_recorder.has_change_event_occurred(
-    #     subarray_node.subarray_devices["csp_subarray"],
-    #     "obsState",
-    #     ObsState.READY,
-    # )
-    #
-    # assert event_recorder.has_change_event_occurred(
-    #     subarray_node.subarray_devices["sdp_subarray"],
-    #     "obsState",
-    #     ObsState.READY,
-    # )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (unique_id[0], COMMAND_COMPLETED),
     )

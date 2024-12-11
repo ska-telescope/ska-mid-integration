@@ -1,6 +1,7 @@
 """Define Constants
 """
 import json
+from enum import IntEnum
 
 import numpy as np
 from ska_control_model import ObsState
@@ -32,6 +33,18 @@ dish_master4 = "ska100/elt/master"
 sdp_queue_connector = "mid-sdp/queueconnector/01"
 COMMAND_COMPLETED = json.dumps([ResultCode.OK, "Command Completed"])
 
+TIMEOUT = 100
+
+
+class CorrectionKey(IntEnum):
+    """An enum class for correction keys"""
+
+    MAINTAIN = 0
+    UPDATE = 1
+    RESET = 2
+
+
+ABORT_COMPLETED = json.dumps([ResultCode.STARTED, "Command Started"])
 DISH_ERROR_MESSAGE = (
     "Exception occurred on the following devices: " + f"{tmc_dish_leaf_node1}:"
 )

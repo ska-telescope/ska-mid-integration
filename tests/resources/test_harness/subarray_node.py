@@ -14,6 +14,7 @@ from tests.resources.test_harness.constant import (
     COMMAND_COMPLETED,
     DISH_001_CALIBRATION_DATA,
     DISH_036_CALIBRATION_DATA,
+    CorrectionKey,
     centralnode,
     csp_master,
     csp_subarray1,
@@ -144,6 +145,8 @@ class SubarrayNodeWrapper(object):
             DeviceProxy(tmc_dish_leaf_node3),
             DeviceProxy(tmc_dish_leaf_node4),
         ]
+        for dish_leaf_node in self.dish_leaf_node_list:
+            dish_leaf_node.set_timeout_millis(5000)
 
         for dish_leaf_node in self.dish_leaf_node_list:
             dish_leaf_node.set_timeout_millis(5000)
@@ -154,6 +157,7 @@ class SubarrayNodeWrapper(object):
         }
         self._state = DevState.OFF
         self.obs_state = SubarrayObsState.EMPTY
+        self._assigned_resources = []
         # setup subarray
         self._setup()
         # Subarray state
@@ -195,6 +199,14 @@ class SubarrayNodeWrapper(object):
             value (DevState): operational state value
         """
         self._state = value
+
+    @property
+    def assigned_resources(self) -> list:
+        """TMC SubarrayNode assignedResources"""
+        self._assigned_resources = Resource(self.tmc_subarraynode1).get(
+            "assignedResources"
+        )
+        return self._assigned_resources
 
     @property
     def obs_state(self):
@@ -331,8 +343,14 @@ class SubarrayNodeWrapper(object):
         while retry <= 3:
             try:
                 if command_name is not None:
+                    if argin:
+                        result, message = self.subarray_node.command_inout(
+                            command_name, argin
+                        )
+                        LOGGER.info(f"Invoked {command_name} on SubarrayNode")
+                        return result, message
                     result, message = self.subarray_node.command_inout(
-                        command_name, argin
+                        command_name
                     )
                     LOGGER.info(f"Invoked {command_name} on SubarrayNode")
                     return result, message
@@ -426,6 +444,19 @@ class SubarrayNodeWrapper(object):
         else:
             LOGGER.info("Devices deployed are real")
 
+    def get_assigned_dish_leaf_nodes_list(self) -> list:
+        """Returns a list of all the dish leaf nodes corresponding to the
+        dishes that are assigned"""
+        assigned_receptors = self.assigned_resources
+        assigned_receptors = [receptor[3:] for receptor in assigned_receptors]
+        assigned_dish_leaf_nodes = []
+        for receptor in assigned_receptors:
+            for dish_leaf_node in self.dish_leaf_node_list:
+                if receptor in dish_leaf_node.dev_name():
+                    assigned_dish_leaf_nodes.append(dish_leaf_node)
+                    break
+        return assigned_dish_leaf_nodes
+
     def tear_down(self):
         """Tear down after each test run"""
 
@@ -459,7 +490,6 @@ class SubarrayNodeWrapper(object):
                 "longRunningCommandResult",
                 (unique_abort[0], ABORT_COMPLETED),
             )
-
             _, unique_restart = self.restart_subarray()
             assert self.event_recorder.has_change_event_occurred(
                 self.subarray_node,
@@ -490,6 +520,7 @@ class SubarrayNodeWrapper(object):
                 "longRunningCommandResult",
                 (unique_release_resource[0], COMMAND_COMPLETED),
             )
+            self.event_recorder.clear_events()
 
         elif self.obs_state == "ABORTED":
             """Invoke Restart"""
@@ -502,7 +533,6 @@ class SubarrayNodeWrapper(object):
             )
         else:
             self.force_change_of_obs_state("EMPTY")
-
         # Move Subarray to OFF state
         self.move_to_off()
         self._reset_dishes()
@@ -581,6 +611,7 @@ class SubarrayNodeWrapper(object):
         partial_configure_jsons: list[str],
         event_tracer,
         command_input_factory,
+        correction_key=CorrectionKey.UPDATE,
     ) -> None:
         """Perform a five point calibration scan on Subarray Node using the
         partial configuration jsons and scan jsons provided as inputs.
@@ -655,12 +686,17 @@ class SubarrayNodeWrapper(object):
             event_tracer.clear_events()
 
             # assert sourceOffset gets populated as expected
-            ca_offset, ie_offset = (
-                json.loads(partial_configure_json)["pointing"]["target"][key]
-                for key in ("ca_offset_arcsec", "ie_offset_arcsec")
-            )
+            if correction_key == CorrectionKey.UPDATE:
+                ca_offset, ie_offset = (
+                    json.loads(partial_configure_json)["pointing"]["target"][
+                        key
+                    ]
+                    for key in ("ca_offset_arcsec", "ie_offset_arcsec")
+                )
+            elif correction_key == CorrectionKey.RESET:
+                ca_offset, ie_offset = 0.0, 0.0
             for dish_leaf_node in self.dish_leaf_node_list:
-                wait_and_validate_device_attribute_value(
+                assert wait_and_validate_device_attribute_value(
                     dish_leaf_node,
                     "sourceOffset",
                     f"{[ca_offset, ie_offset]}",
@@ -679,7 +715,7 @@ class SubarrayNodeWrapper(object):
                 "obsState",
                 ObsState.SCANNING,
             )
-            wait_and_validate_device_attribute_value(
+            assert wait_and_validate_device_attribute_value(
                 self.subarray_node, "obsState", ObsState.READY
             )
             event_tracer.clear_events()

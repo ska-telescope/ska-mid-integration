@@ -222,7 +222,7 @@ def validate_dish_vcc_config_after_central_node_and_csp_mln_restart(
         " Version is Same",
         "dish": "ALL DISH OK",
     }
-    wait_and_validate_device_attribute_value(
+    assert wait_and_validate_device_attribute_value(
         tmc_mid.central_node.central_node,
         "DishVccValidationStatus",
         json.dumps(result_string_to_match),
