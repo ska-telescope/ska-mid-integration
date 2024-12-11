@@ -90,12 +90,6 @@ def telescope_wrapper(
 @pytest.fixture
 def tmc(telescope_wrapper: TelescopeWrapper) -> TMCFacade:
     """Create a facade to TMC devices."""
-    TMCFacade(telescope_wrapper).load_dish_vcc_configuration(
-        DEFAULT_VCC_CONFIG_INPUT,
-        wait_termination=True,
-        custom_timeout=10,
-        is_long_running_command=True,
-    )
     return TMCFacade(telescope_wrapper)
 
 
