@@ -13,6 +13,7 @@ from tests.resources.test_harness.simulator_factory import SimulatorFactory
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 
 
+@pytest.mark.sah1630
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/"
