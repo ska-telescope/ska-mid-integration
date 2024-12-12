@@ -40,6 +40,7 @@ from tests.resources.test_harness.helpers import (
     generate_eb_pb_ids,
     prepare_json_args_for_commands,
     wait_and_validate_device_attribute_value,
+    wait_for_partial_or_complete_abort,
 )
 from tests.resources.test_harness.utils.constant import (
     ABORTED,
@@ -485,12 +486,9 @@ class SubarrayNodeWrapper(object):
 
         elif self.obs_state in ("CONFIGURING", "SCANNING"):
             LOGGER.info("Invoking Abort on Subarray")
-            _, unique_abort = self.abort_subarray()
-            assert self.event_recorder.has_change_event_occurred(
-                self.subarray_node,
-                "longRunningCommandResult",
-                (unique_abort[0], ABORT_COMPLETED),
-            )
+            self.execute_transition("Abort")
+            wait_for_partial_or_complete_abort()
+
             # Waiting for pointingStates of dishes to go to READY/NONE as Abort
             # on Subarray does not consider pointingStates.
             dish_leaf_node_list = self.get_assigned_dish_leaf_nodes_list()
