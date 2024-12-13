@@ -7,6 +7,7 @@ import json
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 
+from tests.conftest import LOGGER
 from tests.resources.test_harness.constant import (
     ERROR_PROPAGATION_DEFECT,
     RESET_DEFECT,
@@ -267,6 +268,10 @@ def invoke_command_load_cfg_on_defective_csp(
         (unique_id[0], exception_msg),
         lookahead=5,
     )
+    LOGGER.info("LRCR: %s", pytest.command_result)
+    LOGGER.info(
+        "LRCR: %s", central_node_mid.central_node.longRunningCommandResult
+    )
     csp_sim.SetDefective(RESET_DEFECT)
 
 
@@ -291,4 +296,8 @@ def check_sys_param_source_sys_param_attributes(central_node_mid):
 @then(parsers.parse("command returns with error message {error_message}"))
 def check_return_msg(error_message: str):
     """Test validate that command failed with error message"""
+    LOGGER.info(
+        "pytest.command_result attribute_value: %s",
+        pytest.command_result["attribute_value"],
+    )
     assert error_message in pytest.command_result["attribute_value"][1]
