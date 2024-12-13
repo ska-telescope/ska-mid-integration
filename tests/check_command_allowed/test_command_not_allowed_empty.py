@@ -29,7 +29,7 @@ telescope_control = BaseTelescopeControl()
 result, message = "", ""
 
 
-@pytest.mark.skip(reason="Move this scenario to SubarrayNode.")
+@pytest.mark.skip(reason="Scenario is covered in SubarrauNode unit test.")
 @scenario(
     "../features/check_command_not_allowed.feature",
     "Unexpected commands not allowed when TMC subarray is empty",
