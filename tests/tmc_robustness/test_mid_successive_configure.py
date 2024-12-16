@@ -128,7 +128,6 @@ def invoke_configure(
     subarray_node: SubarrayNodeWrapper,
     command_input_factory: JsonFactory,
     event_tracer: TangoEventTracer,
-    central_node_mid: CentralNodeWrapperMid,
     input_json1: str,
 ):
     """
@@ -150,10 +149,9 @@ def invoke_configure(
     configure_input_json = prepare_json_args_for_commands(
         input_json1, command_input_factory
     )
-    configure_json = json.loads(configure_input_json)
 
     _, unique_id = subarray_node.execute_transition(
-        "Configure", json.dumps(configure_json)
+        "Configure", json.dumps(configure_input_json)
     )
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "WHEN" STEP: '
@@ -184,6 +182,7 @@ def check_for_ready(
         "obsState",
         ObsState.READY,
     )
+    event_tracer.clear_events()
 
 
 @when(

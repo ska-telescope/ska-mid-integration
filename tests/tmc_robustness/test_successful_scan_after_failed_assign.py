@@ -1,42 +1,26 @@
 import json
-import time
 
 import pytest
+from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
-from tango import DeviceProxy
+from ska_tango_base.control_model import ObsState
+from ska_tango_testing.integration import TangoEventTracer, log_events
+from tango import DevState
 
 from tests.conftest import LOGGER
-from tests.resources.test_support.common_utils.common_helpers import Waiter
+from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
+from tests.resources.test_harness.constant import COMMAND_COMPLETED
+from tests.resources.test_harness.helpers import (
+    prepare_json_args_for_centralnode_commands,
+    prepare_json_args_for_commands,
+)
+from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
+from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.common_utils.result_code import ResultCode
-from tests.resources.test_support.common_utils.telescope_controls import (
-    BaseTelescopeControl,
-)
-from tests.resources.test_support.common_utils.tmc_helpers import (
-    TmcHelper,
-    tear_down,
-)
-from tests.resources.test_support.constant import (
-    DEVICE_OBS_STATE_EMPTY_INFO,
-    DEVICE_OBS_STATE_IDLE_INFO,
-    DEVICE_OBS_STATE_READY_INFO,
-    DEVICE_OBS_STATE_SCANNING_INFO,
-    DEVICE_STATE_ON_INFO,
-    DEVICE_STATE_STANDBY_INFO,
-    DISH_MODE_STANDBYFP_INFO,
-    DISH_MODE_STANDBYLP_INFO,
-    ON_OFF_DEVICE_COMMAND_DICT,
-    centralnode,
-    tmc_subarraynode1,
-)
-
-tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
-telescope_control = BaseTelescopeControl()
+from tests.resources.test_support.enum import DishMode
 
 
-@pytest.mark.skip(
-    reason="Test fails intermittenly as assertions for Dish transitions are"
-    + " missing."
-)
+@pytest.mark.refactor
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_failed_assigned.feature",
@@ -54,47 +38,60 @@ def test_assign_resource_with_invalid_json():
         "a subarray {subarray_id} with resources {resources_list} in obsState EMPTY"  # noqa: E501
     )
 )
-def given_tmc(json_factory):
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        # Verify Telescope is Off/Standby
-        assert telescope_control.is_in_valid_state(
-            DEVICE_STATE_STANDBY_INFO, "State"
+def given_tmc(
+    event_tracer: TangoEventTracer,
+    central_node_mid: CentralNodeWrapperMid,
+    subarray_node: SubarrayNodeWrapper,
+):
+    event_tracer.subscribe_event(
+        central_node_mid.central_node, "telescopeState"
+    )
+    event_tracer.subscribe_event(central_node_mid.subarray_node, "obsState")
+    for dishln in subarray_node.dish_leaf_node_list:
+        event_tracer.subscribe_event(dishln, "dishMode")
+        log_events({dishln: ["dishMode"]})
+    central_node_mid.move_to_on()
+    log_events(
+        {
+            central_node_mid.central_node: ["telescopeState"],
+            central_node_mid.subarray_node: ["obsState"],
+        }
+    )
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the TMC is On'"
+        "TMC Central Node device"
+        f"({central_node_mid.subarray_node.dev_name()}) "
+        "is expected to be in ON telescope state",
+    ).within_timeout(60).has_change_event_occurred(
+        central_node_mid.central_node,
+        "telescopeState",
+        DevState.ON,
+    )
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the TMC is On'"
+        "TMC Subarray device"
+        f"({central_node_mid.subarray_node.dev_name()}) "
+        "is expected to be in EMPTY obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        central_node_mid.subarray_node,
+        "obsState",
+        ObsState.EMPTY,
+    )
+    for dishln in subarray_node.dish_leaf_node_list:
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "GIVEN" STEP: '
+            "'the TMC is On'"
+            "TMC Subarray device"
+            f"({dishln.dev_name()}) "
+            "is expected to be in EMPTY obstate",
+        ).within_timeout(60).has_change_event_occurred(
+            dishln,
+            "dishMode",
+            DishMode.STANDBY_LP,
         )
-
-        # Verify dishomode transitions before TelescopeOn
-        assert telescope_control.is_in_valid_state(
-            DISH_MODE_STANDBYLP_INFO, "dishMode"
-        )
-        # Wait for DishMaster attribute value update,
-        # on CentralNode for value dishMode STANDBY_FP
-
-        # TODO: Improvement in tests/implementation
-        # to minimize the need of having sleep. This is being done under
-        # SAH-1501.
-        time.sleep(4)
-        # Invoke TelescopeOn() command on TMC CentralNode
-        LOGGER.info("Invoking TelescopeOn command on TMC CentralNode")
-        tmc_helper.set_to_on(**ON_OFF_DEVICE_COMMAND_DICT)
-        # Verify State transitions after TelescopeOn
-        assert telescope_control.is_in_valid_state(
-            DEVICE_STATE_ON_INFO, "State"
-        )
-        assert telescope_control.is_in_valid_state(
-            DEVICE_OBS_STATE_EMPTY_INFO, "obsState"
-        )
-        # Verify dishomode transitions before TelescopeOn
-        assert telescope_control.is_in_valid_state(
-            DISH_MODE_STANDBYFP_INFO, "dishMode"
-        )
-        # Wait for DishMaster attribute value update,
-        # on CentralNode for value dishMode STANDBY_FP
-
-        # TODO: Improvement in tests/implementation
-        # to minimize the need of having sleep
-        time.sleep(4)
-    except Exception:
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
+    event_tracer.clear_events()
 
 
 @when(
@@ -103,22 +100,20 @@ def given_tmc(json_factory):
     )
 )
 def invoke_assign_resources_one(
-    json_factory,
+    command_input_factory: JsonFactory,
+    event_tracer: TangoEventTracer,
+    central_node_mid: CentralNodeWrapperMid,
 ):
-    assign_json = json_factory("command_AssignResources")
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        assign_json = json.loads(assign_json)
-        del assign_json["sdp"]["processing_blocks"][0]["pb_id"]
-        # Invoke AssignResources() Command on TMC
-        LOGGER.info("Invoking AssignResources command on TMC CentralNode")
-        central_node = DeviceProxy(centralnode)
-        pytest.command_result = central_node.AssignResources(
-            json.dumps(assign_json)
-        )
-    except Exception as e:
-        LOGGER.info("The Exception is %s", e)
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
+    assign_input_json = prepare_json_args_for_centralnode_commands(
+        "command_AssignResources", command_input_factory
+    )
+    assign_json = json.loads(assign_input_json)
+    del assign_json["sdp"]["processing_blocks"][0]["pb_id"]
+    # Invoke AssignResources() Command on TMC
+    LOGGER.info("Invoking AssignResources command on TMC CentralNode")
+    pytest.command_result = central_node_mid.store_resources(
+        json.dumps(assign_json)
+    )
 
 
 @then(parsers.parse("the subarray {subarray_id} returns an error message"))
@@ -128,150 +123,158 @@ def invalid_command_rejection():
 
 
 @then(parsers.parse("the subarray {subarray_id} remains in obsState EMPTY"))
-def tmc_status(json_factory):
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        # Verify obsState is EMPTY
-        assert telescope_control.is_in_valid_state(
-            DEVICE_OBS_STATE_EMPTY_INFO, "obsState"
-        )
-    except Exception as e:
-        LOGGER.info("The Exception is %s", e)
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
+def tmc_status(
+    event_tracer: TangoEventTracer, central_node_mid: CentralNodeWrapperMid
+):
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the TMC is On'"
+        "TMC Subarray device"
+        f"({central_node_mid.subarray_node.dev_name()}) "
+        "is expected to be in EMPTY obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        central_node_mid.subarray_node,
+        "obsState",
+        ObsState.EMPTY,
+    )
 
 
 @when("I issue the command AssignResources passing a correct JSON script")
-def tmc_accepts_command_with_valid_json(json_factory):
-    assign_json = json_factory("command_AssignResources")
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        # Invoke AssignResources() Command on TMC
-        LOGGER.info("Invoking AssignResources command on TMC CentralNode")
-        tmc_helper.compose_sub(assign_json, **ON_OFF_DEVICE_COMMAND_DICT)
-    except Exception as e:
-        LOGGER.info("The Exception is %s", e)
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
+def tmc_accepts_command_with_valid_json(
+    command_input_factory: JsonFactory, central_node_mid: CentralNodeWrapperMid
+):
+    assign_input_json = prepare_json_args_for_centralnode_commands(
+        "command_AssignResources", command_input_factory
+    )
+    _, pytest.unique_id = central_node_mid.store_resources(assign_input_json)
 
 
 @then("the subarray transitions to obsState IDLE")
-def tmc_status_idle(json_factory):
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        # Verify obsState is IDLE
-        assert telescope_control.is_in_valid_state(
-            DEVICE_OBS_STATE_IDLE_INFO, "obsState"
-        )
-    except Exception as e:
-        LOGGER.info("The Exception is %s", e)
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
+def tmc_status_idle(
+    event_tracer: TangoEventTracer, central_node_mid: CentralNodeWrapperMid
+):
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the subarray must be in the IDLE obsState'"
+        "TMC Subarray device"
+        f"({central_node_mid.subarray_node.dev_name()}) "
+        "is expected to be in IDLE obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        central_node_mid.subarray_node,
+        "obsState",
+        ObsState.IDLE,
+    )
+
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the subarray is in IDLE obsState'"
+        "TMC Central Node device"
+        f"({central_node_mid.central_node.dev_name()}) "
+        "is expected have longRunningCommand as"
+        '(unique_id,(ResultCode.OK,"Command Completed"))',
+    ).within_timeout(60).has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.unique_id[0], COMMAND_COMPLETED),
+    )
 
 
 @when("I issue the command Configure passing a correct JSON script")
-def tmc_accepts_configure_command_with_valid_json(json_factory):
-    configure_json = json_factory("command_Configure")
-    configure_input_json = json.loads(configure_json)
+def tmc_accepts_configure_command_with_valid_json(
+    command_input_factory: JsonFactory,
+    event_tracer: TangoEventTracer,
+    subarray_node: SubarrayNodeWrapper,
+):
+    configure_input_json = prepare_json_args_for_commands(
+        "command_Configure", command_input_factory
+    )
+    configure_input_json = json.loads(configure_input_json)
     configure_input_json["tmc"]["scan_duration"] = 10.0
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        # Invoke Configure() Command on TMC
-        tmc_helper.configure_subarray(
-            json.dumps(configure_input_json), **ON_OFF_DEVICE_COMMAND_DICT
-        )
-        LOGGER.info("Invoked Configure command on TMC SubarrayNode")
-    except Exception:
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
+
+    _, unique_id = subarray_node.execute_transition(
+        "Configure", json.dumps(configure_input_json)
+    )
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "WHEN" STEP: '
+        "TMC Subarray Node device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected have longRunningCommand as"
+        '(unique_id,(ResultCode.OK,"Command Completed"))',
+    ).within_timeout(60).has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (unique_id[0], COMMAND_COMPLETED),
+    )
 
 
 @then("the subarray transitions to obsState READY")
-def tmc_status_ready(json_factory):
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        the_waiter = Waiter()
-        the_waiter.set_wait_for_specific_obsstate("READY", [tmc_subarraynode1])
-        the_waiter.wait(200)
-        # Verify that the obstate is READY
-        assert telescope_control.is_in_valid_state(
-            DEVICE_OBS_STATE_READY_INFO, "obsState"
-        )
-    except Exception as e:
-        LOGGER.info("The Exception is %s", e)
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
+def tmc_status_ready(
+    event_tracer: TangoEventTracer,
+    subarray_node: SubarrayNodeWrapper,
+):
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the subarray must be in the READY obsState'"
+        "TMC Subarray device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected to be in READY obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.READY,
+    )
+    event_tracer.clear_events()
 
 
 @when("I issue the command Scan")
-def tmc_accepts_scan_command(json_factory):
-    scan_json = json_factory("command_Scan")
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        # Invoke Scan() Command on TMC
-        subarray_node = DeviceProxy(tmc_subarraynode1)
-        subarray_node.Scan(scan_json)
-        LOGGER.info("Invoked Scan command on TMC Subarray Node")
-    except Exception as e:
-        LOGGER.info("The Exception is %s", e)
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
+def tmc_accepts_scan_command(
+    command_input_factory: JsonFactory,
+    event_tracer: TangoEventTracer,
+    subarray_node: SubarrayNodeWrapper,
+):
+    scan_input_json = prepare_json_args_for_commands(
+        "command_Scan", command_input_factory
+    )
+    subarray_node.store_scan_data(scan_input_json)
 
 
 @then("the subarray transitions to obsState SCANNING")
-def tmc_status_scanning(json_factory):
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        the_waiter = Waiter(**ON_OFF_DEVICE_COMMAND_DICT)
-        the_waiter.set_wait_for_scanning()
-        the_waiter.wait(200)
-        assert telescope_control.is_in_valid_state(
-            DEVICE_OBS_STATE_SCANNING_INFO, "obsState"
-        )
-    except Exception as e:
-        LOGGER.info("The Exception is %s", e)
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
+def tmc_status_scanning(event_tracer, subarray_node):
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "THEN" STEP: '
+        "'the subarray transitions to obsState SCANNING'"
+        "TMC Subarray device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected to be in SCANNING obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.SCANNING,
+    )
+    event_tracer.clear_events()
 
 
 @when("I issue the command EndScan")
-def tmc_accepts_endscan_command(json_factory):
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        subarray_node = DeviceProxy(tmc_subarraynode1)
-        subarray_node.EndScan()
-        LOGGER.info("Invoking EndScan command on TMC SubarrayNode")
-    except Exception:
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
-        LOGGER.info("Tear Down complete. Telescope is in Standby State")
+def tmc_accepts_endscan_command(
+    event_tracer: TangoEventTracer,
+    subarray_node: SubarrayNodeWrapper,
+):
+    subarray_node.remove_scan_data()
 
 
 # @then("the subarray transitions to obsState READY")
 
 
 @then("implements the teardown")
-def teardown_the_tmc(json_factory):
+def teardown_the_tmc(
+    central_node_mid: CentralNodeWrapperMid,
+    subarray_node: SubarrayNodeWrapper,
+):
     """Tears down the system after test run"""
-    release_json = json_factory("command_ReleaseResources")
-    # Invoke End Command on TMC
-    tmc_helper.end(**ON_OFF_DEVICE_COMMAND_DICT)
-    LOGGER.info("Invoking End command on TMC SubarrayNode")
-    assert telescope_control.is_in_valid_state(
-        DEVICE_OBS_STATE_IDLE_INFO, "obsState"
-    )
-    # Invoke ReleaseResources() Command on TMC
-    tmc_helper.invoke_releaseResources(
-        release_json, **ON_OFF_DEVICE_COMMAND_DICT
-    )
-    LOGGER.info("Invoking ReleaseResources command on TMC SubarrayNode")
-    assert telescope_control.is_in_valid_state(
-        DEVICE_OBS_STATE_EMPTY_INFO, "obsState"
-    )
-    # Invoke Standby() Command on TMC
-    tmc_helper.set_to_standby(**ON_OFF_DEVICE_COMMAND_DICT)
-    LOGGER.info("Invoking Standby command on TMC SubarrayNode")
-    assert telescope_control.is_in_valid_state(
-        DEVICE_STATE_STANDBY_INFO, "State"
-    )
+    subarray_node.tear_down()
+    central_node_mid.tear_down()
 
 
-@pytest.mark.skip(
-    reason="Test fails intermittenly as assertions for Dish transitions are"
-    + " missing."
-)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_failed_assigned.feature",
@@ -290,23 +293,22 @@ def test_assign_resource_after_successive_assign_failure():
         "I issue the command AssignResources passing an invalid JSON script2 to the subarray {subarray_id}"  # noqa: E501
     )
 )
-def send_assignresource_with_invalid_json2(json_factory):
-    assign_json = json_factory("command_AssignResources")
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        assign_json = json.loads(assign_json)
-        del assign_json["sdp"]["execution_block"]["scan_types"][0][
-            "scan_type_id"
-        ]
-        # Invoke AssignResources() Command on TMC
-        LOGGER.info("Invoking AssignResources command on TMC CentralNode")
-        central_node = DeviceProxy(centralnode)
-        pytest.command_result = central_node.AssignResources(
-            json.dumps(assign_json)
-        )
-    except Exception as e:
-        LOGGER.info("The Exception is %s", e)
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
+def send_assignresource_with_invalid_json2(
+    command_input_factory: JsonFactory,
+    event_tracer: TangoEventTracer,
+    central_node_mid: CentralNodeWrapperMid,
+):
+    assign_input_json = prepare_json_args_for_centralnode_commands(
+        "command_AssignResources", command_input_factory
+    )
+
+    assign_json = json.loads(assign_input_json)
+    del assign_json["sdp"]["execution_block"]["scan_types"][0]["scan_type_id"]
+    # Invoke AssignResources() Command on TMC
+    LOGGER.info("Invoking AssignResources command on TMC CentralNode")
+    pytest.command_result = central_node_mid.store_resources(
+        json.dumps(assign_json)
+    )
 
 
 @when(
@@ -314,27 +316,25 @@ def send_assignresource_with_invalid_json2(json_factory):
         "I issue the command AssignResources passing an invalid JSON script3 to the subarray {subarray_id}"  # noqa: E501
     )
 )
-def send_assignresource_with_invalid_json3(json_factory):
-    assign_json = json_factory("command_AssignResources")
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        assign_json = json.loads(assign_json)
-        del assign_json["sdp"]["execution_block"]["channels"][0]["channels_id"]
-        # Invoke AssignResources() Command on TMC
-        LOGGER.info("Invoking AssignResources command on TMC CentralNode")
-        central_node = DeviceProxy(centralnode)
-        pytest.command_result = central_node.AssignResources(
-            json.dumps(assign_json)
-        )
-    except Exception as e:
-        LOGGER.info("The Exception is %s", e)
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
+def send_assignresource_with_invalid_json3(
+    command_input_factory: JsonFactory,
+    event_tracer: TangoEventTracer,
+    central_node_mid: CentralNodeWrapperMid,
+):
+    assign_input_json = prepare_json_args_for_centralnode_commands(
+        "command_AssignResources", command_input_factory
+    )
+
+    assign_json = json.loads(assign_input_json)
+
+    del assign_json["sdp"]["execution_block"]["channels"][0]["channels_id"]
+    # Invoke AssignResources() Command on TMC
+    LOGGER.info("Invoking AssignResources command on TMC CentralNode")
+    pytest.command_result = central_node_mid.store_resources(
+        json.dumps(assign_json)
+    )
 
 
-@pytest.mark.skip(
-    reason="Test fails intermittenly as assertions for Dish transitions are"
-    + " missing."
-)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_assigning_unavailable_resources.feature",  # noqa: E501
@@ -353,21 +353,24 @@ def test_assign_resource_with_unavailable_resources():
         "I issue the command AssignResources with unavailable resources {resources_list} to the subarray {subarray_id}"  # noqa: E501
     )
 )
-def invoke_assign_resources_two(json_factory, resources_list):
-    assign_json = json_factory("command_AssignResources")
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        assign_json = json.loads(assign_json)
-        assign_json["dish"]["receptor_ids"][0] = resources_list
-        # Invoke AssignResources() Command on TMC
-        LOGGER.info("Invoking AssignResources command on TMC CentralNode")
-        central_node = DeviceProxy(centralnode)
-        pytest.command_result = central_node.AssignResources(
-            json.dumps(assign_json)
-        )
-    except Exception as e:
-        LOGGER.info("The Exception is %s", e)
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
+def invoke_assign_resources_two(
+    command_input_factory: JsonFactory,
+    event_tracer: TangoEventTracer,
+    central_node_mid: CentralNodeWrapperMid,
+    resources_list,
+):
+    assign_input_json = prepare_json_args_for_centralnode_commands(
+        "command_AssignResources", command_input_factory
+    )
+
+    assign_json = json.loads(assign_input_json)
+
+    assign_json["dish"]["receptor_ids"][0] = resources_list
+    # Invoke AssignResources() Command on TMC
+    LOGGER.info("Invoking AssignResources command on TMC CentralNode")
+    pytest.command_result = central_node_mid.store_resources(
+        json.dumps(assign_json)
+    )
 
 
 @then(
