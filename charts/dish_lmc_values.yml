@@ -14,12 +14,12 @@ ska-mid-dish-manager:
 
 
 ska-mid-dish-simulators:
-  dishsimulators:
-    image:
-      registry: artefact.skao.int
-      image: ska-mid-dish-simulators
-      tag: 4.1.2
-      pullPolicy: IfNotPresent
+  # dishsimulators:
+  #   image:
+  #     registry: artefact.skao.int
+  #     image: ska-mid-dish-simulators
+  #     tag: 4.1.2
+  #     pullPolicy: IfNotPresent
   labels:
     app: ska-tmc-integration
   enabled: true
