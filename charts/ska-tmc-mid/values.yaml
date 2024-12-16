@@ -113,7 +113,7 @@ dishleafnode:
   image:
     registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-dishleafnode
     image: ska-tmc-dishleafnode
-    tag: 0.19.1-dev.cbbc5cca4
+    tag: 0.19.1-dev.c58971816
     pullPolicy: IfNotPresent
 
 resources:
@@ -207,11 +207,8 @@ deviceServers:
     enabled: true
     instances: ["001", "036", "063", "100"]
     file: "data/dishpointingdevice.yaml"
-    TrackTableEntries: 5
-    PointingCalculationPeriod: 500
+    TrackTableUpdateRate: 50
     TrackTableInAdvance: 7
-    Elevation: 30.0
-    Azimuth: 0.0
     ElevationMaxLimit: 90.0
     ElevationMinLimit: 15.0
 
