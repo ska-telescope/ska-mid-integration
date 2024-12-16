@@ -1,5 +1,3 @@
-import json
-
 import pytest
 from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
@@ -151,7 +149,7 @@ def invoke_configure(
     )
 
     _, unique_id = subarray_node.execute_transition(
-        "Configure", json.dumps(configure_input_json)
+        "Configure", configure_input_json
     )
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "WHEN" STEP: '
@@ -215,10 +213,9 @@ def invoke_successive_configure(
     configure_input_json = prepare_json_args_for_commands(
         input_json2, command_input_factory
     )
-    configure_json = json.loads(configure_input_json)
 
     _, unique_id = subarray_node.execute_transition(
-        "Configure", json.dumps(configure_json)
+        "Configure", configure_input_json
     )
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "WHEN" STEP: '
