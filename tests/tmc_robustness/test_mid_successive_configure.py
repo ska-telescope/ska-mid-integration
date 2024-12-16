@@ -1,32 +1,20 @@
-from datetime import datetime
+import json
 
 import pytest
+from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
-from ska_control_model import ObsState
-from tango import DeviceProxy
+from ska_tango_base.control_model import ObsState
+from ska_tango_testing.integration import TangoEventTracer, log_events
+from tango import DevState
 
-from tests.conftest import LOGGER
-from tests.resources.test_support.common_utils.telescope_controls import (
-    BaseTelescopeControl,
+from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
+from tests.resources.test_harness.constant import COMMAND_COMPLETED
+from tests.resources.test_harness.helpers import (
+    prepare_json_args_for_centralnode_commands,
+    prepare_json_args_for_commands,
 )
-from tests.resources.test_support.common_utils.tmc_helpers import (
-    TmcHelper,
-    tear_down,
-)
-from tests.resources.test_support.constant import (
-    DEVICE_LIST_FOR_CHECK_DEVICES,
-    DEVICE_OBS_STATE_EMPTY_INFO,
-    DEVICE_OBS_STATE_IDLE_INFO,
-    DEVICE_OBS_STATE_READY_INFO,
-    DEVICE_STATE_ON_INFO,
-    DEVICE_STATE_STANDBY_INFO,
-    ON_OFF_DEVICE_COMMAND_DICT,
-    centralnode,
-    tmc_subarraynode1,
-)
-
-tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
-telescope_control = BaseTelescopeControl()
+from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
+from tests.resources.test_harness.utils.common_utils import JsonFactory
 
 
 @pytest.mark.SKA_mid
@@ -42,74 +30,158 @@ def test_multiple_configure_functionality():
 
 
 @given("the TMC is On")
-def given_tmc(json_factory):
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        tmc_helper.check_devices(DEVICE_LIST_FOR_CHECK_DEVICES)
-        # Verify Telescope is Off/Standby
-        assert telescope_control.is_in_valid_state(
-            DEVICE_STATE_STANDBY_INFO, "State"
-        )
+def given_tmc(
+    event_tracer: TangoEventTracer, central_node_mid: CentralNodeWrapperMid
+):
+    event_tracer.subscribe_event(
+        central_node_mid.central_node, "telescopeState"
+    )
+    event_tracer.subscribe_event(central_node_mid.subarray_node, "obsState")
+    central_node_mid.move_to_on()
+    log_events(
+        {
+            central_node_mid.central_node: ["telescopeState"],
+            central_node_mid.subarray_node: ["obsState"],
+        }
+    )
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the TMC is On'"
+        "TMC Central Node device"
+        f"({central_node_mid.subarray_node.dev_name()}) "
+        "is expected to be in ON telescope state",
+    ).within_timeout(60).has_change_event_occurred(
+        central_node_mid.central_node,
+        "telescopeState",
+        DevState.ON,
+    )
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the TMC is On'"
+        "TMC Subarray device"
+        f"({central_node_mid.subarray_node.dev_name()}) "
+        "is expected to be in EMPTY obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        central_node_mid.subarray_node,
+        "obsState",
+        ObsState.EMPTY,
+    )
 
-        dish_node = DeviceProxy("ska063/elt/master")
-        LOGGER.info(dish_node.read_attribute("DishMode").value)
-
-        tmc_helper.set_to_on(**ON_OFF_DEVICE_COMMAND_DICT)
-        LOGGER.info("TelescopeOn command is invoked successfully")
-
-        now = datetime.now()
-        current_time = now.strftime("%d/%m/%Y %H:%M:%S:%f")
-        LOGGER.info("current_time - %s ", current_time)
-
-        assert telescope_control.is_in_valid_state(
-            DEVICE_STATE_ON_INFO, "State"
-        )
-
-        assert telescope_control.is_in_valid_state(
-            DEVICE_OBS_STATE_EMPTY_INFO, "obsState"
-        )
-    except Exception:
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
+    event_tracer.clear_events()
 
 
 @given("the subarray is in IDLE obsState")
-def given_subarray_in_idle(json_factory):
-    assign_json = json_factory("multiple_assign1")
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        # Invoke AssignResources() Command on TMC
-        LOGGER.info("Invoking AssignResources command on TMC CentralNode")
-        tmc_helper.compose_sub(assign_json, **ON_OFF_DEVICE_COMMAND_DICT)
+def given_subarray_in_idle(
+    command_input_factory: JsonFactory,
+    event_tracer: TangoEventTracer,
+    central_node_mid: CentralNodeWrapperMid,
+):
+    """
+    Method to check subarray is in READY obsState
 
-        # Verify ObsState is IDLE
-        assert telescope_control.is_in_valid_state(
-            DEVICE_OBS_STATE_IDLE_INFO, "obsState"
-        )
-    except Exception:
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
+    Args:
+        command_input_factory: fixture for creating input required
+        for command
+        event_recorder: Fixture for EventRecorder class
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+    """
+
+    assign_input_json = prepare_json_args_for_centralnode_commands(
+        "multiple_assign1", command_input_factory
+    )
+
+    _, unique_id = central_node_mid.store_resources(assign_input_json)
+
+    event_tracer.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+    log_events({central_node_mid.central_node: ["longRunningCommandResult"]})
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the subarray must be in the IDLE obsState'"
+        "TMC Subarray device"
+        f"({central_node_mid.subarray_node.dev_name()}) "
+        "is expected to be in IDLE obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        central_node_mid.subarray_node,
+        "obsState",
+        ObsState.IDLE,
+    )
+
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the subarray is in IDLE obsState'"
+        "TMC Central Node device"
+        f"({central_node_mid.central_node.dev_name()}) "
+        "is expected have longRunningCommand as"
+        '(unique_id,(ResultCode.OK,"Command Completed"))',
+    ).within_timeout(60).has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (unique_id[0], COMMAND_COMPLETED),
+    )
 
 
 @when(parsers.parse("the command configure is issued with {input_json1}"))
-def send_configure(json_factory, input_json1):
-    configure_json1 = json_factory(input_json1)
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        LOGGER.info("Invoking Configure command with input_json1")
-        # Invoke Configure() command
-        tmc_helper.configure_subarray(
-            configure_json1, **ON_OFF_DEVICE_COMMAND_DICT
-        )
-        LOGGER.info("Configure1 is invoked successfully")
-    except Exception:
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
+def invoke_configure(
+    subarray_node: SubarrayNodeWrapper,
+    command_input_factory: JsonFactory,
+    event_tracer: TangoEventTracer,
+    central_node_mid: CentralNodeWrapperMid,
+    input_json1: str,
+):
+    """
+    Method to check subarray is in READY obsState
+
+    Args:
+        subarray_node: Fixture for a Subarray Node wrapper class
+        command_input_factory: fixture for creating input required
+        for command
+        event_recorder: Fixture for EventRecorder class
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        subarray_id (str): Subarray ID
+        dish_ids (str): Comma-separated IDs of DISH components.
+    """
+    event_tracer.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
+    log_events({subarray_node.subarray_node: ["longRunningCommandResult"]})
+    configure_input_json = prepare_json_args_for_commands(
+        input_json1, command_input_factory
+    )
+    configure_json = json.loads(configure_input_json)
+
+    _, unique_id = subarray_node.execute_transition(
+        "Configure", json.dumps(configure_json)
+    )
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "WHEN" STEP: '
+        "TMC Subarray Node device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected have longRunningCommand as"
+        '(unique_id,(ResultCode.OK,"Command Completed"))',
+    ).within_timeout(60).has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (unique_id[0], COMMAND_COMPLETED),
+    )
 
 
 @then("the subarray transitions to obsState READY")
-def check_for_ready():
-    # Verify ObsState is READY
-    LOGGER.info("Verifying obsState READY after Configure1")
-    assert telescope_control.is_in_valid_state(
-        DEVICE_OBS_STATE_READY_INFO, "obsState"
+def check_for_ready(
+    event_tracer: TangoEventTracer,
+    subarray_node: SubarrayNodeWrapper,
+):
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the subarray must be in the READY obsState'"
+        "TMC Subarray device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected to be in READY obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.READY,
     )
 
 
@@ -118,30 +190,61 @@ def check_for_ready():
         "the next successive configure command is issued with {input_json2}"
     )
 )
-def send_next_configure(json_factory, input_json2):
-    configure_json2 = json_factory(input_json2)
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        LOGGER.info("Invoking Configure command with input_json2")
-        # Invoke successive Configure() command
-        tmc_helper.configure_subarray(
-            configure_json2, **ON_OFF_DEVICE_COMMAND_DICT
-        )
-        LOGGER.info("Configure2 is invoked successfully")
-    except Exception:
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
+def invoke_successive_configure(
+    subarray_node: SubarrayNodeWrapper,
+    command_input_factory: JsonFactory,
+    event_tracer: TangoEventTracer,
+    input_json2: str,
+):
+    """
+    Method to check subarray is in READY obsState
+
+    Args:
+        subarray_node: Fixture for a Subarray Node wrapper class
+        command_input_factory: fixture for creating input required
+        for command
+        event_recorder: Fixture for EventRecorder class
+        central_node_mid: Fixture for a TMC CentralNode wrapper class
+        subarray_id (str): Subarray ID
+        dish_ids (str): Comma-separated IDs of DISH components.
+    """
+    event_tracer.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
+    log_events({subarray_node.subarray_node: ["longRunningCommandResult"]})
+    configure_input_json = prepare_json_args_for_commands(
+        input_json2, command_input_factory
+    )
+    configure_json = json.loads(configure_input_json)
+
+    _, unique_id = subarray_node.execute_transition(
+        "Configure", json.dumps(configure_json)
+    )
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "WHEN" STEP: '
+        "TMC Subarray Node device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected have longRunningCommand as"
+        '(unique_id,(ResultCode.OK,"Command Completed"))',
+    ).within_timeout(60).has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (unique_id[0], COMMAND_COMPLETED),
+    )
 
 
 @then("the subarray reconfigures changing its obsState to READY")
-def check_for_reconfigure_ready(subarray_node, event_recorder):
+def check_for_reconfigure_ready(
+    event_tracer: TangoEventTracer, subarray_node: SubarrayNodeWrapper
+):
 
-    # Verify ObsState is READY
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-    LOGGER.info("Verifying obsState READY after Configure2")
-    # assert telescope_control.is_in_valid_state(
-    #     DEVICE_OBS_STATE_READY_INFO, "obsState"
-    # )
-    assert event_recorder.has_change_event_occurred(
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the subarray must be in the READY obsState'"
+        "TMC Subarray device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected to be in READY obstate",
+    ).within_timeout(60).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
@@ -149,5 +252,8 @@ def check_for_reconfigure_ready(subarray_node, event_recorder):
 
 
 @then("test goes for the tear down")
-def check_for_tear_down(central_node_mid):
+def check_for_tear_down(
+    central_node_mid: CentralNodeWrapperMid, subarray_node: SubarrayNodeWrapper
+):
+    subarray_node.tear_down()
     central_node_mid.tear_down()
