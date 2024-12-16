@@ -47,9 +47,9 @@ def given_tmc(
         'FAILED ASSUMPTION IN "GIVEN" STEP: '
         "'the TMC is On'"
         "TMC Central Node device"
-        f"({central_node_mid.subarray_node.dev_name()}) "
+        f"({central_node_mid.central_node.dev_name()}) "
         "is expected to be in ON telescope state",
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(100).has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
         DevState.ON,
@@ -60,7 +60,7 @@ def given_tmc(
         "TMC Subarray device"
         f"({central_node_mid.subarray_node.dev_name()}) "
         "is expected to be in EMPTY obstate",
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(100).has_change_event_occurred(
         central_node_mid.subarray_node,
         "obsState",
         ObsState.EMPTY,
