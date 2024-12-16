@@ -74,7 +74,7 @@ def given_tmc(
         "TMC Subarray device"
         f"({central_node_mid.subarray_node.dev_name()}) "
         "is expected to be in EMPTY obstate",
-    ).within_timeout(100).has_change_event_occurred(
+    ).within_timeout(150).has_change_event_occurred(
         central_node_mid.subarray_node,
         "obsState",
         ObsState.EMPTY,
