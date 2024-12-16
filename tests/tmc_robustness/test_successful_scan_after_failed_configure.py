@@ -1,37 +1,24 @@
 import json
 
 import pytest
+from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
-from tango import DeviceProxy
+from ska_tango_base.control_model import ObsState
+from ska_tango_testing.integration import TangoEventTracer, log_events
+from tango import DevState
 
 from tests.conftest import LOGGER
-from tests.resources.test_support.common_utils.common_helpers import Waiter
+from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
+from tests.resources.test_harness.constant import COMMAND_COMPLETED
+from tests.resources.test_harness.helpers import (
+    prepare_json_args_for_centralnode_commands,
+    prepare_json_args_for_commands,
+)
+from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
+from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.common_utils.result_code import ResultCode
-from tests.resources.test_support.common_utils.telescope_controls import (
-    BaseTelescopeControl,
-)
-from tests.resources.test_support.common_utils.tmc_helpers import (
-    TmcHelper,
-    tear_down,
-)
-from tests.resources.test_support.constant import (
-    DEVICE_OBS_STATE_EMPTY_INFO,
-    DEVICE_OBS_STATE_IDLE_INFO,
-    DEVICE_OBS_STATE_READY_INFO,
-    DEVICE_OBS_STATE_SCANNING_INFO,
-    DEVICE_STATE_ON_INFO,
-    DEVICE_STATE_STANDBY_INFO,
-    ON_OFF_DEVICE_COMMAND_DICT,
-    centralnode,
-    tmc_subarraynode1,
-)
-
-# noqa: E501
-tmc_helper = TmcHelper(centralnode, tmc_subarraynode1)
-telescope_control = BaseTelescopeControl()
 
 
-@pytest.mark.skip(reason="Move this test to SubarrayNode")
 @scenario(
     "../features/successful_scan_after_failed_configure.feature",
     "Successfully execute a scan after a failed attempt to configure",
@@ -47,30 +34,77 @@ def test_configure_resource_with_invalid_json():
         "a subarray {subarray_id} with resources {resources_list} in obsState IDLE"  # noqa: E501
     )
 )
-def given_tmc(json_factory):
-    release_json = json_factory("command_ReleaseResources")
-    assign_json = json_factory("command_AssignResources")
-    try:
-        # Verify Telescope is Off/Standby
-        assert telescope_control.is_in_valid_state(
-            DEVICE_STATE_STANDBY_INFO, "State"
-        )
-        # Invoke TelescopeOn() command on TMC CentralNode
-        tmc_helper.set_to_on(**ON_OFF_DEVICE_COMMAND_DICT)
-        # Verify State transitions after TelescopeOn
-        assert telescope_control.is_in_valid_state(
-            DEVICE_STATE_ON_INFO, "State"
-        )
-        # Invoke AssignResources() Command on TMC
-        tmc_helper.compose_sub(assign_json, **ON_OFF_DEVICE_COMMAND_DICT)
+def given_tmc(
+    command_input_factory: JsonFactory,
+    event_tracer: TangoEventTracer,
+    central_node_mid: CentralNodeWrapperMid,
+):
+    event_tracer.subscribe_event(
+        central_node_mid.central_node, "telescopeState"
+    )
+    event_tracer.subscribe_event(central_node_mid.subarray_node, "obsState")
 
-        assert telescope_control.is_in_valid_state(
-            DEVICE_OBS_STATE_IDLE_INFO, "obsState"
-        )
-    except Exception as e:
-        LOGGER.exception("The exception is: %s", e)
+    central_node_mid.move_to_on()
+    log_events(
+        {
+            central_node_mid.central_node: ["telescopeState"],
+            central_node_mid.subarray_node: ["obsState"],
+        }
+    )
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the TMC is On'"
+        "TMC Central Node device"
+        f"({central_node_mid.subarray_node.dev_name()}) "
+        "is expected to be in ON telescope state",
+    ).within_timeout(100).has_change_event_occurred(
+        central_node_mid.central_node,
+        "telescopeState",
+        DevState.ON,
+    )
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the TMC is On'"
+        "TMC Subarray device"
+        f"({central_node_mid.subarray_node.dev_name()}) "
+        "is expected to be in EMPTY obstate",
+    ).within_timeout(100).has_change_event_occurred(
+        central_node_mid.subarray_node,
+        "obsState",
+        ObsState.EMPTY,
+    )
+    assign_input_json = prepare_json_args_for_centralnode_commands(
+        "command_AssignResources", command_input_factory
+    )
 
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
+    # Invoke AssignResources() Command on TMC
+    LOGGER.info("Invoking AssignResources command on TMC CentralNode")
+    _, unique_id = central_node_mid.store_resources(assign_input_json)
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the subarray must be in the IDLE obsState'"
+        "TMC Subarray device"
+        f"({central_node_mid.subarray_node.dev_name()}) "
+        "is expected to be in IDLE obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        central_node_mid.subarray_node,
+        "obsState",
+        ObsState.IDLE,
+    )
+
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the subarray is in IDLE obsState'"
+        "TMC Central Node device"
+        f"({central_node_mid.central_node.dev_name()}) "
+        "is expected have longRunningCommand as"
+        '(unique_id,(ResultCode.OK,"Command Completed"))',
+    ).within_timeout(60).has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (unique_id[0], COMMAND_COMPLETED),
+    )
+    event_tracer.clear_events()
 
 
 @when(
@@ -79,22 +113,18 @@ def given_tmc(json_factory):
     )
 )
 def invoke_configure_one(
-    json_factory,
+    command_input_factory: JsonFactory,
+    event_tracer: TangoEventTracer,
+    subarray_node: SubarrayNodeWrapper,
 ):
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        configure_json = json_factory("command_Configure")
-        release_json = json_factory("command_ReleaseResources")
-        configure_json = json.loads(configure_json)
-        del configure_json["csp"]["cbf"]["fsp"][0]["integration_factor"]
-        subarray_node = DeviceProxy(tmc_subarraynode1)
-        pytest.command_result = subarray_node.Configure(
-            json.dumps(configure_json)
-        )
-    except Exception as e:
-        LOGGER.exception("The exception is: %s", e)
-
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
+    configure_input_json = prepare_json_args_for_commands(
+        "command_Configure", command_input_factory
+    )
+    configure_json = json.loads(configure_input_json)
+    del configure_json["csp"]["cbf"]["fsp"][0]["integration_factor"]
+    pytest.command_result = subarray_node.execute_transition(
+        "Configure", json.dumps(configure_input_json)
+    )
 
 
 @then(parsers.parse("the subarray {subarray_id} returns an error message"))
@@ -105,98 +135,116 @@ def invalid_command_rejection():
 
 
 @then(parsers.parse("the subarray {subarray_id} remains in obsState IDLE"))
-def tmc_status():
-    # Verify obsState transitions
-    assert telescope_control.is_in_valid_state(
-        DEVICE_OBS_STATE_IDLE_INFO, "obsState"
+def tmc_status(
+    event_tracer: TangoEventTracer,
+    central_node_mid: CentralNodeWrapperMid,
+):
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the subarray must be in the IDLE obsState'"
+        "TMC Subarray device"
+        f"({central_node_mid.subarray_node.dev_name()}) "
+        "is expected to be in IDLE obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        central_node_mid.subarray_node,
+        "obsState",
+        ObsState.IDLE,
     )
 
 
 @when("I issue the command Configure passing a correct JSON script")
-def tmc_accepts_command_with_valid_json(json_factory):
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        configure_json = json_factory("command_Configure")
-        # Invoke Configure() Command on TMC
-        tmc_helper.configure_subarray(
-            configure_json, **ON_OFF_DEVICE_COMMAND_DICT
-        )
-    except Exception as e:
-        LOGGER.exception("The exception is: %s", e)
+def tmc_accepts_command_with_valid_json(
+    command_input_factory: JsonFactory,
+    event_tracer: TangoEventTracer,
+    subarray_node: SubarrayNodeWrapper,
+):
+    configure_input_json = prepare_json_args_for_commands(
+        "command_Configure", command_input_factory
+    )
+    configure_input_json = json.loads(configure_input_json)
+    configure_input_json["tmc"]["scan_duration"] = 10.0
 
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
+    _, unique_id = subarray_node.execute_transition(
+        "Configure", json.dumps(configure_input_json)
+    )
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "WHEN" STEP: '
+        "TMC Subarray Node device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected have longRunningCommand as"
+        '(unique_id,(ResultCode.OK,"Command Completed"))',
+    ).within_timeout(60).has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (unique_id[0], COMMAND_COMPLETED),
+    )
 
 
 @then("the subarray transitions to obsState READY")
-def tmc_status_ready():
-    the_waiter = Waiter()
-    the_waiter.set_wait_for_specific_obsstate("READY", [tmc_subarraynode1])
-    the_waiter.wait(100)
-    assert telescope_control.is_in_valid_state(
-        DEVICE_OBS_STATE_READY_INFO, "obsState"
+def tmc_status_ready(
+    event_tracer: TangoEventTracer,
+    subarray_node: SubarrayNodeWrapper,
+):
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the subarray must be in the READY obsState'"
+        "TMC Subarray device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected to be in READY obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.READY,
     )
+    event_tracer.clear_events()
 
 
 @when("I issue the command Scan")
-def tmc_accepts_scan_command(json_factory):
-    scan_json = json_factory("command_Scan")
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        subarray_node = DeviceProxy(tmc_subarraynode1)
-        subarray_node.Scan(scan_json)
-    except Exception as e:
-        LOGGER.exception("The exception is: %s", e)
-
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
+def tmc_accepts_scan_command(
+    command_input_factory: JsonFactory,
+    event_tracer: TangoEventTracer,
+    subarray_node: SubarrayNodeWrapper,
+):
+    scan_input_json = prepare_json_args_for_commands(
+        "command_Scan", command_input_factory
+    )
+    subarray_node.store_scan_data(scan_input_json)
 
 
 @then("the subarray transitions to obsState SCANNING")
-def tmc_status_scanning(json_factory):
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        the_waiter = Waiter(**ON_OFF_DEVICE_COMMAND_DICT)
-        the_waiter.set_wait_for_scanning()
-        the_waiter.wait(200)
-        assert telescope_control.is_in_valid_state(
-            DEVICE_OBS_STATE_SCANNING_INFO, "obsState"
-        )
-    except Exception as e:
-        LOGGER.exception("The exception is: %s", e)
-
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
+def tmc_status_scanning(event_tracer, subarray_node):
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "THEN" STEP: '
+        "'the subarray transitions to obsState SCANNING'"
+        "TMC Subarray device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected to be in SCANNING obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.SCANNING,
+    )
+    event_tracer.clear_events()
 
 
 @when("I issue the command EndScan")
-def tmc_accepts_endscan_command(json_factory):
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        tmc_helper.invoke_endscan(**ON_OFF_DEVICE_COMMAND_DICT)
-    except Exception as e:
-        LOGGER.exception("The exception is: %s", e)
-
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
+def tmc_accepts_endscan_command(
+    event_tracer: TangoEventTracer,
+    subarray_node: SubarrayNodeWrapper,
+):
+    subarray_node.remove_scan_data()
 
 
 @then("implements the teardown")
-def teardown_the_tmc(json_factory):
-    release_json = json_factory("command_ReleaseResources")
-    tmc_helper.end(**ON_OFF_DEVICE_COMMAND_DICT)
-    assert telescope_control.is_in_valid_state(
-        DEVICE_OBS_STATE_IDLE_INFO, "obsState"
-    )
-    tmc_helper.invoke_releaseResources(
-        release_json, **ON_OFF_DEVICE_COMMAND_DICT
-    )
-    assert telescope_control.is_in_valid_state(
-        DEVICE_OBS_STATE_EMPTY_INFO, "obsState"
-    )
-    tmc_helper.set_to_standby(**ON_OFF_DEVICE_COMMAND_DICT)
-    assert telescope_control.is_in_valid_state(
-        DEVICE_STATE_STANDBY_INFO, "State"
-    )
+def teardown_the_tmc(
+    central_node_mid: CentralNodeWrapperMid,
+    subarray_node: SubarrayNodeWrapper,
+):
+    """Tears down the system after test run"""
+    subarray_node.tear_down()
+    central_node_mid.tear_down()
 
 
-@pytest.mark.skip(reason="Move this test to SubarrayNode")
 @scenario(
     "../features/successful_scan_after_failed_configure.feature",
     "Invoke Configure command by passing a JSON script that uses resources which are not assigned to the subarray",  # noqa: E501
@@ -215,21 +263,18 @@ def test_configure_resource_with_unassigned_resources():
     )
 )
 def invoke_configure_with_unassigned_resources(
-    json_factory,
+    command_input_factory: JsonFactory,
+    subarray_node: SubarrayNodeWrapper,
 ):
-    release_json = json_factory("command_ReleaseResources")
-    try:
-        configure_json = json_factory("command_Configure")
-        configure_json = json.loads(configure_json)
-        configure_json["dish"]["receiver_band"] = "9"
-        subarray_node = DeviceProxy(tmc_subarraynode1)
-        pytest.command_result = subarray_node.Configure(
-            json.dumps(configure_json)
-        )
-    except Exception as e:
-        LOGGER.exception("The exception is: %s", e)
+    configure_input_json = prepare_json_args_for_commands(
+        "command_Configure", command_input_factory
+    )
+    configure_input_json = json.loads(configure_input_json)
+    configure_input_json["dish"]["receiver_band"] = "9"
 
-        tear_down(release_json, **ON_OFF_DEVICE_COMMAND_DICT)
+    pytest.command_result = subarray_node.execute_transition(
+        "Configure", json.dumps(configure_input_json)
+    )
 
 
 @then(parsers.parse("the subarray {subarray_id} returns an error message 2"))
