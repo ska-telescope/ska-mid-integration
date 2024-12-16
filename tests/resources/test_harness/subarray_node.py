@@ -10,7 +10,6 @@ from ska_tango_base.control_model import HealthState
 from tango import DeviceProxy, DevState
 
 from tests.resources.test_harness.constant import (
-    ABORT_COMPLETED,
     COMMAND_COMPLETED,
     DISH_001_CALIBRATION_DATA,
     DISH_036_CALIBRATION_DATA,
@@ -40,6 +39,7 @@ from tests.resources.test_harness.helpers import (
     generate_eb_pb_ids,
     prepare_json_args_for_commands,
     wait_and_validate_device_attribute_value,
+    wait_for_partial_or_complete_abort,
 )
 from tests.resources.test_harness.utils.constant import (
     ABORTED,
@@ -484,12 +484,22 @@ class SubarrayNodeWrapper(object):
 
         if self.obs_state in ("RESOURCING", "CONFIGURING", "SCANNING"):
             LOGGER.info("Invoking Abort on Subarray")
-            _, unique_abort = self.abort_subarray()
-            assert self.event_recorder.has_change_event_occurred(
-                self.subarray_node,
-                "longRunningCommandResult",
-                (unique_abort[0], ABORT_COMPLETED),
-            )
+            self.execute_transition("Abort")
+            wait_for_partial_or_complete_abort()
+
+            # # Waiting for pointingStates of dishes to go to READY/NONE as
+            # Abort on Subarray does not consider pointingStates.
+            # dish_leaf_node_list = self.get_assigned_dish_leaf_nodes_list()
+            # for dish_leaf_node in dish_leaf_node_list:
+            #     self.event_recorder.subscribe_event(
+            #         dish_leaf_node, "pointingState"
+            #     )
+            # self.event_recorder.has_change_event_occurred_for_given_values(
+            #         dish_leaf_node,
+            #         "pointingState",
+            #         [PointingState.NONE, PointingState.READY],
+            #     )
+
             _, unique_restart = self.restart_subarray()
             assert self.event_recorder.has_change_event_occurred(
                 self.subarray_node,
