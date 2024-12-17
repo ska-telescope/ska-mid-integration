@@ -246,6 +246,7 @@ def teardown_the_tmc(
     central_node_mid.tear_down()
 
 
+@pytest.mark.skip(reason="Move this test to SubarrayNode")
 @scenario(
     "../features/successful_scan_after_failed_configure.feature",
     "Invoke Configure command by passing a JSON script that uses resources which are not assigned to the subarray",  # noqa: E501
