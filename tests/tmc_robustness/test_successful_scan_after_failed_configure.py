@@ -19,6 +19,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
+@pytest.mark.skip(reason="Move this test to SubarrayNode")
 @scenario(
     "../features/successful_scan_after_failed_configure.feature",
     "Successfully execute a scan after a failed attempt to configure",

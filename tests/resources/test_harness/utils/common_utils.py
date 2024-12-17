@@ -53,6 +53,9 @@ def get_centralnode_input_json(slug):
     """
     assign_json_file_path = join(
         dirname(__file__),
+        "..",
+        "..",
+        "..",
         "data",
         "centralnode",
         f"{slug}.json",
