@@ -21,6 +21,7 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 # The test fails intermittently as the test does not make sure that the Abort
 # is completed on dishes and then the next Configure is invoked
+@pytest.mark.p2
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-28436.feature",
