@@ -57,28 +57,6 @@ def given_tmc(
             central_node_mid.subarray_node: ["obsState"],
         }
     )
-    assert_that(event_tracer).described_as(
-        'FAILED ASSUMPTION IN "GIVEN" STEP: '
-        "'the TMC is On'"
-        "TMC Central Node device"
-        f"({central_node_mid.subarray_node.dev_name()}) "
-        "is expected to be in ON telescope state",
-    ).within_timeout(100).has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.ON,
-    )
-    assert_that(event_tracer).described_as(
-        'FAILED ASSUMPTION IN "GIVEN" STEP: '
-        "'the TMC is On'"
-        "TMC Subarray device"
-        f"({central_node_mid.subarray_node.dev_name()}) "
-        "is expected to be in EMPTY obstate",
-    ).within_timeout(150).has_change_event_occurred(
-        central_node_mid.subarray_node,
-        "obsState",
-        ObsState.EMPTY,
-    )
     for dishln in subarray_node.dish_leaf_node_list:
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "GIVEN" STEP: '
@@ -91,6 +69,29 @@ def given_tmc(
             "dishMode",
             DishMode.STANDBY_LP,
         )
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the TMC is On'"
+        "TMC Central Node device"
+        f"({central_node_mid.subarray_node.dev_name()}) "
+        "is expected to be in ON telescope state",
+    ).within_timeout(150).has_change_event_occurred(
+        central_node_mid.central_node,
+        "telescopeState",
+        DevState.ON,
+    )
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the TMC is On'"
+        "TMC Subarray device"
+        f"({central_node_mid.subarray_node.dev_name()}) "
+        "is expected to be in EMPTY obstate",
+    ).within_timeout(100).has_change_event_occurred(
+        central_node_mid.subarray_node,
+        "obsState",
+        ObsState.EMPTY,
+    )
+
     event_tracer.clear_events()
 
 
