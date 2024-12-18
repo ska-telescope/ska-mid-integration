@@ -91,6 +91,9 @@ server:
           - name: "SdpScanInterfaceURL"
             values:
               - "{{ $sdp_scan_interface }}"
+          - name: "SleepTime"
+            values:
+              - "{{.Values.deviceServers.subarraynode.SleepTime}}"
   {{- end}}
 depends_on:
   - device: sys/database/2

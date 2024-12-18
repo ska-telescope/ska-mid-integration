@@ -67,6 +67,9 @@ server:
             - name: "TrackTableRetryDuration"
               values:
                 - "{{ $TrackTableRetryDuration }}"
+            - name: "SleepTime"
+              values:
+                - "{{.Values.deviceServers.dishleafnode.SleepTime}}"
 
   {{- end }}
 depends_on:

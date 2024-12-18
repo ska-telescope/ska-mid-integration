@@ -116,6 +116,9 @@ server:
         - name: "CommandTimeOut"
           values:
             - "{{ $CommandTimeOut }}"
+        - name: "SleepTime"
+          values:
+            - "{{.Values.deviceServers.centralnode.SleepTime}}"
 
 {{- else }}
 {{- fail "KValueValidRangeUpperLimit should be greater than KValueValidRangeLowerLimit" }}

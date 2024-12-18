@@ -51,6 +51,9 @@ server:
               - name: "CommandTimeOut"
                 values:
                 - "{{ $CommandTimeOut }}"
+              - name: "SleepTime"
+                values:
+                  - "{{.Values.deviceServers.cspsubarrayleafnode.SleepTime}}"
   {{- end}}
 depends_on:
   - device: sys/database/2
