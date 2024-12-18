@@ -127,20 +127,8 @@ def invalid_command_rejection():
 
 
 @then(parsers.parse("the subarray {subarray_id} remains in obsState EMPTY"))
-def tmc_status(
-    event_tracer: TangoEventTracer, central_node_mid: CentralNodeWrapperMid
-):
-    assert_that(event_tracer).described_as(
-        'FAILED ASSUMPTION IN "THEN" STEP: '
-        "'the TMC is On'"
-        "TMC Subarray device"
-        f"({central_node_mid.subarray_node.dev_name()}) "
-        "is expected to be in EMPTY obstate",
-    ).within_timeout(60).has_change_event_occurred(
-        central_node_mid.subarray_node,
-        "obsState",
-        ObsState.EMPTY,
-    )
+def tmc_status(central_node_mid: CentralNodeWrapperMid):
+    assert central_node_mid.subarray_node.obsState == ObsState.EMPTY
 
 
 @when("I issue the command AssignResources passing a correct JSON script")
