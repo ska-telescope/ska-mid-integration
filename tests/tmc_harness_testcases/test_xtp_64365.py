@@ -22,7 +22,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 TIMEOUT = 60
 
 
-@pytest.mark.skip(reason="Test scenario needs to be updated")
+# @pytest.mark.skip(reason="Test scenario needs to be updated")
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-64365.feature",

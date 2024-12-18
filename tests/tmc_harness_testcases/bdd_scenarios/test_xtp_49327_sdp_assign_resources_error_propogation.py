@@ -20,7 +20,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 
-@pytest.mark.skip("temporary")
+# @pytest.mark.skip("temporary")
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp_49327_sdp_subarray_"
