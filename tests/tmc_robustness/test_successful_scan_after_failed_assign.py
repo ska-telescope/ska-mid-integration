@@ -115,7 +115,7 @@ def invoke_assign_resources_one(
     # doesn't raise error
     # Invoke AssignResources() Command on TMC
     LOGGER.info("Invoking AssignResources command on TMC CentralNode")
-    pytest.command_result = central_node_mid.execute_transition(
+    pytest.command_result = central_node_mid.perform_action(
         "AssignResources", json.dumps(assign_json)
     )
 
