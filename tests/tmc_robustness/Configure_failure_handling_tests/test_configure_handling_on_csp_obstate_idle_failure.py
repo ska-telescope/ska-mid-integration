@@ -7,7 +7,7 @@ from ska_control_model import ObsState
 from tests.resources.test_harness.constant import (
     ABORT_COMPLETED,
     COMMAND_COMPLETED,
-    COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE,
+    COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_CONFIGURING_IDLE,
 )
 from tests.resources.test_harness.helpers import (
     check_for_device_command_event,
@@ -116,7 +116,10 @@ def given_tmc_subarray_configure_is_in_progress(
 ):
     csp_sim, _, _, _, _, _ = get_device_simulators(simulator_factory)
     csp_sim.SetDefective(
-        json.dumps(COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE)
+        json.dumps(COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_CONFIGURING_IDLE)
+    )
+    sdp_sim = simulator_factory.get_or_create_simulator_device(
+        SimulatorDeviceType.MID_SDP_DEVICE
     )
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
@@ -124,6 +127,16 @@ def given_tmc_subarray_configure_is_in_progress(
     subarray_node.execute_transition("Configure", configure_input_json)
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
+        "obsState",
+        ObsState.CONFIGURING,
+    )
+    assert event_recorder.has_change_event_occurred(
+        sdp_sim,
+        "obsState",
+        ObsState.CONFIGURING,
+    )
+    assert event_recorder.has_change_event_occurred(
+        csp_sim,
         "obsState",
         ObsState.CONFIGURING,
     )
