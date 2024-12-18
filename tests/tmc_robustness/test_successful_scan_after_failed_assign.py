@@ -108,7 +108,7 @@ def invoke_assign_resources_one(
     central_node_mid: CentralNodeWrapperMid,
 ):
     assign_input_json = prepare_json_args_for_centralnode_commands(
-        "command_AssignResources", command_input_factory
+        "assign_resources_mid", command_input_factory
     )
     assign_json = json.loads(assign_input_json)
     assign_json["sdp"]["processing_blocks"][0].pop("pb_id", None)
@@ -147,7 +147,7 @@ def tmc_accepts_command_with_valid_json(
     command_input_factory: JsonFactory, central_node_mid: CentralNodeWrapperMid
 ):
     assign_input_json = prepare_json_args_for_centralnode_commands(
-        "command_AssignResources", command_input_factory
+        "assign_resources_mid", command_input_factory
     )
     _, pytest.unique_id = central_node_mid.store_resources(assign_input_json)
 
@@ -189,7 +189,7 @@ def tmc_accepts_configure_command_with_valid_json(
     subarray_node: SubarrayNodeWrapper,
 ):
     configure_input_json = prepare_json_args_for_commands(
-        "command_Configure", command_input_factory
+        "configure_mid", command_input_factory
     )
     configure_input_json = json.loads(configure_input_json)
     configure_input_json["tmc"]["scan_duration"] = 10.0
@@ -236,7 +236,7 @@ def tmc_accepts_scan_command(
     subarray_node: SubarrayNodeWrapper,
 ):
     scan_input_json = prepare_json_args_for_commands(
-        "command_Scan", command_input_factory
+        "scan_mid", command_input_factory
     )
     subarray_node.store_scan_data(scan_input_json)
 
