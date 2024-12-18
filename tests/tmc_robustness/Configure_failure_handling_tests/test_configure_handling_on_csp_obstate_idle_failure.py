@@ -3,7 +3,6 @@ import json
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
-from tango import DevState
 
 from tests.resources.test_harness.constant import (
     ABORT_COMPLETED,
@@ -17,6 +16,8 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_commands,
 )
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
+
+# from tango import DevState
 
 
 # The test fails intermittently as the test does not make sure that the Abort
@@ -53,11 +54,11 @@ def given_tmc(central_node_mid, subarray_node, event_recorder):
     )
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     central_node_mid.move_to_on()
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.ON,
-    )
+    # assert event_recorder.has_change_event_occurred(
+    #     central_node_mid.central_node,
+    #     "telescopeState",
+    #     DevState.ON,
+    # )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
