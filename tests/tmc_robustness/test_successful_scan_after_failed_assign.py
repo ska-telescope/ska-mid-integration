@@ -63,23 +63,25 @@ def given_tmc(
             "'the TMC is On'"
             "TMC Subarray device"
             f"({dishln.dev_name()}) "
-            "is expected to be in EMPTY obstate",
-        ).within_timeout(60).has_change_event_occurred(
+            "is expected to be in STANDBY_LP dishMode",
+        ).within_timeout(100).has_change_event_occurred(
             dishln,
             "dishMode",
-            DishMode.STANDBY_LP,
+            DishMode.STANDBY_FP,
         )
+
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "GIVEN" STEP: '
         "'the TMC is On'"
         "TMC Central Node device"
-        f"({central_node_mid.subarray_node.dev_name()}) "
+        f"({central_node_mid.central_node.dev_name()}) "
         "is expected to be in ON telescope state",
     ).within_timeout(150).has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
         DevState.ON,
     )
+
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "GIVEN" STEP: '
         "'the TMC is On'"
@@ -128,7 +130,7 @@ def tmc_status(
     event_tracer: TangoEventTracer, central_node_mid: CentralNodeWrapperMid
 ):
     assert_that(event_tracer).described_as(
-        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        'FAILED ASSUMPTION IN "THEN" STEP: '
         "'the TMC is On'"
         "TMC Subarray device"
         f"({central_node_mid.subarray_node.dev_name()}) "
