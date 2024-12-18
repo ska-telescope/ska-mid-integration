@@ -167,9 +167,9 @@ def check_dish_mode_and_pointing_state_after_configure(
         )
 
     for dish_id in dish_ids.split(","):
-        # central_node_mid.dish_master_dict[dish_id].SetDirectDishMode(
-        #     DishMode.OPERATE
-        # )
+        central_node_mid.dish_master_dict[dish_id].SetDirectDishMode(
+            DishMode.OPERATE
+        )
         central_node_mid.dish_master_dict[dish_id].SetDirectPointingState(
             PointingState.READY
         )
