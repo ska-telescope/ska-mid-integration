@@ -44,12 +44,15 @@ def given_tmc(
     subarray_node: SubarrayNodeWrapper,
 ):
     event_tracer.subscribe_event(
-        central_node_mid.central_node,
-        "telescopeState",
-        central_node_mid.central_node,
-        "longRunningCommandResult",
+        central_node_mid.central_node, "telescopeState"
+    )
+    event_tracer.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
     )
     event_tracer.subscribe_event(central_node_mid.subarray_node, "obsState")
+    event_tracer.subscribe_event(
+        central_node_mid.subarray_node, "longRunningCommandResult"
+    )
     for dishln in subarray_node.dish_leaf_node_list:
         event_tracer.subscribe_event(dishln, "dishMode")
         log_events({dishln: ["dishMode"]})
