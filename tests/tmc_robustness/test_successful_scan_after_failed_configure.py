@@ -19,6 +19,8 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
+@pytest.mark.refactor
+@pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_failed_configure.feature",
     "Successfully execute a scan after a failed attempt to configure",
@@ -57,7 +59,7 @@ def given_tmc(
         "TMC Central Node device"
         f"({central_node_mid.subarray_node.dev_name()}) "
         "is expected to be in ON telescope state",
-    ).within_timeout(150).has_change_event_occurred(
+    ).within_timeout(100).has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
         DevState.ON,
@@ -136,20 +138,9 @@ def invalid_command_rejection():
 
 @then(parsers.parse("the subarray {subarray_id} remains in obsState IDLE"))
 def tmc_status(
-    event_tracer: TangoEventTracer,
     central_node_mid: CentralNodeWrapperMid,
 ):
-    assert_that(event_tracer).described_as(
-        'FAILED ASSUMPTION IN "GIVEN" STEP: '
-        "'the subarray must be in the IDLE obsState'"
-        "TMC Subarray device"
-        f"({central_node_mid.subarray_node.dev_name()}) "
-        "is expected to be in IDLE obstate",
-    ).within_timeout(60).has_change_event_occurred(
-        central_node_mid.subarray_node,
-        "obsState",
-        ObsState.IDLE,
-    )
+    assert central_node_mid.subarray_node.obsState == ObsState.IDLE
 
 
 @when("I issue the command Configure passing a correct JSON script")
@@ -159,7 +150,7 @@ def tmc_accepts_command_with_valid_json(
     subarray_node: SubarrayNodeWrapper,
 ):
     configure_input_json = prepare_json_args_for_commands(
-        "command_Configure", command_input_factory
+        "configure_mid", command_input_factory
     )
     configure_input_json = json.loads(configure_input_json)
     configure_input_json["tmc"]["scan_duration"] = 10.0
@@ -206,7 +197,7 @@ def tmc_accepts_scan_command(
     subarray_node: SubarrayNodeWrapper,
 ):
     scan_input_json = prepare_json_args_for_commands(
-        "command_Scan", command_input_factory
+        "scan_mid", command_input_factory
     )
     subarray_node.store_scan_data(scan_input_json)
 
@@ -245,6 +236,8 @@ def teardown_the_tmc(
     central_node_mid.tear_down()
 
 
+@pytest.mark.refactor
+@pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_failed_configure.feature",
     "Invoke Configure command by passing a JSON script that uses resources which are not assigned to the subarray",  # noqa: E501
