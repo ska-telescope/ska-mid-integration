@@ -44,7 +44,10 @@ def given_tmc(
     subarray_node: SubarrayNodeWrapper,
 ):
     event_tracer.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
+        central_node_mid.central_node,
+        "telescopeState",
+        central_node_mid.central_node,
+        "longRunningCommandResult",
     )
     event_tracer.subscribe_event(central_node_mid.subarray_node, "obsState")
     for dishln in subarray_node.dish_leaf_node_list:
@@ -53,7 +56,10 @@ def given_tmc(
     central_node_mid.move_to_on()
     log_events(
         {
-            central_node_mid.central_node: ["telescopeState"],
+            central_node_mid.central_node: [
+                "telescopeState",
+                "longRunningCommandResult",
+            ],
             central_node_mid.subarray_node: ["obsState"],
         }
     )
