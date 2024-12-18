@@ -111,7 +111,7 @@ def invoke_assign_resources_one(
         "command_AssignResources", command_input_factory
     )
     assign_json = json.loads(assign_input_json)
-    del assign_json["sdp"]["processing_blocks"][0]["pb_id"]
+    assign_json["sdp"]["processing_blocks"][0].pop("pb_id", None)
     # Invoke AssignResources() Command on TMC
     LOGGER.info("Invoking AssignResources command on TMC CentralNode")
     pytest.command_result = central_node_mid.store_resources(
