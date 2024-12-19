@@ -344,8 +344,8 @@ def send_assignresource_with_invalid_json2(
     del assign_json["sdp"]["execution_block"]["scan_types"][0]["scan_type_id"]
     # Invoke AssignResources() Command on TMC
     LOGGER.info("Invoking AssignResources command on TMC CentralNode")
-    pytest.command_result = central_node_mid.store_resources(
-        json.dumps(assign_json)
+    pytest.command_result = central_node_mid.perform_action(
+        "AssignResources", json.dumps(assign_json)
     )
 
 
@@ -368,8 +368,8 @@ def send_assignresource_with_invalid_json3(
     del assign_json["sdp"]["execution_block"]["channels"][0]["channels_id"]
     # Invoke AssignResources() Command on TMC
     LOGGER.info("Invoking AssignResources command on TMC CentralNode")
-    pytest.command_result = central_node_mid.store_resources(
-        json.dumps(assign_json)
+    pytest.command_result = central_node_mid.perform_action(
+        "AssignResources", json.dumps(assign_json)
     )
 
 
@@ -407,8 +407,8 @@ def invoke_assign_resources_two(
     assign_json["dish"]["receptor_ids"][0] = resources_list
     # Invoke AssignResources() Command on TMC
     LOGGER.info("Invoking AssignResources command on TMC CentralNode")
-    pytest.command_result = central_node_mid.store_resources(
-        json.dumps(assign_json)
+    pytest.command_result = central_node_mid.perform_action(
+        "AssignResources", json.dumps(assign_json)
     )
 
 
