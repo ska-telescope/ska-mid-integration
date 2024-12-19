@@ -241,6 +241,31 @@ def tmc_accepts_scan_command(
 
 @then("the subarray transitions to obsState SCANNING")
 def tmc_status_scanning(event_tracer, subarray_node):
+    event_tracer.subscribe_event(subarray_node.csp_subarray1, "obsState")
+    event_tracer.subscribe_event(subarray_node.sdp_subarray1, "obsState")
+
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "THEN" STEP: '
+        "'the subarray transitions to obsState SCANNING'"
+        "TMC Subarray device"
+        f"({subarray_node.csp_subarray1.dev_name()}) "
+        "is expected to be in SCANNING obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        subarray_node.csp_subarray1,
+        "obsState",
+        ObsState.SCANNING,
+    )
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "THEN" STEP: '
+        "'the subarray transitions to obsState SCANNING'"
+        "TMC Subarray device"
+        f"({subarray_node.sdp_subarray1.dev_name()}) "
+        "is expected to be in SCANNING obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        subarray_node.sdp_subarray1,
+        "obsState",
+        ObsState.SCANNING,
+    )
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "THEN" STEP: '
         "'the subarray transitions to obsState SCANNING'"
@@ -257,7 +282,6 @@ def tmc_status_scanning(event_tracer, subarray_node):
 
 @when("I issue the command EndScan")
 def tmc_accepts_endscan_command(
-    event_tracer: TangoEventTracer,
     subarray_node: SubarrayNodeWrapper,
 ):
     subarray_node.remove_scan_data()
