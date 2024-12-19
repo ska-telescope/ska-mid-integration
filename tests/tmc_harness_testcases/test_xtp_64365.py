@@ -22,6 +22,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 TIMEOUT = 60
 
 
+@pytest.mark.p3
 # @pytest.mark.skip(reason="Test scenario needs to be updated")
 @pytest.mark.SKA_mid
 @scenario(
