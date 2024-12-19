@@ -15,7 +15,6 @@ from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 
 
-@pytest.mark.refactor
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successive_configure.feature",
