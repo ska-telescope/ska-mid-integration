@@ -135,7 +135,9 @@ def invoke_configure_one(
         "configure_mid", command_input_factory
     )
     configure_json = json.loads(configure_input_json)
-    del configure_json["csp"]["cbf"]["fsp"][0]["integration_factor"]
+    del configure_json["csp"]["midcbf"]["correlation"]["processing_regions"][
+        0
+    ]["integration_factor"]
     pytest.command_result = subarray_node.execute_transition(
         "Configure", json.dumps(configure_input_json)
     )
