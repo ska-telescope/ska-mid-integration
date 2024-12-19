@@ -19,7 +19,7 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 
 class TestSubarrayNodeNegative(object):
-    @pytest.mark.batch1
+    @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_subarray_assign_csp_unresponsive(
         self,
@@ -156,7 +156,7 @@ class TestSubarrayNodeNegative(object):
 
     # @pytest.mark.sah1630
     # @pytest.mark.repeat(50)
-    @pytest.mark.batch1
+    @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_subarray_configure_when_dish_stuck_in_slew(
         self,
