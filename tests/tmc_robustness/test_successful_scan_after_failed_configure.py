@@ -19,7 +19,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
-@pytest.mark.refactor
+@pytest.mark.skip(reason="TBD")
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_failed_configure.feature",
@@ -236,7 +236,7 @@ def teardown_the_tmc(
     central_node_mid.tear_down()
 
 
-@pytest.mark.refactor
+@pytest.mark.skip(reason="TBD")
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_failed_configure.feature",

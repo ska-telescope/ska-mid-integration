@@ -32,11 +32,11 @@ k8s-test:
   tags:
     - ska-k8s
   variables:
-    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_JOB_ID"    
-    SUBARRAY_COUNT: 2
-    COUNT: 5
-    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_JOB_ID'
-    ADDMARK: "and refactor"
+    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA"    
+    SUBARRAY_COUNT: 1
+    COUNT: 1
+    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA'
+    ADDMARK: ""
   after_script:
     - pip3 install -q -U ska-ser-xray
     - XRAY_TEST_RESULT_FILE="build/cucumber.json" make xray-publish

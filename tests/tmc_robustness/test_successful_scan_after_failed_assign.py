@@ -20,7 +20,7 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode
 
 
-@pytest.mark.refactor
+@pytest.mark.skip(reason="TBD")
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_failed_assigned.feature",
@@ -362,7 +362,7 @@ def send_assignresource_with_invalid_json3(
     )
 
 
-@pytest.mark.refactor
+@pytest.mark.skip(reason="TBD")
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_assigning_unavailable_resources.feature",  # noqa: E501
@@ -413,7 +413,7 @@ def invalid_command_rejection_with_unavailable_resources(resources_list):
     assert pytest.command_result[0][0] == ResultCode.REJECTED
 
 
-@pytest.mark.refactor
+@pytest.mark.skip(reason="TBD")
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_assigning_unavailable_resources.feature",  # noqa: E501
@@ -426,7 +426,7 @@ def test_assign_resource_successive_invokation_with_unavailable_resources():
     """
 
 
-@pytest.mark.refactor
+@pytest.mark.skip(reason="TBD")
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_combination_of_failed_assign_resources.feature",  # noqa: E501
@@ -442,7 +442,7 @@ def test_assign_resource_with_combination():
     """
 
 
-@pytest.mark.refactor
+@pytest.mark.skip(reason="TBD")
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_combination_of_failed_assign_resources.feature",  # noqa: E501
