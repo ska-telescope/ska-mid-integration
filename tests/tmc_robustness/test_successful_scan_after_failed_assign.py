@@ -326,7 +326,7 @@ def send_assignresource_with_invalid_json2(
     central_node_mid: CentralNodeWrapperMid,
 ):
     assign_input_json = prepare_json_args_for_centralnode_commands(
-        "command_AssignResources", command_input_factory
+        "assign_resources_mid", command_input_factory
     )
 
     assign_json = json.loads(assign_input_json)
@@ -349,7 +349,7 @@ def send_assignresource_with_invalid_json3(
     central_node_mid: CentralNodeWrapperMid,
 ):
     assign_input_json = prepare_json_args_for_centralnode_commands(
-        "command_AssignResources", command_input_factory
+        "assign_resources_mid", command_input_factory
     )
 
     assign_json = json.loads(assign_input_json)
@@ -388,7 +388,7 @@ def invoke_assign_resources_two(
     resources_list,
 ):
     assign_input_json = prepare_json_args_for_centralnode_commands(
-        "command_AssignResources", command_input_factory
+        "assign_resources_mid", command_input_factory
     )
 
     assign_json = json.loads(assign_input_json)
