@@ -44,13 +44,25 @@ def given_tmc(
     event_tracer.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
+    event_tracer.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+    event_tracer.subscribe_event(
+        central_node_mid.subarray_node, "longRunningCommandResult"
+    )
     event_tracer.subscribe_event(central_node_mid.subarray_node, "obsState")
 
     central_node_mid.move_to_on()
     log_events(
         {
-            central_node_mid.central_node: ["telescopeState"],
-            central_node_mid.subarray_node: ["obsState"],
+            central_node_mid.central_node: [
+                "telescopeState",
+                "longRunningCommandResult",
+            ],
+            central_node_mid.subarray_node: [
+                "obsState",
+                "longRunningCommandResult",
+            ],
         }
     )
     assert_that(event_tracer).described_as(
