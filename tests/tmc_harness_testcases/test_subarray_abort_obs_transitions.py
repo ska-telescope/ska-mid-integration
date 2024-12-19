@@ -18,7 +18,7 @@ class TestSubarrayNodeAbortCommandObsStateTransitions(object):
             "SCANNING",
         ],
     )
-    @pytest.mark.batch1
+    @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_subarray_obs_transitions_valid_data(
         self,
