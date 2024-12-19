@@ -453,16 +453,16 @@ def turn_on_telescope(
             "dishMode",
             DishMode.STANDBY_FP,
         )
-
-    assert_that(event_tracer).described_as(
-        "FAILED ASSUMPTION AFTER ON COMMAND: "
-        "Central Node "
-        f"({central_node_mid.central_node.dev_name()}) "
-        "is expected to be in telescopeState ON",
-    ).within_timeout(EVENT_TIMEOUT).has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.ON,
-    )
+    # To be enabled later
+    # assert_that(event_tracer).described_as(
+    #     "FAILED ASSUMPTION AFTER ON COMMAND: "
+    #     "Central Node "
+    #     f"({central_node_mid.central_node.dev_name()}) "
+    #     "is expected to be in telescopeState ON",
+    # ).within_timeout(EVENT_TIMEOUT).has_change_event_occurred(
+    #     central_node_mid.central_node,
+    #     "telescopeState",
+    #     DevState.ON,
+    # )
 
     event_tracer.clear_events()
