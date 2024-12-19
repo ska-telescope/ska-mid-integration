@@ -814,16 +814,16 @@ def check_for_device_command_event_tracer(
     event_found: bool = False
     assertion_data = event_tracer.query_events(
         lambda e: e.has_device(device.dev_name())
-        and e.has_attribute(attr_name) 
+        and e.has_attribute(attr_name)
         and e.attribute_value[0].endswith(command_name)
-        and e.attribute_value[1]==event_data,
-        timeout=100
+        and e.attribute_value[1] == event_data,
+        timeout=100,
     )
     if len(assertion_data) == 1:
         event_found = True
 
     LOGGER.info("The assertion data is %s", assertion_data)
-    
+
     return event_found
 
 

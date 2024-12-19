@@ -280,6 +280,8 @@ def tmc_status_scanning(event_tracer, subarray_node):
         ObsState.SCANNING,
     )
     for dishln in subarray_node.dish_leaf_node_list:
+        event_tracer.subscribe_event(dishln, "longRunningCommandResult")
+        log_events({dishln: ["longRunningCommandResult"]})
         assert check_for_device_command_event_tracer(
             dishln,
             "longRunningCommandResult",
