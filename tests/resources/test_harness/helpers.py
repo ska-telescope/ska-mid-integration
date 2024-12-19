@@ -6,7 +6,6 @@ import time
 from datetime import datetime
 from typing import Any, List
 
-from assertpy import assert_that
 from astropy.time import Time
 from numpy import array_equal
 from ska_control_model import ObsState
@@ -817,11 +816,11 @@ def check_for_device_command_event_tracer(
     elapsed_time: float = 0
     start_time: float = time.time()
     while not event_found and elapsed_time < timeout:
-        assertion_data = assert_that(event_tracer).has_change_event_occurred(
-            device,
-            attribute_name=attr_name,
-            attribute_value=(Anything, Anything),
+        assertion_data = event_tracer.query_events(
+            lambda e: e.has_device(device.dev_name())
+            and e.has_attribute(attr_name)
         )
+
         LOGGER.info("The assertion data is %s", assertion_data)
         if assertion_data["attribute_value"][0].endswith(command_name):
             if event_data in assertion_data["attribute_value"][1]:
