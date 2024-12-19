@@ -155,7 +155,7 @@ deviceServers:
     SdpScanInterfaceURL: "https://schema.skao.int/ska-sdp-scan/0.4"
     CommandTimeOut: 110
     AbortCommandTimeout: 110
-    SleepTime: 1
+    SleepTime: 1.5
 
   sdpsubarrayleafnode:
     enabled: true
