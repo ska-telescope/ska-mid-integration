@@ -98,7 +98,7 @@ k8s-test:
     - pip3 install -q -U ska-ser-xray
     - XRAY_TEST_RESULT_FILE="build/cucumber.json" make xray-publish
 
-k8s-test-batch-2:
+k8s-test-batch2:
   extends:
     - k8s-test
   variables:
@@ -110,6 +110,12 @@ k8s-test-batch-2:
     ADDMARK: "and batch2"
     # MARK: 'p3'
 
+stop-k8s-test-batch2:
+  extends:
+    - stop-k8s-test
+  variables:
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch2"
+    
 docs-build-rtd:
   rules:
     - when: never
