@@ -10,6 +10,7 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 
 
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/dish_vcc_initialization/"

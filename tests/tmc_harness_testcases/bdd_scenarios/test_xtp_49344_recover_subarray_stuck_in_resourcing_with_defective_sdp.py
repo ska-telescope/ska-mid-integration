@@ -14,6 +14,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 
 
 @pytest.mark.sah1630
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/"

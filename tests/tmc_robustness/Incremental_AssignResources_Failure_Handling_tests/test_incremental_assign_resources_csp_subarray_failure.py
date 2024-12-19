@@ -17,6 +17,7 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_harness.utils.enums import ResultCode
 
 
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-29012.feature",

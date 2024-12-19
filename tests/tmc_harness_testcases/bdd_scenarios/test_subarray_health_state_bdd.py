@@ -13,6 +13,7 @@ from tests.resources.test_harness.helpers import (
 
 
 @pytest.mark.sah1630
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/subarray_health_state.feature",
@@ -27,6 +28,7 @@ def test_subarray_health_state_with_csp_and_sdp():
 
 
 @pytest.mark.sah1630
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/subarray_health_state.feature",

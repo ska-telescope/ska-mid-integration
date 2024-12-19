@@ -25,6 +25,7 @@ PROGRAM_TRACK_TABLE_LENGTH = 75
 # @pytest.mark.sah1630
 # @pytest.mark.repeat(2)
 @pytest.mark.skip(reason="Test fails if the source provided is not visible")
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp_59647_non_sidereal_tracking.feature",

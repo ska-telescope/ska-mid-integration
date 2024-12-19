@@ -19,6 +19,7 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 
 class TestSubarrayNodeNegative(object):
+    @pytest.mark.batch1
     @pytest.mark.SKA_mid
     def test_subarray_assign_csp_unresponsive(
         self,
@@ -67,6 +68,7 @@ class TestSubarrayNodeNegative(object):
 
         csp_sim.SetDefective(RESET_DEFECT)
 
+    @pytest.mark.skip(reason="Duplicate scenario")
     @pytest.mark.SKA_mid
     def test_subarray_configure_when_csp_stuck_in_configuring(
         self,
@@ -110,6 +112,7 @@ class TestSubarrayNodeNegative(object):
             csp_sim, "Configure", csp_input_json
         )
 
+    @pytest.mark.skip(reason="Duplicate scenario")
     @pytest.mark.SKA_mid
     def test_subarray_configure_when_sdp_stuck_in_configuring(
         self,
@@ -153,6 +156,7 @@ class TestSubarrayNodeNegative(object):
 
     # @pytest.mark.sah1630
     # @pytest.mark.repeat(50)
+    @pytest.mark.batch1
     @pytest.mark.SKA_mid
     def test_subarray_configure_when_dish_stuck_in_slew(
         self,

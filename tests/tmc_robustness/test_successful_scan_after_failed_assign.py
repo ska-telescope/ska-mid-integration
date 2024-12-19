@@ -21,6 +21,7 @@ from tests.resources.test_support.enum import DishMode
 
 
 @pytest.mark.skip(reason="hm-547")
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_failed_assigned.feature",
@@ -276,6 +277,7 @@ def teardown_the_tmc(
 
 
 @pytest.mark.skip(reason="hm-547")
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_failed_assigned.feature",
@@ -338,6 +340,7 @@ def send_assignresource_with_invalid_json3(
 
 @pytest.mark.skip(reason="hm-547")
 @pytest.mark.refactor
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_assigning_unavailable_resources.feature",  # noqa: E501
@@ -390,6 +393,7 @@ def invalid_command_rejection_with_unavailable_resources(resources_list):
 
 @pytest.mark.skip(reason="hm-547")
 @pytest.mark.refactor
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_assigning_unavailable_resources.feature",  # noqa: E501
@@ -404,6 +408,7 @@ def test_assign_resource_successive_invokation_with_unavailable_resources():
 
 @pytest.mark.skip(reason="hm-547")
 @pytest.mark.refactor
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_combination_of_failed_assign_resources.feature",  # noqa: E501
@@ -421,6 +426,7 @@ def test_assign_resource_with_combination():
 
 @pytest.mark.skip(reason="hm-547")
 @pytest.mark.refactor
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_combination_of_failed_assign_resources.feature",  # noqa: E501

@@ -19,6 +19,7 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 
 @pytest.mark.sah1630
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp_49324_csp_subarray_"

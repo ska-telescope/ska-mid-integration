@@ -30,6 +30,7 @@ TIMEOUT = 110
 
 
 @pytest.mark.sah1630
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp-60480_configure_with_reset_key.feature",

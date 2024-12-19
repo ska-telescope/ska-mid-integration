@@ -22,6 +22,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 @pytest.mark.sah1630
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp-45178_skb_331.feature",

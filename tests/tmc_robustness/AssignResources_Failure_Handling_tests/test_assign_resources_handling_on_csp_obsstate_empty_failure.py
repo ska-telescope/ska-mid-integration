@@ -20,6 +20,7 @@ from tests.resources.test_harness.helpers import (
 #     reason="Failure scenario is not getting simulated correctly. The issue "
 #     + "will be investigated under SAH-1531."
 # )
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-28259.feature",

@@ -20,6 +20,7 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 
 # @pytest.mark.skip(reason="TBD")
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/"
