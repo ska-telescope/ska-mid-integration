@@ -141,7 +141,7 @@ deviceServers:
       max: 1177
     CommandTimeOut: 120
     DishVccInitTimeout: 180
-    SleepTime: 1
+    SleepTime: 1.5
 
   subarraynode:
     enabled: true
@@ -155,25 +155,25 @@ deviceServers:
     SdpScanInterfaceURL: "https://schema.skao.int/ska-sdp-scan/0.4"
     CommandTimeOut: 110
     AbortCommandTimeout: 100
-    SleepTime: 1
+    SleepTime: 1.5
 
   sdpsubarrayleafnode:
     enabled: true
     file: "data/sdpsubarrayleafnode.yaml"
     CommandTimeOut: 50
-    SleepTime: 1
+    SleepTime: 1.5
 
   sdpmasterleafnode:
     enabled: true
     instances: ["01"]
     file: "data/sdpmasterleafnode.yaml"
-    SleepTime: 1
+    SleepTime: 1.5
 
   cspmasterleafnode:
     enabled: true
     instances: ["01"]
     file: "data/cspmasterleafnode.yaml"
-    SleepTime: 1
+    SleepTime: 1.5
 
 
   cspsubarrayleafnode:
@@ -185,7 +185,7 @@ deviceServers:
     DelayValidityPeriod: 20.0
     DelayModelTimeInAdvance: 30
     CommandTimeOut: 50
-    SleepTime: 1
+    SleepTime: 1.5
 
   dishleafnode:
     enabled: true
@@ -200,7 +200,7 @@ deviceServers:
     CommandTimeOut: 90
     MaxTrackTableRetry: 3
     TrackTableRetryDuration: 0.2
-    SleepTime: 1
+    SleepTime: 1.5
 
 
   dishpointingdevice:
