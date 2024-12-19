@@ -102,11 +102,11 @@ k8s-test-batch-2:
   extends:
     - k8s-test
   variables:
-    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-batch2-$CI_COMMIT_SHORT_SHA"
+    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch2"
     DISH_SIMULATION_ENABLED: "true"
     SUBARRAY_COUNT: 2
     COUNT: 1
-    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-batch2-$CI_COMMIT_SHORT_SHA'
+    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch2'
     ADDMARK: "and batch2"
     # MARK: 'p3'
 
