@@ -210,7 +210,9 @@ class TestSubarrayNodeNegative(object):
         subarray_node.force_change_of_obs_state("IDLE")
 
         # CSP should go to configuring in no more than 0.1 sec
-        obs_state_duration_params = '[["FAULT",0.1],["READY",0.1]]'
+        obs_state_duration_params = (
+            '[["FAULT",0.1],["CONFIGURING",0.1],["READY",0.1]]'
+        )
         csp_sim.AddTransition(obs_state_duration_params)
 
         subarray_node.execute_transition("Configure", argin=input_json)

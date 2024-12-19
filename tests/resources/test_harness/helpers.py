@@ -6,12 +6,14 @@ import time
 from datetime import datetime
 from typing import Any, List
 
+from assertpy import assert_that
 from astropy.time import Time
 from numpy import array_equal
 from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
 from ska_tango_base.commands import ResultCode
 from ska_tango_base.control_model import HealthState
+from ska_tango_testing.integration import TangoEventTracer
 from ska_tango_testing.mock.placeholders import Anything
 from tango import Database, DeviceProxy
 
@@ -778,6 +780,44 @@ def check_for_device_command_event(
     start_time: float = time.time()
     while not event_found and elapsed_time < timeout:
         assertion_data = event_recorder.has_change_event_occurred(
+            device,
+            attribute_name=attr_name,
+            attribute_value=(Anything, Anything),
+        )
+        LOGGER.info("The assertion data is %s", assertion_data)
+        if assertion_data["attribute_value"][0].endswith(command_name):
+            if event_data in assertion_data["attribute_value"][1]:
+                event_found = True
+                return event_found
+
+        elapsed_time = time.time() - start_time
+
+    return event_found
+
+
+def check_for_device_command_event_tracer(
+    device: DeviceProxy,
+    attr_name: str,
+    event_data: str,
+    event_tracer: TangoEventTracer,
+    command_name: str,
+) -> bool:
+    """Method to check event from the device.
+
+    Args:
+        device (DeviceProxy): device proxy
+        attr_name (str): attribute name
+        event_data (str): event data to be searched
+        event_recorder(EventRecorder): event recorder instance
+        to check for events.
+        command_name(str): executed command name
+    """
+    event_found: bool = False
+    timeout: int = 100
+    elapsed_time: float = 0
+    start_time: float = time.time()
+    while not event_found and elapsed_time < timeout:
+        assertion_data = assert_that(event_tracer).has_change_event_occurred(
             device,
             attribute_name=attr_name,
             attribute_value=(Anything, Anything),

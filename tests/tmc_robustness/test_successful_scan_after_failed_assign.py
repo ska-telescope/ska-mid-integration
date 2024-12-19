@@ -11,6 +11,7 @@ from tests.conftest import LOGGER
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.helpers import (
+    check_for_device_command_event_tracer,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
@@ -20,7 +21,7 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode
 
 
-@pytest.mark.skip(reason="TBD")
+@pytest.mark.refactor
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_failed_assigned.feature",
@@ -245,7 +246,6 @@ def tmc_status_scanning(event_tracer, subarray_node):
     sdp_subarray = subarray_node.subarray_devices["sdp_subarray"]
     event_tracer.subscribe_event(csp_subarray, "obsState")
     event_tracer.subscribe_event(sdp_subarray, "obsState")
-
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "THEN" STEP: '
         "'the subarray transitions to obsState SCANNING'"
@@ -279,6 +279,15 @@ def tmc_status_scanning(event_tracer, subarray_node):
         "obsState",
         ObsState.SCANNING,
     )
+    for dishln in subarray_node.dish_leaf_node_list:
+        assert check_for_device_command_event_tracer(
+            dishln,
+            "longRunningCommandResult",
+            COMMAND_COMPLETED,
+            event_tracer,
+            "Scan",
+        )
+
     event_tracer.clear_events()
 
 
@@ -362,7 +371,7 @@ def send_assignresource_with_invalid_json3(
     )
 
 
-@pytest.mark.skip(reason="TBD")
+@pytest.mark.refactor
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_assigning_unavailable_resources.feature",  # noqa: E501
@@ -413,7 +422,7 @@ def invalid_command_rejection_with_unavailable_resources(resources_list):
     assert pytest.command_result[0][0] == ResultCode.REJECTED
 
 
-@pytest.mark.skip(reason="TBD")
+@pytest.mark.refactor
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_assigning_unavailable_resources.feature",  # noqa: E501
@@ -426,7 +435,7 @@ def test_assign_resource_successive_invokation_with_unavailable_resources():
     """
 
 
-@pytest.mark.skip(reason="TBD")
+@pytest.mark.refactor
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_combination_of_failed_assign_resources.feature",  # noqa: E501
@@ -442,7 +451,7 @@ def test_assign_resource_with_combination():
     """
 
 
-@pytest.mark.skip(reason="TBD")
+@pytest.mark.refactor
 @pytest.mark.SKA_mid
 @scenario(
     "../features/successful_scan_after_combination_of_failed_assign_resources.feature",  # noqa: E501
