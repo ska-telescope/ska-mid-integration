@@ -76,7 +76,7 @@ def given_tmc(
         ObsState.EMPTY,
     )
     assign_input_json = prepare_json_args_for_centralnode_commands(
-        "command_AssignResources", command_input_factory
+        "assign_resources_mid", command_input_factory
     )
 
     # Invoke AssignResources() Command on TMC
@@ -120,7 +120,7 @@ def invoke_configure_one(
     subarray_node: SubarrayNodeWrapper,
 ):
     configure_input_json = prepare_json_args_for_commands(
-        "command_Configure", command_input_factory
+        "configure_mid", command_input_factory
     )
     configure_json = json.loads(configure_input_json)
     del configure_json["csp"]["cbf"]["fsp"][0]["integration_factor"]
@@ -260,7 +260,7 @@ def invoke_configure_with_unassigned_resources(
     subarray_node: SubarrayNodeWrapper,
 ):
     configure_input_json = prepare_json_args_for_commands(
-        "command_Configure", command_input_factory
+        "configure_mid", command_input_factory
     )
     configure_input_json = json.loads(configure_input_json)
     configure_input_json["dish"]["receiver_band"] = "9"
