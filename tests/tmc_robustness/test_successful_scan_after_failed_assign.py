@@ -250,7 +250,7 @@ def tmc_status_scanning(event_tracer, subarray_node):
         'FAILED ASSUMPTION IN "THEN" STEP: '
         "'the subarray transitions to obsState SCANNING'"
         "TMC Subarray device"
-        f"({subarray_node.csp_subarray1.dev_name()}) "
+        f"({csp_subarray.dev_name()}) "
         "is expected to be in SCANNING obstate",
     ).within_timeout(60).has_change_event_occurred(
         csp_subarray,
@@ -261,7 +261,7 @@ def tmc_status_scanning(event_tracer, subarray_node):
         'FAILED ASSUMPTION IN "THEN" STEP: '
         "'the subarray transitions to obsState SCANNING'"
         "TMC Subarray device"
-        f"({subarray_node.sdp_subarray1.dev_name()}) "
+        f"({sdp_subarray.dev_name()}) "
         "is expected to be in SCANNING obstate",
     ).within_timeout(60).has_change_event_occurred(
         sdp_subarray,
