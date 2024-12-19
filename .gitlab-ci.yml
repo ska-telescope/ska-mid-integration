@@ -92,11 +92,23 @@ k8s-test:
     SUBARRAY_COUNT: 2
     COUNT: 1
     KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA'
-    ADDMARK: ""
+    ADDMARK: "and batch1"
     # MARK: 'p3'
   after_script:
     - pip3 install -q -U ska-ser-xray
     - XRAY_TEST_RESULT_FILE="build/cucumber.json" make xray-publish
+
+k8s-test-batch-2:
+  extends:
+    - k8s-test
+  variables:
+    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-batch2-$CI_COMMIT_SHORT_SHA"
+    DISH_SIMULATION_ENABLED: "true"
+    SUBARRAY_COUNT: 2
+    COUNT: 1
+    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-batch2-$CI_COMMIT_SHORT_SHA'
+    ADDMARK: "and batch2"
+    # MARK: 'p3'
 
 docs-build-rtd:
   rules:

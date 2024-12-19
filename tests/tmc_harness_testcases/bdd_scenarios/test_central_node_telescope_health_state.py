@@ -8,6 +8,8 @@ from tests.resources.test_harness.helpers import (
     set_desired_health_state,
 )
 
+pytest.mark.batch2
+
 
 @pytest.mark.SKA_mid
 @scenario(
