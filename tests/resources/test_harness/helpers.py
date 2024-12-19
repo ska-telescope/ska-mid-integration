@@ -812,23 +812,18 @@ def check_for_device_command_event_tracer(
         command_name(str): executed command name
     """
     event_found: bool = False
-    timeout: int = 100
-    elapsed_time: float = 0
-    start_time: float = time.time()
-    while not event_found and elapsed_time < timeout:
-        assertion_data = event_tracer.query_events(
-            lambda e: e.has_device(device.dev_name())
-            and e.has_attribute(attr_name)
-        )
+    assertion_data = event_tracer.query_events(
+        lambda e: e.has_device(device.dev_name())
+        and e.has_attribute(attr_name) 
+        and e.attribute_value[0].endswith(command_name)
+        and e.attribute_value[1]==event_data,
+        timeout=100
+    )
+    if len(assertion_data) == 1:
+        event_found = True
 
-        LOGGER.info("The assertion data is %s", assertion_data)
-        if assertion_data["attribute_value"][0].endswith(command_name):
-            if event_data in assertion_data["attribute_value"][1]:
-                event_found = True
-                return event_found
-
-        elapsed_time = time.time() - start_time
-
+    LOGGER.info("The assertion data is %s", assertion_data)
+    
     return event_found
 
 
