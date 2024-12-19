@@ -241,8 +241,10 @@ def tmc_accepts_scan_command(
 
 @then("the subarray transitions to obsState SCANNING")
 def tmc_status_scanning(event_tracer, subarray_node):
-    event_tracer.subscribe_event(subarray_node.csp_subarray1, "obsState")
-    event_tracer.subscribe_event(subarray_node.sdp_subarray1, "obsState")
+    csp_subarray = subarray_node.subarray_devices["csp_subarray"]
+    sdp_subarray = subarray_node.subarray_devices["sdp_subarray"]
+    event_tracer.subscribe_event(csp_subarray, "obsState")
+    event_tracer.subscribe_event(sdp_subarray, "obsState")
 
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "THEN" STEP: '
@@ -251,7 +253,7 @@ def tmc_status_scanning(event_tracer, subarray_node):
         f"({subarray_node.csp_subarray1.dev_name()}) "
         "is expected to be in SCANNING obstate",
     ).within_timeout(60).has_change_event_occurred(
-        subarray_node.csp_subarray1,
+        csp_subarray,
         "obsState",
         ObsState.SCANNING,
     )
@@ -262,7 +264,7 @@ def tmc_status_scanning(event_tracer, subarray_node):
         f"({subarray_node.sdp_subarray1.dev_name()}) "
         "is expected to be in SCANNING obstate",
     ).within_timeout(60).has_change_event_occurred(
-        subarray_node.sdp_subarray1,
+        sdp_subarray,
         "obsState",
         ObsState.SCANNING,
     )
