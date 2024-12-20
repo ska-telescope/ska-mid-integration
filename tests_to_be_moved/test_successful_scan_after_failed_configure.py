@@ -43,13 +43,25 @@ def given_tmc(
     event_tracer.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
+    event_tracer.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+    event_tracer.subscribe_event(
+        central_node_mid.subarray_node, "longRunningCommandResult"
+    )
     event_tracer.subscribe_event(central_node_mid.subarray_node, "obsState")
 
     central_node_mid.move_to_on()
     log_events(
         {
-            central_node_mid.central_node: ["telescopeState"],
-            central_node_mid.subarray_node: ["obsState"],
+            central_node_mid.central_node: [
+                "telescopeState",
+                "longRunningCommandResult",
+            ],
+            central_node_mid.subarray_node: [
+                "obsState",
+                "longRunningCommandResult",
+            ],
         }
     )
     assert_that(event_tracer).described_as(
@@ -75,7 +87,7 @@ def given_tmc(
         ObsState.EMPTY,
     )
     assign_input_json = prepare_json_args_for_centralnode_commands(
-        "command_AssignResources", command_input_factory
+        "assign_resources_mid", command_input_factory
     )
 
     # Invoke AssignResources() Command on TMC
@@ -119,10 +131,12 @@ def invoke_configure_one(
     subarray_node: SubarrayNodeWrapper,
 ):
     configure_input_json = prepare_json_args_for_commands(
-        "command_Configure", command_input_factory
+        "configure_mid", command_input_factory
     )
     configure_json = json.loads(configure_input_json)
-    del configure_json["csp"]["cbf"]["fsp"][0]["integration_factor"]
+    del configure_json["csp"]["midcbf"]["correlation"]["processing_regions"][
+        0
+    ]["integration_factor"]
     pytest.command_result = subarray_node.execute_transition(
         "Configure", json.dumps(configure_input_json)
     )
@@ -137,20 +151,9 @@ def invalid_command_rejection():
 
 @then(parsers.parse("the subarray {subarray_id} remains in obsState IDLE"))
 def tmc_status(
-    event_tracer: TangoEventTracer,
     central_node_mid: CentralNodeWrapperMid,
 ):
-    assert_that(event_tracer).described_as(
-        'FAILED ASSUMPTION IN "GIVEN" STEP: '
-        "'the subarray must be in the IDLE obsState'"
-        "TMC Subarray device"
-        f"({central_node_mid.subarray_node.dev_name()}) "
-        "is expected to be in IDLE obstate",
-    ).within_timeout(60).has_change_event_occurred(
-        central_node_mid.subarray_node,
-        "obsState",
-        ObsState.IDLE,
-    )
+    assert central_node_mid.subarray_node.obsState == ObsState.IDLE
 
 
 @when("I issue the command Configure passing a correct JSON script")
@@ -160,7 +163,7 @@ def tmc_accepts_command_with_valid_json(
     subarray_node: SubarrayNodeWrapper,
 ):
     configure_input_json = prepare_json_args_for_commands(
-        "command_Configure", command_input_factory
+        "configure_mid", command_input_factory
     )
     configure_input_json = json.loads(configure_input_json)
     configure_input_json["tmc"]["scan_duration"] = 10.0
@@ -207,7 +210,7 @@ def tmc_accepts_scan_command(
     subarray_node: SubarrayNodeWrapper,
 ):
     scan_input_json = prepare_json_args_for_commands(
-        "command_Scan", command_input_factory
+        "scan_mid", command_input_factory
     )
     subarray_node.store_scan_data(scan_input_json)
 
@@ -269,7 +272,7 @@ def invoke_configure_with_unassigned_resources(
     subarray_node: SubarrayNodeWrapper,
 ):
     configure_input_json = prepare_json_args_for_commands(
-        "command_Configure", command_input_factory
+        "configure_mid", command_input_factory
     )
     configure_input_json = json.loads(configure_input_json)
     configure_input_json["dish"]["receiver_band"] = "9"

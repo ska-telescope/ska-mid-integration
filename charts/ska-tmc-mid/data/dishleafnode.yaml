@@ -9,6 +9,7 @@ server:
   instances:
   {{- $MaxTrackTableRetry := .Values.deviceServers.dishleafnode.MaxTrackTableRetry }}
   {{- $TrackTableRetryDuration := .Values.deviceServers.dishleafnode.TrackTableRetryDuration }}
+  {{- $SleepTime := .Values.deviceServers.dishleafnode.SleepTime}}
   {{- $CommandTimeOut := .Values.deviceServers.dishleafnode.CommandTimeOut }}
   {{- $instance_list := list -}}
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
@@ -67,6 +68,9 @@ server:
             - name: "TrackTableRetryDuration"
               values:
                 - "{{ $TrackTableRetryDuration }}"
+            - name: "SleepTime"
+              values:
+                - "{{ $SleepTime }}" 
 
   {{- end }}
 depends_on:

@@ -24,6 +24,8 @@ server:
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
   {{- $CommandTimeOut := .Values.deviceServers.centralnode.CommandTimeOut}}
   {{- $DishVccInitTimeout := .Values.deviceServers.centralnode.DishVccInitTimeout}}
+  {{- $SleepTime := .Values.deviceServers.centralnode.SleepTime}}
+
   - name: "01"
     classes:
     - name: "CentralNodeMid"
@@ -118,7 +120,7 @@ server:
             - "{{ $CommandTimeOut }}"
         - name: "SleepTime"
           values:
-            - "{{.Values.deviceServers.centralnode.SleepTime}}"
+            - "{{$SleepTime}}"
 
 {{- else }}
 {{- fail "KValueValidRangeUpperLimit should be greater than KValueValidRangeLowerLimit" }}

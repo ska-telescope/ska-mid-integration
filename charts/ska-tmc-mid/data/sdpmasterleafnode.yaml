@@ -26,8 +26,9 @@ server:
           values:
             - "5"
         - name: "SleepTime"
-          values:
-            - "{{.Values.deviceServers.sdpmasterleafnode.SleepTime}}"
+          values: 
+            - "{{ .Values.deviceServers.sdpmasterleafnode.SleepTime }}"
+
 depends_on:
   - device: sys/database/2
 image:

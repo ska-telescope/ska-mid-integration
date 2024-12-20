@@ -91,7 +91,7 @@ sdpleafnodes:
   image:
     registry: artefact.skao.int
     image: ska-tmc-sdpleafnodes
-    tag: 0.16.5
+    tag: 0.17.3
     pullPolicy: IfNotPresent
 
 cspmasterleafnode:
@@ -161,19 +161,19 @@ deviceServers:
     enabled: true
     file: "data/sdpsubarrayleafnode.yaml"
     CommandTimeOut: 50
-    SleepTime: 1
+    SleepTime: 1.5
 
   sdpmasterleafnode:
     enabled: true
     instances: ["01"]
     file: "data/sdpmasterleafnode.yaml"
-    SleepTime: 1
+    SleepTime: 1.5
 
   cspmasterleafnode:
     enabled: true
     instances: ["01"]
     file: "data/cspmasterleafnode.yaml"
-    SleepTime: 1
+    SleepTime: 1.5
 
 
   cspsubarrayleafnode:
@@ -185,7 +185,7 @@ deviceServers:
     DelayValidityPeriod: 20.0
     DelayModelTimeInAdvance: 30
     CommandTimeOut: 50
-    SleepTime: 1
+    SleepTime: 1.5
 
   dishleafnode:
     enabled: true
@@ -200,7 +200,7 @@ deviceServers:
     CommandTimeOut: 90
     MaxTrackTableRetry: 3
     TrackTableRetryDuration: 0.2
-    SleepTime: 1
+    SleepTime: 1.5
 
 
   dishpointingdevice:

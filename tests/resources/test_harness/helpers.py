@@ -12,6 +12,7 @@ from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
 from ska_tango_base.commands import ResultCode
 from ska_tango_base.control_model import HealthState
+from ska_tango_testing.integration import TangoEventTracer
 from ska_tango_testing.mock.placeholders import Anything
 from tango import Database, DeviceProxy
 
@@ -789,6 +790,39 @@ def check_for_device_command_event(
                 return event_found
 
         elapsed_time = time.time() - start_time
+
+    return event_found
+
+
+def check_for_device_command_event_tracer(
+    device: DeviceProxy,
+    attr_name: str,
+    event_data: str,
+    event_tracer: TangoEventTracer,
+    command_name: str,
+) -> bool:
+    """Method to check event from the device.
+
+    Args:
+        device (DeviceProxy): device proxy
+        attr_name (str): attribute name
+        event_data (str): event data to be searched
+        event_recorder(EventRecorder): event recorder instance
+        to check for events.
+        command_name(str): executed command name
+    """
+    event_found: bool = False
+    assertion_data = event_tracer.query_events(
+        lambda e: e.has_device(device.dev_name())
+        and e.has_attribute(attr_name)
+        and e.attribute_value[0].endswith(command_name)
+        and e.attribute_value[1] == event_data,
+        timeout=100,
+    )
+    if len(assertion_data) == 1:
+        event_found = True
+
+    LOGGER.info("The assertion data is %s", assertion_data)
 
     return event_found
 

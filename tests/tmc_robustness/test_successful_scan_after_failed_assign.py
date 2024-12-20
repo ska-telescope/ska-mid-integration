@@ -11,6 +11,7 @@ from tests.conftest import LOGGER
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.helpers import (
+    check_for_device_command_event_tracer,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
@@ -47,28 +48,51 @@ def given_tmc(
     event_tracer.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
+    event_tracer.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
     event_tracer.subscribe_event(central_node_mid.subarray_node, "obsState")
+    event_tracer.subscribe_event(
+        central_node_mid.subarray_node, "longRunningCommandResult"
+    )
     for dishln in subarray_node.dish_leaf_node_list:
         event_tracer.subscribe_event(dishln, "dishMode")
         log_events({dishln: ["dishMode"]})
     central_node_mid.move_to_on()
     log_events(
         {
-            central_node_mid.central_node: ["telescopeState"],
+            central_node_mid.central_node: [
+                "telescopeState",
+                "longRunningCommandResult",
+            ],
             central_node_mid.subarray_node: ["obsState"],
         }
     )
+    for dishln in subarray_node.dish_leaf_node_list:
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "GIVEN" STEP: '
+            "'the TMC is On'"
+            "TMC Subarray device"
+            f"({dishln.dev_name()}) "
+            "is expected to be in STANDBY_LP dishMode",
+        ).within_timeout(100).has_change_event_occurred(
+            dishln,
+            "dishMode",
+            DishMode.STANDBY_FP,
+        )
+
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "GIVEN" STEP: '
         "'the TMC is On'"
         "TMC Central Node device"
-        f"({central_node_mid.subarray_node.dev_name()}) "
+        f"({central_node_mid.central_node.dev_name()}) "
         "is expected to be in ON telescope state",
-    ).within_timeout(100).has_change_event_occurred(
+    ).within_timeout(150).has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
         DevState.ON,
     )
+
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "GIVEN" STEP: '
         "'the TMC is On'"
@@ -80,18 +104,7 @@ def given_tmc(
         "obsState",
         ObsState.EMPTY,
     )
-    for dishln in subarray_node.dish_leaf_node_list:
-        assert_that(event_tracer).described_as(
-            'FAILED ASSUMPTION IN "GIVEN" STEP: '
-            "'the TMC is On'"
-            "TMC Subarray device"
-            f"({dishln.dev_name()}) "
-            "is expected to be in EMPTY obstate",
-        ).within_timeout(60).has_change_event_occurred(
-            dishln,
-            "dishMode",
-            DishMode.STANDBY_LP,
-        )
+
     event_tracer.clear_events()
 
 
@@ -106,14 +119,15 @@ def invoke_assign_resources_one(
     central_node_mid: CentralNodeWrapperMid,
 ):
     assign_input_json = prepare_json_args_for_centralnode_commands(
-        "command_AssignResources", command_input_factory
+        "assign_resources_mid", command_input_factory
     )
     assign_json = json.loads(assign_input_json)
-    del assign_json["sdp"]["processing_blocks"][0]["pb_id"]
+    assign_json["sdp"]["processing_blocks"][0].pop("pb_id", None)
+    # doesn't raise error
     # Invoke AssignResources() Command on TMC
     LOGGER.info("Invoking AssignResources command on TMC CentralNode")
-    pytest.command_result = central_node_mid.store_resources(
-        json.dumps(assign_json)
+    pytest.command_result = central_node_mid.perform_action(
+        "AssignResources", json.dumps(assign_json)
     )
 
 
@@ -124,20 +138,8 @@ def invalid_command_rejection():
 
 
 @then(parsers.parse("the subarray {subarray_id} remains in obsState EMPTY"))
-def tmc_status(
-    event_tracer: TangoEventTracer, central_node_mid: CentralNodeWrapperMid
-):
-    assert_that(event_tracer).described_as(
-        'FAILED ASSUMPTION IN "GIVEN" STEP: '
-        "'the TMC is On'"
-        "TMC Subarray device"
-        f"({central_node_mid.subarray_node.dev_name()}) "
-        "is expected to be in EMPTY obstate",
-    ).within_timeout(60).has_change_event_occurred(
-        central_node_mid.subarray_node,
-        "obsState",
-        ObsState.EMPTY,
-    )
+def tmc_status(central_node_mid: CentralNodeWrapperMid):
+    assert central_node_mid.subarray_node.obsState == ObsState.EMPTY
 
 
 @when("I issue the command AssignResources passing a correct JSON script")
@@ -145,7 +147,7 @@ def tmc_accepts_command_with_valid_json(
     command_input_factory: JsonFactory, central_node_mid: CentralNodeWrapperMid
 ):
     assign_input_json = prepare_json_args_for_centralnode_commands(
-        "command_AssignResources", command_input_factory
+        "assign_resources_mid", command_input_factory
     )
     _, pytest.unique_id = central_node_mid.store_resources(assign_input_json)
 
@@ -187,7 +189,7 @@ def tmc_accepts_configure_command_with_valid_json(
     subarray_node: SubarrayNodeWrapper,
 ):
     configure_input_json = prepare_json_args_for_commands(
-        "command_Configure", command_input_factory
+        "configure_mid", command_input_factory
     )
     configure_input_json = json.loads(configure_input_json)
     configure_input_json["tmc"]["scan_duration"] = 10.0
@@ -234,13 +236,39 @@ def tmc_accepts_scan_command(
     subarray_node: SubarrayNodeWrapper,
 ):
     scan_input_json = prepare_json_args_for_commands(
-        "command_Scan", command_input_factory
+        "scan_mid", command_input_factory
     )
     subarray_node.store_scan_data(scan_input_json)
 
 
 @then("the subarray transitions to obsState SCANNING")
 def tmc_status_scanning(event_tracer, subarray_node):
+    csp_subarray = subarray_node.subarray_devices["csp_subarray"]
+    sdp_subarray = subarray_node.subarray_devices["sdp_subarray"]
+    event_tracer.subscribe_event(csp_subarray, "obsState")
+    event_tracer.subscribe_event(sdp_subarray, "obsState")
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "THEN" STEP: '
+        "'the subarray transitions to obsState SCANNING'"
+        "TMC Subarray device"
+        f"({csp_subarray.dev_name()}) "
+        "is expected to be in SCANNING obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        csp_subarray,
+        "obsState",
+        ObsState.SCANNING,
+    )
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "THEN" STEP: '
+        "'the subarray transitions to obsState SCANNING'"
+        "TMC Subarray device"
+        f"({sdp_subarray.dev_name()}) "
+        "is expected to be in SCANNING obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        sdp_subarray,
+        "obsState",
+        ObsState.SCANNING,
+    )
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "THEN" STEP: '
         "'the subarray transitions to obsState SCANNING'"
@@ -252,12 +280,22 @@ def tmc_status_scanning(event_tracer, subarray_node):
         "obsState",
         ObsState.SCANNING,
     )
+    for dishln in subarray_node.dish_leaf_node_list:
+        event_tracer.subscribe_event(dishln, "longRunningCommandResult")
+        log_events({dishln: ["longRunningCommandResult"]})
+        assert check_for_device_command_event_tracer(
+            dishln,
+            "longRunningCommandResult",
+            COMMAND_COMPLETED,
+            event_tracer,
+            "Scan",
+        )
+
     event_tracer.clear_events()
 
 
 @when("I issue the command EndScan")
 def tmc_accepts_endscan_command(
-    event_tracer: TangoEventTracer,
     subarray_node: SubarrayNodeWrapper,
 ):
     subarray_node.remove_scan_data()
@@ -302,15 +340,15 @@ def send_assignresource_with_invalid_json2(
     central_node_mid: CentralNodeWrapperMid,
 ):
     assign_input_json = prepare_json_args_for_centralnode_commands(
-        "command_AssignResources", command_input_factory
+        "assign_resources_mid", command_input_factory
     )
 
     assign_json = json.loads(assign_input_json)
     del assign_json["sdp"]["execution_block"]["scan_types"][0]["scan_type_id"]
     # Invoke AssignResources() Command on TMC
     LOGGER.info("Invoking AssignResources command on TMC CentralNode")
-    pytest.command_result = central_node_mid.store_resources(
-        json.dumps(assign_json)
+    pytest.command_result = central_node_mid.perform_action(
+        "AssignResources", json.dumps(assign_json)
     )
 
 
@@ -325,7 +363,7 @@ def send_assignresource_with_invalid_json3(
     central_node_mid: CentralNodeWrapperMid,
 ):
     assign_input_json = prepare_json_args_for_centralnode_commands(
-        "command_AssignResources", command_input_factory
+        "assign_resources_mid", command_input_factory
     )
 
     assign_json = json.loads(assign_input_json)
@@ -333,8 +371,8 @@ def send_assignresource_with_invalid_json3(
     del assign_json["sdp"]["execution_block"]["channels"][0]["channels_id"]
     # Invoke AssignResources() Command on TMC
     LOGGER.info("Invoking AssignResources command on TMC CentralNode")
-    pytest.command_result = central_node_mid.store_resources(
-        json.dumps(assign_json)
+    pytest.command_result = central_node_mid.perform_action(
+        "AssignResources", json.dumps(assign_json)
     )
 
 
@@ -366,7 +404,7 @@ def invoke_assign_resources_two(
     resources_list,
 ):
     assign_input_json = prepare_json_args_for_centralnode_commands(
-        "command_AssignResources", command_input_factory
+        "assign_resources_mid", command_input_factory
     )
 
     assign_json = json.loads(assign_input_json)
@@ -374,8 +412,8 @@ def invoke_assign_resources_two(
     assign_json["dish"]["receptor_ids"][0] = resources_list
     # Invoke AssignResources() Command on TMC
     LOGGER.info("Invoking AssignResources command on TMC CentralNode")
-    pytest.command_result = central_node_mid.store_resources(
-        json.dumps(assign_json)
+    pytest.command_result = central_node_mid.perform_action(
+        "AssignResources", json.dumps(assign_json)
     )
 
 
