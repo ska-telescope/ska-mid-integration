@@ -141,7 +141,7 @@ deviceServers:
       max: 1177
     CommandTimeOut: 120
     DishVccInitTimeout: 180
-    SleepTime: 1.5
+    SleepTime: 2
 
   subarraynode:
     enabled: true
