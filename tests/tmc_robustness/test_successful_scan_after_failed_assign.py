@@ -21,7 +21,7 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.enum import DishMode
 
 
-@pytest.mark.skip(reason="hm-547")
+# @pytest.mark.skip(reason="hm-547")
 @pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
@@ -314,7 +314,7 @@ def teardown_the_tmc(
     central_node_mid.tear_down()
 
 
-@pytest.mark.skip(reason="hm-547")
+# @pytest.mark.skip(reason="hm-547")
 @pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
@@ -376,7 +376,7 @@ def send_assignresource_with_invalid_json3(
     )
 
 
-@pytest.mark.skip(reason="hm-547")
+# @pytest.mark.skip(reason="hm-547")
 @pytest.mark.refactor
 @pytest.mark.batch2
 @pytest.mark.SKA_mid
@@ -429,7 +429,7 @@ def invalid_command_rejection_with_unavailable_resources(resources_list):
     assert pytest.command_result[0][0] == ResultCode.REJECTED
 
 
-@pytest.mark.skip(reason="hm-547")
+# @pytest.mark.skip(reason="hm-547")
 @pytest.mark.refactor
 @pytest.mark.batch2
 @pytest.mark.SKA_mid
@@ -444,7 +444,7 @@ def test_assign_resource_successive_invokation_with_unavailable_resources():
     """
 
 
-@pytest.mark.skip(reason="hm-547")
+# @pytest.mark.skip(reason="hm-547")
 @pytest.mark.refactor
 @pytest.mark.batch2
 @pytest.mark.SKA_mid
@@ -462,7 +462,7 @@ def test_assign_resource_with_combination():
     """
 
 
-@pytest.mark.skip(reason="hm-547")
+# @pytest.mark.skip(reason="hm-547")
 @pytest.mark.refactor
 @pytest.mark.batch2
 @pytest.mark.SKA_mid
