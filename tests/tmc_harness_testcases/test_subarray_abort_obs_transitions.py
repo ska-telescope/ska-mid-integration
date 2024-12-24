@@ -15,7 +15,7 @@ class TestSubarrayNodeAbortCommandObsStateTransitions(object):
             "RESOURCING",
             "IDLE",
             "CONFIGURING",
-            # "SCANNING", # Abort on DishLeafNode not working properly
+            "SCANNING",
         ],
     )
     @pytest.mark.batch2
