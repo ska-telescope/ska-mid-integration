@@ -104,7 +104,7 @@ K8S_EXTRA_PARAMS=	-f charts/ska-mid-integration/tmc_pairwise/tmc_sdp_values.yaml
 	--set global.sdp_subarray_prefix="$(SDP_SUBARRAY_PREFIX)"\
 	--set ska-sdp.enabled=true\
 	--set ska-sdp.lmc.loadBalancer=true\
-	--set global.operator=true \
+	--set global.operator=false \
 	--set ska-tmc-mid.subarray_count=1\
 	--set ska-sdp.lmc.nsubarray=1
 endif

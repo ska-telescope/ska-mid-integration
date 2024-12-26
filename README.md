@@ -8,18 +8,6 @@ Click below to access the TMC documentation.
 
 [![Documentation Status](https://readthedocs.org/projects/ska-telescope-ska-mid-integration/badge/?version=latest)](https://developer.skao.int/projects/ska-mid-integration/en/latest/)
 
-## Component Versions
-
-The following table lists the key components of the SKA Mid Deployment system and their respective versions:
-
-| Component                | OCI Name                     | Version       |
-|--------------------------|------------------------------|---------------|
-| Mid-CBF                 | ska-mid-cbf-mcs             | 0.24.1-rc.1   |
-| SKA-DISH                | ska-dish-lmc                | 6.0.0         |
-| SKA-TMC                 | ska-tmc-mid                 | 0.13.1        |
-| CSP-LMC                 | ska-csp-lmc-mid             | 0.24.1-rc.1   |
-| SDP Master Leaf Node    | ska-tmc-sdpleafnodes        | 0.14.2        |
-| SKA Mid CBF Leaf Node   | ska-mid-cbf-tmleafnode      | 1.1.0-rc.2    |
 
 ### Deployment of Subsystem in Integration 
  #### Deployment of Dish LMC Helm Chart
@@ -59,18 +47,7 @@ Each telescope involves two deployment phases:
 1. **Pairwise Deployment**: Focuses on individual subsystems.
 2. **System-Level Deployment**: Validates the overall functionality of the telescope.
 
-## Component Versions
 
-Below is the list of components and their corresponding versions used in the SKA Mid Deployment project:
-
-| Component                | OCI Name                     | Version       |
-|--------------------------|------------------------------|---------------|
-| SKA-TMC (Mid)            | ska-tmc-mid                  | 0.13.1        |
-| SKA Mid MCCS             | ska-mid-mccs                 | 0.16.2        |
-| CSP-LMC (Mid)            | ska-csp-lmc-mid              | 0.24.1-rc.1   |
-| SKA Mid CBF              | ska-mid-cbf                  | 1.1.0-rc.2    |
-| SKA Mid CBF Proc         | ska-mid-cbf-proc             | 0.15.0        |
-| SKA PST                  | ska-pst                      | 0.12.1        |
 
 ### Mid Telescope Deployment Structure
 #### Pairwise Deployments
