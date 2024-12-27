@@ -84,7 +84,7 @@ subarraynode:
   image:
     registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-subarraynode
     image: ska-tmc-subarraynode
-    tag: 0.27.0-dev.c19279657
+    tag: 0.27.0-dev.ce0d40095
     pullPolicy: IfNotPresent
 
 sdpleafnodes:
