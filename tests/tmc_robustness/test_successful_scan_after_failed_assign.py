@@ -57,7 +57,9 @@ def given_tmc(
     )
     for dishln in subarray_node.dish_leaf_node_list:
         event_tracer.subscribe_event(dishln, "dishMode")
-        log_events({dishln: ["dishMode"]})
+        event_tracer.subscribe_event(dishln, "longRunningCommandResult")
+        log_events({dishln: ["dishMode", "longRunningCommandResult"]})
+
     central_node_mid.move_to_on()
     log_events(
         {
@@ -281,8 +283,6 @@ def tmc_status_scanning(event_tracer, subarray_node):
         ObsState.SCANNING,
     )
     for dishln in subarray_node.dish_leaf_node_list:
-        event_tracer.subscribe_event(dishln, "longRunningCommandResult")
-        log_events({dishln: ["longRunningCommandResult"]})
         assert check_for_device_command_event_tracer(
             dishln,
             "longRunningCommandResult",
