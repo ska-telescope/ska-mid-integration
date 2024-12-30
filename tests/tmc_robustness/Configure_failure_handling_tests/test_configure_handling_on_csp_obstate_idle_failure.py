@@ -17,6 +17,7 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_commands,
 )
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
+from tests.resources.test_support.enum import PointingState
 
 
 # The test fails intermittently as the test does not make sure that the Abort
@@ -175,11 +176,25 @@ def csp_subarray_returns_to_obsstate_idle(event_recorder, simulator_factory):
 @given(
     parsers.parse("the TMC SubarrayNode {subarray_id} stucks in CONFIGURING")
 )
-def given_tmc_subarray_stuck_configuring(subarray_node, simulator_factory):
+def given_tmc_subarray_stuck_configuring(
+    central_node_mid, subarray_node, simulator_factory, event_recorder
+):
     csp_sim = simulator_factory.get_or_create_simulator_device(
         SimulatorDeviceType.MID_CSP_DEVICE
     )
     assert subarray_node.subarray_node.obsState == ObsState.CONFIGURING
+
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        event_recorder.subscribe_event(
+            central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "pointingState",
+            PointingState.TRACK,
+            lookahead=15,
+        )
+
     # Disable CSP Subarray fault
     csp_sim.SetDefective(json.dumps({"enabled": False}))
 
