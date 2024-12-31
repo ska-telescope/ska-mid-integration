@@ -4,7 +4,7 @@ import logging
 import pytest
 from ska_tango_base.control_model import ObsState
 
-# from tests.resources.test_harness.helpers import check_subarray_obs_state
+from tests.resources.test_support.enum import PointingState
 
 
 class TestSubarrayNodeAbortCommandObsStateTransitions(object):
@@ -84,6 +84,17 @@ class TestSubarrayNodeAbortCommandObsStateTransitions(object):
             ObsState[source_obs_state],
             lookahead=15,
         )
+        if source_obs_state == "CONFIGURING":
+            for dishln in subarray_node.dish_leaf_node_list:
+                event_recorder.subscribe_event(dishln, "pointingState")
+
+                assert event_recorder.has_change_event_occurred(
+                    dishln,
+                    "pointingState",
+                    PointingState.SLEW,
+                    lookahead=15,
+                )
+
         event_recorder.clear_events()
 
         event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
