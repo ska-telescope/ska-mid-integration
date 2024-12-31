@@ -28,7 +28,7 @@ TIMEOUT = 60
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-64365.feature",
-    "TMC mid executes Abort command on DISH with pointingState READY",
+    "TMC mid executes Abort command on DISH with pointingState SLEW",
 )
 def test_tmc_dish_abort():
     """
@@ -41,7 +41,7 @@ def test_tmc_dish_abort():
         "TMC subarray {subarray_id} with {dish_ids} is in obsState CONFIGURING"
     )
 )
-def move_subarray_obsState_to_ready(
+def move_subarray_obsState_to_configuring(
     subarray_node: SubarrayNodeWrapper,
     command_input_factory: JsonFactory,
     event_tracer: TangoEventTracer,
@@ -50,7 +50,7 @@ def move_subarray_obsState_to_ready(
     dish_ids: str,
 ):
     """
-    Method to move subarray in Ready obsState
+    Method to move subarray in CONFIGURING obsState
 
     Args:
         subarray_node: Fixture for a Subarray Node wrapper class
@@ -145,7 +145,7 @@ def move_subarray_obsState_to_ready(
 
 @given(
     parsers.parse(
-        "DishMaster {dish_ids} is in dishMode OPERATE with pointingState READY"
+        "DishMaster {dish_ids} is in dishMode OPERATE with pointingState SLEW"
     )
 )
 def check_dish_mode_and_pointing_state_after_configure(
@@ -168,13 +168,13 @@ def check_dish_mode_and_pointing_state_after_configure(
             central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
         )
 
-    for dish_id in dish_ids.split(","):
-        central_node_mid.dish_master_dict[dish_id].SetDirectDishMode(
-            DishMode.OPERATE
-        )
-        central_node_mid.dish_master_dict[dish_id].SetDirectPointingState(
-            PointingState.READY
-        )
+    # for dish_id in dish_ids.split(","):
+    #     central_node_mid.dish_master_dict[dish_id].SetDirectDishMode(
+    #         DishMode.OPERATE
+    #     )
+    #     central_node_mid.dish_master_dict[dish_id].SetDirectPointingState(
+    #         PointingState.SLEW
+    #     )
 
     for dish_id in dish_ids.split(","):
         assert_that(event_tracer).described_as(
@@ -191,14 +191,14 @@ def check_dish_mode_and_pointing_state_after_configure(
 
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "GIVEN" STEP: '
-            "'the DishLeafNode must be in the TRACK pointingState'"
+            "'the DishLeafNode must be in the SLEW pointingState'"
             "dish device"
             f"({central_node_mid.dish_leaf_node_dict[dish_id].dev_name()}) "
-            "is expected to be in READY pointingState",
+            "is expected to be in SLEW pointingState",
         ).within_timeout(TIMEOUT).has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "pointingState",
-            PointingState.READY,
+            PointingState.SLEW,
         )
 
 
@@ -252,6 +252,18 @@ def check_dish_mode_and_pointing_state_after_abort(
             DishMode.STANDBY_FP,
         )
 
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "GIVEN" STEP: '
+            "'the DishLeafNode must be in the READY pointingState'"
+            "dish device"
+            f"({central_node_mid.dish_leaf_node_dict[dish_id].dev_name()}) "
+            "is expected to be in SLEW pointingState",
+        ).within_timeout(TIMEOUT).has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "pointingState",
+            PointingState.READY,
+        )
+
 
 @then("TMC SubarrayNode transitions to obsState ABORTED")
 def check_subarray_obsstate_aborted(
@@ -270,7 +282,7 @@ def check_subarray_obsstate_aborted(
     subarray_node.set_subarray_id(subarray_id)
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "THEN" STEP: '
-        "'the subarray must be in the READY obsState'"
+        "'the subarray must be in the ABORTED obsState'"
         "TMC Subarray device"
         f"({subarray_node.subarray_node.dev_name()}) "
         "is expected to be in ABORTED obstate",
