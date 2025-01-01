@@ -46,6 +46,8 @@ class TestSubarrayNodeAbortCommandObsStateTransitions(object):
         event_recorder.subscribe_event(
             subarray_node.sdp_subarray_leaf_node, "sdpSubarrayObsState"
         )
+        for dishln in subarray_node.dish_leaf_node_list:
+            event_recorder.subscribe_event(dishln, "pointingState")
 
         subarray_node.move_to_on()
         assign_input = json.loads(
@@ -86,8 +88,6 @@ class TestSubarrayNodeAbortCommandObsStateTransitions(object):
         )
         if source_obs_state == "CONFIGURING":
             for dishln in subarray_node.dish_leaf_node_list:
-                event_recorder.subscribe_event(dishln, "pointingState")
-
                 assert event_recorder.has_change_event_occurred(
                     dishln,
                     "pointingState",
