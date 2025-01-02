@@ -154,7 +154,7 @@ deviceServers:
     CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.0"
     SdpScanInterfaceURL: "https://schema.skao.int/ska-sdp-scan/0.4"
     CommandTimeOut: 110
-    AbortCommandTimeout: 120
+    AbortCommandTimeout: 130
     SleepTime: 1.5
 
   sdpsubarrayleafnode:
