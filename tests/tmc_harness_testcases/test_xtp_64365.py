@@ -23,8 +23,6 @@ TIMEOUT = 60
 
 
 @pytest.mark.batch2
-@pytest.mark.p3
-# @pytest.mark.skip(reason="Test scenario needs to be updated")
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-64365.feature",
@@ -167,14 +165,6 @@ def check_dish_mode_and_pointing_state_after_configure(
         event_tracer.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
         )
-
-    # for dish_id in dish_ids.split(","):
-    #     central_node_mid.dish_master_dict[dish_id].SetDirectDishMode(
-    #         DishMode.OPERATE
-    #     )
-    #     central_node_mid.dish_master_dict[dish_id].SetDirectPointingState(
-    #         PointingState.SLEW
-    #     )
 
     for dish_id in dish_ids.split(","):
         assert_that(event_tracer).described_as(

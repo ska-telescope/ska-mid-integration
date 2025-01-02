@@ -22,8 +22,6 @@ TIMEOUT = 50
 PROGRAM_TRACK_TABLE_LENGTH = 75
 
 
-# @pytest.mark.sah1630
-# @pytest.mark.repeat(2)
 @pytest.mark.skip(reason="Test fails if the source provided is not visible")
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
@@ -136,9 +134,9 @@ def configure_the_subarray(
     # If a source is visible within elevation limits, run the configure
     # command, else skip.
     object_list = non_sidereal_objects.split(",")
-    LOGGER.info("object_list: %s", object_list)
+    LOGGER.info("object list is: %s", object_list)
     configure_input_json, object_name = get_non_sidereal_json_for_now()
-    LOGGER.info("object_name: %s", object_name)
+    LOGGER.info("object name is: %s", object_name)
     pytest.OBJECT_NAME = object_name
     assert object_name in object_list
     LOGGER.info(

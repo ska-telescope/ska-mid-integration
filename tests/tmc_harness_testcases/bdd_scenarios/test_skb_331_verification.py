@@ -19,7 +19,6 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 LOGGER = logging.getLogger(__name__)
 
 
-@pytest.mark.sah1630
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(

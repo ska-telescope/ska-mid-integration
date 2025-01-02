@@ -132,5 +132,4 @@ class TestSubarrayNodeAbortCommandObsStateTransitions(object):
             ObsState.ABORTED,
             lookahead=15,
         )
-        # assert check_subarray_obs_state(obs_state="ABORTED")
         event_recorder.clear_events()

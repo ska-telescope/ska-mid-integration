@@ -20,10 +20,6 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.enum import PointingState
 
 
-# The test fails intermittently as the test does not make sure that the Abort
-# is completed on dishes and then the next Configure is invoked
-# @pytest.mark.skip(reason="Abort on DishLeafNode not working properly")
-@pytest.mark.p2
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(

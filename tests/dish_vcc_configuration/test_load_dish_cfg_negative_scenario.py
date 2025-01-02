@@ -65,13 +65,8 @@ def test_central_node_return_error_for_duplicate_vcc_id():
     """
 
 
-# @pytest.mark.p2
-# @pytest.mark.repeat(10)
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
-# @pytest.mark.skip(
-#     reason="This will be enable once Dish Vcc feature is integrate."
-# )
 @scenario(
     "../features/load_dish_cfg_command_negative_scenario.feature",
     "TMC handling exception from CSP Subarray",
@@ -297,7 +292,7 @@ def check_sys_param_source_sys_param_attributes(central_node_mid):
 def check_return_msg(error_message: str):
     """Test validate that command failed with error message"""
     LOGGER.info(
-        "pytest.command_result attribute_value: %s",
+        "command_result is: %s",
         pytest.command_result["attribute_value"],
     )
     assert error_message in pytest.command_result["attribute_value"][1]
