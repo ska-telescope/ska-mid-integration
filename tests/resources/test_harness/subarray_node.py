@@ -463,42 +463,10 @@ class SubarrayNodeWrapper(object):
         LOGGER.info("Calling Tear down for subarray")
         self._clear_command_call_and_transition_data(clear_transition=True)
 
-        # if self.obs_state in (
-        #     "RESOURCING",
-        #     "CONFIGURING",
-        #     "SCANNING",
-        #     "READY",
-        #     "IDLE",
-        # ):
-        #     """Invoke Abort and Restart"""
-        #     LOGGER.info("Invoking Abort on Subarray")
-        #     # Waiting for few seconds as the SubarrayNode End command
-        #     # completion does not consider Dishes pointingState transition
-        #     # to READY
-        #     the_waiter = Waiter(**device_dict)
-        #     the_waiter.wait(5)
-
-        #     self.abort_subarray()
-        #     self.restart_subarray()
-        #     self.check_if_dishes_are_ready(the_waiter)
-
         if self.obs_state in ("RESOURCING", "CONFIGURING", "SCANNING"):
             LOGGER.info("Invoking Abort on Subarray")
             self.execute_transition("Abort")
             wait_for_partial_or_complete_abort()
-
-            # # Waiting for pointingStates of dishes to go to READY/NONE as
-            # Abort on Subarray does not consider pointingStates.
-            # dish_leaf_node_list = self.get_assigned_dish_leaf_nodes_list()
-            # for dish_leaf_node in dish_leaf_node_list:
-            #     self.event_recorder.subscribe_event(
-            #         dish_leaf_node, "pointingState"
-            #     )
-            # self.event_recorder.has_change_event_occurred_for_given_values(
-            #         dish_leaf_node,
-            #         "pointingState",
-            #         [PointingState.NONE, PointingState.READY],
-            #     )
 
             _, unique_restart = self.restart_subarray()
             assert self.event_recorder.has_change_event_occurred(
