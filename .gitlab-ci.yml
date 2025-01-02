@@ -91,9 +91,15 @@ k8s-test:
     DISH_SIMULATION_ENABLED: "true"
     SUBARRAY_COUNT: 2
     COUNT: 1
-    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_JOB_ID'
+    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA'
     ADDMARK: "and batch1"
-    # MARK: 'p3'
+    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA"
+  before_script:
+    - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
+    - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
+    - make k8s-install-chart
+    - make k8s-wait
+
   after_script:
     - pip3 install -q -U ska-ser-xray
     - XRAY_TEST_RESULT_FILE="build/cucumber.json" make xray-publish
@@ -106,16 +112,23 @@ k8s-test-batch2:
     DISH_SIMULATION_ENABLED: "true"
     SUBARRAY_COUNT: 2
     COUNT: 1
-    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_JOB_ID-batch2'
+    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch2'
     ADDMARK: "and batch2"
-    # MARK: 'p3'
+  environment:
+    name: test/$CI_COMMIT_REF_SLUG-batch2
+    on_stop: stop-k8s-test-batch2
+    auto_stop_in: 1 minute
 
 stop-k8s-test-batch2:
   extends:
     - stop-k8s-test
   variables:
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch2"
-    
+  environment:
+    name: test/$CI_COMMIT_REF_SLUG-batch2
+    action: stop
+
+
 docs-build-rtd:
   rules:
     - when: never
