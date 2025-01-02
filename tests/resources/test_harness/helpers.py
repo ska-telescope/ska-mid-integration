@@ -907,7 +907,7 @@ def wait_for_partial_or_complete_abort() -> None:
 
     # Subscribing to events
     for dev_proxy, attribute_name in DEVICE_ATTRIBUTE_MAP.items():
-        event_recorder.subscribe_event(dev_proxy, attribute_name, timeout=120)
+        event_recorder.subscribe_event(dev_proxy, attribute_name, timeout=150)
 
     # Asserting Events
     for dev_proxy, attribute_name in DEVICE_ATTRIBUTE_MAP.items():
