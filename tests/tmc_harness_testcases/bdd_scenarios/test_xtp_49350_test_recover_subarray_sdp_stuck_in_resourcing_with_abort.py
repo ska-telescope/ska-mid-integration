@@ -2,6 +2,7 @@
 import pytest
 from pytest_bdd import given, parsers, scenario
 from ska_control_model import ObsState
+from ska_tango_testing.mock.placeholders import Anything
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
@@ -50,12 +51,16 @@ def telescope_is_in_resourcing_obsstate(
         "assign_resources_mid_invalid_eb_id", command_input_factory
     )
 
-    central_node_mid.perform_action("AssignResources", assign_input_json)
+    pytest.command_result = central_node_mid.perform_action(
+        "AssignResources", assign_input_json
+    )
 
 
 @given("SDP subarray is defective and stuck in RESOURCING")
 def sdp_subarray_stuck_is_in_empty(
-    event_recorder: EventRecorder, simulator_factory: SimulatorFactory
+    central_node_mid: CentralNodeWrapperMid,
+    event_recorder: EventRecorder,
+    simulator_factory: SimulatorFactory,
 ):
     "Method to check SDP subarray is in EMPTY."
     _, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
@@ -64,6 +69,12 @@ def sdp_subarray_stuck_is_in_empty(
         sdp_sim,
         "obsState",
         ObsState.RESOURCING,
+    )
+    event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], Anything),
+        lookahead=15,
     )
 
 
