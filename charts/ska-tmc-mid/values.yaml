@@ -91,7 +91,7 @@ sdpleafnodes:
   image:
     registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-sdpleafnodes
     image: ska-tmc-sdpleafnodes
-    tag: 0.18.0-dev.cd44b4d75
+    tag: 0.18.0-dev.cc7aba498
     pullPolicy: IfNotPresent
 
 cspmasterleafnode:
