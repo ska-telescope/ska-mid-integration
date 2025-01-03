@@ -6,6 +6,7 @@ from tests.resources.test_harness.utils.enums import DishMode
 
 
 class TestMidCentralNodeStateTransition(object):
+    @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_mid_centralnode_state_transitions(
         self,

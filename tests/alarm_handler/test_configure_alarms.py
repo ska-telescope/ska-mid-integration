@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 @pytest.mark.post_deployment
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @pytest.mark.xfail(
     reason="alarm summary key error to be resolved under SAH-1510"

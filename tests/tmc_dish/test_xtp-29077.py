@@ -212,10 +212,10 @@ def connect_to_dish(central_node_mid, event_recorder):
     central_node_mid.dish_leaf_node_list[0].SetKValue(111)
 
     # Wait for DishLeafNode SetKValue command to be completed
-    wait_and_validate_device_attribute_value(
+    assert wait_and_validate_device_attribute_value(
         central_node_mid.central_node, "isDishVccConfigSet", True
     )
-    wait_and_validate_device_attribute_value(
+    assert wait_and_validate_device_attribute_value(
         central_node_mid.dish_leaf_node_list[0], "kValue", 111
     )
 
@@ -242,14 +242,14 @@ def check_if_telescope_is_in_off_state(central_node_mid):
             == DishMode.STANDBY_LP
         )
 
-    wait_and_validate_device_attribute_value(
+    assert wait_and_validate_device_attribute_value(
         central_node_mid.dish_master_list[0],
         "dishMode",
         DishMode.STANDBY_LP,
     )
     assert central_node_mid.dish_master_list[0].dishMode == DishMode.STANDBY_LP
 
-    wait_and_validate_device_attribute_value(
+    assert wait_and_validate_device_attribute_value(
         central_node_mid.central_node,
         "telescopeState",
         DevState.OFF,

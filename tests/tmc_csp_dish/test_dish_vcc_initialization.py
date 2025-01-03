@@ -17,6 +17,7 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
 @pytest.mark.tmc_csp_dish
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/dish_vcc_initialization/xtp_30249_csp_mln_init.feature",
@@ -87,6 +88,7 @@ def validate_central_node_dish_vcc_config(tmc_mid):
 
 
 @pytest.mark.tmc_csp_dish
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/dish_vcc_initialization/"
@@ -127,6 +129,7 @@ def validate_dish_vcc_config_flag(tmc_mid):
 
 
 @pytest.mark.tmc_csp_dish
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/dish_vcc_initialization/xtp_30250_restart.feature",
@@ -222,7 +225,7 @@ def validate_dish_vcc_config_after_central_node_and_csp_mln_restart(
         " Version is Same",
         "dish": "ALL DISH OK",
     }
-    wait_and_validate_device_attribute_value(
+    assert wait_and_validate_device_attribute_value(
         tmc_mid.central_node.central_node,
         "DishVccValidationStatus",
         json.dumps(result_string_to_match),
@@ -255,6 +258,7 @@ def validate_dish_vcc_config_after_central_node_and_csp_mln_restart(
 
 
 @pytest.mark.tmc_csp_dish
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/dish_vcc_initialization/xtp_30253_dish_vcc_mismatch.feature",

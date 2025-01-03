@@ -453,7 +453,6 @@ def turn_on_telescope(
             "dishMode",
             DishMode.STANDBY_FP,
         )
-
     assert_that(event_tracer).described_as(
         "FAILED ASSUMPTION AFTER ON COMMAND: "
         "Central Node "

@@ -22,6 +22,7 @@ server:
   {{- $sdp_scan_interface := .Values.deviceServers.subarraynode.SdpScanInterfaceURL }}
   {{- $CommandTimeOut := .Values.deviceServers.subarraynode.CommandTimeOut}}
   {{- $AbortCommandTimeout := .Values.deviceServers.subarraynode.AbortCommandTimeout}}
+  {{- $SleepTime := .Values.deviceServers.subarraynode.SleepTime}}
   {{- range  ( regexSplit " " ((.Values.subarray_count | int) | seq ) -1 ) }}
     - name: "{{ printf "%02s" . }}"
       classes:
@@ -91,6 +92,9 @@ server:
           - name: "SdpScanInterfaceURL"
             values:
               - "{{ $sdp_scan_interface }}"
+          - name: "SleepTime"
+            values:
+              - "{{ $SleepTime }}"
   {{- end}}
 depends_on:
   - device: sys/database/2
