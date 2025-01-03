@@ -20,6 +20,7 @@ from tests.resources.test_support.constant import alarm_handler1
 @pytest.mark.skip(
     reason="alarm summary key error to be resolved under SAH-1510"
 )
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../features/dish_vcc_initialization/" "xtp_alarm_dish_vcc.feature",

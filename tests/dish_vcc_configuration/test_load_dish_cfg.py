@@ -10,8 +10,10 @@ from tests.resources.test_harness.helpers import (
     get_master_device_simulators,
     prepare_json_args_for_centralnode_commands,
 )
+from tests.resources.test_support.enum import DishMode
 
 
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/load_dish_cfg_command.feature",
@@ -40,15 +42,21 @@ def telescope_in_on_state(central_node_mid, event_recorder):
     :param event_recorder: fixture for a MockTangoEventCallbackGroup
     for validating the subscribing and receiving events.
     """
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
+    event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
+    event_recorder.subscribe_event(central_node_mid.csp_master, "State")
+    for dish in central_node_mid.dish_leaf_node_list:
+        event_recorder.subscribe_event(dish, "dishMode")
     central_node_mid.move_to_on()
     assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "telescopeState",
-        DevState.ON,
+        central_node_mid.sdp_master, "State", DevState.ON
     )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.csp_master, "State", DevState.ON
+    )
+    for dish in central_node_mid.dish_leaf_node_list:
+        assert event_recorder.has_change_event_occurred(
+            dish, "dishMode", DishMode.STANDBY_FP
+        )
 
 
 @when(

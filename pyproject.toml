@@ -32,6 +32,7 @@ astropy = "^5.0.4"
 ska-telmodel = "1.15.1"
 ska-ser-xray = "^0.6.0"
 ska-integration-test-harness = "^0.2.4"
+assertpy = "^1.1"
 
 [tool.poetry.dev-dependencies]
 black = "^22.8.0"

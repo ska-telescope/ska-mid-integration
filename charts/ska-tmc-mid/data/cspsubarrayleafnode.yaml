@@ -10,6 +10,7 @@ entrypoints:
 {{- $TelmodelSource := .Values.deviceServers.cspsubarrayleafnode.TelmodelSource }}
 {{- $TelmodelPath := .Values.deviceServers.cspsubarrayleafnode.TelmodelPath }}
 {{- $CommandTimeOut := .Values.deviceServers.cspsubarrayleafnode.CommandTimeOut}}
+{{- $SleepTime := .Values.deviceServers.cspsubarrayleafnode.SleepTime}}
 server:
   name: "csp_subarray_leaf_node_mid"
   instances:
@@ -51,6 +52,9 @@ server:
               - name: "CommandTimeOut"
                 values:
                 - "{{ $CommandTimeOut }}"
+              - name: "SleepTime"
+                values:
+                - "{{ $SleepTime }}"
   {{- end}}
 depends_on:
   - device: sys/database/2

@@ -4,11 +4,13 @@ domain: general-monitoring
 instances: ["01"]
 entrypoints:
   - name: "ska_tmc_sdpsubarrayleafnode.sdp_subarray_leaf_node.SdpSubarrayLeafNode"
+{{- $SleepTime := .Values.deviceServers.sdpsubarrayleafnode.SleepTime}}
 server:
   name: "sdp_subarray_leaf_node"
   instances:
   {{ $CommandTimeOut := .Values.deviceServers.sdpsubarrayleafnode.CommandTimeOut}}
   {{ $sdp_sa_fqdn_prefix:= .Values.global.sdp_subarray_prefix}}
+  {{- $SleepTime := .Values.deviceServers.sdpsubarrayleafnode.SleepTime}}
   {{- range  ( regexSplit " " ((.Values.subarray_count | int) | seq ) -1 ) }}
     - name: "{{ printf "%02s" . }}"
       classes:
@@ -31,6 +33,9 @@ server:
               - name: "CommandTimeOut"
                 values:
                 - "{{ $CommandTimeOut }}"
+              - name: "SleepTime"
+                values:
+                - "{{ $SleepTime }}"
   {{- end}}
 depends_on:
   - device: sys/database/2

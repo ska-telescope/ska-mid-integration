@@ -13,6 +13,7 @@ from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.constant import (
     COMMAND_COMPLETED,
     RESET_OFFSETS,
+    CorrectionKey,
 )
 from tests.resources.test_harness.helpers import (
     check_subarray_obs_state,
@@ -28,6 +29,7 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 TIMEOUT = 110
 
 
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp-60480_configure_with_reset_key.feature",
@@ -216,7 +218,7 @@ def a_subarray_after_five_point_calibration(
         ObsState.SCANNING,
     )
 
-    wait_and_validate_device_attribute_value(
+    assert wait_and_validate_device_attribute_value(
         subarray_node.subarray_node, "obsState", ObsState.READY
     )
 
@@ -230,6 +232,7 @@ def a_subarray_after_five_point_calibration(
         partial_configuration_jsons,
         event_tracer,
         command_input_factory,
+        correction_key=CorrectionKey.RESET,
     )
 
     # Set pointing calibration data

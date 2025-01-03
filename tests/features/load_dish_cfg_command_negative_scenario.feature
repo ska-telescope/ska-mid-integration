@@ -31,7 +31,7 @@ Feature: TMC is able to handle the failure when load dish cfg command fails
         Given a TMC
         And Telescope is in ON state
         When I issue the command LoadDishCfg on TMC and CSP Controller raises an exception
-        Then sysParam and sourceSysParam attributes remains unchanged on CSP Master Leaf Node
+        Then dishVccConfig and sourceDishVccConfig attributes remains unchanged on CSP Master Leaf Node
         And command returns with error message <error_message>
         Examples:
         | error_message |

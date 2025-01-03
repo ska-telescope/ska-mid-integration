@@ -29,6 +29,7 @@ TIMEOUT = 110
 
 
 @pytest.mark.SKA_mid
+@pytest.mark.batch1
 @scenario(
     "../features/test_harness/science_scan_after_calibration_scan.feature",
     "TMC Behavior During a Five-Point Calibration Scan",
@@ -200,7 +201,7 @@ def a_subarray_after_five_point_calibration(
         "obsState",
         ObsState.SCANNING,
     )
-    wait_and_validate_device_attribute_value(
+    assert wait_and_validate_device_attribute_value(
         subarray_node.subarray_node, "obsState", ObsState.READY
     )
     event_tracer.clear_events()
