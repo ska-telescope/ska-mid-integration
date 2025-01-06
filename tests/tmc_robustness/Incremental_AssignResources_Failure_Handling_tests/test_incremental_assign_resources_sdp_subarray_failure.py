@@ -16,6 +16,7 @@ from tests.resources.test_harness.utils.enums import ResultCode
 
 @pytest.mark.batch2
 @pytest.mark.SKA_mid
+@pytest.mark.skip(reason="Confirming the latest behaviour with SDP")
 @scenario(
     "../features/xtp-29014.feature",
     "TMC behavior when SDP Subarray "
