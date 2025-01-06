@@ -3,6 +3,13 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+[0.24.0-rc.2]
+a. Updated TMC following TMC nodes:
+    - SDP subarray to fix SKB-699.
+    - Central Node to fix event receiver and telescope on command.
+    - Subarry Node to fix abort aggregation.
+    - Dish leaf node to fix abort lock and scheduler blocking issue.
+  
 [0.23.0]
 ************
 * Added test to verify SKB-512

@@ -1,15 +1,23 @@
-release=0.24.0-rc.1
-tag=0.24.0-rc.1
+release=0.24.0-rc.2
+tag=0.24.0-rc.2
 tag_description=
 **Charts:**
-**1. ska-tmc-integration 0.23.0-rc.1 - 0.24.0-rc.1**
+**1. ska-tmc-integration 0.24.0-rc.1 - 0.24.0-rc.2**
 
-    **1.1 ska-tmc-mid - 0.23.0-rc.1 - 0.24.0-rc.1**
-        a. Verified the TMC-CSP with ADR-99 interface updates
+    **1.1 ska-tmc-mid - 0.24.0-rc.1 - 0.24.0-rc.2**
+        a. Updated TMC following TMC nodes:
+            - SDP subarray to fix SKB-699.
+            - Central Node to fix event receiver and telescope on command.
+            - Subarry Node to fix abort aggregation.
+            - Dish leaf node to fix abort lock and scheduler blocking issue.
 
 release_notes=
 **Charts:**
-**1. ska-tmc-integration 0.23.0-rc.1 - 0.24.0-rc.1**
+**1. ska-tmc-integration 0.23.0-rc.1 - 0.24.0-rc.2**
 
- **1.1 ska-tmc-mid - 0.23.0-rc.1 - 0.24.0-rc.1**
-        a. Verified the TMC-CSP with ADR-99 interface updates
+    **1.1 ska-tmc-mid - 0.24.0-rc.1 - 0.24.0-rc.2**
+        a. Updated TMC following TMC nodes:
+            - SDP subarray to fix SKB-699.
+            - Central Node to fix event receiver and telescope on command.
+            - Subarry Node to fix abort aggregation.
+            - Dish leaf node to fix abort lock and scheduler blocking issue.
