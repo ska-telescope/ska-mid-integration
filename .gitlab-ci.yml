@@ -87,13 +87,12 @@ k8s-test:
   tags:
     - ska-default-large
   variables:
-    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA"
+    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_JOB_ID"
     DISH_SIMULATION_ENABLED: "true"
     SUBARRAY_COUNT: 2
     COUNT: 1
-    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA'
+    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_JOB_ID'
     ADDMARK: "and batch1"
-    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA"
   before_script:
     - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
@@ -108,11 +107,11 @@ k8s-test-batch2:
   extends:
     - k8s-test
   variables:
-    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch2"
+    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_JOB_ID-batch2"
     DISH_SIMULATION_ENABLED: "true"
     SUBARRAY_COUNT: 2
     COUNT: 1
-    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch2'
+    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_JOB_ID-batch2'
     ADDMARK: "and batch23"
   environment:
     name: test/$CI_COMMIT_REF_SLUG-batch2
