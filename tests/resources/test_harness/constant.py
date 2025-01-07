@@ -201,6 +201,14 @@ ERROR_PROPAGATION_DEFECT = json.dumps(
         "result": ResultCode.FAILED,
     }
 )
+SDP_IN_FAULT = json.dumps(
+    {
+        "enabled": True,
+        "fault_type": FaultType.SDP_FAULT,
+        "error_message": "Exception occurred, command failed.",
+        "result": ResultCode.FAILED,
+    }
+)
 RESET_DEFECT = json.dumps(
     {
         "enabled": False,

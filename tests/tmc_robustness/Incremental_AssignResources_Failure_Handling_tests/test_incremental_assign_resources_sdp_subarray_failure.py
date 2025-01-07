@@ -7,6 +7,7 @@ from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
 from tests.conftest import LOGGER
+from tests.resources.test_harness.constant import RESET_DEFECT, SDP_IN_FAULT
 from tests.resources.test_harness.helpers import (
     get_device_simulators,
     prepare_json_args_for_centralnode_commands,
@@ -124,6 +125,7 @@ def given_tmc_subarray_incremental_assign_resources_is_in_progress(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         input_json2, command_input_factory
     )
+    sdp_sim.setDefective(SDP_IN_FAULT)
 
     _, unique_id = central_node_mid.perform_action(
         "AssignResources", assign_input_json
@@ -143,7 +145,7 @@ def given_tmc_subarray_incremental_assign_resources_is_in_progress(
 @given(
     parsers.parse(
         "Sdp Subarray {subarray_id} raises exception and "
-        + "returns to obsState IDLE"
+        + "transitions to obsState FAULT"
     )
 )
 def sdp_subarray_assign_resources_failure(event_recorder, simulator_factory):
@@ -152,8 +154,9 @@ def sdp_subarray_assign_resources_failure(event_recorder, simulator_factory):
     assert event_recorder.has_change_event_occurred(
         sdp_sim,
         "obsState",
-        ObsState.IDLE,
+        ObsState.FAULT,
     )
+    sdp_sim.setDefective(RESET_DEFECT)
 
 
 @given(
