@@ -200,8 +200,8 @@ def send_command_abort(central_node_mid):
 
 @then(
     parsers.parse(
-        "the CSP, SDP and TMC subarray {subarray_id} transitions to "
-        + "obsState ABORTED"
+        "the SDP and TMC subarray {subarray_id} transitions to "
+        + "obsState FAULT and CSP transitions to obsState ABORTED"
     )
 )
 def subarray_transitions_to_aborted(
@@ -218,13 +218,13 @@ def subarray_transitions_to_aborted(
     assert event_recorder.has_change_event_occurred(
         sdp_sim,
         "obsState",
-        ObsState.ABORTED,
+        ObsState.FAULT,
     )
     event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_node,
         "obsState",
-        ObsState.ABORTED,
+        ObsState.FAULT,
     )
 
 
