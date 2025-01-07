@@ -268,9 +268,9 @@ COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_CONFIGURING_IDLE = {
     "target_obsstates": [ObsState.CONFIGURING, ObsState.IDLE],
 }
 
-COMMAND_NOT_ALLOWED_DEFECT = {
+COMMAND_NOT_ALLOWED_DEFECT_BEFORE_QUEUING = {
     "enabled": True,
-    "fault_type": FaultType.COMMAND_NOT_ALLOWED,
+    "fault_type": FaultType.COMMAND_NOT_ALLOWED_BEFORE_QUEUING,
     "error_message": "Command is not allowed",
     "result": ResultCode.FAILED,
 }
