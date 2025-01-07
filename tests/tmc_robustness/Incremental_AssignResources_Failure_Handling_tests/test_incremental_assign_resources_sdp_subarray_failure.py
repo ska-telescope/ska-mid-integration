@@ -4,7 +4,6 @@ import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from ska_tango_testing.mock.placeholders import Anything
-from tango import DevState
 
 from tests.conftest import LOGGER
 from tests.resources.test_harness.constant import RESET_DEFECT, SDP_IN_FAULT
@@ -13,6 +12,8 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
 )
 from tests.resources.test_harness.utils.enums import ResultCode
+
+# from tango import DevState
 
 
 @pytest.mark.batch23
