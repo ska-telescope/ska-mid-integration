@@ -4,6 +4,7 @@ import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from ska_tango_testing.mock.placeholders import Anything
+from tango import DevState
 
 from tests.conftest import LOGGER
 from tests.resources.test_harness.constant import RESET_DEFECT, SDP_IN_FAULT
@@ -13,10 +14,8 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_harness.utils.enums import ResultCode
 
-# from tango import DevState
 
-
-@pytest.mark.batch23
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-29014.feature",
@@ -54,11 +53,11 @@ def given_tmc(central_node_mid, event_recorder):
         central_node_mid.subarray_node, "obsState", timeout=150
     )
     central_node_mid.move_to_on()
-    # assert event_recorder.has_change_event_occurred(
-    #     central_node_mid.central_node,
-    #     "telescopeState",
-    #     DevState.ON,
-    # )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "telescopeState",
+        DevState.ON,
+    )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_node,
         "obsState",
