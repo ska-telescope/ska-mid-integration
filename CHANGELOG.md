@@ -9,6 +9,7 @@ a. Updated TMC following TMC nodes:
     - Central Node to fix event receiver and telescope on command.
     - Subarry Node to fix abort aggregation.
     - Dish leaf node to fix abort lock and scheduler blocking issue.
+    - Fixed bug SKB-516 and SKB-536
   
 [0.23.0]
 ************
