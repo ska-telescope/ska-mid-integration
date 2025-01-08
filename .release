@@ -10,6 +10,7 @@ tag_description=
             - Central Node to fix event receiver and telescope on command.
             - Subarry Node to fix abort aggregation.
             - Dish leaf node to fix abort lock and scheduler blocking issue.
+            - Fixed bug SKB-516 and SKB-536
 
 release_notes=
 **Charts:**
@@ -21,3 +22,4 @@ release_notes=
             - Central Node to fix event receiver and telescope on command.
             - Subarry Node to fix abort aggregation.
             - Dish leaf node to fix abort lock and scheduler blocking issue.
+            - Fixed bug SKB-516 and SKB-536
