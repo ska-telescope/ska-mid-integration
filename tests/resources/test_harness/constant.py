@@ -209,6 +209,14 @@ SDP_IN_FAULT = json.dumps(
         "result": ResultCode.FAILED,
     }
 )
+SDP_BACK_TO_INITIAL_STATE = json.dumps(
+    {
+        "enabled": True,
+        "fault_type": FaultType.SDP_BACK_TO_INITIAL_STATE,
+        "error_message": "Exception occurred, command failed.",
+        "result": ResultCode.FAILED,
+    }
+)
 RESET_DEFECT = json.dumps(
     {
         "enabled": False,
