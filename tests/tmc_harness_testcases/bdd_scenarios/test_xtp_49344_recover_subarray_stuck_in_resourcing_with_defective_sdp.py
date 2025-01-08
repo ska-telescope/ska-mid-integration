@@ -77,13 +77,13 @@ def sdp_subarray_stuck_is_in_empty(
         "obsState",
         ObsState.EMPTY,
     )
-    sdp_sim.SetDefective(RESET_DEFECT)
     event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
         (pytest.command_result[1][0], Anything),
         lookahead=15,
     )
+    sdp_sim.SetDefective(RESET_DEFECT)
 
 
 # from conftest.py
