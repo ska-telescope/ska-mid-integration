@@ -1,20 +1,17 @@
 """Configurations needed for the tests using the new harness."""
 
+import os
 from dataclasses import dataclass
 from typing import Any
 
 import pytest
-from pytest_bdd import given, parsers
-from ska_control_model import ObsState
+from assertpy import assert_that
+from pytest_bdd import given, parsers, then
+from ska_control_model import ObsState, ResultCode
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
 from ska_integration_test_harness.facades.dishes_facade import DishesFacade
 from ska_integration_test_harness.facades.sdp_facade import SDPFacade
-from ska_integration_test_harness.facades.tmc_central_node_facade import (
-    TMCCentralNodeFacade,
-)
-from ska_integration_test_harness.facades.tmc_subarray_node_facade import (
-    TMCSubarrayNodeFacade,
-)
+from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_integration_test_harness.init.test_harness_builder import (
     TestHarnessBuilder,
 )
@@ -29,6 +26,8 @@ from ska_tango_testing.integration import TangoEventTracer, log_events
 
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 
+ASSERTIONS_TIMEOUT = 60
+
 # ------------------------------------------------------------
 # Test Harness fixtures
 
@@ -40,7 +39,7 @@ DEFAULT_VCC_CONFIG_INPUT = DictJSONInput(
             + "ska-sdp-tmlite-repository-1.0.0#tmdata"
         ],
         "tm_data_filepath": (
-            "instrument/ska1_mid_psi/ska-mid-cbf-system-parameters.json",
+            "instrument/ska1_mid_psi/ska-mid-cbf-system-parameters.json"
         ),
     }
 )
@@ -76,33 +75,22 @@ def telescope_wrapper(
     # which will be used for teardown procedures
     test_harness_builder.set_default_inputs(default_commands_inputs)
     test_harness_builder.validate_default_inputs()
+    test_harness_builder.set_kubernetes_namespace(os.getenv("KUBE_NAMESPACE"))
 
     # build the wrapper of the telescope and it's sub-systems
     telescope = test_harness_builder.build()
+    telescope.actions_default_timeout = 120
     yield telescope
 
     # after a test is completed, reset the telescope to its initial state
     # (obsState=READY, telescopeState=OFF, no resources assigned)
     telescope.tear_down()
 
-    # NOTE: As the code is organized now, I cannot anticipate the
-    # teardown of the telescope structure. To run reset now I should
-    # init subarray node (with SetSubarrayId), but to do that I need
-    # to know subarray_id, which is a parameter of the Gherkin steps.
-
 
 @pytest.fixture
-def central_node_facade(telescope_wrapper: TelescopeWrapper):
-    """Create a facade to TMC central node and all its operations."""
-    central_node_facade = TMCCentralNodeFacade(telescope_wrapper)
-    yield central_node_facade
-
-
-@pytest.fixture
-def subarray_node_facade(telescope_wrapper: TelescopeWrapper):
-    """Create a facade to TMC subarray node and all its operations."""
-    subarray_node = TMCSubarrayNodeFacade(telescope_wrapper)
-    yield subarray_node
+def tmc(telescope_wrapper: TelescopeWrapper) -> TMCFacade:
+    """Create a facade to TMC devices."""
+    return TMCFacade(telescope_wrapper)
 
 
 @pytest.fixture
@@ -184,40 +172,33 @@ def context_fixt() -> SubarrayTestContextData:
 
 
 def _setup_event_subscriptions(
-    central_node_facade: TMCCentralNodeFacade,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
 ):
-    """Set up event subscriptions for the test.
+    """Subscribe TMC, CSP and SDP devices to track and log obsState events.
 
-    Args:
-        subarray_node_facade: Facade for the TMC subarray node.
-        csp: Facade for the CSP.
-        event_tracer: Event tracer for capturing events.
+    :param tmc: the TMC facade.
+    :param csp: the CSP facade.
+    :param sdp: the SDP facade.
+    :param event_tracer: the event tracer.
     """
-    event_tracer.subscribe_event(
-        subarray_node_facade.subarray_node, "obsState"
-    )
+    event_tracer.subscribe_event(tmc.subarray_node, "obsState")
     event_tracer.subscribe_event(csp.csp_subarray, "obsState")
     event_tracer.subscribe_event(sdp.sdp_subarray, "obsState")
-    event_tracer.subscribe_event(
-        central_node_facade.central_node, "longRunningCommandResult"
-    )
-    event_tracer.subscribe_event(
-        subarray_node_facade.subarray_node, "longRunningCommandResult"
-    )
+    event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
+    event_tracer.subscribe_event(tmc.subarray_node, "longRunningCommandResult")
 
     log_events(
         {
-            subarray_node_facade.subarray_node: [
+            tmc.subarray_node: [
                 "obsState",
                 "longRunningCommandResult",
             ],
             csp.csp_subarray: ["obsState"],
             sdp.sdp_subarray: ["obsState", "commandCallInfo"],
-            central_node_facade.central_node: ["longRunningCommandResult"],
+            tmc.central_node: ["longRunningCommandResult"],
         },
         event_enum_mapping={"obsState": ObsState},
     )
@@ -225,40 +206,38 @@ def _setup_event_subscriptions(
 
 @given("the telescope is in ON state")
 def given_the_telescope_is_in_on_state(
-    central_node_facade: TMCCentralNodeFacade,
+    tmc: TMCFacade,
 ):
     """Ensure the telescope is in ON state."""
-    central_node_facade.move_to_on(wait_termination=True)
+    # TODO: move to on should verify LRC completion,
+    # but now it fails (at least when called here)
+    tmc.move_to_on(wait_termination=True, is_long_running_command=False)
 
 
 @given(parsers.parse("the subarray {subarray_id} can be used"))
 def subarray_can_be_used(
     subarray_id: str,
-    central_node_facade: TMCCentralNodeFacade,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
 ):
     """Set up the subarray (and the subscriptions) to be used in the test."""
-    subarray_node_facade.set_subarray_id(int(subarray_id))
-    _setup_event_subscriptions(
-        central_node_facade, subarray_node_facade, csp, sdp, event_tracer
-    )
+    tmc.set_subarray_id(int(subarray_id))
+    _setup_event_subscriptions(tmc, csp, sdp, event_tracer)
 
 
 @given(parsers.parse("the subarray {subarray} is in the RESOURCING state"))
 def subarray_in_resourcing_state(
     context_fixt: SubarrayTestContextData,
-    # subarray_id: str,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
     default_commands_inputs: TestHarnessInputs,
 ):
     """Ensure the subarray is in the RESOURCING state."""
     context_fixt.starting_state = ObsState.RESOURCING
     context_fixt.expected_next_state = ObsState.IDLE
 
-    subarray_node_facade.force_change_of_obs_state(
+    tmc.force_change_of_obs_state(
         ObsState.RESOURCING,
         default_commands_inputs,
         wait_termination=True,
@@ -268,15 +247,13 @@ def subarray_in_resourcing_state(
 @given(parsers.parse("the subarray {subarray} is in the IDLE state"))
 def subarray_in_idle_state(
     context_fixt: SubarrayTestContextData,
-    # subarray_id: str,
-    subarray_node_facade: TMCSubarrayNodeFacade,
-    central_node_facade: TMCCentralNodeFacade,
+    tmc: TMCFacade,
     default_commands_inputs: TestHarnessInputs,
 ):
     """Ensure the subarray is in the IDLE state."""
     context_fixt.starting_state = ObsState.IDLE
 
-    subarray_node_facade.force_change_of_obs_state(
+    tmc.force_change_of_obs_state(
         ObsState.EMPTY,
         default_commands_inputs,
         wait_termination=True,
@@ -286,35 +263,23 @@ def subarray_in_idle_state(
         "centralnode", "assign_resources_mid"
     ).with_attribute("subarray_id", 1)
 
-    context_fixt.when_action_result = central_node_facade.assign_resources(
+    context_fixt.when_action_result = tmc.assign_resources(
         json_input,
         wait_termination=True,
     )
-
-    # NOTE: Do not use force change of obs state here, because currently
-    # for moving to IDLE it uses a wrong command, called on subarray node
-    # instead of on central node.
-
-    # TODO: fix the above issue and use the following line instead:
-    # subarray_node_facade.force_change_of_obs_state(
-    #     ObsState.IDLE,
-    #     default_commands_inputs,
-    #     wait_termination=True,
-    # )
 
 
 @given(parsers.parse("the subarray {subarray} is in the CONFIGURING state"))
 def subarray_in_configuring_state(
     context_fixt: SubarrayTestContextData,
-    # subarray_id: str,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
     default_commands_inputs: TestHarnessInputs,
 ):
     """Ensure the subarray is in the CONFIGURING state."""
     context_fixt.starting_state = ObsState.CONFIGURING
     context_fixt.expected_next_state = ObsState.READY
 
-    subarray_node_facade.force_change_of_obs_state(
+    tmc.force_change_of_obs_state(
         ObsState.CONFIGURING,
         default_commands_inputs,
         wait_termination=True,
@@ -324,14 +289,13 @@ def subarray_in_configuring_state(
 @given(parsers.parse("the subarray {subarray} is in the READY state"))
 def subarray_in_ready_state(
     context_fixt: SubarrayTestContextData,
-    # subarray_id: str,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
     default_commands_inputs: TestHarnessInputs,
 ):
     """Ensure the subarray is in the READY state."""
     context_fixt.starting_state = ObsState.READY
 
-    subarray_node_facade.force_change_of_obs_state(
+    tmc.force_change_of_obs_state(
         ObsState.READY,
         default_commands_inputs,
         wait_termination=True,
@@ -341,16 +305,91 @@ def subarray_in_ready_state(
 @given(parsers.parse("the subarray {subarray} is in the SCANNING state"))
 def subarray_in_scanning_state(
     context_fixt: SubarrayTestContextData,
-    # subarray_id: str,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
     default_commands_inputs: TestHarnessInputs,
 ):
     """Ensure the subarray is in the SCANNING state."""
     context_fixt.starting_state = ObsState.SCANNING
     context_fixt.expected_next_state = ObsState.READY
 
-    subarray_node_facade.force_change_of_obs_state(
+    tmc.force_change_of_obs_state(
         ObsState.SCANNING,
         default_commands_inputs,
         wait_termination=True,
+    )
+
+
+# ----------------------------------------------------------
+# Common Then steps (verify LRC completion)
+
+
+def _get_long_run_command_id(context_fixt: SubarrayTestContextData) -> str:
+    return context_fixt.when_action_result[1][0]
+
+
+def _get_expected_long_run_command_result(context_fixt) -> tuple[str, str]:
+    return (
+        _get_long_run_command_id(context_fixt),
+        f'[{ResultCode.OK.value}, "Command Completed"]',
+    )
+
+
+@then(
+    parsers.parse(
+        "the central node reports a longRunningCommand successful completion"
+    )
+)
+def verify_long_running_command_result_on_central_node(
+    context_fixt,
+    tmc: TMCFacade,
+    event_tracer: TangoEventTracer,
+):
+    """
+    Verify the successful completion of a longRunningCommand on central node.
+
+    This step checks that the TMC Central Node reports a successful completion
+    of a longRunningCommand. It uses the event_tracer to assert that a change
+    event occurred on the longRunningCommandResult attribute within a specified
+    timeout. The expected result is derived from the context fixture.
+    """
+    assert_that(event_tracer).described_as(
+        "TMC Central Node "
+        f"({tmc.central_node}) "
+        "is expected to report a"
+        "longRunningCommand successful completion."
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        tmc.central_node,
+        "longRunningCommandResult",
+        _get_expected_long_run_command_result(context_fixt),
+    )
+
+
+@then(
+    parsers.parse(
+        "the subarray {subarray} reports "
+        "a longRunningCommand successful completion"
+    )
+)
+def verify_long_running_command_result_on_subarray(
+    context_fixt,
+    tmc: TMCFacade,
+    event_tracer: TangoEventTracer,
+):
+    """
+    Verify the successful completion of a longRunningCommand on the subarray.
+
+    This step checks that the TMC Subarray Node reports a successful completion
+    of a longRunningCommand. It uses the event_tracer to assert that a change
+    event occurred on the longRunningCommandResult attribute within a specified
+    timeout. The expected result is derived from the context fixture.
+    """
+    assert_that(event_tracer).described_as(
+        "TMC Subarray Node "
+        f"({tmc.subarray_node}) "
+        "is expected to report a"
+        "longRunningCommand successful completion."
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        tmc.subarray_node,
+        "longRunningCommandResult",
+        _get_expected_long_run_command_result(context_fixt),
     )

@@ -15,17 +15,19 @@ Feature: test telescope state transactions
         Given the telescope is in ON state
         When the TelescopeOff command is sent to the telescope central node
         Then the telescope should transition to the OFF state
+        And the central node reports a longRunningCommand successful completion
 
     @XTP-62946 @XTP-62547 @XTP-28347
     Scenario: ON to STANDBY - CMD TelescopeStandby
         Given the telescope is in ON state
         When the TelescopeStandby command is sent to the telescope central node
         Then the telescope should transition to the STANDBY state
+        And the central node reports a longRunningCommand successful completion
 
     @XTP-62964 @XTP-62547 @XTP-28347
     Scenario: OFF to ON - CMD TelescopeOn
         Given the telescope is in OFF state
         When the TelescopeOn command is sent to the telescope central node
         Then the telescope should transition to the ON state
-
+        And the central node reports a longRunningCommand successful completion
 

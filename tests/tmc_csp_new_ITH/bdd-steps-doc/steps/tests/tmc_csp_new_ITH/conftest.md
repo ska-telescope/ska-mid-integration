@@ -1,6 +1,6 @@
 # Test Steps and Scenarios from tests/tmc_csp_new_ITH/conftest.py
 
-Last updated on: 11 September 2024 13:11:01
+Last updated on: 29 October 2024 12:07:20
 
 ## Steps
 
@@ -10,7 +10,7 @@ Last updated on: 11 September 2024 13:11:01
 
 **Signature:**
 ```python
-def given_the_telescope_is_in_on_state(central_node_facade):
+def given_the_telescope_is_in_on_state(tmc):
 ```
 
 **Description:**
@@ -24,7 +24,7 @@ Ensure the telescope is in ON state.
 
 **Signature:**
 ```python
-def subarray_can_be_used(subarray_id, central_node_facade, subarray_node_facade, csp, sdp, event_tracer):
+def subarray_can_be_used(subarray_id, tmc, csp, sdp, event_tracer):
 ```
 
 **Description:**
@@ -38,7 +38,7 @@ Set up the subarray (and the subscriptions) to be used in the test.
 
 **Signature:**
 ```python
-def subarray_in_resourcing_state(context_fixt, subarray_node_facade, default_commands_inputs):
+def subarray_in_resourcing_state(context_fixt, tmc, default_commands_inputs):
 ```
 
 **Description:**
@@ -52,7 +52,7 @@ Ensure the subarray is in the RESOURCING state.
 
 **Signature:**
 ```python
-def subarray_in_idle_state(context_fixt, subarray_node_facade, central_node_facade, default_commands_inputs):
+def subarray_in_idle_state(context_fixt, tmc, default_commands_inputs):
 ```
 
 **Description:**
@@ -66,7 +66,7 @@ Ensure the subarray is in the IDLE state.
 
 **Signature:**
 ```python
-def subarray_in_configuring_state(context_fixt, subarray_node_facade, default_commands_inputs):
+def subarray_in_configuring_state(context_fixt, tmc, default_commands_inputs):
 ```
 
 **Description:**
@@ -80,7 +80,7 @@ Ensure the subarray is in the CONFIGURING state.
 
 **Signature:**
 ```python
-def subarray_in_ready_state(context_fixt, subarray_node_facade, default_commands_inputs):
+def subarray_in_ready_state(context_fixt, tmc, default_commands_inputs):
 ```
 
 **Description:**
@@ -94,7 +94,7 @@ Ensure the subarray is in the READY state.
 
 **Signature:**
 ```python
-def subarray_in_scanning_state(context_fixt, subarray_node_facade, default_commands_inputs):
+def subarray_in_scanning_state(context_fixt, tmc, default_commands_inputs):
 ```
 
 **Description:**
