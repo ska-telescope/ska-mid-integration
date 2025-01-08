@@ -1,4 +1,5 @@
 """Test module to test Assignresources while SDP is defective."""
+
 import pytest
 from pytest_bdd import given, parsers, scenario
 from ska_control_model import ObsState

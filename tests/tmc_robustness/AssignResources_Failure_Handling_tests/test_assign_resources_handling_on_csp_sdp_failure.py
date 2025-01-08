@@ -8,6 +8,8 @@ from tango import DevState
 
 from tests.resources.test_harness.constant import (
     COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_EMPTY,
+    RESET_DEFECT,
+    SDP_BACK_TO_INITIAL_STATE,
 )
 from tests.resources.test_harness.helpers import (
     get_device_simulators,
@@ -80,7 +82,7 @@ def given_tmc_subarray_assign_resources_is_in_progress(
     csp_sim.SetDefective(
         json.dumps(COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_EMPTY)
     )
-
+    sdp_sim.SetDefective(SDP_BACK_TO_INITIAL_STATE)
     # Induce fault on SDP Subarry so that it raises exception and
     # returns to the obsState EMPTY
     assign_input_json = prepare_json_args_for_centralnode_commands(
@@ -114,13 +116,15 @@ def csp_subarray_returns_to_obsstate_empty(event_recorder, simulator_factory):
 
 @when(parsers.parse("Sdp Subarray {subarray_id} returns to obsState EMPTY"))
 def sdp_subarray_returns_to_obsstate_empty(event_recorder, simulator_factory):
-    _, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
+    csp_sim, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
     event_recorder.subscribe_event(sdp_sim, "obsState")
     assert event_recorder.has_change_event_occurred(
         sdp_sim,
         "obsState",
         ObsState.EMPTY,
     )
+    csp_sim.SetDefective(RESET_DEFECT)
+    sdp_sim.SetDefective(RESET_DEFECT)
 
 
 @then(
@@ -131,15 +135,12 @@ def sdp_subarray_returns_to_obsstate_empty(event_recorder, simulator_factory):
 def tmc_subarray_transitions_to_empty(
     central_node_mid, simulator_factory, event_recorder
 ):
-    csp_sim, _, _, _, _, _ = get_device_simulators(simulator_factory)
     event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_node,
         "obsState",
         ObsState.EMPTY,
     )
-    # Disable CSP Subarray fault
-    csp_sim.SetDefective(json.dumps({"enabled": False}))
 
 
 @then(
