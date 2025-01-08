@@ -55,7 +55,7 @@ def telescope_is_in_resourcing_obsstate(
     _, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
     sdp_sim.SetDefective(SDP_BACK_TO_INITIAL_STATE)
     assign_input_json = prepare_json_args_for_centralnode_commands(
-        "assign_resources_mid_invalid_sdp_resources", command_input_factory
+        "assign_resources_mid", command_input_factory
     )
 
     pytest.command_result = central_node_mid.perform_action(

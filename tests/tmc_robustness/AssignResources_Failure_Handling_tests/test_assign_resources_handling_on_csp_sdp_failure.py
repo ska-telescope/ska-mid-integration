@@ -86,7 +86,7 @@ def given_tmc_subarray_assign_resources_is_in_progress(
     # Induce fault on SDP Subarry so that it raises exception and
     # returns to the obsState EMPTY
     assign_input_json = prepare_json_args_for_centralnode_commands(
-        "assign_resources_mid_invalid_sdp_resources", command_input_factory
+        "assign_resources_mid", command_input_factory
     )
     _, unique_id = central_node_mid.perform_action(
         "AssignResources", assign_input_json
