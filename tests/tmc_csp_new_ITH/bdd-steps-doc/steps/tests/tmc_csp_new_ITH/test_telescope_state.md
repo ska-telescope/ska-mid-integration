@@ -1,6 +1,6 @@
 # Test Steps and Scenarios from tests/tmc_csp_new_ITH/test_telescope_state.py
 
-Last updated on: 11 September 2024 13:11:01
+Last updated on: 29 October 2024 12:07:20
 
 ## Scenarios
 
@@ -16,7 +16,7 @@ Last updated on: 11 September 2024 13:11:01
 
 **Signature:**
 ```python
-def tracked_telescope(event_tracer, central_node_facade, csp):
+def tracked_telescope(event_tracer, tmc, csp):
 ```
 
 **Description:**
@@ -31,7 +31,7 @@ to track the telescope state (over TMC central node and CSP devices).
 
 **Signature:**
 ```python
-def telescope_in_off_state(central_node_facade):
+def telescope_in_off_state(tmc):
 ```
 
 **Description:**
@@ -45,7 +45,7 @@ Ensure the telescope is in the OFF state.
 
 **Signature:**
 ```python
-def send_telescope_off_command(event_tracer, central_node_facade):
+def send_telescope_off_command(event_tracer, tmc):
 ```
 
 **Description:**
@@ -59,7 +59,7 @@ Send the TelescopeOff command to the telescope.
 
 **Signature:**
 ```python
-def send_telescope_standby_command(event_tracer, central_node_facade):
+def send_telescope_standby_command(event_tracer, tmc):
 ```
 
 **Description:**
@@ -73,7 +73,7 @@ Send the TelescopeStandby command to the telescope.
 
 **Signature:**
 ```python
-def send_telescope_on_command(event_tracer, central_node_facade):
+def send_telescope_on_command(event_tracer, tmc):
 ```
 
 **Description:**
@@ -87,11 +87,11 @@ Send the TelescopeOn command to the telescope.
 
 **Signature:**
 ```python
-def verify_off_state(event_tracer, central_node_facade, csp):
+def verify_off_state(event_tracer, tmc, csp):
 ```
 
 **Description:**
-The telescope and CSP devices transition to the OFF state.
+TMC and CSP devices transition to the OFF state.
 
 ---
 
@@ -101,11 +101,11 @@ The telescope and CSP devices transition to the OFF state.
 
 **Signature:**
 ```python
-def verify_standby_state(event_tracer, central_node_facade, csp):
+def verify_standby_state(event_tracer, tmc, csp):
 ```
 
 **Description:**
-The telescope and CSP devices transition to the STANDBY state.
+TMC should transition to the STANDBY state.
 
 ---
 
@@ -115,11 +115,11 @@ The telescope and CSP devices transition to the STANDBY state.
 
 **Signature:**
 ```python
-def verify_on_state(event_tracer, central_node_facade, csp):
+def verify_on_state(event_tracer, tmc, csp):
 ```
 
 **Description:**
-The telescope and CSP devices transition to the ON state.
+TMC and CSP devices transition to the ON state.
 
 ---
 
