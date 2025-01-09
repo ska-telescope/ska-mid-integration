@@ -1,4 +1,4 @@
-@XTP-28347 @SKA_mid 
+@XTP-28347 @XTP-73579 @XTP-73581 @SKA_mid 
 Scenario: Verify SKB-329
     Given the telescope is in ON state
     And TMC Subarray <subarray_id> is moved to obsState IDLE

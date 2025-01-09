@@ -1,7 +1,7 @@
 Feature: Test alarm condition when the kValue is not set
 
 	
-	@XTP-30395 @XTP-28347 @Team_HIMALAYA
+	@XTP-30395 @XTP-28347 @XTP-73598 @Team_HIMALAYA
 	Scenario: TMC validates and raises alarm when K-Value not set in Dish Leaf Nodes
 		Given a TMC with already loaded Dish-VCC map version
 		When the Dish Leaf Node is restarted

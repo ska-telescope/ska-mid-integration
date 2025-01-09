@@ -1,7 +1,7 @@
 Feature: TMC handles initialization scenarios of setting and verifying Dish ID - VCC map
 
 	
-	@XTP-30258 @XTP-28347 @Team_HIMALAYA
+	@XTP-30258 @XTP-28347 @XTP-73598 @Team_HIMALAYA
 	Scenario: TMC Validates and Reports K-Value set in Dish Leaf Nodes
 		Given a TMC with already loaded Dish-VCC map version
 		When the Dish Leaf Node is restarted
