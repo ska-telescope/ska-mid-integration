@@ -3,19 +3,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
-[0.24.0-rc.2]
-*************
-* Resolved SKB-525
-* Resolved SKB-665
-* Updated CSP Leaf Node to 0.23.2
-* Updated SDP Leaf Node to 0.19.2
-* Updated Dish Leaf Node to 0.19.4
-
 [0.23.0]
 ************
 * Added test to verify SKB-512
 * Updated Subarray Node to 0.25.1 to fix a bug in usage of is_operation_aborted flag
-
 [0.24.0-rc.1]
 *************
 * Verified the TMC-CSP with ADR-99 interface updates

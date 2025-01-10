@@ -1,15 +1,15 @@
-release=0.24.0-rc.2
-tag=0.24.0-rc.2
+release=0.24.0-rc.1
+tag=0.24.0-rc.1
 tag_description=
 **Charts:**
-**1. ska-tmc-integration 0.24.0-rc.1 - 0.24.0-rc.2**
+**1. ska-tmc-integration 0.23.0-rc.1 - 0.24.0-rc.1**
 
-    **1.1 ska-tmc-mid - 0.24.0-rc.1 - 0.24.0-rc.2**
-        a. Resolved SKB-525, SKB-665
+    **1.1 ska-tmc-mid - 0.23.0-rc.1 - 0.24.0-rc.1**
+        a. Verified the TMC-CSP with ADR-99 interface updates
 
-release_notes= Updated CSP Leaf Node to 0.23.2, SDP Leaf node to 0.19.2, Dish Leaf Node to 0.19.4
+release_notes=
 **Charts:**
-**1. ska-tmc-integration 0.24.0-rc.1 - 0.24.0-rc.2**
+**1. ska-tmc-integration 0.23.0-rc.1 - 0.24.0-rc.1**
 
- **1.1 ska-tmc-mid - 0.24.0-rc.1 - 0.24.0-rc.2**
-        a. Resolved SKB-525, SKB-665
+ **1.1 ska-tmc-mid - 0.23.0-rc.1 - 0.24.0-rc.1**
+        a. Verified the TMC-CSP with ADR-99 interface updates
