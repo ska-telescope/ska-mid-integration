@@ -12,6 +12,7 @@ a. Updated TMC following TMC nodes:
     - Fixed bug SKB-516 and SKB-536
     - CSP subarray leaf node to fix SKB-666
     - Fixed bug SKB-525.
+    - Fixed bug SKB-665 on central node.
   
 [0.24.0-rc.1]
 *************
