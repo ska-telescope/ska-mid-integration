@@ -93,7 +93,6 @@ k8s-test:
     COUNT: 1
     KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA'
     ADDMARK: "and batch1"
-    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA"
   before_script:
     - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
@@ -101,7 +100,8 @@ k8s-test:
     - make k8s-wait
 
   after_script:
-    - pip3 install -q -U ska-ser-xray
+    # - pip3 install -q -U ska-ser-xray
+    - pip3 install -q -U git+https://gitlab.com/ska-telescope/ska-ser-xray.git@sst-979-scripts-to-create-update-jira-test-tickets
     - XRAY_TEST_RESULT_FILE="build/cucumber.json" make xray-publish
 
 k8s-test-batch2:

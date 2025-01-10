@@ -27,28 +27,21 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
 from ska_integration_test_harness.facades.sdp_facade import SDPFacade
-from ska_integration_test_harness.facades.tmc_subarray_node_facade import (
-    TMCSubarrayNodeFacade,
-)
+from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_integration_test_harness.inputs.test_harness_inputs import (
     TestHarnessInputs,
 )
 from ska_tango_testing.integration import TangoEventTracer
 
-from tests.tmc_csp_new_ITH.conftest import SubarrayTestContextData
-
-ASSERTIONS_TIMEOUT = 60
+from tests.tmc_csp_new_ITH.conftest import (
+    ASSERTIONS_TIMEOUT,
+    SubarrayTestContextData,
+)
 
 # ------------------------------------------------------------
 # Scenario Definition
 
 
-@pytest.mark.xfail(
-    reason=(
-        "It may fail because right now we cannot detect the passage "
-        "trough an 'ABORTING' state in the SDP emulator subarray."
-    )
-)
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/abort_restart_subarray.feature",
@@ -58,12 +51,6 @@ def test_resourcing_to_aborting_to_aborted():
     """Test RESOURCING to ABORTING to ABORTED transitions."""
 
 
-@pytest.mark.xfail(
-    reason=(
-        "It may fail because right now we cannot detect the passage "
-        "trough an 'ABORTING' state in the SDP emulator subarray."
-    )
-)
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/abort_restart_subarray.feature",
@@ -73,12 +60,6 @@ def test_idle_to_aborting_to_aborted():
     """Test IDLE to ABORTING to ABORTED transitions."""
 
 
-@pytest.mark.xfail(
-    reason=(
-        "It may fail because right now we cannot detect the passage "
-        "trough an 'ABORTING' state in the SDP emulator subarray."
-    )
-)
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/abort_restart_subarray.feature",
@@ -88,12 +69,6 @@ def test_configuring_to_aborting_to_aborted():
     """Test CONFIGURING to ABORTING to ABORTED transitions."""
 
 
-@pytest.mark.xfail(
-    reason=(
-        "It may fail because right now we cannot detect the passage "
-        "trough an 'ABORTING' state in the SDP emulator subarray."
-    )
-)
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/abort_restart_subarray.feature",
@@ -103,12 +78,6 @@ def test_ready_to_aborting_to_aborted():
     """Test READY to ABORTING to ABORTED transitions."""
 
 
-@pytest.mark.xfail(
-    reason=(
-        "It may fail because right now we cannot detect the passage "
-        "trough an 'ABORTING' state in the SDP emulator subarray."
-    )
-)
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/abort_restart_subarray.feature",
@@ -118,7 +87,6 @@ def test_scanning_to_aborting_to_aborted():
     """Test SCANNING to ABORTING to ABORTED transitions."""
 
 
-@pytest.mark.skip(reason="Facing issues in new test case harness")
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/abort_restart_subarray.feature",
@@ -135,8 +103,7 @@ def test_aborted_to_restarting():
 @given(parsers.parse("the subarray {subarray} is in the ABORTED state"))
 def subarray_in_aborted_state(
     context_fixt: SubarrayTestContextData,
-    # subarray_id: str,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
     default_commands_inputs: TestHarnessInputs,
 ):
     """
@@ -152,14 +119,14 @@ def subarray_in_aborted_state(
     context_fixt.starting_state = ObsState.ABORTED
 
     # move to a state where the Abort command can be sent
-    subarray_node_facade.force_change_of_obs_state(
+    tmc.force_change_of_obs_state(
         ObsState.IDLE,
         default_commands_inputs,
         wait_termination=True,
     )
 
     # send the Abort command
-    subarray_node_facade.abort(wait_termination=True)
+    tmc.abort(wait_termination=True)
 
 
 # ----------------------------------------------------------
@@ -169,8 +136,7 @@ def subarray_in_aborted_state(
 @when(parsers.parse("the Abort command is sent to the subarray {subarray}"))
 def send_abort_command(
     context_fixt: SubarrayTestContextData,
-    # subarray_id: str,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
     event_tracer: TangoEventTracer,
 ):
     """
@@ -182,18 +148,18 @@ def send_abort_command(
     """
     context_fixt.when_action_name = "Abort"
 
-    subarray_node_facade.abort(wait_termination=False)
+    tmc.abort(wait_termination=False)
 
     if context_fixt.is_starting_state_transient():
         assert_that(event_tracer).described_as(
             "FAILED ASSUMPTION: "
             "TMC Subarray Node device "
-            f"({subarray_node_facade.subarray_node}) "
+            f"({tmc.subarray_node}) "
             "Abort command invocation has been performed "
             f"after obsState is {str(context_fixt.starting_state)}, "
             "probably because an automatic transaction triggered."
         ).hasnt_change_event_occurred(
-            subarray_node_facade.subarray_node,
+            tmc.subarray_node,
             "obsState",
             context_fixt.expected_next_state,
             previous_value=context_fixt.starting_state,
@@ -203,8 +169,7 @@ def send_abort_command(
 @when(parsers.parse("the Restart command is sent to the subarray {subarray}"))
 def send_restart_command(
     context_fixt: SubarrayTestContextData,
-    # subarray_id: str,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
 ):
     """
     Send the Restart command to the subarray.
@@ -213,7 +178,7 @@ def send_restart_command(
     """
     context_fixt.when_action_name = "Restart"
 
-    subarray_node_facade.restart(wait_termination=False)
+    tmc.restart(wait_termination=False)
 
 
 # ----------------------------------------------------------
@@ -227,7 +192,7 @@ def send_restart_command(
 )
 def verify_aborting_state(
     context_fixt: SubarrayTestContextData,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
@@ -240,14 +205,14 @@ def verify_aborting_state(
     It verifies the previous state for the TMC Subarray Node.
     """
     assert_that(event_tracer).described_as(
-        f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
+        f"Both TMC Subarray Node device ({tmc.subarray_node})"
         f", CSP Subarray device ({csp.csp_subarray}) "
         f"and SDP Subarray device ({sdp.sdp_subarray}) "
         "ObsState attribute values should move to ABORTING."
         "TMC, in particular, is expected to move exactly from the "
         f"{str(context_fixt.starting_state)} state to ABORTING."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        subarray_node_facade.subarray_node,
+        tmc.subarray_node,
         "obsState",
         ObsState.ABORTING,
         previous_value=context_fixt.starting_state,
@@ -271,8 +236,7 @@ def verify_aborting_state(
     )
 )
 def verify_aborted_state(
-    context_fixt,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
@@ -284,13 +248,13 @@ def verify_aborted_state(
     ABORTING to ABORTED state within the specified timeout.
     """
     assert_that(event_tracer).described_as(
-        f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
+        f"Both TMC Subarray Node device ({tmc.subarray_node})"
         f", CSP Subarray device ({csp.csp_subarray}) "
         f"and SDP Subarray device ({sdp.sdp_subarray}) "
         "ObsState attribute values should move "
         "from ABORTING to ABORTED."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        subarray_node_facade.subarray_node,
+        tmc.subarray_node,
         "obsState",
         ObsState.ABORTED,
         previous_value=ObsState.ABORTING,
@@ -314,7 +278,7 @@ def verify_aborted_state(
 )
 def verify_restarting_state(
     context_fixt: SubarrayTestContextData,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
@@ -330,13 +294,13 @@ def verify_restarting_state(
     3. Verifies that the correct Tango command (Aborted) was received
        by the SDP emulator."""
     assert_that(event_tracer).described_as(
-        f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
+        f"Both TMC Subarray Node device ({tmc.subarray_node})"
         f", CSP Subarray device ({csp.csp_subarray}) "
         f"and SDP Subarray device ({sdp.sdp_subarray}) "
         "ObsState attribute values should move "
         "from ABORTED to RESTARTING."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        subarray_node_facade.subarray_node,
+        tmc.subarray_node,
         "obsState",
         ObsState.RESTARTING,
         previous_value=ObsState.ABORTED,
@@ -362,8 +326,7 @@ def verify_restarting_state(
 )
 def verify_empty_state(
     context_fixt,
-    # subarray_id: str,
-    subarray_node_facade: TMCSubarrayNodeFacade,
+    tmc: TMCFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
@@ -375,13 +338,13 @@ def verify_empty_state(
     the previous state (stored in the test context) to the EMPTY state within
     the specified timeout."""
     assert_that(event_tracer).described_as(
-        f"Both TMC Subarray Node device ({subarray_node_facade.subarray_node})"
+        f"Both TMC Subarray Node device ({tmc.subarray_node})"
         f", CSP Subarray device ({csp.csp_subarray}) "
         f"and SDP Subarray device ({sdp.sdp_subarray}) "
         "ObsState attribute values should move "
         f"from {str(context_fixt.starting_state)} to EMPTY."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        subarray_node_facade.subarray_node,
+        tmc.subarray_node,
         "obsState",
         ObsState.EMPTY,
         previous_value=context_fixt.starting_state,

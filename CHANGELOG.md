@@ -15,6 +15,7 @@ a. Updated TMC following TMC nodes:
 ************
 * Added test to verify SKB-512
 * Updated Subarray Node to 0.25.1 to fix a bug in usage of is_operation_aborted flag
+
 [0.24.0-rc.1]
 *************
 * Verified the TMC-CSP with ADR-99 interface updates
