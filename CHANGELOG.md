@@ -5,11 +5,12 @@ Added
 -----
 [0.24.0-rc.2]
 a. Updated TMC following TMC nodes:
-    - SDP subarray to fix SKB-699.
+    - SDP subarray leaf node to fix SKB-699.
     - Central Node to fix event receiver and telescope on command.
     - Subarry Node to fix abort aggregation.
     - Dish leaf node to fix abort lock and scheduler blocking issue.
     - Fixed bug SKB-516 and SKB-536
+    - CSP subarray leaf node to fix SKB-666
   
 [0.23.0]
 ************
