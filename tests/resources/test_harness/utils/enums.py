@@ -63,15 +63,24 @@ class SimulatorDeviceType(IntEnum):
     MID_SDP_MASTER_DEVICE = 4
 
 
-class FaultType(enum.IntEnum):
+@unique
+class FaultType(IntEnum):
     """Enum class for raising various exceptions from helper devices."""
 
     NONE = 0
-    COMMAND_NOT_ALLOWED = 1
+    COMMAND_NOT_ALLOWED_BEFORE_QUEUING = 1
     FAILED_RESULT = 2
     LONG_RUNNING_EXCEPTION = 3
     STUCK_IN_INTERMEDIATE_STATE = 4
     STUCK_IN_OBSTATE = 5
+    COMMAND_NOT_ALLOWED_AFTER_QUEUING = 6
+    COMMAND_NOT_ALLOWED_EXCEPTION_AFTER_QUEUING = 7
+    GPM_JSON_ERROR = 8
+    GPM_URI_ERROR = 9
+    GPM_URI_NOT_REACHABLE = 10
+    GPM_ERROR_REPORTED_BY_DISH = 11
+    SDP_FAULT = 12
+    SDP_BACK_TO_INITIAL_STATE = 13
 
 
 class ResultCode(enum.IntEnum):
