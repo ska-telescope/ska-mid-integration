@@ -11,6 +11,7 @@ a. Updated TMC following TMC nodes:
     - Dish leaf node to fix abort lock and scheduler blocking issue.
     - Fixed bug SKB-516 and SKB-536
     - CSP subarray leaf node to fix SKB-666
+    - Fixed bug SKB-525.
   
 [0.24.0-rc.1]
 *************
