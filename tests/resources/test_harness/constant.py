@@ -201,6 +201,22 @@ ERROR_PROPAGATION_DEFECT = json.dumps(
         "result": ResultCode.FAILED,
     }
 )
+SDP_IN_FAULT = json.dumps(
+    {
+        "enabled": True,
+        "fault_type": FaultType.SDP_FAULT,
+        "error_message": "Exception occurred, command failed.",
+        "result": ResultCode.FAILED,
+    }
+)
+SDP_BACK_TO_INITIAL_STATE = json.dumps(
+    {
+        "enabled": True,
+        "fault_type": FaultType.SDP_BACK_TO_INITIAL_STATE,
+        "error_message": "Exception occurred, command failed.",
+        "result": ResultCode.FAILED,
+    }
+)
 RESET_DEFECT = json.dumps(
     {
         "enabled": False,
@@ -260,9 +276,9 @@ COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_CONFIGURING_IDLE = {
     "target_obsstates": [ObsState.CONFIGURING, ObsState.IDLE],
 }
 
-COMMAND_NOT_ALLOWED_DEFECT = {
+COMMAND_NOT_ALLOWED_DEFECT_BEFORE_QUEUING = {
     "enabled": True,
-    "fault_type": FaultType.COMMAND_NOT_ALLOWED,
+    "fault_type": FaultType.COMMAND_NOT_ALLOWED_BEFORE_QUEUING,
     "error_message": "Command is not allowed",
     "result": ResultCode.FAILED,
 }
