@@ -73,10 +73,6 @@ notebook-test:
   rules:
     - when: never
 
-python-gemnasium-scan:
-  rules:
-    - when: never
-
 python-test: 
   rules:
     - when: never
