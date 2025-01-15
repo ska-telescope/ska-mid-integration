@@ -1,6 +1,7 @@
 """Define Constants
 """
 import json
+from enum import IntEnum
 
 import numpy as np
 from ska_control_model import ObsState
@@ -32,6 +33,22 @@ dish_master4 = "ska100/elt/master"
 sdp_queue_connector = "mid-sdp/queueconnector/01"
 COMMAND_COMPLETED = json.dumps([ResultCode.OK, "Command Completed"])
 
+TIMEOUT = 100
+
+
+class CorrectionKey(IntEnum):
+    """An enum class for correction keys"""
+
+    MAINTAIN = 0
+    UPDATE = 1
+    RESET = 2
+
+
+ABORT_COMPLETED = json.dumps([ResultCode.STARTED, "Command Started"])
+DISH_ERROR_MESSAGE = (
+    "Exception occurred on the following devices: " + f"{tmc_dish_leaf_node1}:"
+)
+TIMOUT_ERROR = "Timeout has occurred, command failed"
 
 COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE = {
     "enabled": True,
@@ -184,6 +201,22 @@ ERROR_PROPAGATION_DEFECT = json.dumps(
         "result": ResultCode.FAILED,
     }
 )
+SDP_IN_FAULT = json.dumps(
+    {
+        "enabled": True,
+        "fault_type": FaultType.SDP_FAULT,
+        "error_message": "Exception occurred, command failed.",
+        "result": ResultCode.FAILED,
+    }
+)
+SDP_BACK_TO_INITIAL_STATE = json.dumps(
+    {
+        "enabled": True,
+        "fault_type": FaultType.SDP_BACK_TO_INITIAL_STATE,
+        "error_message": "Exception occurred, command failed.",
+        "result": ResultCode.FAILED,
+    }
+)
 RESET_DEFECT = json.dumps(
     {
         "enabled": False,
@@ -235,9 +268,17 @@ COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE = {
     "target_obsstates": [ObsState.RESOURCING, ObsState.IDLE],
 }
 
-COMMAND_NOT_ALLOWED_DEFECT = {
+COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_CONFIGURING_IDLE = {
     "enabled": True,
-    "fault_type": FaultType.COMMAND_NOT_ALLOWED,
+    "fault_type": FaultType.FAILED_RESULT,
+    "error_message": "Default exception.",
+    "result": ResultCode.FAILED,
+    "target_obsstates": [ObsState.CONFIGURING, ObsState.IDLE],
+}
+
+COMMAND_NOT_ALLOWED_DEFECT_BEFORE_QUEUING = {
+    "enabled": True,
+    "fault_type": FaultType.COMMAND_NOT_ALLOWED_BEFORE_QUEUING,
     "error_message": "Command is not allowed",
     "result": ResultCode.FAILED,
 }
@@ -304,3 +345,4 @@ DEFAULT_DISH_VALIDATION_STATUS = {
 DISH_001_CALIBRATION_DATA = [1.1, 1.2, 1.3]
 DISH_036_CALIBRATION_DATA = [2.1, 2.2, 2.3]
 RESET_OFFSETS = [0.0, 0.0]
+ABORT_COMPLETED = json.dumps([ResultCode.STARTED, "Command Started"])

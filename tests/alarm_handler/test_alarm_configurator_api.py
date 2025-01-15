@@ -57,6 +57,7 @@ def remove_alarm_api():
     reason="Alarm summary key error to be resolved under SAH-1510"
 )
 @pytest.mark.post_deployment
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 def test_configure_alarms():
     """test case to configure alarms for mid"""
@@ -67,6 +68,7 @@ def test_configure_alarms():
     reason="Alarm summary key error to be resolved under SAH-1510"
 )
 @pytest.mark.post_deployment
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 def test_remove_alarm():
     """test case to remove alarm for mid"""

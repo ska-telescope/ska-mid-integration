@@ -5,12 +5,17 @@ from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
 from tests.conftest import LOGGER
+from tests.resources.test_harness.constant import (
+    RESET_DEFECT,
+    SDP_BACK_TO_INITIAL_STATE,
+)
 from tests.resources.test_harness.helpers import (
     get_device_simulators,
     prepare_json_args_for_centralnode_commands,
 )
 
 
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-28338.feature",
@@ -75,8 +80,9 @@ def given_tmc_subarray_assign_resources_is_in_progress(
 
     # Induce fault on SDP Subarry so that it raises exception and
     # returns to the obsState EMPTY
+    sdp_sim.SetDefective(SDP_BACK_TO_INITIAL_STATE)
     assign_input_json = prepare_json_args_for_centralnode_commands(
-        "assign_resources_mid_invalid_sdp_resources", command_input_factory
+        "assign_resources_mid", command_input_factory
     )
     _, unique_id = central_node_mid.perform_action(
         "AssignResources", assign_input_json
@@ -118,6 +124,7 @@ def sdp_subarray_returns_to_obsstate_empty(event_recorder, simulator_factory):
         "obsState",
         ObsState.EMPTY,
     )
+    sdp_sim.SetDefective(RESET_DEFECT)
 
 
 @given(

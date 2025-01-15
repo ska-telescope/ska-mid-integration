@@ -3,6 +3,25 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+[0.24.0-rc.2]
+a. Updated following TMC nodes:
+    - SDP subarray leaf node to fix SKB-699.
+    - Central Node to fix event receiver and telescope on command.
+    - Subarry Node to fix abort aggregation and SKB-512.
+    - Dish leaf node to fix abort lock and scheduler blocking issue.
+    - Fixed bug SKB-516 and SKB-536
+    - CSP subarray leaf node to fix SKB-666
+    - Fixed bug SKB-525.
+    - Fixed bug SKB-665 on central node.
+  
+[0.24.0-rc.1]
+*************
+* Verified the TMC-CSP with ADR-99 interface updates
+
+[0.23.0-rc.1]
+*************
+* Verified the TMC-Dish interface timeout and error propagation functionality
+
 [0.22.8]
 ********
 * Resolved SKB-467, SKB-495, SKB-511 and SKB-530
@@ -13,10 +32,10 @@ Added
 * Resolved SKB-509
 * Updated TMC to support TMC-CSP Configure interface v.3.0
 
-[0.22.8]
+[0.22.8-rc.1]
 *************
 * Updated ska-tmc-centralnode v0.16.8 to resolve skb-495
-* Updated ska-tmc-cspleafnode v0.21.2 to resolve skb-495 and skb-530 
+* Updated ska-tmc-cspleafnode v0.21.2 to resolve skb-495 and skb-530
 
 [0.22.7-rc.1]
 *************
@@ -31,7 +50,7 @@ Added
 [0.22.5]
 **********
 * Updated dish leaf node version 0.17.3 to resolve SKB-502
-* Updated central node to 0.16.4 to resolve SKB-434   
+* Updated central node to 0.16.4 to resolve SKB-434
 
 [0.22.4]
 ************

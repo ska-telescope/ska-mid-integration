@@ -12,18 +12,15 @@ sent to the telescope central node:
 import pytest
 from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
-from ska_integration_test_harness.facades.csp_facade import (
-    CSPFacade,  # CSP facade
-)
-from ska_integration_test_harness.facades.tmc_central_node_facade import (
-    TMCCentralNodeFacade,
-)
+from ska_integration_test_harness.facades.csp_facade import CSPFacade
+from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_tango_testing.integration import TangoEventTracer, log_events
 from tango import DevState
 
-# Constants
-ASSERTIONS_TIMEOUT = 60
-
+from tests.tmc_csp_new_ITH.conftest import (
+    ASSERTIONS_TIMEOUT,
+    SubarrayTestContextData,
+)
 
 # ---------------------------------
 # Scenario Definitions
@@ -39,7 +36,6 @@ def test_on_to_off():
     """Test transitioning from ON to OFF."""
 
 
-@pytest.mark.skip(reason="CBF is not supporting STANDBY command")
 @pytest.mark.tmc_csp_new_ITH
 @scenario(
     "../tmc_csp_new_ITH/features/telescope_state.feature",
@@ -66,21 +62,20 @@ def test_off_to_on():
 @given(parsers.parse("a tracked telescope"))
 def tracked_telescope(
     event_tracer: TangoEventTracer,
-    central_node_facade: TMCCentralNodeFacade,
+    tmc: TMCFacade,
     csp: CSPFacade,
 ):
     """A telescope where the event tracking is configured
     to track the telescope state (over TMC central node and CSP devices).
     """
-    event_tracer.subscribe_event(
-        central_node_facade.central_node, "telescopeState"
-    )
+    event_tracer.subscribe_event(tmc.central_node, "telescopeState")
     event_tracer.subscribe_event(csp.csp_master, "State")
     event_tracer.subscribe_event(csp.csp_subarray, "State")
+    event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
 
     log_events(
         {
-            central_node_facade.central_node: ["telescopeState"],
+            tmc.central_node: ["telescopeState", "longRunningCommandResult"],
             csp.csp_master: ["State"],
             csp.csp_subarray: ["State"],
         }
@@ -88,9 +83,9 @@ def tracked_telescope(
 
 
 @given(parsers.parse("the telescope is in OFF state"))
-def telescope_in_off_state(central_node_facade: TMCCentralNodeFacade):
+def telescope_in_off_state(tmc: TMCFacade):
     """Ensure the telescope is in the OFF state."""
-    central_node_facade.move_to_off(wait_termination=True)
+    tmc.move_to_off(wait_termination=True)
 
 
 # ---------------------------------
@@ -104,11 +99,14 @@ def telescope_in_off_state(central_node_facade: TMCCentralNodeFacade):
     )
 )
 def send_telescope_off_command(
-    event_tracer: TangoEventTracer, central_node_facade: TMCCentralNodeFacade
+    context_fixt: SubarrayTestContextData,
+    event_tracer: TangoEventTracer,
+    tmc: TMCFacade,
 ):
     """Send the TelescopeOff command to the telescope."""
     event_tracer.clear_events()
-    central_node_facade.move_to_off(wait_termination=False)
+    context_fixt.when_action_name = "TelescopeOff"
+    context_fixt.when_action_result = tmc.move_to_off(wait_termination=False)
 
 
 @when(
@@ -117,11 +115,14 @@ def send_telescope_off_command(
     )
 )
 def send_telescope_standby_command(
-    event_tracer: TangoEventTracer, central_node_facade: TMCCentralNodeFacade
+    context_fixt: SubarrayTestContextData,
+    event_tracer: TangoEventTracer,
+    tmc: TMCFacade,
 ):
     """Send the TelescopeStandby command to the telescope."""
     event_tracer.clear_events()
-    central_node_facade.set_standby(wait_termination=False)
+    context_fixt.when_action_name = "TelescopeStandby"
+    context_fixt.when_action_result = tmc.set_standby(wait_termination=False)
 
 
 @when(
@@ -130,11 +131,14 @@ def send_telescope_standby_command(
     )
 )
 def send_telescope_on_command(
-    event_tracer: TangoEventTracer, central_node_facade: TMCCentralNodeFacade
+    context_fixt: SubarrayTestContextData,
+    event_tracer: TangoEventTracer,
+    tmc: TMCFacade,
 ):
     """Send the TelescopeOn command to the telescope."""
     event_tracer.clear_events()
-    central_node_facade.move_to_on(wait_termination=False)
+    context_fixt.when_action_name = "TelescopeOn"
+    context_fixt.when_action_result = tmc.move_to_on(wait_termination=False)
 
 
 # ---------------------------------
@@ -145,14 +149,14 @@ def send_telescope_on_command(
 @then(parsers.parse("the telescope should transition to the OFF state"))
 def verify_off_state(
     event_tracer: TangoEventTracer,
-    central_node_facade: TMCCentralNodeFacade,
+    tmc: TMCFacade,
     csp: CSPFacade,
 ):
-    """The telescope and CSP devices transition to the OFF state."""
+    """TMC and CSP devices transition to the OFF state."""
     assert_that(event_tracer).described_as(
-        "The telescope and CSP devices should transition from ON to OFF state."
+        "TMC and CSP devices should transition from ON to OFF state."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        central_node_facade.central_node,
+        tmc.central_node,
         "telescopeState",
         DevState.OFF,
     ).has_change_event_occurred(
@@ -165,21 +169,14 @@ def verify_off_state(
 @then(parsers.parse("the telescope should transition to the STANDBY state"))
 def verify_standby_state(
     event_tracer: TangoEventTracer,
-    central_node_facade: TMCCentralNodeFacade,
-    csp: CSPFacade,
+    tmc: TMCFacade,
 ):
-    """The telescope and CSP devices transition to the STANDBY state."""
-    assert_that(event_tracer).described_as(
-        "The telescope and CSP master should transition "
-        "to the STANDBY state. "
-        "CSP subarray should transition to OFF state."
-    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        central_node_facade.central_node,
-        "telescopeState",
-        DevState.STANDBY,
+    """TMC should transition to the STANDBY state."""
+    assert_that(event_tracer).within_timeout(ASSERTIONS_TIMEOUT).described_as(
+        "TMC should transition to the STANDBY state. "
     ).has_change_event_occurred(
-        csp.csp_master,
-        "State",
+        tmc.central_node,
+        "telescopeState",
         DevState.STANDBY,
     )
 
@@ -187,14 +184,14 @@ def verify_standby_state(
 @then(parsers.parse("the telescope should transition to the ON state"))
 def verify_on_state(
     event_tracer: TangoEventTracer,
-    central_node_facade: TMCCentralNodeFacade,
+    tmc: TMCFacade,
     csp: CSPFacade,
 ):
-    """The telescope and CSP devices transition to the ON state."""
+    """TMC and CSP devices transition to the ON state."""
     assert_that(event_tracer).described_as(
-        "The telescope and CSP devices should transition " "to the ON state."
+        "TMC and CSP devices should transition to the ON state."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        central_node_facade.central_node,
+        tmc.central_node,
         "telescopeState",
         DevState.ON,
     ).has_change_event_occurred(

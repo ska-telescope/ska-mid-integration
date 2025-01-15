@@ -28,6 +28,7 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 TIMEOUT = 110
 
 
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp-60011_configure_with_correction_key.feature",
@@ -207,7 +208,7 @@ def a_subarray_after_five_point_calibration(
         "obsState",
         ObsState.SCANNING,
     )
-    wait_and_validate_device_attribute_value(
+    assert wait_and_validate_device_attribute_value(
         subarray_node.subarray_node, "obsState", ObsState.READY
     )
     event_tracer.clear_events()

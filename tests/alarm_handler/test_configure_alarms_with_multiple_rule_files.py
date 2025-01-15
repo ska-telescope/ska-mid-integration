@@ -15,6 +15,7 @@ cluster_domain = os.getenv("CLUSTER_DOMAIN", "cluster.local")
     reason="Alarm summary key error to be resolved under SAH-1510"
 )
 @pytest.mark.post_deployment
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 def test_configure_alarms_with_multiple_files():
     """Test method to configure alarm rules using

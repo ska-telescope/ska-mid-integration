@@ -12,8 +12,10 @@ from tests.resources.test_harness.helpers import (
     get_device_simulators,
     prepare_json_args_for_centralnode_commands,
 )
+from tests.resources.test_harness.utils.enums import ResultCode
 
 
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-29013.feature",
@@ -90,7 +92,7 @@ def given_assign_resources_executed_on_tmc_subarray(
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (unique_id[0], Anything),
+        (unique_id[0], json.dumps([ResultCode.OK, "Command Completed"])),
     )
 
 

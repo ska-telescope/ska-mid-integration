@@ -7,7 +7,7 @@ from ska_tango_testing.mock.placeholders import Anything
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.constant import (
-    COMMAND_NOT_ALLOWED_DEFECT,
+    COMMAND_NOT_ALLOWED_DEFECT_BEFORE_QUEUING,
     RESET_DEFECT,
     tmc_sdp_subarray_leaf_node,
 )
@@ -20,6 +20,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 
 
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp_49327_sdp_subarray_"
@@ -49,7 +50,9 @@ def set_sdp_subarray_defective(simulator_factory: SimulatorFactory):
         SimulatorDeviceType.MID_SDP_DEVICE
     )
     # Set SDP subarray defective
-    pytest.sdp_sim.SetDefective(json.dumps(COMMAND_NOT_ALLOWED_DEFECT))
+    pytest.sdp_sim.SetDefective(
+        json.dumps(COMMAND_NOT_ALLOWED_DEFECT_BEFORE_QUEUING)
+    )
 
 
 @when("I issue the AssignResources command from TMC CentralNode")

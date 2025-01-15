@@ -19,6 +19,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 LOGGER = logging.getLogger(__name__)
 
 
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp-45178_skb_331.feature",
@@ -92,7 +93,9 @@ def check_json_content(subarray_node):
     input_json = subarray_node.subarray_devices[
         "csp_subarray"
     ].commandCallInfo[-1][-1]
-    fsp_list = json.loads(input_json)["cbf"]["fsp"]
+    fsp_list = json.loads(input_json)["midcbf"]["correlation"][
+        "processing_regions"
+    ]
     for fsp_config in fsp_list:
         assert "output_host" in fsp_config.keys()
         assert "output_port" in fsp_config.keys()

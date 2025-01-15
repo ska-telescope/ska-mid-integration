@@ -13,6 +13,7 @@ from tests.resources.test_harness.constant import (
     COMMAND_COMPLETED,
     DISH_001_CALIBRATION_DATA,
     DISH_036_CALIBRATION_DATA,
+    CorrectionKey,
     centralnode,
     csp_master,
     csp_subarray1,
@@ -31,12 +32,14 @@ from tests.resources.test_harness.constant import (
     tmc_sdp_subarray_leaf_node,
     tmc_subarraynode1,
 )
+from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     SIMULATED_DEVICES_DICT,
     check_subarray_obs_state,
     generate_eb_pb_ids,
     prepare_json_args_for_commands,
     wait_and_validate_device_attribute_value,
+    wait_for_partial_or_complete_abort,
 )
 from tests.resources.test_harness.utils.constant import (
     ABORTED,
@@ -57,7 +60,6 @@ from tests.resources.test_harness.utils.sync_decorators import (
     sync_release_resources,
     sync_restart,
 )
-from tests.resources.test_harness.utils.wait_helpers import Waiter
 from tests.resources.test_support.common_utils.common_helpers import Resource
 
 configure_logging(logging.DEBUG)
@@ -107,12 +109,6 @@ class SubarrayNodeWrapper(object):
         self.csp_subarray_leaf_node = DeviceProxy(tmc_csp_subarray_leaf_node)
         self.sdp_subarray_leaf_node = DeviceProxy(tmc_sdp_subarray_leaf_node)
         self.sdp_qc = DeviceProxy(sdp_queue_connector)
-        self.dish_leaf_node_list = [
-            DeviceProxy(tmc_dish_leaf_node1),
-            DeviceProxy(tmc_dish_leaf_node2),
-        ]
-        for dish_leaf_node in self.dish_leaf_node_list:
-            dish_leaf_node.set_timeout_millis(5000)
 
         if (
             SIMULATED_DEVICES_DICT["csp_and_sdp"]
@@ -147,6 +143,11 @@ class SubarrayNodeWrapper(object):
             DeviceProxy(tmc_dish_leaf_node3),
             DeviceProxy(tmc_dish_leaf_node4),
         ]
+        for dish_leaf_node in self.dish_leaf_node_list:
+            dish_leaf_node.set_timeout_millis(5000)
+
+        for dish_leaf_node in self.dish_leaf_node_list:
+            dish_leaf_node.set_timeout_millis(5000)
 
         self.subarray_devices = {
             "csp_subarray": DeviceProxy(csp_subarray1),
@@ -154,6 +155,7 @@ class SubarrayNodeWrapper(object):
         }
         self._state = DevState.OFF
         self.obs_state = SubarrayObsState.EMPTY
+        self._assigned_resources = []
         # setup subarray
         self._setup()
         # Subarray state
@@ -165,6 +167,10 @@ class SubarrayNodeWrapper(object):
         self.sdp_subarray1 = sdp_subarray1
         device_dict["dish_master_list"] = self.dish_master_list
         device_dict["dish_leaf_node_list"] = self.dish_leaf_node_list
+        self.event_recorder = EventRecorder()
+        self.event_recorder.subscribe_event(
+            self.subarray_node, "longRunningCommandResult"
+        )
 
     def _setup(self):
         """ """
@@ -191,6 +197,14 @@ class SubarrayNodeWrapper(object):
             value (DevState): operational state value
         """
         self._state = value
+
+    @property
+    def assigned_resources(self) -> list:
+        """TMC SubarrayNode assignedResources"""
+        self._assigned_resources = Resource(self.tmc_subarraynode1).get(
+            "assignedResources"
+        )
+        return self._assigned_resources
 
     @property
     def obs_state(self):
@@ -327,8 +341,14 @@ class SubarrayNodeWrapper(object):
         while retry <= 3:
             try:
                 if command_name is not None:
+                    if argin:
+                        result, message = self.subarray_node.command_inout(
+                            command_name, argin
+                        )
+                        LOGGER.info(f"Invoked {command_name} on SubarrayNode")
+                        return result, message
                     result, message = self.subarray_node.command_inout(
-                        command_name, argin
+                        command_name
                     )
                     LOGGER.info(f"Invoked {command_name} on SubarrayNode")
                     return result, message
@@ -422,41 +442,88 @@ class SubarrayNodeWrapper(object):
         else:
             LOGGER.info("Devices deployed are real")
 
+    def get_assigned_dish_leaf_nodes_list(self) -> list:
+        """Returns a list of all the dish leaf nodes corresponding to the
+        dishes that are assigned"""
+        assigned_receptors = self.assigned_resources
+        assigned_receptors = [receptor[3:] for receptor in assigned_receptors]
+        assigned_dish_leaf_nodes = []
+        for receptor in assigned_receptors:
+            for dish_leaf_node in self.dish_leaf_node_list:
+                if receptor in dish_leaf_node.dev_name():
+                    assigned_dish_leaf_nodes.append(dish_leaf_node)
+                    break
+        return assigned_dish_leaf_nodes
+
     def tear_down(self):
         """Tear down after each test run"""
 
         LOGGER.info("Calling Tear down for subarray")
         self._clear_command_call_and_transition_data(clear_transition=True)
 
-        if self.obs_state in (
-            "RESOURCING",
-            "CONFIGURING",
-            "SCANNING",
-            "READY",
-            "IDLE",
-        ):
-            """Invoke Abort and Restart"""
+        if self.obs_state in ("RESOURCING", "CONFIGURING", "SCANNING"):
             LOGGER.info("Invoking Abort on Subarray")
-            # Waiting for few seconds as the SubarrayNode End command
-            # completion does not consider Dishes pointingState transition
-            # to READY
-            the_waiter = Waiter()
-            the_waiter.wait(5)
+            self.execute_transition("Abort")
+            wait_for_partial_or_complete_abort()
 
-            self.abort_subarray()
-            self.restart_subarray()
+            _, unique_restart = self.restart_subarray()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique_restart[0], COMMAND_COMPLETED),
+            )
+            self.event_recorder.clear_events()
+
+        elif self.obs_state == ObsState.READY:
+            _, unique_end = self.end_observation()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique_end[0], COMMAND_COMPLETED),
+            )
+            _, unique_release = self.release_resources_subarray()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique_release[0], COMMAND_COMPLETED),
+            )
+            self.event_recorder.clear_events()
+
+        elif self.obs_state == ObsState.IDLE:
+            _, unique_release_resource = self.release_resources_subarray()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique_release_resource[0], COMMAND_COMPLETED),
+            )
+            self.event_recorder.clear_events()
+
         elif self.obs_state == "ABORTED":
             """Invoke Restart"""
             LOGGER.info("Invoking Restart on Subarray")
-            self.restart_subarray()
+            _, unique_id = self.restart_subarray()
+            assert self.event_recorder.has_change_event_occurred(
+                self.subarray_node,
+                "longRunningCommandResult",
+                (unique_id[0], COMMAND_COMPLETED),
+            )
         else:
             self.force_change_of_obs_state("EMPTY")
-
         # Move Subarray to OFF state
         self.move_to_off()
         self._reset_dishes()
         self._reset_simulator_devices()
         assert check_subarray_obs_state("EMPTY")
+        self.event_recorder.clear_events()
+
+    def check_if_dishes_are_ready(self, waiter):
+        LOGGER.info("waiter.dish_master_list: %s", waiter.dish_master_list)
+        LOGGER.info(
+            "waiter.dish_leaf_node_list: %s", waiter.dish_leaf_node_list
+        )
+        if waiter.dish_master_list and waiter.dish_leaf_node_list:
+            LOGGER.info("Check for PS READY")
+            waiter.set_wait_for_dish("pointingState", "READY")
 
     def clear_all_data(self):
         """Method to clear the observations
@@ -520,6 +587,7 @@ class SubarrayNodeWrapper(object):
         partial_configure_jsons: list[str],
         event_tracer,
         command_input_factory,
+        correction_key=CorrectionKey.UPDATE,
     ) -> None:
         """Perform a five point calibration scan on Subarray Node using the
         partial configuration jsons and scan jsons provided as inputs.
@@ -594,12 +662,17 @@ class SubarrayNodeWrapper(object):
             event_tracer.clear_events()
 
             # assert sourceOffset gets populated as expected
-            ca_offset, ie_offset = (
-                json.loads(partial_configure_json)["pointing"]["target"][key]
-                for key in ("ca_offset_arcsec", "ie_offset_arcsec")
-            )
+            if correction_key == CorrectionKey.UPDATE:
+                ca_offset, ie_offset = (
+                    json.loads(partial_configure_json)["pointing"]["target"][
+                        key
+                    ]
+                    for key in ("ca_offset_arcsec", "ie_offset_arcsec")
+                )
+            elif correction_key == CorrectionKey.RESET:
+                ca_offset, ie_offset = 0.0, 0.0
             for dish_leaf_node in self.dish_leaf_node_list:
-                wait_and_validate_device_attribute_value(
+                assert wait_and_validate_device_attribute_value(
                     dish_leaf_node,
                     "sourceOffset",
                     f"{[ca_offset, ie_offset]}",
@@ -618,7 +691,7 @@ class SubarrayNodeWrapper(object):
                 "obsState",
                 ObsState.SCANNING,
             )
-            wait_and_validate_device_attribute_value(
+            assert wait_and_validate_device_attribute_value(
                 self.subarray_node, "obsState", ObsState.READY
             )
             event_tracer.clear_events()

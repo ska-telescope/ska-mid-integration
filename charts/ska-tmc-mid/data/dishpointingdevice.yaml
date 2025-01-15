@@ -4,20 +4,33 @@ domain: pattern-mapping
 instances: ["001", "036", "063", "100"]
 entrypoints:
   - name: "ska_dishln_pointing_device.dishln_pointing_device.DishPointingDevice"
-{{- $TrackTableUpdateRate := .Values.deviceServers.dishpointingdevice.TrackTableUpdateRate }}
-{{- $TrackTableInAdvance := .Values.deviceServers.dishpointingdevice.TrackTableInAdvance }}
-{{- $ElevationMaxLimit := .Values.deviceServers.dishpointingdevice.ElevationMaxLimit }}
-{{- $ElevationMinLimit := .Values.deviceServers.dishpointingdevice.ElevationMinLimit }}
-
 server:
-  name: "dishpointing"
+  name: "dishln_pointing_device"
   instances:
-  {{- range  .Values.deviceServers.dishpointingdevice.instances }}
-    - name: "{{ . }}"
+  {{- $TrackTableUpdateRate := .Values.deviceServers.dishpointingdevice.TrackTableUpdateRate }}
+  {{- $TrackTableInAdvance := .Values.deviceServers.dishpointingdevice.TrackTableInAdvance }}
+  {{- $ElevationMaxLimit := .Values.deviceServers.dishpointingdevice.ElevationMaxLimit }}
+  {{- $ElevationMinLimit := .Values.deviceServers.dishpointingdevice.ElevationMinLimit }} 
+  {{- $instance_list := list -}}
+  {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
+  {{- $isSimulatedDish := .Values.deviceServers.mocks.dish }}
+  {{- $real_dish_name := .Values.global.namespace_dish.dish_names }}
+  {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true)  }}
+  {{- range $instance := .Values.global.dishes }}
+  {{- $instance_list = append $instance_list ($instance) }}
+  {{- end }}
+  {{- else }}
+  {{- range $instance_real := $real_dish_name }}
+  {{- $match := (regexFind "SKA(\\d{3})" $instance_real) -}}
+  {{- $instance_list = append $instance_list (trimPrefix "SKA" $match) }}
+  {{- end }}
+  {{- end }}
+  {{- range $index, $number := $instance_list }}
+    - name: "{{ $number }}"
       classes:
       - name: "DishPointingDevice"
         devices:
-        - name: "mid-tmc/dish-pointing/d{{ printf "%04s" . }}"
+        - name: "mid-tmc/dish-pointing/d0{{ $number }}"
           properties:
             - name: "TrackTableUpdateRate"
               values:

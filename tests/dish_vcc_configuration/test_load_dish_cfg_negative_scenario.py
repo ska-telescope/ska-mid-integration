@@ -8,6 +8,7 @@ import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from tango import DevState
 
+from tests.conftest import LOGGER
 from tests.resources.test_harness.constant import (
     ERROR_PROPAGATION_DEFECT,
     RESET_DEFECT,
@@ -18,10 +19,8 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
-# TODO This test case fails frequently with corba exception
-# @pytest.mark.skip("Need design change to avoid timeout corba exception")
 
-
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/load_dish_cfg_command_negative_scenario.feature",
@@ -42,6 +41,7 @@ def test_central_node_return_error_for_invalid_file():
     """
 
 
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/load_dish_cfg_command_negative_scenario.feature",
@@ -53,6 +53,7 @@ def test_central_node_return_error_for_invalid_dish_id():
     """
 
 
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/load_dish_cfg_command_negative_scenario.feature",
@@ -64,10 +65,8 @@ def test_central_node_return_error_for_duplicate_vcc_id():
     """
 
 
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
-@pytest.mark.skip(
-    reason="This will be enable once Dish Vcc feature is integrate."
-)
 @scenario(
     "../features/load_dish_cfg_command_negative_scenario.feature",
     "TMC handling exception from CSP Subarray",
@@ -254,14 +253,19 @@ def invoke_command_load_cfg_on_defective_csp(
         central_node_mid.csp_master_leaf_node.dev_name()
     )
     exception_msg = (
-        "Exception occurred on device: Command failed on device "
-        + f"{csp_master_leaf_node_name}: Exception occurred, command failed."
+        '[3, "Exception occurred on device: Command failed on device '
+        + f"{csp_master_leaf_node_name}: Exception occurred, "
+        + 'command failed."]'
     )
     pytest.command_result = event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
         (unique_id[0], exception_msg),
         lookahead=5,
+    )
+    LOGGER.info("LRCR: %s", pytest.command_result)
+    LOGGER.info(
+        "LRCR: %s", central_node_mid.central_node.longRunningCommandResult
     )
     csp_sim.SetDefective(RESET_DEFECT)
 
@@ -287,4 +291,8 @@ def check_sys_param_source_sys_param_attributes(central_node_mid):
 @then(parsers.parse("command returns with error message {error_message}"))
 def check_return_msg(error_message: str):
     """Test validate that command failed with error message"""
+    LOGGER.info(
+        "command_result is: %s",
+        pytest.command_result["attribute_value"],
+    )
     assert error_message in pytest.command_result["attribute_value"][1]
