@@ -12,7 +12,7 @@ include = [
 
 [[tool.poetry.source]]
 name = 'ska-nexus'
-url = 'https://artefact.skao.int/repository/pypi-internal/simple'
+url = 'https://artefact.skao.int/repository/pypi-internal'
 
 [[tool.poetry.source]]
 name = "PyPI-public"
@@ -20,12 +20,12 @@ url = 'https://pypi.org/simple'
 
 [tool.poetry.dependencies]
 python = "^3.10"
-ska-control-model=">=1.0.0,<2.0.0"
+ska-control-model="*"
 ska-tango-base="1.0.0"
 pytango = "9.5.0"
 numpy = ">=1.26.0"
 ska-tango-testing = "0.7.2"
-ska-ser-logging = ">=0.4.3,<0.5.0"
+ska-ser-logging = "*"
 httpx = "^0.19.0"
 msgpack = "1.0.7"
 msgpack_numpy = "0.4.8"
