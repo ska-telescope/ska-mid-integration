@@ -4,6 +4,7 @@ version = "0.24.0-rc.2"
 description = "Repository for integration of TMC components"
 authors = ["Team Himalaya", "Team Sahyadri"]
 license = "BSD-3-Clause"
+package-mode = false
 
 include = [
     { path = 'tests'}
@@ -11,7 +12,7 @@ include = [
 
 [[tool.poetry.source]]
 name = 'ska-nexus'
-url = 'https://artefact.skao.int/repository/pypi-internal/simple'
+url = 'https://artefact.skao.int/repository/pypi-internal/'
 
 [[tool.poetry.source]]
 name = "PyPI-public"
