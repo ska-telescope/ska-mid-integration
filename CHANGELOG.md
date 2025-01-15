@@ -4,15 +4,16 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Added
 -----
 [0.24.0-rc.2]
-a. Updated following TMC nodes:
-    - SDP subarray leaf node to fix SKB-699.
-    - Central Node to fix event receiver and telescope on command.
-    - Subarry Node to fix abort aggregation and SKB-512.
-    - Dish leaf node to fix abort lock and scheduler blocking issue.
-    - Fixed bug SKB-516 and SKB-536
-    - CSP subarray leaf node to fix SKB-666
-    - Fixed bug SKB-525.
-    - Fixed bug SKB-665 on central node.
+*************
+* Updated following TMC nodes:
+  * SDP subarray leaf node to fix SKB-699.
+  * Central Node to fix event receiver and telescope on command.
+  * Subarry Node to fix abort aggregation and SKB-512.
+  * Dish leaf node to fix abort lock and scheduler blocking issue.
+  * Fixed bug SKB-516 and SKB-536.
+  * CSP subarray leaf node to fix SKB-666
+  * Fixed bug SKB-525.
+  * Fixed bug SKB-665 on central node.
   
 [0.24.0-rc.1]
 *************
