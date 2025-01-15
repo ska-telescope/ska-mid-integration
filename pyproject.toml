@@ -12,7 +12,7 @@ include = [
 
 [[tool.poetry.source]]
 name = 'ska-nexus'
-url = 'https://artefact.skao.int/repository/pypi-internal/'
+url = 'https://artefact.skao.int/repository/pypi-internal/simple'
 
 [[tool.poetry.source]]
 name = "PyPI-public"
