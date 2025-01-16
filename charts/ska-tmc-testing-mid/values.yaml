@@ -70,6 +70,7 @@ tmc-mid:
     DelayCadence: 10
     DelayValidityPeriod: 20
     DelayModelTimeInAdvance: 30
+  
   dishleafnode:
     IsDishAbortCommandsEnabled: "True"
     resources:
@@ -80,11 +81,13 @@ tmc-mid:
         memory: 280Mi
     CommandTimeOut: 90
     SleepTime: 1
+  
   dishpointingdevice:
-    TrackTableUpdateRate: 50
+    TrackTableUpdateRate: 10
     TrackTableInAdvance: 7
     ElevationMaxLimit: 90.0
     ElevationMinLimit: 15.0
+  
   deviceServers:
     mocks:
       enabled: true
