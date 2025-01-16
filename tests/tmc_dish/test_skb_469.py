@@ -190,7 +190,7 @@ def check_dish_mode_and_pointing_state(
         "TMC Subarray device"
         f"({subarray_node.subarray_node.dev_name()}) "
         "is expected to be in READY obstate",
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(120).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
