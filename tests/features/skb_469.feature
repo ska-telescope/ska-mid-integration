@@ -1,7 +1,7 @@
 Feature: Default
 
 
-@XTP-70071 @Team_SAHYADRI
+@XTP-70071 @XTP-29778 @Team_SAHYADRI
 Scenario: Verify SKB-469
 	Given a Telescope consisting of TMC, DISH <dish_ids>, simulated CSP and simulated SDP
 	And the Telescope is in ON state
