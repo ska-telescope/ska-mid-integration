@@ -3,6 +3,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+[0.24.0-rc.3]
+*************
+* Utilised CDM v.12.6.0 on ska-tmc-subarraynode.
+
 [0.24.0-rc.2]
 *************
 * Updated following TMC nodes:
