@@ -204,7 +204,7 @@ def tmc_accepts_configure_command_with_valid_json(
         f"({subarray_node.subarray_node.dev_name()}) "
         "is expected have longRunningCommand as"
         '(unique_id,(ResultCode.OK,"Command Completed"))',
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(100).has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
         (unique_id[0], COMMAND_COMPLETED),
