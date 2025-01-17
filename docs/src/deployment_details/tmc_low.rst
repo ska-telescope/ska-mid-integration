@@ -9,7 +9,7 @@ TMC Mid deployment comes with following components:
 
 3. **CSP LMC**
 
-4. **MCCS LMC**
+4. **Dish LMC**
 
 
 
