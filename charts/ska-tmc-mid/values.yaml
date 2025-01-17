@@ -206,7 +206,7 @@ deviceServers:
   dishpointingdevice:
     enabled: true
     file: "data/dishpointingdevice.yaml"
-    TrackTableUpdateRate: 10
+    TrackTableUpdateRate: 50
     TrackTableInAdvance: 7
     ElevationMaxLimit: 90.0
     ElevationMinLimit: 15.0
