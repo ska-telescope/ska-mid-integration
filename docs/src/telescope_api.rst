@@ -1,131 +1,122 @@
-MID Telescope Deployment
-=========================
+mid Telescope Deployment
+========================
 
-MID Telescope deployment comes with the following components:
+Components
+----------
 
-1. **TMC** 
+mid Telescope deployment includes the folmiding components:
 
-2. **SDP-LMC**
-
-3. **CSP-LMC**
-
-4. **MCCS-LMC**
+1. **TMC**  
+2. **SDP-LMC**  
+3. **CSP-LMC**  
+4. **DISH-LMC**  
 
 Configurable Options
----------------------
+--------------------
 
-* a. **instances** : Users can provide the array of device server deployment instances required for a component.
+Instances and Subarray Count
+============================
 
-    Default for components are:
+1.Instances
+-----------
 
-    #. **TMC** : ["01"] 
+Users can provide an array of device server deployment instances required for a component.
 
-    #. **SDP-LMC** : ["01"] 
++---------------+---------------------------+
+| **Component** | **Default**               |
++===============+===========================+
+| TMC           | ["01"]                    |
++---------------+---------------------------+
+| SDP-LMC       | ["01"]                    |
++---------------+---------------------------+
+| CSP-LMC       | ["01"]                    |
++---------------+---------------------------+
+| DISH-LMC      | ["001","100","036","100"] |
++---------------+---------------------------+
 
-    #. **CSP-LMC** : ["01"]
+2.Subarray Count
+----------------
 
-    #. **MCCS-LMC** : ["01"]
+Users can set the subarray count based on the number of required device server deployment instances.
 
-* b. **subarray_count** : Users can set the subarray count according to the number of device server deployment instances required for a component.
-
-    Default Value is 2.
-    
-    #. **TMC** 
-
-    #. **SDP-LMC** 
-
-    #. **CSP-LMC** 
-
-    #. **MCCS-LMC** 
-
-* c. **file** : Users can provide a custom device server configuration file to the components. Default is `configuration files <https://gitlab.com/ska-telescope/ska-tmc/ska-tmc-mid-integration/-/blob/main/charts/ska-tmc-mid/data/>`_
-
-* d. **enabled** : Users can opt to disable any component by setting this value to False. Default is True for all components.
-
-* e. **tmc_subarray_prefix** : This value is present under global settings. Users can use this to change the FQDN prefix of TMC Subarray.
-
-* f. **csp_subarray_ln_prefix** : This value is present under global settings. Users can use this to change the FQDN prefix of CSP-LMC Subarray.
-
-* g. **sdp_subarray_ln_prefix** : This value is present under global settings. Users can use this to change the FQDN prefix of SDP-LMC Subarray.
-
-* h. **csp_master_ln_prefix** : This value is present under global settings. Users can use this to change the FQDN prefix of CSP-LMC Master.
-
-* i. **sdp_master_ln_prefix** : This value is present under global settings. Users can use this to change the FQDN prefix of SDP-LMC Master.
-
-* j. **csp_subarray_prefix** : This value is present under global settings. Users can use this to change the FQDN prefix of CSP Subarray.
-
-* k. **sdp_subarray_prefix** : This value is present under global settings. Users can use this to change the FQDN prefix of SDP Subarray.
-
-* l. **csp_master** : This value is present under global settings. Users can use this to change the FQDN of CSP-LMC Master.
-
-* m. **sdp_master** : This value is present under global settings. Users can use this to change the FQDN of SDP-LMC Master.
-
-* n. **mccs_master** : This value is present under global settings. Users can use this to change the FQDN of MCCS-LMC Master.
-
-* o. **mccs_master_ln_prefix** : This value is present under global settings. Users can use this to change the FQDN prefix of MCCS-LMC Master.
-
-* p. **mccs_subarray_prefix** : This value is present under global settings. Users can use this to change the FQDN prefix of MCCS Subarray.
-
-* q. **mccs_subarray_ln_prefix** : This value is present under global settings. Users can use this to change the FQDN prefix of MCCS Subarray Leaf Node.
-
-* r. **DelayCadence** : This refers to the time difference (in seconds) between each publication of delay values to the `delayModel` attribute on the CSP-LMC Subarray.
-
-* s. **DelayValidityPeriod** : This represents the duration (in seconds) for which delay values remain valid after being published.
-
-* t. **DelayModelTimeInAdvance** : This indicates the time in seconds by which delay values need to be available in advance.
-
-* u. **CspAssignResourcesInterfaceURL** : Interface version for CSP assign resources command. 
-                                    This value is present under Subarray Node. Currently defaults to "https://schema.skao.int/tmc-mid-csp-assignresources/3.0"
-
-* v. **CspScanInterfaceURL** : Interface version for CSP scan command. 
-                                    This value is present under Subarray Node. Currently defaults to "https://schema.skao.int/tmc-mid-csp-scan/2.0"
-
-* w **SdpScanInterfaceURL**: Interface version for SDP scan command. 
-                                    This value is present under Subarray Node. Currently defaults to "https://schema.skao.int/ska-sdp-scan/0.4"
-
-* x **MccsConfigureInterfaceURL**: Interface version for MCCS configure command. 
-                                    This value is present under Subarray Node. Currently defaults to "https://schema.skao.int/tmc-mid-mccs-configure/1.0"
-
-* y **MccsScanInterfaceURL**: Interface version for MCCS scan command. 
-                                    This value is present under Subarray Node. Currently defaults to "https://schema.skao.int/tmc-mid-mccs-scan/3.0"
++----------------------+----------------------------+
+| **Component**        | **Default Subarray Count** |
++======================+============================+
+| TMC                  | 2                          |
++----------------------+----------------------------+
+| SDP-LMC              | 2                          |
++----------------------+----------------------------+
+| CSP-LMC              | 2                          |
++----------------------+----------------------------+
+| DISH-LMC             | 4                          |
++----------------------+----------------------------+
 
 
-MID Telescope Sub-system FQDNs:
---------------------------------
-Below are the FQDNs of the MID Telescope components. For updated FQDNs, kindly refer to `values.yaml` in the Low Telescope charts.
 
-+------------------------------------------+------------------------------------------------------------------------+ 
-| MID Telescope Component                  |            FQDN                                                        | 
-+==========================================+========================================================================+ 
-| TMC                                      |  ska_mid/tm_central/central_node                                       |
-+------------------------------------------+------------------------------------------------------------------------+
-| SDP-LMC                                  |  ska_mid/sdp_lmc/{id}                                                  |
-+------------------------------------------+------------------------------------------------------------------------+
-| CSP-LMC                                  |  ska_mid/csp_lmc/{id}                                                  |
-+------------------------------------------+------------------------------------------------------------------------+
-| MCCS-LMC                                 |  ska_mid/mccs_lmc/{id}                                                 |    
-+------------------------------------------+------------------------------------------------------------------------+
+3. **Configuration File:**  
+   Users can provide a custom device server configuration file.  
+   `Configuration files <https://gitlab.com/ska-telescope/ska-mid-integration/-/tree/main/charts/ska-mid-integration/tmc_pairwise/>`_  
+
+4. **Enabled:**  
+   Almids users to enable or disable simulated components.  
+   Default is `True` for all components.  
+   `Makefile <https://gitlab.com/ska-telescope/ska-mid-integration/-/blob/main/Makefile/>`_
+
+5. **Global FQDN Prefixes:**  
+
++----------------------------------------+----------------------------------------------------------------+
+| **Setting**                            | **Description**                                                |
++========================================+================================================================+
+| **tmc_subarray_prefix**                | FQDN prefix of TMC Subarray                                    |
++----------------------------------------+----------------------------------------------------------------+
+| **csp_subarray_ln_prefix**             | FQDN prefix of CSP-LMC Subarray Leaf Node                      |
++----------------------------------------+----------------------------------------------------------------+
+| **sdp_subarray_ln_prefix**             | FQDN prefix of SDP-LMC Subarray Leaf Node                      |
++----------------------------------------+----------------------------------------------------------------+
+| **csp_master_ln_prefix**               | FQDN prefix of CSP-LMC Master Leaf Node                        |
++----------------------------------------+----------------------------------------------------------------+
+| **sdp_master_ln_prefix**               | FQDN prefix of SDP-LMC Master Leaf Node                        |
++----------------------------------------+----------------------------------------------------------------+
+| **csp_subarray_prefix**                | FQDN prefix of CSP Subarray                                    |
++----------------------------------------+----------------------------------------------------------------+
+| **sdp_subarray_prefix**                | FQDN prefix of SDP Subarray                                    |
++----------------------------------------+----------------------------------------------------------------+
+| **csp_master**                         | FQDN of CSP-LMC Master                                         |
++----------------------------------------+----------------------------------------------------------------+
+| **sdp_master**                         | FQDN of SDP-LMC Master                                         |
++----------------------------------------+----------------------------------------------------------------+
 
 
-**NOTE** : {id} is the identifier for the deployed subarray.
-           For instance, if two subarrays are deployed:
+Examples:
+---------
++-------------+----------------------------------------------------------------------+
+| **Setting** | **Description**                                                      |
++=============+======================================================================+
+| **DishIDs** | User can set this value to provide the ID's of dishes present in the |
+|             | deployment. Default is ["SKA001", "SKA036", "SKA063", "SKA100"].     |
++-------------+----------------------------------------------------------------------+
 
-            Subarray 1 will be:
-           
-                TMC Subarray : ska_mid/tm_central/central_node/01
-           
-                SDP-LMC : ska_mid/sdp_lmc/01
-           
-                CSP-LMC : ska_mid/csp_lmc/01
-           
-                MCCS-LMC : ska_mid/mccs_lmc/01
-         
-            For Subarray 2:
 
-                TMC Subarray : ska_mid/tm_central/central_node/02
-         
-                SDP-LMC : ska_mid/sdp_lmc/02
-         
-                CSP-LMC : ska_mid/csp_lmc/02
-         
-                MCCS-LMC : ska_mid/mccs_lmc/02
+
+
+Additional few Central node specific configurations are:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
++------------------------+----------------------------------------------------------------------------+
+| **Setting**            | **Description**                                                            |
++========================+============================================================================+
+| **DishLeafNodePrefix** | User can set this value according to the FQDN prefix required by the       |
+|                        | deployed dish leaf node devices. Default is "ska_mid/tm_leaf_node/d0".     |
++------------------------+----------------------------------------------------------------------------+
+| **DishIDs**            | User can set this value to provide the ID's of dishes present in the       |
+|                        | deployment. Default is ["SKA001", "SKA036", "SKA063", "SKA100"].           |
++------------------------+----------------------------------------------------------------------------+
+
+**LeafNode Configuration**
+^^^^^^^^^^^^^^^^^^^^^^^^^^
++------------------------+----------------------------------------------------------------------------+
+| **Setting**            | **Description**                                                            |
++========================+============================================================================+
+| **DishLeafNodePrefix** | User can set this value according to the FQDN prefix required by the       |
+|                        | deployed dish leaf node devices. Default is "ska_mid/tm_leaf_node/d0".     |
++------------------------+----------------------------------------------------------------------------+
