@@ -1,4 +1,3 @@
-This project is integration of the Telescope components for the `Square Kilometre Array`_.
 
 .. _Square Kilometre Array: https://skatelescope.org/
 
@@ -34,12 +33,6 @@ This project is integration of the Telescope components for the `Square Kilometr
    developer_guide/code_quality
    
 
-.. toctree::
-   :maxdepth: 1
-   :caption: Testing
-
-   developer_guide/testing/pair_wise_test
-   developer_guide/testing/test_harness
 
 .. toctree::
    :maxdepth: 1
@@ -47,17 +40,6 @@ This project is integration of the Telescope components for the `Square Kilometr
 
    reovering_telescope/recovery
 
-.. toctree::
-   :maxdepth: 1
-   :caption: Mocked Device Testing:
-
-   developer_guide/testing//mocks_devices_tests
-
-.. toctree::
-   :maxdepth: 1
-   :caption: Releases
-
-   CHANGELOG.rst
    
 Indices and tables
 ------------------

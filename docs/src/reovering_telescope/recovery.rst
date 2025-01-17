@@ -1,7 +1,7 @@
 .. _`Recovering Telescope Mid`:
 
 How to recover Telescope Mid when it remains in given ObsState for long time
-=======================================================================
+=============================================================================
 The following table lists the steps to recover Telescope Mid when it is stuck in one
 of the intermediate ObsState (Example: RESOURCING, CONFIGURING).
 
@@ -15,7 +15,7 @@ Using Abort() & Restart() Command
 +===================================+========================================================================+
 | When Telescope Mid is stuck in    |- Using Subarray Node                                                   |
 | one of the ObsStates while running|    - Create device proxy of subarray node                              |
-|                                   |    - To recover Telescope Low stuck in RESOURCING from Subarray node, |
+|                                   |    - To recover Telescope Low stuck in RESOURCING from Subarray node,  |
 |                                   |      execute Abort() command followed by Restart() command.            |
 |                                   |                                                                        |
 |                                   |      - subarray_node = tango.DeviceProxy("ska_mid/tm_subarray_node/01")|
@@ -39,7 +39,7 @@ On the device where the ObsState is RESOURCING, invoke Abort() command followed 
 | When Telescope Mid is stuck in    | - Create device proxy of cspleafnode, sdpleafnode, and mccsleafnode    |
 | RESOURCING                        | - Check the ObsState of each device                                    |
 |                                   | - If the ObsState of the device is IDLE, invoke ReleaseAllResources()  |
-|                                   |   command on that device. For example:                                |
+|                                   |   command on that device. For example:                                 |
 |                                   | -  cspleafnode_proxy =                                                 |
 |                                   |    tango.DeviceProxy("ska_mid/tm_leaf_node/csp_subarray01")            |
 |                                   | - To check the ObsState of cspleafnode, execute                        |
