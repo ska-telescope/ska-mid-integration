@@ -13,28 +13,54 @@ Click below to access the TMC documentation.
  #### Deployment of Dish LMC Helm Chart
  * To deploy the dish LMC chart in integration, run the following command:
     ```bash
-    make k8s-install-chart
+    make k8s-install-chart DISH_SIMULATION_ENABLED=false
     ```
     All values required for deploying the dish LMC can be provided in the `charts/tmc_pairwise/dish_lmc_values.yml` file.
 
     Refer to this link for set flag options: https://gitlab.com/ska-telescope/ska-dish-lmc#-set-flag-options
     
-    After running the above command, the dish LMC with dish ID 001 is deployed in the provided Kubernetes Namespace (i.e., `KUBE_NAMESPACE`).
+    After running the above command, the dish LMC with dishes IDs
+    (001 ,100,036,063) is deployed in the provided Kubernetes Namespace (i.e., `KUBE_NAMESPACE`).
 
-    To deploy multiple dishes, provide multiple values to `global.dishes`. 
-    Example: `global.dishes={036,001,...}`
+    To deploy  dishes,run the command make `k8s-install-chart DISH_SIMULATION_ENABLED=false`
 
  * Uninstall the dish LMC chart:
     ```bash
     make k8s-uninstall-chart
     ```
 
- * Test dish LMC with TMC as an entry point:
-    To test Dish LMC within the TMC integration, you can set a specific flag to control whether you want to use a real device or a mock device. Here's how you can do it:
+
+ #### Deployment of SDP LMC Helm Chart
+ * To deploy the SDP LMC chart in integration, run the following command:
     ```bash
-    --set tmc-mid.deviceServers.mocks.dish=true or false
+    make k8s-install-chart SDP_SIMULATION_ENABLED=false
     ```
-    If you set "enabled" to true, Dish LMC will use a mock device for testing, and if you set "enabled" to false, Dish LMC will use a real device for testing.
+    All values required for deploying the SDP LMC can be provided in the `charts/tmc_pairwise/sdp_lmc_values.yml` file.
+
+    
+    After running the above command, the SDP LMC will get
+    deployed in the provided Kubernetes Namespace (i.e., `KUBE_NAMESPACE`).
+
+
+ * Uninstall the dish LMC chart:
+    ```bash
+    make k8s-uninstall-chart
+
+ #### Deployment of CSP LMC Helm Chart
+ * To deploy the CSP LMC chart in integration, run the following command:
+    ```bash
+    make k8s-install-chart CSP_SIMULATION_ENABLED=false
+    ```
+    All values required for deploying the CSP LMC can be provided in the `charts/tmc_pairwise/csp_lmc_values.yml` file.
+
+    
+    After running the above command, the CSP LMC will get
+    deployed in the provided Kubernetes Namespace (i.e., `KUBE_NAMESPACE`).
+
+
+ * Uninstall the dish LMC chart:
+    ```bash
+    make k8s-uninstall-chart
 
 ## Overview
 The SKA Telescope system is divided into two telescopes:
@@ -66,24 +92,24 @@ Each telescope involves two deployment phases:
 To run pairwise deployments for the Mid Telescope, use the following command:
 
 ```bash
-make k8s-test MARK=<pairwise_test_type>
+make k8s-install-chart {Subsystem}_SIMULATION_ENABLED=false
 ```
-Replace `<pairwise_test_type>` with one of the following:
-- `tmc_csp`
-- `tmc_sdp`
-- `tmc_dish`
+Replace `{subsystem}` with one of the following:
+- `DISH`
+- `SDP`
+- `CSP`
 
-For example, to deploy the **tmc_sdp** subsystem:
+For example, to deploy the **tmc_dish** subsystem:
 
 ```bash
-make k8s-test MARK=tmc_sdp
+make k8s-install-chart DISH_SIMULATION_ENABLED=false
 ```
 
 ### System-Level Deployment
 To deploy system-level charts for the Mid Telescope:
 
 ```bash
-make k8s-test MARK=system_level_tests
+make k8s-install-chart DISH_SIMULATION_ENABLED=false SDP_SIMULATION_ENABLED=false CSP_SIMULATION_ENABLED=false
 ```
 
 ---
@@ -114,15 +140,6 @@ SKA Telescope
         |-- system_level_tests
 ```
 
-### Deployment Commands
-```plaintext
-make k8s-install-chart MARK=<deployment_type>
-```
-- Replace `<deployment_type>` with:
-  - For Mid Pairwise Deployment: `tmc_csp`, `tmc_sdp`, or `tmc_dish`
-  - For System-Level Deployment: `system_level_tests`
-
----
 
 ## Contributing
 We welcome contributions! Please feel free to open issues or submit merge requests for improvements.

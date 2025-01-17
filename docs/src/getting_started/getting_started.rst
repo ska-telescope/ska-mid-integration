@@ -34,7 +34,7 @@ Clone this repo:
 ::
 git clone https://gitlab.com/ska-telescope/ska-mid-integration.git
 cd ska-mid-integration
-
+git submodule update --recursive --init 
 
 To deploy the pods:
 ::
