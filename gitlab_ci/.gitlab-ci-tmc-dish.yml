@@ -31,7 +31,7 @@ k8s-test-dish-lmc:
     - dish-lmc-dish036
     - dish-lmc-dish063
     - dish-lmc-dish100
-#    - k8s-test-csp-dish
+    - k8s-test-csp-dish
   after_script:
     - ls -al
     - ls -al build
