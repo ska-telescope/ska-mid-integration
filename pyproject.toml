@@ -1,9 +1,10 @@
 [tool.poetry]
 name = "ska-tmc-mid-integration"
-version = "0.24.0-rc.2"
+version = "0.24.0-rc.3"
 description = "Repository for integration of TMC components"
 authors = ["Team Himalaya", "Team Sahyadri"]
 license = "BSD-3-Clause"
+package-mode = false
 
 include = [
     { path = 'tests'}
@@ -60,6 +61,7 @@ sphinxcontrib-plantuml = "^0.22"
 typing_extensions  = "^4.3.0"
 sphinx-rtd-theme = "^1.2.2"
 recommonmark = "^0.7.1"
+MarkupSafe = "3.0.2"
 
 [tool.flake8]
 rst-directives = "literalinclude"
