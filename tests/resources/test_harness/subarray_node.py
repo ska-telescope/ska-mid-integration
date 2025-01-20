@@ -620,6 +620,15 @@ class SubarrayNodeWrapper(object):
             partial_configure_3,
             partial_configure_4,
         ]:
+            if correction_key == CorrectionKey.UPDATE:
+                input_json = json.loads(partial_configure_json)
+                input_json["pointing"]["correction"] = "UPDATE"
+                partial_configure_json = json.dumps(input_json)
+            elif correction_key == CorrectionKey.RESET:
+                input_json = json.loads(partial_configure_json)
+                input_json["pointing"]["correction"] = "RESET"
+                partial_configure_json = json.dumps(input_json)
+
             # Partial configure
             _, unique_id = self.execute_transition(
                 "Configure", partial_configure_json
