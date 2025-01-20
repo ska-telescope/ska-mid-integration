@@ -663,8 +663,6 @@ def wait_and_validate_device_attribute_value(
             ):
                 return True
             elif is_list:
-                logging.info("Attribute val: %s", attribute_value)
-                logging.info("Expected val: %s", json.loads(expected_value))
                 return array_equal(attribute_value, json.loads(expected_value))
             elif attribute_value == expected_value:
                 return True
