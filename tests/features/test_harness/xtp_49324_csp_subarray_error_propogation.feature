@@ -1,6 +1,3 @@
-Feature: Default
-
-	
 @XTP-49324 @XTP-73592 @XTP-28347 @Team_SAHYADRI
 Scenario: Verify error propogation with defective CSP Subarray
 	Given the telescope is in ON state
