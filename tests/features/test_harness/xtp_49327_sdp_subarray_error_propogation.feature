@@ -1,7 +1,7 @@
 Feature: Default
 
 	
-	@XTP-49327 @XTP-73592 @Team_SAHYADRI @SKA_mid
+	@XTP-49327 @XTP-73592 @XTP-28347 @Team_SAHYADRI
 	Scenario: Verify CommandNotAllowed error propogation with defective SDP Subarray
 		Given the telescope is in ON state
 		Given SDP subarray is set with command not allowed defect

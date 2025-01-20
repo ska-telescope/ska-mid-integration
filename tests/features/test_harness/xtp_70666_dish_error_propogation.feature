@@ -1,7 +1,7 @@
 Feature: Default
 
 	
-	@XTP-70666 @XTP-28347 @XTP-73592 @SKA_mid
+	@XTP-70666 @XTP-73592 @XTP-28347 @Team_SAHYADRI
 	Scenario: Verify error propogation with defective dish
 		Given the telescope is in ON state
 		And TMC subarray is in ObsState IDLE
