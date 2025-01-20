@@ -34,7 +34,7 @@
        "tmc_mid": "charts/ska-tmc-mid/Chart.yaml"
     }
   },
-  "test_report": "build/report.json",
+  "test_report": "xray/report.json",
   "jira_url": "https://jira.skatelescope.org",
   "project": {
     "id": "XTP",
