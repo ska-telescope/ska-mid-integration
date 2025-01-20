@@ -10,7 +10,7 @@ from ska_control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer, log_events
 from tango import DevState
 
-from tests.resources.test_harness.constant import COMMAND_COMPLETED
+from tests.resources.test_harness.constant import COMMAND_COMPLETED, TIMEOUT
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
 )
@@ -132,7 +132,7 @@ def given_subarray_in_idle(
         "SDP Subarray device"
         f"({sdp.dev_name()}) "
         "is expected to be in IDLE obstate",
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_devices["sdp_subarray"],
         "obsState",
         ObsState.IDLE,
@@ -144,7 +144,7 @@ def given_subarray_in_idle(
         "CSP Subarray device"
         f"({csp.dev_name()}) "
         "is expected to be in IDLE obstate",
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_devices["csp_subarray"],
         "obsState",
         ObsState.IDLE,
@@ -156,7 +156,7 @@ def given_subarray_in_idle(
         "TMC Subarray device"
         f"({subarray_node.subarray_node.dev_name()}) "
         "is expected to be in IDLE obstate",
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
@@ -169,7 +169,7 @@ def given_subarray_in_idle(
         f"({central_node_mid.central_node.dev_name()}) "
         "is expected have longRunningCommand as"
         '(unique_id,(ResultCode.OK,"Command Completed"))',
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
         (pytest.unique_id[0], COMMAND_COMPLETED),
@@ -216,7 +216,7 @@ def check_for_ready(central_node_mid, subarray_node, event_tracer, dish_ids):
             "dish device"
             f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
             "is expected to be in OPERATE dishMode",
-        ).within_timeout(60).has_change_event_occurred(
+        ).within_timeout(TIMEOUT).has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "dishMode",
             DishMode.OPERATE,
@@ -228,7 +228,7 @@ def check_for_ready(central_node_mid, subarray_node, event_tracer, dish_ids):
             "dish device"
             f"({central_node_mid.dish_leaf_node_dict[dish_id].dev_name()}) "
             "is expected to be in OPERATE dishMode",
-        ).within_timeout(60).has_change_event_occurred(
+        ).within_timeout(TIMEOUT).has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "dishMode",
             DishMode.OPERATE,
@@ -240,7 +240,7 @@ def check_for_ready(central_node_mid, subarray_node, event_tracer, dish_ids):
             "dish device"
             f"({central_node_mid.dish_master_dict[dish_id].dev_name()}) "
             "is expected to be in TRACK pointingState",
-        ).within_timeout(60).has_change_event_occurred(
+        ).within_timeout(TIMEOUT).has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
@@ -252,7 +252,7 @@ def check_for_ready(central_node_mid, subarray_node, event_tracer, dish_ids):
             "dish device"
             f"({central_node_mid.dish_leaf_node_dict[dish_id].dev_name()}) "
             "is expected to be in TRACK pointingState",
-        ).within_timeout(60).has_change_event_occurred(
+        ).within_timeout(TIMEOUT).has_change_event_occurred(
             central_node_mid.dish_leaf_node_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
@@ -264,7 +264,7 @@ def check_for_ready(central_node_mid, subarray_node, event_tracer, dish_ids):
         "TMC Subarray device"
         f"({subarray_node.subarray_node.dev_name()}) "
         "is expected to be in READY obstate",
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
@@ -276,7 +276,7 @@ def check_for_ready(central_node_mid, subarray_node, event_tracer, dish_ids):
         f"({subarray_node.subarray_node.dev_name()}) "
         "is expected have longRunningCommand as"
         '(unique_id,(ResultCode.OK,"Command Completed"))',
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
         (pytest.unique_id[0], COMMAND_COMPLETED),
@@ -324,7 +324,7 @@ def given_subarray_in_empty(
         "SDP Subarray device"
         f"({sdp.dev_name()}) "
         "is expected to be in EMPTY obstate",
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_devices["sdp_subarray"],
         "obsState",
         ObsState.EMPTY,
@@ -336,7 +336,7 @@ def given_subarray_in_empty(
         "CSP Subarray device"
         f"({csp.dev_name()}) "
         "is expected to be in EMPTY obstate",
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_devices["csp_subarray"],
         "obsState",
         ObsState.EMPTY,
@@ -348,7 +348,7 @@ def given_subarray_in_empty(
         "TMC Subarray device"
         f"({subarray_node.subarray_node.dev_name()}) "
         "is expected to be in EMPTY obstate",
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.EMPTY,
@@ -361,7 +361,7 @@ def given_subarray_in_empty(
         f"({central_node_mid.central_node.dev_name()}) "
         "is expected have longRunningCommand as"
         '(unique_id,(ResultCode.OK,"Command Completed"))',
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
         (pytest.unique_id[0], COMMAND_COMPLETED),
