@@ -308,11 +308,11 @@ endif
 # if the HTML report is enabled and 
 # the script to publish the HTML report to Jira is available,
 # then publish a link to the HTML report to Jira
-xray-post-publish:
-	if [ -f "$(HTML_REPORT_TARGET_FILE)" ] && [ "$(strip $(ENRICH_TEST_EXECUTIONS))" == "true" ]; then \
-		echo "Publishing the BDD HTML test report to the Jira test execution issue"; \
-		xray-enrich-test-execution $(ENRICH_TEST_EXECUTIONS_PARAMS); \
-	fi;
+# xray-post-publish:
+# 	if [ -f "$(HTML_REPORT_TARGET_FILE)" ] && [ "$(strip $(ENRICH_TEST_EXECUTIONS))" == "true" ]; then \
+# 		echo "Publishing the BDD HTML test report to the Jira test execution issue"; \
+# 		xray-enrich-test-execution $(ENRICH_TEST_EXECUTIONS_PARAMS); \
+# 	fi;
 
 # ----------------------------------------------------------------------------
 # Further customisations of the test command args
