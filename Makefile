@@ -105,7 +105,7 @@ ADD_ARGS +=  --true-context
 MARK ?= $(shell echo $(TELESCOPE) | sed "s/-/_/g") 
 
 endif
-
+MARK = "l23504"
 
 PYTHON_VARS_AFTER_PYTEST ?= -m '$(MARK) $(ADDMARK)' $(ADD_ARGS) $(FILE) --count=$(COUNT)
 CUSTOM_VALUES1 ?=
