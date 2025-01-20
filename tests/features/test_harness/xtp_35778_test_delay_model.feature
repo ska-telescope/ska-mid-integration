@@ -1,4 +1,4 @@
-@XTP-35778 @XTP-28347 @XTP-73579 @XTP-73581
+@XTP-35778 @XTP-73581 @XTP-73579 @XTP-28347
 Scenario: Verify generated delay epoch values are less than delay advance time
     Given the telescope is in ON state
     And TMC subarray <subarray_id> in ObsState IDLE

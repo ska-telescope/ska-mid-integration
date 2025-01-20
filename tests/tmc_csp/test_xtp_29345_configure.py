@@ -20,6 +20,7 @@ from tests.resources.test_harness.utils.common_utils import (
 )
 
 
+@pytest.mark.test1
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/xtp_29345_configure.feature",
