@@ -17,10 +17,12 @@ TIMEOUT = 50
 
 
 @pytest.mark.batch1
+@pytest.mark.l23504
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/five_point_scan.feature",
-    "TMC behaviour during five point calibration scan.",
+    "TMC implements five point calibration scan: TMC executes five point "
+    + "calibration scan successfully.",
 )
 def test_five_point_calibration_scan():
     """
