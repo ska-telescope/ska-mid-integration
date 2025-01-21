@@ -34,7 +34,7 @@ TIMEOUT = 110
 @scenario(
     "../features/test_harness/xtp-60011_configure_with_correction_key.feature",
     "Configure the telescope having TMC and Dish Subsystems with UPDATE "
-    +"correction key",
+    + "correction key",
 )
 def test_tmc_dish_configure_with_correction_key():
     """
