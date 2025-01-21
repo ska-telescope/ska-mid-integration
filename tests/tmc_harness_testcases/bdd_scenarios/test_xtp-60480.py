@@ -33,7 +33,8 @@ TIMEOUT = 110
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp-60480_configure_with_reset_key.feature",
-    "TMC Behavior During correction key handling",
+    "Configure the telescope having TMC and Dish Subsystems with RESET "
+    + "correction key",
 )
 def test_tmc_dish_configure_with_reset_correction_key():
     """
