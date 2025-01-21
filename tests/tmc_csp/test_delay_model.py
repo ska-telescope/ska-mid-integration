@@ -22,10 +22,11 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 LOGGER = logging.getLogger(__name__)
 
 
+@pytest.mark.l23228
 @pytest.mark.tmc_csp
 @scenario(
     "../features/test_harness/xtp_35778_test_delay_model.feature",
-    "Verify generated delay epoch values are less than delay advance time",
+    "Verification test for SKB-300",
 )
 def test_tmc_csp_delay_functionality() -> None:
     """

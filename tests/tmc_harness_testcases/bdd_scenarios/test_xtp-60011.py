@@ -29,7 +29,6 @@ TIMEOUT = 110
 
 
 @pytest.mark.batch2
-@pytest.mark.l23504
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp-60011_configure_with_correction_key.feature",

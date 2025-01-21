@@ -17,7 +17,6 @@ TIMEOUT = 50
 
 
 @pytest.mark.batch1
-@pytest.mark.l23504
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/five_point_scan.feature",

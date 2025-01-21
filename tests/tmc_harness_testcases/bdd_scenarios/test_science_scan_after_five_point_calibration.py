@@ -29,7 +29,6 @@ TIMEOUT = 110
 
 
 @pytest.mark.SKA_mid
-@pytest.mark.l23504
 @pytest.mark.batch1
 @scenario(
     "../features/test_harness/science_scan_after_calibration_scan.feature",
