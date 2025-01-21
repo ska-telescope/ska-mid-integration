@@ -32,7 +32,7 @@ def test_skb_469():
 @given(
     parsers.parse(
         "the command Configure is issued to the TMC"
-        + " subarray with {receiver_band1} and {scan_duration1} sec"
+        + " subarray with {receiver_band1} and {scan_duration1} seconds"
     )
 )
 def invoke_configure(
@@ -378,7 +378,7 @@ def invoke_end_command(
 @when(
     parsers.parse(
         "the command Configure is issued again to the TMC"
-        + " subarray with {receiver_band2} and {scan_duration2} sec"
+        + " subarray with {receiver_band2} and {scan_duration2} seconds"
     )
 )
 def invoke_next_configure(
