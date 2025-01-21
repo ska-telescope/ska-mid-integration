@@ -12,7 +12,6 @@ k8s-test-tmc-with-sdp:
     SUBARRAY_COUNT: 2
     SDP_SIMULATION_ENABLED: 'false'
     TARANTA_ENABLED: 'true'
-    MARK: "l23391"
   before_script:
     - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
@@ -22,7 +21,7 @@ k8s-test-tmc-with-sdp:
     - ${PWD}/tests/scripts/sdp_data_copy.sh create_pod
     - make k8s-wait
   script:
-    - make k8s-test MARK='tmc_sdp_unhappy'
+    - make k8s-test MARK='l23391'
     - make k8s-uninstall-chart
     - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
     - make k8s-delete-namespace
