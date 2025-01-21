@@ -259,6 +259,7 @@ def validate_dish_vcc_config_after_central_node_and_csp_mln_restart(
 
 @pytest.mark.tmc_csp_dish
 @pytest.mark.batch1
+@pytest.mark.l23391
 @pytest.mark.SKA_mid
 @scenario(
     "../features/dish_vcc_initialization/xtp_30253_dish_vcc_mismatch.feature",

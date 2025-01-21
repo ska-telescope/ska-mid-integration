@@ -26,7 +26,6 @@ LOGGER = logging.getLogger(__name__)
 
 
 @pytest.mark.tmc_sdp_unhappy
-@pytest.mark.l23391
 @scenario(
     "../features/tmc_sdp/xtp_39503_health_state_unhappy_path.feature",
     "Verify TMC TelescopeHealthState transition based on SDP Controller"

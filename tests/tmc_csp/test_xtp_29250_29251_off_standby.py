@@ -7,7 +7,6 @@ from tests.resources.test_harness.helpers import get_master_device_simulators
 
 
 @pytest.mark.tmc_csp
-@pytest.mark.l23228
 @scenario(
     "../features/tmc_csp/xtp_29250_off.feature",
     "Turn Off Telescope with real TMC and CSP devices",

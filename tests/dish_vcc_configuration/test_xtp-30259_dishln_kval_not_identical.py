@@ -16,6 +16,7 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
+@pytest.mark.l23391
 @scenario(
     "../features/dish_vcc_initialization/"
     "xtp_30259_dishln_kvalue_not_identical.feature",
