@@ -24,6 +24,7 @@ server:
   {{- $AbortCommandTimeOut := .Values.deviceServers.subarraynode.AbortCommandTimeOut}}
   {{- $LivelinessCheckPeriod := .Values.deviceServers.subarraynode.LivelinessCheckPeriod}}
   {{- $EventSubscriptionCheckPeriod := .Values.deviceServers.subarraynode.EventSubscriptionCheckPeriod}}
+  {{- $DishLeafNodePrefix := .Values.global.dish_ln_prefix}}
   {{- range  ( regexSplit " " ((.Values.subarray_count | int) | seq ) -1 ) }}
     - name: "{{ printf "%02s" . }}"
       classes:
@@ -33,7 +34,7 @@ server:
           properties:
           - name: "DishLeafNodePrefix"
             values:
-            - "{{.Values.global.dish_ln_prefix}}"
+            - "{{ $DishLeafNodePrefix }}"
           - name: "DishMasterIdentifier"
             values:
             {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
