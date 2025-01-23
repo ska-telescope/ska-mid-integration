@@ -21,8 +21,9 @@ server:
   {{- $csp_scan_interface := .Values.deviceServers.subarraynode.CspScanInterfaceURL }}
   {{- $sdp_scan_interface := .Values.deviceServers.subarraynode.SdpScanInterfaceURL }}
   {{- $CommandTimeOut := .Values.deviceServers.subarraynode.CommandTimeOut}}
-  {{- $AbortCommandTimeout := .Values.deviceServers.subarraynode.AbortCommandTimeout}}
-  {{- $SleepTime := .Values.deviceServers.subarraynode.SleepTime}}
+  {{- $AbortCommandTimeOut := .Values.deviceServers.subarraynode.AbortCommandTimeOut}}
+  {{- $LivelinessCheckPeriod := .Values.deviceServers.subarraynode.LivelinessCheckPeriod}}
+  {{- $EventSubscriptionCheckPeriod := .Values.deviceServers.subarraynode.EventSubscriptionCheckPeriod}}
   {{- range  ( regexSplit " " ((.Values.subarray_count | int) | seq ) -1 ) }}
     - name: "{{ printf "%02s" . }}"
       classes:
@@ -32,7 +33,7 @@ server:
           properties:
           - name: "DishLeafNodePrefix"
             values:
-            - "ska_mid/tm_leaf_node/d0"
+            - "{{.Values.global.dish_ln_prefix}}"
           - name: "DishMasterIdentifier"
             values:
             {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
@@ -52,12 +53,7 @@ server:
           - name: "SdpSubarrayFQDN"
             values:
             - "{{ $sdp_sa_fqdn_prefix}}/{{ printf "%02s" . }}"
-          - name: "DishIDs"
-            values:
-            {{- range  $dish_id  }}
-            - "{{ . }}"
-            {{- end }}
-          - name: "DishMasterFQDN"
+          - name: "DishMasterFQDNs"
             values:
             {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
             {{- range  $dish_id }}
@@ -80,9 +76,9 @@ server:
           - name: "CommandTimeOut"
             values:
               - "{{ $CommandTimeOut }}"
-          - name: "AbortCommandTimeout"
+          - name: "AbortCommandTimeOut"
             values:
-              - "{{ $AbortCommandTimeout}}"
+              - "{{ $AbortCommandTimeOut}}"
           - name: "CspAssignResourcesInterfaceURL"
             values:
               - "{{ $csp_assign_interface }}"
@@ -92,9 +88,12 @@ server:
           - name: "SdpScanInterfaceURL"
             values:
               - "{{ $sdp_scan_interface }}"
-          - name: "SleepTime"
+          - name: "LivelinessCheckPeriod"
             values:
-              - "{{ $SleepTime }}"
+              - "{{ $LivelinessCheckPeriod }}"
+          - name: "EventSubscriptionCheckPeriod"
+            values:
+              - "{{ $EventSubscriptionCheckPeriod }}"
   {{- end}}
 depends_on:
   - device: sys/database/2

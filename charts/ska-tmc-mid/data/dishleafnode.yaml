@@ -9,7 +9,10 @@ server:
   instances:
   {{- $MaxTrackTableRetry := .Values.deviceServers.dishleafnode.MaxTrackTableRetry }}
   {{- $TrackTableRetryDuration := .Values.deviceServers.dishleafnode.TrackTableRetryDuration }}
-  {{- $SleepTime := .Values.deviceServers.dishleafnode.SleepTime}}
+  {{- $LivelinessCheckPeriod := .Values.deviceServers.dishleafnode.LivelinessCheckPeriod}}
+  {{- $EventSubscriptionCheckPeriod := .Values.deviceServers.dishleafnode.EventSubscriptionCheckPeriod}}
+  {{- $AdapterTimeOut := .Values.deviceServers.dishleafnode.AdapterTimeOut}}
+  {{- $DishAvailabilityCheckTimeout := .Values.deviceServers.dishleafnode.DishAvailabilityCheckTimeout}}
   {{- $CommandTimeOut := .Values.deviceServers.dishleafnode.CommandTimeOut }}
   {{- $instance_list := list -}}
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
@@ -68,9 +71,18 @@ server:
             - name: "TrackTableRetryDuration"
               values:
                 - "{{ $TrackTableRetryDuration }}"
-            - name: "SleepTime"
+            - name: "LivelinessCheckPeriod"
               values:
-                - "{{ $SleepTime }}" 
+                - "{{ $LivelinessCheckPeriod }}"
+            - name: "EventSubscriptionCheckPeriod"
+              values:
+                - "{{ $EventSubscriptionCheckPeriod }}"
+            - name: "AdapterTimeOut"
+              values:
+                - "{{ $AdapterTimeOut }}"
+            - name: "DishAvailabilityCheckTimeout"
+              values:
+                - "{{ $DishAvailabilityCheckTimeout }}"
 
   {{- end }}
 depends_on:

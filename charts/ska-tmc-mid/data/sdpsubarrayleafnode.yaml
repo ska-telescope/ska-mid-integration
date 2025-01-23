@@ -10,7 +10,9 @@ server:
   instances:
   {{ $CommandTimeOut := .Values.deviceServers.sdpsubarrayleafnode.CommandTimeOut}}
   {{ $sdp_sa_fqdn_prefix:= .Values.global.sdp_subarray_prefix}}
-  {{- $SleepTime := .Values.deviceServers.sdpsubarrayleafnode.SleepTime}}
+  {{- $AdapterTimeOut := .Values.deviceServers.sdpsubarrayleafnode.AdapterTimeOut}}
+  {{- $LivelinessCheckPeriod := .Values.deviceServers.sdpsubarrayleafnode.LivelinessCheckPeriod}}
+  {{- $EventSubscriptionCheckPeriod := .Values.deviceServers.sdpsubarrayleafnode.EventSubscriptionCheckPeriod}}
   {{- range  ( regexSplit " " ((.Values.subarray_count | int) | seq ) -1 ) }}
     - name: "{{ printf "%02s" . }}"
       classes:
@@ -33,9 +35,15 @@ server:
               - name: "CommandTimeOut"
                 values:
                 - "{{ $CommandTimeOut }}"
-              - name: "SleepTime"
+              - name: "AdapterTimeOut"
                 values:
-                - "{{ $SleepTime }}"
+                - "{{ $AdapterTimeOut }}"
+              - name: "LivelinessCheckPeriod"
+                values:
+                - "{{ $LivelinessCheckPeriod }}"
+              - name: "EventSubscriptionCheckPeriod"
+                values:
+                - "{{ $EventSubscriptionCheckPeriod }}"
   {{- end}}
 depends_on:
   - device: sys/database/2
