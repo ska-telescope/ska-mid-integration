@@ -26,7 +26,7 @@ k8s-test-csp-dish:
     - make k8s-wait
   script:
     - make k8s-test MARK=tmc_csp_dish
-  MARK: test1
+  MARK: "test1"
   needs:
     - dish-lmc-dish001
     - dish-lmc-dish036
