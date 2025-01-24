@@ -173,7 +173,9 @@ deviceServers:
     enabled: true
     instances: ["01"]
     file: "data/sdpmasterleafnode.yaml"
-    SleepTime: 1.5
+    AdapterTimeOut: 2
+    LivelinessCheckPeriod: 1.5
+    EventSubscriptionCheckPeriod: 1.5
 
   cspmasterleafnode:
     enabled: true
