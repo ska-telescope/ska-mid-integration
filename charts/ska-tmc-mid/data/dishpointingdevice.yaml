@@ -7,11 +7,8 @@ entrypoints:
 server:
   name: "dishln_pointing_device"
   instances:
-  {{- $TrackTableEntries := .Values.deviceServers.dishpointingdevice.TrackTableEntries }}
-  {{- $PointingCalculationPeriod := .Values.deviceServers.dishpointingdevice.PointingCalculationPeriod }}
+  {{- $TrackTableUpdateRate := .Values.deviceServers.dishpointingdevice.TrackTableUpdateRate }}
   {{- $TrackTableInAdvance := .Values.deviceServers.dishpointingdevice.TrackTableInAdvance }}
-  {{- $Elevation := .Values.deviceServers.dishpointingdevice.Elevation }}
-  {{- $Azimuth := .Values.deviceServers.dishpointingdevice.Azimuth }}
   {{- $ElevationMaxLimit := .Values.deviceServers.dishpointingdevice.ElevationMaxLimit }}
   {{- $ElevationMinLimit := .Values.deviceServers.dishpointingdevice.ElevationMinLimit }} 
   {{- $instance_list := list -}}
@@ -35,21 +32,12 @@ server:
         devices:
         - name: "mid-tmc/dish-pointing/d0{{ $number }}"
           properties:
-            - name: "TrackTableEntries"
+            - name: "TrackTableUpdateRate"
               values:
-                - "{{ $TrackTableEntries }}"
-            - name: "PointingCalculationPeriod"
-              values:
-                - "{{ $PointingCalculationPeriod }}"
+                - "{{ $TrackTableUpdateRate }}"
             - name: "TrackTableInAdvance"
               values:
                 - "{{ $TrackTableInAdvance }}"
-            - name: "Elevation"
-              values:
-                - "{{ $Elevation }}"
-            - name: "Azimuth"
-              values:
-                - "{{ $Azimuth }}"
             - name: "ElevationMaxLimit"
               values:
                 - "{{ $ElevationMaxLimit }}"

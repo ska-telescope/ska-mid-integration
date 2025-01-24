@@ -19,6 +19,7 @@ k8s-test-dish-lmc:
     DISH_NAMESPACE_4: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX_100"
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-test"
     DISH_LMC_SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-test"
+    ADDMARK: ''
   before_script:
     - make cred SERVICE_ACCOUNT=$DISH_LMC_SERVICE_ACCOUNT
     - make k8s-install-chart
@@ -30,7 +31,6 @@ k8s-test-dish-lmc:
     - dish-lmc-dish036
     - dish-lmc-dish063
     - dish-lmc-dish100
-    - k8s-test-csp-dish
   after_script:
     - ls -al
     - ls -al build
