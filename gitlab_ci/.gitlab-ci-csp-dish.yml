@@ -19,6 +19,7 @@ k8s-test-csp-dish:
     DISH_NAMESPACE_4: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-dish-lmc-$DISH_INDEX_100"
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-test-mid-csp-dish"
     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-test-mid-csp-dish"
+    MARK: "test1"
   before_script:
     - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
@@ -26,7 +27,6 @@ k8s-test-csp-dish:
     - make k8s-wait
   script:
     - make k8s-test MARK=tmc_csp_dish
-  MARK: "test1"
   needs:
     - dish-lmc-dish001
     - dish-lmc-dish036
