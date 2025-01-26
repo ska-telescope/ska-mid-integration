@@ -257,7 +257,6 @@ def validate_dish_vcc_config_after_central_node_and_csp_mln_restart(
     assert tmc_mid.dish_leaf_node_list[3].kValue == 101
 
 
-@pytest.mark.test1
 @pytest.mark.tmc_csp_dish
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
