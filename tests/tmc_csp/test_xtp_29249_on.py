@@ -9,7 +9,6 @@ from tests.resources.test_harness.helpers import (
 )
 
 
-@pytest.mark.test1
 @pytest.mark.tmc_csp
 @scenario(
     "../features/tmc_csp/xtp_29249_on.feature",
