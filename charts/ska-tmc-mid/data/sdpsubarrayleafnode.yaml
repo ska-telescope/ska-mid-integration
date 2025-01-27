@@ -4,7 +4,6 @@ domain: general-monitoring
 instances: ["01"]
 entrypoints:
   - name: "ska_tmc_sdpsubarrayleafnode.sdp_subarray_leaf_node.SdpSubarrayLeafNode"
-{{- $SleepTime := .Values.deviceServers.sdpsubarrayleafnode.SleepTime}}
 server:
   name: "sdp_subarray_leaf_node"
   instances:
@@ -13,6 +12,7 @@ server:
   {{- $AdapterTimeOut := .Values.deviceServers.sdpsubarrayleafnode.AdapterTimeOut}}
   {{- $LivelinessCheckPeriod := .Values.deviceServers.sdpsubarrayleafnode.LivelinessCheckPeriod}}
   {{- $EventSubscriptionCheckPeriod := .Values.deviceServers.sdpsubarrayleafnode.EventSubscriptionCheckPeriod}}
+  {{- $SDPSubarrayAdminModeEnabled := .Values.deviceServers.sdpsubarrayleafnode.SDPSubarrayAdminModeEnabled}}
   {{- range  ( regexSplit " " ((.Values.subarray_count | int) | seq ) -1 ) }}
     - name: "{{ printf "%02s" . }}"
       classes:
@@ -44,6 +44,9 @@ server:
               - name: "EventSubscriptionCheckPeriod"
                 values:
                 - "{{ $EventSubscriptionCheckPeriod }}"
+              - name: "SDPSubarrayAdminModeEnabled"
+                values:
+                - "{{ $SDPSubarrayAdminModeEnabled }}"
   {{- end}}
 depends_on:
   - device: sys/database/2
