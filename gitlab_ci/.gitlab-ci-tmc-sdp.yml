@@ -12,7 +12,7 @@ k8s-test-tmc-with-sdp:
     SUBARRAY_COUNT: 2
     SDP_SIMULATION_ENABLED: 'false'
     TARANTA_ENABLED: 'true'
-    MARK: 'test2'
+    ADDMARK: "and test2"
   before_script:
     - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
