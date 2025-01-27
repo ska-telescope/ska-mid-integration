@@ -12,7 +12,7 @@ from tests.resources.test_harness.utils.enums import DishMode
 
 
 @pytest.mark.test2
-@pytest.mark.tmc_sdp
+# @pytest.mark.tmc_sdp
 @scenario(
     "../features/tmc_sdp/xtp-29230_on.feature",
     "Start up the telescope having TMC and SDP subsystems",
