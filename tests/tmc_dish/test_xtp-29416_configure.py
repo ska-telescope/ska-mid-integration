@@ -26,7 +26,7 @@ def test_tmc_dish_configure():
     """
 
 
-@given("the TMC subarray is in IDLE obsState")
+@given("TMC subarray is in IDLE obsState")
 def subarray_is_in_idle_obsState(
     central_node_mid,
     subarray_node,
