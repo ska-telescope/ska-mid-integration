@@ -16,6 +16,7 @@ from tests.resources.test_harness.helpers import (
 TIMEOUT = 50
 
 
+@pytest.mark.test1
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
