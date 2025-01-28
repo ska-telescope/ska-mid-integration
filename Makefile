@@ -13,6 +13,7 @@ DISH_NAMESPACE_4 ?= dish-lmc-4
 KUBE_NAMESPACE ?= ska-tmc-integration
 KUBE_NAMESPACE_SDP ?= ska-tmc-integration-sdp
 K8S_TIMEOUT ?= 800s
+CI_KEEP_NAMESPACE ?= true
 PYTHON_LINT_TARGET ?= tests/
 DEPLOYMENT_TYPE = $(shell echo $(TELESCOPE) | cut -d '-' -f2)
 MARK ?= $(shell echo $(TELESCOPE) | sed "s/-/_/g") ## What -m opt to pass to pytest
