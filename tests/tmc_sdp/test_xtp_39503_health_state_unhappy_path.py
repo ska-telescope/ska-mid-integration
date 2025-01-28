@@ -25,6 +25,7 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
+@pytest.mark.test3
 @pytest.mark.tmc_sdp_unhappy
 @scenario(
     "../features/tmc_sdp/xtp_39503_health_state_unhappy_path.feature",
