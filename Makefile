@@ -277,7 +277,7 @@ endif
 ## General flag to enable/disable the publishing of the BDD HTML test report
 # to the Jira test execution issue. 
 # Set to any value other than "true" to disable it
-ENRICH_TEST_EXECUTIONS ?= false
+ENRICH_TEST_EXECUTIONS ?= true
 ENRICH_TEST_EXECUTIONS_PARAMS ?=
 
 ## Jira configurations for publishing the BDD HTML test report to Jira
