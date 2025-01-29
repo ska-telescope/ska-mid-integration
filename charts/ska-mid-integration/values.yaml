@@ -71,6 +71,11 @@ ska-tango-base:
   tangodb:
     use_pv: false
 
+#=== TMC Mid ===#
+ska-tmc-mid:
+  dishleafnode:
+    image:
+      tag: 0.19.6 
 #=== OSO ===#
 # ska-oso-oet:
 #   labels:
