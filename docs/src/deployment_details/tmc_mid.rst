@@ -51,6 +51,7 @@ Configurable options
 * e. **enabled** : User can opt to disable any node by setting this value to False.Default is True for all nodes.
 
 * f. Variables under **global** section
+
     #. **tmc_subarray_prefix** : This value is present under global, User can use this to change the FQDN prefix of SubarrayNode.
 
     #. **csp_subarray_ln_prefix** : This value is present under global, User can use this to change the FQDN prefix of CspSubarrayLeafNode.
