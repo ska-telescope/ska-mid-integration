@@ -82,7 +82,7 @@ def given_tmc_subarray_assign_resources_is_in_progress(
     # returns to the obsState EMPTY
     sdp_sim.SetDefective(SDP_BACK_TO_INITIAL_STATE)
     assign_input_json = prepare_json_args_for_centralnode_commands(
-        "assign_resources_mid1", command_input_factory
+        "assign_resources_mid", command_input_factory
     )
     _, unique_id = central_node_mid.perform_action(
         "AssignResources", assign_input_json
@@ -202,7 +202,7 @@ def assign_resources_executed_on_subarray(
         central_node_mid.central_node, "longRunningCommandResult"
     )
     assign_input_json = prepare_json_args_for_centralnode_commands(
-        "assign_resources_mid2", command_input_factory
+        "assign_resources_mid", command_input_factory
     )
 
     _, unique_id = central_node_mid.perform_action(
