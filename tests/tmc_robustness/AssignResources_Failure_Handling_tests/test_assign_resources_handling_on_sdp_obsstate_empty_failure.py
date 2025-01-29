@@ -97,6 +97,10 @@ def given_tmc_subarray_assign_resources_is_in_progress(
         "longRunningCommandResult",
         (unique_id[0], Anything),
     )
+    assigned_resources = central_node_mid.subarray_node.read_attribute(
+        "assignedResources"
+    ).value
+    LOGGER.info(f"assigned Resources afyer first assign:{assigned_resources}")
 
 
 @given(parsers.parse("Csp Subarray {subarray_id} completes assignResources"))
@@ -178,6 +182,10 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
         "obsState",
         ObsState.EMPTY,
     )
+    assigned_resources = central_node_mid.subarray_node.read_attribute(
+        "assignedResources"
+    ).value
+    LOGGER.info(f"assigned Resources after empty:{assigned_resources}")
 
 
 @then(
@@ -210,3 +218,7 @@ def assign_resources_executed_on_subarray(
         "longRunningCommandResult",
         (unique_id[0], Anything),
     )
+    assigned_resources = central_node_mid.subarray_node.read_attribute(
+        "assignedResources"
+    ).value
+    LOGGER.info(f"assigned Resources after second assign:{assigned_resources}")
