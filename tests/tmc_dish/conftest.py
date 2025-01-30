@@ -8,6 +8,7 @@ from assertpy import assert_that
 from pytest_bdd import given, parsers, then
 from ska_control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer, log_events
+from tango import DevState
 
 from tests.resources.test_harness.constant import COMMAND_COMPLETED, TIMEOUT
 from tests.resources.test_harness.helpers import (
@@ -15,8 +16,6 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_harness.utils.common_utils import setup_dish_events
 from tests.resources.test_support.enum import DishMode, PointingState
-
-# from tango import DevState
 
 
 @given(
@@ -49,7 +48,7 @@ def turn_on_telescope(central_node_mid, event_recorder):
         central_node_mid: Fixture for a TMC CentralNode wrapper class
         event_recorder: Fixture for EventRecorder class
     """
-    # central_node_mid.move_to_on()
+    central_node_mid.move_to_on()
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
             central_node_mid.dish_master_dict[dish_id], "dishMode"
@@ -65,40 +64,40 @@ def turn_on_telescope(central_node_mid, event_recorder):
         )
     event_recorder.subscribe_event(central_node_mid.csp_master, "State")
     event_recorder.subscribe_event(central_node_mid.sdp_master, "State")
-    #
-    # assert event_recorder.has_change_event_occurred(
-    #     central_node_mid.csp_master,
-    #     "State",
-    #     DevState.ON,
-    # )
-    # assert event_recorder.has_change_event_occurred(
-    #     central_node_mid.sdp_master,
-    #     "State",
-    #     DevState.ON,
-    # )
-    #
-    # for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
-    #     assert event_recorder.has_change_event_occurred(
-    #         central_node_mid.dish_master_dict[dish_id],
-    #         "dishMode",
-    #         DishMode.STANDBY_FP,
-    #     )
-    #     assert event_recorder.has_change_event_occurred(
-    #         central_node_mid.dish_leaf_node_dict[dish_id],
-    #         "dishMode",
-    #         DishMode.STANDBY_FP,
-    #         lookahead=15,
-    #     )
-    #
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.csp_master,
+        "State",
+        DevState.ON,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.sdp_master,
+        "State",
+        DevState.ON,
+    )
+
+    for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_master_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+        )
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.dish_leaf_node_dict[dish_id],
+            "dishMode",
+            DishMode.STANDBY_FP,
+            lookahead=15,
+        )
+
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
-    #
-    # assert event_recorder.has_change_event_occurred(
-    #     central_node_mid.central_node,
-    #     "telescopeState",
-    #     DevState.ON,
-    # )
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "telescopeState",
+        DevState.ON,
+    )
 
 
 @given("the subarray is in IDLE obsState")

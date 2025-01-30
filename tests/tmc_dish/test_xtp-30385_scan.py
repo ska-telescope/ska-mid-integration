@@ -21,6 +21,7 @@ from tests.resources.test_support.enum import DishMode, PointingState
 
 
 @pytest.mark.skip()
+@pytest.mark.skip()
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-30385_scan.feature",
