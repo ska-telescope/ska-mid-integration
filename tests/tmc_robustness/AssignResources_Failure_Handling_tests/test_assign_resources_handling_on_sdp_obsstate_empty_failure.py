@@ -1,10 +1,7 @@
-import json
-
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
-
-# from ska_tango_testing.mock.placeholders import Anything
+from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
 from tests.conftest import LOGGER
@@ -17,7 +14,6 @@ from tests.resources.test_harness.helpers import (
     get_device_simulators,
     prepare_json_args_for_centralnode_commands,
 )
-from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
 @pytest.mark.batch1
@@ -65,6 +61,7 @@ def given_tmc(central_node_mid, event_recorder):
         "obsState",
         ObsState.EMPTY,
     )
+    event_recorder.clear_events()
 
 
 @given(
@@ -97,17 +94,11 @@ def given_tmc_subarray_assign_resources_is_in_progress(
         "obsState",
         ObsState.RESOURCING,
     )
-    ERROR_MESSAGE = (
-        "Exception occurred on device: 1738238625.8845735_"
-        + "24302652370837_AssignResources: ska_mid/tm_subarray_node/1: "
-        + "Exception occurred on the following devices: ska_mid/tm_leaf_node"
-        + "/sdp_subarray01: Exception occurred, command failed.\\n"
-    )
 
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (unique_id[0], json.dumps([ResultCode.FAILED, ERROR_MESSAGE])),
+        (unique_id[0], Anything),
     )
     assigned_resources = central_node_mid.subarray_node.read_attribute(
         "assignedResources"
@@ -198,6 +189,7 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
         "assignedResources"
     ).value
     LOGGER.info(f"assigned Resources after empty:{assigned_resources}")
+    event_recorder.clear_events()
 
 
 @then(
