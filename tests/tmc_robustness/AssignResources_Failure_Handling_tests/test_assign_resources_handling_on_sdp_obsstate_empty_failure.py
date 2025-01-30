@@ -20,7 +20,6 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
-@pytest.mark.ms
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
@@ -98,10 +97,12 @@ def given_tmc_subarray_assign_resources_is_in_progress(
         "obsState",
         ObsState.RESOURCING,
     )
-    ERROR_MESSAGE = "Exception occurred on device: 1738238625.8845735_"
-    +"24302652370837_AssignResources: ska_mid/tm_subarray_node/1: "
-    +"Exception occurred on the following devices: ska_mid/tm_leaf_node/sdp_"
-    +"subarray01: Exception occurred, command failed.\\n"
+    ERROR_MESSAGE = (
+        "Exception occurred on device: 1738238625.8845735_"
+        + "24302652370837_AssignResources: ska_mid/tm_subarray_node/1: "
+        + "Exception occurred on the following devices: ska_mid/tm_leaf_node"
+        + "/sdp_subarray01: Exception occurred, command failed.\\n"
+    )
 
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
