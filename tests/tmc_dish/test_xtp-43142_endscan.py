@@ -205,10 +205,10 @@ def move_subarray_obsState_to_scanning(
     # )
 
     event_tracer.subscribe_event(
-        subarray_node.subarray_devices["csp_subarray"], "cspSubarrayObsState"
+        subarray_node.csp_subarray_leaf_node, "cspSubarrayObsState"
     )
     event_tracer.subscribe_event(
-        subarray_node.subarray_devices["sdp_subarray"], "sdpSubarrayObsState"
+        subarray_node.sdp_subarray_leaf_node, "sdpSubarrayObsState"
     )
 
     assert_that(event_tracer).described_as(
