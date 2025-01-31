@@ -196,22 +196,29 @@ def move_subarray_obsState_to_scanning(
         ObsState.SCANNING,
     )
 
-    event_tracer.subscribe_event(
-        central_node_mid.csp_master_leaf_node, "cspSubarrayObsState"
-    )
+    # event_tracer.subscribe_event(
+    #     central_node_mid.csp_master_leaf_node, "cspSubarrayObsState"
+    # )
+    #
+    # event_tracer.subscribe_event(
+    #     central_node_mid.sdp_master_leaf_node, "sdpSubarrayObsState"
+    # )
 
     event_tracer.subscribe_event(
-        central_node_mid.sdp_master_leaf_node, "sdpSubarrayObsState"
+        subarray_node.subarray_devices["csp_subarray"], "cspSubarrayObsState"
+    )
+    event_tracer.subscribe_event(
+        subarray_node.subarray_devices["sdp_subarray"], "sdpSubarrayObsState"
     )
 
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "GIVEN" STEP: '
         "'the subarray must be in the SCANNING obsState'"
         "TMC Subarray device"
-        f"({central_node_mid.csp_master_leaf_node.dev_name()}) "
+        "csp_subarray"
         "is expected to be in SCANNING obstate",
     ).within_timeout(60).has_change_event_occurred(
-        central_node_mid.csp_master_leaf_node,
+        subarray_node.subarray_devices["csp_subarray"],
         "cspSubarrayObsState",
         ObsState.SCANNING,
     )
@@ -220,10 +227,10 @@ def move_subarray_obsState_to_scanning(
         'FAILED ASSUMPTION IN "GIVEN" STEP: '
         "'the subarray must be in the SCANNING obsState'"
         "TMC Subarray device"
-        f"({central_node_mid.sdp_master_leaf_node.dev_name()}) "
+        "sdp subarry "
         "is expected to be in SCANNING obstate",
     ).within_timeout(60).has_change_event_occurred(
-        central_node_mid.sdp_master_leaf_node,
+        subarray_node.subarray_devices["sdp_subarray"],
         "sdpSubarrayObsState",
         ObsState.SCANNING,
     )
