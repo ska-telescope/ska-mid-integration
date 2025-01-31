@@ -12,8 +12,6 @@ ska-mid-dish-manager:
     app: ska-tmc-integration
   enabled: true
 
-ska-tango-base:
-  enabled: false
 
 ska-mid-dish-simulators:
   labels:
