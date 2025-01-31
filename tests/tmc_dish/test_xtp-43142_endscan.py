@@ -20,7 +20,6 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
-@pytest.mark.skip()
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-43142_endscan.feature",
@@ -193,6 +192,38 @@ def move_subarray_obsState_to_scanning(
         "is expected to be in SCANNING obstate",
     ).within_timeout(60).has_change_event_occurred(
         subarray_node.subarray_node,
+        "obsState",
+        ObsState.SCANNING,
+    )
+
+    event_tracer.subscribe_event(
+        central_node_mid.csp_master_leaf_node, "obsState"
+    )
+
+    event_tracer.subscribe_event(
+        central_node_mid.sdp_master_leaf_node, "obsState"
+    )
+
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the subarray must be in the SCANNING obsState'"
+        "TMC Subarray device"
+        f"({central_node_mid.csp_master_leaf_node.dev_name()}) "
+        "is expected to be in SCANNING obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        central_node_mid.csp_master_leaf_node,
+        "obsState",
+        ObsState.SCANNING,
+    )
+
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the subarray must be in the SCANNING obsState'"
+        "TMC Subarray device"
+        f"({central_node_mid.sdp_master_leaf_node.dev_name()}) "
+        "is expected to be in SCANNING obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        central_node_mid.sdp_master_leaf_node,
         "obsState",
         ObsState.SCANNING,
     )
