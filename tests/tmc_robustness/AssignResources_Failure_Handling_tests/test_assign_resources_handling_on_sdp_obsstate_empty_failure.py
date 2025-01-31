@@ -16,6 +16,7 @@ from tests.resources.test_harness.helpers import (
 )
 
 
+@pytest.mark.test1
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
@@ -86,19 +87,13 @@ def given_tmc_subarray_assign_resources_is_in_progress(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-    _, unique_id = central_node_mid.perform_action(
+    _, pytest.unique_id = central_node_mid.perform_action(
         "AssignResources", assign_input_json
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_node,
         "obsState",
         ObsState.RESOURCING,
-    )
-
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "longRunningCommandResult",
-        (unique_id[0], Anything),
     )
     assigned_resources = central_node_mid.subarray_node.read_attribute(
         "assignedResources"
@@ -184,6 +179,11 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
         central_node_mid.subarray_node,
         "obsState",
         ObsState.EMPTY,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.unique_id[0], Anything),
     )
     assigned_resources = central_node_mid.subarray_node.read_attribute(
         "assignedResources"
