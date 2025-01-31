@@ -218,7 +218,7 @@ def move_subarray_obsState_to_scanning(
         "csp_subarray"
         "is expected to be in SCANNING obstate",
     ).within_timeout(60).has_change_event_occurred(
-        subarray_node.subarray_devices["csp_subarray"],
+        subarray_node.csp_subarray_leaf_node,
         "cspSubarrayObsState",
         ObsState.SCANNING,
     )
@@ -230,7 +230,7 @@ def move_subarray_obsState_to_scanning(
         "sdp subarry "
         "is expected to be in SCANNING obstate",
     ).within_timeout(60).has_change_event_occurred(
-        subarray_node.subarray_devices["sdp_subarray"],
+        subarray_node.sdp_subarray_leaf_node,
         "sdpSubarrayObsState",
         ObsState.SCANNING,
     )
