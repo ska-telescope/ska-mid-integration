@@ -1,0 +1,96 @@
+{
+    "interface": "https://schema.skao.int/ska-tmc-configure/4.1",
+    "transaction_id": "txn-....-00001",
+    "pointing": {
+        "groups": [
+            {
+                "receptors": ["SKA001", "SKA036"],
+                "field": {
+                    "target_name": "Cen-A",
+                    "reference_frame": "ICRS",
+                    "attrs": {
+                        "c1": 201.365,
+                        "c2": -43.0191667
+                    }
+                },
+                "trajectory": {
+                    "name": "mosaic",
+                    "attrs": {
+                        "x_offsets": [
+                            -5.0,
+                            0.0,
+                            5.0,
+                            -5.0,
+                            0.0,
+                            5.0,
+                            -5.0,
+                            0.0,
+                            5.0
+                        ],
+                        "y_offsets": [
+                            5.0,
+                            5.0,
+                            5.0,
+                            0.0,
+                            0.0,
+                            0.0,
+                            -5.0,
+                            -5.0,
+                            -5.0
+                        ]
+                    }
+                },
+                "projection": {"name": "SSN", "alignment": "ICRS"}
+            },
+            {
+                "receptors": ["SKA100"],
+                "field": {
+                    "target_name": "Cen-A",
+                    "reference_frame": "ICRS",
+                    "attrs": {
+                        "c1": 201.365,
+                        "c2": -43.0191667
+                    }
+                }
+            }
+        ]
+    },
+    "dish": {"receiver_band": "1"},
+    "csp": {
+        "interface": "https://schema.skao.int/ska-csp-configurescan/4.0",
+        "common": {
+            "config_id": "sbi-mvp01-20200325-00001-science_A",
+            "frequency_band": "1"
+        },
+        "midcbf": {
+            "correlation": {
+                "processing_regions": [
+                    {
+                        "fsp_ids": [1, 2, 3, 4],
+                        "receptors": ["SKA063", "SKA001", "SKA100"],
+                        "start_freq": 350000000,
+                        "channel_width": 13440,
+                        "channel_count": 52080,
+                        "sdp_start_channel_id": 0,
+                        "integration_factor": 1
+                    },
+                    {
+                        "fsp_ids": [1, 2, 3, 4],
+                        "receptors": ["SKA063", "SKA001", "SKA100"],
+                        "start_freq": 548437600,
+                        "channel_width": 13440,
+                        "channel_count": 14880,
+                        "sdp_start_channel_id": 1,
+                        "integration_factor": 10
+                    }
+                ]
+            },
+            "vlbi": {}
+        }
+    },
+    "sdp": {
+        "interface": "https://schema.skao.int/ska-sdp-configure/0.4",
+        "scan_type": "target:a"
+    },
+    "tmc": {"scan_duration": 60.0}
+}
