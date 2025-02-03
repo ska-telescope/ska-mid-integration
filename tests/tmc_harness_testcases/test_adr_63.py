@@ -159,8 +159,9 @@ def verify_ready_obsstate(
     subarray_node: SubarrayNodeWrapper,
     command_input_factory: JsonFactory,
     event_recorder: EventRecorder,
+    event_tracer: TangoEventTracer,
 ) -> None:
-
+    event_tracer.subscribe_event(subarray_node.subarray_node, "obsState")
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",

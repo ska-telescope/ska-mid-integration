@@ -12,45 +12,6 @@
                         "c1": 201.365,
                         "c2": -43.0191667
                     }
-                },
-                "trajectory": {
-                    "name": "mosaic",
-                    "attrs": {
-                        "x_offsets": [
-                            -5.0,
-                            0.0,
-                            5.0,
-                            -5.0,
-                            0.0,
-                            5.0,
-                            -5.0,
-                            0.0,
-                            5.0
-                        ],
-                        "y_offsets": [
-                            5.0,
-                            5.0,
-                            5.0,
-                            0.0,
-                            0.0,
-                            0.0,
-                            -5.0,
-                            -5.0,
-                            -5.0
-                        ]
-                    }
-                },
-                "projection": {"name": "SSN", "alignment": "ICRS"}
-            },
-            {
-                "receptors": ["SKA100"],
-                "field": {
-                    "target_name": "Cen-A",
-                    "reference_frame": "ICRS",
-                    "attrs": {
-                        "c1": 201.365,
-                        "c2": -43.0191667
-                    }
                 }
             }
         ]
