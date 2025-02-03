@@ -22,7 +22,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 TIMEOUT = 110
 
 
-@pytest.mark.batch21
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../features/adr_63.feature",
