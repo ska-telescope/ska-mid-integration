@@ -6,7 +6,7 @@ from ska_control_model import ObsState
 from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
-from tests.conftest import LOGGER
+from tests.conftest import LOGGER, wait_for_obsstate_state_change
 from tests.resources.test_harness.constant import (
     COMMAND_COMPLETED,
     RESET_DEFECT,
@@ -197,6 +197,9 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
         exception_message
         in json.loads(assertion_data["attribute_value"][1])[1]
     )
+    wait_for_obsstate_state_change(
+        target_mode=0, device=central_node_mid.subarray_node, timeout_seconds=5
+    )
     assigned_resources = central_node_mid.subarray_node.read_attribute(
         "assignedResources"
     ).value
@@ -213,6 +216,7 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
 def assign_resources_executed_on_subarray(
     central_node_mid, event_recorder, command_input_factory
 ):
+
     event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
     event_recorder.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
