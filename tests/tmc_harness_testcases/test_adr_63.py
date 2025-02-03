@@ -25,7 +25,7 @@ TIMEOUT = 110
 @pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
-    "../adr_63.feature",
+    "../features/adr_63.feature",
     "TMC behavior when configure command is invoked with ADR-63 JSON",
 )
 def test_tmc_configure_adr_63():
