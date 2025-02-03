@@ -19,6 +19,7 @@ from tests.resources.test_harness.helpers import (
 
 
 @pytest.mark.test1
+@pytest.mark.repeat(100)
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
