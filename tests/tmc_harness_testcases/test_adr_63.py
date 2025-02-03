@@ -22,7 +22,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 TIMEOUT = 110
 
 
-@pytest.mark.batch2
+@pytest.mark.batch21
 @pytest.mark.SKA_mid
 @scenario(
     "../features/adr_63.feature",
@@ -114,7 +114,7 @@ def invoke_assign_resources(
         "assign_resources_mid", command_input_factory
     )
     event_recorder.subscribe_event(
-        subarray_node.subarray_node, "longRunningCommandResult"
+        central_node_mid.central_node, "longRunningCommandResult"
     )
     # Create json for AssignResources commands with requested subarray_id
     assign_input = json.loads(assign_input_json)
