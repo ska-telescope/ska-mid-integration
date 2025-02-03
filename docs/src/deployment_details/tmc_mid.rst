@@ -78,8 +78,6 @@ Configurable options
 
     #. **DishIDs** : User can set this value to provide the ID's of dishes present in the deployment. Default is ["SKA001", "SKA036", "SKA063", "SKA100"]
 
-    #. **SkuidService** :  This refers to the value for SKUID service. Currently defaults to "ska-ser-skuid-test-svc.ska-tmc-centralnode.svc.techops.internal.skao.int:9870".
-
     #. Variables under **DishVccConfig** section
 
         #. **DishVccUri** :  This refers to the URI for Dish VCC Configuration. Currently defaults to "car://gitlab.com/ska-telescope/ska-telmodel-data?ska-sdp-tmlite-repository-1.0.0#tmdata".
