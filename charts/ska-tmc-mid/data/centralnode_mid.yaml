@@ -24,7 +24,8 @@ server:
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
   {{- $CommandTimeOut := .Values.deviceServers.centralnode.CommandTimeOut}}
   {{- $DishVccInitTimeout := .Values.deviceServers.centralnode.DishVccInitTimeout}}
-  {{- $SleepTime := .Values.deviceServers.centralnode.SleepTime}}
+  {{- $LivelinessCheckPeriod := .Values.deviceServers.centralnode.LivelinessCheckPeriod}}
+  {{- $EventSubscriptionCheckPeriod := .Values.deviceServers.centralnode.EventSubscriptionCheckPeriod}}
 
   - name: "01"
     classes:
@@ -46,7 +47,7 @@ server:
           - "{{.Values.global.sdp_master}}"
         - name: "DishLeafNodePrefix"
           values:
-          - "ska_mid/tm_leaf_node/d0"
+          - "{{.Values.global.dish_ln_prefix}}"
         - name: "DishMasterIdentifier"
           values:
           {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
@@ -71,7 +72,7 @@ server:
           {{- range  (.Values.deviceServers.centralnode.DishIDs)  }}
           - "{{ . }}"
           {{- end }}
-        - name: "DishMasterFQDN"
+        - name: "DishMasterFQDNs"
           values:
           {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
           {{- range  (.Values.deviceServers.centralnode.DishIDs)  }}
@@ -118,9 +119,12 @@ server:
         - name: "CommandTimeOut"
           values:
             - "{{ $CommandTimeOut }}"
-        - name: "SleepTime"
+        - name: "LivelinessCheckPeriod"
           values:
-            - "{{$SleepTime}}"
+            - "{{ $LivelinessCheckPeriod }}"
+        - name: "EventSubscriptionCheckPeriod"
+          values:
+            - "{{ $EventSubscriptionCheckPeriod }}"
 
 {{- else }}
 {{- fail "KValueValidRangeUpperLimit should be greater than KValueValidRangeLowerLimit" }}
