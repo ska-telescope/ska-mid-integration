@@ -11,9 +11,6 @@ from tango import DeviceProxy, DevState
 from tango.db import Database
 
 from tests.resources.test_harness.central_node import CentralNodeWrapper
-
-# COMMAND_COMPLETED,; DEFAULT_DISH_VALIDATION_STATUS,;
-# tmc_csp_master_leaf_node,
 from tests.resources.test_harness.constant import (
     DEFAULT_DISH_VCC_CONFIG,
     centralnode,
@@ -26,6 +23,7 @@ from tests.resources.test_harness.constant import (
     dish_master4,
     sdp_master,
     sdp_subarray1,
+    tmc_csp_master_leaf_node,
     tmc_dish_leaf_node1,
     tmc_dish_leaf_node2,
     tmc_dish_leaf_node3,
@@ -54,6 +52,9 @@ from tests.resources.test_harness.utils.sync_decorators import (
 from tests.resources.test_harness.utils.wait_helpers import Waiter
 from tests.resources.test_support.common_utils.common_helpers import Resource
 
+# COMMAND_COMPLETED,; DEFAULT_DISH_VALIDATION_STATUS,;
+
+
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
@@ -74,7 +75,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         self.central_node.set_timeout_millis(5000)
         self.subarray_node = DeviceProxy(tmc_subarraynode1)
         self.subarray_node.set_timeout_millis(5000)
-        self.csp_master_leaf_node = DeviceProxy()
+        self.csp_master_leaf_node = DeviceProxy(tmc_csp_master_leaf_node)
         self.sdp_master_leaf_node = DeviceProxy(tmc_sdp_master_leaf_node)
         self.sdp_master = DeviceProxy(sdp_master)
         self.subarray_devices = {
