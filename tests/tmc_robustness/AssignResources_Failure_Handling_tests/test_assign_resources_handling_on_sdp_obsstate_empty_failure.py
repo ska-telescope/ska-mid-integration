@@ -1,4 +1,5 @@
 import json
+import time
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -244,3 +245,4 @@ def assign_resources_executed_on_subarray(
         "assignedResources"
     ).value
     LOGGER.info(f"assigned Resources after second assign:{assigned_resources}")
+    time.sleep(3)
