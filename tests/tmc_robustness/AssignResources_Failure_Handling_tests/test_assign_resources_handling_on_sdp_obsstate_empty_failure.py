@@ -1,3 +1,5 @@
+import json
+
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
@@ -87,7 +89,7 @@ def given_tmc_subarray_assign_resources_is_in_progress(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-    _, pytest.unique_id = central_node_mid.perform_action(
+    pytest.command_result = central_node_mid.perform_action(
         "AssignResources", assign_input_json
     )
     assert event_recorder.has_change_event_occurred(
@@ -180,10 +182,20 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
         "obsState",
         ObsState.EMPTY,
     )
-    assert event_recorder.has_change_event_occurred(
+    assertion_data = event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (pytest.unique_id[0], Anything),
+        (pytest.command_result[1][0], Anything),
+        lookahead=15,
+    )
+    exception_message = (
+        "Exception occurred on the following devices: "
+        + "ska_mid/tm_leaf_node/sdp_subarray01: "
+        + "Error ocurred during assign resources"
+    )
+    assert (
+        exception_message
+        in json.loads(assertion_data["attribute_value"][1])[1]
     )
     assigned_resources = central_node_mid.subarray_node.read_attribute(
         "assignedResources"
