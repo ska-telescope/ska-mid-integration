@@ -94,45 +94,33 @@ def given_tmc(
 
 
 @when("the resources are assigned to TMC SubarrayNode")
-def invoke_assign_resources(
+def move_subarray_node_to_idle_obsstate(
     central_node_mid: CentralNodeWrapperMid,
     event_recorder: EventRecorder,
     command_input_factory: JsonFactory,
-    subarray_node,
-):
-    """
-    Move TMC Subarray to IDLE obsstate.
-    :param central_node_mid: fixture for a TMC CentralNode Mid under test
-    which provides simulated master devices
-    :param event_recorder: fixture for a MockTangoEventCallbackGroup
-    for validating the subscribing and receiving events.
-    :param command_input_factory: fixture for creating input required
-    for command
-    :param subarray_node: fixture for a TMC SubarrayNode under test
-    """
+    subarray_id: str,
+) -> None:
+    """Move TMC Subarray to IDLE obsstate."""
+    central_node_mid.set_subarray_id(subarray_id)
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-    event_recorder.subscribe_event(
-        central_node_mid.central_node, "longRunningCommandResult"
-    )
     # Create json for AssignResources commands with requested subarray_id
     assign_input = json.loads(assign_input_json)
-    _, unique_id = central_node_mid.store_resources(json.dumps(assign_input))
-
-    event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
+    assign_input["subarray_id"] = int(subarray_id)
+    pytest.command_result = central_node_mid.perform_action(
+        "AssignResources", json.dumps(assign_input)
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], COMMAND_COMPLETED),
+    )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_node,
         "obsState",
         ObsState.IDLE,
-        lookahead=10,
-    )
-
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "longRunningCommandResult",
-        (unique_id[0], COMMAND_COMPLETED),
-        lookahead=5,
+        lookahead=20,
     )
 
 
@@ -145,18 +133,16 @@ def invoke_configure(
     """
     Invokes Configure command on TMC SubarrayNode
     """
-    event_recorder.subscribe_event(
-        subarray_node.subarray_node, "longRunningCommandResult"
-    )
     configure_input_json = prepare_json_args_for_commands(
-        "configure_adr_63", command_input_factory
+        "configure_mid", command_input_factory
     )
-    subarray_node.execute_transition("Configure", argin=configure_input_json)
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
+    pytest.command_result = subarray_node.execute_transition(
+        "Configure", argin=configure_input_json
+    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
-        "obsState",
-        ObsState.READY,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], COMMAND_COMPLETED),
     )
 
 
@@ -167,4 +153,8 @@ def verify_ready_obsstate(
     event_recorder: EventRecorder,
     event_tracer: TangoEventTracer,
 ) -> None:
-    """check if obsstate of subsystem is READY"""
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_devices["csp_subarray"],
+        "obsState",
+        ObsState.READY,
+    )
