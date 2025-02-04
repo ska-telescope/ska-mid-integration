@@ -26,7 +26,6 @@ server:
   {{- $DishVccInitTimeout := .Values.deviceServers.centralnode.DishVccInitTimeout}}
   {{- $LivelinessCheckPeriod := .Values.deviceServers.centralnode.LivelinessCheckPeriod}}
   {{- $EventSubscriptionCheckPeriod := .Values.deviceServers.centralnode.EventSubscriptionCheckPeriod}}
-  {{- $SkuidService := .Values.deviceServers.centralnode.SkuidService}}
 
   - name: "01"
     classes:
@@ -126,9 +125,6 @@ server:
         - name: "EventSubscriptionCheckPeriod"
           values:
             - "{{ $EventSubscriptionCheckPeriod }}"
-        - name: "SkuidService"
-          values:
-            - "{{ $SkuidService }}"
 
 {{- else }}
 {{- fail "KValueValidRangeUpperLimit should be greater than KValueValidRangeLowerLimit" }}

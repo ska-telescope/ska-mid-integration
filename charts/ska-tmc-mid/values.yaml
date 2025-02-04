@@ -92,21 +92,21 @@ sdpleafnodes:
   image:
     registry: artefact.skao.int
     image: ska-tmc-sdpleafnodes
-    tag: 0.20.0
+    tag: 0.20.1
     pullPolicy: IfNotPresent
 
 cspmasterleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.23.3
+    tag: 0.23.4
     pullPolicy: IfNotPresent
 
 cspsubarrayleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.23.3
+    tag: 0.23.4
     pullPolicy: IfNotPresent
 
 dishleafnode:
@@ -128,11 +128,9 @@ deviceServers:
     instances: ["01"]
     subarray_count: 1
     file: "data/centralnode_mid.yaml"
-    DishLeafNodePrefix: "ska_mid/tm_leaf_node/d0"
     DishIDs: ["SKA001", "SKA036", "SKA063", "SKA100"]
     RealDishMasterIdentifier: "mid-dish/dish-manager"
     SimulatorDishMasterIdentifier: "elt/master"
-    SkuidService: "ska-ser-skuid-test-svc.ska-tmc-centralnode.svc.techops.internal.skao.int:9870"
     DishVccConfig:
       DishVccUri: "car://gitlab.com/ska-telescope/ska-telmodel-data?ska-sdp-tmlite-repository-1.0.0#tmdata"
       DishVccFilePath: "instrument/ska1_mid_psi/ska-mid-cbf-system-parameters.json"
@@ -149,7 +147,6 @@ deviceServers:
   subarraynode:
     enabled: true
     file: "data/subarraynode_mid.yaml"
-    DishLeafNodePrefix: "ska_mid/tm_leaf_node/d0"
     DishIDs: ["SKA001", "SKA036", "SKA063", "SKA100"]
     RealDishMasterIdentifier: "mid-dish/dish-manager"
     SimulatorDishMasterIdentifier: "elt/master"
