@@ -97,16 +97,16 @@ sdpleafnodes:
 
 cspmasterleafnode:
   image:
-    registry: artefact.skao.int
+    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-cspleafnodes
     image: ska-tmc-cspleafnodes
-    tag: 0.23.4
+    tag: 0.23.4-dev.c30f9f8e7 
     pullPolicy: IfNotPresent
 
 cspsubarrayleafnode:
   image:
-    registry: artefact.skao.int
+    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-cspleafnodes
     image: ska-tmc-cspleafnodes
-    tag: 0.23.4
+    tag: 0.23.4-dev.c30f9f8e7 
     pullPolicy: IfNotPresent
 
 dishleafnode:
