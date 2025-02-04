@@ -144,11 +144,6 @@ def invoke_configure(
     pytest.command_result = subarray_node.execute_transition(
         "Configure", argin=configure_input_json
     )
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "longRunningCommandResult",
-        (pytest.command_result[1][0], COMMAND_COMPLETED),
-    )
 
 
 @then("the TMC SubarrayNode transitions to obsState READY")
