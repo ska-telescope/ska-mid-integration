@@ -28,21 +28,12 @@
                 "processing_regions": [
                     {
                         "fsp_ids": [1, 2, 3, 4],
-                        "receptors": ["SKA063", "SKA001", "SKA100"],
+                        "receptors": ["SKA036", "SKA001"],
                         "start_freq": 350000000,
                         "channel_width": 13440,
                         "channel_count": 52080,
                         "sdp_start_channel_id": 0,
                         "integration_factor": 1
-                    },
-                    {
-                        "fsp_ids": [1, 2, 3, 4],
-                        "receptors": ["SKA063", "SKA001", "SKA100"],
-                        "start_freq": 548437600,
-                        "channel_width": 13440,
-                        "channel_count": 14880,
-                        "sdp_start_channel_id": 1,
-                        "integration_factor": 10
                     }
                 ]
             },
