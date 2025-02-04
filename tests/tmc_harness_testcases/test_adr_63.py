@@ -114,7 +114,7 @@ def move_subarray_node_to_idle_obsstate(
         "TMC Subarray device"
         f"({subarray_node.subarray_node.dev_name()}) "
         "is expected to be in IDLE obstate",
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
@@ -155,12 +155,11 @@ def invoke_configure(
         "TMC Subarray device"
         f"({subarray_node.subarray_node.dev_name()}) "
         "is expected to be in CONFIGURING obstate",
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.CONFIGURING,
     )
-    event_tracer.clear_events()
 
 
 @then("the TMC SubarrayNode transitions to obsState READY")
@@ -175,7 +174,7 @@ def verify_ready_obsstate(
         "TMC Subarray device"
         f"({subarray_node.subarray_node.dev_name()}) "
         "is expected to be in READY obstate",
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
@@ -187,7 +186,7 @@ def verify_ready_obsstate(
         f"({subarray_node.subarray_node.dev_name()}) "
         "is expected have longRunningCommand as"
         '(unique_id,(ResultCode.OK,"Command Completed"))',
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
         (pytest.unique_id[0], COMMAND_COMPLETED),
