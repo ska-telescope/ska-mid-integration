@@ -98,11 +98,16 @@ def move_subarray_node_to_idle_obsstate(
     central_node_mid: CentralNodeWrapperMid,
     event_recorder: EventRecorder,
     command_input_factory: JsonFactory,
+    subarray_node: SubarrayNodeWrapper,
 ) -> None:
     """Move TMC Subarray to IDLE obsstate."""
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
+    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     # Create json for AssignResources commands with requested subarray_id
     assign_input = json.loads(assign_input_json)
     pytest.command_result = central_node_mid.perform_action(
@@ -132,6 +137,9 @@ def invoke_configure(
     """
     configure_input_json = prepare_json_args_for_commands(
         "configure_adr_63.json", command_input_factory
+    )
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
     )
     pytest.command_result = subarray_node.execute_transition(
         "Configure", argin=configure_input_json
