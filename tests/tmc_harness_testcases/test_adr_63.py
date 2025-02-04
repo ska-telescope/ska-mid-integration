@@ -105,7 +105,7 @@ def move_subarray_node_to_idle_obsstate(
         "assign_resources_mid", command_input_factory
     )
     event_recorder.subscribe_event(
-        subarray_node.subarray_node, "longRunningCommandResult"
+        central_node_mid.central_node, "longRunningCommandResult"
     )
     event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     # Create json for AssignResources commands with requested subarray_id
