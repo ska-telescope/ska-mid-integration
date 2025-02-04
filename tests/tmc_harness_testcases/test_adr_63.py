@@ -122,7 +122,7 @@ def move_subarray_node_to_idle_obsstate(
         central_node_mid.subarray_node,
         "obsState",
         ObsState.IDLE,
-        lookahead=20,
+        lookahead=10,
     )
 
 
@@ -135,26 +135,24 @@ def invoke_configure(
     """
     Invokes Configure command on TMC SubarrayNode
     """
+    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     configure_input_json = prepare_json_args_for_commands(
         "configure_adr_63", command_input_factory
     )
-    event_recorder.subscribe_event(
-        subarray_node.subarray_node, "longRunningCommandResult"
-    )
     pytest.command_result = subarray_node.execute_transition(
         "Configure", argin=configure_input_json
+    )
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.READY,
+        lookahead=20,
     )
 
 
 @then("the TMC SubarrayNode transitions to obsState READY")
 def verify_ready_obsstate(
     subarray_node: SubarrayNodeWrapper,
-    command_input_factory: JsonFactory,
     event_recorder: EventRecorder,
-    event_tracer: TangoEventTracer,
 ) -> None:
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_devices["csp_subarray"],
-        "obsState",
-        ObsState.READY,
-    )
+    """obsstate read pass"""
