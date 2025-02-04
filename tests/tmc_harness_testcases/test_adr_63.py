@@ -134,7 +134,7 @@ def invoke_configure(
     Invokes Configure command on TMC SubarrayNode
     """
     configure_input_json = prepare_json_args_for_commands(
-        "configure_mid", command_input_factory
+        "configure_adr_63.json", command_input_factory
     )
     pytest.command_result = subarray_node.execute_transition(
         "Configure", argin=configure_input_json
