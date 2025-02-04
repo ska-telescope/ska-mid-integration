@@ -10,7 +10,9 @@ entrypoints:
 {{- $TelmodelSource := .Values.deviceServers.cspsubarrayleafnode.TelmodelSource }}
 {{- $TelmodelPath := .Values.deviceServers.cspsubarrayleafnode.TelmodelPath }}
 {{- $CommandTimeOut := .Values.deviceServers.cspsubarrayleafnode.CommandTimeOut}}
-{{- $SleepTime := .Values.deviceServers.cspsubarrayleafnode.SleepTime}}
+{{- $AdapterTimeOut := .Values.deviceServers.cspsubarrayleafnode.AdapterTimeOut}}
+{{- $LivelinessCheckPeriod := .Values.deviceServers.cspsubarrayleafnode.LivelinessCheckPeriod}}
+{{- $EventSubscriptionCheckPeriod := .Values.deviceServers.cspsubarrayleafnode.EventSubscriptionCheckPeriod}}
 server:
   name: "csp_subarray_leaf_node_mid"
   instances:
@@ -52,9 +54,15 @@ server:
               - name: "CommandTimeOut"
                 values:
                 - "{{ $CommandTimeOut }}"
-              - name: "SleepTime"
+              - name: "AdapterTimeOut"
                 values:
-                - "{{ $SleepTime }}"
+                - "{{ $AdapterTimeOut }}"
+              - name: "LivelinessCheckPeriod"
+                values:
+                - "{{ $LivelinessCheckPeriod }}"
+              - name: "EventSubscriptionCheckPeriod"
+                values:
+                - "{{ $EventSubscriptionCheckPeriod }}"
   {{- end}}
 depends_on:
   - device: sys/database/2
