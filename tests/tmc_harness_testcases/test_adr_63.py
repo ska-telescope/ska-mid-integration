@@ -98,16 +98,13 @@ def move_subarray_node_to_idle_obsstate(
     central_node_mid: CentralNodeWrapperMid,
     event_recorder: EventRecorder,
     command_input_factory: JsonFactory,
-    subarray_id: str,
 ) -> None:
     """Move TMC Subarray to IDLE obsstate."""
-    central_node_mid.set_subarray_id(subarray_id)
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
     # Create json for AssignResources commands with requested subarray_id
     assign_input = json.loads(assign_input_json)
-    assign_input["subarray_id"] = int(subarray_id)
     pytest.command_result = central_node_mid.perform_action(
         "AssignResources", json.dumps(assign_input)
     )
