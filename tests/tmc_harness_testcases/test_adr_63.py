@@ -136,7 +136,7 @@ def invoke_configure(
     Invokes Configure command on TMC SubarrayNode
     """
     configure_input_json = prepare_json_args_for_commands(
-        "configure_adr_63.json", command_input_factory
+        "configure_adr_63", command_input_factory
     )
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
