@@ -6,11 +6,11 @@
             {
                 "receptors": ["SKA001", "SKA036"],
                 "field": {
-                    "target_name": "Cen-A",
+                    "target_name": "Polaris Australis",
                     "reference_frame": "ICRS",
                     "attrs": {
-                        "c1": 201.365,
-                        "c2": -43.0191667
+                        "c1": 317.199,
+                        "c2": -88.95636
                     }
                 }
             }
