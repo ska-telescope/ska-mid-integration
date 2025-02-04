@@ -1,7 +1,5 @@
 """Test module for verification """
 
-import json
-
 import pytest
 from assertpy import assert_that
 from pytest_bdd import given, scenario, then, when
@@ -11,7 +9,6 @@ from tango import DevState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.constant import COMMAND_COMPLETED
-from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
@@ -96,7 +93,7 @@ def given_tmc(
 @when("the resources are assigned to TMC SubarrayNode")
 def move_subarray_node_to_idle_obsstate(
     central_node_mid: CentralNodeWrapperMid,
-    event_recorder: EventRecorder,
+    event_tracer: TangoEventTracer,
     command_input_factory: JsonFactory,
     subarray_node: SubarrayNodeWrapper,
 ) -> None:
@@ -104,55 +101,95 @@ def move_subarray_node_to_idle_obsstate(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-    event_recorder.subscribe_event(
+    _, pytest.unique_id = central_node_mid.store_resources(assign_input_json)
+
+    event_tracer.subscribe_event(subarray_node.subarray_node, "obsState")
+    event_tracer.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
     )
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-    # Create json for AssignResources commands with requested subarray_id
-    assign_input = json.loads(assign_input_json)
-    pytest.command_result = central_node_mid.perform_action(
-        "AssignResources", json.dumps(assign_input)
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "longRunningCommandResult",
-        (pytest.command_result[1][0], COMMAND_COMPLETED),
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.subarray_node,
+
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the subarray must be in the IDLE obsState'"
+        "TMC Subarray device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected to be in IDLE obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
-        lookahead=10,
     )
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the subarray is in IDLE obsState'"
+        "TMC Central Node device"
+        f"({central_node_mid.central_node.dev_name()}) "
+        "is expected have longRunningCommand as"
+        '(unique_id,(ResultCode.OK,"Command Completed"))',
+    ).within_timeout(60).has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.unique_id[0], COMMAND_COMPLETED),
+    )
+    event_tracer.clear_events()
 
 
 @when("the Configure command is invoked with respective ADR-63 changes input")
 def invoke_configure(
     subarray_node: SubarrayNodeWrapper,
     command_input_factory: JsonFactory,
-    event_recorder: EventRecorder,
+    event_tracer: TangoEventTracer,
 ) -> None:
     """
     Invokes Configure command on TMC SubarrayNode
     """
-    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     configure_input_json = prepare_json_args_for_commands(
         "configure_adr_63", command_input_factory
     )
     pytest.command_result = subarray_node.execute_transition(
         "Configure", argin=configure_input_json
     )
-    assert event_recorder.has_change_event_occurred(
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the subarray must be in the CONFIGURING obsState'"
+        "TMC Subarray device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected to be in CONFIGURING obstate",
+    ).within_timeout(60).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
-        ObsState.READY,
-        lookahead=20,
+        ObsState.CONFIGURING,
     )
+    event_tracer.clear_events()
 
 
 @then("the TMC SubarrayNode transitions to obsState READY")
 def verify_ready_obsstate(
     subarray_node: SubarrayNodeWrapper,
-    event_recorder: EventRecorder,
+    event_tracer: TangoEventTracer,
 ) -> None:
-    """obsstate read pass"""
+    """This step in test case ensure subarray node is in Obsstate READY"""
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the subarray must be in the READY obsState'"
+        "TMC Subarray device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected to be in READY obstate",
+    ).within_timeout(60).has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.READY,
+    )
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'the subarray is in READY obsState'"
+        "TMC Subarray Node device"
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected have longRunningCommand as"
+        '(unique_id,(ResultCode.OK,"Command Completed"))',
+    ).within_timeout(60).has_change_event_occurred(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        (pytest.unique_id[0], COMMAND_COMPLETED),
+    )
+    event_tracer.clear_events()
