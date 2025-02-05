@@ -1,4 +1,4 @@
-@SKA_mid25 @XTP-73592
+@SKA_mid @XTP-73592
 Scenario Outline: Error Propagation Reported by TMC Mid End/EndScan/Scan Commands for Defective Subarray
 		Given the telescope is is ON state
 		And the TMC subarray is in the <initialObsState> observation state

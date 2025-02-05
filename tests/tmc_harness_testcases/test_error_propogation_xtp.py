@@ -34,7 +34,7 @@ from tests.tmc_harness_testcases.conftest import (
 )
 
 
-@pytest.mark.SKA_mid25
+@pytest.mark.SKA_mid
 @scenario(
     "../features/check_error_propagation.feature",
     "Error Propagation Reported by TMC Mid End/EndScan/Scan "
