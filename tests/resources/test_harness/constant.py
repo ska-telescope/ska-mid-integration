@@ -346,3 +346,23 @@ DISH_001_CALIBRATION_DATA = [1.1, 1.2, 1.3]
 DISH_036_CALIBRATION_DATA = [2.1, 2.2, 2.3]
 RESET_OFFSETS = [0.0, 0.0]
 ABORT_COMPLETED = json.dumps([ResultCode.STARTED, "Command Started"])
+
+
+FAILED_DEFECT = json.dumps(
+    {
+        "enabled": True,
+        "fault_type": FaultType.FAILED_RESULT,
+        "error_message": "Default exception.",
+        "result": ResultCode.FAILED,
+    }
+)
+
+INTERMEDIATE_CONFIGURING_STATE_DEFECT = json.dumps(
+    {
+        "enabled": True,
+        "fault_type": FaultType.STUCK_IN_INTERMEDIATE_STATE,
+        "error_message": "Device stuck in intermediate state",
+        "result": ResultCode.FAILED,
+        "intermediate_state": ObsState.CONFIGURING,
+    }
+)
