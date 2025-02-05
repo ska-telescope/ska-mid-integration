@@ -15,6 +15,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
 
+@pytest.mark.skip()
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(

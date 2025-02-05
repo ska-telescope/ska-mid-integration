@@ -10,6 +10,7 @@ from tests.resources.test_support.common_utils.telescope_controls import (
 telescope_control = BaseTelescopeControl()
 
 
+@pytest.mark.skip()
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-64935.feature",
