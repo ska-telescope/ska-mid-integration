@@ -1,5 +1,5 @@
 # This BDD test performs TMC-Dish pairwise testing to verify CentralNode TelescopeHealthState
-@XTP-55713 @XTP-29778 @Team_SAHYADRI @tmc_dish
+@XTP-55713 @XTP-29778 @XTP-73574 @Team_SAHYADRI @tmc_dish
 Scenario Outline: Verify CentralNode TelescopeHealthState
     Given a Telescope consisting of TMC, DISH <dish_ids>, simulated CSP and simulated SDP
     And the Telescope is in ON state

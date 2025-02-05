@@ -1,5 +1,4 @@
-# This BDD test performs TMC-CSP pairwise testing to verify Configure command flow.
-@XTP-29583 @XTP-29345 @tmc_csp
+@XTP-29345 @XTP-73581 @XTP-73579 @XTP-28347 @XTP-29583 @Team_SAHYADRI @xtp-73581
 Scenario Outline: Configure a CSP subarray for a scan using TMC
     Given the telescope is in ON state
     And TMC subarray <subarray_id> in ObsState IDLE
@@ -10,4 +9,3 @@ Scenario Outline: Configure a CSP subarray for a scan using TMC
     Examples:
     | subarray_id |
     | 1           |
-    
