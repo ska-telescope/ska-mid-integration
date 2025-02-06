@@ -34,7 +34,7 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 @given("the telescope is is ON state")
 def check_telescope_is_in_on_state(
     central_node_mid: CentralNodeWrapperMid,
-    subarray_node_mid: SubarrayNodeWrapper,
+    subarray_node: SubarrayNodeWrapper,
     event_tracer: TangoEventTracer,
 ) -> None:
     """
@@ -45,12 +45,12 @@ def check_telescope_is_in_on_state(
         central_node_mid.central_node, "telescopeState"
     )
     event_tracer.subscribe_event(
-        subarray_node_mid.subarray_node, "longRunningCommandResult"
+        subarray_node.subarray_node, "longRunningCommandResult"
     )
     log_events(
         {
             central_node_mid.central_node: ["telescopeState"],
-            subarray_node_mid.subarray_node: [
+            subarray_node.subarray_node: [
                 "obsState",
                 "longRunningCommandResult",
             ],
@@ -71,7 +71,7 @@ def check_telescope_is_in_on_state(
 
 def perform_idle_transition(
     central_node_mid: CentralNodeWrapperMid,
-    subarray_node_mid: SubarrayNodeWrapper,
+    subarray_node: SubarrayNodeWrapper,
     event_tracer: TangoEventTracer,
     command_input_factory: JsonFactory,
 ):
@@ -79,7 +79,7 @@ def perform_idle_transition(
     Execute Assign and verify
     """
 
-    event_tracer.subscribe_event(subarray_node_mid.subarray_node, "obsState")
+    event_tracer.subscribe_event(subarray_node.subarray_node, "obsState")
     event_tracer.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
     )
@@ -100,10 +100,10 @@ def perform_idle_transition(
     assert_that(event_tracer).described_as(
         "FAILED ASSUMPTION AFTER ASSIGNRESOURCES COMMAND: "
         "Subarray Node device"
-        f"({subarray_node_mid.subarray_node.dev_name()}) "
+        f"({subarray_node.subarray_node.dev_name()}) "
         "is expected to be in IDLE obstate",
     ).within_timeout(TIMEOUT).has_change_event_occurred(
-        subarray_node_mid.subarray_node,
+        subarray_node.subarray_node,
         "obsState",
         ObsState.IDLE,
     )
@@ -123,40 +123,40 @@ def perform_idle_transition(
 
 
 def verify_scanning_transition_with_endscan(
-    subarray_node_mid: SubarrayNodeWrapper,
+    subarray_node: SubarrayNodeWrapper,
 ):
     """
     Execute EndScan
     """
 
-    _, pytest.unique_id = subarray_node_mid.execute_transition("EndScan")
+    _, pytest.unique_id = subarray_node.execute_transition("EndScan")
 
 
 def perform_ready_transition_with_end(
-    subarray_node_mid: SubarrayNodeWrapper,
+    subarray_node: SubarrayNodeWrapper,
     event_tracer: TangoEventTracer,
 ):
     """
     Execute End and verify error propagation
     """
 
-    _, pytest.unique_id = subarray_node_mid.subarray_node.End()
+    _, pytest.unique_id = subarray_node.subarray_node.End()
 
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "WHEN" STEP: '
         '"I end the observation"'
         "Subarray Node device"
-        f"({subarray_node_mid.subarray_node.dev_name()}) "
+        f"({subarray_node.subarray_node.dev_name()}) "
         "is expected to be in IDLE obstate",
     ).within_timeout(TIMEOUT).has_change_event_occurred(
-        subarray_node_mid.subarray_node,
+        subarray_node.subarray_node,
         "obsState",
         ObsState.CONFIGURING,
     )
 
 
 def perform_scan(
-    subarray_node_mid: SubarrayNodeWrapper,
+    subarray_node: SubarrayNodeWrapper,
     command_input_factory: JsonFactory,
 ):
 
@@ -166,13 +166,13 @@ def perform_scan(
     scan_input_json = prepare_json_args_for_commands(
         "scan_mid", command_input_factory
     )
-    _, pytest.unique_id = subarray_node_mid.execute_transition(
+    _, pytest.unique_id = subarray_node.execute_transition(
         "Scan", scan_input_json
     )
 
 
 def perform_scanning_transition(
-    subarray_node_mid: SubarrayNodeWrapper,
+    subarray_node: SubarrayNodeWrapper,
     event_tracer: TangoEventTracer,
     command_input_factory: JsonFactory,
 ):
@@ -180,23 +180,21 @@ def perform_scanning_transition(
     Send a Scan command to the subarray.
     """
     event_tracer.subscribe_event(
-        subarray_node_mid.subarray_node, "longRunningCommandResult"
+        subarray_node.subarray_node, "longRunningCommandResult"
     )
     scan_input_json = prepare_json_args_for_commands(
         "scan_mid", command_input_factory
     )
-    _, unique_id = subarray_node_mid.execute_transition(
-        "Scan", scan_input_json
-    )
+    _, unique_id = subarray_node.execute_transition("Scan", scan_input_json)
 
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "THEN" STEP: '
         "'the subarray must be in the SCANNING obsState until finished'"
         "Subarray Node device"
-        f"({subarray_node_mid.subarray_node.dev_name()}) "
+        f"({subarray_node.subarray_node.dev_name()}) "
         "is expected to be in SCANNING obstate",
     ).within_timeout(TIMEOUT).has_change_event_occurred(
-        subarray_node_mid.subarray_node,
+        subarray_node.subarray_node,
         "obsState",
         ObsState.SCANNING,
     )
@@ -204,11 +202,11 @@ def perform_scanning_transition(
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "GIVEN" STEP: '
         "Central Node device"
-        f"({subarray_node_mid.subarray_node.dev_name()}) "
+        f"({subarray_node.subarray_node.dev_name()}) "
         "is expected have longRunningCommand as"
         '(unique_id,(ResultCode.OK,"Command Completed"))',
     ).within_timeout(TIMEOUT).has_change_event_occurred(
-        subarray_node_mid.subarray_node,
+        subarray_node.subarray_node,
         "longRunningCommandResult",
         (unique_id[0], json.dumps((int(ResultCode.OK), "Command Completed"))),
     )
@@ -217,7 +215,7 @@ def perform_scanning_transition(
 
 def perform_ready_transition(
     central_node_mid: CentralNodeWrapperMid,
-    subarray_node_mid: SubarrayNodeWrapper,
+    subarray_node: SubarrayNodeWrapper,
     event_tracer: TangoEventTracer,
     command_input_factory: JsonFactory,
 ):
@@ -228,44 +226,38 @@ def perform_ready_transition(
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    _, unique_id = subarray_node_mid.store_configuration_data(
-        configure_input_json
-    )
+    _, unique_id = subarray_node.store_configuration_data(configure_input_json)
 
     event_tracer.subscribe_event(
-        subarray_node_mid.subarray_devices.get("sdp_subarray"), "obsState"
+        subarray_node.subarray_devices.get("sdp_subarray"), "obsState"
     )
     event_tracer.subscribe_event(
-        subarray_node_mid.subarray_devices.get("csp_subarray"), "obsState"
+        subarray_node.subarray_devices.get("csp_subarray"), "obsState"
     )
     event_tracer.subscribe_event(
-        subarray_node_mid.csp_subarray_leaf_node, "cspSubarrayObsState"
+        subarray_node.csp_subarray_leaf_node, "cspSubarrayObsState"
     )
     event_tracer.subscribe_event(
-        subarray_node_mid.sdp_subarray_leaf_node, "sdpSubarrayObsState"
+        subarray_node.sdp_subarray_leaf_node, "sdpSubarrayObsState"
     )
     log_events(
         {
-            subarray_node_mid.subarray_devices.get("sdp_subarray"): [
-                "obsState"
-            ],
-            subarray_node_mid.subarray_devices.get("csp_subarray"): [
-                "obsState"
-            ],
-            subarray_node_mid.csp_subarray_leaf_node: ["cspSubarrayObsState"],
-            subarray_node_mid.sdp_subarray_leaf_node: ["sdpSubarrayObsState"],
+            subarray_node.subarray_devices.get("sdp_subarray"): ["obsState"],
+            subarray_node.subarray_devices.get("csp_subarray"): ["obsState"],
+            subarray_node.csp_subarray_leaf_node: ["cspSubarrayObsState"],
+            subarray_node.sdp_subarray_leaf_node: ["sdpSubarrayObsState"],
         }
     )
-    csp = subarray_node_mid.subarray_devices.get("csp_subarray")
-    sdp = subarray_node_mid.subarray_devices.get("sdp_subarray")
+    csp = subarray_node.subarray_devices.get("csp_subarray")
+    sdp = subarray_node.subarray_devices.get("sdp_subarray")
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "THEN" STEP: '
         "'the subarray must be in the READY obsState'"
         "CSP Subarray Leaf Node device"
-        f"({subarray_node_mid.csp_subarray_leaf_node.dev_name()}) "
+        f"({subarray_node.csp_subarray_leaf_node.dev_name()}) "
         "is expected to be in READY obstate",
     ).within_timeout(TIMEOUT).has_change_event_occurred(
-        subarray_node_mid.csp_subarray_leaf_node,
+        subarray_node.csp_subarray_leaf_node,
         "cspSubarrayObsState",
         ObsState.READY,
     )
@@ -273,10 +265,10 @@ def perform_ready_transition(
         'FAILED ASSUMPTION IN "THEN" STEP: '
         "'the subarray must be in the READY obsState'"
         "SDP Subarray Leaf Node device"
-        f"({subarray_node_mid.sdp_subarray_leaf_node.dev_name()}) "
+        f"({subarray_node.sdp_subarray_leaf_node.dev_name()}) "
         "is expected to be in READY obstate",
     ).within_timeout(TIMEOUT).has_change_event_occurred(
-        subarray_node_mid.sdp_subarray_leaf_node,
+        subarray_node.sdp_subarray_leaf_node,
         "sdpSubarrayObsState",
         ObsState.READY,
     )
@@ -334,7 +326,7 @@ def perform_ready_transition(
 )
 def move_tmc_to_intial_state(
     central_node_mid: CentralNodeWrapperMid,
-    subarray_node_mid: SubarrayNodeWrapper,
+    subarray_node: SubarrayNodeWrapper,
     event_tracer: TangoEventTracer,
     command_input_factory: JsonFactory,
     initialObsState,
@@ -350,14 +342,14 @@ def move_tmc_to_intial_state(
 
             perform_idle_transition(
                 central_node_mid,
-                subarray_node_mid,
+                subarray_node,
                 event_tracer,
                 command_input_factory,
             )
 
             perform_ready_transition(
                 central_node_mid,
-                subarray_node_mid,
+                subarray_node,
                 event_tracer,
                 command_input_factory,
             )
@@ -365,20 +357,20 @@ def move_tmc_to_intial_state(
 
             perform_idle_transition(
                 central_node_mid,
-                subarray_node_mid,
+                subarray_node,
                 event_tracer,
                 command_input_factory,
             )
 
             perform_ready_transition(
                 central_node_mid,
-                subarray_node_mid,
+                subarray_node,
                 event_tracer,
                 command_input_factory,
             )
 
             perform_scanning_transition(
-                subarray_node_mid,
+                subarray_node,
                 event_tracer,
                 command_input_factory,
             )
@@ -386,7 +378,7 @@ def move_tmc_to_intial_state(
 
 @when(parsers.parse("{command} is invoked on a {defectiveSubsystem} Subarray"))
 def execute_command_on_tmc_with_defectivesetup(
-    subarray_node_mid: SubarrayNodeWrapper,
+    subarray_node: SubarrayNodeWrapper,
     event_tracer: TangoEventTracer,
     simulator_factory: SimulatorFactory,
     command_input_factory: JsonFactory,
@@ -432,19 +424,19 @@ def execute_command_on_tmc_with_defectivesetup(
         case "END":
 
             perform_ready_transition_with_end(
-                subarray_node_mid,
+                subarray_node,
                 event_tracer,
             )
 
         case "ENDSCAN":
 
             verify_scanning_transition_with_endscan(
-                subarray_node_mid,
+                subarray_node,
             )
         case "SCAN":
 
             perform_scan(
-                subarray_node_mid,
+                subarray_node,
                 command_input_factory,
             )
 
@@ -456,7 +448,7 @@ def execute_command_on_tmc_with_defectivesetup(
     )
 )
 def validate_error_message_reporting(
-    subarray_node_mid: SubarrayNodeWrapper,
+    subarray_node: SubarrayNodeWrapper,
     event_tracer: TangoEventTracer,
 ):
     """
@@ -474,11 +466,11 @@ def validate_error_message_reporting(
         '"the command failure is reported by subarray with appropriate"'
         '"error message"'
         "Subarray Node device"
-        f"({subarray_node_mid.subarray_node.dev_name()}) "
+        f"({subarray_node.subarray_node.dev_name()}) "
         "is expected have longRunningCommandResult"
         "(ResultCode.FAILED,exception)",
     ).within_timeout(TIMEOUT).has_desired_result_code_message_in_lrcr_event(
-        subarray_node_mid.subarray_node,
+        subarray_node.subarray_node,
         [exception_message],
         pytest.unique_id[0],
         ResultCode.FAILED,
@@ -491,14 +483,14 @@ def validate_error_message_reporting(
 
 @then(parsers.parse("the TMC SubarrayNode remains in {stuck} obsState"))
 def validate_subarry_obsState(
-    subarray_node_mid: SubarrayNodeWrapper,
+    subarray_node: SubarrayNodeWrapper,
     stuck,
 ):
     """
     Check if TMC subarray remains in stuck Obs-State.
     """
 
-    attribute_value = subarray_node_mid.subarray_node.read_attribute(
+    attribute_value = subarray_node.subarray_node.read_attribute(
         "obsState"
     ).value
 

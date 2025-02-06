@@ -62,7 +62,7 @@ def test_tmc_command_timeout_error_propagation():
 def execute_command(
     device,
     command,
-    subarray_node_mid: SubarrayNodeWrapper,
+    subarray_node: SubarrayNodeWrapper,
     event_tracer: TangoEventTracer,
     command_input_factory: JsonFactory,
 ):
@@ -78,7 +78,7 @@ def execute_command(
 
                 LOGGER.info("Working on Ready State")
                 perform_ready_transition_with_end(
-                    subarray_node_mid,
+                    subarray_node,
                     event_tracer,
                 )
 
@@ -89,7 +89,7 @@ def execute_command(
                 )
                 LOGGER.info("Working on End Scan")
                 verify_scanning_transition_with_endscan(
-                    subarray_node_mid,
+                    subarray_node,
                     # event_tracer,
                 )
             case "SCAN":
@@ -99,7 +99,7 @@ def execute_command(
                 )
                 LOGGER.info("Workng on Scan")
                 perform_scan(
-                    subarray_node_mid,
+                    subarray_node,
                     # event_tracer,
                     command_input_factory,
                 )
@@ -114,7 +114,7 @@ def execute_command(
                 pytest.defective_subarray.SetDelayInfo(json.dumps({"End": 55}))
                 LOGGER.info("Working on Ready State")
                 perform_ready_transition_with_end(
-                    subarray_node_mid,
+                    subarray_node,
                     event_tracer,
                 )
 
@@ -128,7 +128,7 @@ def execute_command(
                 )
                 LOGGER.info("Working on End Scan")
                 verify_scanning_transition_with_endscan(
-                    subarray_node_mid,
+                    subarray_node,
                     # event_tracer,
                 )
             case "SCAN":
@@ -141,7 +141,7 @@ def execute_command(
                 )
                 LOGGER.info("Workng on Scan")
                 perform_scan(
-                    subarray_node_mid,
+                    subarray_node,
                     # event_tracer,
                     command_input_factory,
                 )
@@ -149,7 +149,7 @@ def execute_command(
 
 @when(parsers.parse("{command} is invoked on a {defectiveSubsystem} Subarray"))
 def execute_command_on_tmc_with_defectivesetup(
-    subarray_node_mid: SubarrayNodeWrapper,
+    subarray_node: SubarrayNodeWrapper,
     event_tracer: TangoEventTracer,
     simulator_factory: SimulatorFactory,
     command_input_factory: JsonFactory,
@@ -174,7 +174,7 @@ def execute_command_on_tmc_with_defectivesetup(
             execute_command(
                 "CSP",
                 command,
-                subarray_node_mid,
+                subarray_node,
                 event_tracer,
                 command_input_factory,
             )
@@ -189,7 +189,7 @@ def execute_command_on_tmc_with_defectivesetup(
             execute_command(
                 "SDP",
                 command,
-                subarray_node_mid,
+                subarray_node,
                 event_tracer,
                 command_input_factory,
             )
@@ -205,7 +205,7 @@ def execute_command_on_tmc_with_defectivesetup(
             # execute_command(
             #     "MCCS",
             #     command,
-            #     subarray_node_mid,
+            #     subarray_node,
             #     event_tracer,
             #     command_input_factory,
             # )
@@ -219,7 +219,7 @@ def execute_command_on_tmc_with_defectivesetup(
     )
 )
 def validate_error_message_reporting(
-    subarray_node_mid: SubarrayNodeWrapper,
+    subarray_node: SubarrayNodeWrapper,
     event_tracer: TangoEventTracer,
 ):
     """
@@ -241,11 +241,11 @@ def validate_error_message_reporting(
         '"the command failure is reported by subarray with appropriate"'
         '"error message"'
         "Subarray Node device"
-        f"({subarray_node_mid.subarray_node.dev_name()}) "
+        f"({subarray_node.subarray_node.dev_name()}) "
         "is expected have longRunningCommandResult"
         "(ResultCode.FAILED,exception)",
     ).within_timeout(TIMEOUT).has_desired_result_code_message_in_lrcr_event(
-        subarray_node_mid.subarray_node,
+        subarray_node.subarray_node,
         [exception_message],
         pytest.unique_id[0],
         ResultCode.FAILED,
