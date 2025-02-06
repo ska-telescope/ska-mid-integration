@@ -227,6 +227,7 @@ def validate_error_message_reporting(
     """
 
     LOGGER.info("validate_error_message_reporting")
+    LOGGER.info("TIMEOUT - %s", TIMEOUT)
 
     # exception_message = (
     #     "Exception occurred on the following devices:"
