@@ -363,6 +363,6 @@ INTERMEDIATE_CONFIGURING_STATE_DEFECT = json.dumps(
         "fault_type": FaultType.STUCK_IN_INTERMEDIATE_STATE,
         "error_message": "Device stuck in intermediate state",
         "result": ResultCode.FAILED,
-        "intermediate_state": ObsState.CONFIGURING,
+        "intermediate_state": ObsState.READY,
     }
 )
