@@ -1,5 +1,5 @@
 Feature: Successfully execute a scan after a failed configure
-    @XTP-20321 @SKA_mid
+    @XTP-20321 @XTP-73595 @XTP-28347 @End_to_end @configuration
     Scenario: Successfully execute a scan after a failed attempt to configure
         Given a subarray <subarray_id> with resources <resources_list> in obsState IDLE
         When I issue the command Configure passing an invalid JSON script to the subarray <subarray_id>
