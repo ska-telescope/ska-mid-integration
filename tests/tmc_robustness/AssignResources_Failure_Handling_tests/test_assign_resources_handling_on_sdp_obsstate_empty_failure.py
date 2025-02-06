@@ -1,5 +1,4 @@
 import json
-import time
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -97,10 +96,6 @@ def given_tmc_subarray_assign_resources_is_in_progress(
         "obsState",
         ObsState.RESOURCING,
     )
-    assigned_resources = central_node_mid.subarray_node.read_attribute(
-        "assignedResources"
-    ).value
-    LOGGER.info(f"assigned Resources afyer first assign:{assigned_resources}")
 
 
 @given(parsers.parse("Csp Subarray {subarray_id} completes assignResources"))
@@ -191,7 +186,7 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
     exception_message = (
         "Exception occurred on the following devices: "
         + "ska_mid/tm_leaf_node/sdp_subarray01: "
-        + "Error ocurred during assign resources"
+        + "Exception occurred, command failed."
     )
     assert (
         exception_message
@@ -200,11 +195,6 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
     wait_for_obsstate_state_change(
         target_mode=0, device=central_node_mid.subarray_node, timeout_seconds=5
     )
-    assigned_resources = central_node_mid.subarray_node.read_attribute(
-        "assignedResources"
-    ).value
-    LOGGER.info(f"assigned Resources after empty:{assigned_resources}")
-    event_recorder.clear_events()
 
 
 @then(
@@ -239,8 +229,3 @@ def assign_resources_executed_on_subarray(
         (unique_id[0], COMMAND_COMPLETED),
         lookahead=5,
     )
-    assigned_resources = central_node_mid.subarray_node.read_attribute(
-        "assignedResources"
-    ).value
-    LOGGER.info(f"assigned Resources after second assign:{assigned_resources}")
-    time.sleep(3)
