@@ -15,7 +15,7 @@ KUBE_NAMESPACE_SDP ?= ska-tmc-integration-sdp
 K8S_TIMEOUT ?= 800s
 PYTHON_LINT_TARGET ?= tests/
 DEPLOYMENT_TYPE = $(shell echo $(TELESCOPE) | cut -d '-' -f2)
-MARK ?= $(shell echo $(TELESCOPE) | sed "s/-/_/g") ## What -m opt to pass to pytest
+#MARK ?= $(shell echo $(TELESCOPE) | sed "s/-/_/g") ## What -m opt to pass to pytest
 MARK = SKA_mid25
 # run one test with FILE=acceptance/test_subarray_node.py::test_check_internal_model_according_to_the_tango_ecosystem_deployed
 FILE ?= tests## A specific test file to pass to pytest
@@ -103,8 +103,8 @@ SDP_PROCCONTROL_REPLICAS ?= 1
 
 ifeq ($(MAKECMDGOALS),k8s-test)
 ADD_ARGS +=  --true-context
-MARK ?= $(shell echo $(TELESCOPE) | sed "s/-/_/g") 
-
+#MARK ?= $(shell echo $(TELESCOPE) | sed "s/-/_/g")
+MARK = SKA_mid25
 endif
 
 
