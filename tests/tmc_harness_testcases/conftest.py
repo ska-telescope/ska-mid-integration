@@ -170,7 +170,7 @@ def perform_scan(
     )
     if defectiveSubsystem == "SDP":
         scan_input_json = json.loads(scan_input_json)
-        scan_input_json.pop("scan_id")
+        # scan_input_json.pop("scan_id")
         scan_input_json = json.dumps(scan_input_json)
 
     _, pytest.unique_id = subarray_node.execute_transition(
@@ -463,6 +463,11 @@ def validate_error_message_reporting(
     """
     Check if subarray node populates error message correctly.
     """
+
+    # exception_message = (
+    #     "Exception occurred on the following devices:"
+    #     + f" {pytest.defective_device}:"
+    # )
 
     exception_message = (
         "Exception occurred on the following devices:"

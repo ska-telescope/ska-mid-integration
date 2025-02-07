@@ -584,7 +584,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
 
                 else:
                     LOGGER.info("Moving to Off State")
-                    self.move_to_off()
+                    # self.move_to_off()
 
                 self._clear_command_call_and_transition_data(
                     clear_transition=True
