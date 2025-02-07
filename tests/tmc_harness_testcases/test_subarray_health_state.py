@@ -135,6 +135,8 @@ class TestSubarrayHealthState(object):
         dish_master_sim_2.SetDirectHealthState(dish_master2_health_state)
         dish_master_sim_3.SetDirectHealthState(dish_master3_health_state)
         dish_master_sim_4.SetDirectHealthState(dish_master4_health_state)
+        event_recorder.subscribe_event(csp_sa_sim, "healthState")
+        event_recorder.subscribe_event(sdp_sa_sim, "healthState")
         event_recorder.subscribe_event(dish_master_sim_1, "healthState")
         event_recorder.subscribe_event(dish_master_sim_2, "healthState")
         event_recorder.subscribe_event(dish_master_sim_3, "healthState")
