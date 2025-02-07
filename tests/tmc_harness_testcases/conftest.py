@@ -169,6 +169,7 @@ def perform_scan(
         "scan_mid", command_input_factory
     )
     if defectiveSubsystem == "SDP":
+        scan_input_json = json.loads(scan_input_json)
         scan_input_json.pop("scan_id")
 
     _, pytest.unique_id = subarray_node.execute_transition(
