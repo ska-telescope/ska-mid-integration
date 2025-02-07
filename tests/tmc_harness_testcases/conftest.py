@@ -16,6 +16,7 @@ from tests.conftest import LOGGER
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.constant import (
     ERROR_PROPAGATION_DEFECT,
+    FAILED_DEFECT,
     TIMEOUT,
     tmc_csp_subarray_leaf_node,
     tmc_sdp_subarray_leaf_node,
@@ -416,7 +417,7 @@ def execute_command_on_tmc_with_defectivesetup(
                 )
             )
             pytest.defective_device = tmc_sdp_subarray_leaf_node
-            pytest.defective_subarray.SetDefective(ERROR_PROPAGATION_DEFECT)
+            pytest.defective_subarray.SetDefective(FAILED_DEFECT)
 
         case "Dish":
             # pytest.defective_subarray = (
@@ -439,7 +440,7 @@ def execute_command_on_tmc_with_defectivesetup(
             pytest.defective_subarray.SetDefective(
                 json.dumps(ERROR_PROPAGATION_DEFECT)
             )
-            LOGGER.info("Defect induced on Dish")
+            LOGGER.info("Work in Progress")
 
     match command:
         case "END":
