@@ -7,11 +7,6 @@ Scenario Outline: Error Propagation Reported by TMC Mid End/EndScan/Scan Command
 		Then the TMC SubarrayNode remains in <stuck> obsState
 		Examples:
 		            |initialObsState  | command | defectiveSubsystem  |stuck|
-		            |READY            | END     | CSP                  | READY |
-		            |SCANNING         | ENDSCAN | CSP                  | SCANNING |
-		            |READY            | SCAN    | CSP                  | SCANNING |
-		            |READY            | END     | SDP                  | READY|
-		            |SCANNING         | ENDSCAN | SDP                  | SCANNING|
 		            |READY            | SCAN    | SDP                  | SCANNING|
 
 

@@ -171,6 +171,7 @@ def perform_scan(
     if defectiveSubsystem == "SDP":
         scan_input_json = json.loads(scan_input_json)
         scan_input_json.pop("scan_id")
+        scan_input_json = json.dumps(scan_input_json)
 
     _, pytest.unique_id = subarray_node.execute_transition(
         "Scan", scan_input_json
