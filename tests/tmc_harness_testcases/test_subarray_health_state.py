@@ -408,10 +408,10 @@ class TestSubarrayHealthState(object):
         dish_master3_health_state, dish_master4_health_state",
         [
             (
+                HealthState.FAILED,
                 HealthState.OK,
                 HealthState.OK,
-                HealthState.FAILED,
-                HealthState.FAILED,
+                HealthState.OK,
                 HealthState.OK,
                 HealthState.OK,
             ),
