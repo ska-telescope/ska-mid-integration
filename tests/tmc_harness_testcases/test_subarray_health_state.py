@@ -35,6 +35,8 @@ class TestSubarrayHealthState(object):
         dish_master_sim_2.SetDirectHealthState(HealthState.OK)
         dish_master_sim_3.SetDirectHealthState(HealthState.OK)
         dish_master_sim_4.SetDirectHealthState(HealthState.OK)
+        csp_sa_sim.adminMode = 0
+        sdp_sa_sim.adminMode = 0
         event_recorder.subscribe_event(csp_sa_sim, "healthState")
         event_recorder.subscribe_event(sdp_sa_sim, "healthState")
         event_recorder.subscribe_event(dish_master_sim_1, "healthState")
@@ -131,6 +133,8 @@ class TestSubarrayHealthState(object):
 
         csp_sa_sim.SetDirectHealthState(csp_subarray_health_state)
         sdp_sa_sim.SetDirectHealthState(sdp_subarray_health_state)
+        csp_sa_sim.adminMode = 0
+        sdp_sa_sim.adminMode = 0
         dish_master_sim_1.SetDirectHealthState(dish_master1_health_state)
         dish_master_sim_2.SetDirectHealthState(dish_master2_health_state)
         dish_master_sim_3.SetDirectHealthState(dish_master3_health_state)
@@ -239,7 +243,8 @@ class TestSubarrayHealthState(object):
             dish_master_sim_3,
             dish_master_sim_4,
         ) = get_device_simulators(simulator_factory)
-
+        csp_sa_sim.adminMode = 0
+        sdp_sa_sim.adminMode = 0
         csp_sa_sim.SetDirectHealthState(csp_subarray_health_state)
         sdp_sa_sim.SetDirectHealthState(sdp_subarray_health_state)
         dish_master_sim_1.SetDirectHealthState(dish_master1_health_state)
@@ -349,7 +354,8 @@ class TestSubarrayHealthState(object):
             dish_master_sim_3,
             dish_master_sim_4,
         ) = get_device_simulators(simulator_factory)
-
+        csp_sa_sim.adminMode = 0
+        sdp_sa_sim.adminMode = 0
         csp_sa_sim.SetDirectHealthState(csp_subarray_health_state)
         sdp_sa_sim.SetDirectHealthState(sdp_subarray_health_state)
         dish_master_sim_1.SetDirectHealthState(dish_master1_health_state)
@@ -455,7 +461,8 @@ class TestSubarrayHealthState(object):
         self._assign_dishes_to_subarray(
             subarray_node, command_input_factory, event_recorder
         )
-
+        csp_sa_sim.adminMode = 0
+        sdp_sa_sim.adminMode = 0
         csp_sa_sim.SetDirectHealthState(csp_subarray_health_state)
         sdp_sa_sim.SetDirectHealthState(sdp_subarray_health_state)
         dish_master_sim_1.SetDirectHealthState(dish_master1_health_state)
@@ -578,7 +585,8 @@ class TestSubarrayHealthState(object):
         self._assign_dishes_to_subarray(
             subarray_node, command_input_factory, event_recorder
         )
-
+        csp_sa_sim.adminMode = 0
+        sdp_sa_sim.adminMode = 0
         csp_sa_sim.SetDirectHealthState(csp_subarray_health_state)
         sdp_sa_sim.SetDirectHealthState(sdp_subarray_health_state)
         dish_master_sim_1.SetDirectHealthState(dish_master1_health_state)
@@ -716,7 +724,8 @@ class TestSubarrayHealthState(object):
         self._assign_dishes_to_subarray(
             subarray_node, command_input_factory, event_recorder
         )
-
+        csp_sa_sim.adminMode = 0
+        sdp_sa_sim.adminMode = 0
         csp_sa_sim.SetDirectHealthState(csp_subarray_health_state)
         sdp_sa_sim.SetDirectHealthState(sdp_subarray_health_state)
         dish_master_sim_1.SetDirectHealthState(dish_master1_health_state)
