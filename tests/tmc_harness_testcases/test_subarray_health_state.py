@@ -425,7 +425,7 @@ class TestSubarrayHealthState(object):
             ),
         ],
     )
-    @pytest.mark.batchtest
+    @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_health_state_failed_when_all_dish_failed(
         self,
