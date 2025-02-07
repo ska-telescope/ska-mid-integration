@@ -158,14 +158,19 @@ def perform_ready_transition_with_end(
 def perform_scan(
     subarray_node: SubarrayNodeWrapper,
     command_input_factory: JsonFactory,
+    defectiveSubsystem,
 ):
 
     """
     Perform Scan
     """
+
     scan_input_json = prepare_json_args_for_commands(
         "scan_mid", command_input_factory
     )
+    if defectiveSubsystem == "SDP":
+        scan_input_json.pop("scan_id")
+
     _, pytest.unique_id = subarray_node.execute_transition(
         "Scan", scan_input_json
     )
@@ -440,8 +445,7 @@ def execute_command_on_tmc_with_defectivesetup(
         case "SCAN":
 
             perform_scan(
-                subarray_node,
-                command_input_factory,
+                subarray_node, command_input_factory, defectiveSubsystem
             )
 
 
