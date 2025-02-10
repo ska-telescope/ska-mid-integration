@@ -13,6 +13,7 @@ Scenario Outline: Error Propagation Reported by TMC Mid End/EndScan/Scan Command
 		            |READY            | END     | SDP                  | READY|
 		            |SCANNING         | ENDSCAN | SDP                  | SCANNING|
 		            |READY            | SCAN    | SDP                  | SCANNING|
+		            |READY            | END     | DISH                  | READY |
 
 
 @SKA_mid @XTP-73592

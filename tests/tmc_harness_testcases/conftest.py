@@ -419,7 +419,7 @@ def execute_command_on_tmc_with_defectivesetup(
             pytest.defective_device = tmc_sdp_subarray_leaf_node
             pytest.defective_subarray.SetDefective(FAILED_DEFECT)
 
-        case "Dish":
+        case "DISH":
             # pytest.defective_subarray = (
             #     simulator_factory.get_or_create_simulator_device(
             #         SimulatorDeviceType.MCCS_SUBARRAY_DEVICE
@@ -440,7 +440,7 @@ def execute_command_on_tmc_with_defectivesetup(
             pytest.defective_subarray.SetDefective(
                 json.dumps(ERROR_PROPAGATION_DEFECT)
             )
-            LOGGER.info("Work in Progress")
+            LOGGER.info("Work on dish in Progress")
 
     match command:
         case "END":
