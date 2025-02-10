@@ -10,7 +10,9 @@ server:
   {{- $TrackTableUpdateRate := .Values.deviceServers.dishpointingdevice.TrackTableUpdateRate }}
   {{- $TrackTableInAdvance := .Values.deviceServers.dishpointingdevice.TrackTableInAdvance }}
   {{- $ElevationMaxLimit := .Values.deviceServers.dishpointingdevice.ElevationMaxLimit }}
-  {{- $ElevationMinLimit := .Values.deviceServers.dishpointingdevice.ElevationMinLimit }} 
+  {{- $ElevationMinLimit := .Values.deviceServers.dishpointingdevice.ElevationMinLimit }}
+  {{- $AzimuthMaxLimit := .Values.deviceServers.dishpointingdevice.AzimuthMaxLimit }}
+  {{- $AzimuthMinLimit := .Values.deviceServers.dishpointingdevice.AzimuthMinLimit }}
   {{- $instance_list := list -}}
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
   {{- $isSimulatedDish := .Values.deviceServers.mocks.dish }}
@@ -44,6 +46,12 @@ server:
             - name: "ElevationMinLimit"
               values:
                 - "{{ $ElevationMinLimit }}"
+            - name: "AzimuthMaxLimit"
+              values:
+                - "{{ $AzimuthMaxLimit }}"
+            - name: "AzimuthMinLimit"
+              values:
+                - "{{ $AzimuthMinLimit }}"
             - name: "LoggingTargetsDefault"
               values:
                 - "tango::logger"
