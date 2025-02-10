@@ -19,6 +19,7 @@ from tests.resources.test_harness.constant import (
     FAILED_DEFECT,
     TIMEOUT,
     tmc_csp_subarray_leaf_node,
+    tmc_dish_leaf_node1,
     tmc_sdp_subarray_leaf_node,
 )
 from tests.resources.test_harness.helpers import (
@@ -436,7 +437,7 @@ def execute_command_on_tmc_with_defectivesetup(
                 )
             )
             # Set dish 1 defective
-
+            pytest.defective_device = tmc_dish_leaf_node1
             pytest.defective_subarray.SetDefective(
                 json.dumps(ERROR_PROPAGATION_DEFECT)
             )
