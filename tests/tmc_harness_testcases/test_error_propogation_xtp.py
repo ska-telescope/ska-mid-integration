@@ -72,7 +72,7 @@ def execute_command(
     """
     Execute command
     """
-    if device in ["CSP", "MCCS"]:
+    if device in ["CSP", "DISH"]:
         match command:
             case "END":
                 pytest.defective_subarray.SetDefective(
