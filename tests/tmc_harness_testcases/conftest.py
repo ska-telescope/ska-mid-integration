@@ -455,9 +455,7 @@ def execute_command_on_tmc_with_defectivesetup(
             )
         case "SCAN":
 
-            perform_scan(
-                subarray_node, command_input_factory, defectiveSubsystem
-            )
+            perform_scan(subarray_node, command_input_factory)
 
 
 @then(
