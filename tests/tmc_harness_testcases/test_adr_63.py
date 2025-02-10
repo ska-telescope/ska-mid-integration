@@ -9,7 +9,10 @@ from tango import DevState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.constant import COMMAND_COMPLETED
-from tests.resources.test_harness.helpers import prepare_json_args_for_commands
+from tests.resources.test_harness.helpers import (
+    prepare_json_args_for_centralnode_commands,
+    prepare_json_args_for_commands,
+)
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 
@@ -95,7 +98,7 @@ def move_subarray_node_to_idle_obsstate(
     subarray_node: SubarrayNodeWrapper,
 ) -> None:
     """Move TMC Subarray to IDLE obsstate."""
-    assign_input_json = prepare_json_args_for_commands(
+    assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
     _, pytest.unique_id = central_node_mid.store_resources(assign_input_json)
