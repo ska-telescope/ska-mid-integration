@@ -22,6 +22,7 @@ from tests.resources.test_harness.constant import (
     INTERMEDIATE_SCANNING_STATE_DEFECT,
     TIMEOUT,
     tmc_csp_subarray_leaf_node,
+    tmc_dish_leaf_node1,
     tmc_sdp_subarray_leaf_node,
 )
 from tests.resources.test_harness.simulator_factory import SimulatorFactory
@@ -36,7 +37,7 @@ from tests.tmc_harness_testcases.conftest import (
 
 
 @pytest.mark.batch1
-@pytest.mark.SKA_mid25
+@pytest.mark.SKA_mid
 @scenario(
     "../features/check_error_propagation.feature",
     "Error Propagation Reported by TMC Mid End/EndScan/Scan "
@@ -48,7 +49,8 @@ def test_tmc_command_error_propagation():
     """
 
 
-@pytest.mark.SKA_mid
+@pytest.mark.batch1
+@pytest.mark.SKA_mid25
 @scenario(
     "../features/check_error_propagation.feature",
     "TimeOut Reported by TMC Mid End/EndScan/Scan "
@@ -210,7 +212,25 @@ def execute_command_on_tmc_with_defectivesetup(
             #     event_tracer,
             #     command_input_factory,
             # )
-            LOGGER.info("Work in Progress")
+
+            pytest.defective_subarray = (
+                simulator_factory.get_or_create_simulator_device(
+                    SimulatorDeviceType.DISH_DEVICE
+                )
+            )
+            # Set dish 1 defective
+            pytest.defective_device = tmc_dish_leaf_node1
+            # pytest.defective_subarray.SetDefective(ERROR_PROPAGATION_DEFECT)
+            # LOGGER.info("Work on dish in Progress")
+            # LOGGER.info("Work in Progress")
+
+            execute_command(
+                "DISH",
+                command,
+                subarray_node,
+                event_tracer,
+                command_input_factory,
+            )
 
 
 @then(
