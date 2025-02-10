@@ -159,7 +159,6 @@ def perform_ready_transition_with_end(
 def perform_scan(
     subarray_node: SubarrayNodeWrapper,
     command_input_factory: JsonFactory,
-    defectiveSubsystem,
 ):
 
     """
@@ -169,10 +168,10 @@ def perform_scan(
     scan_input_json = prepare_json_args_for_commands(
         "scan_mid", command_input_factory
     )
-    if defectiveSubsystem == "SDP":
-        scan_input_json = json.loads(scan_input_json)
-        # scan_input_json.pop("scan_id")
-        scan_input_json = json.dumps(scan_input_json)
+    # if defectiveSubsystem == "SDP":
+    #     scan_input_json = json.loads(scan_input_json)
+    #     # scan_input_json.pop("scan_id")
+    #     scan_input_json = json.dumps(scan_input_json)
 
     _, pytest.unique_id = subarray_node.execute_transition(
         "Scan", scan_input_json
