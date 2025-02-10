@@ -438,9 +438,7 @@ def execute_command_on_tmc_with_defectivesetup(
             )
             # Set dish 1 defective
             pytest.defective_device = tmc_dish_leaf_node1
-            pytest.defective_subarray.SetDefective(
-                json.dumps(ERROR_PROPAGATION_DEFECT)
-            )
+            pytest.defective_subarray.SetDefective(ERROR_PROPAGATION_DEFECT)
             LOGGER.info("Work on dish in Progress")
 
     match command:
