@@ -21,7 +21,6 @@ from tests.resources.test_harness.constant import (
     INTERMEDIATE_CONFIGURING_STATE_DEFECT,
     INTERMEDIATE_CONFIGURING_STATE_DEFECT_DISH,
     INTERMEDIATE_SCANNING_STATE_DEFECT,
-    TIMEOUT,
     tmc_csp_subarray_leaf_node,
     tmc_dish_leaf_node1,
     tmc_sdp_subarray_leaf_node,
@@ -253,15 +252,6 @@ def validate_error_message_reporting(
     """
     Send next command on TMC
     """
-
-    LOGGER.info("validate_error_message_reporting")
-    LOGGER.info("TIMEOUT - %s", TIMEOUT)
-
-    # exception_message = (
-    #     "Exception occurred on the following devices:"
-    #     + f" {pytest.defective_device}:"
-    #     + " Exception occurred, command failed."
-    # )
 
     exception_message = "Timeout has occurred, command failed"
 
