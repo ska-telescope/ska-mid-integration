@@ -19,6 +19,7 @@ from ska_tango_testing.integration import TangoEventTracer
 from tests.conftest import LOGGER
 from tests.resources.test_harness.constant import (
     INTERMEDIATE_CONFIGURING_STATE_DEFECT,
+    INTERMEDIATE_CONFIGURING_STATE_DEFECT_DISH,
     INTERMEDIATE_SCANNING_STATE_DEFECT,
     TIMEOUT,
     tmc_csp_subarray_leaf_node,
@@ -75,9 +76,15 @@ def execute_command(
     if device in ["CSP", "DISH"]:
         match command:
             case "END":
-                pytest.defective_subarray.SetDefective(
-                    INTERMEDIATE_CONFIGURING_STATE_DEFECT
-                )
+                if device == "DISH":
+                    pytest.defective_subarray.SetDefective(
+                        INTERMEDIATE_CONFIGURING_STATE_DEFECT
+                    )
+
+                else:
+                    pytest.defective_subarray.SetDefective(
+                        INTERMEDIATE_CONFIGURING_STATE_DEFECT_DISH
+                    )
 
                 LOGGER.info("Working on Ready State")
                 perform_ready_transition_with_end(

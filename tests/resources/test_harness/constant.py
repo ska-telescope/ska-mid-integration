@@ -8,6 +8,7 @@ from ska_control_model import ObsState
 
 from tests.resources.test_harness.utils.enums import (
     FaultType,
+    PointingState,
     ResultCode,
     SimulatorDeviceType,
 )
@@ -364,6 +365,16 @@ INTERMEDIATE_CONFIGURING_STATE_DEFECT = json.dumps(
         "error_message": "Device stuck in intermediate state",
         "result": ResultCode.FAILED,
         "intermediate_state": ObsState.READY,
+    }
+)
+
+INTERMEDIATE_CONFIGURING_STATE_DEFECT_DISH = json.dumps(
+    {
+        "enabled": True,
+        "fault_type": FaultType.STUCK_IN_INTERMEDIATE_STATE,
+        "error_message": "Device stuck in intermediate state",
+        "result": ResultCode.FAILED,
+        "intermediate_state": PointingState.TRACK,
     }
 )
 
