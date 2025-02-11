@@ -21,8 +21,7 @@
       "beams": [
         {
           "beam_id": "vis0",
-          "function": "visibilities",
-          "visibilitiy_beam_id": 121
+          "function": "visibilities"
         },
         {
           "beam_id": "pss1",
