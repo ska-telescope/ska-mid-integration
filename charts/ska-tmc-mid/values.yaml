@@ -79,7 +79,7 @@ centralnode:
     registry: artefact.skao.int
     image: ska-tmc-centralnode
     tag: 0.17.4
-    pullPolicy: IfNotPresent
+    pullPolicy: Always
 
 subarraynode:
   image:
