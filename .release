@@ -1,15 +1,15 @@
-release=0.24.0-rc.4
-tag=0.24.0-rc.4
-tag_description=
+release=0.25.0-rc.3
+tag=0.25.0-rc.3
+tag_description= ADR-63 changes for configure command 
 **Charts:**
-**1. ska-tmc-integration 0.24.0-rc.2 - 0.24.0-rc.4**
+**1. ska-tmc-integration 0.25.0-rc.2 - 0.25.0-rc.3**
 
-    **1.1 ska-tmc-mid - 0.24.0-rc.2 - 0.24.0-rc.4**
-        a. Utilised CDM v.12.6.0 on ska-tmc-subarraynode.
+    **1.1 ska-tmc-mid - 0.25.0-rc.2 - 0.25.0-rc.3**
+        a. ADR-63 changes.
 
 release_notes=
 **Charts:**
-**1. ska-tmc-integration 0.23.0-rc.2 - 0.24.0-rc.4**
+**1. ska-tmc-integration 0.25.0-rc.2 - 0.25.0-rc.3**
 
-    **1.1 ska-tmc-mid - 0.24.0-rc.2 - 0.24.0-rc.4**
-        a. Utilised CDM v.12.6.0 on ska-tmc-subarraynode.
+    **1.1 ska-tmc-mid - 0.25.0-rc.2 - 0.25.0-rc.3**
+        a. ADR-63 changes.
