@@ -3,6 +3,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+[0.25.0-rc.2]
+*************
+* Fixed RTD
+
 [0.25.0-rc.1]
 *************
 * Following bugs are fixed on the tmc-dish interface:
