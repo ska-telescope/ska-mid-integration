@@ -78,12 +78,12 @@ def execute_command(
             case "END":
                 if device == "DISH":
                     pytest.defective_subarray.SetDefective(
-                        INTERMEDIATE_CONFIGURING_STATE_DEFECT
+                        INTERMEDIATE_CONFIGURING_STATE_DEFECT_DISH
                     )
 
                 else:
                     pytest.defective_subarray.SetDefective(
-                        INTERMEDIATE_CONFIGURING_STATE_DEFECT_DISH
+                        INTERMEDIATE_CONFIGURING_STATE_DEFECT
                     )
 
                 LOGGER.info("Working on Ready State")
