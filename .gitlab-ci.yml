@@ -124,6 +124,29 @@ stop-k8s-test-batch2:
     name: test/$CI_COMMIT_REF_SLUG-batch2
     action: stop
 
+k8s-test-batch3:
+  extends:
+    - k8s-test
+  variables:
+    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch3"
+    DISH_SIMULATION_ENABLED: "true"
+    SUBARRAY_COUNT: 2
+    COUNT: 1
+    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch3'
+    ADDMARK: "and batch3"
+  environment:
+    name: test/$CI_COMMIT_REF_SLUG-batch3
+    on_stop: stop-k8s-test-batch3
+    auto_stop_in: 1 minute
+
+stop-k8s-test-batch3:
+  extends:
+    - stop-k8s-test
+  variables:
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch3"
+  environment:
+    name: test/$CI_COMMIT_REF_SLUG-batch3
+    action: stop
 
 docs-build-rtd:
   rules:

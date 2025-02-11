@@ -37,8 +37,8 @@ from tests.tmc_harness_testcases.conftest import (
 )
 
 
-@pytest.mark.batch1
-@pytest.mark.SKA_mid25
+@pytest.mark.batch3
+@pytest.mark.SKA_mid
 @scenario(
     "../features/check_error_propagation.feature",
     "Error Propagation Reported by TMC Mid End/EndScan/Scan "
@@ -50,8 +50,8 @@ def test_tmc_command_error_propagation():
     """
 
 
-@pytest.mark.batch1
-@pytest.mark.SKA_mid25
+@pytest.mark.batch3
+@pytest.mark.SKA_mid
 @scenario(
     "../features/check_error_propagation.feature",
     "TimeOut Reported by TMC Mid End/EndScan/Scan "
