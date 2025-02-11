@@ -6,6 +6,21 @@ Added
 [0.24.0-rc.4]
 *************
 * Implemented ADR-63 based changes.
+[0.25.0-rc.2]
+*************
+* Fixed RTD
+
+[0.25.0-rc.1]
+*************
+* Following bugs are fixed on the tmc-dish interface:
+  * SKB-469
+  * SKB-606
+  * SKB-661
+* Fixed SKB-658 on all the TMC devices.
+
+[0.24.0]
+********
+* TMC Mid full release 0.24.0 as per REL-1555
 
 [0.24.0-rc.3]
 *************
