@@ -10,7 +10,6 @@ dish-lmc-dish001:
     DISH_HELM_RELEASE: "6.0.1"
     K8S_DISH_LMC_CHART: "ska-dish-lmc"
   script:
-    - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
     - make k8s-install-chart-car KUBE_NAMESPACE=$KUBE_NAMESPACE K8S_CHART_PARAMS='-f charts/dish_lmc_values.yml
       --set "global.dishes={$(DISH_INDEX)}" --version=6.0.1
       --set global.cluster_domain=$(CLUSTER_DOMAIN)'
@@ -20,7 +19,7 @@ dish-lmc-dish001:
     name: test/d001-$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-dish-lmc-001
   allow_failure: true
-
+  when: manual
 
 
 dish-lmc-dish036:
@@ -37,7 +36,7 @@ dish-lmc-dish036:
   environment:
     name: test/d036-$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-dish-lmc-036
-  
+  when: manual
 
 
 dish-lmc-dish063:
@@ -54,7 +53,7 @@ dish-lmc-dish063:
   environment:
     name: test/d063-$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-dish-lmc-063
-  
+  when: manual
 
 
 dish-lmc-dish100:
@@ -72,7 +71,7 @@ dish-lmc-dish100:
   environment:
     name: test/d100-$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-dish-lmc-100
-  
+  when: manual
 
 
 stop-k8s-dish-lmc-001:
