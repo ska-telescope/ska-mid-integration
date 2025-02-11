@@ -206,7 +206,6 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
 def assign_resources_executed_on_subarray(
     central_node_mid, event_recorder, command_input_factory
 ):
-
     event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
     event_recorder.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
