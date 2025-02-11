@@ -1,15 +1,15 @@
-release=1.0.0-rc.1
-tag=1.0.0-rc.1
+release=0.25.0-rc.1
+tag=0.25.0-rc.1
 tag_description=
 **Charts:**
-**1. ska-tmc-integration 0.24.0 - 1.0.0-rc.1**
+**1. ska-tmc-integration 0.24.0 - 0.25.0-rc.1**
 
-    **1.1 ska-tmc-mid - 0.24.0 - 1.0.0-rc.1**
+    **1.1 ska-tmc-mid - 0.24.0 - 0.25.0-rc.1**
         a. Fixed SKB-469, SKB-606, SKB-661 and SKB-658.
 
 release_notes=
 **Charts:**
-**1. ska-tmc-integration 0.24.0 - 1.0.0-rc.1**
+**1. ska-tmc-integration 0.24.0 - 0.25.0-rc.1**
 
-    **1.1 ska-tmc-mid - 0.24.0 - 1.0.0-rc.1**
+    **1.1 ska-tmc-mid - 0.24.0 - 0.25.0-rc.1**
         a. Fixed SKB-469, SKB-606, SKB-661 and SKB-658.
