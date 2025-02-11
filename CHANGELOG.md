@@ -3,6 +3,13 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+[1.0.0-rc.1]
+* Following bugs are fixed on the tmc-dish interface:
+  * SKB-469
+  * SKB-606
+  * SKB-661
+* Fixed SKB-658 on all the TMC devices.
+
 [0.24.0-rc.3]
 *************
 * Utilised CDM v.12.6.0 on ska-tmc-subarraynode.
