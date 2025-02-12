@@ -51,6 +51,7 @@ Configurable options
 * e. **enabled** : User can opt to disable any node by setting this value to False.Default is True for all nodes.
 
 * f. Variables under **global** section
+
     #. **tmc_subarray_prefix** : This value is present under global, User can use this to change the FQDN prefix of SubarrayNode.
 
     #. **csp_subarray_ln_prefix** : This value is present under global, User can use this to change the FQDN prefix of CspSubarrayLeafNode.
@@ -76,8 +77,6 @@ Configurable options
 * g. Variables under **deviceServers.centralnode** section
 
     #. **DishIDs** : User can set this value to provide the ID's of dishes present in the deployment. Default is ["SKA001", "SKA036", "SKA063", "SKA100"]
-
-    #. **SkuidService** :  This refers to the value for SKUID service. Currently defaults to "ska-ser-skuid-test-svc.ska-tmc-centralnode.svc.techops.internal.skao.int:9870".
 
     #. Variables under **DishVccConfig** section
 
@@ -183,10 +182,14 @@ Configurable options
 
 * n. Variables under **deviceServers.dishpointingdevice** section
 
-    #. **TrackTableUpdateRate** : This refers to the rate (in seconds) at which a tracktable is provided. Currently defaults to 50 seconds.
+    #. **TrackTableUpdateRate** : This refers to the rate (in seconds) at which a tracktable is supplied to the DishManager. Currently defaults to 50 seconds.
 
     #. **TrackTableInAdvance** : This refers to the time in advance at which programTrackTable needs to be provided. Currently defaults to 7 seconds.
 
     #. **ElevationMaxLimit** : This refers to the maximum elevation allowed for observation. Currently defaults to 90.0.
 
     #. **ElevationMinLimit** : This refers to the minimum elevation allowed for observation. Currently defaults to 15.0.
+
+    #. **AzimuthMaxLimit** : This refers to the Maximum value of Azimuth where dish can point. Currently defaults to 270.0.
+
+    #. **AzimuthMinLimit** : This refers to the Minimum value of Azimuth where dish can point. Currently defaults to -270.0.

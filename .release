@@ -1,15 +1,15 @@
-release=0.24.0-rc.3
-tag=0.24.0-rc.3
+release=0.25.0-rc.2
+tag=0.25.0-rc.2
 tag_description=
 **Charts:**
-**1. ska-tmc-integration 0.24.0-rc.2 - 0.24.0-rc.3**
+**1. ska-tmc-integration 0.25.0-rc.1 - 0.25.0-rc.2**
 
-    **1.1 ska-tmc-mid - 0.24.0-rc.2 - 0.24.0-rc.3**
-        a. Utilised CDM v.12.6.0 on ska-tmc-subarraynode.
+    **1.1 ska-tmc-mid - 0.25.0-rc.1 - 0.25.0-rc.2**
+        a. Fixed RTD.
 
 release_notes=
 **Charts:**
-**1. ska-tmc-integration 0.23.0-rc.2 - 0.24.0-rc.3**
+**1. ska-tmc-integration 0.25.0-rc.1 - 0.25.0-rc.2**
 
-    **1.1 ska-tmc-mid - 0.24.0-rc.2 - 0.24.0-rc.3**
-        a. Utilised CDM v.12.6.0 on ska-tmc-subarraynode.
+    **1.1 ska-tmc-mid - 0.25.0-rc.1 - 0.25.0-rc.2**
+        a. Fixed RTD.
