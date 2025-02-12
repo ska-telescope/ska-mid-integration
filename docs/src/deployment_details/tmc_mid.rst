@@ -182,10 +182,14 @@ Configurable options
 
 * n. Variables under **deviceServers.dishpointingdevice** section
 
-    #. **TrackTableUpdateRate** : This refers to the rate (in seconds) at which a tracktable is provided. Currently defaults to 50 seconds.
+    #. **TrackTableUpdateRate** : This refers to the rate (in seconds) at which a tracktable is supplied to the DishManager. Currently defaults to 50 seconds.
 
     #. **TrackTableInAdvance** : This refers to the time in advance at which programTrackTable needs to be provided. Currently defaults to 7 seconds.
 
     #. **ElevationMaxLimit** : This refers to the maximum elevation allowed for observation. Currently defaults to 90.0.
 
     #. **ElevationMinLimit** : This refers to the minimum elevation allowed for observation. Currently defaults to 15.0.
+
+    #. **AzimuthMaxLimit** : This refers to the Maximum value of Azimuth where dish can point. Currently defaults to 270.0.
+
+    #. **AzimuthMinLimit** : This refers to the Minimum value of Azimuth where dish can point. Currently defaults to -270.0.

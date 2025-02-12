@@ -94,6 +94,8 @@ tmc-mid:
       TrackTableInAdvance: 7
       ElevationMaxLimit: 90.0
       ElevationMinLimit: 15.0
+      AzimuthMaxLimit: 270
+      AzimuthMinLimit: -270
 
 ska-sdp:
   resources:
