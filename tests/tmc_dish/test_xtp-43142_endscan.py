@@ -196,14 +196,6 @@ def move_subarray_obsState_to_scanning(
         ObsState.SCANNING,
     )
 
-    # event_tracer.subscribe_event(
-    #     central_node_mid.csp_master_leaf_node, "cspSubarrayObsState"
-    # )
-    #
-    # event_tracer.subscribe_event(
-    #     central_node_mid.sdp_master_leaf_node, "sdpSubarrayObsState"
-    # )
-
     event_tracer.subscribe_event(
         subarray_node.csp_subarray_leaf_node, "cspSubarrayObsState"
     )
