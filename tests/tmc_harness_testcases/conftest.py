@@ -168,10 +168,6 @@ def perform_scan(
     scan_input_json = prepare_json_args_for_commands(
         "scan_mid", command_input_factory
     )
-    # if defectiveSubsystem == "SDP":
-    #     scan_input_json = json.loads(scan_input_json)
-    #     # scan_input_json.pop("scan_id")
-    #     scan_input_json = json.dumps(scan_input_json)
 
     _, pytest.unique_id = subarray_node.execute_transition(
         "Scan", scan_input_json
@@ -420,15 +416,6 @@ def execute_command_on_tmc_with_defectivesetup(
             pytest.defective_subarray.SetDefective(FAILED_DEFECT)
 
         case "DISH":
-            # pytest.defective_subarray = (
-            #     simulator_factory.get_or_create_simulator_device(
-            #         SimulatorDeviceType.MCCS_SUBARRAY_DEVICE
-            #     )
-            # )
-            #
-            # pytest.defective_device = mccs_subarray_leaf_node
-            #
-            # pytest.defective_subarray.SetDefective(ERROR_PROPAGATION_DEFECT)
 
             pytest.defective_subarray = (
                 simulator_factory.get_or_create_simulator_device(
@@ -470,11 +457,6 @@ def validate_error_message_reporting(
     """
     Check if subarray node populates error message correctly.
     """
-
-    # exception_message = (
-    #     "Exception occurred on the following devices:"
-    #     + f" {pytest.defective_device}:"
-    # )
 
     exception_message = (
         "Exception occurred on the following devices:"
