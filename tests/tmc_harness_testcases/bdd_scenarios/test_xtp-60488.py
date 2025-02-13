@@ -49,6 +49,9 @@ def given_tmc(
     event_tracer: TangoEventTracer,
 ):
     """Given a TMC setup for the test."""
+    # TelescopeOn
+    central_node_mid.move_to_on()
+
     # Setting up subscriptions
     event_tracer.subscribe_event(
         central_node_mid.central_node, "telescopeState"
@@ -77,9 +80,6 @@ def given_tmc(
 
     for dish_master in subarray_node.dish_master_list:
         event_tracer.subscribe_event(dish_master, "dishMode")
-
-    # TelescopeOn
-    central_node_mid.move_to_on()
 
     # Assertions
     assert_that(event_tracer).described_as(
