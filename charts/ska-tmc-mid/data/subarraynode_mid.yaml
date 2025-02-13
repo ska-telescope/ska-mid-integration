@@ -35,6 +35,9 @@ server:
           - name: "DishLeafNodePrefix"
             values:
             - "{{ $DishLeafNodePrefix }}"
+          - name: "DevFamily"
+            values:
+            - "tm_subarray_node"
           - name: "DishMasterIdentifier"
             values:
             {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}

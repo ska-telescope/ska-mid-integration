@@ -34,6 +34,7 @@ global:
   # deviceServers.dishmaster, deviceServers.dishleafnode
   dish_devices: ["dishmaster", "dishleafnode"]
   dishes: ["001", "036", "063", "100"]
+  
 
   namespace_dish:
     dish_names: []
@@ -85,7 +86,7 @@ subarraynode:
   image:
     registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-subarraynode
     image: ska-tmc-subarraynode
-    tag: 0.29.2-dev.c8ddf0392
+    tag: 0.29.2-dev.c25f44754
     pullPolicy: IfNotPresent
 
 sdpleafnodes:
