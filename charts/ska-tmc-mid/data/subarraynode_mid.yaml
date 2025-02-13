@@ -3,7 +3,7 @@ function: telescope-monitoring
 domain: subarray
 instances: ["01"]
 entrypoints:
-  - name: "ska_tmc_subarraynode.subarray_node_mid.SubarrayNodeMid"
+  - name: "ska_tmc_subarraynode.subarray_node_mid.MidTmcSubarray"
 server:
   name: "subarray_node_mid"
   instances:
