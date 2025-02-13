@@ -9,7 +9,7 @@ from tests.resources.test_harness.helpers import retry_tango_command
 from tests.resources.test_support.constant import alarm_handler1
 
 
-@pytest.repeat(50)
+@pytest.mark.repeat(50)
 @pytest.mark.batch2
 @pytest.mark.SKA_mid44
 @scenario(
