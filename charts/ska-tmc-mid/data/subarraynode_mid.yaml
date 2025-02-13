@@ -28,7 +28,7 @@ server:
   {{- range  ( regexSplit " " ((.Values.subarray_count | int) | seq ) -1 ) }}
     - name: "{{ printf "%02s" . }}"
       classes:
-      - name: "SubarrayNodeMid"
+      - name: "MidTmcSubarray"
         devices:
         - name: "ska_mid/tm_subarray_node/{{ . }}"
           properties:
