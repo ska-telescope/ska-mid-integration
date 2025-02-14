@@ -10,7 +10,7 @@ from tests.resources.test_support.constant import alarm_handler1
 
 
 @pytest.mark.batch2
-@pytest.mark.SKA_mid44
+@pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp_50437_nan_alarm.feature",
     "TMC mid raises an alarm when it encounters NaN"
