@@ -165,7 +165,7 @@ deviceServers:
     AdapterTimeOut: 2
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
-    SDPSubarrayAdminModeEnabled: true
+    SDPSubarrayAdminModeEnabled: false
 
   sdpmasterleafnode:
     enabled: true
