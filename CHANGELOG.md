@@ -3,10 +3,6 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
-[0.25.0-rc.3]
-*************
-* Implemented ADR-63 based changes.
-
 [0.25.0-rc.2]
 *************
 * Fixed RTD
