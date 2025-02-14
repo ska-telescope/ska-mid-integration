@@ -174,7 +174,7 @@ deviceServers:
     AdapterTimeOut: 2
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
-    SDPMasterAdminModeEnabled: true
+    SDPMasterAdminModeEnabled: false
 
   cspmasterleafnode:
     enabled: true
