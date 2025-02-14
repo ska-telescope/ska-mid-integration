@@ -80,12 +80,12 @@ class TestMidCentralNodeAssignResources(object):
             "obsState",
             ObsState.IDLE,
         )
-        assert check_assigned_resources(
-            central_node_mid.subarray_node,
-            ("SKA001", "SKA036", "SKA063", "SKA100"),
-        )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.central_node,
             "longRunningCommandResult",
             (unique_id[0], COMMAND_COMPLETED),
+        )
+        assert check_assigned_resources(
+            central_node_mid.subarray_node,
+            ("SKA001", "SKA036", "SKA063", "SKA100"),
         )
