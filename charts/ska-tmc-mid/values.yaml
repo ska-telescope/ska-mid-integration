@@ -216,7 +216,7 @@ deviceServers:
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
     AdapterTimeOut: 2.0
-    DishAvailabilityCheckTimeout: 3
+    DishAvailabilityCheckTimeout: 30
 
   dishpointingdevice:
     enabled: true
