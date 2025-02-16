@@ -117,9 +117,12 @@ dishleafnode:
     pullPolicy: IfNotPresent
 
 resources:
+  limits:
+    memory: 3000Mi
+    cpu: 2500m
   requests:
-    cpu: 200m
-    memory: 200Mi
+    cpu: 2000m
+    memory: 2000Mi
 
 
 deviceServers:
@@ -205,10 +208,11 @@ deviceServers:
     resources:
       limits:
         memory: 3000Mi
+        cpu: 2500m
       requests:
         cpu: 2000m
         # cpu: 1000m
-        memory: 280Mi
+        memory: 1000Mi
     CommandTimeOut: 90
     MaxTrackTableRetry: 3
     TrackTableRetryDuration: 0.2
