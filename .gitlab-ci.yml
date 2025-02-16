@@ -153,3 +153,10 @@ docs-build-rtd:
   rules:
     - when: never
 
+
+dependency-scanning:
+  stage: test
+  script:
+    - echo "Running Dependency Scanning"
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
