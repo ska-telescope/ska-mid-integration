@@ -3,7 +3,7 @@ function: telescope-monitoring
 domain: subarray
 instances: ["01"]
 entrypoints:
-  - name: "ska_tmc_subarraynode.subarray_node_mid.SubarrayNodeMid"
+  - name: "ska_tmc_subarraynode.subarray_node_mid.MidTmcSubarray"
 server:
   name: "subarray_node_mid"
   instances:
@@ -28,13 +28,16 @@ server:
   {{- range  ( regexSplit " " ((.Values.subarray_count | int) | seq ) -1 ) }}
     - name: "{{ printf "%02s" . }}"
       classes:
-      - name: "SubarrayNodeMid"
+      - name: "MidTmcSubarray"
         devices:
         - name: "ska_mid/tm_subarray_node/{{ . }}"
           properties:
           - name: "DishLeafNodePrefix"
             values:
             - "{{ $DishLeafNodePrefix }}"
+          - name: "DevFamily"
+            values:
+            - "tm_subarray_node"
           - name: "DishMasterIdentifier"
             values:
             {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
