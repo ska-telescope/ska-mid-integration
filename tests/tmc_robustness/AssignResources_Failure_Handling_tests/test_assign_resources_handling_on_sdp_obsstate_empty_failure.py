@@ -1,11 +1,14 @@
+import json
+
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
-from tests.conftest import LOGGER
+from tests.conftest import LOGGER, wait_for_obsstate_state_change
 from tests.resources.test_harness.constant import (
+    COMMAND_COMPLETED,
     RESET_DEFECT,
     SDP_BACK_TO_INITIAL_STATE,
 )
@@ -60,6 +63,7 @@ def given_tmc(central_node_mid, event_recorder):
         "obsState",
         ObsState.EMPTY,
     )
+    event_recorder.clear_events()
 
 
 @given(
@@ -84,18 +88,13 @@ def given_tmc_subarray_assign_resources_is_in_progress(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-    _, unique_id = central_node_mid.perform_action(
+    pytest.command_result = central_node_mid.perform_action(
         "AssignResources", assign_input_json
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_node,
         "obsState",
         ObsState.RESOURCING,
-    )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "longRunningCommandResult",
-        (unique_id[0], Anything),
     )
 
 
@@ -178,6 +177,24 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
         "obsState",
         ObsState.EMPTY,
     )
+    assertion_data = event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.command_result[1][0], Anything),
+        lookahead=15,
+    )
+    exception_message = (
+        "Exception occurred on the following devices: "
+        + "ska_mid/tm_leaf_node/sdp_subarray01: "
+        + "Exception occurred, command failed."
+    )
+    assert (
+        exception_message
+        in json.loads(assertion_data["attribute_value"][1])[1]
+    )
+    wait_for_obsstate_state_change(
+        target_mode=0, device=central_node_mid.subarray_node, timeout_seconds=5
+    )
 
 
 @then(
@@ -208,5 +225,6 @@ def assign_resources_executed_on_subarray(
     assert event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
-        (unique_id[0], Anything),
+        (unique_id[0], COMMAND_COMPLETED),
+        lookahead=5,
     )

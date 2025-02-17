@@ -28,7 +28,6 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 TIMEOUT = 110
 
 
-@pytest.mark.test1
 @pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
