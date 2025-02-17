@@ -17,6 +17,7 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_harness.simulator_factory import SimulatorFactory
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
+from tests.resources.test_support.constant import tmc_csp_master_leaf_node
 
 
 @pytest.mark.batch1
@@ -88,7 +89,7 @@ def check_timeout_error(
     )
     exception_message = (
         "Exception occurred on the following devices: "
-        "ska_mid/tm_leaf_node/csp_subarray01: "
+        f"{tmc_csp_master_leaf_node}: "
     )
     assert (
         exception_message

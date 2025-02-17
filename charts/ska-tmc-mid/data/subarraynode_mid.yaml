@@ -3,18 +3,18 @@ function: telescope-monitoring
 domain: subarray
 instances: ["01"]
 entrypoints:
-  - name: "ska_tmc_subarraynode.subarray_node_mid.MidTmcSubarray"
+  - name: "ska_tmc_subarraynode.subarray_node_mid.SubarrayNodeMid"
 server:
   name: "subarray_node_mid"
   instances:
+  {{- $midTmcSubarrayPrefix := .Values.global.tmc_subarray_prefix }}
   {{- $csp_sa_ln_fqdn_prefix:= .Values.global.csp_subarray_ln_prefix}}
   {{- $sdp_sa_ln_fqdn_prefix:= .Values.global.sdp_subarray_ln_prefix}}
   {{- $csp_sa_fqdn_prefix:= .Values.global.csp_subarray_prefix}}
   {{- $sdp_sa_fqdn_prefix:= .Values.global.sdp_subarray_prefix}}
   {{- $isSimulatedDish := .Values.deviceServers.mocks.dish }}
   {{- $real_dish_name := .Values.global.namespace_dish.dish_names }}
-  {{- $RealDishMasterIdentifier := .Values.deviceServers.subarraynode.RealDishMasterIdentifier }}
-  {{- $SimulatorDishMasterIdentifier := .Values.deviceServers.subarraynode.SimulatorDishMasterIdentifier }}
+  {{- $DishMasterIdentifier := .Values.global.dish_suffix }}
   {{- $dish_id := .Values.deviceServers.subarraynode.DishIDs }}
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
   {{- $csp_assign_interface := .Values.deviceServers.subarraynode.CspAssignResourcesInterfaceURL }}
@@ -28,23 +28,16 @@ server:
   {{- range  ( regexSplit " " ((.Values.subarray_count | int) | seq ) -1 ) }}
     - name: "{{ printf "%02s" . }}"
       classes:
-      - name: "MidTmcSubarray"
+      - name: "SubarrayNodeMid"
         devices:
-        - name: "ska_mid/tm_subarray_node/{{ . }}"
+        - name: "{{ $midTmcSubarrayPrefix }}/{{ . }}"
           properties:
           - name: "DishLeafNodePrefix"
             values:
             - "{{ $DishLeafNodePrefix }}"
-          - name: "DevFamily"
-            values:
-            - "tm_subarray_node"
           - name: "DishMasterIdentifier"
             values:
-            {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
-            - "{{ $SimulatorDishMasterIdentifier }}"
-            {{- else }}
-            - "{{ $RealDishMasterIdentifier }}" # Real dish
-            {{- end }}
+            - "{{ $DishMasterIdentifier }}"
           - name: "CspSubarrayLNFQDN"
             values:
             - "{{ $csp_sa_ln_fqdn_prefix}}{{ printf "%02s" . }}"
@@ -61,7 +54,7 @@ server:
             values:
             {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
             {{- range  $dish_id }}
-            - "{{ . | lower }}/{{ $SimulatorDishMasterIdentifier }}"
+            - "{{ $DishMasterIdentifier }}/{{ . | lower }}"
             {{- end }}
             {{- else }}
             {{- range  $real_dish_name }}

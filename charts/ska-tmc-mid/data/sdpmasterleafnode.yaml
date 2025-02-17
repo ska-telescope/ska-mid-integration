@@ -2,16 +2,17 @@ name: "sdpmasterleafnode-test"
 function: telescope-monitoring
 domain: general-monitoring
 instances: ["01"]
+{{- $midTmcSdpControl := .Values.global.sdp_master_ln_prefix }}
 entrypoints:
-  - name: "ska_tmc_sdpmasterleafnode.sdp_master_leaf_node.SdpMasterLeafNode"
+  - name: "ska_tmc_sdpmasterleafnode.sdp_master_leaf_node.TmcLeafNodeSdp"
 server:
   name: "sdp_master_leaf_node"
   instances:
   - name: "01"
     classes:
-    - name: "SdpMasterLeafNode"
+    - name: "TmcLeafNodeSdp"
       devices:
-      - name: "ska_mid/tm_leaf_node/sdp_master"
+      - name: "{{ $midTmcSdpControl }}"
         properties:
         - name: "SdpMasterFQDN"
           values:

@@ -12,24 +12,24 @@ from tests.resources.test_harness.utils.enums import (
     SimulatorDeviceType,
 )
 
-centralnode = "ska_mid/tm_central/central_node"
-tmc_subarraynode1 = "ska_mid/tm_subarray_node/1"
-tmc_csp_master_leaf_node = "ska_mid/tm_leaf_node/csp_master"
-tmc_sdp_master_leaf_node = "ska_mid/tm_leaf_node/sdp_master"
-tmc_csp_subarray_leaf_node = "ska_mid/tm_leaf_node/csp_subarray01"
-tmc_sdp_subarray_leaf_node = "ska_mid/tm_leaf_node/sdp_subarray01"
-tmc_dish_leaf_node1 = "ska_mid/tm_leaf_node/d0001"
-tmc_dish_leaf_node2 = "ska_mid/tm_leaf_node/d0036"
-tmc_dish_leaf_node3 = "ska_mid/tm_leaf_node/d0063"
-tmc_dish_leaf_node4 = "ska_mid/tm_leaf_node/d0100"
+centralnode = "mid-tmc/central-node/0"
+tmc_subarraynode1 = "mid-tmc/subarray/01"
+tmc_csp_master_leaf_node = "mid-tmc/leaf-node-csp/0"
+tmc_sdp_master_leaf_node = "mid-tmc/leaf-node-sdp/0"
+tmc_csp_subarray_leaf_node = "mid-tmc/subarray-leaf-node-csp/01"
+tmc_sdp_subarray_leaf_node = "mid-tmc/subarray-leaf-node-sdp/01"
+tmc_dish_leaf_node1 = "mid-tmc/leaf-node-dish/SKA001"
+tmc_dish_leaf_node2 = "mid-tmc/leaf-node-dish/SKA036"
+tmc_dish_leaf_node3 = "mid-tmc/leaf-node-dish/SKA063"
+tmc_dish_leaf_node4 = "mid-tmc/leaf-node-dish/SKA100"
 sdp_subarray1 = "mid-sdp/subarray/01"
 csp_subarray1 = "mid-csp/subarray/01"
 sdp_master = "mid-sdp/control/0"
 csp_master = "mid-csp/control/0"
-dish_master1 = "ska001/elt/master"
-dish_master2 = "ska036/elt/master"
-dish_master3 = "ska063/elt/master"
-dish_master4 = "ska100/elt/master"
+dish_master1 = "mid-dish/dish-manager/SKA001"
+dish_master2 = "mid-dish/dish-manager/SKA036"
+dish_master3 = "mid-dish/dish-manager/SKA063"
+dish_master4 = "mid-dish/dish-manager/SKA100"
 sdp_queue_connector = "mid-sdp/queueconnector/01"
 COMMAND_COMPLETED = json.dumps([ResultCode.OK, "Command Completed"])
 
@@ -337,9 +337,7 @@ DEFAULT_DISH_VCC_CONFIG = {
 
 DEFAULT_DISH_VALIDATION_STATUS = {
     "dish": "ALL DISH OK",
-    "ska_mid/tm_leaf_node/csp_master": (
-        "TMC and CSP Master Dish Vcc Version " + "is Same"
-    ),
+    csp_master: ("TMC and CSP Master Dish Vcc Version " + "is Same"),
 }
 
 DISH_001_CALIBRATION_DATA = [1.1, 1.2, 1.3]

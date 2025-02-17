@@ -7,6 +7,7 @@ from tests.resources.test_support.constant import (
     centralnode,
     tmc_subarraynode1,
 )
+from tests.resources.test_support.constant import tmc_subarraynode1
 
 # These test case will pass only when any of the node is deleted explicitly
 # Hence this test will be skipped on pipeline
@@ -63,7 +64,7 @@ def test_assign_mid(json_factory):
     central_node = DeviceProxy(centralnode)
     result, message = central_node.AssignResources(assign_json)
 
-    assert "Subarray ska_mid/tm_subarray_node/1 is not available" in str(
+    assert f"Subarray {tmc_subarraynode1} is not available" in str(
         message
     )
 
@@ -80,7 +81,7 @@ def test_release_mid(json_factory):
         central_node = DeviceProxy(centralnode)
         result, message = central_node.ReleaseResources(release_json)
 
-        assert "Subarray ska_mid/tm_subarray_node/1 is not available" in str(
+        assert f"Subarray {tmc_subarraynode1} is not available" in str(
             message
         )
 

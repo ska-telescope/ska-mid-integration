@@ -61,6 +61,12 @@ from tests.resources.test_harness.utils.sync_decorators import (
     sync_restart,
 )
 from tests.resources.test_support.common_utils.common_helpers import Resource
+from tests.resources.test_support.constant import (
+    csp_subarray_prefix,
+    sdp_subarray_prefix,
+    tmc_csp_subarrayln_prefix,
+    tmc_sdp_subarrayln_prefix,
+)
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -243,14 +249,18 @@ class SubarrayNodeWrapper(object):
         id"""
         subarray_id = str(requested_subarray_id).zfill(2)
         self.subarray_devices = {
-            "csp_subarray": DeviceProxy(f"mid-csp/subarray/{subarray_id}"),
-            "sdp_subarray": DeviceProxy(f"mid-sdp/subarray/{subarray_id}"),
+            "csp_subarray": DeviceProxy(
+                f"{csp_subarray_prefix}/{subarray_id}"
+            ),
+            "sdp_subarray": DeviceProxy(
+                f"{sdp_subarray_prefix}/{subarray_id}"
+            ),
         }
         self.csp_subarray_leaf_node = DeviceProxy(
-            f"ska_mid/tm_leaf_node/csp_subarray{subarray_id}"
+            f"{tmc_csp_subarrayln_prefix}/{subarray_id}"
         )
         self.sdp_subarray_leaf_node = DeviceProxy(
-            f"ska_mid/tm_leaf_node/sdp_subarray{subarray_id}"
+            f"{tmc_sdp_subarrayln_prefix}/{subarray_id}"
         )
 
     def move_to_on(self):

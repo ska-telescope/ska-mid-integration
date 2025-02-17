@@ -8,7 +8,7 @@
   },
   "midcbf": {
       "vlbi": {},
-      "delay_model_subscription_point": "ska_mid/tm_leaf_node/csp_subarray_01/delayModel",
+      "delay_model_subscription_point": "mid-tmc/subarray-leaf-node-csp/01/delayModel",
       "correlation": {
           "processing_regions": [{
               "fsp_ids": [1],

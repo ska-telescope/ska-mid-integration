@@ -1,1 +1,1 @@
-formula=(ska_mid/tm_central/central_node/telescopehealthState == 1);priority=log;group=none;message=(\"alarm for central node telescopehealthstate degraded\")
+formula=(mid-tmc/central-node/0/telescopehealthState == 1);priority=log;group=none;message=(\"alarm for central node telescopehealthstate degraded\")

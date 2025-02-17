@@ -3,7 +3,7 @@ function: telescope-monitoring
 domain: general-monitoring
 instances: ["01"]
 entrypoints:
-  - name: "ska_tmc_cspsubarrayleafnode.csp_subarray_leaf_node_mid.CspSubarrayLeafNodeMid"
+  - name: "ska_tmc_cspsubarrayleafnode.csp_subarray_leaf_node_mid.MidTmcLeafNodeCspSubarray"
 {{- $DelayModelTimeInAdvance := .Values.deviceServers.cspsubarrayleafnode.DelayModelTimeInAdvance }}
 {{- $DelayCadence := .Values.deviceServers.cspsubarrayleafnode.DelayCadence }}
 {{- $DelayValidityPeriod := .Values.deviceServers.cspsubarrayleafnode.DelayValidityPeriod }}
@@ -13,6 +13,7 @@ entrypoints:
 {{- $AdapterTimeOut := .Values.deviceServers.cspsubarrayleafnode.AdapterTimeOut}}
 {{- $LivelinessCheckPeriod := .Values.deviceServers.cspsubarrayleafnode.LivelinessCheckPeriod}}
 {{- $EventSubscriptionCheckPeriod := .Values.deviceServers.cspsubarrayleafnode.EventSubscriptionCheckPeriod}}
+{{- $tmcCspSubarrayLeafNodePrefix := .Values.global.csp_subarray_ln_prefix }}
 server:
   name: "csp_subarray_leaf_node_mid"
   instances:
@@ -20,9 +21,9 @@ server:
   {{- range  ( regexSplit " " ((.Values.subarray_count | int) | seq ) -1 ) }}
     - name: "{{ printf "%02s" . }}"
       classes:
-      - name: "CspSubarrayLeafNodeMid"
+      - name: "MidTmcLeafNodeCspSubarray"
         devices:
-          - name: "ska_mid/tm_leaf_node/csp_subarray{{ printf "%02s" . }}"
+          - name: "{{ $tmcCspSubarrayLeafNodePrefix }}{{ printf "%02s" . }}"
             properties:
               - name: "TelmodelSource"
                 values:

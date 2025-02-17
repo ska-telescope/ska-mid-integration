@@ -66,7 +66,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska_mid/tm_central/central_node",
+          "device": "taranta://mid-tmc/central-node/0",
           "attribute": "telescopeavailability",
           "label": "telescopeAvailability"
         },
@@ -123,7 +123,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska_mid/tm_central/central_node",
+          "device": "taranta://mid-tmc/central-node/0",
           "attribute": "telescopestate",
           "label": "telescopeState"
         },
@@ -180,7 +180,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska_mid/tm_central/central_node",
+          "device": "taranta://mid-tmc/central-node/0",
           "attribute": "telescopehealthstate",
           "label": "telescopeHealthState"
         },
@@ -605,7 +605,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska_mid/tm_central/central_node",
+          "device": "taranta://mid-tmc/central-node/0",
           "attribute": "state",
           "label": "State"
         },
@@ -639,7 +639,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska_mid/tm_central/central_node",
+          "device": "taranta://mid-tmc/central-node/0",
           "attribute": "healthstate",
           "label": "healthState"
         },
@@ -1487,7 +1487,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska001/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA001",
           "attribute": "state",
           "label": "State"
         },
@@ -1521,7 +1521,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska001/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA001",
           "attribute": "healthstate",
           "label": "healthState"
         },
@@ -1555,7 +1555,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska001/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA001",
           "attribute": "pointingstate",
           "label": "pointingState"
         },
@@ -1589,7 +1589,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska001/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA001",
           "attribute": "dishmode",
           "label": "dishMode"
         },
@@ -1623,7 +1623,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska036/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA036",
           "attribute": "state",
           "label": "State"
         },
@@ -1657,7 +1657,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska036/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA036",
           "attribute": "healthstate",
           "label": "healthState"
         },
@@ -1691,7 +1691,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska036/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA036",
           "attribute": "pointingstate",
           "label": "pointingState"
         },
@@ -1725,7 +1725,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska036/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA036",
           "attribute": "dishmode",
           "label": "dishMode"
         },
@@ -1759,7 +1759,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska063/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA063",
           "attribute": "state",
           "label": "State"
         },
@@ -1793,7 +1793,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska063/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA063",
           "attribute": "healthstate",
           "label": "healthState"
         },
@@ -1827,7 +1827,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska063/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA063",
           "attribute": "pointingstate",
           "label": "pointingState"
         },
@@ -1861,7 +1861,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska063/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA063",
           "attribute": "dishmode",
           "label": "dishMode"
         },
@@ -1895,7 +1895,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska100/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA100",
           "attribute": "state",
           "label": "State"
         },
@@ -1929,7 +1929,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska100/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA100",
           "attribute": "healthstate",
           "label": "healthState"
         },
@@ -1963,7 +1963,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska100/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA100",
           "attribute": "pointingstate",
           "label": "pointingState"
         },
@@ -1997,7 +1997,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska100/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA100",
           "attribute": "dishmode",
           "label": "dishMode"
         },
@@ -2031,7 +2031,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska_mid/tm_central/central_node",
+          "device": "taranta://mid-tmc/central-node/0",
           "attribute": "versionid",
           "label": "versionId"
         },
@@ -2065,7 +2065,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska_mid/tm_subarray_node/1",
+          "device": "taranta://mid-tmc/subarray/01",
           "attribute": "versionid",
           "label": "versionId"
         },
@@ -2099,7 +2099,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska_mid/tm_leaf_node/csp_master",
+          "device": "taranta://mid-tmc/leaf-node-csp/0",
           "attribute": "versionid",
           "label": "versionId"
         },
@@ -2133,7 +2133,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska_mid/tm_leaf_node/sdp_master",
+          "device": "taranta://mid-tmc/leaf-node-sdp/0",
           "attribute": "versionid",
           "label": "versionId"
         },
@@ -2167,7 +2167,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska_mid/tm_leaf_node/d0001",
+          "device": "taranta://mid-tmc/leaf-node-dish/SKA001",
           "attribute": "versionid",
           "label": "versionId"
         },
@@ -2337,7 +2337,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska001/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA001",
           "attribute": "versionid",
           "label": "versionId"
         },
@@ -2486,7 +2486,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska_mid/tm_subarray_node/1",
+          "device": "taranta://mid-tmc/subarray/01",
           "attribute": "state",
           "label": "State"
         },
@@ -2520,7 +2520,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska_mid/tm_subarray_node/1",
+          "device": "taranta://mid-tmc/subarray/01",
           "attribute": "healthstate",
           "label": "healthState"
         },
@@ -2554,7 +2554,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska_mid/tm_subarray_node/1",
+          "device": "taranta://mid-tmc/subarray/01",
           "attribute": "obsstate",
           "label": "obsState"
         },
@@ -2735,7 +2735,7 @@
         "attributes": [
           {
             "attribute": {
-              "device": "taranta://ska_mid/tm_subarray_node/1",
+              "device": "taranta://mid-tmc/subarray/01",
               "attribute": "obsstate",
               "label": "obsState"
             },
@@ -2832,7 +2832,7 @@
       "type": "SPECTRUM_TABLE",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska_mid/tm_subarray_node/1",
+          "device": "taranta://mid-tmc/subarray/01",
           "attribute": "assignedresources",
           "label": "assignedResources"
         },
@@ -2882,7 +2882,7 @@
       "type": "SPECTRUM_TABLE",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska_mid/tm_subarray_node/1",
+          "device": "taranta://mid-tmc/subarray/01",
           "attribute": "longrunningcommandresult",
           "label": "longRunningCommandResult"
         },
@@ -2909,7 +2909,7 @@
       "type": "SPECTRUM_TABLE",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska001/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA001",
           "attribute": "achievedpointing",
           "label": "achievedPointing"
         },
@@ -2960,7 +2960,7 @@
       "type": "SPECTRUM_TABLE",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska001/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA001",
           "attribute": "desiredpointing",
           "label": "desiredPointing"
         },
@@ -3011,7 +3011,7 @@
       "type": "SPECTRUM_TABLE",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska036/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA036",
           "attribute": "achievedpointing",
           "label": "achievedPointing"
         },
@@ -3039,7 +3039,7 @@
       "type": "SPECTRUM_TABLE",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska036/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA036",
           "attribute": "desiredpointing",
           "label": "desiredPointing"
         },
@@ -3090,7 +3090,7 @@
       "type": "SPECTRUM_TABLE",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska063/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA063",
           "attribute": "achievedpointing",
           "label": "achievedPointing"
         },
@@ -3118,7 +3118,7 @@
       "type": "SPECTRUM_TABLE",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska063/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA063",
           "attribute": "desiredpointing",
           "label": "desiredPointing"
         },
@@ -3192,7 +3192,7 @@
       "type": "SPECTRUM_TABLE",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska100/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA100",
           "attribute": "achievedpointing",
           "label": "achievedPointing"
         },
@@ -3220,7 +3220,7 @@
       "type": "SPECTRUM_TABLE",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska100/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA100",
           "attribute": "desiredpointing",
           "label": "desiredPointing"
         },
@@ -3340,7 +3340,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska036/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA036",
           "attribute": "versionid",
           "label": "versionId"
         },
@@ -3374,7 +3374,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska063/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA063",
           "attribute": "versionid",
           "label": "versionId"
         },
@@ -3408,7 +3408,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska100/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA100",
           "attribute": "versionid",
           "label": "versionId"
         },
@@ -3442,7 +3442,7 @@
       "type": "LED_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska_mid/tm_subarray_node/1",
+          "device": "taranta://mid-tmc/subarray/01",
           "attribute": "issubarrayavailable",
           "label": "isSubarrayAvailable"
         },
@@ -3473,7 +3473,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska_mid/tm_central/central_node",
+          "device": "taranta://mid-tmc/central-node/0",
           "attribute": "isdishvccconfigset",
           "label": "isDishVccConfigSet"
         },
@@ -3587,7 +3587,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska_mid/tm_central/central_node",
+          "device": "taranta://mid-tmc/central-node/0",
           "attribute": "dishvccvalidationstatus",
           "label": "DishVccValidationStatus"
         },
@@ -3701,7 +3701,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska001/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA001",
           "attribute": "kvalue",
           "label": "kValue"
         },
@@ -3758,7 +3758,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska036/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA036",
           "attribute": "kvalue",
           "label": "kValue"
         },
@@ -3838,7 +3838,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska063/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA063",
           "attribute": "kvalue",
           "label": "kValue"
         },
@@ -3872,7 +3872,7 @@
       "type": "ATTRIBUTE_DISPLAY",
       "inputs": {
         "attribute": {
-          "device": "taranta://ska100/elt/master",
+          "device": "taranta://mid-dish/dish-manager/SKA100",
           "attribute": "kvalue",
           "label": "kValue"
         },

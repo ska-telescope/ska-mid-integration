@@ -3,10 +3,12 @@ function: telescope-monitoring
 domain: general-monitoring
 instances: ["001", "036", "063", "100"]
 entrypoints:
-  - name: "ska_tmc_dishleafnode.dish_leaf_node.DishLeafNode"
+  - name: "ska_tmc_dishleafnode.dish_leaf_node.MidTmcLeafNodeDish"
 server:
   name: "dish_leaf_node"
   instances:
+  {{- $dishManagerSuffix := .Values.global.dish_manager_suffix }}
+  {{- $tmcDishPointingSuffix := .Values.global.dishln_pointing_suffix }}
   {{- $MaxTrackTableRetry := .Values.deviceServers.dishleafnode.MaxTrackTableRetry }}
   {{- $TrackTableRetryDuration := .Values.deviceServers.dishleafnode.TrackTableRetryDuration }}
   {{- $LivelinessCheckPeriod := .Values.deviceServers.dishleafnode.LivelinessCheckPeriod}}
@@ -32,14 +34,14 @@ server:
   {{- range $index, $number := $instance_list }}
     - name: "{{ $number }}"
       classes:
-      - name: "DishLeafNode"
+      - name: "MidTmcLeafNodeDish"
         devices:
-        - name: "ska_mid/tm_leaf_node/d0{{ $number }}"
+        - name: "mid-tmc/leaf-node-dish/SKA{{ $number }}"
           properties:
-            - name: "DishMasterFQDN"
+            - name: "MidDishControl"
               values:
                 {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true)  }}
-                - "SKA{{ printf $number }}/elt/master" # Mock device FQDN
+                - "{{ $dishManagerSuffix }}{{ printf $number }}" # Mock device FQDN
                 {{- else }}
                 {{- range $index_real, $instance_real := $real_dish_name }}
                 {{- if eq $index_real $index }}
@@ -47,9 +49,9 @@ server:
                 {{- end }}
                 {{- end }}
                 {{- end }}
-            - name: "DishlnPointingDeviceFQDN"
+            - name: "MidPointingDevice"
               values:
-                - "mid-tmc/dish-pointing/d0{{ $number }}"
+                - "{{ $tmcDishPointingSuffix }}{{ $number }}"
             - name: "SkaLevel"
               values:
                 - "3"

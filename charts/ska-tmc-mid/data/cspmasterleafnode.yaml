@@ -2,16 +2,17 @@ name: "cspmasterleafnode-test"
 function: telescope-monitoring
 domain: general-monitoring
 instances: ["01"]
+{{- $cspMasterLeafNode := .Values.global.csp_master_ln_prefix }}
 entrypoints:
-  - name: "ska_tmc_cspmasterleafnode.csp_master_leaf_node_mid.CspMasterLeafNodeMid"
+  - name: "ska_tmc_cspmasterleafnode.csp_master_leaf_node_mid.MidTmcLeafNodeCspControl"
 server:
   name: "csp_master_leaf_node"
   instances:
   - name: "01"
     classes:
-    - name: "CspMasterLeafNodeMid"
+    - name: "MidTmcLeafNodeCspControl"
       devices:
-      - name: "ska_mid/tm_leaf_node/csp_master"
+      - name: "{{ $cspMasterLeafNode }}"
         properties:
         - name: "CspMasterFQDN"
           values:

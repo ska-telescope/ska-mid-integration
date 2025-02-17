@@ -14,7 +14,11 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.common_utils.tmc_helpers import (
     tear_down_configured_alarms,
 )
-from tests.resources.test_support.constant import alarm_handler1
+from tests.resources.test_support.constant import (
+    alarm_handler1,
+    csp_master,
+    tmc_dish_leaf_node1,
+)
 
 
 @pytest.mark.skip(
@@ -42,7 +46,7 @@ def given_tmc_with_already_loaded_dish_vcc_config_version(tmc_mid):
     cspmln_validation_string = "TMC and CSP Master Dish Vcc Version is Same"
     central_node_dish_vcc_validation_status = {
         "dish": "ALL DISH OK",
-        "ska_mid/tm_leaf_node/csp_master": cspmln_validation_string,
+        csp_master: cspmln_validation_string,
     }
     assert (
         json.loads(tmc_mid.DishVccValidationStatus)
@@ -83,7 +87,7 @@ def test_load_alarm():
     alarm_handler = DeviceProxy(alarm_handler1)
     alarm_formula = (
         "tag=dishleafnode_kvalue_not_set;formula="
-        "(ska_mid/tm_leaf_node/d0001/kValueValidationResult == '4' );"
+        f"({tmc_dish_leaf_node1}/kValueValidationResult == '4' );"
         "priority=log;group=none;message="
         "alarm for dishvalidation status raised when k-value is not set"
     )
@@ -105,8 +109,8 @@ def check_value_of_isdishvccconfigset_on_central_node(tmc_mid):
     or false after dish leaf node report."""
     cspmln_validation_string = "TMC and CSP Master Dish Vcc Version is Same"
     central_node_dish_vcc_validation_status = {
-        "d0001": "k-value not set",
-        "ska_mid/tm_leaf_node/csp_master": cspmln_validation_string,
+        "SKA001": "k-value not set",
+        csp_master: cspmln_validation_string,
     }
     assert wait_and_validate_device_attribute_value(
         tmc_mid.central_node.central_node,

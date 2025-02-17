@@ -16,6 +16,7 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_commands,
 )
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
+from tests.resources.test_support.constant import tmc_csp_subarray_leaf_node
 
 
 class TestSubarrayNodeNegative(object):
@@ -59,7 +60,7 @@ class TestSubarrayNodeNegative(object):
         )
         exception_message = (
             "Exception occurred on the following devices: "
-            "ska_mid/tm_leaf_node/csp_subarray01: "
+            f"{tmc_csp_subarray_leaf_node}: "
         )
         assert (
             exception_message

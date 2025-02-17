@@ -2,6 +2,14 @@ name: "mocks-{{.Release.Name}}"
 function: testing
 domain: mocks
 instances: ["01","02","03","04","05","001","036","063","100"]
+{{- $midSdpControlFqdn := .Values.global.sdp_master }}
+{{- $midSdpSubarrayFqdn1 := .Values.global.mid_sdp_subarray_1 }}
+{{- $midSdpSubarrayFqdn2 := .Values.global.mid_sdp_subarray_2 }}
+{{- $midSdpQueueConnector := .Values.global.mid_sdp_queueconnector }}
+{{- $midCspControl := .Values.global.mid_csp_control }}
+{{- $midCspSubarray1 := .Values.global.mid_csp_subarray_1 }}
+{{- $midCspSubarray2 := .Values.global.mid_csp_subarray_2 }}
+{{- $dishManagerSuffix := .Values.global.dish_manager_suffix }}
 entrypoints:
   - name: "ska_tmc_common.test_helpers.helper_base_device.HelperBaseDevice"
   - name: "ska_tmc_common.test_helpers.helper_dish_device.HelperDishDevice"
@@ -20,18 +28,18 @@ server:
       classes:
         - name: "HelperBaseDevice"
           devices:
-          - name: "mid-sdp/control/0"
+          - name: "{{ $midSdpControlFqdn }}"
     - name: "02"
       classes:
         - name: "HelperSdpSubarray"
           devices:
-          - name: "mid-sdp/subarray/01"
-          - name: "mid-sdp/subarray/02"
+          - name: "{{ $midSdpSubarrayFqdn1 }}"
+          - name: "{{ $midSdpSubarrayFqdn2 }}"
     - name: "03"
       classes:
         - name: "HelperSdpQueueConnector"
           devices:
-          - name: "mid-sdp/queueconnector/01"
+          - name: "{{ $midSdpQueueConnector }}"
       {{- end }}
 
       {{- if eq $isSimulatedCsp true }}
@@ -39,13 +47,13 @@ server:
       classes:
         - name: "HelperCspMasterDevice"
           devices:
-          - name: "mid-csp/control/0"
+          - name: "{{ $midCspControl }}"
     - name: "05"
       classes:
         - name: "HelperSubArrayDevice"
           devices:
-          - name: "mid-csp/subarray/01"
-          - name: "mid-csp/subarray/02"
+          - name: "{{ $midCspSubarray1 }}"
+          - name: "{{ $midCspSubarray2 }}"
         {{- end }}
         {{- if eq $isSimulatedDish true }}
   {{- range .Values.global.dishes }}
@@ -53,7 +61,7 @@ server:
       classes:
         - name: "HelperDishDevice"
           devices:
-          - name: "ska{{ printf . }}/elt/master"
+          - name: "{{ $dishManagerSuffix }}{{ printf . }}"
       {{- end }}
       {{- end }}
 depends_on:

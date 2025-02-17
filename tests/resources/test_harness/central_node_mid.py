@@ -51,6 +51,11 @@ from tests.resources.test_harness.utils.sync_decorators import (
 )
 from tests.resources.test_harness.utils.wait_helpers import Waiter
 from tests.resources.test_support.common_utils.common_helpers import Resource
+from tests.resources.test_support.constant import (
+    tmc_csp_subarrayln_prefix,
+    tmc_sdp_subarrayln_prefix,
+    tmc_subarray_prefix,
+)
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -92,7 +97,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
 
             # creating spfrx device fqdn
             self.spfrx_fqdn = dish_fqdn001.replace(
-                "mid-dish/dish-manager/SKA001",
+                dish_master1,
                 "mid-dish/simulator-spfrx/SKA001",
             )
             spfrx_proxy = DeviceProxy(self.spfrx_fqdn)
@@ -111,9 +116,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             self.dish1_db = Database(dish1_host, dish1_port)
 
             # Get the Dish1 device class and server
-            dish1_info = self.dish1_db.get_device_info(
-                "mid-dish/dish-manager/SKA001"
-            )
+            dish1_info = self.dish1_db.get_device_info(dish_master1)
             self.dish1_dev_class = dish1_info.class_name
             self.dish1_dev_server = dish1_info.ds_full_name
 
@@ -253,7 +256,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         """This method creates subarray devices for the requested subarray
         id"""
         self.subarray_node = DeviceProxy(
-            f"ska_mid/tm_subarray_node/{requested_subarray_id}"
+            f"{tmc_subarray_prefix}/{requested_subarray_id}"
         )
         subarray_id = str(requested_subarray_id).zfill(2)
         self.subarray_devices = {
@@ -261,10 +264,10 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             "sdp_subarray": DeviceProxy(f"mid-sdp/subarray/{subarray_id}"),
         }
         self.csp_subarray_leaf_node = DeviceProxy(
-            f"ska_mid/tm_leaf_node/csp_subarray{subarray_id}"
+            f"{tmc_csp_subarrayln_prefix}/{subarray_id}"
         )
         self.sdp_subarray_leaf_node = DeviceProxy(
-            f"ska_mid/tm_leaf_node/sdp_subarray{subarray_id}"
+            f"{tmc_sdp_subarrayln_prefix}/{subarray_id}"
         )
 
     def get_track_table_for_dish_id(

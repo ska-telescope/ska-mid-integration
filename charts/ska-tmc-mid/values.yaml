@@ -34,7 +34,6 @@ global:
   # deviceServers.dishmaster, deviceServers.dishleafnode
   dish_devices: ["dishmaster", "dishleafnode"]
   dishes: ["001", "036", "063", "100"]
-  
 
   namespace_dish:
     dish_names: []
@@ -48,17 +47,26 @@ global:
 
 
   # fqdn for mid devices
-  tmc_subarray_prefix: "ska_mid/tm_subarray_node"
-  csp_subarray_ln_prefix: "ska_mid/tm_leaf_node/csp_subarray"
-  sdp_subarray_ln_prefix: "ska_mid/tm_leaf_node/sdp_subarray"
-  csp_master_ln_prefix: "ska_mid/tm_leaf_node/csp_master"
-  sdp_master_ln_prefix: "ska_mid/tm_leaf_node/sdp_master"
+  tmc_central_node: "mid-tmc/central-node/0"
+  tmc_subarray_prefix: "mid-tmc/subarray"
+  csp_subarray_ln_prefix: "mid-tmc/subarray-leaf-node-csp/"
+  sdp_subarray_ln_prefix: "mid-tmc/subarray-leaf-node-sdp/"
+  csp_master_ln_prefix: "mid-tmc/leaf-node-csp/0"
+  sdp_master_ln_prefix: "mid-tmc/leaf-node-sdp/0"
   csp_subarray_prefix: "mid-csp/subarray"
   sdp_subarray_prefix: "mid-sdp/subarray"
-  dish_suffix: "elt/master"
+  dish_suffix: "mid-dish/dish-manager"
+  dish_manager_suffix: "mid-dish/dish-manager/SKA"
   csp_master: "mid-csp/control/0"
   sdp_master: "mid-sdp/control/0"
-  dish_ln_prefix: "ska_mid/tm_leaf_node/d0"
+  dish_ln_prefix: "mid-tmc/leaf-node-dish/SKA"
+  dishln_pointing_suffix: "mid-tmc/dish-pointing/SKA"
+  mid_sdp_subarray_1: "mid-sdp/subarray/01"
+  mid_sdp_subarray_2: "mid-sdp/subarray/02"
+  mid_sdp_queueconnector: "mid-sdp/queueconnector/01"
+  mid_csp_control: "mid-csp/control/0"
+  mid_csp_subarray_1: "mid-csp/subarray/01"
+  mid_csp_subarray_2: "mid-csp/subarray/02"
 
 dsconfig:
   configuration_file: data/tmc-mid-config.json
@@ -79,42 +87,42 @@ centralnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-centralnode
-    tag: 0.17.3
+    tag: 0.17.6
     pullPolicy: IfNotPresent
 
 subarraynode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-subarraynode
-    tag: 0.30.1
+    tag: 0.30.0
     pullPolicy: IfNotPresent
 
 sdpleafnodes:
   image:
-    registry: artefact.skao.int
+    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-sdpleafnodes
     image: ska-tmc-sdpleafnodes
-    tag: 0.20.1
+    tag: 0.21.0-dev.c41be8f17
     pullPolicy: IfNotPresent
 
 cspmasterleafnode:
   image:
-    registry: artefact.skao.int
+    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-cspleafnodes
     image: ska-tmc-cspleafnodes
-    tag: 0.23.5
+    tag: 0.24.0-dev.c51bd11d7
     pullPolicy: IfNotPresent
 
 cspsubarrayleafnode:
   image:
-    registry: artefact.skao.int
+    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-cspleafnodes
     image: ska-tmc-cspleafnodes
-    tag: 0.23.5
+    tag: 0.24.0-dev.c51bd11d7
     pullPolicy: IfNotPresent
 
 dishleafnode:
   image:
-    registry: artefact.skao.int
+    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-dishleafnode
     image: ska-tmc-dishleafnode
-    tag: 0.19.7
+    tag: 0.20.0-dev.cf2bd8fdc
     pullPolicy: IfNotPresent
 
 resources:
@@ -130,8 +138,6 @@ deviceServers:
     subarray_count: 1
     file: "data/centralnode_mid.yaml"
     DishIDs: ["SKA001", "SKA036", "SKA063", "SKA100"]
-    RealDishMasterIdentifier: "mid-dish/dish-manager"
-    SimulatorDishMasterIdentifier: "elt/master"
     DishVccConfig:
       DishVccUri: "car://gitlab.com/ska-telescope/ska-telmodel-data?ska-sdp-tmlite-repository-1.0.0#tmdata"
       DishVccFilePath: "instrument/ska1_mid_psi/ska-mid-cbf-system-parameters.json"
@@ -149,8 +155,6 @@ deviceServers:
     enabled: true
     file: "data/subarraynode_mid.yaml"
     DishIDs: ["SKA001", "SKA036", "SKA063", "SKA100"]
-    RealDishMasterIdentifier: "mid-dish/dish-manager"
-    SimulatorDishMasterIdentifier: "elt/master"
     CspAssignResourcesInterfaceURL: "https://schema.skao.int/ska-csp-assignresources/2.0"
     CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.0"
     SdpScanInterfaceURL: "https://schema.skao.int/ska-sdp-scan/0.4"

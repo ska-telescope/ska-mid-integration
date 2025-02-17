@@ -7,6 +7,7 @@ entrypoints:
 server:
   name: "dishln_pointing_device"
   instances:
+  {{- $tmcDishPointingSuffix := .Values.global.dishln_pointing_suffix }}
   {{- $TrackTableUpdateRate := .Values.deviceServers.dishpointingdevice.TrackTableUpdateRate }}
   {{- $TrackTableInAdvance := .Values.deviceServers.dishpointingdevice.TrackTableInAdvance }}
   {{- $ElevationMaxLimit := .Values.deviceServers.dishpointingdevice.ElevationMaxLimit }}
@@ -32,7 +33,7 @@ server:
       classes:
       - name: "DishPointingDevice"
         devices:
-        - name: "mid-tmc/dish-pointing/d0{{ $number }}"
+        - name: "{{ $tmcDishPointingSuffix }}{{ $number }}"
           properties:
             - name: "TrackTableUpdateRate"
               values:

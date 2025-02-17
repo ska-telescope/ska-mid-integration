@@ -6,7 +6,7 @@ from tango import DeviceProxy
 from tests.resources.test_support.common_utils.tmc_helpers import (
     tear_down_configured_alarms,
 )
-from tests.resources.test_support.constant import alarm_handler1
+from tests.resources.test_support.constant import alarm_handler1, centralnode
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +22,7 @@ def test_load_alarm():
     alarm_handler = DeviceProxy(alarm_handler1)
     alarm_formula = (
         "tag=CentralNode_telescopehealthstate_degraded;formula="
-        "(ska_mid/tm_central/central_node/telescopehealthState == 1);"
+        f"({centralnode}/telescopehealthState == 1);"
         "priority=log;group=none;message="
         '("alarm for central node telescopehealthstate degraded")'
     )
