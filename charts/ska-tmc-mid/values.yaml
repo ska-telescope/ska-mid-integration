@@ -77,9 +77,9 @@ itango:
 
 centralnode:
   image:
-    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-centralnode
+    registry: artefact.skao.int
     image: ska-tmc-centralnode
-    tag: 0.17.5-dev.c45a306dd
+    tag: 0.17.5
     pullPolicy: IfNotPresent
 
 subarraynode:
@@ -91,9 +91,9 @@ subarraynode:
 
 sdpleafnodes:
   image:
-    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-sdpleafnodes
+    registry: artefact.skao.int
     image: ska-tmc-sdpleafnodes
-    tag: 0.20.2-dev.c6f386625
+    tag: 0.20.2
     pullPolicy: IfNotPresent
 
 cspmasterleafnode:
@@ -123,7 +123,7 @@ resources:
     cpu: 2500m
   requests:
     cpu: 2000m
-    memory: 2000Mi
+    memory: 500Mi
 
 
 deviceServers:
