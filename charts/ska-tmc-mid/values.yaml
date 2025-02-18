@@ -120,7 +120,7 @@ dishleafnode:
 resources:
   requests:
     cpu: 200m
-    memory: 200Mi
+    memory: 300Mi
 
 
 deviceServers:
