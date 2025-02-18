@@ -47,7 +47,7 @@ server:
           - "{{.Values.global.sdp_master}}"
         - name: "DishLeafNodePrefix"
           values:
-          - "{{.Values.global.dish_ln_prefix}}"
+          - "{{lower .Values.global.dish_ln_prefix}}"
         - name: "DishMasterIdentifier"
           values:
           - "{{ $DishMasterIdentifier }}"
