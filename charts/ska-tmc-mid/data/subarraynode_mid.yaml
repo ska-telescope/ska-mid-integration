@@ -7,7 +7,6 @@ entrypoints:
 server:
   name: "subarray_node_mid"
   instances:
-  {{- $midTmcSubarrayPrefix := .Values.global.tmc_subarray_prefix }}
   {{- $csp_sa_ln_fqdn_prefix:= .Values.global.csp_subarray_ln_prefix}}
   {{- $sdp_sa_ln_fqdn_prefix:= .Values.global.sdp_subarray_ln_prefix}}
   {{- $csp_sa_fqdn_prefix:= .Values.global.csp_subarray_prefix}}
@@ -25,8 +24,8 @@ server:
   {{- $LivelinessCheckPeriod := .Values.deviceServers.subarraynode.LivelinessCheckPeriod}}
   {{- $EventSubscriptionCheckPeriod := .Values.deviceServers.subarraynode.EventSubscriptionCheckPeriod}}
   {{- $DishLeafNodePrefix := .Values.global.dish_ln_prefix}}
-  {{ - $Domain := .Values.global.domain }}
-  {{ - $Family := .Values.deviceServers.subarraynode.family }}
+  {{- $Domain := .Values.global.domain }}
+  {{- $Family := .Values.deviceServers.subarraynode.family }}
   {{- range  ( regexSplit " " ((.Values.subarray_count | int) | seq ) -1 ) }}
     - name: "{{ printf "%02s" . }}"
       classes:
