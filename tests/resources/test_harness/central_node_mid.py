@@ -255,10 +255,10 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
     def set_subarray_id(self, requested_subarray_id: str) -> None:
         """This method creates subarray devices for the requested subarray
         id"""
-        self.subarray_node = DeviceProxy(
-            f"{tmc_subarray_prefix}/{requested_subarray_id}"
-        )
         subarray_id = str(requested_subarray_id).zfill(2)
+        self.subarray_node = DeviceProxy(
+            f"{tmc_subarray_prefix}/{subarray_id}"
+        )
         self.subarray_devices = {
             "csp_subarray": DeviceProxy(f"mid-csp/subarray/{subarray_id}"),
             "sdp_subarray": DeviceProxy(f"mid-sdp/subarray/{subarray_id}"),
