@@ -119,11 +119,11 @@ dishleafnode:
 
 resources:
   limits:
-    memory: 3000Mi
-    cpu: 2500m
-  requests:
-    cpu: 2000m
     memory: 500Mi
+    cpu: 400m
+  requests:
+    cpu: 200m
+    memory: 200Mi
 
 
 deviceServers:
@@ -208,12 +208,11 @@ deviceServers:
     IsDishAbortCommandsEnabled: "True"
     resources:
       limits:
-        memory: 3000Mi
+        memory: 1000Mi
         cpu: 2500m
       requests:
         cpu: 2000m
-        # cpu: 1000m
-        memory: 1000Mi
+        memory: 300Mi
     CommandTimeOut: 90
     MaxTrackTableRetry: 3
     TrackTableRetryDuration: 0.2
