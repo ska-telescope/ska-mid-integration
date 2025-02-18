@@ -4,13 +4,13 @@ domain: general-monitoring
 instances: ["01"]
 {{- $midTmcSdpControl := .Values.global.sdp_master_ln_prefix }}
 entrypoints:
-  - name: "ska_tmc_sdpmasterleafnode.sdp_master_leaf_node.TmcLeafNodeSdp"
+  - name: "ska_tmc_sdpmasterleafnode.sdp_master_leaf_node_mid.MidTmcLeafNodeSdp"
 server:
   name: "sdp_master_leaf_node"
   instances:
   - name: "01"
     classes:
-    - name: "TmcLeafNodeSdp"
+    - name: "MidTmcLeafNodeSdp"
       devices:
       - name: "{{ $midTmcSdpControl }}"
         properties:
