@@ -209,9 +209,9 @@ deviceServers:
     resources:
       limits:
         memory: 1000Mi
-        cpu: 6000m
+
       requests:
-        cpu: 5000m
+        cpu: 2000m
         memory: 300Mi
     CommandTimeOut: 90
     MaxTrackTableRetry: 3
