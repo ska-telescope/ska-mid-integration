@@ -25,12 +25,14 @@ server:
   {{- $LivelinessCheckPeriod := .Values.deviceServers.subarraynode.LivelinessCheckPeriod}}
   {{- $EventSubscriptionCheckPeriod := .Values.deviceServers.subarraynode.EventSubscriptionCheckPeriod}}
   {{- $DishLeafNodePrefix := .Values.global.dish_ln_prefix}}
+  {{ - $Domain := .Values.global.domain }}
+  {{ - $Family := .Values.deviceServers.subarraynode.family }}
   {{- range  ( regexSplit " " ((.Values.subarray_count | int) | seq ) -1 ) }}
     - name: "{{ printf "%02s" . }}"
       classes:
       - name: "SubarrayNodeMid"
         devices:
-        - name: "{{ $midTmcSubarrayPrefix }}/{{ . }}"
+        - name: "{{ $Domain }}/{{ $Family }}/{{ . }}"
           properties:
           - name: "DishLeafNodePrefix"
             values:

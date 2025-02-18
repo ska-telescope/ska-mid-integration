@@ -34,6 +34,7 @@ global:
   # deviceServers.dishmaster, deviceServers.dishleafnode
   dish_devices: ["dishmaster", "dishleafnode"]
   dishes: ["001", "036", "063", "100"]
+  domain: "mid-tmc"
 
   namespace_dish:
     dish_names: []
@@ -162,6 +163,7 @@ deviceServers:
     AbortCommandTimeOut: 130
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
+    family: "subarray"
 
   sdpsubarrayleafnode:
     enabled: true
