@@ -31,7 +31,7 @@ server:
       classes:
       - name: "SubarrayNodeMid"
         devices:
-        - name: "{{ $Domain }}/{{ $Family }}/{{ . }}"
+        - name: "{{ $Domain }}/{{ $Family }}/{{ printf "%02s" . }}"
           properties:
           - name: "DishLeafNodePrefix"
             values:

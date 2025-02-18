@@ -151,6 +151,8 @@ deviceServers:
     DishVccInitTimeout: 180
     LivelinessCheckPeriod: 2.0
     EventSubscriptionCheckPeriod: 2.0
+    family: "central-node"
+    member : "0"
 
   subarraynode:
     enabled: true
@@ -173,6 +175,7 @@ deviceServers:
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
     SDPSubarrayAdminModeEnabled: true
+    family: "subarray-leaf-node-sdp"
 
   sdpmasterleafnode:
     enabled: true
@@ -182,6 +185,8 @@ deviceServers:
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
     SDPMasterAdminModeEnabled: true
+    family: "leaf-node-sdp"
+    member : "0"
 
   cspmasterleafnode:
     enabled: true
@@ -190,6 +195,8 @@ deviceServers:
     AdapterTimeOut: 2.0
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
+    family: "leaf-node-csp"
+    member : "0"
 
 
   cspsubarrayleafnode:
@@ -204,6 +211,7 @@ deviceServers:
     AdapterTimeOut: 2.0
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
+    family: "subarray-leaf-node-csp"
 
   dishleafnode:
     enabled: true

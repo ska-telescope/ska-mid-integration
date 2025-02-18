@@ -3,6 +3,9 @@ function: telescope-monitoring
 domain: general-monitoring
 instances: ["01"]
 {{- $midTmcSdpControl := .Values.global.sdp_master_ln_prefix }}
+{{- $domain := .Values.global.domain}}
+{{- $family := .Values.deviceServers.sdpmasterleafnode.family }}
+{{- $member := .Values.deviceServers.sdpmasterleafnode.member }}
 entrypoints:
   - name: "ska_tmc_sdpmasterleafnode.sdp_master_leaf_node_mid.MidTmcLeafNodeSdp"
 server:
@@ -12,7 +15,7 @@ server:
     classes:
     - name: "MidTmcLeafNodeSdp"
       devices:
-      - name: "{{ $midTmcSdpControl }}"
+      - name: "{{ $domain }}/{{ $family }}/{{ $member }}"
         properties:
         - name: "SdpMasterFQDN"
           values:

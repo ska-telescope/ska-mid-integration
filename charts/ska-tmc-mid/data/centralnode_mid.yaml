@@ -23,12 +23,15 @@ server:
   {{- $DishVccInitTimeout := .Values.deviceServers.centralnode.DishVccInitTimeout}}
   {{- $LivelinessCheckPeriod := .Values.deviceServers.centralnode.LivelinessCheckPeriod}}
   {{- $EventSubscriptionCheckPeriod := .Values.deviceServers.centralnode.EventSubscriptionCheckPeriod}}
+  {{- $domain := .Values.global.domain }}
+  {{- $family := .Values.deviceServers.centralnode.family }}
+  {{- $member := .Values.deviceServers.centralnode.member }}
   {{- $centralNode := .Values.global.tmc_central_node }}
   - name: "01"
     classes:
     - name: "MidTmcCentralNode"
       devices:
-      - name: "{{ $centralNode }}"
+      - name: "{{ $domain }}/{{ $family }}/{{ $member }}"
         properties:
         - name: "CspMasterLeafNodeFQDN"
           values:
@@ -79,7 +82,7 @@ server:
         - name: "TMCSubarrayNodes"
           values:
           {{- range  ( regexSplit " " ((.Values.subarray_count | int) | seq ) -1 )  }}
-          - "{{ $tmc_sa_fqdn_prefix }}/{{ . }}"
+          - "{{ $tmc_sa_fqdn_prefix }}/{{ printf "%02s" . }}"
           {{- end }}
         - name: "CspSubarrayLeafNodes"
           values:
