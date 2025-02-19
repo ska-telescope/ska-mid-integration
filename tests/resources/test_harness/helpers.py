@@ -635,6 +635,35 @@ def check_subarray_instance(device, subarray_id):
     assert subarray_instance == subarray_id
 
 
+def normalize_dict(d: dict):
+    """
+    Set dict key name in lower case
+    :return: updated dict with lower case key
+    :rtype: dict
+    """
+    return {
+        k.lower()
+        if isinstance(k, str)
+        else k: v.lower()
+        if isinstance(v, str)
+        else v
+        for k, v in d.items()
+    }
+
+
+def compare_dicts_case_insensitive(dict1: dict, dict2: dict):
+    """
+    Compare dict after normalizing
+    :param dict1: dictionary 1 to compare
+    :type dict1: dict
+    :param dict2: dictionary 2 to compare
+    :type dict2: dict
+    :return: bool value if two dict are same
+    :rtype: bool
+    """
+    return normalize_dict(dict1) == normalize_dict(dict2)
+
+
 def wait_and_validate_device_attribute_value(
     device: DeviceProxy,
     attribute_name: str,
@@ -658,8 +687,8 @@ def wait_and_validate_device_attribute_value(
                 attribute_value,
                 type(attribute_value),
             )
-            if is_json and json.loads(attribute_value) == json.loads(
-                expected_value
+            if is_json and compare_dicts_case_insensitive(
+                json.loads(attribute_value), json.loads(expected_value)
             ):
                 return True
             elif is_list:
