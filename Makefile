@@ -188,10 +188,6 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set ska-tango-archiver.dbpassword=$(ARCHIVER_PWD)\
 	--set ska-tango-archiver.hostname=$(ARCHIVER_HOSTNAME)\
 	--set ska-tango-archiver.archwizard_config=$(ARCHWIZARD_CONFIG)\
-	--set ska-tango-archiver.archviewer.instances[0].name="mid_sw_int"\
-	--set ska-tango-archiver.archviewer.instances[0].timescale_host="$(ARCHIVER_HOSTNAME)"\
-	--set ska-tango-archiver.archviewer.instances[0].timescale_databases=""\
-	--set ska-tango-archiver.archviewer.instances[0].timescale_login="$(ARCHIVER_TIMESCALE_DB_USER):$(ARCHIVER_PWD)"\
 	$(K8S_EXTRA_PARAMS)
 
 
