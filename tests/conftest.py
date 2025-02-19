@@ -18,7 +18,6 @@ from ska_tango_testing.mock.tango.event_callback import (
 from tango import DevState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
-from tests.resources.test_harness.constant import centralnode, csp_master
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     CSP_SIMULATION_ENABLED,
@@ -34,6 +33,7 @@ from tests.resources.test_harness.utils.common_utils import (
     SharedContext,
 )
 from tests.resources.test_harness.utils.enums import ResultCode
+from tests.resources.test_support.constant import centralnode, csp_master
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)

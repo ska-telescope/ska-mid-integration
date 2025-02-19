@@ -6,10 +6,10 @@ from pytest_bdd import given, scenario, then, when
 from ska_control_model import ObsState
 from tango import DevState
 
-from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
 )
+from tests.resources.test_support.constant import COMMAND_COMPLETED
 
 
 @pytest.mark.skip(reason="Duplicate scenario")

@@ -10,7 +10,6 @@ from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
 from tango import DevState
 
-from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.helpers import (
     check_subarray_instance,
     prepare_json_args_for_centralnode_commands,
@@ -24,6 +23,7 @@ from tests.resources.test_harness.utils.common_utils import (
     check_scan_successful,
     wait_added_for_skb372,
 )
+from tests.resources.test_support.constant import COMMAND_COMPLETED
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
