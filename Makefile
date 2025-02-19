@@ -97,6 +97,15 @@ DISH_NAME_100 ?= tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_4).svc.$(CLUSTER_DO
 #tango://$(DISH_TANGO_HOST).$(DISH_NAMESPACE_4).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-dish/dish-manager/SKA100
 SDP_DEPLOY ?= true
 
+#EDA configuration
+ARCHIVER_PWD ?=  #this is read from the pipeline
+ARCHWIZARD_VIEW_DBNAME = mid_sw_int_eda
+TANGO_HOST_NAME?= $(shell echo $(TANGO_HOST) | cut -d ":" -f 1)
+ARCHIVER_HOSTNAME ?= #set from pipeline
+CONFIG_MANAGER = mid-eda/cm/01
+ARCHWIZARD_CONFIG = $(ARCHWIZARD_VIEW_DBNAME)=tango://$(TANGO_HOST_NAME).$(KUBE_NAMESPACE).svc.$(CLUSTER_DOMAIN):10000/$(CONFIG_MANAGER)
+ARCHIVER_TIMESCALE_DB_USER = admin
+
 ifeq ($(SDP_SIMULATION_ENABLED),false)
 K8S_EXTRA_PARAMS=	-f charts/ska-mid-integration/tmc_pairwise/tmc_sdp_values.yaml \
 	--set ska-tmc-mid.deviceServers.mocks.sdp=$(SDP_SIMULATION_ENABLED)\
@@ -176,7 +185,16 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set ska-db-oda.rest.backend.type=filesystem \
 	--set ska-db-oda.pgadmin4.enabled=false \
 	--set ska-db-oda.postgresql.enabled=false \
+	--set ska-tango-archiver.dbpassword=$(ARCHIVER_PWD)\
+	--set ska-tango-archiver.hostname=$(ARCHIVER_HOSTNAME)\
+	--set ska-tango-archiver.archwizard_config=$(ARCHWIZARD_CONFIG)\
+	--set ska-tango-archiver.archviewer.instances[0].name="mid_sw_int"\
+	--set ska-tango-archiver.archviewer.instances[0].timescale_host="$(ARCHIVER_HOSTNAME)"\
+	--set ska-tango-archiver.archviewer.instances[0].timescale_databases=""\
+	--set ska-tango-archiver.archviewer.instances[0].timescale_login="$(ARCHIVER_TIMESCALE_DB_USER):$(ARCHIVER_PWD)"\
 	$(K8S_EXTRA_PARAMS)
+
+
 
 # ifeq ($(strip $(MINIKUBE)),true)
 # ifeq ($(strip $(TARANTA_AUTH_DASHBOARD_ENABLE)),true)
