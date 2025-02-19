@@ -14,7 +14,7 @@ from tests.resources.test_harness.helpers import (
     wait_and_validate_device_attribute_value,
 )
 from tests.resources.test_support.common_utils.result_code import ResultCode
-from tests.resources.test_support.constant import csp_master
+from tests.resources.test_support.constant import tmc_csp_master_leaf_node
 
 
 @pytest.mark.tmc_csp_dish
@@ -78,7 +78,8 @@ def validate_central_node_dish_vcc_config(tmc_mid):
     assert tmc_mid.IsDishVccConfigSet
     # Validate Dish Vcc validation status
     result_string_to_match = {
-        csp_master: "TMC and CSP Master Dish Vcc " "Version is Same",
+        tmc_csp_master_leaf_node: "TMC and CSP Master Dish Vcc "
+        "Version is Same",
         "dish": "ALL DISH OK",
     }
     assert (
@@ -118,7 +119,8 @@ def validate_dish_vcc_config_flag(tmc_mid):
     )
     # Validate Dish Vcc validation status
     result_string_to_match = {
-        csp_master: "TMC and CSP Master Dish Vcc" " Version is Same",
+        tmc_csp_master_leaf_node: "TMC and CSP Master Dish Vcc"
+        " Version is Same",
         "dish": "ALL DISH OK",
     }
     assert (
@@ -220,7 +222,8 @@ def validate_dish_vcc_config_after_central_node_and_csp_mln_restart(
     )
     # Validate Dish Vcc validation status
     result_string_to_match = {
-        csp_master: "TMC and CSP Master Dish Vcc" " Version is Same",
+        tmc_csp_master_leaf_node: "TMC and CSP Master Dish Vcc"
+        " Version is Same",
         "dish": "ALL DISH OK",
     }
     assert wait_and_validate_device_attribute_value(
@@ -299,7 +302,7 @@ def tmc_report_dish_vcc_mismatch(tmc_mid):
     """Validate isDishVccConfigSet to False"""
     expected_dish_vcc_mismatch_message = (
         '{"dish": "ALL DISH OK", '
-        f"'{csp_master}'"
+        f"'{tmc_csp_master_leaf_node}'"
         ': "TMC and CSP Master Dish VCC'
         ' version is Different"}'
     )

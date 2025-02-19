@@ -10,7 +10,7 @@ from tests.resources.test_harness.helpers import (
     wait_and_validate_device_attribute_value,
 )
 from tests.resources.test_support.common_utils.result_code import ResultCode
-from tests.resources.test_support.constant import csp_master
+from tests.resources.test_support.constant import tmc_csp_master_leaf_node
 
 
 @pytest.mark.batch1
@@ -36,7 +36,7 @@ def given_tmc_with_already_loaded_dish_vcc_config_version(tmc_mid):
     cspmln_validation_string = "TMC and CSP Master Dish Vcc Version is Same"
     central_node_dish_vcc_validation_status = {
         "dish": "ALL DISH OK",
-        csp_master: cspmln_validation_string,
+        tmc_csp_master_leaf_node: cspmln_validation_string,
     }
     assert (
         json.loads(tmc_mid.DishVccValidationStatus)

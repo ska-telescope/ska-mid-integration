@@ -337,7 +337,9 @@ DEFAULT_DISH_VCC_CONFIG = {
 
 DEFAULT_DISH_VALIDATION_STATUS = {
     "dish": "ALL DISH OK",
-    csp_master: ("TMC and CSP Master Dish Vcc Version " + "is Same"),
+    tmc_csp_master_leaf_node: (
+        "TMC and CSP Master Dish Vcc Version " + "is Same"
+    ),
 }
 
 DISH_001_CALIBRATION_DATA = [1.1, 1.2, 1.3]
