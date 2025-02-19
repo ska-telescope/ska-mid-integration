@@ -302,7 +302,7 @@ def tmc_report_dish_vcc_mismatch(tmc_mid):
     """Validate isDishVccConfigSet to False"""
     expected_dish_vcc_mismatch_message = (
         '{"dish": "ALL DISH OK", '
-        f"'{tmc_csp_master_leaf_node}'"
+        f'"{tmc_csp_master_leaf_node}"'
         ': "TMC and CSP Master Dish VCC'
         ' version is Different"}'
     )
