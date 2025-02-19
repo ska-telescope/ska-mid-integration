@@ -28,9 +28,6 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 TIMEOUT = 110
 
 
-@pytest.mark.skip(
-    reason="Abort obsState aggregation does not consider dish transitions"
-)
 @pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
@@ -51,6 +48,9 @@ def given_tmc(
     event_tracer: TangoEventTracer,
 ):
     """Given a TMC setup for the test."""
+    # TelescopeOn
+    central_node_mid.move_to_on()
+
     # Setting up subscriptions
     event_tracer.subscribe_event(
         central_node_mid.central_node, "telescopeState"
@@ -79,9 +79,6 @@ def given_tmc(
 
     for dish_master in subarray_node.dish_master_list:
         event_tracer.subscribe_event(dish_master, "dishMode")
-
-    # TelescopeOn
-    central_node_mid.move_to_on()
 
     # Assertions
     assert_that(event_tracer).described_as(
