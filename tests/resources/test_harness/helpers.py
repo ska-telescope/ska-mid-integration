@@ -651,17 +651,20 @@ def normalize_dict(d: dict):
     }
 
 
-def compare_dicts_case_insensitive(dict1: dict, dict2: dict):
+def compare_case_insensitive_data(data1: Any, data2: Any):
     """
-    Compare dict after normalizing
-    :param dict1: dictionary 1 to compare
-    :type dict1: dict
-    :param dict2: dictionary 2 to compare
-    :type dict2: dict
-    :return: bool value if two dict are same
+    Compare two data
+    :param data1: data 1 to compare
+    :type data1: Any
+    :param data2: data 2 to compare
+    :type data2: Any
+    :return: bool value if two data are same
     :rtype: bool
     """
-    return normalize_dict(dict1) == normalize_dict(dict2)
+    if isinstance(data1, dict):
+        return normalize_dict(data1) == normalize_dict(data2)
+    else:
+        return data1 == data2
 
 
 def wait_and_validate_device_attribute_value(
@@ -687,7 +690,7 @@ def wait_and_validate_device_attribute_value(
                 attribute_value,
                 type(attribute_value),
             )
-            if is_json and compare_dicts_case_insensitive(
+            if is_json and compare_case_insensitive_data(
                 json.loads(attribute_value), json.loads(expected_value)
             ):
                 return True
