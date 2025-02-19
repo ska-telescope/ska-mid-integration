@@ -16,6 +16,7 @@ from tests.resources.test_harness.helpers import (
     get_device_simulators,
     prepare_json_args_for_centralnode_commands,
 )
+from tests.resources.test_support.constant import tmc_sdp_subarray_leaf_node
 
 
 @pytest.mark.batch1
@@ -185,7 +186,7 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
     )
     exception_message = (
         "Exception occurred on the following devices: "
-        + "ska_mid/tm_leaf_node/sdp_subarray01: "
+        + f"{tmc_sdp_subarray_leaf_node}: "
         + "Exception occurred, command failed."
     )
     assert (
