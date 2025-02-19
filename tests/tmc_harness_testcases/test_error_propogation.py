@@ -116,9 +116,6 @@ def execute_command(
 
         match command:
             case "END":
-                # pytest.defective_subarray.SetDefective(
-                #     COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE
-                # )
 
                 pytest.defective_subarray.SetDelayInfo(json.dumps({"End": 55}))
                 LOGGER.info("Working on Ready State")
@@ -129,29 +126,21 @@ def execute_command(
 
             case "ENDSCAN":
 
-                # pytest.defective_subarray.SetDefective(
-                #     COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE
-                # )
                 pytest.defective_subarray.SetDelayInfo(
                     json.dumps({"EndScan": 55})
                 )
                 LOGGER.info("Working on End Scan")
                 verify_scanning_transition_with_endscan(
                     subarray_node,
-                    # event_tracer,
                 )
             case "SCAN":
 
-                # pytest.defective_subarray.SetDefective(
-                #     COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE
-                # )
                 pytest.defective_subarray.SetDelayInfo(
                     json.dumps({"Scan": 55})
                 )
-                LOGGER.info("Workng on Scan")
+
                 perform_scan(
                     subarray_node,
-                    # event_tracer,
                     command_input_factory,
                 )
 
@@ -204,20 +193,6 @@ def execute_command_on_tmc_with_defectivesetup(
             )
 
         case "DISH":
-            # pytest.defective_subarray = (
-            #     simulator_factory.get_or_create_simulator_device(
-            #         SimulatorDeviceType.MCCS_SUBARRAY_DEVICE
-            #     )
-            # )
-            #
-            # pytest.defective_device = mccs_subarray_leaf_node
-            # execute_command(
-            #     "MCCS",
-            #     command,
-            #     subarray_node,
-            #     event_tracer,
-            #     command_input_factory,
-            # )
 
             pytest.defective_subarray = (
                 simulator_factory.get_or_create_simulator_device(
@@ -226,9 +201,6 @@ def execute_command_on_tmc_with_defectivesetup(
             )
             # Set dish 1 defective
             pytest.defective_device = tmc_dish_leaf_node1
-            # pytest.defective_subarray.SetDefective(ERROR_PROPAGATION_DEFECT)
-            # LOGGER.info("Work on dish in Progress")
-            # LOGGER.info("Work in Progress")
 
             execute_command(
                 "DISH",

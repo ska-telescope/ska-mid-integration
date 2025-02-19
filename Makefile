@@ -16,7 +16,6 @@ K8S_TIMEOUT ?= 800s
 PYTHON_LINT_TARGET ?= tests/
 DEPLOYMENT_TYPE = $(shell echo $(TELESCOPE) | cut -d '-' -f2)
 MARK ?= $(shell echo $(TELESCOPE) | sed "s/-/_/g") ## What -m opt to pass to pytest
-#MARK = SKA_mid44
 # run one test with FILE=acceptance/test_subarray_node.py::test_check_internal_model_according_to_the_tango_ecosystem_deployed
 FILE ?= tests## A specific test file to pass to pytest
 ADD_ARGS ?= ## Additional args to pass to pytest
@@ -227,9 +226,6 @@ k8s-pre-test: test-requirements
 # #  			  only the ones with "abort" in their name will be run.
 
 PYTHON_TEST_NAME ?= ## -k parameter for pytest
-
-#PYTHON_TEST_NAME ?= test_tmc_command_error_propagation
-
 
 ifneq ($(PYTHON_TEST_NAME),)
 PYTHON_VARS_AFTER_PYTEST += -k '$(PYTHON_TEST_NAME)'

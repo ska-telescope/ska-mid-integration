@@ -118,9 +118,7 @@ dishleafnode:
     pullPolicy: IfNotPresent
 
 resources:
-  limits:
-    memory: 500Mi
-    cpu: 400m
+
   requests:
     cpu: 200m
     memory: 300Mi
@@ -208,7 +206,7 @@ deviceServers:
     IsDishAbortCommandsEnabled: "True"
     resources:
       limits:
-        memory: 1000Mi
+        memory: 3000Mi
 
       requests:
         cpu: 2000m
