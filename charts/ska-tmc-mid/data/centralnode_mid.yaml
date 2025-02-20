@@ -9,7 +9,7 @@ instances: ["01"]
 
 {{- if ge $KValueValidRangeUpperLimit $KValueValidRangeLowerLimit }}
 entrypoints:
-  - name: "ska_tmc_centralnode.central_node_mid.CentralNodeMid"
+  - name: "ska_tmc_centralnode.central_node_mid.MidTmcCentralNode"
 server:
   name: "central_node_mid"
   instances:
@@ -29,7 +29,7 @@ server:
 
   - name: "01"
     classes:
-    - name: "CentralNodeMid"
+    - name: "MidTmcCentralNode"
       devices:
       - name: "ska_mid/tm_central/central_node"
         properties:
