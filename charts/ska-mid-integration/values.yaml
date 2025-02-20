@@ -142,7 +142,7 @@ ska-dish-lmc:
       image:
         registry: registry.gitlab.com/ska-telescope/ska-mid-dish-manager
         image: ska-mid-dish-manager
-        tag:  v7.0.0
+        tag: 6.0.2-dev.c0e478312
 
 
   ska-mid-dish-ds-manager:
