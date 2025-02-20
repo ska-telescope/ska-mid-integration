@@ -15,7 +15,6 @@ entrypoints:
 {{- $EventSubscriptionCheckPeriod := .Values.deviceServers.cspsubarrayleafnode.EventSubscriptionCheckPeriod}}
 {{- $domain := .Values.global.domain }}
 {{- $family := .Values.deviceServers.cspsubarrayleafnode.family }}
-{{- $tmcCspSubarrayLeafNodePrefix := .Values.global.csp_subarray_ln_prefix }}
 server:
   name: "csp_subarray_leaf_node_mid"
   instances:

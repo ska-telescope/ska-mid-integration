@@ -52,8 +52,8 @@ global:
   tmc_subarray_prefix: "mid-tmc/subarray"
   csp_subarray_ln_prefix: "mid-tmc/subarray-leaf-node-csp/"
   sdp_subarray_ln_prefix: "mid-tmc/subarray-leaf-node-sdp/"
-  csp_master_ln_prefix: "mid-tmc/leaf-node-csp/0"
-  sdp_master_ln_prefix: "mid-tmc/leaf-node-sdp/0"
+  csp_master_ln: "mid-tmc/leaf-node-csp/0"
+  sdp_master_ln: "mid-tmc/leaf-node-sdp/0"
   csp_subarray_prefix: "mid-csp/subarray"
   sdp_subarray_prefix: "mid-sdp/subarray"
   dish_suffix: "mid-dish/dish-manager"
@@ -123,7 +123,7 @@ dishleafnode:
   image:
     registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-dishleafnode
     image: ska-tmc-dishleafnode
-    tag: 0.20.0-dev.cf2bd8fdc
+    tag: 0.20.0-dev.cb83ae40a
     pullPolicy: IfNotPresent
 
 resources:
@@ -231,6 +231,8 @@ deviceServers:
     EventSubscriptionCheckPeriod: 1.5
     AdapterTimeOut: 2.0
     DishAvailabilityCheckTimeout: 30
+    family: "leaf-node-dish"
+    prefix_member: "SKA"
 
   dishpointingdevice:
     enabled: true

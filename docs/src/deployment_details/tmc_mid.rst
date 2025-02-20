@@ -58,9 +58,9 @@ Configurable options
 
     #. **sdp_subarray_ln_prefix** : This value is present under global, User can use this to change the FQDN prefix of SdpSubarrayLeafNode.
 
-    #. **csp_master_ln_prefix** : This value is present under global, User can use this to change the FQDN prefix of CspMasterLeafNode.
+    #. **csp_master_ln** : This value is present under global, User can use this to change the FQDN of CspMasterLeafNode.
 
-    #. **sdp_master_ln_prefix** : This value is present under global, User can use this to change the FQDN prefix of SdpMasterLeafNode.
+    #. **sdp_master_ln** : This value is present under global, User can use this to change the FQDN of SdpMasterLeafNode.
 
     #. **csp_subarray_prefix** : This value is present under global, User can use this to change the FQDN prefix of CSP Subarray.
 

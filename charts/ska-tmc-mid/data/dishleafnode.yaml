@@ -7,6 +7,9 @@ entrypoints:
 server:
   name: "dish_leaf_node"
   instances:
+  {{- $domain := .Values.global.domain }}
+  {{- $family := .Values.deviceServers.dishleafnode.family }}
+  {{- $prefixMember := .Values.deviceServers.dishleafnode.prefix_member }}
   {{- $dishManagerSuffix := .Values.global.dish_manager_suffix }}
   {{- $tmcDishPointingSuffix := .Values.global.dishln_pointing_suffix }}
   {{- $MaxTrackTableRetry := .Values.deviceServers.dishleafnode.MaxTrackTableRetry }}
@@ -36,7 +39,7 @@ server:
       classes:
       - name: "MidTmcLeafNodeDish"
         devices:
-        - name: "mid-tmc/leaf-node-dish/SKA{{ $number }}"
+        - name: "{{ $domain }}/{{ $family }}/{{ $prefixMember }}{{ $number }}"
           properties:
             - name: "MidDishControl"
               values:

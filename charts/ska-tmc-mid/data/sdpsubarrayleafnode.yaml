@@ -7,7 +7,6 @@ entrypoints:
 server:
   name: "sdp_subarray_leaf_node"
   instances:
-  {{- $midTmcSdpSubarrayLeafNodePrefix := .Values.global.sdp_subarray_ln_prefix }}
   {{ $CommandTimeOut := .Values.deviceServers.sdpsubarrayleafnode.CommandTimeOut}}
   {{ $sdp_sa_fqdn_prefix:= .Values.global.sdp_subarray_prefix}}
   {{- $AdapterTimeOut := .Values.deviceServers.sdpsubarrayleafnode.AdapterTimeOut}}

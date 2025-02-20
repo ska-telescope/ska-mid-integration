@@ -26,7 +26,6 @@ server:
   {{- $domain := .Values.global.domain }}
   {{- $family := .Values.deviceServers.centralnode.family }}
   {{- $member := .Values.deviceServers.centralnode.member }}
-  {{- $centralNode := .Values.global.tmc_central_node }}
   - name: "01"
     classes:
     - name: "MidTmcCentralNode"
@@ -35,13 +34,13 @@ server:
         properties:
         - name: "CspMasterLeafNodeFQDN"
           values:
-          - "{{.Values.global.csp_master_ln_prefix}}"
+          - "{{.Values.global.csp_master_ln}}"
         - name: "CspMasterFQDN"
           values:
           - "{{.Values.global.csp_master}}"
         - name: "SdpMasterLeafNodeFQDN"
           values:
-          - "{{.Values.global.sdp_master_ln_prefix}}"
+          - "{{.Values.global.sdp_master_ln}}"
         - name: "SdpMasterFQDN"
           values:
           - "{{.Values.global.sdp_master}}"
