@@ -3,6 +3,26 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+[Unreleased]
+*************
+* Resolved SKB-714, SKB-690
+* Added `domain` field in values.yaml. The domain is `mid-tmc`
+* Added `family` and `member` field in deviceServers of each controller leafnode device in values.yaml
+* Added `family` field in deviceServers of each subarray leafnode devices in value.yaml
+* Updated the TRLs of TMC low devices as per ADR-9
+* ska_mid/tm_central/central_node - mid-tmc/central-node/0              
+* ska_mid/tm_subarray_node/1 - mid-tmc/subarray/01            
+* ska_mid/tm_leaf_node/csp_master - mid-tmc/leaf-node-csp/0
+* ska_mid/tm_leaf_node/sdp_master - mid-tmc/leaf-node-sdp/0
+* ska_mid/tm_leaf_node/csp_subarray01 - mid-tmc/subarray-leaf-node-csp/01
+* ska_mid/tm_leaf_node/sdp_subarray01 - mid-tmc/subarray-leaf-node-sdp/01
+* ska_mid/tm_leaf_node/d0001 - mid-tmc/leaf-node-dish/ska001
+* Updated CentralNode version to 0.18.0
+* Updated DishLeafNode version to 0.20.0
+* Updated SdpLeafNode version to 0.21.0
+* Updated CspLeafNode version to 0.24.0
+* Updated SubarrayNode version to 0.30.1
+
 [0.25.0-rc.4]
 *************
 * Updated event receiver from central node
