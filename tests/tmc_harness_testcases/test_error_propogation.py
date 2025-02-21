@@ -36,7 +36,7 @@ from tests.tmc_harness_testcases.conftest import (
 )
 
 
-@pytest.mark.batch3
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/check_error_propagation.feature",
@@ -49,7 +49,7 @@ def test_tmc_command_error_propagation():
     """
 
 
-@pytest.mark.batch3
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../features/check_error_propagation.feature",

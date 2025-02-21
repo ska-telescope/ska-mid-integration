@@ -121,7 +121,7 @@ resources:
 
   requests:
     cpu: 200m
-    memory: 300Mi
+    memory: 200Mi
 
 
 deviceServers:
@@ -159,6 +159,10 @@ deviceServers:
     AbortCommandTimeOut: 130
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
+    resources:
+      requests:
+        cpu: 200m
+        memory: 300Mi
 
   sdpsubarrayleafnode:
     enabled: true
