@@ -7,16 +7,16 @@ from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
 from tests.conftest import LOGGER, wait_for_obsstate_state_change
-from tests.resources.test_harness.constant import (
-    COMMAND_COMPLETED,
-    RESET_DEFECT,
-    SDP_BACK_TO_INITIAL_STATE,
-)
 from tests.resources.test_harness.helpers import (
     get_device_simulators,
     prepare_json_args_for_centralnode_commands,
 )
-from tests.resources.test_support.constant import tmc_sdp_subarray_leaf_node
+from tests.resources.test_support.constant import (
+    COMMAND_COMPLETED,
+    RESET_DEFECT,
+    SDP_BACK_TO_INITIAL_STATE,
+    tmc_sdp_subarray_leaf_node,
+)
 
 
 @pytest.mark.batch1

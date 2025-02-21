@@ -3,7 +3,6 @@ from pytest_bdd import scenario, then, when
 from ska_tango_base.control_model import HealthState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
-from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     check_for_device_command_event,
@@ -13,6 +12,7 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.common_utils.result_code import ResultCode
+from tests.resources.test_support.constant import COMMAND_COMPLETED
 
 
 @pytest.mark.batch1

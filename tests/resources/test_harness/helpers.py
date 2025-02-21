@@ -16,7 +16,6 @@ from ska_tango_testing.integration import TangoEventTracer
 from ska_tango_testing.mock.placeholders import Anything
 from tango import Database, DeviceProxy
 
-from tests.resources.test_harness.constant import device_dict
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.simulator_factory import SimulatorFactory
 from tests.resources.test_harness.utils.common_utils import (
@@ -28,6 +27,7 @@ from tests.resources.test_harness.utils.wait_helpers import Waiter, watch
 from tests.resources.test_support.common_utils.common_helpers import Resource
 from tests.resources.test_support.constant import (
     csp_subarray1,
+    device_dict,
     sdp_subarray1,
     tmc_csp_subarray_leaf_node,
     tmc_sdp_subarray_leaf_node,

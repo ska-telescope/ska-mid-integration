@@ -6,17 +6,17 @@ import pytest
 from ska_tango_base.control_model import ObsState
 from ska_tango_testing.mock.placeholders import Anything
 
-from tests.resources.test_harness.constant import (
-    INTERMEDIATE_STATE_DEFECT,
-    RESET_DEFECT,
-)
 from tests.resources.test_harness.helpers import (
     device_received_this_command,
     get_recorded_commands,
     prepare_json_args_for_commands,
 )
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
-from tests.resources.test_support.constant import tmc_csp_subarray_leaf_node
+from tests.resources.test_support.constant import (
+    INTERMEDIATE_STATE_DEFECT,
+    RESET_DEFECT,
+    tmc_csp_subarray_leaf_node,
+)
 
 
 class TestSubarrayNodeNegative(object):

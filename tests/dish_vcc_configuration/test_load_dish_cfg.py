@@ -4,12 +4,12 @@ import pytest
 from pytest_bdd import given, scenario, then, when
 from tango import DevState
 
-from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.helpers import (
     device_attribute_changed,
     get_master_device_simulators,
     prepare_json_args_for_centralnode_commands,
 )
+from tests.resources.test_support.constant import COMMAND_COMPLETED
 from tests.resources.test_support.enum import DishMode
 
 

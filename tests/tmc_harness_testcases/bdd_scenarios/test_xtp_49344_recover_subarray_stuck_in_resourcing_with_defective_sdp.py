@@ -6,10 +6,6 @@ from ska_control_model import ObsState
 from ska_tango_testing.mock.placeholders import Anything
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
-from tests.resources.test_harness.constant import (
-    RESET_DEFECT,
-    SDP_BACK_TO_INITIAL_STATE,
-)
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     get_device_simulators,
@@ -17,6 +13,10 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_harness.simulator_factory import SimulatorFactory
 from tests.resources.test_harness.utils.common_utils import JsonFactory
+from tests.resources.test_support.constant import (
+    RESET_DEFECT,
+    SDP_BACK_TO_INITIAL_STATE,
+)
 
 
 @pytest.mark.batch1

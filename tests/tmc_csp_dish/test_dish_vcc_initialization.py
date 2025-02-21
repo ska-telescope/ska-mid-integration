@@ -7,14 +7,16 @@ import json
 import pytest
 from pytest_bdd import given, scenario, then, when
 
-from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.helpers import (
     device_attribute_changed,
     prepare_json_args_for_centralnode_commands,
     wait_and_validate_device_attribute_value,
 )
 from tests.resources.test_support.common_utils.result_code import ResultCode
-from tests.resources.test_support.constant import tmc_csp_master_leaf_node
+from tests.resources.test_support.constant import (
+    COMMAND_COMPLETED,
+    tmc_csp_master_leaf_node,
+)
 
 
 @pytest.mark.tmc_csp_dish

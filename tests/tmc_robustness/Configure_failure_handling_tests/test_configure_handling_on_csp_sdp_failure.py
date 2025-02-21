@@ -5,10 +5,6 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from tango import DevState
 
-from tests.resources.test_harness.constant import (
-    COMMAND_COMPLETED,
-    COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE,
-)
 from tests.resources.test_harness.helpers import (
     check_for_device_command_event,
     get_device_simulators,
@@ -16,6 +12,10 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_commands,
 )
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
+from tests.resources.test_support.constant import (
+    COMMAND_COMPLETED,
+    COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE,
+)
 
 
 @pytest.mark.batch1

@@ -9,29 +9,6 @@ from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import HealthState
 from tango import DeviceProxy, DevState
 
-from tests.resources.test_harness.constant import (
-    COMMAND_COMPLETED,
-    DISH_001_CALIBRATION_DATA,
-    DISH_036_CALIBRATION_DATA,
-    CorrectionKey,
-    centralnode,
-    csp_master,
-    csp_subarray1,
-    dish_master1,
-    dish_master2,
-    dish_master3,
-    dish_master4,
-    sdp_master,
-    sdp_queue_connector,
-    sdp_subarray1,
-    tmc_csp_subarray_leaf_node,
-    tmc_dish_leaf_node1,
-    tmc_dish_leaf_node2,
-    tmc_dish_leaf_node3,
-    tmc_dish_leaf_node4,
-    tmc_sdp_subarray_leaf_node,
-    tmc_subarraynode1,
-)
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     SIMULATED_DEVICES_DICT,
@@ -62,10 +39,31 @@ from tests.resources.test_harness.utils.sync_decorators import (
 )
 from tests.resources.test_support.common_utils.common_helpers import Resource
 from tests.resources.test_support.constant import (
+    COMMAND_COMPLETED,
+    DISH_001_CALIBRATION_DATA,
+    DISH_036_CALIBRATION_DATA,
+    CorrectionKey,
+    centralnode,
+    csp_master,
+    csp_subarray1,
     csp_subarray_prefix,
+    dish_master1,
+    dish_master2,
+    dish_master3,
+    dish_master4,
+    sdp_master,
+    sdp_queue_connector,
+    sdp_subarray1,
     sdp_subarray_prefix,
+    tmc_csp_subarray_leaf_node,
     tmc_csp_subarrayln_prefix,
+    tmc_dish_leaf_node1,
+    tmc_dish_leaf_node2,
+    tmc_dish_leaf_node3,
+    tmc_dish_leaf_node4,
+    tmc_sdp_subarray_leaf_node,
     tmc_sdp_subarrayln_prefix,
+    tmc_subarraynode1,
 )
 
 configure_logging(logging.DEBUG)

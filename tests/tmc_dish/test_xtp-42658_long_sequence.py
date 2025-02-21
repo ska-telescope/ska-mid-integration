@@ -15,13 +15,13 @@ from ska_tango_base.control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer, log_events
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
-from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
+from tests.resources.test_support.constant import COMMAND_COMPLETED
 from tests.resources.test_support.enum import DishMode, PointingState
 
 

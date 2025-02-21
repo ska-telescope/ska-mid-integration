@@ -2,12 +2,12 @@ import pytest
 from pytest_bdd import scenario, when
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
-from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
 )
 from tests.resources.test_harness.utils.common_utils import JsonFactory
+from tests.resources.test_support.constant import COMMAND_COMPLETED
 
 
 @pytest.mark.batch1

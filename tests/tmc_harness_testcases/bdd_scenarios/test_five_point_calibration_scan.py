@@ -5,12 +5,12 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from ska_tango_testing.integration import log_events
 
-from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.helpers import (
     check_subarray_obs_state,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
 )
+from tests.resources.test_support.constant import COMMAND_COMPLETED
 
 # Assertion timeouts
 TIMEOUT = 50

@@ -17,11 +17,6 @@ from ska_tango_testing.integration import TangoEventTracer, log_events
 from tango import DevState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
-from tests.resources.test_harness.constant import (
-    INTERMEDIATE_STATE_DEFECT,
-    RESET_DEFECT,
-    TIMEOUT,
-)
 from tests.resources.test_harness.helpers import (
     get_device_simulators,
     prepare_json_args_for_centralnode_commands,
@@ -30,6 +25,11 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_harness.simulator_factory import SimulatorFactory
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
+from tests.resources.test_support.constant import (
+    INTERMEDIATE_STATE_DEFECT,
+    RESET_DEFECT,
+    TIMEOUT,
+)
 
 
 @pytest.mark.batch1

@@ -10,28 +10,6 @@ from tango import DeviceProxy, DevState
 from tango.db import Database
 
 from tests.resources.test_harness.central_node import CentralNodeWrapper
-from tests.resources.test_harness.constant import (
-    COMMAND_COMPLETED,
-    DEFAULT_DISH_VALIDATION_STATUS,
-    DEFAULT_DISH_VCC_CONFIG,
-    centralnode,
-    csp_master,
-    csp_subarray1,
-    device_dict,
-    dish_master1,
-    dish_master2,
-    dish_master3,
-    dish_master4,
-    sdp_master,
-    sdp_subarray1,
-    tmc_csp_master_leaf_node,
-    tmc_dish_leaf_node1,
-    tmc_dish_leaf_node2,
-    tmc_dish_leaf_node3,
-    tmc_dish_leaf_node4,
-    tmc_sdp_master_leaf_node,
-    tmc_subarraynode1,
-)
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     SIMULATED_DEVICES_DICT,
@@ -52,9 +30,29 @@ from tests.resources.test_harness.utils.sync_decorators import (
 from tests.resources.test_harness.utils.wait_helpers import Waiter
 from tests.resources.test_support.common_utils.common_helpers import Resource
 from tests.resources.test_support.constant import (
+    COMMAND_COMPLETED,
+    DEFAULT_DISH_VALIDATION_STATUS,
+    DEFAULT_DISH_VCC_CONFIG,
+    centralnode,
+    csp_master,
+    csp_subarray1,
+    device_dict,
+    dish_master1,
+    dish_master2,
+    dish_master3,
+    dish_master4,
+    sdp_master,
+    sdp_subarray1,
+    tmc_csp_master_leaf_node,
     tmc_csp_subarrayln_prefix,
+    tmc_dish_leaf_node1,
+    tmc_dish_leaf_node2,
+    tmc_dish_leaf_node3,
+    tmc_dish_leaf_node4,
+    tmc_sdp_master_leaf_node,
     tmc_sdp_subarrayln_prefix,
     tmc_subarray_prefix,
+    tmc_subarraynode1,
 )
 
 configure_logging(logging.DEBUG)

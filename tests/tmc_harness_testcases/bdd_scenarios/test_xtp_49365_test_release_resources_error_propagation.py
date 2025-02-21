@@ -6,10 +6,6 @@ from pytest_bdd import scenario, then, when
 from ska_tango_testing.mock.placeholders import Anything
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
-from tests.resources.test_harness.constant import (
-    OBS_STATE_CONFIGURING_STUCK_DEFECT,
-    RESET_DEFECT,
-)
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
@@ -17,7 +13,11 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_harness.simulator_factory import SimulatorFactory
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
-from tests.resources.test_support.constant import tmc_csp_subarray_leaf_node
+from tests.resources.test_support.constant import (
+    OBS_STATE_CONFIGURING_STUCK_DEFECT,
+    RESET_DEFECT,
+    tmc_csp_subarray_leaf_node,
+)
 
 
 @pytest.mark.batch1

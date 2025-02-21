@@ -17,7 +17,11 @@ from ska_control_model import ResultCode
 from ska_tango_testing.integration import TangoEventTracer
 
 from tests.conftest import LOGGER
-from tests.resources.test_harness.constant import (
+from tests.resources.test_harness.simulator_factory import SimulatorFactory
+from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
+from tests.resources.test_harness.utils.common_utils import JsonFactory
+from tests.resources.test_harness.utils.enums import SimulatorDeviceType
+from tests.resources.test_support.constant import (
     INTERMEDIATE_CONFIGURING_STATE_DEFECT,
     INTERMEDIATE_CONFIGURING_STATE_DEFECT_DISH,
     INTERMEDIATE_SCANNING_STATE_DEFECT,
@@ -25,10 +29,6 @@ from tests.resources.test_harness.constant import (
     tmc_dish_leaf_node1,
     tmc_sdp_subarray_leaf_node,
 )
-from tests.resources.test_harness.simulator_factory import SimulatorFactory
-from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
-from tests.resources.test_harness.utils.common_utils import JsonFactory
-from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.tmc_harness_testcases.conftest import (
     perform_ready_transition_with_end,
     perform_scan,
