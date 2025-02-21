@@ -28,7 +28,7 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 TIMEOUT = 110
 
 
-@pytest.mark.batch2
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/xtp-60011_configure_with_correction_key.feature",

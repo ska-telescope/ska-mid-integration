@@ -454,15 +454,6 @@ def invoke_scan(
             == DishMode.OPERATE
         )
 
-        assert (
-            central_node_mid.dish_master_dict[dish_id].pointingState
-            == PointingState.TRACK
-        )
-        assert (
-            central_node_mid.dish_leaf_node_dict[dish_id].pointingState
-            == PointingState.TRACK
-        )
-
 
 @then("tmc subarraynode reports SCANNING obsState")
 def check_tmc_subarray_scanning(

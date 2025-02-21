@@ -88,7 +88,7 @@ centralnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-centralnode
-    tag: 0.17.6
+    tag:  0.18.0
     pullPolicy: IfNotPresent
 
 subarraynode:
@@ -127,6 +127,7 @@ dishleafnode:
     pullPolicy: IfNotPresent
 
 resources:
+
   requests:
     cpu: 200m
     memory: 200Mi
@@ -166,6 +167,10 @@ deviceServers:
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
     family: "subarray"
+    resources:
+      requests:
+        cpu: 200m
+        memory: 300Mi
 
   sdpsubarrayleafnode:
     enabled: true
@@ -174,7 +179,7 @@ deviceServers:
     AdapterTimeOut: 2
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
-    SDPSubarrayAdminModeEnabled: true
+    SDPSubarrayAdminModeEnabled: false
     family: "subarray-leaf-node-sdp"
 
   sdpmasterleafnode:
@@ -184,7 +189,7 @@ deviceServers:
     AdapterTimeOut: 2
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
-    SDPMasterAdminModeEnabled: true
+    SDPMasterAdminModeEnabled: false
     family: "leaf-node-sdp"
     member : "0"
 
@@ -220,10 +225,10 @@ deviceServers:
     resources:
       limits:
         memory: 3000Mi
+
       requests:
         cpu: 2000m
-        # cpu: 1000m
-        memory: 280Mi
+        memory: 300Mi
     CommandTimeOut: 90
     MaxTrackTableRetry: 3
     TrackTableRetryDuration: 0.2

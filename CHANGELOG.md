@@ -4,6 +4,7 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Added
 -----
 
+
 [0.25.0-rc.3]
 *************
 * Added Configure functionality for ADR-63 based json
