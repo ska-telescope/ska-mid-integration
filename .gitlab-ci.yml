@@ -89,6 +89,7 @@ k8s-test:
     COUNT: 1
     KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA'
     ADDMARK: "and batch1"
+
   before_script:
     - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
@@ -123,7 +124,6 @@ stop-k8s-test-batch2:
   environment:
     name: test/$CI_COMMIT_REF_SLUG-batch2
     action: stop
-
 
 docs-build-rtd:
   rules:

@@ -1,0 +1,38 @@
+@SKA_mid @XTP-73592 @XTP-76068 @XTP-28347
+Scenario Outline: Error Propagation Reported by TMC Mid End/EndScan/Scan Commands for Defective Subarray
+		Given the telescope is is ON state
+		And the TMC subarray is in the <initialObsState> observation state
+		When <command> is invoked on a defectiveSubsystem <defectiveSubsystem>
+		Then the command failure is reported by subarray with error message
+		Then the TMC SubarrayNode remains in <stuck> obsState
+		Examples:
+		            |initialObsState  | command | defectiveSubsystem  |stuck|
+		            |READY            | END     | CSP                  | READY |
+		            |SCANNING         | ENDSCAN | CSP                  | SCANNING |
+		            |READY            | SCAN    | CSP                  | SCANNING |
+		            |READY            | END     | SDP                  | READY|
+		            |SCANNING         | ENDSCAN | SDP                  | SCANNING|
+		            |READY            | SCAN    | SDP                  | SCANNING|
+		            |READY            | END     | DISH                  | READY |
+		            |SCANNING         | ENDSCAN | DISH                  | SCANNING |
+		            |READY            | SCAN    | DISH                  | SCANNING |
+
+
+@SKA_mid @XTP-73592 @XTP-76069 @XTP-28347
+	Scenario Outline: TimeOut Reported by TMC Mid End/EndScan/Scan Commands for Defective Subarray
+		Given the telescope is is ON state
+		And the TMC subarray is in the <initialObsState> observation state
+		When <command> is invoked on a <defectiveSubsystem> Subarray
+		Then the command failure is reported by subarray with appropriate error message
+		Then the TMC SubarrayNode remains in <stuck> obsState
+		Examples:
+		            |initialObsState  | command | defectiveSubsystem  |stuck|
+		            |READY            | END     | CSP                  | READY |
+		            |SCANNING         | ENDSCAN | CSP                  | SCANNING |
+		            |READY            | SCAN    | CSP                  | SCANNING |
+		            |READY            | END     | SDP                  | READY|
+		            |SCANNING         | ENDSCAN | SDP                  | SCANNING|
+		            |READY            | SCAN    | SDP                  | SCANNING|
+		            |SCANNING         | ENDSCAN | DISH                  | SCANNING |
+		            |READY            | SCAN    | DISH                  | SCANNING |
+		            |READY            | END     | DISH                  | READY |

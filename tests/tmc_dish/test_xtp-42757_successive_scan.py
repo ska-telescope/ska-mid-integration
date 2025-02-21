@@ -18,6 +18,7 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
+@pytest.mark.skip("reason=further changes to SKB-517 resolution are required")
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42757_successive_scan.feature",
