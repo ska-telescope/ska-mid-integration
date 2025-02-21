@@ -3,7 +3,11 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
-
+[0.25.0-rc.4]
+*************
+* Updated event receiver from central node
+* Tested  timeout and error propagation for Scan/EndScan/End
+* Resolved SKB-709 caused due to dishleafnode unavailability
 
 [0.25.0-rc.3]
 *************
