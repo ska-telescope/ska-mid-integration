@@ -214,6 +214,16 @@ COMMAND_NOT_ALLOWED_DEFECT = {
 }
 
 
+FAILED_DEFECT = json.dumps(
+    {
+        "enabled": True,
+        "fault_type": FaultType.FAILED_RESULT,
+        "error_message": "Default exception.",
+        "result": ResultCode.FAILED,
+    }
+)
+
+
 class CorrectionKey(IntEnum):
     """An enum class for correction keys"""
 
