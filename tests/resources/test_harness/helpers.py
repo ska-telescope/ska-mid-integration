@@ -605,7 +605,6 @@ def generate_id(id_pattern: str) -> str:
     for section in sections:
         section_length = len(section)
         section_id = timestamp[-section_length:]
-        timestamp = timestamp[:-section_length]
         if unique_id:
             unique_id = f"{section_id}-{unique_id}"
         else:
