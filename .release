@@ -1,15 +1,21 @@
-release=0.25.0-rc.3
-tag=0.25.0-rc.3
+release=0.25.0-rc.4
+tag=0.25.0-rc.4
 tag_description=
 **Charts:**
-**1. ska-tmc-integration 0.25.0-rc.2 - 0.25.0-rc.3**
+**1. ska-tmc-integration 0.25.0-rc.3 - 0.25.0-rc.4**
 
-    **1.1 ska-tmc-mid - 0.25.0-rc.2 - 0.25.0-rc.3**
-        a. ADR-63 Input json configure.
+    **1.1 ska-tmc-mid - 0.25.0-rc.3 - 0.25.0-rc.4**
+        a. Updated event receiver from central node
+        b. Tested  timeout and error propagation for Scan/EndScan/End
+        c. Resolved SKB-709 caused due to dishleafnode unavailability
+
 
 release_notes=
 **Charts:**
-**1. ska-tmc-integration 0.25.0-rc.2 - 0.25.0-rc.3**
+**1. ska-tmc-integration 0.25.0-rc.3 - 0.25.0-rc.4**
 
-    **1.1 ska-tmc-mid - 0.25.0-rc.3 - 0.25.0-rc.3**
-        a. ADR-63 based changes.
+    **1.1 ska-tmc-mid - 0.25.0-rc.3 - 0.25.0-rc.4**
+        a. Updated event receiver from central node
+        b. Tested  timeout and error propagation for Scan/EndScan/End
+        c. Resolved SKB-709 caused due to dishleafnode unavailability
+
