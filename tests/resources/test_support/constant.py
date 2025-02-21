@@ -234,7 +234,7 @@ class CorrectionKey(IntEnum):
 
 ABORT_COMPLETED = json.dumps([ResultCode.STARTED, "Command Started"])
 DISH_ERROR_MESSAGE = (
-    "Exception occurred on the following devices: " + f"{tmc_dish_leaf_node1}:"
+    "Exception occurred on the following devices: " + f"{tmc_dish_leaf_node1.lower()}:"
 )
 TIMOUT_ERROR = "Timeout has occurred, command failed"
 
