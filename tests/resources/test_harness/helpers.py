@@ -16,7 +16,6 @@ from ska_tango_testing.integration import TangoEventTracer
 from ska_tango_testing.mock.placeholders import Anything
 from tango import Database, DeviceProxy
 
-from tests.resources.test_harness.constant import device_dict
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.simulator_factory import SimulatorFactory
 from tests.resources.test_harness.utils.common_utils import (
@@ -28,6 +27,7 @@ from tests.resources.test_harness.utils.wait_helpers import Waiter, watch
 from tests.resources.test_support.common_utils.common_helpers import Resource
 from tests.resources.test_support.constant import (
     csp_subarray1,
+    device_dict,
     sdp_subarray1,
     tmc_csp_subarray_leaf_node,
     tmc_sdp_subarray_leaf_node,
@@ -605,7 +605,6 @@ def generate_id(id_pattern: str) -> str:
     for section in sections:
         section_length = len(section)
         section_id = timestamp[-section_length:]
-        timestamp = timestamp[:-section_length]
         if unique_id:
             unique_id = f"{section_id}-{unique_id}"
         else:
@@ -635,6 +634,38 @@ def check_subarray_instance(device, subarray_id):
     assert subarray_instance == subarray_id
 
 
+def normalize_dict(d: dict):
+    """
+    Set dict key name in lower case
+    :return: updated dict with lower case key
+    :rtype: dict
+    """
+    return {
+        k.lower()
+        if isinstance(k, str)
+        else k: v.lower()
+        if isinstance(v, str)
+        else v
+        for k, v in d.items()
+    }
+
+
+def compare_case_insensitive_data(data1: Any, data2: Any):
+    """
+    Compare two data
+    :param data1: data 1 to compare
+    :type data1: Any
+    :param data2: data 2 to compare
+    :type data2: Any
+    :return: bool value if two data are same
+    :rtype: bool
+    """
+    if isinstance(data1, dict):
+        return normalize_dict(data1) == normalize_dict(data2)
+    else:
+        return data1 == data2
+
+
 def wait_and_validate_device_attribute_value(
     device: DeviceProxy,
     attribute_name: str,
@@ -658,8 +689,8 @@ def wait_and_validate_device_attribute_value(
                 attribute_value,
                 type(attribute_value),
             )
-            if is_json and json.loads(attribute_value) == json.loads(
-                expected_value
+            if is_json and compare_case_insensitive_data(
+                json.loads(attribute_value), json.loads(expected_value)
             ):
                 return True
             elif is_list:

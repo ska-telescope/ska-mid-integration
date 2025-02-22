@@ -6,16 +6,17 @@ import pytest
 from ska_tango_base.control_model import ObsState
 from ska_tango_testing.mock.placeholders import Anything
 
-from tests.resources.test_harness.constant import (
-    INTERMEDIATE_STATE_DEFECT,
-    RESET_DEFECT,
-)
 from tests.resources.test_harness.helpers import (
     device_received_this_command,
     get_recorded_commands,
     prepare_json_args_for_commands,
 )
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
+from tests.resources.test_support.constant import (
+    INTERMEDIATE_STATE_DEFECT,
+    RESET_DEFECT,
+    tmc_csp_subarray_leaf_node,
+)
 
 
 class TestSubarrayNodeNegative(object):
@@ -59,7 +60,7 @@ class TestSubarrayNodeNegative(object):
         )
         exception_message = (
             "Exception occurred on the following devices: "
-            "ska_mid/tm_leaf_node/csp_subarray01: "
+            f"{tmc_csp_subarray_leaf_node}: "
         )
         assert (
             exception_message

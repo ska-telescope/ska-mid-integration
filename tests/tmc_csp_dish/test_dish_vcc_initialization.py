@@ -7,13 +7,16 @@ import json
 import pytest
 from pytest_bdd import given, scenario, then, when
 
-from tests.resources.test_harness.constant import COMMAND_COMPLETED
 from tests.resources.test_harness.helpers import (
     device_attribute_changed,
     prepare_json_args_for_centralnode_commands,
     wait_and_validate_device_attribute_value,
 )
 from tests.resources.test_support.common_utils.result_code import ResultCode
+from tests.resources.test_support.constant import (
+    COMMAND_COMPLETED,
+    tmc_csp_master_leaf_node,
+)
 
 
 @pytest.mark.tmc_csp_dish
@@ -77,7 +80,7 @@ def validate_central_node_dish_vcc_config(tmc_mid):
     assert tmc_mid.IsDishVccConfigSet
     # Validate Dish Vcc validation status
     result_string_to_match = {
-        "ska_mid/tm_leaf_node/csp_master": "TMC and CSP Master Dish Vcc "
+        tmc_csp_master_leaf_node: "TMC and CSP Master Dish Vcc "
         "Version is Same",
         "dish": "ALL DISH OK",
     }
@@ -118,7 +121,7 @@ def validate_dish_vcc_config_flag(tmc_mid):
     )
     # Validate Dish Vcc validation status
     result_string_to_match = {
-        "ska_mid/tm_leaf_node/csp_master": "TMC and CSP Master Dish Vcc"
+        tmc_csp_master_leaf_node: "TMC and CSP Master Dish Vcc"
         " Version is Same",
         "dish": "ALL DISH OK",
     }
@@ -221,7 +224,7 @@ def validate_dish_vcc_config_after_central_node_and_csp_mln_restart(
     )
     # Validate Dish Vcc validation status
     result_string_to_match = {
-        "ska_mid/tm_leaf_node/csp_master": "TMC and CSP Master Dish Vcc"
+        tmc_csp_master_leaf_node: "TMC and CSP Master Dish Vcc"
         " Version is Same",
         "dish": "ALL DISH OK",
     }
@@ -301,7 +304,7 @@ def tmc_report_dish_vcc_mismatch(tmc_mid):
     """Validate isDishVccConfigSet to False"""
     expected_dish_vcc_mismatch_message = (
         '{"dish": "ALL DISH OK", '
-        '"ska_mid/tm_leaf_node/csp_master"'
+        f'"{tmc_csp_master_leaf_node}"'
         ': "TMC and CSP Master Dish VCC'
         ' version is Different"}'
     )

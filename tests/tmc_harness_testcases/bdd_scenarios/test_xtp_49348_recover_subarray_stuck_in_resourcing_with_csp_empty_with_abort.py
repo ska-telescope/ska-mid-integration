@@ -7,9 +7,6 @@ from ska_control_model import ObsState
 from ska_tango_testing.mock.placeholders import Anything
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
-from tests.resources.test_harness.constant import (
-    COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_EMPTY,
-)
 from tests.resources.test_harness.event_recorder import EventRecorder
 from tests.resources.test_harness.helpers import (
     get_device_simulators,
@@ -17,6 +14,10 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_harness.simulator_factory import SimulatorFactory
 from tests.resources.test_harness.utils.common_utils import JsonFactory
+from tests.resources.test_support.constant import (
+    COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_EMPTY,
+    tmc_csp_subarray_leaf_node,
+)
 
 
 @pytest.mark.batch1
@@ -92,7 +93,7 @@ def sdp_subarray_stuck_is_in_empty(
     )
     exception_message = (
         "Exception occurred on the following devices: "
-        + "ska_mid/tm_leaf_node/csp_subarray01: "
+        + f"{tmc_csp_subarray_leaf_node}: "
     )
     assert (
         exception_message

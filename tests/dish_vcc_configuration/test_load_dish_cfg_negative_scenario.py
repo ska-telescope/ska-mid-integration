@@ -9,15 +9,15 @@ from pytest_bdd import given, parsers, scenario, then, when
 from tango import DevState
 
 from tests.conftest import LOGGER
-from tests.resources.test_harness.constant import (
-    ERROR_PROPAGATION_DEFECT,
-    RESET_DEFECT,
-)
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
 )
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.common_utils.result_code import ResultCode
+from tests.resources.test_support.constant import (
+    ERROR_PROPAGATION_DEFECT,
+    RESET_DEFECT,
+)
 
 
 @pytest.mark.batch1

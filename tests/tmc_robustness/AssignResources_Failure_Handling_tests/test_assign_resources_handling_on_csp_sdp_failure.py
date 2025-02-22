@@ -6,14 +6,14 @@ from ska_control_model import ObsState
 from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
-from tests.resources.test_harness.constant import (
-    COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_EMPTY,
-    RESET_DEFECT,
-    SDP_BACK_TO_INITIAL_STATE,
-)
 from tests.resources.test_harness.helpers import (
     get_device_simulators,
     prepare_json_args_for_centralnode_commands,
+)
+from tests.resources.test_support.constant import (
+    COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_EMPTY,
+    RESET_DEFECT,
+    SDP_BACK_TO_INITIAL_STATE,
 )
 
 

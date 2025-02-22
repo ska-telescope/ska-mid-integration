@@ -2,14 +2,13 @@ name: "centralnode-test"
 function: telescope-monitoring
 domain: general-monitoring
 instances: ["01"]
-{{- $RealDishMasterIdentifier := .Values.deviceServers.centralnode.RealDishMasterIdentifier }}
-{{- $SimulatorDishMasterIdentifier := .Values.deviceServers.centralnode.SimulatorDishMasterIdentifier }}
+{{- $DishMasterIdentifier := .Values.global.dish_suffix }}
 {{- $KValueValidRangeUpperLimit := .Values.deviceServers.centralnode.KValueValidRange.max | int }}
 {{- $KValueValidRangeLowerLimit := .Values.deviceServers.centralnode.KValueValidRange.min | int }}
 
 {{- if ge $KValueValidRangeUpperLimit $KValueValidRangeLowerLimit }}
 entrypoints:
-  - name: "ska_tmc_centralnode.central_node_mid.CentralNodeMid"
+  - name: "ska_tmc_centralnode.central_node_mid.MidTmcCentralNode"
 server:
   name: "central_node_mid"
   instances:
@@ -18,43 +17,39 @@ server:
   {{- $sdp_sa_ln_fqdn_prefix:= .Values.global.sdp_subarray_ln_prefix}}
   {{- $isSimulatedDish := .Values.deviceServers.mocks.dish }}
   {{- $real_dish_name := .Values.global.namespace_dish.dish_names }}
-  {{- $RealDishMasterIdentifier := .Values.deviceServers.centralnode.RealDishMasterIdentifier }}
-  {{- $SimulatorDishMasterIdentifier := .Values.deviceServers.centralnode.SimulatorDishMasterIdentifier }}
   {{- $isSimulatedCsp := .Values.deviceServers.mocks.csp }}
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
   {{- $CommandTimeOut := .Values.deviceServers.centralnode.CommandTimeOut}}
   {{- $DishVccInitTimeout := .Values.deviceServers.centralnode.DishVccInitTimeout}}
   {{- $LivelinessCheckPeriod := .Values.deviceServers.centralnode.LivelinessCheckPeriod}}
   {{- $EventSubscriptionCheckPeriod := .Values.deviceServers.centralnode.EventSubscriptionCheckPeriod}}
-
+  {{- $domain := .Values.global.domain }}
+  {{- $family := .Values.deviceServers.centralnode.family }}
+  {{- $member := .Values.deviceServers.centralnode.member }}
   - name: "01"
     classes:
-    - name: "CentralNodeMid"
+    - name: "MidTmcCentralNode"
       devices:
-      - name: "ska_mid/tm_central/central_node"
+      - name: "{{ $domain }}/{{ $family }}/{{ $member }}"
         properties:
         - name: "CspMasterLeafNodeFQDN"
           values:
-          - "{{.Values.global.csp_master_ln_prefix}}"
+          - "{{.Values.global.csp_master_ln}}"
         - name: "CspMasterFQDN"
           values:
           - "{{.Values.global.csp_master}}"
         - name: "SdpMasterLeafNodeFQDN"
           values:
-          - "{{.Values.global.sdp_master_ln_prefix}}"
+          - "{{.Values.global.sdp_master_ln}}"
         - name: "SdpMasterFQDN"
           values:
           - "{{.Values.global.sdp_master}}"
         - name: "DishLeafNodePrefix"
           values:
-          - "{{.Values.global.dish_ln_prefix}}"
+          - "{{lower .Values.global.dish_ln_prefix}}"
         - name: "DishMasterIdentifier"
           values:
-          {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
-          - "{{ $SimulatorDishMasterIdentifier }}"
-          {{- else }}
-          - "{{ $RealDishMasterIdentifier }}" # Real dish
-          {{- end }}
+          - "{{ $DishMasterIdentifier }}"
         - name: "DishVccUri"
           values:
           - "{{.Values.deviceServers.centralnode.DishVccConfig.DishVccUri}}"
@@ -76,7 +71,7 @@ server:
           values:
           {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
           {{- range  (.Values.deviceServers.centralnode.DishIDs)  }}
-          - "{{ . | lower }}/{{ $SimulatorDishMasterIdentifier }}"
+          - "{{ $DishMasterIdentifier }}/{{ . | lower }}"
           {{- end }}
           {{- else }}
           {{- range  (.Values.global.namespace_dish.dish_names)  }}
@@ -86,7 +81,7 @@ server:
         - name: "TMCSubarrayNodes"
           values:
           {{- range  ( regexSplit " " ((.Values.subarray_count | int) | seq ) -1 )  }}
-          - "{{ $tmc_sa_fqdn_prefix }}/{{ . }}"
+          - "{{ $tmc_sa_fqdn_prefix }}/{{ printf "%02s" . }}"
           {{- end }}
         - name: "CspSubarrayLeafNodes"
           values:

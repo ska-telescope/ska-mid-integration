@@ -12,6 +12,7 @@ from tests.resources.test_harness.helpers import (
     wait_and_validate_device_attribute_value,
 )
 from tests.resources.test_support.common_utils.result_code import ResultCode
+from tests.resources.test_support.constant import tmc_csp_master_leaf_node
 
 
 @pytest.mark.batch1
@@ -39,7 +40,7 @@ def given_tmc_with_already_loaded_dish_vcc_config_version(tmc_mid):
     cspmln_validation_string = "TMC and CSP Master Dish Vcc Version is Same"
     central_node_dish_vcc_validation_status = {
         "dish": "ALL DISH OK",
-        "ska_mid/tm_leaf_node/csp_master": cspmln_validation_string,
+        tmc_csp_master_leaf_node: cspmln_validation_string,
     }
     assert (
         json.loads(tmc_mid.DishVccValidationStatus)
@@ -124,9 +125,9 @@ def check_value_of_isdishvccconfigset_on_central_node(tmc_mid):
     false after dish leaf node report."""
     cspmln_validation_string = "TMC and CSP Master Dish Vcc Version is Same"
     central_node_dish_vcc_validation_status = {
-        "d0036": "k-value not identical",
-        "d0063": "k-value not identical",
-        "ska_mid/tm_leaf_node/csp_master": cspmln_validation_string,
+        "SKA036": "k-value not identical",
+        "SKA063": "k-value not identical",
+        tmc_csp_master_leaf_node: cspmln_validation_string,
     }
     assert wait_and_validate_device_attribute_value(
         tmc_mid.central_node.central_node,

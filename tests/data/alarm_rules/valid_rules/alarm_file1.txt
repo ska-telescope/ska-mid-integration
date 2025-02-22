@@ -1,4 +1,4 @@
-tag=CentralNode_health_degraded;formula=(ska_mid/tm_central/central_node/telescopehealthState == 1 && ska_mid/tm_central/central_node/healthState == 1);priority=log;group=none;message="alarm for central node healthState and telescopehealthState degraded"
-tag=CentralNode_health_failed;formula=(ska_mid/tm_central/central_node/telescopehealthState == 2 && ska_mid/tm_central/central_node/healthState == 2);priority=log;group=none;message="alarm for central node healthState and telescopehealthState SubarrayNode_healthstate_failed"
-tag=SubarrayNode_obsstate_fault;formula=(ska_mid/subarray_node/1/obsState == 9);priority=log;group=none;message="alarm for subarray node obsstate fault"
-tag=SubarrayNode_health;formula=(ska_mid/subarray_node/1/healthState == 1);priority=log;group=none;message="alarm for subarray node healthState degraded"
+tag=CentralNode_health_degraded;formula=(mid-tmc/central-node/0/telescopehealthState == 1 && mid-tmc/central-node/0/healthState == 1);priority=log;group=none;message="alarm for central node healthState and telescopehealthState degraded"
+tag=CentralNode_health_failed;formula=(mid-tmc/central-node/0/telescopehealthState == 2 && mid-tmc/central-node/0/healthState == 2);priority=log;group=none;message="alarm for central node healthState and telescopehealthState SubarrayNode_healthstate_failed"
+tag=SubarrayNode_obsstate_fault;formula=(mid-tmc/subarray/01/obsState == 9);priority=log;group=none;message="alarm for subarray node obsstate fault"
+tag=SubarrayNode_health;formula=(mid-tmc/subarray/01/healthState == 1);priority=log;group=none;message="alarm for subarray node healthState degraded"

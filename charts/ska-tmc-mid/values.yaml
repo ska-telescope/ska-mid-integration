@@ -34,7 +34,7 @@ global:
   # deviceServers.dishmaster, deviceServers.dishleafnode
   dish_devices: ["dishmaster", "dishleafnode"]
   dishes: ["001", "036", "063", "100"]
-  
+  domain: "mid-tmc"
 
   namespace_dish:
     dish_names: []
@@ -48,17 +48,26 @@ global:
 
 
   # fqdn for mid devices
-  tmc_subarray_prefix: "ska_mid/tm_subarray_node"
-  csp_subarray_ln_prefix: "ska_mid/tm_leaf_node/csp_subarray"
-  sdp_subarray_ln_prefix: "ska_mid/tm_leaf_node/sdp_subarray"
-  csp_master_ln_prefix: "ska_mid/tm_leaf_node/csp_master"
-  sdp_master_ln_prefix: "ska_mid/tm_leaf_node/sdp_master"
+  tmc_central_node: "mid-tmc/central-node/0"
+  tmc_subarray_prefix: "mid-tmc/subarray"
+  csp_subarray_ln_prefix: "mid-tmc/subarray-leaf-node-csp/"
+  sdp_subarray_ln_prefix: "mid-tmc/subarray-leaf-node-sdp/"
+  csp_master_ln: "mid-tmc/leaf-node-csp/0"
+  sdp_master_ln: "mid-tmc/leaf-node-sdp/0"
   csp_subarray_prefix: "mid-csp/subarray"
   sdp_subarray_prefix: "mid-sdp/subarray"
-  dish_suffix: "elt/master"
+  dish_suffix: "mid-dish/dish-manager"
+  dish_manager_suffix: "mid-dish/dish-manager/ska"
   csp_master: "mid-csp/control/0"
   sdp_master: "mid-sdp/control/0"
-  dish_ln_prefix: "ska_mid/tm_leaf_node/d0"
+  dish_ln_prefix: "mid-tmc/leaf-node-dish/ska"
+  dishln_pointing_suffix: "mid-tmc/dish-pointing/ska"
+  mid_sdp_subarray_1: "mid-sdp/subarray/01"
+  mid_sdp_subarray_2: "mid-sdp/subarray/02"
+  mid_sdp_queueconnector: "mid-sdp/queueconnector/01"
+  mid_csp_control: "mid-csp/control/0"
+  mid_csp_subarray_1: "mid-csp/subarray/01"
+  mid_csp_subarray_2: "mid-csp/subarray/02"
 
 dsconfig:
   configuration_file: data/tmc-mid-config.json
@@ -79,7 +88,7 @@ centralnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-centralnode
-    tag:  0.17.7
+    tag:  0.18.0
     pullPolicy: IfNotPresent
 
 subarraynode:
@@ -93,28 +102,28 @@ sdpleafnodes:
   image:
     registry: artefact.skao.int
     image: ska-tmc-sdpleafnodes
-    tag: 0.20.2
+    tag: 0.21.0
     pullPolicy: IfNotPresent
 
 cspmasterleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.23.5
+    tag: 0.24.0
     pullPolicy: IfNotPresent
 
 cspsubarrayleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.23.5
+    tag: 0.24.0
     pullPolicy: IfNotPresent
 
 dishleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-dishleafnode
-    tag: 0.19.7
+    tag: 0.20.0
     pullPolicy: IfNotPresent
 
 resources:
@@ -131,8 +140,6 @@ deviceServers:
     subarray_count: 1
     file: "data/centralnode_mid.yaml"
     DishIDs: ["SKA001", "SKA036", "SKA063", "SKA100"]
-    RealDishMasterIdentifier: "mid-dish/dish-manager"
-    SimulatorDishMasterIdentifier: "elt/master"
     DishVccConfig:
       DishVccUri: "car://gitlab.com/ska-telescope/ska-telmodel-data?ska-sdp-tmlite-repository-1.0.0#tmdata"
       DishVccFilePath: "instrument/ska1_mid_psi/ska-mid-cbf-system-parameters.json"
@@ -145,13 +152,13 @@ deviceServers:
     DishVccInitTimeout: 180
     LivelinessCheckPeriod: 2.0
     EventSubscriptionCheckPeriod: 2.0
+    family: "central-node"
+    member : "0"
 
   subarraynode:
     enabled: true
     file: "data/subarraynode_mid.yaml"
     DishIDs: ["SKA001", "SKA036", "SKA063", "SKA100"]
-    RealDishMasterIdentifier: "mid-dish/dish-manager"
-    SimulatorDishMasterIdentifier: "elt/master"
     CspAssignResourcesInterfaceURL: "https://schema.skao.int/ska-csp-assignresources/2.0"
     CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.0"
     SdpScanInterfaceURL: "https://schema.skao.int/ska-sdp-scan/0.4"
@@ -159,6 +166,7 @@ deviceServers:
     AbortCommandTimeOut: 130
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
+    family: "subarray"
     resources:
       requests:
         cpu: 200m
@@ -172,6 +180,7 @@ deviceServers:
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
     SDPSubarrayAdminModeEnabled: false
+    family: "subarray-leaf-node-sdp"
 
   sdpmasterleafnode:
     enabled: true
@@ -181,6 +190,8 @@ deviceServers:
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
     SDPMasterAdminModeEnabled: false
+    family: "leaf-node-sdp"
+    member : "0"
 
   cspmasterleafnode:
     enabled: true
@@ -189,6 +200,8 @@ deviceServers:
     AdapterTimeOut: 2.0
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
+    family: "leaf-node-csp"
+    member : "0"
 
 
   cspsubarrayleafnode:
@@ -203,6 +216,7 @@ deviceServers:
     AdapterTimeOut: 2.0
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
+    family: "subarray-leaf-node-csp"
 
   dishleafnode:
     enabled: true
@@ -222,6 +236,8 @@ deviceServers:
     EventSubscriptionCheckPeriod: 1.5
     AdapterTimeOut: 2.0
     DishAvailabilityCheckTimeout: 30
+    family: "leaf-node-dish"
+    prefix_member: "SKA"
 
   dishpointingdevice:
     enabled: true

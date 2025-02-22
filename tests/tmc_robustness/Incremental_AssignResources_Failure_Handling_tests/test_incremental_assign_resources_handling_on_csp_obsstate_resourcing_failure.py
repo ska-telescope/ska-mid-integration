@@ -7,12 +7,12 @@ from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
 from tests.conftest import LOGGER
-from tests.resources.test_harness.constant import INTERMEDIATE_STATE_DEFECT
 from tests.resources.test_harness.helpers import (
     get_device_simulators,
     prepare_json_args_for_centralnode_commands,
 )
 from tests.resources.test_harness.utils.enums import ResultCode
+from tests.resources.test_support.constant import INTERMEDIATE_STATE_DEFECT
 
 
 @pytest.mark.batch2

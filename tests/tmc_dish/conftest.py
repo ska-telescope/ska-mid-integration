@@ -10,11 +10,11 @@ from ska_control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer, log_events
 from tango import DevState
 
-from tests.resources.test_harness.constant import COMMAND_COMPLETED, TIMEOUT
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
 )
 from tests.resources.test_harness.utils.common_utils import setup_dish_events
+from tests.resources.test_support.constant import COMMAND_COMPLETED, TIMEOUT
 from tests.resources.test_support.enum import DishMode, PointingState
 
 

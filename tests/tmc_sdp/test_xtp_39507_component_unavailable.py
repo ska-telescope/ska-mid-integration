@@ -17,6 +17,10 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_harness.simulator_factory import SimulatorFactory
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
+from tests.resources.test_support.constant import (
+    tmc_sdp_subarray_leaf_node,
+    tmc_subarraynode1,
+)
 
 
 @pytest.mark.tmc_sdp_unhappy
@@ -142,8 +146,8 @@ def tmc_reports_unavailability_to_client(
     Method to verify TMC subarray reports unavailability to client.
     """
     exception_message = (
-        " ska_mid/tm_subarray_node/1: Exception occurred on the"
-        + " following devices: ska_mid/tm_leaf_node/sdp_subarray01:"
+        f" {tmc_subarraynode1}: Exception occurred on the"
+        + f" following devices: {tmc_sdp_subarray_leaf_node}:"
         + " The processing controller, helm deployer, or both are OFFLINE:"
         + " cannot start processing blocks.\n"
     )

@@ -1,3 +1,3 @@
-tag=DishLeafNode_kValue_not_set;formula=(ska_mid/tm_leaf_node/d0001/kValueValidationResult == '4' );priority=log;group=none;message="alarm for dishvalidation status raised when k-value is not set"
-tag=CentralNode_dish_config_set;formula=(ska_mid/tm_central/central_node/isDishVccConfigSet == 0 );priority=log;group=none;message="alarm for isDishVccConfigSet status"
-tag=CentralNode_dish_validation_status;formula=(ska_mid/tm_central/central_node/DishVccValidationStatus == '{"d0001": "k-value not identical", "ska_mid/tm_leaf_node/csp_master": "TMC and CSP Master Dish Vcc Version is Same"}');priority=log;group=none;message="alarm for dishvalidation status raised when k-value is not identical"
+tag=DishLeafNode_kValue_not_set;formula=(mid-tmc/leaf-node-dish/SKA001/kValueValidationResult == '4' );priority=log;group=none;message="alarm for dishvalidation status raised when k-value is not set"
+tag=CentralNode_dish_config_set;formula=(mid-tmc/central-node/0/isDishVccConfigSet == 0 );priority=log;group=none;message="alarm for isDishVccConfigSet status"
+tag=CentralNode_dish_validation_status;formula=(mid-tmc/central-node/0/DishVccValidationStatus == '{"SKA001": "k-value not identical", "mid-tmc/leaf-node-csp/0": "TMC and CSP Master Dish Vcc Version is Same"}');priority=log;group=none;message="alarm for dishvalidation status raised when k-value is not identical"

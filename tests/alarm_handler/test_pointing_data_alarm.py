@@ -6,7 +6,10 @@ from pytest_bdd import given, scenario, then, when
 from tango import DeviceProxy
 
 from tests.resources.test_harness.helpers import retry_tango_command
-from tests.resources.test_support.constant import alarm_handler1
+from tests.resources.test_support.constant import (
+    alarm_handler1,
+    tmc_dish_leaf_node1,
+)
 
 
 @pytest.mark.batch2
@@ -56,7 +59,7 @@ def test_load_alarm():
     alarm_formula = (
         "tag=NaN_found_in_received_pointing_calibration;"
         "formula="
-        "(ska_mid/tm_leaf_node/d0001/lastPointingData.quality == ATTR_ALARM);"
+        f"({tmc_dish_leaf_node1}/lastPointingData.quality == ATTR_ALARM);"
         "priority=log;message=NaN found in received pointing calibration"
     )
     assert retry_tango_command(alarm_handler, "Load", alarm_formula)
