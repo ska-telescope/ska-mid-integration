@@ -1,21 +1,33 @@
-release=0.25.0-rc.4
-tag=0.25.0-rc.4
+release=1.0.0-rc.1
+tag=1.0.0-rc.1
 tag_description=
 **Charts:**
-**1. ska-tmc-integration 0.25.0-rc.3 - 0.25.0-rc.4**
+**1. ska-tmc-integration 0.25.0-rc.4 - 1.0.0-rc.1**
 
-    **1.1 ska-tmc-mid - 0.25.0-rc.3 - 0.25.0-rc.4**
-        a. Updated event receiver from central node
-        b. Tested  timeout and error propagation for Scan/EndScan/End
-        c. Resolved SKB-709 caused due to dishleafnode unavailability
+    **1.1 ska-tmc-mid - 0.25.0-rc.4 - 1.0.0-rc.1**
+            * Updated the TRL's of TMC Mid devices
+            * --- OLD TRL -------------      ->   ---New TRL------
+            * ska_mid/tm_central/central_node - mid-tmc/central-node/0              
+            * ska_mid/tm_subarray_node/1 - mid-tmc/subarray/01            
+            * ska_mid/tm_leaf_node/csp_master - mid-tmc/leaf-node-csp/0
+            * ska_mid/tm_leaf_node/sdp_master - mid-tmc/leaf-node-sdp/0
+            * ska_mid/tm_leaf_node/csp_subarray01 - mid-tmc/subarray-leaf-node-csp/01
+            * ska_mid/tm_leaf_node/sdp_subarray01 - mid-tmc/subarray-leaf-node-sdp/01
+            * ska_mid/tm_leaf_node/d0001 - mid-tmc/leaf-node-dish/SKA001
 
 
 release_notes=
 **Charts:**
-**1. ska-tmc-integration 0.25.0-rc.3 - 0.25.0-rc.4**
+**1. ska-tmc-integration 0.25.0-rc.4 - 1.0.0-rc.1**
 
-    **1.1 ska-tmc-mid - 0.25.0-rc.3 - 0.25.0-rc.4**
-        a. Updated event receiver from central node
-        b. Tested  timeout and error propagation for Scan/EndScan/End
-        c. Resolved SKB-709 caused due to dishleafnode unavailability
+    **1.1 ska-tmc-mid - 0.25.0-rc.4 - 1.0.0-rc.1**
+            * Updated the TRL's of TMC Mid devices
+            * --- OLD TRL -------------      ->   ---New TRL------
+            * ska_mid/tm_central/central_node - mid-tmc/central-node/0              
+            * ska_mid/tm_subarray_node/1 - mid-tmc/subarray/01            
+            * ska_mid/tm_leaf_node/csp_master - mid-tmc/leaf-node-csp/0
+            * ska_mid/tm_leaf_node/sdp_master - mid-tmc/leaf-node-sdp/0
+            * ska_mid/tm_leaf_node/csp_subarray01 - mid-tmc/subarray-leaf-node-csp/01
+            * ska_mid/tm_leaf_node/sdp_subarray01 - mid-tmc/subarray-leaf-node-sdp/01
+            * ska_mid/tm_leaf_node/d0001 - mid-tmc/leaf-node-dish/SKA001
 
