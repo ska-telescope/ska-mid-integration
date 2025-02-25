@@ -3,8 +3,8 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
-[Unreleased]
-*************
+[1.0.0-rc.1]
+************
 * Resolved SKB-714, SKB-690
 * Added `domain` field in values.yaml. The domain is `mid-tmc`
 * Added `family` and `member` field in deviceServers of each controller leafnode device in values.yaml
