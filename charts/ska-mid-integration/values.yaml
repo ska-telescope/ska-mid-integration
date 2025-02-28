@@ -165,6 +165,9 @@ ska-tmc-mid:
       dish: false
       csp: false
       sdp: false
+    subarraynode:
+      CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.2"
+
 
 ##tangoGQL
 ska-tango-tangogql:
