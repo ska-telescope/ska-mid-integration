@@ -3,6 +3,11 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 Added
 -----
+[unreleased]
+************
+* Update ska-tmc-sdpsubarraynode v0.21.1 to fix hardcoded sdp configure interface 0.3.
+* Update ska-tmc-centralnode v0.18.1 (contains latest telmodel to fix SKB-672 for low side).
+
 [1.0.0-rc.1]
 ************
 * Resolved SKB-714, SKB-690
