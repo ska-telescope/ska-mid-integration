@@ -1,33 +1,14 @@
-release=1.0.0-rc.1
-tag=1.0.0-rc.1
+release=1.0.0-rc.2
+tag=1.0.0-rc.2
 tag_description=
 **Charts:**
-**1. ska-tmc-integration 0.25.0-rc.4 - 1.0.0-rc.1**
-
-    **1.1 ska-tmc-mid - 0.25.0-rc.4 - 1.0.0-rc.1**
-            * Updated the TRL's of TMC Mid devices
-            * --- OLD TRL -------------      ->   ---New TRL------
-            * ska_mid/tm_central/central_node - mid-tmc/central-node/0              
-            * ska_mid/tm_subarray_node/1 - mid-tmc/subarray/01            
-            * ska_mid/tm_leaf_node/csp_master - mid-tmc/leaf-node-csp/0
-            * ska_mid/tm_leaf_node/sdp_master - mid-tmc/leaf-node-sdp/0
-            * ska_mid/tm_leaf_node/csp_subarray01 - mid-tmc/subarray-leaf-node-csp/01
-            * ska_mid/tm_leaf_node/sdp_subarray01 - mid-tmc/subarray-leaf-node-sdp/01
-            * ska_mid/tm_leaf_node/d0001 - mid-tmc/leaf-node-dish/SKA001
-
+**1. Updated ska-tmc-mid from v1.0.0-rc.1 to v1.0.0-rc.2**
+    * Updated ska-tmc-sdpleafnodes v0.21.1 to fix hardcoded sdp configure interface 0.3.
+    * Updated ska-tmc-centralnode v0.18.1 (contains latest telmodel to fix SKB-672 for low side).
 
 release_notes=
 **Charts:**
-**1. ska-tmc-integration 0.25.0-rc.4 - 1.0.0-rc.1**
-
-    **1.1 ska-tmc-mid - 0.25.0-rc.4 - 1.0.0-rc.1**
-            * Updated the TRL's of TMC Mid devices
-            * --- OLD TRL -------------      ->   ---New TRL------
-            * ska_mid/tm_central/central_node - mid-tmc/central-node/0              
-            * ska_mid/tm_subarray_node/1 - mid-tmc/subarray/01            
-            * ska_mid/tm_leaf_node/csp_master - mid-tmc/leaf-node-csp/0
-            * ska_mid/tm_leaf_node/sdp_master - mid-tmc/leaf-node-sdp/0
-            * ska_mid/tm_leaf_node/csp_subarray01 - mid-tmc/subarray-leaf-node-csp/01
-            * ska_mid/tm_leaf_node/sdp_subarray01 - mid-tmc/subarray-leaf-node-sdp/01
-            * ska_mid/tm_leaf_node/d0001 - mid-tmc/leaf-node-dish/SKA001
+**1. Updated ska-tmc-mid from v1.0.0-rc.1 to v1.0.0-rc.2**
+    * Updated ska-tmc-sdpleafnodes v0.21.1 to fix hardcoded sdp configure interface 0.3.
+    * Updated ska-tmc-centralnode v0.18.1 (contains latest telmodel to fix SKB-672 for low side).
 

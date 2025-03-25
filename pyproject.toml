@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ska-tmc-mid-integration"
-version = "1.0.0-rc.1"
+version = "1.0.0-rc.2"
 description = "Repository for integration of TMC components"
 authors = ["Team Himalaya", "Team Sahyadri"]
 license = "BSD-3-Clause"
@@ -35,7 +35,7 @@ ska-ser-xray = "^0.6.0"
 ska-integration-test-harness = "^0.2.4"
 assertpy = "^1.1"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 black = "^22.8.0"
 isort = "^5.10.1"
 flake8 = "^5.0.4"
