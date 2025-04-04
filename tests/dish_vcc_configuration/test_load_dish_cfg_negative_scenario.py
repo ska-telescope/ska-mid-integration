@@ -190,7 +190,7 @@ def invoke_another_load_dish_cfg(central_node_mid, command_input_factory):
     pytest.failed_command_result_message = message
 
 
-@then("TMC should reject the new LoadDishCfg commandd")
+@then("TMC should reject the new LoadDishCfg command")
 def test_tmc_rejects_load_dish_cfg():
     """Test validate that command failed with error message"""
     assert pytest.failed_command_result_code == ResultCode.REJECTED
