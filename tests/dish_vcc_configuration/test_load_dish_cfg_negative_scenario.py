@@ -173,15 +173,14 @@ def load_dish_cfg_in_progress(
 
 
 @when("another LoadDishCfg command is issued")
-def invoke_another_load_dish_cfg(
-    central_node_mid, command_input_factory, file_name
-):
+def invoke_another_load_dish_cfg(central_node_mid, command_input_factory):
     """Call load_dish_cfg method which invoke LoadDishCfg
     command on CentralNode
     """
     # Prepare input for load dish configuration
+    # Prepare input for load dish configuration
     load_dish_cfg_json = prepare_json_args_for_centralnode_commands(
-        f"load_dish_cfg_{file_name}", command_input_factory
+        "load_dish_cfg", command_input_factory
     )
 
     result_code, message = central_node_mid.load_dish_vcc_configuration(
