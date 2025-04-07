@@ -80,7 +80,6 @@ def test_central_node_handle_exception():
     """
 
 
-@pytest.mark.test
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
