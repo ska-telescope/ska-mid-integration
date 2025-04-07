@@ -73,7 +73,7 @@ SDP_SUBARRAY_PREFIX ?= tango://$(TANGO_HOST_NAME).$(KUBE_NAMESPACE).svc.$(CLUSTE
 CI_REGISTRY ?= gitlab.com
 
 # K8S_TEST_IMAGE_TO_TEST ?= artefact.skao.int/ska-tango-images-tango-itango:9.3.12## docker image that will be run for testing purpose
-K8S_TEST_IMAGE_TO_TEST ?= registry.gitlab.com/ska-telescope/ska-tango-images/ska-tango-images-pytango-builder:9.5.0
+K8S_TEST_IMAGE_TO_TEST ?= harbor.skao.int/production/ska-tango-images-pytango-builder:9.4.2
 
 TARANTA_ENABLED ?= false
 
