@@ -1,7 +1,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
-[Unreleased]
+Added
+-----
+[1.0.0-rc.3]
 ************
 * Resolved the SKB-716
 * Updated the CentralNode image to 0.18.2
@@ -9,8 +11,6 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 * LoadDishCfg command is rejected if DishVccCommandStatus is in STAGING or IN PROGRESS
 * After TMC initialization is complete, the DishVccCommandStatus is updated to either COMPLETED or FAILED.
 
-Added
------
 [1.0.0-rc.2]
 ************
 * Updated ska-tmc-sdpleafnodes v0.21.1 to fix hardcoded sdp configure interface 0.3.
