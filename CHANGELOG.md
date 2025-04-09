@@ -1,6 +1,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[Unreleased]
+************
+* Resolved the SKB-716
+* Updated the CentralNode image to 0.18.2
+* DishVccCommandStatus attribute added for central node
+* LoadDishCfg command is rejected if DishVccCommandStatus is in STAGING or IN PROGRESS
+* After TMC initialization is complete, the DishVccCommandStatus is updated to either COMPLETED or FAILED.
+
 Added
 -----
 [1.0.0-rc.2]
