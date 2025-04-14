@@ -18,7 +18,6 @@ from tests.resources.test_support.constant import COMMAND_COMPLETED, TIMEOUT
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
-@pytest.mark.skip("reason=further changes to SKB-517 resolution are required")
 @pytest.mark.tmc_dish
 @scenario(
     "../features/skb_469.feature",
