@@ -109,13 +109,13 @@ ska-sdp:
   lmc:
     prefix: mid
     nsubarray: 2
-      resources:
-        limits:
-          memory: 500Mi
-          cpu: 0.5
-        requests:
-          memory: 100Mi
-          cpu: 0.3
+    resources:
+      limits:
+        memory: 500Mi
+        cpu: 0.5
+      requests:
+        memory: 100Mi
+        cpu: 0.3
   data-pvc:
     create:
       enabled: true
