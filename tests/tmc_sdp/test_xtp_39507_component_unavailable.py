@@ -148,7 +148,7 @@ def tmc_reports_unavailability_to_client(
     exception_message = (
         f" {tmc_subarraynode1}: Exception occurred on the"
         + f" following devices: {tmc_sdp_subarray_leaf_node}:"
-        + "The processing controller, helm deployer, or both are OFFLINE:"
+        + " The processing controller, helm deployer, or both are OFFLINE:"
         + " cannot start processing blocks."
     )
     assert "AssignResources" in pytest.assertion_data["attribute_value"][0]
