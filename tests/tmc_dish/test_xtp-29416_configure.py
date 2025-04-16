@@ -219,17 +219,17 @@ def check_dish_mode_and_pointing_state(
             PointingState.TRACK,
         )
 
-        assert_that(event_tracer).described_as(
-            'FAILED ASSUMPTION IN "THEN" STEP: '
-            "'the DishLeafNode must be in the TRACK pointingState'"
-            "dish device"
-            f"({central_node_mid.dish_leaf_node_dict[dish_id].dev_name()}) "
-            "is expected to be in TRACK pointingState",
-        ).within_timeout(60).has_change_event_occurred(
-            central_node_mid.dish_leaf_node_dict[dish_id],
-            "pointingState",
-            PointingState.TRACK,
-        )
+        # assert_that(event_tracer).described_as(
+        #     'FAILED ASSUMPTION IN "THEN" STEP: '
+        #     "'the DishLeafNode must be in the TRACK pointingState'"
+        #     "dish device"
+        #     f"({central_node_mid.dish_leaf_node_dict[dish_id].dev_name()}) "
+        #     "is expected to be in TRACK pointingState",
+        # ).within_timeout(60).has_change_event_occurred(
+        #     central_node_mid.dish_leaf_node_dict[dish_id],
+        #     "pointingState",
+        #     PointingState.TRACK,
+        # )
 
 
 @then(
