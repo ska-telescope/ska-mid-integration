@@ -102,7 +102,6 @@ ska-sdp:
   lmc:
     prefix: mid
     nsubarray: 1
-    loopInterval: 8
   data-pvc:
     create:
       enabled: true
