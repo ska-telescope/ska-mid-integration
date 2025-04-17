@@ -274,7 +274,7 @@ class Waiter:
                 "obsState", changed_to="READY"
             )
         )
-        if self.dish_master_list and self.dish_leaf_node_list:
+        if self.dish_master_list:  # and self.dish_leaf_node_list:
             self.set_wait_for_dish("dishMode", "OPERATE")
             self.set_wait_for_dish("pointingState", "TRACK")
 
