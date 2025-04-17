@@ -75,11 +75,11 @@ class Waiter:
                     )
                 )
                 LOGGER.info("Dish Master check is done")
-                self.waits.append(
-                    watch(Resource(self.dish_leaf_node_list[index])).to_become(
-                        attribute_name, changed_to=state_name
-                    )
-                )
+                # self.waits.append(
+                #     watch(Resource(self.dish_leaf_node_list[index])).to_become(
+                #         attribute_name, changed_to=state_name
+                #     )
+                # )
         LOGGER.info("Dish Leaf Node check is done")
 
     def set_wait_for_going_to_off(self):
