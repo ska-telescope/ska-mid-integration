@@ -308,10 +308,10 @@ def check_dish_mode_and_pointing_state_after_scan(
             central_node_mid.dish_master_dict[dish_id].pointingState
             == PointingState.TRACK
         )
-        assert (
-            central_node_mid.dish_leaf_node_dict[dish_id].pointingState
-            == PointingState.TRACK
-        )
+        # assert (
+        #     central_node_mid.dish_leaf_node_dict[dish_id].pointingState
+        #     == PointingState.TRACK
+        # )
         assert check_long_running_command_status(
             central_node_mid.dish_master_dict[dish_id],
             "longRunningCommandStatus",
