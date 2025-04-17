@@ -107,6 +107,7 @@ ska-sdp:
       cpu: 0.2
   enabled: false
   lmc:
+    loopInterval: 9
     prefix: mid
     nsubarray: 2
     resources:
