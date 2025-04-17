@@ -107,9 +107,9 @@ ska-sdp:
       cpu: 0.2
   enabled: false
   lmc:
-    loopInterval: 9
+    loadBalancer: true
     prefix: mid
-    nsubarray: 2
+    nsubarray: 1
     resources:
       limits:
         memory: 500Mi
