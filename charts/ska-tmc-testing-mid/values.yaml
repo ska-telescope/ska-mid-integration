@@ -98,29 +98,15 @@ tmc-mid:
       AzimuthMinLimit: -270
 
 ska-sdp:
-  resources:
-    limits:
-      memory: 200Mi
-      cpu: 0.1
-    requests:
-      memory: 100Mi
-      cpu: 0.2
   enabled: false
   lmc:
-    loadBalancer: true
     prefix: mid
     nsubarray: 1
-    resources:
-      limits:
-        memory: 500Mi
-        cpu: 0.5
-      requests:
-        memory: 100Mi
-        cpu: 0.3
+    loopInterval: 8
   data-pvc:
     create:
       enabled: true
-      size: 100Mi
+      size: 500Mi
       storageClassName: nfss1
   ska-tango-base:
     enabled: false
