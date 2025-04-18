@@ -13,7 +13,8 @@ k8s-test-tmc-with-sdp:
     SDP_SIMULATION_ENABLED: 'false'
     TARANTA_ENABLED: 'true'
     ADDMARK: ''
-    MARK: "tmc_sdp"
+    MARK: "tmc_sdp_configure"
+    COUNT: 20
   after_script:
     - ls -al
     - ls -al build
