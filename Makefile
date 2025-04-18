@@ -20,7 +20,7 @@ CI_PROJECT_DIR ?= .
 
 MINIKUBE ?= false ## Minikube or not
 EXPOSE_All_DS ?= false ## Expose All Tango Services to the external network (enable Loadbalancer service)
-SKA_TANGO_OPERATOR ?= true
+SKA_TANGO_OPERATOR ?= false
 ODA_URI ?= http://ska-db-oda-rest-$(HELM_RELEASE).$(KUBE_NAMESPACE).svc.$(CLUSTER_DOMAIN):5000/$(KUBE_NAMESPACE)/api/v1
 
 NOTEBOOK_IGNORE_FILES = not notebook.ipynb
