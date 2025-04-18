@@ -5,7 +5,7 @@ global:
   labels:
     app: ska-mid-integration
   minikube: false
-  operator: true
+  operator: false
   exposeAllDS: false
   taranta_auth_enabled: false
   taranta_dashboard_enabled: false
@@ -107,8 +107,16 @@ ska-sdp:
   ska-tango-base:
     enabled: false
   lmc:
+    resources:
+      limits:
+        memory: 500Mi
+        cpu: 0.5
+      requests:
+        memory: 100Mi
+        cpu: 0.3
+
     prefix: mid
-    nsubarray: 3
+    nsubarray: 1
   data-pvc:
     create:
       enabled: true
