@@ -75,7 +75,7 @@ class Waiter:
                     )
                 )
                 LOGGER.info("Dish Master check is done")
-                LOGGER.info("Wait will be skipped " " only for Track  ")
+                LOGGER.info("Wait will be skipped only for Track  ")
                 if attribute_name not in ["pointingState"]:
                     self.waits.append(
                         watch(
