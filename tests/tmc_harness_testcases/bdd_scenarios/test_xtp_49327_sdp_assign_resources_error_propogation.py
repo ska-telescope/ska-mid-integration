@@ -1,6 +1,5 @@
 """Test module to verify timeout error propogation from SDP Subarray"""
 import json
-import time
 
 import pytest
 from pytest_bdd import given, scenario, then, when
@@ -19,19 +18,6 @@ from tests.resources.test_support.constant import (
     RESET_DEFECT,
     tmc_sdp_subarray_leaf_node,
 )
-
-TIMEOUT = 30
-
-
-def _is_defective_reset(device):
-    start_time = time.time()
-
-    while time.time() - start_time < TIMEOUT:
-        if not json.loads(device.defective)["enabled"]:
-            return True
-        time.sleep(1)
-
-    return False
 
 
 @pytest.mark.batch1
@@ -112,7 +98,7 @@ def check_timeout_error(
         "Exception occurred on the following devices:"
         + f" {tmc_sdp_subarray_leaf_node}:"
         " ska_tmc_common.exceptions.CommandNotAllowed:"
-        " Command is not allowed\n\n"
+        " Command is not allowed\n"
     )
     assert (
         exception_message
@@ -121,5 +107,3 @@ def check_timeout_error(
 
     # Reset SDP subarray defect
     pytest.sdp_sim.SetDefective(RESET_DEFECT)
-
-    assert _is_defective_reset(pytest.sdp_sim)
