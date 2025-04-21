@@ -60,6 +60,7 @@ def _setup_event_subscriptions(
 
 @pytest.mark.new
 @pytest.mark.batch1
+@pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/skb_837_receive_addresses_event_missing.feature",
     "Verify SKB-837",
