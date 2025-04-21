@@ -461,7 +461,7 @@ EVENT_DEFECT = json.dumps(
 )
 RECEIVE_ADDRESSES = json.dumps(
     {
-        "science_A": {
+        "science": {
             "vis0": {
                 "function": "visibilities",
                 "host": [[0, "192.168.0.1"], [2000, "192.168.0.2"]],
