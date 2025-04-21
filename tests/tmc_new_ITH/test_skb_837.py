@@ -69,7 +69,7 @@ def _setup_event_subscriptions(
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/skb_837_receive_addresses_event_missing.feature",
-    "Verify SKB-837",
+    "Fallback to attribute‑read when no change event for attribute receiveAddresses",
 )
 def test_verify_837():
     """Test Configure comannd when receive addresses event is missing."""
@@ -168,6 +168,7 @@ def verify_ready_state(
     state changes occur within a specified timeout. After verification, it
     updates the starting state in the context fixture for subsequent steps.
     """
+    context_fixt.starting_state = ObsState.CONFIGURING
     assert_that(event_tracer).described_as(
         f"Both TMC Subarray Node device ({tmc.subarray_node})"
         f", CSP Subarray device ({csp.csp_subarray}) "
@@ -190,6 +191,4 @@ def verify_ready_state(
         ObsState.READY,
         previous_value=context_fixt.starting_state,
     )
-
-    # override the starting state for the next step
     context_fixt.starting_state = ObsState.READY
