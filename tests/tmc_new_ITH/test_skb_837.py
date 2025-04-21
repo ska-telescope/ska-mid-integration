@@ -13,7 +13,11 @@ from ska_integration_test_harness.inputs.test_harness_inputs import (
 )
 from ska_tango_testing.integration import TangoEventTracer, log_events
 
-from tests.resources.test_support.constant import EVENT_DEFECT, RESET_DEFECT
+from tests.resources.test_support.constant import (
+    EVENT_DEFECT,
+    RECEIVE_ADDRESSES,
+    RESET_DEFECT,
+)
 from tests.tmc_csp_new_ITH.conftest import (
     ASSERTIONS_TIMEOUT,
     SubarrayTestContextData,
@@ -83,6 +87,8 @@ def subarray_in_idle_state(
     context_fixt.starting_state = ObsState.IDLE
     sdp.sdp_subarray.SetDirectreceiveAddresses("{}")
     sdp.sdp_subarray.SetDefective(EVENT_DEFECT)
+    sdp.sdp_subarray.SetDirectreceiveAddresses(RECEIVE_ADDRESSES)
+    sdp.sdp_subarray.SetDefective(RESET_DEFECT)
     tmc.force_change_of_obs_state(
         ObsState.EMPTY,
         default_commands_inputs,
@@ -185,4 +191,3 @@ def verify_ready_state(
 
     # override the starting state for the next step
     context_fixt.starting_state = ObsState.READY
-    sdp.sdp_subarray.SetDefective(RESET_DEFECT)
