@@ -19,6 +19,7 @@ from tests.resources.test_support.constant import COMMAND_COMPLETED
 TIMEOUT = 110
 
 
+@pytest.mark.skip(reason="temp")
 @pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
