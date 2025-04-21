@@ -224,9 +224,9 @@ deviceServers:
     IsDishAbortCommandsEnabled: "True"
     resources:
       limits:
-        memory: 200Mi
+        memory: 3000Mi
       requests:
-        cpu: 100m
+        cpu: 2000m
         memory: 300Mi
     CommandTimeOut: 90
     MaxTrackTableRetry: 3
