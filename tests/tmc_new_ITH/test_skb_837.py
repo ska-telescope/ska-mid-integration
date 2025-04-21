@@ -122,7 +122,7 @@ def change_event_is_empty(sdp: SDPFacade, event_tracer: TangoEventTracer):
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         sdp.sdp_subarray,
         "receiveAddresses",
-        {},
+        "{}",
     )
 
 
