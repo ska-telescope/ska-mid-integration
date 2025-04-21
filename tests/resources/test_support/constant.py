@@ -456,3 +456,6 @@ INTERMEDIATE_SCANNING_STATE_DEFECT = json.dumps(
         "intermediate_state": ObsState.SCANNING,
     }
 )
+EVENT_DEFECT = json.dumps(
+    {"enabled": True, "fault_type": FaultType.EVENT_NOT_RECEIVED}
+)

@@ -224,10 +224,9 @@ deviceServers:
     IsDishAbortCommandsEnabled: "True"
     resources:
       limits:
-        memory: 3000Mi
-
+        memory: 200Mi
       requests:
-        cpu: 2000m
+        cpu: 100m
         memory: 300Mi
     CommandTimeOut: 90
     MaxTrackTableRetry: 3
@@ -261,13 +260,3 @@ nodeSelector: {}
 affinity: {}
 
 tolerations: []
-
-# not needed, already available in CI/CD
-# ingress:
-#   enabled: true
-#   annotations:
-#     nginx.ingress.kubernetes.io/rewrite-target: /
-#   host: ""  # You can put your domain here or leave it blank for IP-based access
-#   path: /
-#   serviceName: ska-k8s-config-exporter-service
-#   servicePort: 8080

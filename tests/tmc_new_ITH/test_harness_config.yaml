@@ -1,0 +1,30 @@
+tmc:
+  is_emulated: false
+  centralnode_name: "mid-tmc/central-node/0"
+  tmc_subarraynode1_name: "mid-tmc/subarray/01"
+  tmc_csp_master_leaf_node_name: "mid-tmc/leaf-node-csp/0"
+  tmc_csp_subarray_leaf_node_name: "mid-tmc/subarray-leaf-node-csp/01"
+  tmc_sdp_master_leaf_node_name: "mid-tmc/leaf-node-sdp/0"
+  tmc_sdp_subarray_leaf_node_name: "mid-tmc/subarray-leaf-node-sdp/01"
+  tmc_dish_leaf_node1_name: "mid-tmc/leaf-node-dish/SKA001"
+  tmc_dish_leaf_node2_name: "mid-tmc/leaf-node-dish/SKA036"
+  tmc_dish_leaf_node3_name: "mid-tmc/leaf-node-dish/SKA063"
+  tmc_dish_leaf_node4_name: "mid-tmc/leaf-node-dish/SKA0100"
+
+csp:
+  is_emulated: true 
+  csp_master_name: "mid-csp/control/0"
+  csp_subarray1_name: "mid-csp/subarray/01"
+
+sdp:
+  is_emulated: true
+  sdp_master_name: "mid-sdp/control/0"
+  sdp_subarray1_name: "mid-sdp/subarray/01"
+
+dishes:
+  is_emulated: true
+  dish_master1_name: "mid-dish/dish-manager/SKA001"
+  dish_master2_name: "mid-dish/dish-manager/SKA036"
+  dish_master3_name: "mid-dish/dish-manager/SKA063"
+  dish_master4_name: "mid-dish/dish-manager/SKA100"
+
