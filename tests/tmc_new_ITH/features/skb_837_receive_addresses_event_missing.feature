@@ -1,4 +1,4 @@
-@
+@batch1 @new
 Scenario: Verify SKB-837
     Given subarray is in observation state IDLE
     And change event data is EMPTY for attribute receiveAddresses
