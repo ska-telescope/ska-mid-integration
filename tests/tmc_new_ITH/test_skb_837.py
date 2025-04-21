@@ -109,11 +109,11 @@ def subarray_in_idle_state(
 
 @given("change event data is EMPTY for attribute receiveAddresses")
 def change_event_is_empty(sdp: SDPFacade, event_tracer: TangoEventTracer):
-    """_summary_
+    """Verifies that the change event of attribute receiveAddresses is EMPTY.
 
-    :param sdp: _description_
+    :param sdp: sdp device facade instance
     :type sdp: SDPFacade
-    :param event_tracer: _description_
+    :param event_tracer: TanogEventTracer object to handle events.
     :type event_tracer: TangoEventTracer
     """
     assert_that(event_tracer).described_as(
