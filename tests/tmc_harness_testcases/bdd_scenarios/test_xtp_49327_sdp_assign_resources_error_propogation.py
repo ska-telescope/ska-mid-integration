@@ -85,6 +85,9 @@ def check_timeout_error(
         central_node_mid : A fixture for CentralNodeMid tango device class
         event_recorder: A fixture for EventRecorder class
     """
+    # Reset SDP subarray defect
+    pytest.sdp_sim.SetDefective(RESET_DEFECT)
+
     event_recorder.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
     )
@@ -104,5 +107,3 @@ def check_timeout_error(
         exception_message
         in json.loads(assertion_data["attribute_value"][1])[1]
     )
-    # Reset SDP subarray defect
-    pytest.sdp_sim.SetDefective(RESET_DEFECT)
