@@ -98,11 +98,12 @@ def check_timeout_error(
         "Exception occurred on the following devices:"
         + f" {tmc_sdp_subarray_leaf_node}:"
         " ska_tmc_common.exceptions.CommandNotAllowed:"
-        " Command is not allowed\n\n"
+        " Command is not allowed\n"
     )
     assert (
         exception_message
         in json.loads(assertion_data["attribute_value"][1])[1]
     )
+
     # Reset SDP subarray defect
     pytest.sdp_sim.SetDefective(RESET_DEFECT)

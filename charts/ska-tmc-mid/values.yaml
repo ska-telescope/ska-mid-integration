@@ -88,14 +88,14 @@ centralnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-centralnode
-    tag:  0.18.1
+    tag:  0.18.2
     pullPolicy: IfNotPresent
 
 subarraynode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-subarraynode
-    tag: 0.30.1
+    tag: 0.32.2
     pullPolicy: IfNotPresent
 
 sdpleafnodes:
@@ -225,7 +225,6 @@ deviceServers:
     resources:
       limits:
         memory: 3000Mi
-
       requests:
         cpu: 2000m
         memory: 300Mi
@@ -261,13 +260,3 @@ nodeSelector: {}
 affinity: {}
 
 tolerations: []
-
-# not needed, already available in CI/CD
-# ingress:
-#   enabled: true
-#   annotations:
-#     nginx.ingress.kubernetes.io/rewrite-target: /
-#   host: ""  # You can put your domain here or leave it blank for IP-based access
-#   path: /
-#   serviceName: ska-k8s-config-exporter-service
-#   servicePort: 8080

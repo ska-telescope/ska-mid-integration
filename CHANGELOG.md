@@ -1,8 +1,22 @@
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
-Added
------
+[1.0.0-rc.4]
+************
+### Fixed
+    * Resolved SKB-837 by enabling the read of receiveAddresses before configure command
+    and utilising it if the change event of receiveAddresses is empty.This is resolved by
+    subarray node 0.32.2.
+    * Fix issue with trajectory key by utilising dish leaf node tag 0.21.0.
+    
+[1.0.0-rc.3]
+************
+* Resolved the SKB-716
+* Updated the CentralNode image to 0.18.2
+* DishVccCommandStatus attribute added for central node
+* LoadDishCfg command is rejected if DishVccCommandStatus is in STAGING or IN PROGRESS
+* After TMC initialization is complete, the DishVccCommandStatus is updated to either COMPLETED or FAILED.
+
 [1.0.0-rc.2]
 ************
 * Updated ska-tmc-sdpleafnodes v0.21.1 to fix hardcoded sdp configure interface 0.3.

@@ -1,14 +1,17 @@
-release=1.0.0-rc.2
-tag=1.0.0-rc.2
+release=1.0.0-rc.4
+tag=1.0.0-rc.4
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.0.0-rc.1 to v1.0.0-rc.2**
-    * Updated ska-tmc-sdpleafnodes v0.21.1 to fix hardcoded sdp configure interface 0.3.
-    * Updated ska-tmc-centralnode v0.18.1 (contains latest telmodel to fix SKB-672 for low side).
+**1. Updated ska-tmc-mid from v1.0.0-rc.3 to v1.0.0-rc.4**
+    * Resolved SKB-837 by enabling the read of receiveAddresses before configure command
+    and utilising it if the change event of receiveAddresses is empty.This is resolved by
+    subarray node 0.32.2.
+    * Fixed issue with trajectory key by utilising dish leaf node tag 0.21.0.
 
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.0.0-rc.1 to v1.0.0-rc.2**
-    * Updated ska-tmc-sdpleafnodes v0.21.1 to fix hardcoded sdp configure interface 0.3.
-    * Updated ska-tmc-centralnode v0.18.1 (contains latest telmodel to fix SKB-672 for low side).
-
+**1. Updated ska-tmc-mid from v1.0.0-rc.3 to v1.0.0-rc.4**
+    * Resolved SKB-837 by enabling the read of receiveAddresses before configure command
+    and utilising it if the change event of receiveAddresses is empty.This is resolved by
+    subarray node 0.32.2.
+    * Fixed issue with trajectory key by utilising dish leaf node tag 0.21.0.

@@ -105,51 +105,24 @@ ska-sdp:
     requests:
       memory: 100Mi
       cpu: 0.2
-  legacy_compatibility: true
   enabled: false
   lmc:
+    resources:
+      limits:
+        memory: 500Mi
+        cpu: 0.5
+      requests:
+        memory: 100Mi
+        cpu: 0.3
     prefix: mid
-    nsubarray: 2
-    queueconnector:
-      image: artefact.skao.int/ska-sdp-lmc-queue-connector
-      version: 4.1.0
-      domain: queue-connector
-      function: sdp-queue-connector
-      resources:
-        limits:
-          memory: 500Mi
-          cpu: 0.5
-        requests:
-          memory: 100Mi
-          cpu: 0.3
-    pointing-offset:
-      image: artefact.skao.int/ska-sdp-wflow-pointing-offset
-      version: 0.5.0
-      script: pointing-offset
-      imagePullPolicy: IfNotPresent
-      command:
-        - pointing-offset
-      dataProductStorage:
-        name: test-pvc
-        mountPath: /mnt/data
-
-
-  console:
-    enabled: true
+    nsubarray: 1
   data-pvc:
     create:
       enabled: true
       size: 100Mi
       storageClassName: nfss1
-  ska-sdp-qa:
-    enabled: true
-    config:
-      kafka:
-        overrideUrl: "ska-sdp-kafka:9092"
   ska-tango-base:
     enabled: false
-  kafka:
-    enabled: true
 
 # SKUID
 ska-ser-skuid:

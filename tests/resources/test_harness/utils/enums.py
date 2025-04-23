@@ -81,6 +81,7 @@ class FaultType(IntEnum):
     GPM_ERROR_REPORTED_BY_DISH = 11
     SDP_FAULT = 12
     SDP_BACK_TO_INITIAL_STATE = 13
+    EVENT_NOT_RECEIVED = 14
 
 
 class ResultCode(enum.IntEnum):

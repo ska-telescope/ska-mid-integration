@@ -9,5 +9,5 @@ Scenario: Configure a SDP subarray for a scan using TMC
 	And the TMC subarray <subarray_id> obsState is transitioned to READY
 	Examples:
 	| subarray_id    |    scan_type    |
-	| 1              |    target:a     |
+	| 1              |    science     |
 	

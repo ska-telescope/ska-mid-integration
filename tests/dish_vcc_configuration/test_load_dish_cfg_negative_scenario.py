@@ -15,6 +15,7 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.constant import (
+    COMMAND_COMPLETED,
     ERROR_PROPAGATION_DEFECT,
     RESET_DEFECT,
 )
@@ -79,6 +80,26 @@ def test_central_node_handle_exception():
     """
 
 
+@pytest.mark.batch1
+@pytest.mark.SKA_mid
+@scenario(
+    "../features/dish_vcc_initialization/xtp_78417.feature",
+    "TMC reject LoadDishCfg command if existing dish vcc "
+    "config is in progress",
+)
+def test_central_node_reject_load_dish_cfg():
+    """This test validate that central node reject load dish cfg
+    command if existing load dish cfg command is in progress
+    Glossary:
+    - "central_node_mid": fixture for a TMC CentralNode Mid under test
+    which provides simulated master devices
+    - "event_recorder": fixture for a MockTangoEventCallbackGroup
+    for validating the subscribing and receiving events.
+    - "simulator_factory": fixture for creating simulator devices for
+    mid Telescope respectively.
+    """
+
+
 @given("a TMC")
 def given_tmc():
     """Given a TMC"""
@@ -118,6 +139,82 @@ def invoke_load_dish_cfg(central_node_mid, command_input_factory, file_name):
     )
     pytest.command_result_code = result_code
     pytest.command_result_message = message
+
+
+@given("a LoadDishCfg command is currently in progress")
+def load_dish_cfg_in_progress(
+    central_node_mid, event_recorder, command_input_factory
+):
+    """Call load_dish_cfg method which invoke LoadDishCfg
+    command on CentralNode
+    """
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "DishVccCommandStatus"
+    )
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+    # Prepare input for load dish configuration
+    load_dish_cfg_json = prepare_json_args_for_centralnode_commands(
+        "load_dish_cfg", command_input_factory
+    )
+
+    result_code, message = central_node_mid.load_dish_vcc_configuration(
+        load_dish_cfg_json
+    )
+    pytest.command_result_code = result_code
+    pytest.command_result_message = message
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "DishVccCommandStatus",
+        2,
+    )
+
+
+@when("another LoadDishCfg command is issued")
+def invoke_another_load_dish_cfg(central_node_mid, command_input_factory):
+    """Call load_dish_cfg method which invoke LoadDishCfg
+    command on CentralNode
+    """
+    # Prepare input for load dish configuration
+    # Prepare input for load dish configuration
+    load_dish_cfg_json = prepare_json_args_for_centralnode_commands(
+        "load_dish_cfg", command_input_factory
+    )
+
+    result_code, message = central_node_mid.load_dish_vcc_configuration(
+        load_dish_cfg_json
+    )
+    pytest.failed_command_result_code = result_code
+    pytest.failed_command_result_message = message
+
+
+@then("TMC should reject the new LoadDishCfg command")
+def test_tmc_rejects_load_dish_cfg():
+    """Test validate that command failed with error message"""
+    assert pytest.failed_command_result_code == ResultCode.REJECTED
+
+
+@then("the in-progress LoadDishCfg command should complete")
+def test_in_progress_load_dish_cfg_complete(central_node_mid, event_recorder):
+    """Test validate that in progress load dish cfg complete"""
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (pytest.command_result_message[0], COMMAND_COMPLETED),
+        lookahead=5,
+    )
+
+
+@then("the DishVccCommandStatus should transition to COMPLETED")
+def test_dish_vcc_command_status_complete(central_node_mid, event_recorder):
+    """Test validate that in progress load dish cfg complete"""
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "DishVccCommandStatus",
+        3,
+        lookahead=5,
+    )
 
 
 @then(parsers.parse("TMC rejects the command with error {error_message}"))
