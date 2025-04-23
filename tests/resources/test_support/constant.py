@@ -223,7 +223,7 @@ class CorrectionKey(IntEnum):
     RESET = 2
 
 
-ABORT_COMPLETED = json.dumps([ResultCode.STARTED, "Command Started"])
+ABORT_COMPLETED = json.dumps([ResultCode.OK, "Abort command completed"])
 DISH_ERROR_MESSAGE = (
     "Exception occurred on the following devices: "
     + f"{tmc_dish_leaf_node1.lower()}:"
@@ -415,7 +415,7 @@ DEFAULT_DISH_VALIDATION_STATUS = {
 DISH_001_CALIBRATION_DATA = [1.1, 1.2, 1.3]
 DISH_036_CALIBRATION_DATA = [2.1, 2.2, 2.3]
 RESET_OFFSETS = [0.0, 0.0]
-ABORT_COMPLETED = json.dumps([ResultCode.STARTED, "Command Started"])
+ABORT_COMPLETED = json.dumps([ResultCode.OK, "Abort command completed"])
 
 
 FAILED_DEFECT = json.dumps(
@@ -454,5 +454,33 @@ INTERMEDIATE_SCANNING_STATE_DEFECT = json.dumps(
         "error_message": "Device stuck in intermediate state",
         "result": ResultCode.FAILED,
         "intermediate_state": ObsState.SCANNING,
+    }
+)
+EVENT_DEFECT = json.dumps(
+    {"enabled": True, "fault_type": FaultType.EVENT_NOT_RECEIVED}
+)
+RECEIVE_ADDRESSES = json.dumps(
+    {
+        "science_A": {
+            "vis0": {
+                "function": "visibilities",
+                "host": [[0, "192.168.0.1"], [2000, "192.168.0.2"]],
+                "port": [[0, 9000], [20, 9001]],
+            }
+        },
+        "target:a": {
+            "vis0": {
+                "function": "visibilities",
+                "host": [[0, "192.168.0.1"], [2000, "192.168.0.2"]],
+                "port": [[0, 9000], [20, 9001]],
+            }
+        },
+        "calibration:b": {
+            "vis0": {
+                "function": "visibilities",
+                "host": [[0, "192.168.0.1"], [2000, "192.168.0.2"]],
+                "port": [[0, 9000], [20, 9001]],
+            }
+        },
     }
 )
