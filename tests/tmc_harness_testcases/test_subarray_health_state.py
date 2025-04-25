@@ -14,6 +14,7 @@ class TestSubarrayHealthState(object):
     https://docs.google.com/spreadsheets/d/1XbNb8We7fK-EhmOcw3S-h0V_Pu-WAfPTkEd13MSmIns/edit#gid=747888622
     """
 
+    @pytest.mark.aki
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_health_state_ok(
@@ -105,6 +106,7 @@ class TestSubarrayHealthState(object):
             ),
         ],
     )
+    @pytest.mark.aki
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_health_state_failed_when_csp_or_sdp_failed(
@@ -216,6 +218,7 @@ class TestSubarrayHealthState(object):
             ),
         ],
     )
+    @pytest.mark.aki
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_health_state_failed_when_csp_or_sdp_unknown(
@@ -325,6 +328,7 @@ class TestSubarrayHealthState(object):
             ),
         ],
     )
+    @pytest.mark.aki
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_health_state_degraded_when_csp_or_sdp_degraded(
@@ -425,6 +429,7 @@ class TestSubarrayHealthState(object):
             ),
         ],
     )
+    @pytest.mark.aki
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_health_state_failed_when_all_dish_failed(
@@ -547,6 +552,7 @@ class TestSubarrayHealthState(object):
             ),
         ],
     )
+    @pytest.mark.aki
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_health_state_failed_when_dish_unknown(
@@ -684,6 +690,7 @@ class TestSubarrayHealthState(object):
             ),
         ],
     )
+    @pytest.mark.aki
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_health_state_degraded_when_one_or_more_dish_degraded_or_failed(
