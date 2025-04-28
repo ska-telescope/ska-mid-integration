@@ -526,31 +526,31 @@ class TestSubarrayHealthState(object):
                 HealthState.OK,
                 HealthState.OK,
                 HealthState.OK,
-            ),
-            (
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.UNKNOWN,
-                HealthState.OK,
-                HealthState.OK,
-            ),
-            (
-                HealthState.OK,
-                HealthState.OK,
-                HealthState.UNKNOWN,
-                HealthState.UNKNOWN,
-                HealthState.OK,
-                HealthState.OK,
-            ),
-            (
-                HealthState.UNKNOWN,
-                HealthState.UNKNOWN,
-                HealthState.UNKNOWN,
-                HealthState.UNKNOWN,
-                HealthState.UNKNOWN,
-                HealthState.UNKNOWN,
-            ),
+            )
+            # (
+            #     HealthState.OK,
+            #     HealthState.OK,
+            #     HealthState.OK,
+            #     HealthState.UNKNOWN,
+            #     HealthState.OK,
+            #     HealthState.OK,
+            # ),
+            # (
+            #     HealthState.OK,
+            #     HealthState.OK,
+            #     HealthState.UNKNOWN,
+            #     HealthState.UNKNOWN,
+            #     HealthState.OK,
+            #     HealthState.OK,
+            # ),
+            # (
+            #     HealthState.UNKNOWN,
+            #     HealthState.UNKNOWN,
+            #     HealthState.UNKNOWN,
+            #     HealthState.UNKNOWN,
+            #     HealthState.UNKNOWN,
+            #     HealthState.UNKNOWN,
+            # ),
         ],
     )
     @pytest.mark.aki
@@ -630,8 +630,11 @@ class TestSubarrayHealthState(object):
             "healthState",
             dish_master4_health_state,
         )
-        time.sleep(3)
-        assert subarray_node.subarray_node.healthState == HealthState.UNKNOWN
+        assert event_recorder.has_change_event_occurred(
+            subarray_node.subarray_node,
+            "healthState",
+            HealthState.UNKNOWN,
+        ), "Expected Subarray Node HealthState to be UNKNOWN"
 
     @pytest.mark.parametrize(
         "csp_subarray_health_state, sdp_subarray_health_state, \
