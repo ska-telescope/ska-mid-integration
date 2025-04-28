@@ -587,9 +587,15 @@ class TestSubarrayHealthState(object):
         LOGGER.info(f"My healthstate of csp_sa is {csp_sa_sim.healthstate}")
         sdp_sa_sim.SetDirectHealthState(sdp_subarray_health_state)
         LOGGER.info(f"My healthstate of sdp_sa is {sdp_sa_sim.healthstate}")
+        LOGGER.info(
+            f"My healthstate before dish001 is {dish_master_sim_1.healthstate}"
+        )
         dish_master_sim_1.SetDirectHealthState(dish_master1_health_state)
         LOGGER.info(
-            f"My healthstate of dish001 is {dish_master_sim_1.healthstate}"
+            f"My healthstate after dish001 is {dish_master_sim_1.healthstate}"
+        )
+        LOGGER.info(
+            f"My healthstate before dish001 is {dish_master_sim_2.healthstate}"
         )
         dish_master_sim_2.SetDirectHealthState(dish_master2_health_state)
         LOGGER.info(
