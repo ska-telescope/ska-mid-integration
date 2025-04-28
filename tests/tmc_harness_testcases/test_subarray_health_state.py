@@ -630,6 +630,7 @@ class TestSubarrayHealthState(object):
             "healthState",
             dish_master4_health_state,
         )
+        time.sleep(3)
         assert subarray_node.subarray_node.healthState == HealthState.UNKNOWN
 
     @pytest.mark.parametrize(
