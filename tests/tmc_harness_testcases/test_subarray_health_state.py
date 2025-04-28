@@ -1,3 +1,4 @@
+import json
 import time
 
 import pytest
@@ -6,8 +7,9 @@ from ska_tango_base.control_model import HealthState, ObsState
 from tests.conftest import LOGGER
 from tests.resources.test_harness.helpers import (
     get_device_simulators,
-    prepare_json_args_for_commands,
+    prepare_json_args_for_centralnode_commands,
 )
+from tests.resources.test_support.constant import COMMAND_COMPLETED
 
 
 class TestSubarrayHealthState(object):
@@ -438,6 +440,7 @@ class TestSubarrayHealthState(object):
     def test_health_state_failed_when_all_dish_failed(
         self,
         subarray_node,
+        central_node_mid,
         simulator_factory,
         event_recorder,
         command_input_factory,
@@ -459,18 +462,17 @@ class TestSubarrayHealthState(object):
         ) = get_device_simulators(simulator_factory)
 
         self._assign_dishes_to_subarray(
-            subarray_node, command_input_factory, event_recorder
+            subarray_node,
+            central_node_mid,
+            command_input_factory,
+            event_recorder,
         )
         csp_sa_sim.SetDirectHealthState(csp_subarray_health_state)
         sdp_sa_sim.SetDirectHealthState(sdp_subarray_health_state)
         dish_master_sim_1.SetDirectHealthState(dish_master1_health_state)
-        time.sleep(3)
         dish_master_sim_2.SetDirectHealthState(dish_master2_health_state)
-        time.sleep(3)
         dish_master_sim_3.SetDirectHealthState(dish_master3_health_state)
-        time.sleep(3)
         dish_master_sim_4.SetDirectHealthState(dish_master4_health_state)
-        time.sleep(3)
         event_recorder.subscribe_event(csp_sa_sim, "healthState")
         event_recorder.subscribe_event(sdp_sa_sim, "healthState")
         event_recorder.subscribe_event(dish_master_sim_1, "healthState")
@@ -559,12 +561,13 @@ class TestSubarrayHealthState(object):
             ),
         ],
     )
-    @pytest.mark.aki
+    @pytest.mark.aki3
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_health_state_failed_when_dish_unknown(
         self,
         subarray_node,
+        central_node_mid,
         simulator_factory,
         event_recorder,
         command_input_factory,
@@ -586,7 +589,10 @@ class TestSubarrayHealthState(object):
         ) = get_device_simulators(simulator_factory)
 
         self._assign_dishes_to_subarray(
-            subarray_node, command_input_factory, event_recorder
+            subarray_node,
+            central_node_mid,
+            command_input_factory,
+            event_recorder,
         )
         csp_sa_sim.SetDirectHealthState(csp_subarray_health_state)
         sdp_sa_sim.SetDirectHealthState(sdp_subarray_health_state)
@@ -715,6 +721,7 @@ class TestSubarrayHealthState(object):
     def test_health_state_degraded_when_one_or_more_dish_degraded_or_failed(
         self,
         subarray_node,
+        central_node_mid,
         simulator_factory,
         event_recorder,
         command_input_factory,
@@ -736,7 +743,10 @@ class TestSubarrayHealthState(object):
         ) = get_device_simulators(simulator_factory)
 
         self._assign_dishes_to_subarray(
-            subarray_node, command_input_factory, event_recorder
+            subarray_node,
+            central_node_mid,
+            command_input_factory,
+            event_recorder,
         )
         csp_sa_sim.SetDirectHealthState(csp_subarray_health_state)
         sdp_sa_sim.SetDirectHealthState(sdp_subarray_health_state)
@@ -793,17 +803,31 @@ class TestSubarrayHealthState(object):
         ), "Expected Subarray Node HealthState to be DEGRADED"
 
     def _assign_dishes_to_subarray(
-        self, subarray_node, command_input_factory, event_recorder
+        self,
+        subarray_node,
+        central_node_mid,
+        command_input_factory,
+        event_recorder,
     ):
-        subarray_node.move_to_on()
-        subarray_node.force_change_of_obs_state("EMPTY")
-        input_json = prepare_json_args_for_commands(
+        central_node_mid.move_to_on()
+        event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
+        subarray_id = 1
+        event_recorder.subscribe_event(
+            central_node_mid.central_node, "longRunningCommandResult"
+        )
+        assign_input_json = prepare_json_args_for_centralnode_commands(
             "assign_resources_mid", command_input_factory
         )
-
-        event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-
-        subarray_node.execute_transition("AssignResources", argin=input_json)
+        assign_input = json.loads(assign_input_json)
+        assign_input["subarray_id"] = int(subarray_id)
+        pytest.command_result = central_node_mid.perform_action(
+            "AssignResources", json.dumps(assign_input)
+        )
         assert event_recorder.has_change_event_occurred(
             subarray_node.subarray_node, "obsState", ObsState.IDLE
         ), "Waiting for subarray node to complete"
+        assert event_recorder.has_change_event_occurred(
+            central_node_mid.central_node,
+            "longRunningCommandResult",
+            (pytest.command_result[1][0], COMMAND_COMPLETED),
+        )
