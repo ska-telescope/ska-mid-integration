@@ -535,14 +535,14 @@ class TestSubarrayHealthState(object):
                 HealthState.OK,
                 HealthState.OK,
             ),
-            # (
-            #     HealthState.OK,
-            #     HealthState.OK,
-            #     HealthState.UNKNOWN,
-            #     HealthState.UNKNOWN,
-            #     HealthState.OK,
-            #     HealthState.OK,
-            # ),
+            (
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.UNKNOWN,
+                HealthState.UNKNOWN,
+                HealthState.OK,
+                HealthState.OK,
+            ),
             # (
             #     HealthState.UNKNOWN,
             #     HealthState.UNKNOWN,
