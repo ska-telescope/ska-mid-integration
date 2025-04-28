@@ -110,7 +110,7 @@ class TestSubarrayHealthState(object):
             ),
         ],
     )
-    @pytest.mark.aki
+    @pytest.mark.aki2
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_health_state_failed_when_csp_or_sdp_failed(
@@ -714,7 +714,7 @@ class TestSubarrayHealthState(object):
             ),
         ],
     )
-    @pytest.mark.aki
+    @pytest.mark.aki4
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_health_state_degraded_when_one_or_more_dish_degraded_or_failed(
