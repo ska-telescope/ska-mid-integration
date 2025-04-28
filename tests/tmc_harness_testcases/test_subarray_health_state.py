@@ -788,3 +788,4 @@ class TestSubarrayHealthState(object):
         assert event_recorder.has_change_event_occurred(
             subarray_node.subarray_node, "obsState", ObsState.IDLE
         ), "Waiting for subarray node to complete"
+        time.sleep(5)
