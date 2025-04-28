@@ -525,14 +525,14 @@ class TestSubarrayHealthState(object):
         dish_master1_health_state, dish_master2_health_state, \
         dish_master3_health_state, dish_master4_health_state",
         [
-            # (
-            #     HealthState.OK,
-            #     HealthState.OK,
-            #     HealthState.UNKNOWN,
-            #     HealthState.OK,
-            #     HealthState.OK,
-            #     HealthState.OK,
-            # ),
+            (
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.UNKNOWN,
+                HealthState.OK,
+                HealthState.OK,
+                HealthState.OK,
+            ),
             (
                 HealthState.OK,
                 HealthState.OK,
@@ -549,17 +549,17 @@ class TestSubarrayHealthState(object):
                 HealthState.OK,
                 HealthState.OK,
             ),
-            # (
-            #     HealthState.UNKNOWN,
-            #     HealthState.UNKNOWN,
-            #     HealthState.UNKNOWN,
-            #     HealthState.UNKNOWN,
-            #     HealthState.UNKNOWN,
-            #     HealthState.UNKNOWN,
-            # ),
+            (
+                HealthState.UNKNOWN,
+                HealthState.UNKNOWN,
+                HealthState.UNKNOWN,
+                HealthState.UNKNOWN,
+                HealthState.UNKNOWN,
+                HealthState.UNKNOWN,
+            ),
         ],
     )
-    @pytest.mark.skip
+    @pytest.mark.aki
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_health_state_failed_when_dish_unknown(
@@ -703,7 +703,7 @@ class TestSubarrayHealthState(object):
                 HealthState.DEGRADED,
                 HealthState.DEGRADED,
                 HealthState.DEGRADED,
-                HealthState.DEGRADED,
+                HealthState.OK,
                 HealthState.DEGRADED,
                 HealthState.DEGRADED,
             ),
