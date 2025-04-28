@@ -3,6 +3,7 @@ import time
 import pytest
 from ska_tango_base.control_model import HealthState, ObsState
 
+from tests.conftest import LOGGER
 from tests.resources.test_harness.helpers import (
     get_device_simulators,
     prepare_json_args_for_commands,
@@ -583,9 +584,17 @@ class TestSubarrayHealthState(object):
             subarray_node, command_input_factory, event_recorder
         )
         csp_sa_sim.SetDirectHealthState(csp_subarray_health_state)
+        LOGGER.info(f"My healthstate of csp_sa is {csp_sa_sim.healthstate}")
         sdp_sa_sim.SetDirectHealthState(sdp_subarray_health_state)
+        LOGGER.info(f"My healthstate of sdp_sa is {sdp_sa_sim.healthstate}")
         dish_master_sim_1.SetDirectHealthState(dish_master1_health_state)
+        LOGGER.info(
+            f"My healthstate of dish001 is {dish_master_sim_1.healthstate}"
+        )
         dish_master_sim_2.SetDirectHealthState(dish_master2_health_state)
+        LOGGER.info(
+            f"My healthstate of dish036 is {dish_master_sim_2.healthstate}"
+        )
         dish_master_sim_3.SetDirectHealthState(dish_master3_health_state)
         dish_master_sim_4.SetDirectHealthState(dish_master4_health_state)
         event_recorder.subscribe_event(csp_sa_sim, "healthState")
