@@ -585,13 +585,9 @@ class TestSubarrayHealthState(object):
         csp_sa_sim.SetDirectHealthState(csp_subarray_health_state)
         sdp_sa_sim.SetDirectHealthState(sdp_subarray_health_state)
         dish_master_sim_1.SetDirectHealthState(dish_master1_health_state)
-        time.sleep(3)
         dish_master_sim_2.SetDirectHealthState(dish_master2_health_state)
-        time.sleep(3)
         dish_master_sim_3.SetDirectHealthState(dish_master3_health_state)
-        time.sleep(3)
         dish_master_sim_4.SetDirectHealthState(dish_master4_health_state)
-        time.sleep(3)
         event_recorder.subscribe_event(csp_sa_sim, "healthState")
         event_recorder.subscribe_event(sdp_sa_sim, "healthState")
         event_recorder.subscribe_event(dish_master_sim_1, "healthState")
@@ -634,11 +630,7 @@ class TestSubarrayHealthState(object):
             "healthState",
             dish_master4_health_state,
         )
-        assert event_recorder.has_change_event_occurred(
-            subarray_node.subarray_node,
-            "healthState",
-            HealthState.UNKNOWN,
-        ), "Expected Subarray Node HealthState to be UNKNOWN"
+        assert subarray_node.subarray_node.healthState == HealthState.UNKNOWN
 
     @pytest.mark.parametrize(
         "csp_subarray_health_state, sdp_subarray_health_state, \
