@@ -22,7 +22,7 @@ server:
   {{- $instance_list := list -}}
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
   {{- $isSimulatedDish := .Values.deviceServers.mocks.dish }}
-  {{- $isDishAbortCommandsEnabled := .Values.deviceServers.dishleafnode.IsDishAbortCommandsEnabled }}
+  {{- $isDishAbortEnabled := .Values.deviceServers.dishleafnode.IsDishAbortEnabled }}
   {{- $real_dish_name := .Values.global.namespace_dish.dish_names }}
   {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true)  }}
   {{- range $instance := .Values.global.dishes }}
@@ -67,9 +67,9 @@ server:
             - name: "CommandTimeOut"
               values:
                 - "{{ $CommandTimeOut }}"
-            - name: "IsDishAbortCommandsEnabled"
+            - name: "IsDishAbortEnabled"
               values:
-                - "{{ $isDishAbortCommandsEnabled }}"
+                - "{{ $isDishAbortEnabled }}"
             - name: "MaxTrackTableRetry"
               values:
                 - "{{ $MaxTrackTableRetry }}"
