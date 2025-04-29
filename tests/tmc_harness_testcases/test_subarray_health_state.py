@@ -702,7 +702,7 @@ class TestSubarrayHealthState(object):
                 HealthState.DEGRADED,
                 HealthState.DEGRADED,
                 HealthState.DEGRADED,
-                HealthState.OK,
+                HealthState.DEGRADED,
                 HealthState.DEGRADED,
                 HealthState.DEGRADED,
             ),
