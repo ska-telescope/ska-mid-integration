@@ -388,7 +388,6 @@ class SubarrayNodeWrapper(object):
             device = DeviceProxy(sim_device_fqdn)
             device.ResetDelayInfo()
             device.SetDirectHealthState(HealthState.UNKNOWN)
-            time.sleep(2)
             device.SetDefective(json.dumps({"enabled": False}))
 
     def _reset_dishes(self):
@@ -401,7 +400,6 @@ class SubarrayNodeWrapper(object):
             for dish_master in self.dish_master_list:
                 dish_master.SetDelay(2)
                 dish_master.SetDirectHealthState(HealthState.UNKNOWN)
-                time.sleep(2)
 
     def _clear_command_call_and_transition_data(self, clear_transition=False):
         """Clears the command call data"""
