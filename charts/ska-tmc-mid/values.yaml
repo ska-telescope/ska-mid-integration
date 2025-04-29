@@ -221,7 +221,7 @@ deviceServers:
   dishleafnode:
     enabled: true
     file: "data/dishleafnode.yaml"
-    IsDishAbortCommandsEnabled: "True"
+    IsDishAbortEnabled: "True"
     resources:
       limits:
         memory: 3000Mi
