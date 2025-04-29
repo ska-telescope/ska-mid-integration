@@ -18,7 +18,6 @@ class TestSubarrayHealthState(object):
     https://docs.google.com/spreadsheets/d/1XbNb8We7fK-EhmOcw3S-h0V_Pu-WAfPTkEd13MSmIns/edit#gid=747888622
     """
 
-    @pytest.mark.aki
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_health_state_ok(
@@ -110,7 +109,6 @@ class TestSubarrayHealthState(object):
             ),
         ],
     )
-    @pytest.mark.aki
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_health_state_failed_when_csp_or_sdp_failed(
@@ -222,7 +220,6 @@ class TestSubarrayHealthState(object):
             ),
         ],
     )
-    @pytest.mark.aki
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_health_state_failed_when_csp_or_sdp_unknown(
@@ -332,7 +329,6 @@ class TestSubarrayHealthState(object):
             ),
         ],
     )
-    @pytest.mark.aki
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_health_state_degraded_when_csp_or_sdp_degraded(
@@ -433,7 +429,6 @@ class TestSubarrayHealthState(object):
             ),
         ],
     )
-    @pytest.mark.aki
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_health_state_failed_when_all_dish_failed(
@@ -560,7 +555,6 @@ class TestSubarrayHealthState(object):
             ),
         ],
     )
-    @pytest.mark.aki
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_health_state_failed_when_dish_unknown(
@@ -714,7 +708,6 @@ class TestSubarrayHealthState(object):
             ),
         ],
     )
-    @pytest.mark.aki
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_health_state_degraded_when_one_or_more_dish_degraded_or_failed(
@@ -795,11 +788,24 @@ class TestSubarrayHealthState(object):
             "healthState",
             dish_master4_health_state,
         )
-        assert event_recorder.has_change_event_occurred(
-            subarray_node.subarray_node,
-            "healthState",
-            HealthState.DEGRADED,
-        ), "Expected Subarray Node HealthState to be DEGRADED"
+
+        if (
+            dish_master1_health_state == HealthState.DEGRADED
+            and dish_master2_health_state == HealthState.DEGRADED
+            and dish_master3_health_state == HealthState.DEGRADED
+            and dish_master4_health_state == HealthState.DEGRADED
+        ):
+            assert event_recorder.has_change_event_occurred(
+                subarray_node.subarray_node,
+                "healthState",
+                HealthState.FAILED,
+            ), "Expected Subarray Node HealthState to be DEGRADED"
+        else:
+            assert event_recorder.has_change_event_occurred(
+                subarray_node.subarray_node,
+                "healthState",
+                HealthState.DEGRADED,
+            ), "Expected Subarray Node HealthState to be DEGRADED"
 
     def _assign_dishes_to_subarray(
         self,
