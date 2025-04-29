@@ -3,7 +3,6 @@ import json
 import pytest
 from ska_tango_base.control_model import HealthState, ObsState
 
-from tests.conftest import LOGGER
 from tests.resources.test_harness.helpers import (
     get_device_simulators,
     prepare_json_args_for_centralnode_commands,
