@@ -79,7 +79,6 @@ class TestTelescopeHealthState(object):
             ),
         ],
     )
-    @pytest.mark.aki
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_telescope_health_state_failed(
@@ -119,7 +118,6 @@ class TestTelescopeHealthState(object):
             HealthState.FAILED,
         )
 
-    @pytest.mark.aki
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_telescope_health_state_ok(
@@ -251,7 +249,6 @@ class TestTelescopeHealthState(object):
             ),
         ],
     )
-    @pytest.mark.aki
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_telescope_health_state_degraded(
@@ -347,7 +344,6 @@ class TestTelescopeHealthState(object):
             ),
         ],
     )
-    @pytest.mark.aki
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_telescope_health_state_unknown(
