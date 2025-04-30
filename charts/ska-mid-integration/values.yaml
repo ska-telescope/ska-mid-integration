@@ -163,7 +163,7 @@ ska-tmc-mid:
     image:
       registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-subarraynode
       image: ska-tmc-subarraynode
-      tag: 0.33.0-dev.cdde29f1c
+      tag: 0.33.5-dev.c645427ff
   deviceServers:
     mocks:
       enabled: false
