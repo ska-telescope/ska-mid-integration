@@ -812,7 +812,7 @@ class TestSubarrayHealthState(object):
         )
         assign_input = json.loads(assign_input_json)
         assign_input["subarray_id"] = int(subarray_id)
-        pytest.command_result = central_node_mid.perform_action(
+        command_result = central_node_mid.perform_action(
             "AssignResources", json.dumps(assign_input)
         )
         assert event_recorder.has_change_event_occurred(
@@ -821,5 +821,5 @@ class TestSubarrayHealthState(object):
         assert event_recorder.has_change_event_occurred(
             central_node_mid.central_node,
             "longRunningCommandResult",
-            (pytest.command_result[1][0], COMMAND_COMPLETED),
+            (command_result[1][0], COMMAND_COMPLETED),
         )
