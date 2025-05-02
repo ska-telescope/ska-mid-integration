@@ -164,6 +164,13 @@ ska-tmc-mid:
       registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-subarraynode
       image: ska-tmc-subarraynode
       tag: 0.33.5-dev.c645427ff
+  dishleafnode:
+    image:
+      registry: artefact.skao.int
+      image: ska-tmc-dishleafnode
+      tag: 0.22.2
+      pullPolicy: IfNotPresent
+
   deviceServers:
     mocks:
       enabled: false
