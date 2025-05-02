@@ -11,11 +11,6 @@ ska-mid-dish-manager:
   labels:
     app: ska-tmc-integration
   enabled: true
-  dishmanager:
-    image:
-      registry: registry.gitlab.com/ska-telescope/ska-mid-dish-manager
-      image: ska-mid-dish-manager
-      tag: 7.0.1
 
 
 ska-mid-dish-simulators:
