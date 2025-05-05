@@ -258,7 +258,7 @@ def assign_resources_executed_on_subarray(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-    assert _wait_for_availability()
+    assert _wait_for_availability(central_node_mid)
     _, unique_id = central_node_mid.perform_action(
         "AssignResources", assign_input_json
     )
