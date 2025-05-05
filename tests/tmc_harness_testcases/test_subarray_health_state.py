@@ -15,7 +15,7 @@ class TestSubarrayHealthState(object):
     """
 
     @pytest.mark.batch2
-    @pytest.mark.SKA_mid
+    @pytest.mark.SKA_midskiphealth
     def test_health_state_ok(
         self, subarray_node, simulator_factory, event_recorder
     ):
@@ -106,7 +106,7 @@ class TestSubarrayHealthState(object):
         ],
     )
     @pytest.mark.batch2
-    @pytest.mark.SKA_mid
+    @pytest.mark.SKA_midskiphealth
     def test_health_state_failed_when_csp_or_sdp_failed(
         self,
         subarray_node,
@@ -217,7 +217,7 @@ class TestSubarrayHealthState(object):
         ],
     )
     @pytest.mark.batch2
-    @pytest.mark.SKA_mid
+    @pytest.mark.SKA_midskiphealth
     def test_health_state_failed_when_csp_or_sdp_unknown(
         self,
         subarray_node,
@@ -326,7 +326,7 @@ class TestSubarrayHealthState(object):
         ],
     )
     @pytest.mark.batch2
-    @pytest.mark.SKA_mid
+    @pytest.mark.SKA_midskiphealth
     def test_health_state_degraded_when_csp_or_sdp_degraded(
         self,
         subarray_node,
@@ -426,7 +426,7 @@ class TestSubarrayHealthState(object):
         ],
     )
     @pytest.mark.batch2
-    @pytest.mark.SKA_mid
+    @pytest.mark.SKA_midskiphealth
     def test_health_state_failed_when_all_dish_failed(
         self,
         subarray_node,
@@ -548,7 +548,7 @@ class TestSubarrayHealthState(object):
         ],
     )
     @pytest.mark.batch2
-    @pytest.mark.SKA_mid
+    @pytest.mark.SKA_midskiphealth
     def test_health_state_failed_when_dish_unknown(
         self,
         subarray_node,
@@ -685,7 +685,7 @@ class TestSubarrayHealthState(object):
         ],
     )
     @pytest.mark.batch2
-    @pytest.mark.SKA_mid
+    @pytest.mark.SKA_midskiphealthskip
     def test_health_state_degraded_when_one_or_more_dish_degraded_or_failed(
         self,
         subarray_node,
