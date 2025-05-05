@@ -32,7 +32,7 @@ def _wait_for_availability(central_node_mid) -> bool:
     return False
 
 
-@pytest.mark.batch2_test
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-29011.feature",
