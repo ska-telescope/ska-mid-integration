@@ -69,6 +69,6 @@ depends_on:
 image:
   registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-common
   image: ska-tmc-common
-  tag: 0.27.1-dev.c87130512
+  tag: 0.27.1-dev.ca9cb3a93
   pullPolicy: "{{.Values.subarraynode.image.pullPolicy}}"
 
