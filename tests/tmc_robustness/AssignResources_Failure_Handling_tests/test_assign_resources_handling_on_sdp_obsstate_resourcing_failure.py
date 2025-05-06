@@ -197,7 +197,7 @@ def subarray_transitions_to_empty(
         ObsState.EMPTY,
     )
     event_recorder.subscribe_event(sdp_sim, "obsState")
-    assert event_recorder.has_change_evenunsubscribe_eventt_occurred(
+    assert event_recorder.has_change_event_occurred(
         sdp_sim,
         "obsState",
         ObsState.EMPTY,
