@@ -5,9 +5,9 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 ************
 ### Fixed
     * Resolved SKB-879.
-    * Fix issue with configure by updating dishleafnode and 
-    cspleafnode.
+    * Fix issue with configure by updating dishleafnode and cspleafnode.
     * Ensured required parameters are provided before starting delay model calculation
+
 ### Updated
     * Improved health state aggregation logic using rule engine.
     * Utilised Abort API instead of AbortCommands
