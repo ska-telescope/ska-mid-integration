@@ -79,7 +79,7 @@ tmc-mid:
       DelayModelTimeInAdvance: 30
   
     dishleafnode:
-      IsDishAbortEnabled: True
+      IsDishAbortEnabled: "True"
       resources:
         limits:
           memory: 3000Mi

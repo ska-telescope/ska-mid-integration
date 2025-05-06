@@ -124,7 +124,3 @@ stop-k8s-test-batch2:
   environment:
     name: test/$CI_COMMIT_REF_SLUG-batch2
     action: stop
-
-docs-build-rtd:
-  rules:
-    - when: never

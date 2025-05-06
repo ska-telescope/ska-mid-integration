@@ -5,8 +5,8 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 ************
 ### Fixed
     * Resolved SKB-837 by enabling the read of receiveAddresses before configure command
-    and utilising it if the change event of receiveAddresses is empty.This is resolved by
-    subarray node 0.32.2.
+      and utilising it if the change event of receiveAddresses is empty.This is resolved by
+      subarray node 0.32.2.
     * Fix issue with trajectory key by utilising dish leaf node tag 0.21.0.
     
 [1.0.0-rc.3]

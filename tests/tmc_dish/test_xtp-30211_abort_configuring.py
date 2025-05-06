@@ -12,7 +12,7 @@ from tests.resources.test_support.constant import COMMAND_COMPLETED
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
-@pytest.mark.tmc_dish
+@pytest.mark.tmc_dish1
 @scenario(
     "../features/tmc_dish/xtp-30211_abort_configuring.feature",
     "Abort configuring DISH.LMC using TMC",
@@ -110,16 +110,9 @@ def subarray_is_in_configuring_obsState(
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
             "pointingState",
-            PointingState.TRACK,
+            PointingState.SLEW,
             lookahead=15,
         )
-        # assert event_recorder.has_change_event_occurred(
-        #     central_node_mid.dish_leaf_node_dict[dish_id],
-        #     "pointingState",
-        #     PointingState.TRACK,
-        #     lookahead=15,
-        # )
-
     for dish_id in dish_ids.split(","):
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],

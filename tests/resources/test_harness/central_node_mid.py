@@ -494,7 +494,8 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             ]:
                 mock_device.SetDirectHealthState(HealthState.UNKNOWN)
             for mock_device in self.dish_master_list:
-                mock_device.SetDirectHealthState(HealthState.UNKNOWN)
+                if mock_device.healthstate != HealthState.UNKNOWN:
+                    mock_device.SetDirectHealthState(HealthState.UNKNOWN)
         else:
             LOGGER.info("No devices to reset healthState")
 
