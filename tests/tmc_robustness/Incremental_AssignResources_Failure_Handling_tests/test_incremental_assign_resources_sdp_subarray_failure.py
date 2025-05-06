@@ -79,7 +79,7 @@ def given_assign_resources_executed_on_tmc_subarray(
     command_input_factory,
 ):
     event_recorder.subscribe_event(
-        central_node_mid.central_node, "longRunningCommandResult"
+        central_node_mid.central_node, "longRunningCommandResult", timeout=130
     )
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
@@ -131,6 +131,11 @@ def given_tmc_subarray_incremental_assign_resources_is_in_progress(
         central_node_mid.subarray_node,
         "obsState",
         ObsState.RESOURCING,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (unique_id[0], Anything),
     )
 
 
