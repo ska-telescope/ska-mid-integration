@@ -7,6 +7,8 @@ tag_description=
     * Fix issue with configure by updating dishleafnode and 
     cspleafnode.
     * Improved health state aggregation logic using rule engine
+    * Utilised Abort API instead of AbortCommands
+    * Ensured required parameters are provided before starting delay model calculation
 
 release_notes=
 **Charts:**
@@ -15,3 +17,5 @@ release_notes=
     * Fix issue with configure by updating dishleafnode and 
     cspleafnode.
     * Improved health state aggregation logic using rule engine
+    * Utilised Abort API instead of AbortCommands
+    * Ensured required parameters are provided before starting delay model calculation
