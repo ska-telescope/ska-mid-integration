@@ -86,9 +86,9 @@ k8s-test:
     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA"
     DISH_SIMULATION_ENABLED: "true"
     SUBARRAY_COUNT: 2
-    COUNT: 60
+    COUNT: 1
     KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA'
-    ADDMARK: "and batch1 and scan"
+    ADDMARK: "and batch1"
 
   before_script:
     - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT

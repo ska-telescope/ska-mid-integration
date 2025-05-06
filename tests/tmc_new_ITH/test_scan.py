@@ -1,4 +1,4 @@
-"""Verify bug SKB-879
+"""Verifies scan functionality
 """
 
 import pytest
@@ -59,14 +59,13 @@ def _setup_event_subscriptions(
     )
 
 
-@pytest.mark.scan
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/scan.feature",
-    "Scan",
+    "Test scan command",
 )
-def test_verify_879():
+def test_verify_scan_command():
     """Test Scan comannd."""
 
 
