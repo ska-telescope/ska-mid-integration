@@ -25,7 +25,7 @@ k8s-test-dish-lmc:
     - make k8s-install-chart
     - make k8s-wait
   script:
-    - make k8s-test MARK=tmc_dish1
+    - make k8s-test MARK=tmc_dish
   needs:
     - dish-lmc-dish001
     - dish-lmc-dish036
