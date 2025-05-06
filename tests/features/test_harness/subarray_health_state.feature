@@ -25,8 +25,8 @@ Examples:
 		    | Devices                                                 | Device_Health_State                      | Subarray_Health_State |   
 		    | dish master 1                                           | FAILED                                   |  DEGRADED             | #Row 17
 		    | dish master 2                                           | DEGRADED                                 |  DEGRADED             | #Row 18
-		    | csp subarray,sdp subarray,dish master 1,dish master 2   | DEGRADED,DEGRADED,DEGRADED,DEGRADED      |  DEGRADED             | #Row 19
-		    | sdp subarray,dish master 1,dish master 2                | DEGRADED,DEGRADED,DEGRADED               |  DEGRADED             | #Row 20
+		    | csp subarray,sdp subarray,dish master 1,dish master 2   | DEGRADED,DEGRADED,DEGRADED,DEGRADED      |  FAILED               | #Row 19 
+		    | sdp subarray,dish master 1,dish master 2                | DEGRADED,DEGRADED,DEGRADED               |  FAILED               | #Row 20
 		    | csp subarray,sdp subarray,dish master 1                 | DEGRADED,UNKNOWN,UNKNOWN                 |  DEGRADED             | 
 		    | dish master 1,dish master 2                             | FAILED,FAILED                            |  FAILED               | #Row 5
 		    | csp subarray,sdp subarray,dish master 1,dish master 2   | FAILED,FAILED,FAILED,FAILED              |  FAILED               | #Row 6
