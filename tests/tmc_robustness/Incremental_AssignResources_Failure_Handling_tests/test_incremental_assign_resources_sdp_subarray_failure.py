@@ -79,7 +79,7 @@ def given_assign_resources_executed_on_tmc_subarray(
     command_input_factory,
 ):
     event_recorder.subscribe_event(
-        central_node_mid.central_node, "longRunningCommandResult"
+        central_node_mid.central_node, "longRunningCommandResult", timeout=130
     )
 
     assign_input_json = prepare_json_args_for_centralnode_commands(

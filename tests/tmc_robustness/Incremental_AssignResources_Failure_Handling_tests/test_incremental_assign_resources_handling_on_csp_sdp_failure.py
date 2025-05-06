@@ -17,6 +17,20 @@ from tests.resources.test_support.constant import (
     COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE,
 )
 
+TIMEOUT = 100
+
+
+def _wait_for_availability(central_node_mid) -> bool:
+    start_time = time.time()
+    while time.time() - start_time <= TIMEOUT:
+        telescopeavailability = (
+            central_node_mid.central_node.telescopeAvailability
+        )
+        telescopeavailability = json.loads(telescopeavailability)
+        if all(telescopeavailability["tmc_subarrays"].values()):
+            return True
+    return False
+
 
 @pytest.mark.batch2
 @pytest.mark.SKA_mid
@@ -244,10 +258,11 @@ def assign_resources_executed_on_subarray(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-
+    assert _wait_for_availability(central_node_mid)
     _, unique_id = central_node_mid.perform_action(
         "AssignResources", assign_input_json
     )
+
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_node,
         "obsState",
