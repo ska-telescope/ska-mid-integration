@@ -58,6 +58,7 @@ def _setup_event_subscriptions(
         event_enum_mapping={"obsState": ObsState},
     )
 
+
 @pytest.mark.scan
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
