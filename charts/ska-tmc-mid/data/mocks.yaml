@@ -67,8 +67,8 @@ server:
 depends_on:
   - device: sys/database/2
 image:
-  registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-common
-  image: ska-tmc-common
-  tag: 0.27.1-dev.ca9cb3a93
-  pullPolicy: "{{.Values.subarraynode.image.pullPolicy}}"
+  registry: "{{.Values.sdpleafnodes.image.registry}}"
+  image: "{{.Values.sdpleafnodes.image.image}}"
+  tag: "{{.Values.sdpleafnodes.image.tag}}"
+  pullPolicy: "{{.Values.sdpleafnodes.image.pullPolicy}}"
 
