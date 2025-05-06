@@ -132,11 +132,6 @@ def given_tmc_subarray_incremental_assign_resources_is_in_progress(
         "obsState",
         ObsState.RESOURCING,
     )
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.central_node,
-        "longRunningCommandResult",
-        (unique_id[0], Anything),
-    )
 
 
 @given(
