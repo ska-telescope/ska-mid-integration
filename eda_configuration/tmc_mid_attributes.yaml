@@ -3,7 +3,7 @@ manager: mid-eda/cm/01
 archiver: mid-eda/es/01
 
 configuration:
-  - class: CentralNodeMid
+  - class: MidTmcCentralNode
     attributes:
       state:
         code_push_event: true
@@ -29,7 +29,7 @@ configuration:
       isSubarrayAvailable:
         code_push_event: true
 
-  - class: CspMasterLeafNodeMid
+  - class: MidTmcLeafNodeCspControl
     attributes:
       state:
         code_push_event: true
@@ -38,7 +38,7 @@ configuration:
       isSubsystemAvailable:
         code_push_event: true
 
-  - class: CspSubarrayLeafNodeMid
+  - class: MidTmcLeafNodeCspSubarray
     attributes:
       state:
         code_push_event: true
@@ -51,7 +51,7 @@ configuration:
       cspSubarrayObsState:
         code_push_event: true
 
-  - class: SdpMasterLeafNode
+  - class: MidTmcLeafNodeSdp
     attributes:
       state:
         code_push_event: true
@@ -72,7 +72,7 @@ configuration:
       sdpSubarrayObsState:
         code_push_event: true
 
-  - class: DishLeafNode
+  - class: MidTmcLeafNodeDish
     attributes:
       state:
         code_push_event: true
