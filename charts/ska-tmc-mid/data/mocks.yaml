@@ -71,5 +71,3 @@ image:
   image: "{{.Values.sdpleafnodes.image.image}}"
   tag: "{{.Values.sdpleafnodes.image.tag}}"
   pullPolicy: "{{.Values.sdpleafnodes.image.pullPolicy}}"
-
-

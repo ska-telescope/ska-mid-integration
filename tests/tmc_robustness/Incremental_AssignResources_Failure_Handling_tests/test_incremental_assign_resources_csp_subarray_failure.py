@@ -234,8 +234,32 @@ def subarray_transitions_to_aborted(
         "I issue the Restart command on TMC SubarrayNode {subarray_id}"
     )
 )
-def send_command_restart(central_node_mid):
-    central_node_mid.subarray_node.Restart()
+def send_command_restart(central_node_mid, event_recorder, simulator_factory):
+    csp_sim, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
+    event_recorder.subscribe_event(csp_sim, "obsState")
+    event_recorder.subscribe_event(sdp_sim, "obsState")
+    event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
+    event_recorder.subscribe_event(
+        central_node_mid.subarray_node, "longRunningCommandResult"
+    )
+    _, pytest.unique_id = central_node_mid.subarray_node.Restart()
+    assert event_recorder.has_change_event_occurred(
+        csp_sim,
+        "obsState",
+        ObsState.RESTARTING,
+    )
+
+    assert event_recorder.has_change_event_occurred(
+        sdp_sim,
+        "obsState",
+        ObsState.RESTARTING,
+    )
+
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.subarray_node,
+        "obsState",
+        ObsState.RESTARTING,
+    )
 
 
 @then(
@@ -248,23 +272,30 @@ def subarray_transitions_to_empty(
     central_node_mid, simulator_factory, event_recorder
 ):
     csp_sim, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
-    event_recorder.subscribe_event(csp_sim, "obsState")
     assert event_recorder.has_change_event_occurred(
         csp_sim,
         "obsState",
         ObsState.EMPTY,
     )
-    event_recorder.subscribe_event(sdp_sim, "obsState")
+
     assert event_recorder.has_change_event_occurred(
         sdp_sim,
         "obsState",
         ObsState.EMPTY,
     )
-    event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
+
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_node,
         "obsState",
         ObsState.EMPTY,
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.subarray_node,
+        "longRunningCommandResult",
+        (
+            pytest.unique_id[0],
+            json.dumps([ResultCode.OK, "Command Completed"]),
+        ),
     )
     event_recorder.clear_events()
 
