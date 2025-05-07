@@ -75,7 +75,7 @@ def given_assign_resources_executed_on_tmc_subarray(
 ):
     event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
     event_recorder.subscribe_event(
-        central_node_mid.central_node, "longRunningCommandResult"
+        central_node_mid.central_node, "longRunningCommandResult", timeout=150
     )
     assign_input_json = prepare_json_args_for_centralnode_commands(
         input_json1, command_input_factory
