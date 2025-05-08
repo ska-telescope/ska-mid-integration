@@ -14,6 +14,7 @@ class TestSubarrayNodeAbortCommandObsStateTransitions(object):
             "READY",
             "RESOURCING",
             "IDLE",
+            "CONFIGURING",
             "SCANNING",
         ],
     )

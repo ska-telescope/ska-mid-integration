@@ -120,12 +120,6 @@ def subarray_is_in_ready_obsState(
             PointingState.TRACK,
             lookahead=15,
         )
-        # assert event_recorder.has_change_event_occurred(
-        #     central_node_mid.dish_leaf_node_dict[dish_id],
-        #     "pointingState",
-        #     PointingState.TRACK,
-        #     lookahead=15,
-        # )
 
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"

@@ -74,8 +74,9 @@ class Waiter:
                         attribute_name, changed_to=state_name
                     )
                 )
-                LOGGER.info("Dish Master check is done")
-                LOGGER.info("Wait will be skipped only for Track  ")
+
+                # PoinitngState Event will not come if command is complete
+                # Hence this assertion is skipped.
                 if attribute_name not in ["pointingState"]:
                     self.waits.append(
                         watch(

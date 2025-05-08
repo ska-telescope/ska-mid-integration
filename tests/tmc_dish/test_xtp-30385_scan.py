@@ -176,18 +176,6 @@ def check_dish_mode_and_pointing_state(
             PointingState.TRACK,
         )
 
-        # assert_that(event_tracer).described_as(
-        #     'FAILED ASSUMPTION IN "GIVEN" STEP: '
-        #     "'the DishLeafNode must be in the TRACK pointingState'"
-        #     "dish device"
-        #     f"({central_node_mid.dish_leaf_node_dict[dish_id].dev_name()}) "
-        #     "is expected to be in TRACK pointingState",
-        # ).within_timeout(60).has_change_event_occurred(
-        #     central_node_mid.dish_leaf_node_dict[dish_id],
-        #     "pointingState",
-        #     PointingState.TRACK,
-        # )
-
     event_tracer.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
@@ -308,10 +296,7 @@ def check_dish_mode_and_pointing_state_after_scan(
             central_node_mid.dish_master_dict[dish_id].pointingState
             == PointingState.TRACK
         )
-        # assert (
-        #     central_node_mid.dish_leaf_node_dict[dish_id].pointingState
-        #     == PointingState.TRACK
-        # )
+
         assert check_long_running_command_status(
             central_node_mid.dish_master_dict[dish_id],
             "longRunningCommandStatus",
