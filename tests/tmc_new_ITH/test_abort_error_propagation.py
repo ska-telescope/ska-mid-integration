@@ -1,8 +1,6 @@
 """
 Test for Abort() error propagation verification
 """
-import json
-
 import pytest
 from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
@@ -13,22 +11,12 @@ from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_integration_test_harness.inputs.test_harness_inputs import (
     TestHarnessInputs,
 )
-from ska_tango_base.commands import ResultCode
 from ska_tango_testing.integration import TangoEventTracer, log_events
-from ska_tmc_common import FaultType
 
+from tests.resources.test_support.constant import ERROR_PROPAGATION_DEFECT
 from tests.tmc_csp_new_ITH.conftest import (
     ASSERTIONS_TIMEOUT,
     SubarrayTestContextData,
-)
-
-ERROR_PROPAGATION_DEFECT = json.dumps(
-    {
-        "enabled": True,
-        "fault_type": FaultType.LONG_RUNNING_EXCEPTION,
-        "error_message": "Exception occured, command failed.",
-        "result": ResultCode.FAILED,
-    }
 )
 
 
