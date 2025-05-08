@@ -190,7 +190,7 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
     assertion_data = event_recorder.has_change_event_occurred(
         central_node_mid.subarray_node,
         "longRunningCommandResult",
-        (pytest.command_result[1][0], Anything),
+        Anything,
         lookahead=15,
     )
     exception_message = (
