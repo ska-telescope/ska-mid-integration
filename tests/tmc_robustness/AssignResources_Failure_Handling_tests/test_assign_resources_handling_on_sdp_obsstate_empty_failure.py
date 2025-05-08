@@ -175,6 +175,9 @@ def csp_subarray_transitions_to_empty(simulator_factory, event_recorder):
 )
 def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
     event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
+    event_recorder.subscribe_event(
+        central_node_mid.subarray_node, "longRunningCommandResult"
+    )
     wait_for_obsstate_state_change(
         target_mode=0, device=central_node_mid.subarray_node, timeout_seconds=5
     )
