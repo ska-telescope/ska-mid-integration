@@ -38,6 +38,12 @@ def _setup_event_subscriptions(
     event_tracer.subscribe_event(sdp.sdp_subarray, "obsState")
     event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
     event_tracer.subscribe_event(tmc.subarray_node, "longRunningCommandResult")
+    event_tracer.subscribe_event(
+        tmc.csp_subarray_leaf_node, "longRunningCommandResult"
+    )
+    event_tracer.subscribe_event(
+        tmc.sdp_subarray_leaf_node, "longRunningCommandResult"
+    )
 
     log_events(
         {
@@ -45,15 +51,15 @@ def _setup_event_subscriptions(
                 "obsState",
                 "longRunningCommandResult",
             ],
-            csp.csp_subarray: ["obsState"],
-            sdp.sdp_subarray: ["obsState"],
+            csp.csp_subarray: ["obsState", "longRunningCommandResult"],
+            sdp.sdp_subarray: ["obsState", "longRunningCommandResult"],
             tmc.central_node: ["longRunningCommandResult"],
         },
         event_enum_mapping={"obsState": ObsState},
     )
 
 
-@pytest.mark.batch1
+@pytest.mark.batch3
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/abort_error_propagation.feature",
