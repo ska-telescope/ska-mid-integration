@@ -19,6 +19,7 @@ from tests.resources.test_support.constant import (
 )
 
 
+@pytest.mark.repeat(10)
 @pytest.mark.batch1
 @pytest.mark.SKA_mid12
 @scenario(
