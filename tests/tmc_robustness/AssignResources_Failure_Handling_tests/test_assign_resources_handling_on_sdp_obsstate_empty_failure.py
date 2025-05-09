@@ -204,6 +204,8 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
         in json.loads(assertion_data["attribute_value"][1])[1]
     )
 
+    event_recorder.clear_events()
+
 
 @then(
     parsers.parse(
