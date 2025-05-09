@@ -145,7 +145,7 @@ def verify_error_message(
         "TMC Subarray Node device"
         f"({tmc.subarray_node.dev_name()}) "
         "is expected have longRunningCommandResult as"
-        '(unique_id, COMMAND_RESULT)',
+        "(unique_id, COMMAND_RESULT)",
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         tmc.subarray_node,
         "longRunningCommandResult",
