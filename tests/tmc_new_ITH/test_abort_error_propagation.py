@@ -1,6 +1,8 @@
 """
 Test for Abort() error propagation verification
 """
+import logging
+
 import pytest
 from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
@@ -11,6 +13,7 @@ from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_integration_test_harness.inputs.test_harness_inputs import (
     TestHarnessInputs,
 )
+from ska_ser_logging import configure_logging
 from ska_tango_testing.integration import TangoEventTracer, log_events
 
 from tests.resources.test_support.constant import ERROR_PROPAGATION_DEFECT
@@ -18,6 +21,12 @@ from tests.tmc_csp_new_ITH.conftest import (
     ASSERTIONS_TIMEOUT,
     SubarrayTestContextData,
 )
+
+configure_logging(logging.DEBUG)
+LOGGER = logging.getLogger(__name__)
+
+COMMAND_RESULT = '[3, "Exception occurred on the following devices:'
+' mid-tmc/subarray-leaf-node-csp/01: Exception occurred, command failed."]'
 
 
 def _setup_event_subscriptions(
@@ -111,6 +120,7 @@ def send_abort_command(
     csp.csp_subarray.SetDefective(ERROR_PROPAGATION_DEFECT)
     context_fixt.when_action_name = command
     context_fixt.when_action_result = tmc.abort()
+    LOGGER.info("Result: %s", context_fixt.when_action_result)
 
 
 @then(("the command failure is reported by subarray with error message"))
@@ -131,30 +141,17 @@ def verify_error_message(
     updates the starting state in the context fixture for subsequent steps.
     """
     assert_that(event_tracer).described_as(
-        f"Both TMC Subarray Node device ({tmc.subarray_node})"
-        f", CSP Subarray device ({csp.csp_subarray}) "
-        f"and SDP Subarray device ({sdp.sdp_subarray}) "
-        "ObsState attribute values should move "
-        f"from {str(context_fixt.starting_state)} to SCANNING."
-    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        'FAILED ASSUMPTION IN "THEN" STEP: '
+        "'the subarray is in ABORTING obsState'"
+        "TMC Subarray Node device"
+        f"({tmc.subarray_node.dev_name()}) "
+        "is expected have longRunningCommand as"
+        '(unique_id,(ResultCode.OK,"Command Completed"))',
+    ).within_timeout(60).has_change_event_occurred(
         tmc.subarray_node,
-        "obsState",
-        ObsState.SCANNING,
-        previous_value=context_fixt.starting_state,
-    ).has_change_event_occurred(
-        csp.csp_subarray,
-        "obsState",
-        ObsState.SCANNING,
-        previous_value=context_fixt.starting_state,
-    ).has_change_event_occurred(
-        sdp.sdp_subarray,
-        "obsState",
-        ObsState.SCANNING,
-        previous_value=context_fixt.starting_state,
+        "longRunningCommandResult",
+        (context_fixt.when_action_result[0], COMMAND_RESULT),
     )
-
-    # override the starting state for the next step
-    context_fixt.starting_state = ObsState.SCANNING
 
 
 @then(parsers.parse("the TMC SubarrayNode remains in {stuck} obsState"))
