@@ -1,4 +1,5 @@
 import json
+import time
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -203,6 +204,24 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
     assert (
         exception_message
         in json.loads(assertion_data["attribute_value"][1])[1]
+    )
+
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "lastDeviceInfoChanged"
+    )
+
+    import logging
+
+    LOGGER = logging.getLogger(__name__)
+
+    LOGGER.info(
+        "lastDeviceInfoChanged - %s",
+        central_node_mid.central_node.lastDeviceInfoChanged.value,
+    )
+    time.sleep(30)
+    LOGGER.info(
+        "lastDeviceInfoChanged - %s",
+        central_node_mid.central_node.lastDeviceInfoChanged.value,
     )
 
     event_recorder.clear_events()
