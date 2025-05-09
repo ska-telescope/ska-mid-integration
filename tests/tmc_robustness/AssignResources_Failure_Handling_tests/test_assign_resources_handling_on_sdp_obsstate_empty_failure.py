@@ -19,9 +19,8 @@ from tests.resources.test_support.constant import (
 )
 
 
-@pytest.mark.repeat(10)
 @pytest.mark.batch1
-@pytest.mark.SKA_mid12
+@pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-28338.feature",
     "TMC behavior when SDP Subarray AssignResources raises exception",
@@ -141,6 +140,8 @@ def given_tmc_subarray_stuck_resourcing(
     )
     assert central_node_mid.subarray_node.obsState == ObsState.RESOURCING
 
+    event_recorder.clear_events()
+
 
 @when(
     parsers.parse(
@@ -199,8 +200,6 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
         exception_message
         in json.loads(assertion_data["attribute_value"][1])[1]
     )
-
-    event_recorder.clear_events()
 
 
 @then(
