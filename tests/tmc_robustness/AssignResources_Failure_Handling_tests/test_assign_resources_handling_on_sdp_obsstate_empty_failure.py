@@ -220,7 +220,7 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
     )
 
     assertion_data = event_recorder.has_change_event_occurred(
-        central_node_mid.subarray_node, "lastDeviceInfoChanged", Anything
+        central_node_mid.central_node, "lastDeviceInfoChanged", Anything
     )
 
     LOGGER.info("assertion_data - %s", assertion_data)
