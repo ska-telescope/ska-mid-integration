@@ -119,7 +119,7 @@ def send_abort_command(
     """
     csp.csp_subarray.SetDefective(ERROR_PROPAGATION_DEFECT)
     context_fixt.when_action_name = command
-    context_fixt.when_action_result = tmc.abort()
+    _, pytest.unique_id = tmc.subarray_node.Abort()
     LOGGER.info("Result: %s", context_fixt.when_action_result)
 
 
@@ -150,7 +150,7 @@ def verify_error_message(
     ).within_timeout(60).has_change_event_occurred(
         tmc.subarray_node,
         "longRunningCommandResult",
-        (context_fixt.when_action_result[0], COMMAND_RESULT),
+        (pytest.unique_id[0], COMMAND_RESULT),
     )
 
 
