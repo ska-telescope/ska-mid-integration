@@ -20,7 +20,7 @@ from tests.resources.test_support.constant import (
 
 
 @pytest.mark.batch1
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 @scenario(
     "../features/xtp-28338.feature",
     "TMC behavior when SDP Subarray AssignResources raises exception",
