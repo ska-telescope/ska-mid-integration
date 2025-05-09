@@ -238,7 +238,7 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
     #     ObsState.EMPTY in json.loads(assertion_data["attribute_value"][1])[1]
     # )
 
-    wait_for_DeviceInfo_change(
+    assert wait_for_DeviceInfo_change(
         target_mode=0, device=central_node_mid.central_node, timeout_seconds=30
     )
     # assert ObsState.EMPTY in json.loads(assertion_data["attribute_value"])

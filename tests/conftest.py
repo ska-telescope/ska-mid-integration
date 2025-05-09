@@ -275,8 +275,8 @@ def wait_for_DeviceInfo_change(
         attribute_value = json.loads(device.lastDeviceInfoChanged)
         LOGGER.info("attribute_value - %s", attribute_value)
 
-        if ObsState.EMPTY in attribute_value:
-
+        if attribute_value["obsState"] == "ObsState.EMPTY":
+            LOGGER.info("Match Found")
             return True
         time.sleep(1)
 
