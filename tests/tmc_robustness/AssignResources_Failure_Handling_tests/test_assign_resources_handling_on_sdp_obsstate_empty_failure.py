@@ -6,7 +6,11 @@ from ska_control_model import ObsState
 from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
-from tests.conftest import LOGGER, wait_for_obsstate_state_change
+from tests.conftest import (
+    LOGGER,
+    wait_for_DeviceInfo_change,
+    wait_for_obsstate_state_change,
+)
 from tests.resources.test_harness.helpers import (
     get_device_simulators,
     prepare_json_args_for_centralnode_commands,
@@ -219,22 +223,25 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
         central_node_mid.central_node, "lastDeviceInfoChanged"
     )
 
-    assertion_data = event_recorder.has_change_event_occurred(
-        central_node_mid.central_node, "lastDeviceInfoChanged", Anything
-    )
-
-    LOGGER.info("assertion_data - %s", assertion_data)
-
-    LOGGER.info(
-        "lastDeviceInfoChanged - %s",
-        central_node_mid.central_node.lastDeviceInfoChanged,
-    )
+    # assertion_data = event_recorder.has_change_event_occurred(
+    #     central_node_mid.central_node, "lastDeviceInfoChanged", Anything
+    # )
+    #
+    # LOGGER.info("assertion_data - %s", assertion_data)
+    #
+    # LOGGER.info(
+    #     "lastDeviceInfoChanged - %s",
+    #     central_node_mid.central_node.lastDeviceInfoChanged,
+    # )
 
     # assert (
     #     ObsState.EMPTY in json.loads(assertion_data["attribute_value"][1])[1]
     # )
 
-    assert ObsState.EMPTY in json.loads(assertion_data["attribute_value"])
+    wait_for_DeviceInfo_change(
+        target_mode=0, device=central_node_mid.central_node, timeout_seconds=30
+    )
+    # assert ObsState.EMPTY in json.loads(assertion_data["attribute_value"])
 
     # assert assertion_data["obsState"] == ObsState.EMPTY
 

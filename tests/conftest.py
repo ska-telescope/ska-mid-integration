@@ -264,6 +264,25 @@ def wait_for_obsstate_state_change(
     return False
 
 
+def wait_for_DeviceInfo_change(
+    target_mode: int, device: str, timeout_seconds: int
+):
+    """Returns True if the pointingState is changed to a expected value"""
+    start_time = time.time()
+
+    while time.time() - start_time < timeout_seconds:
+
+        attribute_value = json.loads(device.lastDeviceInfoChanged)
+        LOGGER.info("attribute_value - %s", attribute_value)
+
+        if ObsState.EMPTY in attribute_value:
+
+            return True
+        time.sleep(1)
+
+    return False
+
+
 @pytest.fixture
 def shared_context():
     """
