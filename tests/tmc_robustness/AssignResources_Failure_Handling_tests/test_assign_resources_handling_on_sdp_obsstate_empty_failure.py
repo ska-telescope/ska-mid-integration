@@ -99,6 +99,10 @@ def given_tmc_subarray_assign_resources_is_in_progress(
         "obsState",
         ObsState.RESOURCING,
     )
+    LOGGER.info(
+        "lastDeviceInfoChanged - %s",
+        central_node_mid.central_node.lastDeviceInfoChanged,
+    )
 
 
 @given(parsers.parse("Csp Subarray {subarray_id} completes assignResources"))
@@ -142,6 +146,10 @@ def given_tmc_subarray_stuck_resourcing(
     )
     assert central_node_mid.subarray_node.obsState == ObsState.RESOURCING
 
+    LOGGER.info(
+        "lastDeviceInfoChanged - %s",
+        central_node_mid.central_node.lastDeviceInfoChanged,
+    )
     event_recorder.clear_events()
 
 
@@ -209,10 +217,6 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
     event_recorder.subscribe_event(
         central_node_mid.central_node, "lastDeviceInfoChanged"
     )
-
-    import logging
-
-    LOGGER = logging.getLogger(__name__)
 
     LOGGER.info(
         "lastDeviceInfoChanged - %s",
