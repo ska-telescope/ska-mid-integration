@@ -216,12 +216,12 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
 
     LOGGER.info(
         "lastDeviceInfoChanged - %s",
-        central_node_mid.central_node.lastDeviceInfoChanged.value,
+        central_node_mid.central_node.lastDeviceInfoChanged,
     )
     time.sleep(30)
     LOGGER.info(
         "lastDeviceInfoChanged - %s",
-        central_node_mid.central_node.lastDeviceInfoChanged.value,
+        central_node_mid.central_node.lastDeviceInfoChanged,
     )
 
     event_recorder.clear_events()
