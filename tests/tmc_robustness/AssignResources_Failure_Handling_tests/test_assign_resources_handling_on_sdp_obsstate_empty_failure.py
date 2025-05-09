@@ -1,5 +1,4 @@
 import json
-import time
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -18,6 +17,8 @@ from tests.resources.test_support.constant import (
     SDP_BACK_TO_INITIAL_STATE,
     tmc_sdp_subarray_leaf_node,
 )
+
+# import time
 
 
 @pytest.mark.repeat(10)
@@ -218,15 +219,30 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
         central_node_mid.central_node, "lastDeviceInfoChanged"
     )
 
+    assertion_data = event_recorder.has_change_event_occurred(
+        central_node_mid.subarray_node, "lastDeviceInfoChanged", Anything
+    )
+
+    LOGGER.info("assertion_data - %s", assertion_data)
+
     LOGGER.info(
         "lastDeviceInfoChanged - %s",
         central_node_mid.central_node.lastDeviceInfoChanged,
     )
-    time.sleep(30)
-    LOGGER.info(
-        "lastDeviceInfoChanged - %s",
-        central_node_mid.central_node.lastDeviceInfoChanged,
+
+    assert (
+        ObsState.EMPTY in json.loads(assertion_data["attribute_value"][1])[1]
     )
+
+    # LOGGER.info(
+    #     "lastDeviceInfoChanged - %s",
+    #     central_node_mid.central_node.lastDeviceInfoChanged,
+    # )
+    # time.sleep(30)
+    # LOGGER.info(
+    #     "lastDeviceInfoChanged - %s",
+    #     central_node_mid.central_node.lastDeviceInfoChanged,
+    # )
 
     event_recorder.clear_events()
 
