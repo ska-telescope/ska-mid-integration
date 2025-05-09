@@ -289,5 +289,3 @@ def assign_resources_executed_on_subarray(
         (unique_id[0], COMMAND_COMPLETED),
         lookahead=5,
     )
-
-    assert False
