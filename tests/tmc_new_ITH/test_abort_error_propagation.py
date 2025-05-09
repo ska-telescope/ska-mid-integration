@@ -120,7 +120,6 @@ def send_abort_command(
     csp.csp_subarray.SetDefective(ERROR_PROPAGATION_DEFECT)
     context_fixt.when_action_name = command
     _, pytest.unique_id = tmc.subarray_node.Abort()
-    LOGGER.info("Result: %s", context_fixt.when_action_result)
 
 
 @then(("the command failure is reported by subarray with error message"))
@@ -145,9 +144,9 @@ def verify_error_message(
         "'the subarray is in ABORTING obsState'"
         "TMC Subarray Node device"
         f"({tmc.subarray_node.dev_name()}) "
-        "is expected have longRunningCommand as"
-        '(unique_id,(ResultCode.OK,"Command Completed"))',
-    ).within_timeout(60).has_change_event_occurred(
+        "is expected have longRunningCommandResult as"
+        '(unique_id, COMMAND_RESULT)',
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         tmc.subarray_node,
         "longRunningCommandResult",
         (pytest.unique_id[0], COMMAND_RESULT),
