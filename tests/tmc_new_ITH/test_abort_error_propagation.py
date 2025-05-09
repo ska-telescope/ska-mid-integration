@@ -1,6 +1,7 @@
 """
 Test for Abort() error propagation verification
 """
+import json
 import logging
 
 import pytest
@@ -25,8 +26,8 @@ from tests.tmc_csp_new_ITH.conftest import (
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
-COMMAND_RESULT = '[3, "Exception occurred on the following devices:'
-' mid-tmc/subarray-leaf-node-csp/01: Exception occurred, command failed."]'
+COMMAND_RESULT = '[3, "Exception occurred on the following devices: '
+'mid-tmc/subarray-leaf-node-csp/01: Exception occurred, command failed."]'
 
 
 def _setup_event_subscriptions(
@@ -179,19 +180,21 @@ def verify_ready_state(
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         tmc.subarray_node,
         "obsState",
-        ObsState.READY,
+        ObsState.ABORTING,
         previous_value=context_fixt.starting_state,
     ).has_change_event_occurred(
         csp.csp_subarray,
         "obsState",
-        ObsState.READY,
+        ObsState.IDLE,
         previous_value=context_fixt.starting_state,
     ).has_change_event_occurred(
         sdp.sdp_subarray,
         "obsState",
-        ObsState.READY,
+        ObsState.ABORTED,
         previous_value=context_fixt.starting_state,
     )
 
+    csp.csp_subarray.SetDefective(json.dumps({"enabled": False}))
+
     # override the starting state for the next step
-    context_fixt.starting_state = ObsState.READY
+    # context_fixt.starting_state = ObsState.READY
