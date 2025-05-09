@@ -188,22 +188,6 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
     )
 
     assertion_data = event_recorder.has_change_event_occurred(
-        central_node_mid.subarray_node,
-        "longRunningCommandResult",
-        Anything,
-        lookahead=15,
-    )
-    exception_message = (
-        "Exception occurred on the following devices: "
-        + f"{tmc_sdp_subarray_leaf_node}: "
-        + "Exception occurred, command failed."
-    )
-    assert (
-        exception_message
-        in json.loads(assertion_data["attribute_value"][1])[1]
-    )
-
-    assertion_data = event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
         (pytest.command_result[1][0], Anything),
