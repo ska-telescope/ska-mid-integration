@@ -176,11 +176,11 @@ def verify_ready_state(
         f", CSP Subarray device ({csp.csp_subarray}) "
         f"and SDP Subarray device ({sdp.sdp_subarray}) "
         "ObsState attribute values should move "
-        f"from {str(context_fixt.starting_state)} to READY."
+        f"from {str(context_fixt.starting_state)} to FAULT."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         tmc.subarray_node,
         "obsState",
-        ObsState.ABORTING,
+        ObsState.FAULT,
         previous_value=context_fixt.starting_state,
     ).has_change_event_occurred(
         csp.csp_subarray,
@@ -195,6 +195,19 @@ def verify_ready_state(
     )
 
     csp.csp_subarray.SetDefective(json.dumps({"enabled": False}))
+    csp.csp_subarray.Abort()
+
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "THEN" STEP: '
+        "'the csp subarray must be in the ABORTED obsState'"
+        "CSP Subarray device"
+        f"({csp.csp_subarray.dev_name()}) "
+        "is expected to be in ABORTED obstate",
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        csp.csp_subarray,
+        "obsState",
+        ObsState.ABORTED,
+    )
 
     # override the starting state for the next step
     # context_fixt.starting_state = ObsState.READY
