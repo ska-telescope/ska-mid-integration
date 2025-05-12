@@ -75,7 +75,7 @@ class Waiter:
                     )
                 )
 
-                # PoinitngState Event will not come if command is complete
+                # PoinitngState Event will not be pushed if command is complete
                 # Hence this assertion is skipped.
                 if attribute_name not in ["pointingState"]:
                     self.waits.append(
