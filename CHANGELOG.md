@@ -1,6 +1,37 @@
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[1.0.0]
+*******
+### Fixed
+  * Resolved SKB-879.
+  * Fixed issue with configure by updating dishleafnode v0.22.2.
+  * Ensured required parameters are provided before starting delay model calculation
+  * Resolved SKB-837 by enabling the read of receiveAddresses before configure command
+      and utilising it if the change event of receiveAddresses is empty.This is resolved by
+      subarray node 0.32.2.
+  * Fix issue with trajectory key by utilising dish leaf node tag 0.21.0.
+  * Resolved the SKB-716.
+  * Resolved SKB-714, SKB-690
+### Updated
+  * Improved health state aggregation logic using rule engine.
+  * Utilised Abort API instead of AbortCommands.
+  * Updated the TRLs of TMC mid devices as per ADR-9
+    * ska_mid/tm_central/central_node - mid-tmc/central-node/0              
+    * ska_mid/tm_subarray_node/1 - mid-tmc/subarray/01            
+    * ska_mid/tm_leaf_node/csp_master - mid-tmc/leaf-node-csp/0
+    * ska_mid/tm_leaf_node/sdp_master - mid-tmc/leaf-node-sdp/0
+    * ska_mid/tm_leaf_node/csp_subarray01 - mid-tmc/subarray-leaf-node-csp/01
+    * ska_mid/tm_leaf_node/sdp_subarray01 - mid-tmc/subarray-leaf-node-sdp/01
+    * ska_mid/tm_leaf_node/d0001 - mid-tmc/leaf-node-dish/ska001
+### Added
+  * DishVccCommandStatus attribute added for central node
+  * LoadDishCfg command is rejected if DishVccCommandStatus is in STAGING or IN PROGRESS
+  * After TMC initialization is complete, the DishVccCommandStatus is updated to either COMPLETED or FAILED.
+  * Added `domain` field in values.yaml. The domain is `mid-tmc`
+  * Added `family` and `member` field in deviceServers of each controller leafnode device in values.yaml
+  * Added `family` field in deviceServers of each subarray leafnode devices in value.yaml
+
 [1.0.0-rc.5]
 ************
 ### Fixed
