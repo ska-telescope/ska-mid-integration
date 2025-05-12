@@ -36,7 +36,7 @@ dependencies:
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-tmc-simulators.enabled
   - name: ska-tango-taranta
-    version: 2.6.0
+    version: 2.13.4
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-taranta.enabled
   - name: ska-tango-tangogql
