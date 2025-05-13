@@ -17,10 +17,6 @@ from ska_integration_test_harness.inputs.test_harness_inputs import (
 from ska_ser_logging import configure_logging
 from ska_tango_testing.integration import TangoEventTracer, log_events
 
-from tests.resources.test_support.constant import (
-    ERROR_PROPAGATION_DEFECT,
-    FAILED_RESULT_DEFECT,
-)
 from tests.tmc_csp_new_ITH.conftest import (
     ASSERTIONS_TIMEOUT,
     SubarrayTestContextData,
@@ -72,15 +68,14 @@ def _setup_event_subscriptions(
     )
 
 
-@pytest.mark.batch1
+@pytest.mark.batch3
 @pytest.mark.SKA_mid
 @scenario(
-    "../tmc_new_ITH/features/error_propagation.feature",
-    "Error Propagation Reported by TMC Mid Abort command for"
-    " defective subsystem subarray",
+    "../tmc_new_ITH/features/timeout_handling.feature",
+    "Timeout reported by TMC Mid Abort command for subsystem subarray",
 )
-def test_verify_abort_error_propagation():
-    """Test for Abort command error propagation."""
+def test_verify_timeout_error_propagation():
+    """Test for Abort command timeout error propagation."""
 
 
 @given("the TMC subarray is in the IDLE observation state")
@@ -105,7 +100,7 @@ def subarray_in_idle_obsstate(
 
 @when(
     parsers.parse(
-        "Abort is invoked on a defective subsystem {defectiveSubsystem}"
+        "Abort is invoked on tmc with command timeout on {subsystem}"
     )
 )
 def send_abort_command(
@@ -113,7 +108,7 @@ def send_abort_command(
     tmc: TMCFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
-    defectiveSubsystem: str,
+    subsystem: str,
 ):
     """
     Send the Sbort command to the subarray.
@@ -121,15 +116,15 @@ def send_abort_command(
     This step uses the tmc to send an Abort command to the
     specified subarray with provided defective subsystem.
     """
-    if defectiveSubsystem == "CSP":
-        csp.csp_subarray.SetDefective(ERROR_PROPAGATION_DEFECT)
-    if defectiveSubsystem == "SDP":
-        sdp.sdp_subarray.SetDefective(FAILED_RESULT_DEFECT)
+    if subsystem == "CSP":
+        csp.csp_subarray.SetDelayInfo(json.dumps({"Abort": 135}))
+    if subsystem == "SDP":
+        sdp.sdp_subarray.SetDelayInfo(json.dumps({"Abort": 135}))
     context_fixt.when_action_name = "Abort"
     _, pytest.unique_id = tmc.subarray_node.Abort()
 
 
-@then("the TMC SubarrayNode obsstate changes to FAULT obsState")
+@then("the TMC SubarrayNode obsstate changes to FAULT obsState after timeout")
 def verify_fault_obsstate(
     tmc: TMCFacade,
     event_tracer: TangoEventTracer,
@@ -164,8 +159,8 @@ def verify_fault_obsstate(
 
 @then(
     parsers.parse(
-        "the command failure is reported by subarray with error"
-        " message with {defectiveSubsystem}"
+        "the command failure is reported by subarray with"
+        " timeout error message with {subsystem}"
     )
 )
 def verify_error_message(
@@ -176,7 +171,7 @@ def verify_error_message(
     defectiveSubsystem: str,
 ):
     """
-    Verify the subarray's reports exception on its LRCR.
+    Verify the tmc subarray reports timeout on its LRCR.
     """
     if defectiveSubsystem == "CSP":
         assert_that(event_tracer).described_as(
@@ -194,7 +189,7 @@ def verify_error_message(
 
         # tear_down as TMC is inconsistent state. Also
         # FAULT obsState is not considered in tear_down
-        csp.csp_subarray.SetDefective(json.dumps({"enabled": False}))
+        csp.csp_subarray.ResetDelayInfo()
         csp.csp_subarray.Abort()
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
@@ -223,7 +218,7 @@ def verify_error_message(
         )
         # tear_down as TMC is inconsistent state. Also
         # FAULT obsState is not considered in tear_down
-        sdp.sdp_subarray.SetDefective(json.dumps({"enabled": False}))
+        sdp.sdp_subarray.ResetDelayInfo()
         sdp.sdp_subarray.Abort()
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
