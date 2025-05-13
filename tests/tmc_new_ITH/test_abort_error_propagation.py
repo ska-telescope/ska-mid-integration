@@ -206,10 +206,10 @@ def verify_ready_state(
         'FAILED ASSUMPTION IN "THEN" STEP: '
         "'the tmc subarray must be in the ABORTING obsState' "
         "TMC Subarray device"
-        f"({tmc.tmc_subarray.dev_name()}) "
+        f"({tmc.subarray_node.dev_name()}) "
         "is expected to be in ABORTING obstate",
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        tmc.tmc_subarray,
+        tmc.subarray_node,
         "obsState",
         ObsState.ABORTING,
     )
@@ -218,10 +218,10 @@ def verify_ready_state(
         'FAILED ASSUMPTION IN "THEN" STEP: '
         "'the tmc subarray must be in the FAULT obsState' "
         "TMC Subarray device"
-        f"({tmc.tmc_subarray.dev_name()}) "
+        f"({tmc.subarray_node.dev_name()}) "
         "is expected to be in ABORTING obstate",
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        tmc.tmc_subarray,
+        tmc.subarray_node,
         "obsState",
         ObsState.FAULT,
     )
