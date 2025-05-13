@@ -27,8 +27,10 @@ from tests.tmc_csp_new_ITH.conftest import (
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
-COMMAND_RESULT = '[3, "Exception occurred on the following devices: '
-'mid-tmc/subarray-leaf-node-csp/01: Exception occurred, command failed."]'
+COMMAND_RESULT = (
+    '[3, "Exception occurred on the following devices: '
+    'mid-tmc/subarray-leaf-node-csp/01: Exception occurred, command failed."]'
+)
 
 
 def _setup_event_subscriptions(
