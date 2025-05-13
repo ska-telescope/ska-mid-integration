@@ -75,9 +75,9 @@ def _setup_event_subscriptions(
 @pytest.mark.batch3
 @pytest.mark.SKA_mid
 @scenario(
-    "../tmc_new_ITH/features/abort_error_propagation.feature",
-    "Error Propagation Reported by TMC Mid Abort and Restart Commands for"
-    " Defective Subarray",
+    "../tmc_new_ITH/features/error_propagation.feature",
+    "Error Propagation Reported by TMC Mid Abort commands for"
+    " defective subsystem subarray",
 )
 def test_verify_abort_error_propagation():
     """Test for Abort command error propagation."""
@@ -105,7 +105,7 @@ def subarray_in_idle_obsstate(
 
 @when(
     parsers.parse(
-        "Abort is invoked on a defectiveSubsystem {defectiveSubsystem}"
+        "Abort is invoked on a defective subsystem {defectiveSubsystem}"
     )
 )
 def send_abort_command(
@@ -133,7 +133,7 @@ def send_abort_command(
 
 
 @then("the TMC SubarrayNode obsstate changes to FAULT obsState")
-def verify_ready_state(
+def verify_fault_obsstate(
     tmc: TMCFacade,
     event_tracer: TangoEventTracer,
 ):
