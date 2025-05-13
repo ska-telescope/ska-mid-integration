@@ -180,15 +180,17 @@ class EventRecorder(object):
             f"Attribute {callable_name} is not subscribed"
         )
 
-    def has_change_event_occurred_for_DeviceInfo(
+    def has_change_event_occurred_for_dictdata(
         self,
         device: DeviceProxy,
         attribute_name: str,
         attribute_values: list[Any],
         lookahead: int = 7,
     ) -> bool:
-        """Validate if a change event occurred for one of the given values. Is
-        an extention of has_change_event_occurred."""
+        """Validate if a change event occurred for one of the given values
+        for data which is in Dictionary format.
+        Is an extension of has_change_event_occurred."""
+
         callable_name = self._generate_callable_name(device, attribute_name)
         change_event_callback = self.subscribed_events.get(callable_name, None)
         if change_event_callback:
@@ -196,39 +198,22 @@ class EventRecorder(object):
                 assertion_data = change_event_callback[
                     callable_name
                 ].assert_change_event(Anything)
-                LOGGER.info(
+                LOGGER.debug(
                     "Received event for attribute: %s with assertion data: %s",
                     attribute_name,
                     assertion_data,
                 )
-                LOGGER.info(f"{assertion_data['arg0'].attr_value.name}")
 
                 if (
                     assertion_data["arg0"].attr_value.name.lower()
                     == attribute_name.lower()
                 ):
 
-                    value = assertion_data["arg0"].attr_value.value
-                    data = json.loads(value)
-                    LOGGER.info(f"data - {data}")
+                    data = json.loads(assertion_data["arg0"].attr_value.value)
+                    if data.get(attribute_name) in attribute_values:
 
-                    # if data.get("obsState") == "ObsState.EMPTY":
-                    #     LOGGER.info("obsState is EMPTY")
-                    #     return True
-                    # else:
-                    #     LOGGER.info("obsState has a different value")
-
-                    if data.get("obsState") in attribute_values:
-                        LOGGER.info(f"obsState {data.get('obsState')}")
                         return True
-                    else:
-                        LOGGER.info("obsState has a different value")
 
-                    # if (
-                    #     assertion_data["arg0"].attr_value.value
-                    #     in attribute_values
-                    # ):
-                    #     return True
                     continue
             return False
         raise AttributeNotSubscribed(

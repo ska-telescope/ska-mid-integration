@@ -219,22 +219,12 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
         central_node_mid.central_node, "lastDeviceInfoChanged"
     )
 
-    # assertion_data = event_recorder.has_change_event_occurred_for_given_info(
-    #     central_node_mid.central_node,
-    #     "lastDeviceInfoChanged",
-    #     (pytest.command_result[1][0], Anything),
-    #     lookahead=15,
-    # )
-
-    assert event_recorder.has_change_event_occurred_for_DeviceInfo(
+    assert event_recorder.has_change_event_occurred_for_dictdata(
         central_node_mid.central_node,
         "lastDeviceInfoChanged",
         ["ObsState.EMPTY"],
     )
 
-    # assert wait_for_DeviceInfo_change(
-    #     device=central_node_mid.central_node, timeout_seconds=30
-    # )
     event_recorder.clear_events()
 
 
