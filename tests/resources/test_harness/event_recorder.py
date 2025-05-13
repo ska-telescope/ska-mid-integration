@@ -208,7 +208,8 @@ class EventRecorder(object):
                     == attribute_name.lower()
                 ):
 
-                    data = json.loads(["arg0"].attr_value.value)
+                    value = assertion_data["arg0"].attr_value.value
+                    data = json.loads(value)
                     LOGGER.info(f"data - {data}")
 
                     if data.get("obsState") == "ObsState.EMPTY":
