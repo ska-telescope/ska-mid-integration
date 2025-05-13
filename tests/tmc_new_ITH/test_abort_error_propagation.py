@@ -76,7 +76,7 @@ def _setup_event_subscriptions(
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/error_propagation.feature",
-    "Error Propagation Reported by TMC Mid Abort commands for"
+    "Error Propagation Reported by TMC Mid Abort command for"
     " defective subsystem subarray",
 )
 def test_verify_abort_error_propagation():
