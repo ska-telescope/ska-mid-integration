@@ -184,12 +184,25 @@ class EventRecorder(object):
         self,
         device: DeviceProxy,
         attribute_name: str,
+        attribute_to_check: str,
         attribute_values: list[Any],
         lookahead: int = 7,
     ) -> bool:
         """Validate if a change event occurred for one of the given values
         for data which is in Dictionary format.
-        Is an extension of has_change_event_occurred."""
+        Is an extension of has_change_event_occurred.
+
+        :param device: Proxy of the device
+        :param attribute_name: Name of attribute being monitored
+        :param attribute_to_check: Attribute name for which value needs
+        to be checked
+        :param attribute_values: Possible attribute values
+        :param lookahead: Number of event instances to be monitored
+
+
+        :return: True if attribute_to_check is present in event data
+        :rtype: boolean
+        """
 
         callable_name = self._generate_callable_name(device, attribute_name)
         change_event_callback = self.subscribed_events.get(callable_name, None)
@@ -209,8 +222,11 @@ class EventRecorder(object):
                     == attribute_name.lower()
                 ):
 
+                    # value = assertion_data["arg0"].attr_value.value
+                    # data = json.loads(value)
+
                     data = json.loads(assertion_data["arg0"].attr_value.value)
-                    if data.get(attribute_name) in attribute_values:
+                    if data.get(attribute_to_check) in attribute_values:
 
                         return True
 
