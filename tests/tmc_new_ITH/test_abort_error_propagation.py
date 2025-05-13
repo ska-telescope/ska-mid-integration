@@ -141,12 +141,14 @@ def verify_error_message(
     state changes occur within a specified timeout. After verification, it
     updates the starting state in the context fixture for subsequent steps.
     """
+    LOGGER.info("Uniq id: %s", pytest.unique_id[0])
+    LOGGER.info("COMMAND_RESULT: %s", COMMAND_RESULT)
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "THEN" STEP: '
-        "'the subarray is in ABORTING obsState'"
-        "TMC Subarray Node device"
+        "'the subarray is in FAULT obsState' "
+        "TMC Subarray Node device "
         f"({tmc.subarray_node.dev_name()}) "
-        "is expected have longRunningCommandResult as"
+        "is expected have longRunningCommandResult as "
         "(unique_id, COMMAND_RESULT)",
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         tmc.subarray_node,
