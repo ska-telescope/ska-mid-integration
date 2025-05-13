@@ -30,8 +30,9 @@ COMMAND_RESULT_CSP = (
     'mid-tmc/subarray-leaf-node-csp/01: Exception occurred, command failed."]'
 )
 COMMAND_RESULT_SDP = (
-    '[3, "Exception occurred on the following devices: '
-    'mid-tmc/subarray-leaf-node-sdp/01: Exception occurred, command failed"]'
+    '[3, "Exception occurred on the following devices:'
+    " mid-tmc/subarray-leaf-node-sdp/01: Timeout has occurred, "
+    'command failed"]'
 )
 
 
@@ -211,7 +212,7 @@ def verify_error_message(
             f"({tmc.subarray_node.dev_name()}) "
             "is expected have longRunningCommandResult as "
             "(unique_id, COMMAND_RESULT)",
-        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        ).within_timeout(135).has_change_event_occurred(
             tmc.subarray_node,
             "longRunningCommandResult",
             (pytest.unique_id[0], COMMAND_RESULT_SDP),
@@ -219,7 +220,6 @@ def verify_error_message(
         # tear_down as TMC is inconsistent state. Also
         # FAULT obsState is not considered in tear_down
         sdp.sdp_subarray.ResetDelayInfo()
-        sdp.sdp_subarray.Abort()
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
             "'the sdp subarray must be in the ABORTED obsState'"
