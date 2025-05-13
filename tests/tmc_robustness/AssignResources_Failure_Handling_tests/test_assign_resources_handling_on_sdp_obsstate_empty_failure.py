@@ -226,19 +226,10 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
     #     lookahead=15,
     # )
 
-    assert event_recorder.has_change_event_occurred_for_given_info(
+    assert event_recorder.has_change_event_occurred_for_DeviceInfo(
         central_node_mid.central_node,
         "lastDeviceInfoChanged",
-        [ObsState.EMPTY],
-    )
-
-    LOGGER.info("assertion_data -%s", assertion_data)
-    LOGGER.info(f" {json.loads(assertion_data['attribute_value'][1])[1]}")
-    LOGGER.info(f" {json.loads(assertion_data['attribute_value'][1])[0]}")
-    LOGGER.info(f" {json.loads(assertion_data['attribute_value'][1])[2]}")
-
-    assert (
-        "ObsState.EMPTY" in json.loads(assertion_data["attribute_value"][1])[1]
+        ["ObsState.EMPTY"],
     )
 
     # assert wait_for_DeviceInfo_change(

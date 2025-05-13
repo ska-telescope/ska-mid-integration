@@ -180,7 +180,7 @@ class EventRecorder(object):
             f"Attribute {callable_name} is not subscribed"
         )
 
-    def has_change_event_occurred_for_given_info(
+    def has_change_event_occurred_for_DeviceInfo(
         self,
         device: DeviceProxy,
         attribute_name: str,
@@ -212,8 +212,14 @@ class EventRecorder(object):
                     data = json.loads(value)
                     LOGGER.info(f"data - {data}")
 
-                    if data.get("obsState") == "ObsState.EMPTY":
-                        LOGGER.info("obsState is EMPTY")
+                    # if data.get("obsState") == "ObsState.EMPTY":
+                    #     LOGGER.info("obsState is EMPTY")
+                    #     return True
+                    # else:
+                    #     LOGGER.info("obsState has a different value")
+
+                    if data.get("obsState") in attribute_values:
+                        LOGGER.info(f"obsState {data.get('obsState')}")
                         return True
                     else:
                         LOGGER.info("obsState has a different value")
