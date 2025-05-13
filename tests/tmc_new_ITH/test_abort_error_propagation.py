@@ -157,6 +157,21 @@ def verify_error_message(
         (pytest.unique_id[0], COMMAND_RESULT),
     )
 
+    csp.csp_subarray.SetDefective(json.dumps({"enabled": False}))
+    csp.csp_subarray.Abort()
+
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "THEN" STEP: '
+        "'the csp subarray must be in the ABORTED obsState'"
+        "CSP Subarray device"
+        f"({csp.csp_subarray.dev_name()}) "
+        "is expected to be in ABORTED obstate",
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        csp.csp_subarray,
+        "obsState",
+        ObsState.ABORTED,
+    )
+
 
 @then(parsers.parse("the TMC SubarrayNode remains in {stuck} obsState"))
 def verify_ready_state(
@@ -176,41 +191,39 @@ def verify_ready_state(
     updates the starting state in the context fixture for subsequent steps.
     """
     assert_that(event_tracer).described_as(
-        f"Both TMC Subarray Node device ({tmc.subarray_node})"
-        f", CSP Subarray device ({csp.csp_subarray}) "
-        f"and SDP Subarray device ({sdp.sdp_subarray}) "
-        "ObsState attribute values should move "
-        f"from {str(context_fixt.starting_state)} to FAULT."
+        'FAILED ASSUMPTION IN "THEN" STEP: '
+        "'the sdp subarray must be in the ABORTING obsState' "
+        "SDP Subarray device"
+        f"({sdp.sdp_subarray.dev_name()}) "
+        "is expected to be in ABORTING obstate",
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        tmc.subarray_node,
-        "obsState",
-        ObsState.FAULT,
-        previous_value=context_fixt.starting_state,
-    ).has_change_event_occurred(
-        csp.csp_subarray,
-        "obsState",
-        ObsState.IDLE,
-        previous_value=context_fixt.starting_state,
-    ).has_change_event_occurred(
         sdp.sdp_subarray,
         "obsState",
-        ObsState.ABORTED,
-        previous_value=context_fixt.starting_state,
+        ObsState.ABORTING,
     )
-
-    csp.csp_subarray.SetDefective(json.dumps({"enabled": False}))
-    csp.csp_subarray.Abort()
 
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "THEN" STEP: '
-        "'the csp subarray must be in the ABORTED obsState'"
-        "CSP Subarray device"
-        f"({csp.csp_subarray.dev_name()}) "
-        "is expected to be in ABORTED obstate",
+        "'the tmc subarray must be in the ABORTING obsState' "
+        "TMC Subarray device"
+        f"({tmc.tmc_subarray.dev_name()}) "
+        "is expected to be in ABORTING obstate",
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        csp.csp_subarray,
+        tmc.tmc_subarray,
         "obsState",
-        ObsState.ABORTED,
+        ObsState.ABORTING,
+    )
+
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "THEN" STEP: '
+        "'the tmc subarray must be in the FAULT obsState' "
+        "TMC Subarray device"
+        f"({tmc.tmc_subarray.dev_name()}) "
+        "is expected to be in ABORTING obstate",
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        tmc.tmc_subarray,
+        "obsState",
+        ObsState.FAULT,
     )
 
     # override the starting state for the next step
