@@ -6,9 +6,8 @@ from ska_control_model import ObsState
 from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
-from tests.conftest import (
+from tests.conftest import (  # wait_for_DeviceInfo_change,
     LOGGER,
-    wait_for_DeviceInfo_change,
     wait_for_obsstate_state_change,
 )
 from tests.resources.test_harness.helpers import (
@@ -24,7 +23,7 @@ from tests.resources.test_support.constant import (
 
 
 @pytest.mark.batch1
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 @scenario(
     "../features/xtp-28338.feature",
     "TMC behavior when SDP Subarray AssignResources raises exception",
@@ -220,9 +219,25 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
         central_node_mid.central_node, "lastDeviceInfoChanged"
     )
 
-    assert wait_for_DeviceInfo_change(
-        device=central_node_mid.central_node, timeout_seconds=30
+    assertion_data = event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "lastDeviceInfoChanged",
+        (pytest.command_result[1][0], Anything),
+        lookahead=15,
     )
+
+    LOGGER.info("assertion_data -%s", assertion_data)
+    LOGGER.info(f" {json.loads(assertion_data['attribute_value'][1])[1]}")
+    LOGGER.info(f" {json.loads(assertion_data['attribute_value'][1])[0]}")
+    LOGGER.info(f" {json.loads(assertion_data['attribute_value'][1])[2]}")
+
+    assert (
+        "ObsState.EMPTY" in json.loads(assertion_data["attribute_value"][1])[1]
+    )
+
+    # assert wait_for_DeviceInfo_change(
+    #     device=central_node_mid.central_node, timeout_seconds=30
+    # )
     event_recorder.clear_events()
 
 
