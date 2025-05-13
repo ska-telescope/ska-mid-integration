@@ -218,6 +218,8 @@ def verify_error_message(
         )
 
     if defectiveSubsystem == "SDP":
+        LOGGER.info("ID: %s", pytest.unique_id[0])
+        LOGGER.info("COMMAND_RESULT_SDP: %s", COMMAND_RESULT_SDP)
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
             "'the subarray is in FAULT obsState' "
