@@ -222,7 +222,8 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
     assert event_recorder.has_change_event_occurred_for_dictdata(
         central_node_mid.central_node,
         "lastDeviceInfoChanged",
-        "obsState"["ObsState.EMPTY"],
+        "obsState",
+        ["ObsState.EMPTY"],
     )
 
     event_recorder.clear_events()
