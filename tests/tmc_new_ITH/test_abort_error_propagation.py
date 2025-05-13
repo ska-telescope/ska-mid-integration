@@ -113,7 +113,6 @@ def send_abort_command(
     tmc: TMCFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
-    command: str,
     defectiveSubsystem: str,
 ):
     """
@@ -123,12 +122,10 @@ def send_abort_command(
     specified subarray with provided defective subsystem.
     """
     if defectiveSubsystem == "CSP":
-        LOGGER.info("Inside csp defective... %s", defectiveSubsystem)
-        LOGGER.info(type(defectiveSubsystem))
         csp.csp_subarray.SetDefective(ERROR_PROPAGATION_DEFECT)
     if defectiveSubsystem == "SDP":
         sdp.sdp_subarray.SetDefective(FAILED_RESULT_DEFECT)
-    context_fixt.when_action_name = command
+    context_fixt.when_action_name = "Abort"
     _, pytest.unique_id = tmc.subarray_node.Abort()
 
 
