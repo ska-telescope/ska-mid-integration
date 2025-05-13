@@ -158,6 +158,8 @@ def verify_error_message(
     )
 
     csp.csp_subarray.SetDefective(json.dumps({"enabled": False}))
+
+    # tear_down
     csp.csp_subarray.Abort()
 
     assert_that(event_tracer).described_as(
@@ -171,6 +173,8 @@ def verify_error_message(
         "obsState",
         ObsState.ABORTED,
     )
+
+    tmc.restart()
 
 
 @then(parsers.parse("the TMC SubarrayNode remains in {stuck} obsState"))
@@ -225,6 +229,3 @@ def verify_ready_state(
         "obsState",
         ObsState.FAULT,
     )
-
-    # override the starting state for the next step
-    # context_fixt.starting_state = ObsState.READY
