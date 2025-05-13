@@ -119,9 +119,11 @@ def send_abort_command(
     This step uses the tmc to send an Abort command to the
     specified subarray with provided defective subsystem.
     """
-    if defectiveSubsystem == "csp":
+    if defectiveSubsystem == "CSP":
+        LOGGER.info("Inside csp defective... %s", defectiveSubsystem)
+        LOGGER.info(type(defectiveSubsystem))
         csp.csp_subarray.SetDefective(ERROR_PROPAGATION_DEFECT)
-    if defectiveSubsystem == "sdp":
+    if defectiveSubsystem == "SDP":
         sdp.sdp_subarray.SetDefective(ERROR_PROPAGATION_DEFECT)
     context_fixt.when_action_name = command
     _, pytest.unique_id = tmc.subarray_node.Abort()
@@ -152,7 +154,7 @@ def verify_ready_state(
         "'the tmc subarray must be in the FAULT obsState' "
         "TMC Subarray device"
         f"({tmc.subarray_node.dev_name()}) "
-        "is expected to be in ABORTING obstate",
+        "is expected to be in FAULT obstate",
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         tmc.subarray_node,
         "obsState",
@@ -182,7 +184,7 @@ def verify_error_message(
     state changes occur within a specified timeout. After verification, it
     updates the starting state in the context fixture for subsequent steps.
     """
-    if defectiveSubsystem == "csp":
+    if defectiveSubsystem == "CSP":
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
             "'the subarray is in FAULT obsState' "
@@ -212,7 +214,7 @@ def verify_error_message(
             ObsState.ABORTED,
         )
 
-    if defectiveSubsystem == "sdp":
+    if defectiveSubsystem == "SDP":
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
             "'the subarray is in FAULT obsState' "
