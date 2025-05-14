@@ -226,7 +226,7 @@ def verify_error_message(
             "SDP Subarray device"
             f"({sdp.sdp_subarray.dev_name()}) "
             "is expected to be in ABORTED obstate",
-        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        ).within_timeout(140).has_change_event_occurred(
             sdp.sdp_subarray,
             "obsState",
             ObsState.ABORTED,
