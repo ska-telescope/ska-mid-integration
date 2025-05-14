@@ -1,7 +1,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
-[1.0.1-rc.1]
+[1.1.0-rc.1]
 *******
   * Event Handlers are updated to remove event processing logic and handle it under component manager.
   * As a part of SKB-517 , resolution pointingState SLEW was accepted as valid Dish
