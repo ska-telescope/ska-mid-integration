@@ -6,5 +6,5 @@ Scenario Outline: Timeout reported by TMC Mid Abort command for subsystem subarr
 		Then the command failure is reported by subarray with timeout error message with <subsystem>
 		Examples:
 		        | subsystem            |
+		        | CSP                  |
 		        | SDP                  |
-		        #| SDP                  |

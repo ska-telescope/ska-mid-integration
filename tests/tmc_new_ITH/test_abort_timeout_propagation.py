@@ -118,7 +118,7 @@ def send_abort_command(
     specified subarray with provided defective subsystem.
     """
     if subsystem == "CSP":
-        csp.csp_subarray.SetDelayInfo(json.dumps({"Abort": 135}))
+        csp.csp_subarray.SetDelay(135)
     if subsystem == "SDP":
         sdp.sdp_subarray.SetDelayInfo(json.dumps({"Abort": 135}))
     context_fixt.when_action_name = "Abort"
@@ -190,15 +190,15 @@ def verify_error_message(
 
         # tear_down as TMC is inconsistent state. Also
         # FAULT obsState is not considered in tear_down
-        csp.csp_subarray.ResetDelayInfo()
-        csp.csp_subarray.Abort()
+        csp.csp_subarray.SetDelay(2)
+
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
             "'the csp subarray must be in the ABORTED obsState'"
             "CSP Subarray device"
             f"({csp.csp_subarray.dev_name()}) "
             "is expected to be in ABORTED obstate",
-        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        ).within_timeout(140).has_change_event_occurred(
             csp.csp_subarray,
             "obsState",
             ObsState.ABORTED,
