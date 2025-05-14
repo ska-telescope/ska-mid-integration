@@ -3,6 +3,7 @@ Test for Abort() error propagation verification
 """
 import json
 import logging
+import time
 
 import pytest
 from assertpy import assert_that
@@ -220,6 +221,7 @@ def verify_error_message(
         # tear_down as TMC is inconsistent state. Also
         # FAULT obsState is not considered in tear_down
         sdp.sdp_subarray.ResetDelayInfo()
+        time.sleep(120)
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
             "'the sdp subarray must be in the ABORTED obsState'"
