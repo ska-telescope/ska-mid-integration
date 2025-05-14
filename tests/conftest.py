@@ -264,6 +264,22 @@ def wait_for_obsstate_state_change(
     return False
 
 
+def wait_for_DeviceInfo_change(device: str, timeout_seconds: int):
+    """Returns True if the obsState is changed to ObsState.EMPTY"""
+    start_time = time.time()
+
+    while time.time() - start_time < timeout_seconds:
+
+        attribute_value = json.loads(device.lastDeviceInfoChanged)
+
+        if attribute_value["obsState"] == "ObsState.EMPTY":
+
+            return True
+        time.sleep(1)
+
+    return False
+
+
 @pytest.fixture
 def shared_context():
     """
