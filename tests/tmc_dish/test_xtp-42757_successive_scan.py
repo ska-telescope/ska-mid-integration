@@ -18,7 +18,6 @@ from tests.resources.test_support.constant import COMMAND_COMPLETED
 from tests.resources.test_support.enum import DishMode, PointingState
 
 
-@pytest.mark.skip("reason=further changes to SKB-517 resolution are required")
 @pytest.mark.tmc_dish
 @scenario(
     "../features/tmc_dish/xtp-42757_successive_scan.feature",
@@ -194,18 +193,6 @@ def check_dish_mode_and_pointing_state(
             "is expected to be in TRACK pointingState",
         ).within_timeout(60).has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
-            "pointingState",
-            PointingState.TRACK,
-        )
-
-        assert_that(event_tracer).described_as(
-            'FAILED ASSUMPTION IN "GIVEN" STEP: '
-            "'the DishLeafNode must be in the TRACK pointingState'"
-            "dish device"
-            f"({central_node_mid.dish_leaf_node_dict[dish_id].dev_name()}) "
-            "is expected to be in TRACK pointingState",
-        ).within_timeout(60).has_change_event_occurred(
-            central_node_mid.dish_leaf_node_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
         )

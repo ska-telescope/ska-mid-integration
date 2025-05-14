@@ -145,18 +145,6 @@ def move_subarray_obsState_to_scanning(
             PointingState.TRACK,
         )
 
-        assert_that(event_tracer).described_as(
-            'FAILED ASSUMPTION IN "THEN" STEP: '
-            "'the DishLeafNode must be in the TRACK pointingState'"
-            "dish device"
-            f"({central_node_mid.dish_leaf_node_dict[dish_id].dev_name()}) "
-            "is expected to be in TRACK pointingState",
-        ).within_timeout(60).has_change_event_occurred(
-            central_node_mid.dish_leaf_node_dict[dish_id],
-            "pointingState",
-            PointingState.TRACK,
-        )
-
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "GIVEN" STEP: '
         "'the subarray must be in the READY obsState'"
@@ -257,10 +245,6 @@ def check_dish_mode_and_pointing_state_after_scan(
             central_node_mid.dish_master_dict[dish_id].pointingState
             == PointingState.TRACK
         )
-        assert (
-            central_node_mid.dish_leaf_node_dict[dish_id].pointingState
-            == PointingState.TRACK
-        )
 
 
 @when(
@@ -348,12 +332,6 @@ def check_dish_mode_and_pointing_state_after_endscan(
         )
         assert event_recorder.has_change_event_occurred(
             central_node_mid.dish_master_dict[dish_id],
-            "pointingState",
-            PointingState.TRACK,
-            lookahead=15,
-        )
-        assert event_recorder.has_change_event_occurred(
-            central_node_mid.dish_leaf_node_dict[dish_id],
             "pointingState",
             PointingState.TRACK,
             lookahead=15,

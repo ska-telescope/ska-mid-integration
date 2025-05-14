@@ -6,7 +6,10 @@ from ska_control_model import ObsState
 from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
-from tests.conftest import LOGGER, wait_for_obsstate_state_change
+from tests.conftest import (  # wait_for_DeviceInfo_change,
+    LOGGER,
+    wait_for_obsstate_state_change,
+)
 from tests.resources.test_harness.helpers import (
     get_device_simulators,
     prepare_json_args_for_centralnode_commands,
@@ -97,6 +100,10 @@ def given_tmc_subarray_assign_resources_is_in_progress(
         "obsState",
         ObsState.RESOURCING,
     )
+    LOGGER.info(
+        "lastDeviceInfoChanged - %s",
+        central_node_mid.central_node.lastDeviceInfoChanged,
+    )
 
 
 @given(parsers.parse("Csp Subarray {subarray_id} completes assignResources"))
@@ -140,6 +147,12 @@ def given_tmc_subarray_stuck_resourcing(
     )
     assert central_node_mid.subarray_node.obsState == ObsState.RESOURCING
 
+    LOGGER.info(
+        "lastDeviceInfoChanged - %s",
+        central_node_mid.central_node.lastDeviceInfoChanged,
+    )
+    event_recorder.clear_events()
+
 
 @when(
     parsers.parse(
@@ -165,6 +178,8 @@ def csp_subarray_transitions_to_empty(simulator_factory, event_recorder):
         ObsState.EMPTY,
     )
 
+    event_recorder.clear_events()
+
 
 @then(
     parsers.parse(
@@ -173,6 +188,9 @@ def csp_subarray_transitions_to_empty(simulator_factory, event_recorder):
 )
 def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
     event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
     wait_for_obsstate_state_change(
         target_mode=0, device=central_node_mid.subarray_node, timeout_seconds=5
     )
@@ -196,6 +214,19 @@ def tmc_subarray_transitions_to_empty(central_node_mid, event_recorder):
         exception_message
         in json.loads(assertion_data["attribute_value"][1])[1]
     )
+
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "lastDeviceInfoChanged"
+    )
+
+    assert event_recorder.has_change_event_occurred_for_dictdata(
+        central_node_mid.central_node,
+        "lastDeviceInfoChanged",
+        "obsState",
+        ["ObsState.EMPTY"],
+    )
+
+    event_recorder.clear_events()
 
 
 @then(
