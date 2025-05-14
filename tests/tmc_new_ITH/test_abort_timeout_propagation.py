@@ -169,12 +169,12 @@ def verify_error_message(
     csp: CSPFacade,
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
-    defectiveSubsystem: str,
+    subsystem: str,
 ):
     """
     Verify the tmc subarray reports timeout on its LRCR.
     """
-    if defectiveSubsystem == "CSP":
+    if subsystem == "CSP":
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
             "'the subarray is in FAULT obsState' "
@@ -204,7 +204,7 @@ def verify_error_message(
             ObsState.ABORTED,
         )
 
-    if defectiveSubsystem == "SDP":
+    if subsystem == "SDP":
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
             "'the subarray is in FAULT obsState' "
