@@ -3,7 +3,7 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 [1.1.0-rc.1]
 ************
-### Updated
+### Added
   * Event Handlers are updated to remove event processing logic and handle it under component manager.
   * Updated Central node command execution logic for Dishes to send ON/OFF/STANDBY 
       commands even if it fails for one dish , command will still be sent to other dishes.
@@ -16,7 +16,7 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
       come to TMC after it moves to READY was causing issues in obsState aggregation.
       Hence, going forward TRACK event will not be sent from Dish Leaf Node if 
       command is not in progress.
-  
+
 [1.0.0]
 *******
 ### Fixed
