@@ -72,19 +72,19 @@ def _setup_event_subscriptions(
     )
 
 
-@pytest.mark.batch1
+@pytest.mark.batch3
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/error_propagation.feature",
-    "Error Propagation Reported by TMC Mid Abort command for"
+    "Error Propagation Reported by TMC Mid Restart command for"
     " defective subsystem subarray",
 )
-def test_verify_abort_error_propagation():
-    """Test for Abort command error propagation."""
+def test_verify_abort_restart_propagation():
+    """Test for Abort command restart propagation."""
 
 
-@given("the TMC subarray is in the IDLE observation state")
-def subarray_in_idle_obsstate(
+@given("the TMC subarray is in the ABORTED observation state")
+def subarray_in_aborted_obsstate(
     context_fixt: SubarrayTestContextData,
     tmc: TMCFacade,
     sdp: SDPFacade,
@@ -92,12 +92,12 @@ def subarray_in_idle_obsstate(
     event_tracer: TangoEventTracer,
     default_commands_inputs: TestHarnessInputs,
 ):
-    """Ensure the subarray is in IDLE obsstate."""
+    """Ensure the subarray is in ABORTED obsstate."""
     _setup_event_subscriptions(tmc, csp, sdp, event_tracer)
-    context_fixt.starting_state = ObsState.IDLE
+    context_fixt.starting_state = ObsState.ABORTED
 
     tmc.force_change_of_obs_state(
-        ObsState.IDLE,
+        ObsState.ABORTED,
         default_commands_inputs,
         wait_termination=True,
     )
@@ -105,10 +105,10 @@ def subarray_in_idle_obsstate(
 
 @when(
     parsers.parse(
-        "Abort is invoked on a defective subsystem {defectiveSubsystem}"
+        "Restart is invoked on a defective subsystem {defectiveSubsystem}"
     )
 )
-def send_abort_command(
+def send_restart_command(
     context_fixt: SubarrayTestContextData,
     tmc: TMCFacade,
     csp: CSPFacade,
@@ -116,7 +116,7 @@ def send_abort_command(
     defectiveSubsystem: str,
 ):
     """
-    Send the Abort command to the subarray.
+    Send the Restart command to the subarray.
 
     This step uses the tmc to send an Abort command to the
     specified subarray with provided defective subsystem.
@@ -125,40 +125,28 @@ def send_abort_command(
         csp.csp_subarray.SetDefective(ERROR_PROPAGATION_DEFECT)
     if defectiveSubsystem == "SDP":
         sdp.sdp_subarray.SetDefective(FAILED_RESULT_DEFECT)
-    context_fixt.when_action_name = "Abort"
-    _, pytest.unique_id = tmc.subarray_node.Abort()
+    context_fixt.when_action_name = "Restart"
+    _, pytest.unique_id = tmc.subarray_node.Restart()
 
 
-@then("the TMC SubarrayNode obsstate changes to FAULT obsState")
-def verify_fault_obsstate(
+@then("the TMC SubarrayNode obsstate stuck into RESTARTING obsState")
+def verify_restarting_obsstate(
     tmc: TMCFacade,
     event_tracer: TangoEventTracer,
 ):
     """
-    Verify the subarray's transition to the FAULT observation state.
+    Verify the subarray's stuck into the RESTARTING observation state.
     """
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "THEN" STEP: '
-        "'the tmc subarray must be in the ABORTING obsState' "
+        "'the tmc subarray must be in the RESTARTING obsState' "
         "TMC Subarray device"
         f"({tmc.subarray_node.dev_name()}) "
-        "is expected to be in ABORTING obstate",
+        "is expected to be in RESTARTING obstate",
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         tmc.subarray_node,
         "obsState",
-        ObsState.ABORTING,
-    )
-
-    assert_that(event_tracer).described_as(
-        'FAILED ASSUMPTION IN "THEN" STEP: '
-        "'the tmc subarray must be in the FAULT obsState' "
-        "TMC Subarray device"
-        f"({tmc.subarray_node.dev_name()}) "
-        "is expected to be in FAULT obstate",
-    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        tmc.subarray_node,
-        "obsState",
-        ObsState.FAULT,
+        ObsState.RESTARTING,
     )
 
 
@@ -181,7 +169,7 @@ def verify_error_message(
     if defectiveSubsystem == "CSP":
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
-            "'the subarray is in FAULT obsState' "
+            "'the subarray is in RESTARTING obsState' "
             "TMC Subarray Node device "
             f"({tmc.subarray_node.dev_name()}) "
             "is expected have longRunningCommandResult as "
@@ -193,25 +181,25 @@ def verify_error_message(
         )
 
         # tear_down as TMC is inconsistent state. Also
-        # FAULT obsState is not considered in tear_down
+        # no command is allowed in RESTARTING obsState
         csp.csp_subarray.SetDefective(json.dumps({"enabled": False}))
-        csp.csp_subarray.Abort()
+        csp.csp_subarray.Restart()
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
-            "'the csp subarray must be in the ABORTED obsState'"
+            "'the csp subarray must be in the EMPTY obsState'"
             "CSP Subarray device"
             f"({csp.csp_subarray.dev_name()}) "
-            "is expected to be in ABORTED obstate",
+            "is expected to be in EMPTY obstate",
         ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
             csp.csp_subarray,
             "obsState",
-            ObsState.ABORTED,
+            ObsState.EMPTY,
         )
 
     if defectiveSubsystem == "SDP":
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
-            "'the subarray is in FAULT obsState' "
+            "'the subarray is in RESTARTING obsState' "
             "TMC Subarray Node device "
             f"({tmc.subarray_node.dev_name()}) "
             "is expected have longRunningCommandResult as "
@@ -222,19 +210,17 @@ def verify_error_message(
             (pytest.unique_id[0], COMMAND_RESULT_SDP),
         )
         # tear_down as TMC is inconsistent state. Also
-        # FAULT obsState is not considered in tear_down
+        # no command is allowed in RESTARTING obsState
         sdp.sdp_subarray.SetDefective(json.dumps({"enabled": False}))
-        sdp.sdp_subarray.Abort()
+        sdp.sdp_subarray.Restart()
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
-            "'the sdp subarray must be in the ABORTED obsState'"
+            "'the sdp subarray must be in the EMPTY obsState'"
             "SDP Subarray device"
             f"({sdp.sdp_subarray.dev_name()}) "
-            "is expected to be in ABORTED obstate",
+            "is expected to be in EMPTY obstate",
         ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
             sdp.sdp_subarray,
             "obsState",
-            ObsState.ABORTED,
+            ObsState.EMPTY,
         )
-
-    tmc.restart()
