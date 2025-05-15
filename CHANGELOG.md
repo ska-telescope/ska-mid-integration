@@ -3,16 +3,22 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 [1.1.0-rc.1]
 *******
+### Updated
   * Event Handlers are updated to remove event processing logic and handle it under component manager.
-  * As a part of SKB-517 , resolution pointingState SLEW was accepted as valid Dish
+  * Updated Central node command execution logic for Dishes to send ON/OFF/STANDBY 
+      commands even if it fails for one dish , command will still be sent to other dishes.
+  * Utilized refactored event manager in ska-tmc-centralnode version 0.19.5
+  * ska-tmc-common version 0.27.5 is utilized for the same
+### Fixed
+  * As a part of SKB-517 resolution pointingState SLEW was accepted as valid Dish
       pointingState , so that TMC subarry can move to READY obsState.
       But it was found that sometimes TRACK event for the dish which used to 
       come to TMC after it moves to READY was causing issues in obsState aggregation.
       Hence, going forward TRACK event will not be sent from Dish Leaf Node if 
       command is not in progress.
+### Validated
   * Validated  SKB-517 , SKB-706
-  * Updated Central node command execution logic for Dishes to send ON/OFF/STANDBY 
-      commands even if it fails for one dish , command will still be sent to other dishes.
+  
 
 
 [1.0.0]
