@@ -9,6 +9,7 @@ from ska_control_model import ObsState
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
 from ska_integration_test_harness.facades.sdp_facade import SDPFacade
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
+from ska_integration_test_harness.inputs.json_input import DictJSONInput
 from ska_integration_test_harness.inputs.test_harness_inputs import (
     TestHarnessInputs,
 )
@@ -142,12 +143,12 @@ def send_partial_configure_command(
     context_fixt.when_action_name = "Configure"
     json_input = MyFileJSONInput("subarray", "partial_configure_trajectory")
     for x, y in zip(x_offsets, y_offsets):
-        partial_configure_json = json.loads(json_input)
+        partial_configure_json = json.loads(json_input.as_str())
         partial_configure_json["pointing"]["trajectory"]["attrs"] = {
             "x": x,
             "y": y,
         }
         context_fixt.when_action_result = tmc.configure(
-            json.dumps(partial_configure_json), wait_termination=True
+            DictJSONInput(partial_configure_json), wait_termination=True
         )
         # TODO add assert for targetData
