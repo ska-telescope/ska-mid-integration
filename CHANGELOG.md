@@ -16,11 +16,7 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
       come to TMC after it moves to READY was causing issues in obsState aggregation.
       Hence, going forward TRACK event will not be sent from Dish Leaf Node if 
       command is not in progress.
-### Validated
-  * Validated  SKB-517 , SKB-706
   
-
-
 [1.0.0]
 *******
 ### Fixed
