@@ -8,6 +8,8 @@ tag_description=
     * Validated  SKB-517 , SKB-706
     * Updated Central node command execution logic for Dishes to send ON/OFF/STANDBY
       commands even if it fails for one dish , command will still be sent to other dishes.
+    * Utilized refactored event manager in ska-tmc-centralnode version 0.19.5
+    * ska-tmc-common version 0.27.5 is utilized for the same
 
 release_notes=
 **Charts:**
@@ -16,3 +18,5 @@ release_notes=
     * Validated  SKB-517 , SKB-706
     * Updated Central node command execution logic for Dishes to send ON/OFF/STANDBY
       commands even if it fails for one dish , command will still be sent to other dishes.
+    * Utilized refactored event manager in ska-tmc-centralnode version 0.19.5
+    * ska-tmc-common version 0.27.5 is utilized for the same
