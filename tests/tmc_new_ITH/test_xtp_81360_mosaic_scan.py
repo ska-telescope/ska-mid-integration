@@ -97,6 +97,7 @@ def verify_ready_state(
     state changes occur within a specified timeout. After verification, it
     updates the starting state in the context fixture for subsequent steps.
     """
+    context_fixt.starting_state = ObsState.CONFIGURING
     assert_that(event_tracer).described_as(
         f"Both TMC Subarray Node device ({tmc.subarray_node})"
         f", CSP Subarray device ({csp.csp_subarray}) "
