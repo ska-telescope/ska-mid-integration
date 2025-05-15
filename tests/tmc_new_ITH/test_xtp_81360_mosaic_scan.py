@@ -144,7 +144,9 @@ def send_partial_configure_command(
     json_input = MyFileJSONInput("subarray", "partial_configure_trajectory")
     for x, y in zip(x_offsets, y_offsets):
         partial_configure_json = json.loads(json_input.as_str())
-        partial_configure_json["pointing"]["trajectory"]["attrs"] = {
+        partial_configure_json["pointing"]["groups"][0]["trajectory"][
+            "attrs"
+        ] = {
             "x": x,
             "y": y,
         }
