@@ -1,0 +1,22 @@
+{
+  "interface":"https://schema.skao.int/ska-tmc-configure/4.2",
+  "transaction_id":"txn-....-00003",
+  "tmc":{
+    "partial_configuration":true,
+    "scan_duration":10.0
+  },
+  "pointing":{
+    "wrap_sector":0,
+    "groups":[
+      {
+        "trajectory":{
+          "name":"fixed",
+          "attrs":{
+            "x":-5,
+            "y":5
+          }
+        }
+      }
+    ]
+  }
+}
