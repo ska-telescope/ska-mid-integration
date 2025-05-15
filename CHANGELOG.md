@@ -2,7 +2,7 @@ All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 [1.1.0-rc.1]
-*******
+************
 ### Updated
   * Event Handlers are updated to remove event processing logic and handle it under component manager.
   * Updated Central node command execution logic for Dishes to send ON/OFF/STANDBY 
