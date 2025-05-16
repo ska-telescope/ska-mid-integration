@@ -74,12 +74,15 @@ class Waiter:
                         attribute_name, changed_to=state_name
                     )
                 )
-                LOGGER.info("Dish Master check is done")
-                self.waits.append(
-                    watch(Resource(self.dish_leaf_node_list[index])).to_become(
-                        attribute_name, changed_to=state_name
+
+                # PoinitngState Event will not be pushed if command is complete
+                # Hence this assertion is skipped.
+                if attribute_name not in ["pointingState"]:
+                    self.waits.append(
+                        watch(
+                            Resource(self.dish_leaf_node_list[index])
+                        ).to_become(attribute_name, changed_to=state_name)
                     )
-                )
         LOGGER.info("Dish Leaf Node check is done")
 
     def set_wait_for_going_to_off(self):
@@ -274,7 +277,7 @@ class Waiter:
                 "obsState", changed_to="READY"
             )
         )
-        if self.dish_master_list and self.dish_leaf_node_list:
+        if self.dish_master_list:
             self.set_wait_for_dish("dishMode", "OPERATE")
             self.set_wait_for_dish("pointingState", "TRACK")
 
