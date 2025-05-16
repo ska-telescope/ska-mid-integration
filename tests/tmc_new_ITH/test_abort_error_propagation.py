@@ -49,6 +49,7 @@ def _setup_event_subscriptions(
     tmc: TMCFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
+    dishes: DishesFacade,
     event_tracer: TangoEventTracer,
 ):
     """Subscribe TMC, CSP and SDP devices to track and log obsState events.
@@ -63,6 +64,9 @@ def _setup_event_subscriptions(
     event_tracer.subscribe_event(sdp.sdp_subarray, "obsState")
     event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
     event_tracer.subscribe_event(tmc.subarray_node, "longRunningCommandResult")
+    event_tracer.subscribe_event(
+        dishes.dish_master_dict["dish_001"], "pointingState"
+    )
 
     log_events(
         {
