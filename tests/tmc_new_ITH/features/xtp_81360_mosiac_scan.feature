@@ -6,5 +6,5 @@ Scenario Outline: TMC Mid execute mosiac scan
 	When I perform partial configurations with <x_offsets> <y_offsets> offsets followed by scans
 	Then the subarray executes the commands successfully and is in READY obsState
 	Examples:
-		| group1                  | group2            | x_offsets        | y_offsets        |
-		| "SKA001","SKA063"       | "SKA036","SKA100" | -5.0,5.0         | 5.0,1.0          |
+		| group1          | group2         | x_offsets        | y_offsets        |
+		| SKA001,SKA063   | SKA036,SKA100  | -5.0,5.0         | 5.0,1.0          |
