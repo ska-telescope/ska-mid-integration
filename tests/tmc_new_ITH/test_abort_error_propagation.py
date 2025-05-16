@@ -41,7 +41,7 @@ COMMAND_RESULT_SDP = (
 )
 COMMAND_RESULT_DISH = (
     '[3, "Exception occurred on the following devices: '
-    'mid-tmc/leaf-node-dish/SKA001: Exception occurred, command failed"]'
+    'mid-tmc/leaf-node-dish/ska001: Exception occurred, command failed."]'
 )
 
 
