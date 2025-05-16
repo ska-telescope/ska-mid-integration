@@ -20,6 +20,7 @@ from tests.tmc_csp_new_ITH.conftest import (
     SubarrayTestContextData,
 )
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
+from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDeviceFacade
 from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
 
 
@@ -56,7 +57,13 @@ def subarray_in_idle_state(
     )
 
 
-@given("a subarray configured for a mosaic scan with multiple groups")
+@given(
+    parsers.parse(
+        "A subarray is configured for a mosaic scan, with {group1} assigned "
+        "to track a fixed target and {group2} responsible for tracking "
+        "varying offsets"
+    )
+)
 def subarray_configured_with_multiple_groups(
     context_fixt: SubarrayTestContextData,
     tmc: TMCFacade,
@@ -64,6 +71,8 @@ def subarray_configured_with_multiple_groups(
     csp: CSPFacade,
     event_tracer: TangoEventTracer,
     default_commands_inputs: TestHarnessInputs,
+    group1: str,
+    group2: str,
 ):
     """Ensure the subarray is configured with multiple groups
     and obs state is changed to READY
@@ -71,9 +80,18 @@ def subarray_configured_with_multiple_groups(
     context_fixt.when_action_name = "Configure"
 
     json_input = MyFileJSONInput("subarray", "configure_holography_adr106")
-
+    # Update receptor as per group
+    config_dict = json.loads(json_input.as_str())
+    groups = config_dict["pointing"]["groups"]
+    pytest.group1 = group1.split(",")
+    pytest.group2 = group2.split(",")
+    for group in groups:
+        if "trajectory" in group:
+            group["receptors"] = pytest.group2
+        else:
+            group["receptors"] = pytest.group1
     context_fixt.when_action_result = tmc.configure(
-        json_input,
+        DictJSONInput(config_dict),
         wait_termination=False,
     )
 
@@ -133,6 +151,7 @@ def verify_ready_state(
 def send_partial_configure_command(
     context_fixt: SubarrayTestContextData,
     tmc: TMCFacade,
+    dish_pointng_devices: DishPointingDeviceFacade,
     x_offsets: list,
     y_offsets: list,
 ):
@@ -140,6 +159,7 @@ def send_partial_configure_command(
     This steps execute multiple partial configuration for each x, y offsets
     provided in x offsets and y offsets list
     """
+    dpd_dict = dish_pointng_devices.dish_pointing_device_dict
     context_fixt.when_action_name = "Configure"
     json_input = MyFileJSONInput("subarray", "partial_configure_trajectory")
     x_offset_list = x_offsets.split(",")
@@ -155,4 +175,12 @@ def send_partial_configure_command(
         context_fixt.when_action_result = tmc.configure(
             DictJSONInput(partial_configure_json), wait_termination=True
         )
-        # TODO add assert for targetData
+        # Verify that target data reflect offsets provided
+        for dish_id in pytest.group1:
+            assert json.loads(dpd_dict[dish_id].targetData)["pointing"][
+                "trajectory"
+            ]["attrs"] == {"x": 0, "y": 0}
+        for dish_id in pytest.group2:
+            assert json.loads(dpd_dict[dish_id].targetData)["pointing"][
+                "trajectory"
+            ]["attrs"] == {"x": int(x), "y": int(y)}
