@@ -11,6 +11,7 @@ from ska_control_model import ObsState
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
 from ska_integration_test_harness.facades.sdp_facade import SDPFacade
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
+from ska_integration_test_harness.facades.dishes_facade import DishesFacade
 from ska_integration_test_harness.inputs.test_harness_inputs import (
     TestHarnessInputs,
 )
@@ -36,6 +37,10 @@ COMMAND_RESULT_CSP = (
 COMMAND_RESULT_SDP = (
     '[3, "Exception occurred on the following devices: '
     'mid-tmc/subarray-leaf-node-sdp/01: Exception occurred, command failed"]'
+)
+COMMAND_RESULT_DISH = (
+    '[3, "Exception occurred on the following devices: '
+    'mid-tmc/leaf-node-dish/SKA001: Exception occurred, command failed"]'
 )
 
 
@@ -72,7 +77,7 @@ def _setup_event_subscriptions(
     )
 
 
-@pytest.mark.batch1
+@pytest.mark.batch3
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/error_propagation.feature",
@@ -94,10 +99,10 @@ def subarray_in_idle_obsstate(
 ):
     """Ensure the subarray is in IDLE obsstate."""
     _setup_event_subscriptions(tmc, csp, sdp, event_tracer)
-    context_fixt.starting_state = ObsState.IDLE
+    context_fixt.starting_state = ObsState.READY
 
     tmc.force_change_of_obs_state(
-        ObsState.IDLE,
+        ObsState.READY,
         default_commands_inputs,
         wait_termination=True,
     )
@@ -113,6 +118,7 @@ def send_abort_command(
     tmc: TMCFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
+    dishes: DishesFacade,
     defectiveSubsystem: str,
 ):
     """
@@ -125,6 +131,9 @@ def send_abort_command(
         csp.csp_subarray.SetDefective(ERROR_PROPAGATION_DEFECT)
     if defectiveSubsystem == "SDP":
         sdp.sdp_subarray.SetDefective(FAILED_RESULT_DEFECT)
+    if defectiveSubsystem == "Dish":
+        dish1 = dishes.dish_master_dict["dish_001"]
+        dish1.SetDefective(ERROR_PROPAGATION_DEFECT)
     context_fixt.when_action_name = "Abort"
     _, pytest.unique_id = tmc.subarray_node.Abort()
 

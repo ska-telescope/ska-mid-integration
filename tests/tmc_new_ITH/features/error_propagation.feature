@@ -8,6 +8,7 @@ Scenario Outline: Error Propagation Reported by TMC Mid Abort command for defect
 		        | defectiveSubsystem   |
 		        | CSP                  |
 		        | SDP                  |
+				| Dish                 |
 
 
 @SKA_mid
