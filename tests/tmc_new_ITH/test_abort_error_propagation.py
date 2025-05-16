@@ -99,11 +99,12 @@ def subarray_in_idle_obsstate(
     tmc: TMCFacade,
     sdp: SDPFacade,
     csp: CSPFacade,
+    dishes: DishesFacade,
     event_tracer: TangoEventTracer,
     default_commands_inputs: TestHarnessInputs,
 ):
     """Ensure the subarray is in IDLE obsstate."""
-    _setup_event_subscriptions(tmc, csp, sdp, event_tracer)
+    _setup_event_subscriptions(tmc, csp, sdp, dishes, event_tracer)
     context_fixt.starting_state = ObsState.READY
 
     tmc.force_change_of_obs_state(
