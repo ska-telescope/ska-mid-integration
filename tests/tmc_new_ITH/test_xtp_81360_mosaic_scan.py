@@ -183,4 +183,4 @@ def send_partial_configure_command(
         for dish_id in pytest.group2:
             assert json.loads(dpd_dict[dish_id].targetData)["pointing"][
                 "trajectory"
-            ]["attrs"] == {"x": int(x), "y": int(y)}
+            ]["attrs"] == {"x": float(x), "y": float(y)}
