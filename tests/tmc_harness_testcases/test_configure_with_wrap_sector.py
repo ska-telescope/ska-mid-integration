@@ -24,7 +24,7 @@ TIMEOUT = 110
 @pytest.mark.repeat(15)
 @pytest.mark.SKA_mid
 @scenario(
-    "../features/configure_with_wrap_sector.feature",
+    "../features/xtp-81402.feature",
     "TMC behavior when configure command is invoked with wrap_sector",
 )
 def test_tmc_configure_with_wrap_sector_key():
