@@ -9,6 +9,7 @@ from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
+from ska_integration_test_harness.facades.dishes_facade import DishesFacade
 from ska_integration_test_harness.facades.sdp_facade import SDPFacade
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_integration_test_harness.inputs.test_harness_inputs import (
@@ -17,6 +18,7 @@ from ska_integration_test_harness.inputs.test_harness_inputs import (
 from ska_ser_logging import configure_logging
 from ska_tango_testing.integration import TangoEventTracer, log_events
 
+from tests.resources.test_support.enum import PointingState
 from tests.tmc_csp_new_ITH.conftest import (
     ASSERTIONS_TIMEOUT,
     SubarrayTestContextData,
@@ -34,12 +36,18 @@ COMMAND_RESULT_SDP = (
     " mid-tmc/subarray-leaf-node-sdp/01: Timeout has occurred, "
     'command failed"]'
 )
+COMMAND_RESULT_DISH = (
+    '[3, "Exception occurred on the following devices:'
+    " mid-tmc/leaf-node-dish/ska001: Timeout has occurred, "
+    'command failed."]'
+)
 
 
 def _setup_event_subscriptions(
     tmc: TMCFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
+    dishes: DishesFacade,
     event_tracer: TangoEventTracer,
 ):
     """Subscribe TMC, CSP and SDP devices to track and log obsState events.
@@ -54,6 +62,9 @@ def _setup_event_subscriptions(
     event_tracer.subscribe_event(sdp.sdp_subarray, "obsState")
     event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
     event_tracer.subscribe_event(tmc.subarray_node, "longRunningCommandResult")
+    event_tracer.subscribe_event(
+        dishes.dish_master_dict["dish_001"], "pointingState"
+    )
 
     log_events(
         {
@@ -69,7 +80,7 @@ def _setup_event_subscriptions(
     )
 
 
-@pytest.mark.batch1
+@pytest.mark.batch3
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/timeout_handling.feature",
@@ -85,15 +96,16 @@ def subarray_in_idle_obsstate(
     tmc: TMCFacade,
     sdp: SDPFacade,
     csp: CSPFacade,
+    dishes: DishesFacade,
     event_tracer: TangoEventTracer,
     default_commands_inputs: TestHarnessInputs,
 ):
     """Ensure the subarray is in IDLE obsstate."""
-    _setup_event_subscriptions(tmc, csp, sdp, event_tracer)
-    context_fixt.starting_state = ObsState.IDLE
+    _setup_event_subscriptions(tmc, csp, sdp, dishes, event_tracer)
+    context_fixt.starting_state = ObsState.READY
 
     tmc.force_change_of_obs_state(
-        ObsState.IDLE,
+        ObsState.READY,
         default_commands_inputs,
         wait_termination=True,
     )
@@ -109,6 +121,7 @@ def send_abort_command(
     tmc: TMCFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
+    dishes: DishesFacade,
     subsystem: str,
 ):
     """
@@ -121,6 +134,9 @@ def send_abort_command(
         csp.csp_subarray.SetDelayInfo(json.dumps({"Abort": 135}))
     if subsystem == "SDP":
         sdp.sdp_subarray.SetDelayInfo(json.dumps({"Abort": 135}))
+    if subsystem == "Dish":
+        dish1 = dishes.dish_master_dict["dish_001"]
+        dish1.SetDelayInfo(json.dumps({"Abort": 135}))
     context_fixt.when_action_name = "Abort"
     _, pytest.unique_id = tmc.subarray_node.Abort()
 
@@ -168,6 +184,7 @@ def verify_error_message(
     tmc: TMCFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
+    dishes: DishesFacade,
     event_tracer: TangoEventTracer,
     subsystem: str,
 ):
@@ -230,6 +247,35 @@ def verify_error_message(
             sdp.sdp_subarray,
             "obsState",
             ObsState.ABORTED,
+        )
+
+    if subsystem == "Dish":
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "THEN" STEP: '
+            "'the subarray is in FAULT obsState' "
+            "TMC Subarray Node device "
+            f"({tmc.subarray_node.dev_name()}) "
+            "is expected have longRunningCommandResult as "
+            "(unique_id, COMMAND_RESULT)",
+        ).within_timeout(135).has_change_event_occurred(
+            tmc.subarray_node,
+            "longRunningCommandResult",
+            (pytest.unique_id[0], COMMAND_RESULT_DISH),
+        )
+        # tear_down as TMC is inconsistent state. Also
+        # FAULT obsState is not considered in tear_down
+        dish1 = dishes.dish_master_dict["dish_001"]
+        dish1.ResetDelayInfo()
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "THEN" STEP: '
+            "'the dish must be in the READY pointingState' "
+            "Dish device"
+            f"({dish1.dev_name()}) "
+            "is expected to be in READY pointingState",
+        ).within_timeout(140).has_change_event_occurred(
+            dish1,
+            "pointingState",
+            PointingState.READY,
         )
 
     tmc.restart()
