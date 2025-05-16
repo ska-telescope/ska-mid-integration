@@ -22,6 +22,7 @@ from tests.resources.test_support.constant import (
     ERROR_PROPAGATION_DEFECT,
     FAILED_RESULT_DEFECT,
 )
+from tests.resources.test_support.enum import PointingState
 from tests.tmc_csp_new_ITH.conftest import (
     ASSERTIONS_TIMEOUT,
     SubarrayTestContextData,
@@ -181,6 +182,7 @@ def verify_error_message(
     tmc: TMCFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
+    dishes: DishesFacade,
     event_tracer: TangoEventTracer,
     defectiveSubsystem: str,
 ):
@@ -246,4 +248,31 @@ def verify_error_message(
             ObsState.ABORTED,
         )
 
+    if defectiveSubsystem == "Dish":
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "THEN" STEP: '
+            "'the subarray is in FAULT obsState' "
+            "TMC Subarray Node device "
+            f"({tmc.subarray_node.dev_name()}) "
+            "is expected have longRunningCommandResult as "
+            "(unique_id, COMMAND_RESULT)",
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+            tmc.subarray_node,
+            "longRunningCommandResult",
+            (pytest.unique_id[0], COMMAND_RESULT_DISH),
+        )
+        dish1 = dishes.dish_master_dict["dish_001"]
+        dish1.SetDefective(json.dumps({"enabled": False}))
+        dish1.Abort()
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "THEN" STEP: '
+            "'the Dish must be in the READY pointingState' "
+            "Dish device "
+            f"({dish1.dev_name()}) "
+            "is expected to be in READY pointingState",
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+            dish1,
+            "pointingState",
+            PointingState.READY,
+        )
     tmc.restart()
