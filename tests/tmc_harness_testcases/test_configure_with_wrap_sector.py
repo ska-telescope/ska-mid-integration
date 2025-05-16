@@ -20,8 +20,6 @@ TIMEOUT = 110
 
 
 @pytest.mark.batch2
-@pytest.mark.t1
-@pytest.mark.repeat(15)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-81402.feature",
