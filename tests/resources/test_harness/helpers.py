@@ -272,19 +272,15 @@ def get_boolean_command_call_info(device: SimulatorFactory, command_name: str):
     device: Tango Device Proxy Object
 
     """
-    command_info = None
-    timeout = 5
+
     received_command_call_data = None
-    while not command_info and not timeout:
-        command_call_info = device.read_attribute("commandCallInfo").value
-        LOGGER.info("Command info %s", command_call_info)
-        command_info = [
-            command_info
-            for command_info in command_call_info
-            if command_info[0] == command_name
-        ]
-        time.sleep(1)
-        timeout = timeout - 1
+    command_call_info = device.read_attribute("commandCallInfo").value
+    LOGGER.info("Command info %s", command_call_info)
+    command_info = [
+        command_info
+        for command_info in command_call_info
+        if command_info[0] == command_name
+    ]
 
     if command_info:
         received_command_call_data = (
