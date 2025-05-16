@@ -142,13 +142,15 @@ def send_partial_configure_command(
     """
     context_fixt.when_action_name = "Configure"
     json_input = MyFileJSONInput("subarray", "partial_configure_trajectory")
-    for x, y in zip(x_offsets, y_offsets):
+    x_offset_list = x_offsets.split(",")
+    y_offset_list = y_offsets.split(",")
+    for x, y in zip(x_offset_list, y_offset_list):
         partial_configure_json = json.loads(json_input.as_str())
         partial_configure_json["pointing"]["groups"][0]["trajectory"][
             "attrs"
         ] = {
-            "x": x,
-            "y": y,
+            "x": float(x),
+            "y": float(y),
         }
         context_fixt.when_action_result = tmc.configure(
             DictJSONInput(partial_configure_json), wait_termination=True
