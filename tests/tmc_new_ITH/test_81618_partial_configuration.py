@@ -172,6 +172,6 @@ def verify_configuration_data(
     context_fixt: SubarrayTestContextData, tmc: TMCFacade, dishes: DishesFacade
 ):
     """Verify that configuration data is applied correctly on dishes"""
-    if pytest.pytest.configuration_data == "configuration_with_only_band":
+    if pytest.configuration_data == "configuration_with_only_band":
         for dish in dishes.dish_master_list:
             assert dish.configuredBand == Band.B2
