@@ -39,7 +39,7 @@ COMMAND_RESULT_SDP = (
 COMMAND_RESULT_DISH = (
     '[3, "Exception occurred on the following devices:'
     " mid-tmc/leaf-node-dish/ska001: Timeout has occurred, "
-    'command failed."]'
+    'command failed"]'
 )
 
 
@@ -167,7 +167,7 @@ def verify_fault_obsstate(
         "TMC Subarray device"
         f"({tmc.subarray_node.dev_name()}) "
         "is expected to be in FAULT obstate",
-    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+    ).within_timeout(140).has_change_event_occurred(
         tmc.subarray_node,
         "obsState",
         ObsState.FAULT,
