@@ -21,6 +21,7 @@ from tests.tmc_csp_new_ITH.conftest import (
     SubarrayTestContextData,
 )
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
+from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDeviceFacade
 
 # from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDeviceFacade
 from tests.tmc_new_ITH.utils.enums import Band
@@ -169,9 +170,35 @@ def verify_ready_state(
 
 @then("provided configuration data applied on dish leaf node")
 def verify_configuration_data(
-    context_fixt: SubarrayTestContextData, tmc: TMCFacade, dishes: DishesFacade
+    context_fixt: SubarrayTestContextData,
+    tmc: TMCFacade,
+    dishes: DishesFacade,
+    dish_pointng_devices: DishPointingDeviceFacade,
 ):
     """Verify that configuration data is applied correctly on dishes"""
     if pytest.configuration_data == "configuration_with_only_band":
         for dish in dishes.dish_master_list:
             assert dish.configuredBand == Band.B2
+    elif (
+        pytest.configuration_data
+        == "configuration_with_only_collimation_offsets"
+    ):
+        for dish in tmc.dish_leaf_node_list:
+            assert json.loads(dish.sourceOffset) == [0.0, 5.0]
+    elif pytest.configuration_data == "configuration_with_only_trajectory":
+        for dpd in dish_pointng_devices.dish_pointing_device_list:
+            assert json.loads(dpd.targetData)["pointing"]["trajectory"][
+                "attrs"
+            ] == {"x": -5, "y": 5}
+    elif (
+        pytest.configuration_data
+        == "configuration_with_trajectory_collimation_offsets"
+    ):
+        for dish, dpd in zip(
+            tmc.dish_leaf_node_list,
+            dish_pointng_devices.dish_pointing_device_list,
+        ):
+            assert json.loads(dish.sourceOffset) == [0.0, 5.0]
+            assert json.loads(dpd.targetData)["pointing"]["trajectory"][
+                "attrs"
+            ] == {"x": -5, "y": 5}
