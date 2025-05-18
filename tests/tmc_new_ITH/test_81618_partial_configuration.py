@@ -46,6 +46,10 @@ def update_configuration_json(config_json: dict, config_data: str):
         }
     elif config_data == "configuration_with_trajectory_collimation_offsets":
         config_json["pointing"].pop("wrap_sector", None)
+        config_json["pointing"]["groups"][0]["trajectory"]["attrs"] = {
+            "x": 5.0,
+            "y": 1.0
+        }
         config_json["pointing"].update(
             {
                 "ca_offset_arcsec": 0.0,
@@ -186,19 +190,33 @@ def verify_configuration_data(
         for dish in tmc.dish_leaf_node_list:
             assert json.loads(dish.sourceOffset) == [0.0, 5.0]
     elif pytest.configuration_data == "configuration_with_only_trajectory":
-        for dpd in dish_pointng_devices.dish_pointing_device_list:
-            assert json.loads(dpd.targetData)["pointing"]["trajectory"][
-                "attrs"
-            ] == {"x": -5, "y": 5}
+        for dpd_name in dish_pointng_devices.dish_pointing_device_dict.keys():
+            dpd = dish_pointng_devices.dish_pointing_device_dict[dpd_name]
+            # Verify trajectory applied to a correct group of dishes
+            if dpd_name in ["SKA036","SKA100"]:
+                assert json.loads(dpd.targetData)["pointing"]["trajectory"][
+                    "attrs"
+                ] == {"x": -5, "y": 5}
+            else:
+                assert json.loads(dpd.targetData)["pointing"]["trajectory"][
+                           "attrs"
+                       ] == {"x": 0, "y": 0}
     elif (
         pytest.configuration_data
         == "configuration_with_trajectory_collimation_offsets"
     ):
-        for dish, dpd in zip(
+        for dish, dpd_name in zip(
             tmc.dish_leaf_node_list,
-            dish_pointng_devices.dish_pointing_device_list,
+            dish_pointng_devices.dish_pointing_device_dict.keys(),
         ):
             assert json.loads(dish.sourceOffset) == [0.0, 5.0]
-            assert json.loads(dpd.targetData)["pointing"]["trajectory"][
-                "attrs"
-            ] == {"x": -5, "y": 5}
+            dpd = dish_pointng_devices.dish_pointing_device_dict[dpd_name]
+            # Verify trajectory applied to a correct group of dishes
+            if dpd_name in ["SKA036", "SKA100"]:
+                assert json.loads(dpd.targetData)["pointing"]["trajectory"][
+                    "attrs"
+                ] == {"x": 5, "y": 1}
+            else:
+                assert json.loads(dpd.targetData)["pointing"]["trajectory"][
+                           "attrs"
+                       ] == {"x": 0, "y": 0}
