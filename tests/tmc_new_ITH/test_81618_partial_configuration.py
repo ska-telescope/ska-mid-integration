@@ -188,7 +188,7 @@ def verify_configuration_data(
         == "configuration_with_only_collimation_offsets"
     ):
         for dish in tmc.dish_leaf_node_list:
-            assert json.loads(dish.sourceOffset) == [0.0, 5.0]
+            assert list(dish.sourceOffset) == [0.0, 5.0]
     elif pytest.configuration_data == "configuration_with_only_trajectory":
         for dpd_name in dish_pointng_devices.dish_pointing_device_dict.keys():
             dpd = dish_pointng_devices.dish_pointing_device_dict[dpd_name]
@@ -209,7 +209,7 @@ def verify_configuration_data(
             tmc.dish_leaf_node_list,
             dish_pointng_devices.dish_pointing_device_dict.keys(),
         ):
-            assert json.loads(dish.sourceOffset) == [0.0, 5.0]
+            assert list(dish.sourceOffset) == [0.0, 5.0]
             dpd = dish_pointng_devices.dish_pointing_device_dict[dpd_name]
             # Verify trajectory applied to a correct group of dishes
             if dpd_name in ["SKA036", "SKA100"]:
