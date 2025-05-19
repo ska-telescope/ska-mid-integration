@@ -10,4 +10,5 @@ Scenario Outline: TMC Behaviour when partial configuration is provided
    | configuration_with_only_trajectory                   |
    | configuration_with_only_band                         |
    | configuration_with_only_collimation_offsets          |
-   | configuration_with_trajectory_collimation_offsets    |
+   | configuration_with_traj_coll_offsets                 |
+   | configuration_with_only_wrap_sector                  |

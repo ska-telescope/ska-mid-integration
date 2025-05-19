@@ -171,6 +171,11 @@ class TestSubarrayNodeNegative(object):
         dish_sim = simulator_factory.get_or_create_simulator_device(
             SimulatorDeviceType.DISH_DEVICE
         )
+        # At this stage dish leaf node band is 1
+        # change it to 2 so that dish leaf node
+        # invoke ConfigureBand2 command as a band is changed
+        config_dict = json.loads(input_json)
+        config_dict["dish"]["receiver_band"] = "2"
 
         event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
         subarray_node.move_to_on()
@@ -180,7 +185,9 @@ class TestSubarrayNodeNegative(object):
         pointing_state_duration_params = '[["READY",0.1]]'
         dish_sim.AddTransition(pointing_state_duration_params)
 
-        subarray_node.execute_transition("Configure", argin=input_json)
+        subarray_node.execute_transition(
+            "Configure", argin=json.dumps(config_dict)
+        )
 
         assert event_recorder.has_change_event_occurred(
             subarray_node.subarray_node, "obsState", ObsState.CONFIGURING
@@ -190,4 +197,4 @@ class TestSubarrayNodeNegative(object):
                 subarray_node.subarray_node, "obsState", ObsState.READY
             )
         # assert device_received_this_command
-        # (dish_sim, "ConfigureBand1", "True")
+        (dish_sim, "ConfigureBand2", "True")

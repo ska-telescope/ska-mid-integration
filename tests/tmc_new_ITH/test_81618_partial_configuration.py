@@ -22,8 +22,6 @@ from tests.tmc_csp_new_ITH.conftest import (
 )
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDeviceFacade
-
-# from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDeviceFacade
 from tests.tmc_new_ITH.utils.enums import Band
 from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
 
@@ -44,7 +42,7 @@ def update_configuration_json(config_json: dict, config_data: str):
             "ca_offset_arcsec": 0.0,
             "ie_offset_arcsec": 5.0,
         }
-    elif config_data == "configuration_with_trajectory_collimation_offsets":
+    elif config_data == "configuration_with_traj_coll_offsets":
         config_json["pointing"].pop("wrap_sector", None)
         config_json["pointing"]["groups"][0]["trajectory"]["attrs"] = {
             "x": 5.0,
@@ -56,10 +54,11 @@ def update_configuration_json(config_json: dict, config_data: str):
                 "ie_offset_arcsec": 5.0,
             }
         )
+    elif config_data == "configuration_with_only_wrap_sector":
+        config_json["pointing"]["wrap_sector"] = 0
 
 
 @pytest.mark.batch1
-@pytest.mark.test
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/xtp_81618_partial_configuration.feature",
@@ -72,7 +71,7 @@ def test_verify_partial_configuration():
 
 
 @given("a TMC")
-def give_a_tmc(
+def given_a_tmc(
     tmc: TMCFacade,
     sdp: SDPFacade,
     csp: CSPFacade,
@@ -89,7 +88,7 @@ def subarray_in_ready_state(
     sdp: SDPFacade,
     csp: CSPFacade,
     event_tracer: TangoEventTracer,
-    default_commands_inputs: TestHarnessInputs,
+    dish_pointng_devices: DishPointingDeviceFacade,
 ):
     """Ensure the subarray is in the READY state."""
     context_fixt.starting_state = ObsState.IDLE
@@ -105,6 +104,15 @@ def subarray_in_ready_state(
         ),
         wait_termination=True,
     )
+    # Verify wrap sector applied correctly
+    for dish_pointing_device in dish_pointng_devices.dish_pointing_device_list:
+        program_track_table = json.loads(
+            dish_pointing_device.pointingprogramtracktable
+        )
+        dpd_target_data = json.loads(dish_pointing_device.targetdata)
+        assert dpd_target_data["pointing"]["wrap_sector"] == -1
+        # Assert azimuth value getting updated as per value of wrap_sector
+        assert program_track_table[1] < 0
 
 
 @when(
@@ -172,6 +180,93 @@ def verify_ready_state(
     context_fixt.starting_state = ObsState.READY
 
 
+def verify_band(dishes: DishesFacade):
+    """
+    Verify that all dishes have the configured band set.
+    Args:
+        dishes (DishesFacade): Facade providing access to dish objects.
+    """
+    for dish in dishes.dish_master_list:
+        assert dish.configuredBand == Band.B2
+
+
+def verify_coff(tmc: TMCFacade):
+    """
+    Verify that all dishes in the TMC dish leaf node list have the expected
+    source offset values.
+    Args:
+        tmc (TMCFacade): Facade providing access to TMC dish leaf nodes.
+    """
+    for dish in tmc.dish_leaf_node_list:
+        assert list(dish.sourceOffset) == [0.0, 5.0]
+
+
+def verify_only_trajectory(dish_pointng_devices: DishPointingDeviceFacade):
+    """
+    Verify that the trajectory attributes in the target data of dish pointing
+    devices are correctly applied.
+    Args:
+        dish_pointng_devices (DishPointingDeviceFacade):
+        Facade for dish pointing devices.
+    """
+    for (
+        dpd_name,
+        dpd,
+    ) in dish_pointng_devices.dish_pointing_device_dict.items():
+        if dpd_name in ["SKA036", "SKA100"]:
+            expected = {"x": -5, "y": 5}
+        else:
+            expected = {"x": 0, "y": 0}
+        assert (
+            json.loads(dpd.targetData)["pointing"]["trajectory"]["attrs"]
+            == expected
+        )
+
+
+def verify_traj_and_coff(
+    tmc: TMCFacade, dish_pointng_devices: DishPointingDeviceFacade
+):
+    """
+    Verify that both trajectory attributes and collimation offsets
+    are correctly applied on dishes.
+
+    Args:
+        tmc (TMCFacade): Facade providing access to TMC dish leaf nodes.
+        dish_pointng_devices (DishPointingDeviceFacade): Facade for
+        dish pointing devices.
+    """
+    for dish, dpd_name in zip(
+        tmc.dish_leaf_node_list,
+        dish_pointng_devices.dish_pointing_device_dict.keys(),
+    ):
+        assert list(dish.sourceOffset) == [0.0, 5.0]
+        dpd = dish_pointng_devices.dish_pointing_device_dict[dpd_name]
+        if dpd_name in ["SKA036", "SKA100"]:
+            expected = {"x": 5, "y": 1}
+        else:
+            expected = {"x": 0, "y": 0}
+        assert (
+            json.loads(dpd.targetData)["pointing"]["trajectory"]["attrs"]
+            == expected
+        )
+
+
+def verify_wrap_sector(dish_pointng_devices: DishPointingDeviceFacade):
+    """
+    Verify that the wrap sector is correctly applied on dish pointing devices.
+    Args:
+        dish_pointng_devices (DishPointingDeviceFacade): Facade for
+        dish pointing devices.
+    """
+    for dish_pointing_device in dish_pointng_devices.dish_pointing_device_list:
+        program_track_table = json.loads(
+            dish_pointing_device.pointingprogramtracktable
+        )
+        dpd_target_data = json.loads(dish_pointing_device.targetdata)
+        assert dpd_target_data["pointing"]["wrap_sector"] == 0
+        assert program_track_table[1] > 0
+
+
 @then("provided configuration data applied on dish leaf node")
 def verify_configuration_data(
     context_fixt: SubarrayTestContextData,
@@ -180,43 +275,21 @@ def verify_configuration_data(
     dish_pointng_devices: DishPointingDeviceFacade,
 ):
     """Verify that configuration data is applied correctly on dishes"""
-    if pytest.configuration_data == "configuration_with_only_band":
-        for dish in dishes.dish_master_list:
-            assert dish.configuredBand == Band.B2
-    elif (
-        pytest.configuration_data
-        == "configuration_with_only_collimation_offsets"
-    ):
-        for dish in tmc.dish_leaf_node_list:
-            assert list(dish.sourceOffset) == [0.0, 5.0]
-    elif pytest.configuration_data == "configuration_with_only_trajectory":
-        for dpd_name in dish_pointng_devices.dish_pointing_device_dict.keys():
-            dpd = dish_pointng_devices.dish_pointing_device_dict[dpd_name]
-            # Verify trajectory applied to a correct group of dishes
-            if dpd_name in ["SKA036", "SKA100"]:
-                assert json.loads(dpd.targetData)["pointing"]["trajectory"][
-                    "attrs"
-                ] == {"x": -5, "y": 5}
-            else:
-                assert json.loads(dpd.targetData)["pointing"]["trajectory"][
-                    "attrs"
-                ] == {"x": 0, "y": 0}
-    elif (
-        pytest.configuration_data
-        == "configuration_with_trajectory_collimation_offsets"
-    ):
-        for dish, dpd_name in zip(
-            tmc.dish_leaf_node_list,
-            dish_pointng_devices.dish_pointing_device_dict.keys(),
-        ):
-            assert list(dish.sourceOffset) == [0.0, 5.0]
-            dpd = dish_pointng_devices.dish_pointing_device_dict[dpd_name]
-            # Verify trajectory applied to a correct group of dishes
-            if dpd_name in ["SKA036", "SKA100"]:
-                assert json.loads(dpd.targetData)["pointing"]["trajectory"][
-                    "attrs"
-                ] == {"x": 5, "y": 1}
-            else:
-                assert json.loads(dpd.targetData)["pointing"]["trajectory"][
-                    "attrs"
-                ] == {"x": 0, "y": 0}
+    dispatch = {
+        "configuration_with_only_band": lambda: verify_band(dishes),
+        "configuration_with_only_collimation_offsets": lambda: verify_coff(
+            tmc
+        ),
+        "configuration_with_only_trajectory": lambda: verify_only_trajectory(
+            dish_pointng_devices
+        ),
+        "configuration_with_traj_coll_offsets": lambda: verify_traj_and_coff(
+            tmc, dish_pointng_devices
+        ),
+        "configuration_with_only_wrap_sector": lambda: verify_wrap_sector(
+            dish_pointng_devices
+        ),
+    }
+
+    func = dispatch.get(pytest.configuration_data)
+    func()

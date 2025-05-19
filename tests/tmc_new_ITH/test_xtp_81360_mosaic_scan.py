@@ -25,7 +25,6 @@ from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
 
 
 @pytest.mark.batch1
-@pytest.mark.test
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/xtp_81360_mosiac_scan.feature",
@@ -144,8 +143,8 @@ def verify_ready_state(
 
 @when(
     parsers.parse(
-        "I perform partial configurations with "
-        "{x_offsets} {y_offsets} offsets followed by scans"
+        "I perform partial configurations with {x_offsets} "
+        "{y_offsets} offsets"
     )
 )
 def send_partial_configure_command(
