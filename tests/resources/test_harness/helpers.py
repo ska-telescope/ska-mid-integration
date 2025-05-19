@@ -272,7 +272,6 @@ def get_boolean_command_call_info(device: SimulatorFactory, command_name: str):
     device: Tango Device Proxy Object
 
     """
-
     command_call_info = device.read_attribute("commandCallInfo").value
     LOGGER.info("Command info %s", command_call_info)
     command_info = [
