@@ -138,14 +138,14 @@ def verify_ready_state(
     context_fixt.starting_state = ObsState.READY
 
 
-@then("provided {wrap_sector} is applied on dish leaf node")
+@then(parsers.parse("provided {wrap_sector} is applied on dish leaf node"))
 def verify_configuration_data(
     context_fixt: SubarrayTestContextData,
     tmc: TMCFacade,
     dish_pointng_devices: DishPointingDeviceFacade,
     wrap_sector,
 ):
-    """Verify that configuration data is applied correctly on dishes"""
+    """Verify that wrap_sector is applied correctly on dishes"""
 
     for dpd_name in dish_pointng_devices.dish_pointing_device_dict.keys():
         dpd = dish_pointng_devices.dish_pointing_device_dict[dpd_name]
