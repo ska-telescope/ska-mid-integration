@@ -49,7 +49,7 @@ def given_a_tmc(
     # setup_event_subscriptions(tmc, csp, sdp, event_tracer)
 
 
-@given("the resources are assigned to TMC SubarrayNode")
+@when("the resources are assigned to TMC SubarrayNode")
 def subarray_in_idle_state(
     context_fixt: SubarrayTestContextData,
     tmc: TMCFacade,

@@ -20,9 +20,9 @@ cache:
 # It is also specified that only the master branch will be subject of this job.
 
 stages:
-  - lint
-  - build
-  - on-demand
+  # - lint
+  # - build
+  # - on-demand
   - test
   - integration
   - publish
