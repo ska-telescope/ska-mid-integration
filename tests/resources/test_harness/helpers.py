@@ -273,7 +273,6 @@ def get_boolean_command_call_info(device: SimulatorFactory, command_name: str):
 
     """
 
-    received_command_call_data = None
     command_call_info = device.read_attribute("commandCallInfo").value
     LOGGER.info("Command info %s", command_call_info)
     command_info = [
@@ -282,11 +281,10 @@ def get_boolean_command_call_info(device: SimulatorFactory, command_name: str):
         if command_info[0] == command_name
     ]
 
-    if command_info:
-        received_command_call_data = (
-            command_info[0][0],
-            command_info[0][1],
-        )
+    received_command_call_data = (
+        command_info[0][0],
+        command_info[0][1],
+    )
 
     return received_command_call_data
 

@@ -4,6 +4,7 @@ Scenario Outline: TMC behavior when configure command is invoked with wrap_secto
     When the resources are assigned to TMC SubarrayNode
     And I execute configure json <configure_json> <conf_type> with wrap_sector <wrap_sector>
     Then the TMC SubarrayNode transitions to obsState READY
+    And provided <wrap_sector> is applied on dish leaf node
     Examples:
     | configure_json               | wrap_sector | conf_type         |
     | configure_mid                | 0           | deprecated        |

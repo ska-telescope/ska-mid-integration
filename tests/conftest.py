@@ -34,6 +34,8 @@ from tests.resources.test_harness.utils.common_utils import (
 )
 from tests.resources.test_harness.utils.enums import ResultCode
 from tests.resources.test_support.constant import centralnode, csp_master
+from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDeviceFacade
+
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -129,6 +131,11 @@ def update_scan_json(scan_json: str, scan_id: int, transaction_id: str) -> str:
     scan_dict["scan_id"] = scan_id
     scan_dict["transaction_id"] = transaction_id
     return json.dumps(scan_dict)
+
+@pytest.fixture
+def dish_pointng_devices():
+    """Create a facade to dish pointing devices."""
+    return DishPointingDeviceFacade()
 
 
 @pytest.fixture()
