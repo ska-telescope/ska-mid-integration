@@ -20,11 +20,8 @@ from tests.tmc_csp_new_ITH.conftest import (
     SubarrayTestContextData,
 )
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
-
-# from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDeviceFacade
 from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDeviceFacade
-
-# from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
+from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
 
 
 @pytest.mark.batch1
@@ -46,7 +43,7 @@ def given_a_tmc(
     event_tracer: TangoEventTracer,
 ):
     """Given a TMC"""
-    # setup_event_subscriptions(tmc, csp, sdp, event_tracer)
+    setup_event_subscriptions(tmc, csp, sdp, event_tracer)
 
 
 @when("the resources are assigned to TMC SubarrayNode")
