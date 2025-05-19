@@ -20,9 +20,11 @@ from tests.tmc_csp_new_ITH.conftest import (
     SubarrayTestContextData,
 )
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
+
 # from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDeviceFacade
 from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDeviceFacade
-#from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
+
+# from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
 
 
 @pytest.mark.batch1
@@ -33,8 +35,7 @@ from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDeviceFacade
     "TMC behavior when configure command is invoked with wrap_sector",
 )
 def test_verify_wrap_sector_with_main_configure_json():
-    """Test TMC can handle wrap_sector with any kind on main configure json
-    """
+    """Test TMC can handle wrap_sector with any kind on main configure json"""
 
 
 @given("a TMC")
@@ -45,7 +46,7 @@ def given_a_tmc(
     event_tracer: TangoEventTracer,
 ):
     """Given a TMC"""
-    #setup_event_subscriptions(tmc, csp, sdp, event_tracer)
+    # setup_event_subscriptions(tmc, csp, sdp, event_tracer)
 
 
 @given("the resources are assigned to TMC SubarrayNode")
@@ -75,7 +76,8 @@ def subarray_in_idle_state(
 
 @when(
     parsers.parse(
-        "I execute configure json {configure_json} {conf_type} with wrap_sector {wrap_sector}"
+        "I execute configure json {configure_json} {conf_type}"
+        " with wrap_sector {wrap_sector}"
     )
 )
 def when_i_execute_configure_json_with_provided_wrap_sector(
@@ -85,8 +87,7 @@ def when_i_execute_configure_json_with_provided_wrap_sector(
     conf_type: str,
     wrap_sector: int,
 ):
-    """Invoke Configure command with wrap_sector key
-    """
+    """Invoke Configure command with wrap_sector key"""
     json_input = MyFileJSONInput("subarray", configure_json)
     configure_data = json.loads(json_input.as_str())
     configure_data["pointing"]["wrap_sector"] = wrap_sector
@@ -96,7 +97,6 @@ def when_i_execute_configure_json_with_provided_wrap_sector(
         DictJSONInput(configure_data), wait_termination=True
     )
 
-    
 
 @then("the TMC SubarrayNode transitions to obsState READY")
 def verify_ready_state(
@@ -149,17 +149,12 @@ def verify_configuration_data(
     wrap_sector,
 ):
     """Verify that configuration data is applied correctly on dishes"""
-    
+
     for dpd_name in dish_pointng_devices.dish_pointing_device_dict.keys():
         dpd = dish_pointng_devices.dish_pointing_device_dict[dpd_name]
-        program_track_table = json.loads(
-            dpd.pointingprogramtracktable
-        )
+        program_track_table = json.loads(dpd.pointingprogramtracktable)
         dpd_target_data = json.loads(dpd.targetdata)
-        assert (
-            int(wrap_sector)
-            == dpd_target_data["pointing"]["wrap_sector"]
-        )
+        assert int(wrap_sector) == dpd_target_data["pointing"]["wrap_sector"]
         # Assert azimuth value getting updated as per value of wrap_sector
         if not int(wrap_sector):
             assert program_track_table[1] > 0

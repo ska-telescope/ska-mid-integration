@@ -36,7 +36,6 @@ from tests.resources.test_harness.utils.enums import ResultCode
 from tests.resources.test_support.constant import centralnode, csp_master
 from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDeviceFacade
 
-
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 MID_DELAYMODEL_VERSION = "https://schema.skao.int/ska-mid-csp-delaymodel/3.0"
@@ -131,6 +130,7 @@ def update_scan_json(scan_json: str, scan_id: int, transaction_id: str) -> str:
     scan_dict["scan_id"] = scan_id
     scan_dict["transaction_id"] = transaction_id
     return json.dumps(scan_dict)
+
 
 @pytest.fixture
 def dish_pointng_devices():
