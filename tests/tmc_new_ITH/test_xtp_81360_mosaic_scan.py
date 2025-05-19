@@ -43,10 +43,13 @@ def subarray_in_idle_state(
     sdp: SDPFacade,
     csp: CSPFacade,
     event_tracer: TangoEventTracer,
+    dish_pointng_devices: DishPointingDeviceFacade,
     default_commands_inputs: TestHarnessInputs,
 ):
     """Ensure the subarray is in the IDLE state."""
-    setup_event_subscriptions(tmc, csp, sdp, event_tracer)
+    setup_event_subscriptions(
+        tmc, csp, sdp, dish_pointng_devices, event_tracer
+    )
     context_fixt.starting_state = ObsState.IDLE
 
     tmc.force_change_of_obs_state(

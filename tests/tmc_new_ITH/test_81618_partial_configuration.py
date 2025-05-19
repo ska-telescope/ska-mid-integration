@@ -15,6 +15,7 @@ from ska_integration_test_harness.inputs.test_harness_inputs import (
     TestHarnessInputs,
 )
 from ska_tango_testing.integration import TangoEventTracer
+from ska_tango_testing.mock.placeholders import Anything
 
 from tests.tmc_csp_new_ITH.conftest import (
     ASSERTIONS_TIMEOUT,
@@ -75,10 +76,13 @@ def given_a_tmc(
     tmc: TMCFacade,
     sdp: SDPFacade,
     csp: CSPFacade,
+    dish_pointng_devices: DishPointingDeviceFacade,
     event_tracer: TangoEventTracer,
 ):
     """Given a TMC"""
-    setup_event_subscriptions(tmc, csp, sdp, event_tracer)
+    setup_event_subscriptions(
+        tmc, csp, sdp, dish_pointng_devices, event_tracer
+    )
 
 
 @given("TMC SubarrayNode is in Ready ObsState")
@@ -251,16 +255,27 @@ def verify_traj_and_coff(
         )
 
 
-def verify_wrap_sector(dish_pointng_devices: DishPointingDeviceFacade):
+def verify_wrap_sector(
+    dish_pointng_devices: DishPointingDeviceFacade,
+    event_tracer: TangoEventTracer,
+):
     """
     Verify that the wrap sector is correctly applied on dish pointing devices.
     Args:
         dish_pointng_devices (DishPointingDeviceFacade): Facade for
         dish pointing devices.
+        event_tracer (TangoEventTracer): tango event tracer.
     """
     for dish_pointing_device in dish_pointng_devices.dish_pointing_device_list:
         program_track_table = json.loads(
             dish_pointing_device.pointingprogramtracktable
+        )
+        assert_that(event_tracer).described_as(
+            "New Track Table event should be generated"
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+            dish_pointing_device,
+            "pointingProgramTrackTable",
+            Anything,
         )
         dpd_target_data = json.loads(dish_pointing_device.targetdata)
         assert dpd_target_data["pointing"]["wrap_sector"] == 0
@@ -273,6 +288,7 @@ def verify_configuration_data(
     tmc: TMCFacade,
     dishes: DishesFacade,
     dish_pointng_devices: DishPointingDeviceFacade,
+    event_tracer: TangoEventTracer,
 ):
     """Verify that configuration data is applied correctly on dishes"""
     dispatch = {
@@ -287,7 +303,7 @@ def verify_configuration_data(
             tmc, dish_pointng_devices
         ),
         "configuration_with_only_wrap_sector": lambda: verify_wrap_sector(
-            dish_pointng_devices
+            dish_pointng_devices, event_tracer
         ),
     }
 
