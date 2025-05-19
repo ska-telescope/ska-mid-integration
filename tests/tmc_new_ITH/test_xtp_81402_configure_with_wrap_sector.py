@@ -26,7 +26,6 @@ from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
 
 @pytest.mark.batch1
 @pytest.mark.t1
-@pytest.mark.repeat(20)
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/xtp_81402_configure_with_wrap_sector.feature",
@@ -49,12 +48,7 @@ def given_a_tmc(
 
 @when("the resources are assigned to TMC SubarrayNode")
 def subarray_in_idle_state(
-    context_fixt: SubarrayTestContextData,
-    tmc: TMCFacade,
-    sdp: SDPFacade,
-    csp: CSPFacade,
-    event_tracer: TangoEventTracer,
-    default_commands_inputs: TestHarnessInputs,
+    context_fixt: SubarrayTestContextData, tmc: TMCFacade
 ):
     """Ensure the subarray is in the IDLE state."""
     context_fixt.starting_state = ObsState.EMPTY
@@ -141,8 +135,6 @@ def verify_ready_state(
 
 @then(parsers.parse("provided {wrap_sector} is applied on dish leaf node"))
 def verify_configuration_data(
-    context_fixt: SubarrayTestContextData,
-    tmc: TMCFacade,
     dish_pointng_devices: DishPointingDeviceFacade,
     wrap_sector,
 ):
