@@ -18,7 +18,6 @@ def setup_event_subscriptions(
     :param tmc: the TMC facade.
     :param csp: the CSP facade.
     :param sdp: the SDP facade.
-    :param dish_pointing_devices: dish pointing device facade.
     :param event_tracer: the event tracer.
     """
     event_tracer.subscribe_event(tmc.subarray_node, "obsState")
