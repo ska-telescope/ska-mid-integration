@@ -51,10 +51,6 @@ from tests.resources.test_support.constant import (
     dish_master2,
     dish_master3,
     dish_master4,
-    pointing_device1,
-    pointing_device2,
-    pointing_device3,
-    pointing_device4,
     sdp_master,
     sdp_queue_connector,
     sdp_subarray1,
@@ -150,13 +146,6 @@ class SubarrayNodeWrapper(object):
             DeviceProxy(tmc_dish_leaf_node2),
             DeviceProxy(tmc_dish_leaf_node3),
             DeviceProxy(tmc_dish_leaf_node4),
-        ]
-
-        self.dish_pointing_device_proxy_list = [
-            DeviceProxy(pointing_device1),
-            DeviceProxy(pointing_device2),
-            DeviceProxy(pointing_device3),
-            DeviceProxy(pointing_device4),
         ]
 
         for dish_leaf_node in self.dish_leaf_node_list:

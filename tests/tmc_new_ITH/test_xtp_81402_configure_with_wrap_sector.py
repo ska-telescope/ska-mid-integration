@@ -25,7 +25,6 @@ from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
 
 
 @pytest.mark.batch1
-@pytest.mark.t1
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/xtp_81402_configure_with_wrap_sector.feature",

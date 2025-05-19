@@ -10,6 +10,9 @@ class DishPointingDeviceFacade:
     def __init__(self) -> None:
         self._dish_pointing_device_dict = {
             "SKA001": tango.DeviceProxy("mid-tmc/dish-pointing/ska001"),
+            "SKA100": tango.DeviceProxy("mid-tmc/dish-pointing/ska100"),
+            "SKA063": tango.DeviceProxy("mid-tmc/dish-pointing/ska063"),
+            "SKA036": tango.DeviceProxy("mid-tmc/dish-pointing/ska036"),
         }
 
     @property
