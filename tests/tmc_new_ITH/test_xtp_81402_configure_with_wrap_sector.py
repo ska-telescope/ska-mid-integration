@@ -20,7 +20,7 @@ from tests.tmc_csp_new_ITH.conftest import (
     SubarrayTestContextData,
 )
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
-from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDeviceFacade
+from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDevicesFacade
 from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
 
 
@@ -134,7 +134,7 @@ def verify_ready_state(
 
 @then(parsers.parse("provided {wrap_sector} is applied on dish leaf node"))
 def verify_configuration_data(
-    dish_pointng_devices: DishPointingDeviceFacade,
+    dish_pointng_devices: DishPointingDevicesFacade,
     wrap_sector,
 ):
     """Verify that wrap_sector is applied correctly on dishes"""

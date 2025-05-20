@@ -4,8 +4,8 @@
 import tango
 
 
-class DishPointingDeviceFacade:
-    """A facade to expose the Dish Pointing Device to the tests."""
+class DishPointingDevicesFacade:
+    """A facade to expose the Dish Pointing Devices to the tests."""
 
     def __init__(self) -> None:
         self._dish_pointing_device_dict = {
