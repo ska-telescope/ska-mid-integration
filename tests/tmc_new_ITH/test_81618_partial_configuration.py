@@ -21,7 +21,7 @@ from tests.tmc_csp_new_ITH.conftest import (
     SubarrayTestContextData,
 )
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
-from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDeviceFacade
+from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDevicesFacade
 from tests.tmc_new_ITH.utils.enums import Band
 from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
 
@@ -88,7 +88,7 @@ def subarray_in_ready_state(
     sdp: SDPFacade,
     csp: CSPFacade,
     event_tracer: TangoEventTracer,
-    dish_pointng_devices: DishPointingDeviceFacade,
+    dish_pointng_devices: DishPointingDevicesFacade,
 ):
     """Ensure the subarray is in the READY state."""
     context_fixt.starting_state = ObsState.IDLE
@@ -201,12 +201,12 @@ def verify_coff(tmc: TMCFacade):
         assert list(dish.sourceOffset) == [0.0, 5.0]
 
 
-def verify_only_trajectory(dish_pointng_devices: DishPointingDeviceFacade):
+def verify_only_trajectory(dish_pointng_devices: DishPointingDevicesFacade):
     """
     Verify that the trajectory attributes in the target data of dish pointing
     devices are correctly applied.
     Args:
-        dish_pointng_devices (DishPointingDeviceFacade):
+        dish_pointng_devices (DishPointingDevicesFacade):
         Facade for dish pointing devices.
     """
     for (
@@ -224,7 +224,7 @@ def verify_only_trajectory(dish_pointng_devices: DishPointingDeviceFacade):
 
 
 def verify_traj_and_coff(
-    tmc: TMCFacade, dish_pointng_devices: DishPointingDeviceFacade
+    tmc: TMCFacade, dish_pointng_devices: DishPointingDevicesFacade
 ):
     """
     Verify that both trajectory attributes and collimation offsets
@@ -232,7 +232,7 @@ def verify_traj_and_coff(
 
     Args:
         tmc (TMCFacade): Facade providing access to TMC dish leaf nodes.
-        dish_pointng_devices (DishPointingDeviceFacade): Facade for
+        dish_pointng_devices (DishPointingDevicesFacade): Facade for
         dish pointing devices.
     """
     for dish, dpd_name in zip(
@@ -252,12 +252,12 @@ def verify_traj_and_coff(
 
 
 def verify_wrap_sector(
-    dish_pointng_devices: DishPointingDeviceFacade,
+    dish_pointng_devices: DishPointingDevicesFacade,
 ):
     """
     Verify that the wrap sector is correctly applied on dish pointing devices.
     Args:
-        dish_pointng_devices (DishPointingDeviceFacade): Facade for
+        dish_pointng_devices (DishPointingDevicesFacade): Facade for
         dish pointing devices.
         event_tracer (TangoEventTracer): tango event tracer.
     """
@@ -271,7 +271,7 @@ def verify_configuration_data(
     context_fixt: SubarrayTestContextData,
     tmc: TMCFacade,
     dishes: DishesFacade,
-    dish_pointng_devices: DishPointingDeviceFacade,
+    dish_pointng_devices: DishPointingDevicesFacade,
 ):
     """Verify that configuration data is applied correctly on dishes"""
     dispatch = {

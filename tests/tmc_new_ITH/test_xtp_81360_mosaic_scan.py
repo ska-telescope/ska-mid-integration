@@ -20,7 +20,7 @@ from tests.tmc_csp_new_ITH.conftest import (
     SubarrayTestContextData,
 )
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
-from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDeviceFacade
+from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDevicesFacade
 from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
 
 
@@ -150,7 +150,7 @@ def verify_ready_state(
 def send_partial_configure_command(
     context_fixt: SubarrayTestContextData,
     tmc: TMCFacade,
-    dish_pointng_devices: DishPointingDeviceFacade,
+    dish_pointng_devices: DishPointingDevicesFacade,
     x_offsets: list,
     y_offsets: list,
 ):
