@@ -1,6 +1,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[Unreleased]
+************
+### Added
+  * TMC uses wrap sector to generate program track table
+  * TMC performs track table generation based on Fixed Trajectory data
+  * Partial Configure now supports updating individual configuration keys. The Dish Leaf Node applies changes only to the specified fields.
+  
 [1.1.0]
 *******
 ### Added
@@ -16,7 +23,8 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
       come to TMC after it moves to READY was causing issues in obsState aggregation.
       Hence, going forward TRACK event will not be sent from Dish Leaf Node if 
       command is not in progress.
-      
+
+
 [1.1.0-rc.1]
 ************
 ### Added

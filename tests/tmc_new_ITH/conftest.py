@@ -23,6 +23,7 @@ from ska_integration_test_harness.structure.telescope_wrapper import (
 from ska_tango_testing.integration import TangoEventTracer
 
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
+from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDevicesFacade
 
 ASSERTIONS_TIMEOUT = 60
 
@@ -107,6 +108,12 @@ def sdp(telescope_wrapper: TelescopeWrapper):
 def dishes(telescope_wrapper: TelescopeWrapper):
     """Create a facade to dishes devices."""
     return DishesFacade(telescope_wrapper)
+
+
+@pytest.fixture
+def dish_pointng_devices():
+    """Create a facade to dish pointing devices."""
+    return DishPointingDevicesFacade()
 
 
 # ----------------------------------------------------------
