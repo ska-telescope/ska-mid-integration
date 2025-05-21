@@ -8,7 +8,7 @@ Scenario Outline: Timeout reported by TMC Mid Abort command for subsystem subarr
 		        | subsystem            |
 		        | CSP                  |
 		        | SDP                  |
-				| Dish                 |
+                | Dish                 |
 
 
 @SKA_mid
