@@ -147,6 +147,7 @@ class SubarrayNodeWrapper(object):
             DeviceProxy(tmc_dish_leaf_node3),
             DeviceProxy(tmc_dish_leaf_node4),
         ]
+
         for dish_leaf_node in self.dish_leaf_node_list:
             dish_leaf_node.set_timeout_millis(5000)
 

@@ -1,21 +1,22 @@
-release=1.0.0-rc.5
-tag=1.0.0-rc.5
+release=1.1.0-rc.1
+tag=1.1.0-rc.1
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.0.0-rc.4 to v1.0.0-rc.5**
-    * Resolved SKB-879.
-    * Fix issue with configure by updating dishleafnode and 
-    cspleafnode.
-    * Improved health state aggregation logic using rule engine
-    * Utilised Abort API instead of AbortCommands
-    * Ensured required parameters are provided before starting delay model calculation
+**1. Updated ska-tmc-mid from v1.0.0 to v1.0.1-rc.1**
+
+    * Event Handlers are updated to remove event processing logic and handle it under component manager.
+    * Validated  SKB-517 , SKB-706
+    * Updated Central node command execution logic for Dishes to send ON/OFF/STANDBY
+      commands even if it fails for one dish , command will still be sent to other dishes.
+    * Utilized refactored event manager in ska-tmc-centralnode version 0.19.5
+    * ska-tmc-common version 0.27.5 is utilized for the same
 
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.0.0-rc.4 to v1.0.0-rc.5**
-    * Resolved SKB-879.
-    * Fix issue with configure by updating dishleafnode and 
-    cspleafnode.
-    * Improved health state aggregation logic using rule engine
-    * Utilised Abort API instead of AbortCommands
-    * Ensured required parameters are provided before starting delay model calculation
+**1. Updated ska-tmc-mid from v1.0.0 to v1.0.1-rc.1**
+    * Event Handlers are updated to remove event processing logic and handle it under component manager.
+    * Validated  SKB-517 , SKB-706
+    * Updated Central node command execution logic for Dishes to send ON/OFF/STANDBY
+      commands even if it fails for one dish , command will still be sent to other dishes.
+    * Utilized refactored event manager in ska-tmc-centralnode version 0.19.5
+    * ska-tmc-common version 0.27.5 is utilized for the same

@@ -1,6 +1,60 @@
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[Unreleased]
+************
+### Added
+  * TMC uses wrap sector to generate program track table
+  * TMC performs track table generation based on Fixed Trajectory data
+  * Partial Configure now supports updating individual configuration keys. The Dish Leaf Node applies changes only to the specified fields.
+
+[1.1.0-rc.1]
+************
+### Added
+  * Event Handlers are updated to remove event processing logic and handle it under component manager.
+  * Updated Central node command execution logic for Dishes to send ON/OFF/STANDBY 
+      commands even if it fails for one dish , command will still be sent to other dishes.
+  * Utilized refactored event manager in ska-tmc-centralnode version 0.19.5
+  * ska-tmc-common version 0.27.5 is utilized for the same
+### Fixed
+  * As a part of SKB-517 resolution pointingState SLEW was accepted as valid Dish
+      pointingState , so that TMC subarry can move to READY obsState.
+      But it was found that sometimes TRACK event for the dish which used to 
+      come to TMC after it moves to READY was causing issues in obsState aggregation.
+      Hence, going forward TRACK event will not be sent from Dish Leaf Node if 
+      command is not in progress.
+
+[1.0.0]
+*******
+### Fixed
+  * Resolved SKB-879.
+  * Fixed issue with configure by updating dishleafnode v0.22.2.
+  * Ensured required parameters are provided before starting delay model calculation
+  * Resolved SKB-837 by enabling the read of receiveAddresses before configure command
+      and utilising it if the change event of receiveAddresses is empty.This is resolved by
+      subarray node 0.32.2.
+  * Fix issue with trajectory key by utilising dish leaf node tag 0.21.0.
+  * Resolved the SKB-716.
+  * Resolved SKB-714, SKB-690
+### Updated
+  * Improved health state aggregation logic using rule engine.
+  * Utilised Abort API instead of AbortCommands.
+  * Updated the TRLs of TMC mid devices as per ADR-9
+    * ska_mid/tm_central/central_node - mid-tmc/central-node/0              
+    * ska_mid/tm_subarray_node/1 - mid-tmc/subarray/01            
+    * ska_mid/tm_leaf_node/csp_master - mid-tmc/leaf-node-csp/0
+    * ska_mid/tm_leaf_node/sdp_master - mid-tmc/leaf-node-sdp/0
+    * ska_mid/tm_leaf_node/csp_subarray01 - mid-tmc/subarray-leaf-node-csp/01
+    * ska_mid/tm_leaf_node/sdp_subarray01 - mid-tmc/subarray-leaf-node-sdp/01
+    * ska_mid/tm_leaf_node/d0001 - mid-tmc/leaf-node-dish/ska001
+### Added
+  * DishVccCommandStatus attribute added for central node
+  * LoadDishCfg command is rejected if DishVccCommandStatus is in STAGING or IN PROGRESS
+  * After TMC initialization is complete, the DishVccCommandStatus is updated to either COMPLETED or FAILED.
+  * Added `domain` field in values.yaml. The domain is `mid-tmc`
+  * Added `family` and `member` field in deviceServers of each controller leafnode device in values.yaml
+  * Added `family` field in deviceServers of each subarray leafnode devices in value.yaml
+
 [1.0.0-rc.5]
 ************
 ### Fixed
