@@ -90,7 +90,7 @@ def test_verify_timeout_error_propagation():
     """Test for Abort command timeout error propagation."""
 
 
-@given("the TMC subarray is in the IDLE observation state")
+@given("the TMC subarray is in the READY observation state")
 def subarray_in_idle_obsstate(
     context_fixt: SubarrayTestContextData,
     tmc: TMCFacade,
@@ -100,7 +100,7 @@ def subarray_in_idle_obsstate(
     event_tracer: TangoEventTracer,
     default_commands_inputs: TestHarnessInputs,
 ):
-    """Ensure the subarray is in IDLE obsstate."""
+    """Ensure the subarray is in READY obsstate."""
     _setup_event_subscriptions(tmc, csp, sdp, dishes, event_tracer)
     context_fixt.starting_state = ObsState.READY
 

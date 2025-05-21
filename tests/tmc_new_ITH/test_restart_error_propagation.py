@@ -1,5 +1,5 @@
 """
-Test for Abort() error propagation verification
+Test for Restart() error propagation verification
 """
 import json
 import logging
