@@ -184,7 +184,7 @@ def get_abort_command_timeout() -> int:
     """
     db = tango.Database()
     return int(
-        db.get_device_property(
-            tmc.subarray_node.dev_name(), "AbortCommandTimeOut"
-        )["AbortCommandTimeOut"][0]
+        db.get_device_property("mid-tmc/subarray/01", "AbortCommandTimeOut")[
+            "AbortCommandTimeOut"
+        ][0]
     )
