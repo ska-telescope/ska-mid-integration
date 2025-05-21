@@ -1,7 +1,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
-[Unreleased]
+[1.2.0-rc.1]
 ************
 ### Added
   * TMC uses wrap sector to generate program track table
