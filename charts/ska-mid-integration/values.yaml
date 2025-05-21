@@ -185,6 +185,9 @@ ska-tango-archiver:
   dbuser: admin
   # dbpassword - this is set from the pipeline
   port: 5432
+vault:
+  secretPath: "kv/data/users/kvsudhirreddy/archiver"
+  secretMount: kv
   telescope: SKA-mid
   telescope-environment: MID-STFC
   # archwizard_config: MyHDB=tango://tango-databaseds.test-environment.svc.lowitf.internal.skao.int:10000/low-eda/cm/01 - Updating this from Makefile
