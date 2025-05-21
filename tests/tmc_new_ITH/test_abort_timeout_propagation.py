@@ -20,8 +20,8 @@ from ska_tango_testing.integration import TangoEventTracer, log_events
 
 from tests.resources.test_support.enum import PointingState
 from tests.tmc_csp_new_ITH.conftest import (
-    ASSERTIONS_TIMEOUT,
     SubarrayTestContextData,
+    get_abort_command_timeout,
 )
 
 configure_logging(logging.DEBUG)
@@ -41,6 +41,12 @@ COMMAND_RESULT_DISH = (
     " mid-tmc/leaf-node-dish/ska001: Timeout has occurred, "
     'command failed"]'
 )
+
+ABORT_COMMAND_TIMEOUT = get_abort_command_timeout()
+
+# It is expected that required event will get generated
+# once command timeout is captured on the subarraynode
+ASSERTIONS_TIMEOUT = ABORT_COMMAND_TIMEOUT + 10
 
 
 def _setup_event_subscriptions(
@@ -80,7 +86,7 @@ def _setup_event_subscriptions(
     )
 
 
-@pytest.mark.batch3
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/timeout_handling.feature",
@@ -125,18 +131,21 @@ def send_abort_command(
     subsystem: str,
 ):
     """
-    Send the Sbort command to the subarray.
+    Send the Abort command to the subarray.
 
     This step uses the tmc to send an Abort command to the
     specified subarray with provided defective subsystem.
     """
+    # Delay is set more than Abort command timeout to
+    # generate Abort command timeout on the subarray node
+    delay = ABORT_COMMAND_TIMEOUT + 5
     if subsystem == "CSP":
-        csp.csp_subarray.SetDelayInfo(json.dumps({"Abort": 135}))
+        csp.csp_subarray.SetDelayInfo(json.dumps({"Abort": delay}))
     if subsystem == "SDP":
-        sdp.sdp_subarray.SetDelayInfo(json.dumps({"Abort": 135}))
+        sdp.sdp_subarray.SetDelayInfo(json.dumps({"Abort": delay}))
     if subsystem == "Dish":
         dish1 = dishes.dish_master_dict["dish_001"]
-        dish1.SetDelayInfo(json.dumps({"Abort": 135}))
+        dish1.SetDelayInfo(json.dumps({"Abort": delay}))
     context_fixt.when_action_name = "Abort"
     _, pytest.unique_id = tmc.subarray_node.Abort()
 
@@ -167,7 +176,7 @@ def verify_fault_obsstate(
         "TMC Subarray device"
         f"({tmc.subarray_node.dev_name()}) "
         "is expected to be in FAULT obstate",
-    ).within_timeout(140).has_change_event_occurred(
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         tmc.subarray_node,
         "obsState",
         ObsState.FAULT,
@@ -215,7 +224,7 @@ def verify_error_message(
             "CSP Subarray device"
             f"({csp.csp_subarray.dev_name()}) "
             "is expected to be in ABORTED obstate",
-        ).within_timeout(140).has_change_event_occurred(
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
             csp.csp_subarray,
             "obsState",
             ObsState.ABORTED,
@@ -229,7 +238,7 @@ def verify_error_message(
             f"({tmc.subarray_node.dev_name()}) "
             "is expected have longRunningCommandResult as "
             "(unique_id, COMMAND_RESULT)",
-        ).within_timeout(135).has_change_event_occurred(
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
             tmc.subarray_node,
             "longRunningCommandResult",
             (pytest.unique_id[0], COMMAND_RESULT_SDP),
@@ -243,7 +252,7 @@ def verify_error_message(
             "SDP Subarray device"
             f"({sdp.sdp_subarray.dev_name()}) "
             "is expected to be in ABORTED obstate",
-        ).within_timeout(140).has_change_event_occurred(
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
             sdp.sdp_subarray,
             "obsState",
             ObsState.ABORTED,
@@ -257,7 +266,7 @@ def verify_error_message(
             f"({tmc.subarray_node.dev_name()}) "
             "is expected have longRunningCommandResult as "
             "(unique_id, COMMAND_RESULT)",
-        ).within_timeout(135).has_change_event_occurred(
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
             tmc.subarray_node,
             "longRunningCommandResult",
             (pytest.unique_id[0], COMMAND_RESULT_DISH),
@@ -272,7 +281,7 @@ def verify_error_message(
             "Dish device"
             f"({dish1.dev_name()}) "
             "is expected to be in READY pointingState",
-        ).within_timeout(140).has_change_event_occurred(
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
             dish1,
             "pointingState",
             PointingState.READY,

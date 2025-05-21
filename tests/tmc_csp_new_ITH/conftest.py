@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from typing import Any
 
 import pytest
+import tango
 from assertpy import assert_that
 from pytest_bdd import given, parsers, then
 from ska_control_model import ObsState, ResultCode
@@ -392,4 +393,17 @@ def verify_long_running_command_result_on_subarray(
         tmc.subarray_node,
         "longRunningCommandResult",
         _get_expected_long_run_command_result(context_fixt),
+    )
+
+
+def get_abort_command_timeout() -> int:
+    """
+    This method returns value of subarraynode's
+    AbortCommandTimeOut property.
+    """
+    db = tango.Database()
+    return int(
+        db.get_device_property(
+            tmc.subarray_node.dev_name(), "AbortCommandTimeOut"
+        )["AbortCommandTimeOut"][0]
     )

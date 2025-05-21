@@ -18,8 +18,8 @@ from ska_ser_logging import configure_logging
 from ska_tango_testing.integration import TangoEventTracer, log_events
 
 from tests.tmc_csp_new_ITH.conftest import (
-    ASSERTIONS_TIMEOUT,
     SubarrayTestContextData,
+    get_abort_command_timeout,
 )
 
 configure_logging(logging.DEBUG)
@@ -34,6 +34,10 @@ COMMAND_RESULT_SDP = (
     " mid-tmc/subarray-leaf-node-sdp/01: Timeout has occurred, "
     'command failed"]'
 )
+ABORT_COMMAND_TIMEOUT = get_abort_command_timeout()
+# It is expected that required event will get generated
+# once command timeout is captured on the subarraynode
+ASSERTIONS_TIMEOUT = ABORT_COMMAND_TIMEOUT + 10
 
 
 def _setup_event_subscriptions(
@@ -117,10 +121,13 @@ def send_restart_command(
     This step uses the tmc to send an Restart command to the
     specified subarray with provided defective subsystem.
     """
+    # Delay is set more than Restart command timeout to
+    # generate restart command timeout on the subarray node
+    delay = ABORT_COMMAND_TIMEOUT + 5
     if subsystem == "CSP":
-        csp.csp_subarray.SetDelayInfo(json.dumps({"Restart": 135}))
+        csp.csp_subarray.SetDelayInfo(json.dumps({"Restart": delay}))
     if subsystem == "SDP":
-        sdp.sdp_subarray.SetDelayInfo(json.dumps({"Restart": 135}))
+        sdp.sdp_subarray.SetDelayInfo(json.dumps({"Restart": delay}))
     context_fixt.when_action_name = "Restart"
     _, pytest.unique_id = tmc.subarray_node.Restart()
 
@@ -185,7 +192,7 @@ def verify_error_message(
             "CSP Subarray device"
             f"({csp.csp_subarray.dev_name()}) "
             "is expected to be in EMPTY obstate",
-        ).within_timeout(140).has_change_event_occurred(
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
             csp.csp_subarray,
             "obsState",
             ObsState.EMPTY,
@@ -199,7 +206,7 @@ def verify_error_message(
             f"({tmc.subarray_node.dev_name()}) "
             "is expected have longRunningCommandResult as "
             "(unique_id, COMMAND_RESULT)",
-        ).within_timeout(135).has_change_event_occurred(
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
             tmc.subarray_node,
             "longRunningCommandResult",
             (pytest.unique_id[0], COMMAND_RESULT_SDP),
@@ -212,7 +219,7 @@ def verify_error_message(
             "SDP Subarray device"
             f"({sdp.sdp_subarray.dev_name()}) "
             "is expected to be in EMPTY obstate",
-        ).within_timeout(140).has_change_event_occurred(
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
             sdp.sdp_subarray,
             "obsState",
             ObsState.EMPTY,
