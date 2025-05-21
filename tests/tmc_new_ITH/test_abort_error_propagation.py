@@ -116,7 +116,7 @@ def subarray_in_idle_obsstate(
 
 @when(
     parsers.parse(
-        "Abort is invoked on a defective subsystem {defectiveSubsystem}"
+        "Abort is invoked on a defective subsystem {defective_subsystem}"
     )
 )
 def send_abort_command(
@@ -125,7 +125,7 @@ def send_abort_command(
     csp: CSPFacade,
     sdp: SDPFacade,
     dishes: DishesFacade,
-    defectiveSubsystem: str,
+    defective_subsystem: str,
 ):
     """
     Send the Abort command to the subarray.
@@ -133,11 +133,11 @@ def send_abort_command(
     This step uses the tmc to send an Abort command to the
     specified subarray with provided defective subsystem.
     """
-    if defectiveSubsystem == "CSP":
+    if defective_subsystem == "CSP":
         csp.csp_subarray.SetDefective(ERROR_PROPAGATION_DEFECT)
-    if defectiveSubsystem == "SDP":
+    if defective_subsystem == "SDP":
         sdp.sdp_subarray.SetDefective(FAILED_RESULT_DEFECT)
-    if defectiveSubsystem == "Dish":
+    if defective_subsystem == "Dish":
         dish1 = dishes.dish_master_dict["dish_001"]
         dish1.SetDefective(ERROR_PROPAGATION_DEFECT)
     context_fixt.when_action_name = "Abort"
@@ -180,7 +180,7 @@ def verify_fault_obsstate(
 @then(
     parsers.parse(
         "the command failure is reported by subarray with error"
-        " message with {defectiveSubsystem}"
+        " message with {defective_subsystem}"
     )
 )
 def verify_error_message(
@@ -189,12 +189,12 @@ def verify_error_message(
     sdp: SDPFacade,
     dishes: DishesFacade,
     event_tracer: TangoEventTracer,
-    defectiveSubsystem: str,
+    defective_subsystem: str,
 ):
     """
     Verify the subarray's reports exception on its LRCR.
     """
-    if defectiveSubsystem == "CSP":
+    if defective_subsystem == "CSP":
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
             "'the subarray is in FAULT obsState' "
@@ -224,7 +224,7 @@ def verify_error_message(
             ObsState.ABORTED,
         )
 
-    if defectiveSubsystem == "SDP":
+    if defective_subsystem == "SDP":
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
             "'the subarray is in FAULT obsState' "
@@ -253,7 +253,7 @@ def verify_error_message(
             ObsState.ABORTED,
         )
 
-    if defectiveSubsystem == "Dish":
+    if defective_subsystem == "Dish":
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
             "'the subarray is in FAULT obsState' "

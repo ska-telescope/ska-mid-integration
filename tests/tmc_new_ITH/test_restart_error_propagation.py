@@ -105,7 +105,7 @@ def subarray_in_aborted_obsstate(
 
 @when(
     parsers.parse(
-        "Restart is invoked on a defective subsystem {defectiveSubsystem}"
+        "Restart is invoked on a defective subsystem {defective_subsystem}"
     )
 )
 def send_restart_command(
@@ -113,7 +113,7 @@ def send_restart_command(
     tmc: TMCFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
-    defectiveSubsystem: str,
+    defective_subsystem: str,
 ):
     """
     Send the Restart command to the subarray.
@@ -121,9 +121,9 @@ def send_restart_command(
     This step uses the tmc to send an Abort command to the
     specified subarray with provided defective subsystem.
     """
-    if defectiveSubsystem == "CSP":
+    if defective_subsystem == "CSP":
         csp.csp_subarray.SetDefective(ERROR_PROPAGATION_DEFECT)
-    if defectiveSubsystem == "SDP":
+    if defective_subsystem == "SDP":
         sdp.sdp_subarray.SetDefective(FAILED_RESULT_DEFECT)
     context_fixt.when_action_name = "Restart"
     _, pytest.unique_id = tmc.subarray_node.Restart()
@@ -153,7 +153,7 @@ def verify_restarting_obsstate(
 @then(
     parsers.parse(
         "the command failure is reported by subarray with error"
-        " message with {defectiveSubsystem}"
+        " message with {defective_subsystem}"
     )
 )
 def verify_error_message(
@@ -161,12 +161,12 @@ def verify_error_message(
     csp: CSPFacade,
     sdp: SDPFacade,
     event_tracer: TangoEventTracer,
-    defectiveSubsystem: str,
+    defective_subsystem: str,
 ):
     """
     Verify the subarray's reports exception on its LRCR.
     """
-    if defectiveSubsystem == "CSP":
+    if defective_subsystem == "CSP":
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
             "'the subarray is in RESTARTING obsState' "
@@ -196,7 +196,7 @@ def verify_error_message(
             ObsState.EMPTY,
         )
 
-    if defectiveSubsystem == "SDP":
+    if defective_subsystem == "SDP":
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
             "'the subarray is in RESTARTING obsState' "

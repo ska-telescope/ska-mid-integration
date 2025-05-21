@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from typing import Any
 
 import pytest
+import tango
 from ska_control_model import ObsState
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
 from ska_integration_test_harness.facades.dishes_facade import DishesFacade
@@ -174,3 +175,16 @@ def context_fixt() -> SubarrayTestContextData:
     :return: the shared variables.
     """
     return SubarrayTestContextData()
+
+
+def get_abort_command_timeout() -> int:
+    """
+    This method returns value of subarraynode's
+    AbortCommandTimeOut property.
+    """
+    db = tango.Database()
+    return int(
+        db.get_device_property(
+            tmc.subarray_node.dev_name(), "AbortCommandTimeOut"
+        )["AbortCommandTimeOut"][0]
+    )

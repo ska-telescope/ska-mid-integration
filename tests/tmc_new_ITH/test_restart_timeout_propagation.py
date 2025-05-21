@@ -17,10 +17,8 @@ from ska_integration_test_harness.inputs.test_harness_inputs import (
 from ska_ser_logging import configure_logging
 from ska_tango_testing.integration import TangoEventTracer, log_events
 
-from tests.tmc_csp_new_ITH.conftest import (
-    SubarrayTestContextData,
-    get_abort_command_timeout,
-)
+from tests.tmc_csp_new_ITH.conftest import SubarrayTestContextData
+from tests.tmc_new_ITH.conftest import get_abort_command_timeout
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
