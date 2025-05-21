@@ -1,4 +1,4 @@
-@SKA_mid @XTP-82066 @XTP-28347
+@SKA_mid @XTP-82066 @XTP-28347 @XTP-73592
 Scenario Outline: Error Propagation Reported by TMC Mid Abort command for defective subsystem subarray
 		Given the TMC subarray is in the READY observation state
 		When Abort is invoked on a defective subsystem <defective_subsystem>
@@ -11,7 +11,7 @@ Scenario Outline: Error Propagation Reported by TMC Mid Abort command for defect
                 | Dish                 |
 
 
-@SKA_mid @XTP-82067 @XTP-28347
+@SKA_mid @XTP-82067 @XTP-28347 @XTP-73592
 Scenario Outline: Error Propagation Reported by TMC Mid Restart command for defective subsystem subarray
 		Given the TMC subarray is in the ABORTED observation state
 		When Restart is invoked on a defective subsystem <defective_subsystem>
