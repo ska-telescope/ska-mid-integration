@@ -140,3 +140,9 @@ ska-mid-cbf-mcs:
 ska-mid-cbf-tmleafnode:
   labels: 
     app: ska-tmc-integration
+
+ska-mid-wms:
+  ska-tango-base:
+    enabled: false
+    itango:
+      enabled: false
