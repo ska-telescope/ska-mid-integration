@@ -1,17 +1,14 @@
-release=1.2.0-rc.1
-tag=1.2.0-rc.1
+release=1.2.0-rc.2
+tag=1.2.0-rc.2
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.1.0 to v1.2.0-rc.1**
+**1. Updated ska-tmc-mid from v1.2.0-rc.1 to 1.2.0-rc.2**
 
-    * TMC uses wrap sector to generate program track table
-    * TMC performs track table generation based on Fixed Trajectory data
-    * Partial Configure now supports updating individual configuration keys. The Dish Leaf Node applies changes only to the specified fields.
-
+    * Implemented timeout and exception propagation for Abort and Restart commands
+    
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.1.0 to v1.2.0-rc.1**
+**1. Updated ska-tmc-mid from v1.2.0-rc.1 to v1.2.0-rc.2**
 
-    * TMC uses wrap sector to generate program track table
-    * TMC performs track table generation based on Fixed Trajectory data
-    * Partial Configure now supports updating individual configuration keys. The Dish Leaf Node applies changes only to the specified fields.
+    * Implemented timeout and exception propagation for Abort and Restart commands
+ 
