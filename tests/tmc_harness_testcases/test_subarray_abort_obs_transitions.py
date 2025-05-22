@@ -4,6 +4,7 @@ import logging
 import pytest
 from ska_tango_base.control_model import ObsState
 
+from tests.resources.test_support.constant import ABORT_COMPLETED
 from tests.resources.test_support.enum import PointingState
 
 
@@ -99,13 +100,16 @@ class TestSubarrayNodeAbortCommandObsStateTransitions(object):
 
         event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
         event_recorder.subscribe_event(
+            subarray_node.subarray_node, "longRunningCommandResult"
+        )
+        event_recorder.subscribe_event(
             subarray_node.csp_subarray_leaf_node, "cspSubarrayObsState"
         )
         event_recorder.subscribe_event(
             subarray_node.sdp_subarray_leaf_node, "sdpSubarrayObsState"
         )
 
-        subarray_node.execute_transition("Abort", argin=None)
+        _, unique_id = subarray_node.execute_transition("Abort", argin=None)
 
         assert event_recorder.has_change_event_occurred(
             subarray_node.subarray_node,
@@ -125,6 +129,11 @@ class TestSubarrayNodeAbortCommandObsStateTransitions(object):
             "cspSubarrayObsState",
             ObsState.ABORTED,
             lookahead=15,
+        )
+        assert event_recorder.has_change_event_occurred(
+            subarray_node.subarray_node,
+            "longRunningCommandResult",
+            (unique_id[0], ABORT_COMPLETED),
         )
         assert event_recorder.has_change_event_occurred(
             subarray_node.subarray_node,
