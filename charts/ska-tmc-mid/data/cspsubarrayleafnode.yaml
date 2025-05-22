@@ -65,6 +65,9 @@ server:
               - name: "EventSubscriptionCheckPeriod"
                 values:
                 - "{{ $EventSubscriptionCheckPeriod }}"
+              - name: "WeatherStationDevName"
+                values:
+                - "mid/wms/0"
   {{- end}}
 depends_on:
   - device: sys/database/2
