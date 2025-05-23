@@ -102,21 +102,21 @@ sdpleafnodes:
   image:
     registry: artefact.skao.int
     image: ska-tmc-sdpleafnodes
-    tag: 0.22.2
+    tag: 0.22.3
     pullPolicy: IfNotPresent
 
 cspmasterleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.25.1
+    tag: 0.26.0
     pullPolicy: IfNotPresent
 
 cspsubarrayleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.25.1
+    tag: 0.26.0
     pullPolicy: IfNotPresent
 
 dishleafnode:
@@ -168,8 +168,11 @@ deviceServers:
     EventSubscriptionCheckPeriod: 1.5
     family: "subarray"
     resources:
+      limits:
+        cpu: 300m
+        memory: 1000Mi
       requests:
-        cpu: 200m
+        cpu: 500m
         memory: 300Mi
 
   sdpsubarrayleafnode:
@@ -247,6 +250,13 @@ deviceServers:
     ElevationMinLimit: 15.0
     AzimuthMaxLimit: 270
     AzimuthMinLimit: -270
+    resources:
+      limits:
+        memory: 1000Mi
+        cpu : 500m
+      requests:
+        cpu: 500m
+        memory: 300Mi
 
   mocks:
     enabled: false
@@ -254,6 +264,14 @@ deviceServers:
     dish: false
     csp: false
     sdp: false
+
+ska-mid-wms:
+  legacy_compatibility: true
+  dev-name: "mid/wms/0"
+  ska-tango-base:
+    enabled: false
+    itango:
+      enabled: false
 
 nodeSelector: {}
 

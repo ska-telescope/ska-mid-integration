@@ -38,6 +38,7 @@ from tests.resources.test_support.constant import centralnode, csp_master
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 MID_DELAYMODEL_VERSION = "https://schema.skao.int/ska-mid-csp-delaymodel/3.0"
+WEATHER_STATION = "mid/wms/0"
 
 
 def pytest_sessionstart(session):
@@ -303,6 +304,14 @@ def is_dish_vcc_set():
     """
     Validate dish vcc config set to true
     """
+    try:
+        weather_Station_dev_proxy = tango.DeviceProxy(WEATHER_STATION)
+        weather_Station_dev_proxy.adminMode = 0
+    except Exception as e:
+        # Any other unexpected error should surface as a test failure
+        LOGGER.exception(
+            "Unexpected error in set_weather_station fixture %s", e
+        )
     csp_master_device = tango.DeviceProxy(csp_master)
     if csp_master_device.adminMode != 0:
         csp_master_device.adminMode = 0

@@ -101,3 +101,9 @@ image:
   tag: "{{.Values.subarraynode.image.tag}}"
   pullPolicy: "{{.Values.subarraynode.image.pullPolicy}}"
 
+resources:
+  limits:
+    memory: "{{.Values.deviceServers.subarraynode.resources.limits.memory}}"
+  requests:
+    cpu: "{{.Values.deviceServers.subarraynode.resources.requests.cpu}}"
+    memory: "{{.Values.deviceServers.subarraynode.resources.requests.memory}}"

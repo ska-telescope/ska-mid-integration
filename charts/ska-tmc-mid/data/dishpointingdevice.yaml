@@ -71,3 +71,9 @@ image:
   image: "{{.Values.dishleafnode.image.image}}"
   tag: "{{.Values.dishleafnode.image.tag}}"
   pullPolicy: "{{.Values.dishleafnode.image.pullPolicy}}"
+resources:
+  limits:
+    memory: "{{.Values.deviceServers.dishpointingdevice.resources.limits.memory}}"
+  requests:
+    cpu: "{{.Values.deviceServers.dishpointingdevice.resources.requests.cpu}}"
+    memory: "{{.Values.deviceServers.dishpointingdevice.resources.requests.memory}}"
