@@ -168,8 +168,11 @@ deviceServers:
     EventSubscriptionCheckPeriod: 1.5
     family: "subarray"
     resources:
+      limits:
+        cpu: 300m
+        memory: 1000Mi
       requests:
-        cpu: 200m
+        cpu: 500m
         memory: 300Mi
 
   sdpsubarrayleafnode:
@@ -247,6 +250,13 @@ deviceServers:
     ElevationMinLimit: 15.0
     AzimuthMaxLimit: 270
     AzimuthMinLimit: -270
+    resources:
+      limits:
+        memory: 1000Mi
+        cpu : 500m
+      requests:
+        cpu: 500m
+        memory: 300Mi
 
   mocks:
     enabled: false
