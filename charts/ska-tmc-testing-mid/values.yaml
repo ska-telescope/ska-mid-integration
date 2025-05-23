@@ -142,7 +142,10 @@ ska-mid-cbf-tmleafnode:
     app: ska-tmc-integration
 
 ska-mid-wms:
+  legacy_compatibility: true
+  dev-name: "mid/wms/0"
   ska-tango-base:
     enabled: false
     itango:
       enabled: false
+  

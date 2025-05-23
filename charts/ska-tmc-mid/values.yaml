@@ -102,7 +102,7 @@ sdpleafnodes:
   image:
     registry: artefact.skao.int
     image: ska-tmc-sdpleafnodes
-    tag: 0.22.2
+    tag: 0.22.3
     pullPolicy: IfNotPresent
 
 cspmasterleafnode:
@@ -264,6 +264,14 @@ deviceServers:
     dish: false
     csp: false
     sdp: false
+
+ska-mid-wms:
+  legacy_compatibility: true
+  dev-name: "mid/wms/0"
+  ska-tango-base:
+    enabled: false
+    itango:
+      enabled: false
 
 nodeSelector: {}
 
