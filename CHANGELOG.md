@@ -1,13 +1,17 @@
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
-[1.2.0-rc.2]
+[1.2.0-rc.3]
 ************
 ### Added
   * Weather Station Device integrated which provides weather data for delay 
   correction calculations.
   * Updated SDP leafnode tag to 0.22.3
-
+  
+[1.2.0-rc.2]
+************
+### Added
+  * Implemented timeout and exception propagation for Abort and Restart commands
 
 [1.2.0-rc.1]
 ************

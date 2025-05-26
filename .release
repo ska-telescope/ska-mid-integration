@@ -1,15 +1,15 @@
-release=1.2.0-rc.2
-tag=1.2.0-rc.2
+release=1.2.0-rc.3
+tag=1.2.0-rc.3
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.2.0-rc.1 to v1.2.0-rc.2**
+**1. Updated ska-tmc-mid from v1.2.0-rc.2 to v1.2.0-rc.3**
 
     * Weather Station Device integrated which provides weather data for delay correction calculations.
    
     
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.2.0-rc.1 to v1.2.0-rc.2**
+**1. Updated ska-tmc-mid from v1.2.0-rc.2 to v1.2.0-rc.3**
 
     * Weather Station Device integrated which provides weather data for delay correction calculations.
  
