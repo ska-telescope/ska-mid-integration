@@ -5,7 +5,7 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 ************
 ### Added
   * Weather Station Device integrated which provides weather data for delay 
-  correction calculations.
+    correction calculations.
   * Updated SDP leafnode tag to 0.22.3
   
 [1.2.0-rc.2]
