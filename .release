@@ -1,14 +1,15 @@
-release=1.2.0-rc.2
-tag=1.2.0-rc.2
+release=1.2.0-rc.3
+tag=1.2.0-rc.3
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.2.0-rc.1 to 1.2.0-rc.2**
+**1. Updated ska-tmc-mid from v1.2.0-rc.2 to v1.2.0-rc.3**
 
-    * Implemented timeout and exception propagation for Abort and Restart commands
+    * Weather Station Device integrated which provides weather data (Pressure, Temperature ,Humidity) for delay correction calculations.
+   
     
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.2.0-rc.1 to v1.2.0-rc.2**
+**1. Updated ska-tmc-mid from v1.2.0-rc.2 to v1.2.0-rc.3**
 
-    * Implemented timeout and exception propagation for Abort and Restart commands
+    * Weather Station Device integrated which provides weather data (Pressure, Temperature ,Humidity) for delay correction calculations.
  
