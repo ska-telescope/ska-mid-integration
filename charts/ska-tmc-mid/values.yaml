@@ -169,10 +169,10 @@ deviceServers:
     family: "subarray"
     resources:
       limits:
-        cpu: 300m
+        cpu: 600m
         memory: 1000Mi
       requests:
-        cpu: 500m
+        cpu: 400m
         memory: 300Mi
 
   sdpsubarrayleafnode:
