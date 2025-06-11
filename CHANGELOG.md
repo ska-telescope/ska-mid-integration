@@ -1,6 +1,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+
+[1.2.0-rc.4]
+************
+### Fixed
+  * Updated version of weather station to resolve Bug SKB-932 : Operator
+    not setting to true while utilising Weather Station device.
+
 [1.2.0-rc.3]
 ************
 ### Added
