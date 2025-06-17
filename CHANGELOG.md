@@ -3,8 +3,8 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 [1.2.0-rc.5]
 ************
-### Fixed
-  * Added retry mechanism to device responsiveness check to fix SKB-860
+### Updated
+  * Utilised latest version of centralnode v0.19.7 to resolve SKB-860
 
 [1.2.0-rc.4]
 ************
