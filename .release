@@ -1,15 +1,15 @@
-release=1.2.0-rc.4
-tag=1.2.0-rc.4
+release=1.2.0-rc.5
+tag=1.2.0-rc.5
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.2.0-rc.4 to v1.2.0-rc.4**
+**1. Updated ska-tmc-mid from v1.2.0-rc.4 to v1.2.0-rc.5**
 
-    * Validation of bug SKB-932
+    * Utilised latest version of centralnode v0.19.7 to resolve SKB-860
    
     
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.2.0-rc.4 to v1.2.0-rc.4**
+**1. Updated ska-tmc-mid from v1.2.0-rc.4 to v1.2.0-rc.5**
 
-    * Validation of bug SKB-932
+    * Utilised latest version of centralnode v0.19.7 to resolve SKB-860
  
