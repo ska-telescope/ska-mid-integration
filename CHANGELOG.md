@@ -1,6 +1,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[1.3.0-rc.1]
+************
+### Added
+  * TMC-Mid considers weather parameters while calculating the delay model
+  * Validate SKB-932
+  * Utilised centralnode v0.19.7 to validate SKB-860.
+  * Utilised dishleafnode v0.23.1 with updated Abort command completion check.
+
 [1.2.0-rc.5]
 ************
 ### Updated
