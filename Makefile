@@ -73,7 +73,8 @@ SDP_SUBARRAY_PREFIX ?= tango://$(TANGO_HOST_NAME).$(KUBE_NAMESPACE).svc.$(CLUSTE
 CI_REGISTRY ?= gitlab.com
 
 # K8S_TEST_IMAGE_TO_TEST ?= artefact.skao.int/ska-tango-images-tango-itango:9.3.12## docker image that will be run for testing purpose
-K8S_TEST_IMAGE_TO_TEST ?= harbor.skao.int/production/ska-tango-images-pytango-builder:9.4.2
+K8S_TEST_IMAGE_TO_TEST ?= $(CAR_OCI_REGISTRY_HOST)/ska-tango-images-tango-itango:9.5.0
+
 
 TARANTA_ENABLED ?= false
 
@@ -87,7 +88,7 @@ TARANTA ?= false
 MINIKUBE ?= false ## Minikube or not
 FAKE_DEVICES ?= false ## Install fake devices or not
 
-ITANGO_DOCKER_IMAGE = $(CAR_OCI_REGISTRY_HOST)/ska-tango-images-tango-itango:9.3.10
+ITANGO_DOCKER_IMAGE = $(CAR_OCI_REGISTRY_HOST)/ska-tango-images-tango-itango:9.5.0
 
 # Test runner - run to completion job in K8s
 # name of the pod running the k8s_tests
@@ -212,7 +213,7 @@ cred:
 
 
 test-requirements:
-	@poetry export --without-hashes --dev --format requirements.txt --output tests/requirements.txt
+	@poetry export --without-hashes --with dev --format requirements.txt --output tests/requirements.txt
 
 k8s-pre-test: test-requirements    
 
