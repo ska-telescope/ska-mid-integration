@@ -5,4 +5,4 @@ Feature: Default
 	Scenario: Test AssignResources with SDP v1.0 to verify fix for SKB-927
 		Given subarray is in observation state EMPTY
 		When I assign resources with SDP interface v1.0 to the TMC Subarray
-		Then AssignResources is invoked on SDP with provided version v1.0
+		Then AssignResources is successfully invoked on SDP with provided version v1.0

@@ -114,7 +114,9 @@ def invoke_assign_resources(
     )
 
 
-@then("AssignResources is invoked on SDP with provided version v1.0")
+@then(
+    "AssignResources is successfully invoked on SDP with provided version v1.0"
+)
 def verify_version_sdp_mock_interface(sdp: SDPFacade):
     """Verify the interface version on SDP Mock device"""
     invoked_command_info = sdp.sdp_subarray.commandCallInfo
