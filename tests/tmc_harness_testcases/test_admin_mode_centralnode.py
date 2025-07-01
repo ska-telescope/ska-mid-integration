@@ -18,7 +18,7 @@ SUBSYSTEM_DEVICES = {
     "sdpcontroller": sdp_master,
 }
 
-
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../features/check_cmd_not_allowed_adminmode.feature",
