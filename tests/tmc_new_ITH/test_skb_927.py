@@ -66,7 +66,7 @@ def _setup_event_subscriptions(
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/skb_927.feature",
-    "Test AssignResources with SDP v1.0" " receiveAddresses",
+    "Test AssignResources with SDP v1.0",
 )
 def test_verify_927():
     """Test AssignResources with SDP v1.0."""
