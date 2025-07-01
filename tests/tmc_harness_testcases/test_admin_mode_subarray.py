@@ -15,6 +15,7 @@ SUBSYSTEM_DEVICES = {
     "sdpcontroller": sdp_master,
 }
 
+
 @pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
