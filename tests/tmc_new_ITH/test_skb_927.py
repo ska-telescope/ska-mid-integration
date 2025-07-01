@@ -1,4 +1,4 @@
-"""Verify bug SKB-837
+"""Verifies bug SKB-927
 """
 
 import json
