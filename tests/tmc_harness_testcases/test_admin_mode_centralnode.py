@@ -3,7 +3,7 @@ import time
 
 import pytest
 import tango
-from pytest_bdd import parsers, scenario, then, when
+from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import AdminMode
 
 from tests.resources.test_harness.helpers import (
@@ -30,6 +30,24 @@ def test_command_not_allowed():
     """
     Test case to verify command not allowed when adminMode OFFLINE/NOT_FITTED
     """
+
+
+@given("the telescope")
+def check_telescope_is_in_on_state(
+    central_node_mid,
+    subarray_node,
+    event_tracer,
+) -> None:
+    """
+    Ensure telescope is in ON state.
+    """
+    # Event Subscriptions
+    event_tracer.subscribe_event(
+        central_node_mid.central_node, "telescopeState"
+    )
+    event_tracer.subscribe_event(
+        subarray_node.subarray_node, "longRunningCommandResult"
+    )
 
 
 @when(
