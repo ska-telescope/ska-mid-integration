@@ -65,7 +65,7 @@ def invoke_assignresources(central_node_mid, command, command_input_factory):
             release_input = prepare_json_args_for_centralnode_commands(
                 "release_resources_mid", command_input_factory
             )
-            central_node_mid.perform_action("ReleaseResource", release_input)
+            central_node_mid.perform_action("ReleaseResources", release_input)
         elif "On" in command:
             central_node_mid.perform_action("On")
         elif "standby" in command:
