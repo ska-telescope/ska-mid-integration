@@ -8,8 +8,8 @@
 		Examples:
 		| subsystem           | adminmode    | command         |
 		| cspcontroller       | OFFLINE      | AssignResources |
-		| cspcontroller       | OFFLINE      | ReleaseResources|
 		| sdpcontroller       | NOT_FITTED   | ReleaseResources|
+		| cspcontroller       | OFFLINE      | ReleaseResources|
 		| sdpcontroller       | OFFLINE      | standby         |
 
 	@XTP-84042 @XTP-84039 @TEAM_HIMALAYA
