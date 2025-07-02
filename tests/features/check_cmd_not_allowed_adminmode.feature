@@ -7,7 +7,7 @@
 		Examples:
 		| subsystem           | adminmode    | command         |
 		| cspcontroller       | OFFLINE      | AssignResources |
-		| sdpcontroller       | NOT_FITTED   | ReleaseResources|
+		| cspcontroller       | NOT_FITTED   | ReleaseResources|
 		| cspcontroller       | OFFLINE      | ReleaseResources|
 		| sdpcontroller       | OFFLINE      | standby         |
 

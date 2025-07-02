@@ -59,19 +59,13 @@ def invoke_assignresources(
             configure_input = MyFileJSONInput("subarray", "configure_mid")
             tmc.configure(configure_input)
         elif "Scan" in command:
-            configure_input = MyFileJSONInput("subarray", "configure_mid")
-            tmc.configure(configure_input)
             scan_input = MyFileJSONInput("subarray", "scan_mid")
             tmc.scan(scan_input)
         elif "EndScan" in command:
-            configure_input = MyFileJSONInput("subarray", "configure_mid")
-            tmc.configure(configure_input)
-            scan_input = MyFileJSONInput("subarray", "scan_mid")
-            tmc.scan(scan_input)
+
             tmc.end_scan()
         elif "End" in command:
-            configure_input = MyFileJSONInput("subarray", "configure_mid")
-            tmc.configure(configure_input)
+
             tmc.end_observation()
         else:
             raise ValueError(f"Unsupported command: {command}")
