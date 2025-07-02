@@ -17,14 +17,14 @@ SUBSYSTEM_DEVICES = {
 }
 
 
-@pytest.mark.batch2
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/check_cmd_not_allowed_adminmode.feature",
     "Command not allowed from SubarrayNode when subsystem adminmode "
     "is OFFLINE/NOT_FITTED",
 )
-def test_command_not_allowed():
+def test_command_not_allowed_admin_mode_centralnode():
     """
     Test case to verify command not allowed when adminMode OFFLINE/NOT_FITTED
     """
@@ -59,11 +59,19 @@ def invoke_assignresources(
             configure_input = MyFileJSONInput("subarray", "configure_mid")
             tmc.configure(configure_input)
         elif "Scan" in command:
+            configure_input = MyFileJSONInput("subarray", "configure_mid")
+            tmc.configure(configure_input)
             scan_input = MyFileJSONInput("subarray", "scan_mid")
             tmc.scan(scan_input)
         elif "EndScan" in command:
+            configure_input = MyFileJSONInput("subarray", "configure_mid")
+            tmc.configure(configure_input)
+            scan_input = MyFileJSONInput("subarray", "scan_mid")
+            tmc.scan(scan_input)
             tmc.end_scan()
         elif "End" in command:
+            configure_input = MyFileJSONInput("subarray", "configure_mid")
+            tmc.configure(configure_input)
             tmc.end_observation()
         else:
             raise ValueError(f"Unsupported command: {command}")

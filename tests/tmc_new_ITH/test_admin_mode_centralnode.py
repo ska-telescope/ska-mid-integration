@@ -18,14 +18,14 @@ SUBSYSTEM_DEVICES = {
 }
 
 
-@pytest.mark.batch2
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/check_cmd_not_allowed_adminmode.feature",
     "Command not allowed from CentralNode when subsystem adminmode "
     "is OFFLINE/NOT_FITTED",
 )
-def test_command_not_allowed():
+def test_command_not_allowed_admin_mode_subarray():
     """
     Test case to verify command not allowed when adminMode OFFLINE/NOT_FITTED
     """
@@ -62,6 +62,10 @@ def invoke_assignresources(
             )
             tmc.assign_resources(assign_input)
         elif "ReleaseResources" in command:
+            assign_input = MyFileJSONInput(
+                "centralnode", "assign_resources_mid"
+            )
+            tmc.assign_resources(assign_input)
             release_input = MyFileJSONInput(
                 "centralnode", "release_resources_mid"
             )
