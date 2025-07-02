@@ -12,7 +12,7 @@ SDP assign resources schema if not set.
 
 ### Fixed
 * Hardcoding of sdpleafnode is now removed and attribute is created to make it
-  runtime configurable.This resolves SKB-927.
+runtime configurable.This resolves SKB-927.
 
 
 [1.3.0-rc.1]
