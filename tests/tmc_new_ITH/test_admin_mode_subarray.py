@@ -5,9 +5,10 @@ import pytest
 import tango
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import AdminMode
+from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 
-from tests.resources.test_harness.helpers import prepare_json_args_for_commands
 from tests.resources.test_support.constant import csp_master, sdp_master
+from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 
 TIMEOUT = 100
 SUBSYSTEM_DEVICES = {
@@ -47,28 +48,23 @@ def set_admin_mode(subsystem, adminmode):
 
 @when(parsers.parse("I invoke command {command} on subarraynode"))
 def invoke_assignresources(
+    tmc: TMCFacade,
     command,
-    subarray_node,
-    command_input_factory,
 ):
     """Invokes command on TMC"""
     pytest.command_failed_exception = None
 
     try:
         if "Configure" in command:
-            configure_input_json = prepare_json_args_for_commands(
-                "configure_mid", command_input_factory
-            )
-            subarray_node.perform_action("Configure", configure_input_json)
+            configure_input = MyFileJSONInput("subarray", "configure_mid")
+            tmc.configure(configure_input)
         elif "Scan" in command:
-            scan_input_json = prepare_json_args_for_commands(
-                "scan_mid", command_input_factory
-            )
-            subarray_node.perform_action("Scan", scan_input_json)
+            scan_input = MyFileJSONInput("subarray", "scan_mid")
+            tmc.scan(scan_input)
         elif "EndScan" in command:
-            subarray_node.perform_action("EndScan")
+            tmc.end_scan()
         elif "End" in command:
-            subarray_node.perform_action("End")
+            tmc.end_observation()
         else:
             raise ValueError(f"Unsupported command: {command}")
     except (tango.DevFailed, RuntimeError, ValueError) as e:

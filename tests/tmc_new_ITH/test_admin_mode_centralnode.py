@@ -5,11 +5,10 @@ import pytest
 import tango
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import AdminMode
+from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 
-from tests.resources.test_harness.helpers import (
-    prepare_json_args_for_centralnode_commands,
-)
 from tests.resources.test_support.constant import csp_master, sdp_master
+from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 
 TIMEOUT = 100
 
@@ -49,27 +48,28 @@ def set_admin_mode(subsystem, adminmode):
 
 
 @when(parsers.parse("I invoke command {command} on centralnode"))
-def invoke_assignresources(central_node_mid, command, command_input_factory):
+def invoke_assignresources(
+    tmc: TMCFacade,
+    command,
+):
     """Invokes command on TMC"""
     pytest.command_failed_exception = None
 
     try:
         if "AssignResources" in command:
-            assign_input_json = prepare_json_args_for_centralnode_commands(
-                "assign_resources_mid", command_input_factory
+            assign_input = MyFileJSONInput(
+                "centralnode", "assign_resources_mid"
             )
-            central_node_mid.perform_action(
-                "AssignResources", assign_input_json
-            )
+            tmc.assign_resources(assign_input)
         elif "ReleaseResources" in command:
-            release_input = prepare_json_args_for_centralnode_commands(
-                "release_resources_mid", command_input_factory
+            release_input = MyFileJSONInput(
+                "centralnode", "release_resources_mid"
             )
-            central_node_mid.perform_action("ReleaseResources", release_input)
+            tmc.release_resources(release_input)
         elif "On" in command:
-            central_node_mid.perform_action("On")
+            tmc.move_to_on()
         elif "standby" in command:
-            central_node_mid.perform_action("TelescopeStandBy")
+            tmc.set_standby()
         else:
             raise ValueError(f"Unsupported command: {command}")
     except (tango.DevFailed, RuntimeError, ValueError) as e:
