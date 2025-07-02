@@ -32,25 +32,7 @@ def test_command_not_allowed():
     """
 
 
-@given("the telescope")
-def check_telescope_is_in_on_state(
-    central_node_mid,
-    subarray_node,
-    event_tracer,
-) -> None:
-    """
-    Ensure telescope is in ON state.
-    """
-    # Event Subscriptions
-    event_tracer.subscribe_event(
-        central_node_mid.central_node, "telescopeState"
-    )
-    event_tracer.subscribe_event(
-        subarray_node.subarray_node, "longRunningCommandResult"
-    )
-
-
-@when(
+@given(
     parsers.parse(
         "the adminmode of subsystem controller {subsystem} is {adminmode}"
     )
