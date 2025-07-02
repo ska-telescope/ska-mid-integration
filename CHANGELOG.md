@@ -1,6 +1,20 @@
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[1.4.0-rc.1]
+************
+### Added
+* Attribute on sdpleafnode named `assignResourcesSchemaVersion` which sets default version of
+SDP assign resources schema if not set.
+
+### Updated 
+* TMC Mid supports new TMC AssignResources json v2.2 with SDP v1.0.
+
+### Fixed
+* Hardcoding of sdpleafnode is now removed and attribute is created to make it
+runtime configurable.This resolves SKB-927.
+
+
 [1.3.0-rc.1]
 ************
 ### Added
