@@ -13,8 +13,13 @@ from tests.resources.test_support.constant import COMMAND_COMPLETED
 class TestMidCentralNodeAssignResources(object):
     @pytest.mark.batch1
     @pytest.mark.SKA_mid
+    @pytest.mark.parametrize(
+        "input_json_name",
+        ["assign_resources_mid", "assign_resources_mid_v2_1"],
+    )
     def test_mid_centralnode_assign_resources(
         self,
+        input_json_name,
         central_node_mid,
         event_recorder,
         simulator_factory,
@@ -36,7 +41,7 @@ class TestMidCentralNodeAssignResources(object):
         """
 
         assign_input_json = prepare_json_args_for_centralnode_commands(
-            "assign_resources_mid", command_input_factory
+            input_json_name, command_input_factory
         )
         csp_sim, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
         event_recorder.subscribe_event(csp_sim, "obsState")
