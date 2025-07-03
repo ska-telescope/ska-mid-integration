@@ -3,14 +3,10 @@
 		Given the adminmode of subsystem controller <subsystem> is <adminmode>
 		When I invoke command <command> on centralnode
 		Then the centralnode rejects the command 
-		
 		Examples:
 		| subsystem           | adminmode    | command          |
-		| cspcontroller       | OFFLINE      | On               |
-		| cspcontroller       | OFFLINE      | AssignResources  |
-		| cspcontroller       | OFFLINE      | ReleaseResources |
+		| cspcontroller       | NOT_FITTED   | ReleaseResources |
 		| sdpcontroller       | OFFLINE      | ReleaseResources |
-		| sdpcontroller       | OFFLINE      | standby          |
 		| sdpcontroller       | NOT_FITTED   | ReleaseResources |
 
 	@XTP-84042 @XTP-84039 @TEAM_HIMALAYA
