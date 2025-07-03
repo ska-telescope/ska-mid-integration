@@ -63,6 +63,11 @@ def invoke_assignresources(
             )
             tmc.assign_resources(assign_input)
         elif "ReleaseResources" in command:
+            assign_input = MyFileJSONInput(
+                "centralnode", "assign_resources_mid"
+            )
+            tmc.assign_resources(assign_input)
+
             release_input = MyFileJSONInput(
                 "centralnode", "release_resources_mid"
             )
