@@ -1,5 +1,4 @@
 """Test the command not allowed when adminmode NOT_FITTED/OFFLINE"""
-import time
 
 import pytest
 import tango
