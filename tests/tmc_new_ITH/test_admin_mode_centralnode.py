@@ -43,8 +43,6 @@ def set_admin_mode(subsystem, adminmode):
     proxy = tango.DeviceProxy(device_name)
     mode_enum = AdminMode[adminmode]
     proxy.adminMode = mode_enum
-    time.sleep(0.1)
-    # Optional: Assert adminMode is set
     assert proxy.adminMode == mode_enum
 
 
