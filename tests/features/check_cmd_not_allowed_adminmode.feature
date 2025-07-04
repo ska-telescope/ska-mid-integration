@@ -7,7 +7,7 @@
 		| subsystem           | adminmode    | command          |
 		| cspcontroller       | OFFLINE      | On               |
 		| cspcontroller       | OFFLINE      | AssignResources  |
-		| cspcontroller       | NOT_FITTED   | ReleaseResources |
+		| sdpcontroller       | NOT_FITTED   | AssignResources  |
 		| sdpcontroller       | OFFLINE      | ReleaseResources |
 		| sdpcontroller       | OFFLINE      | standby          |
 		| sdpcontroller       | NOT_FITTED   | ReleaseResources |
