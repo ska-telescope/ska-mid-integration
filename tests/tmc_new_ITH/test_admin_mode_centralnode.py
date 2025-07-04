@@ -76,7 +76,7 @@ def invoke_assignresources(
 
 @then("the centralnode rejects the command")
 def centralnode_rejects_command():
-    """Assert the previously invoked command was rejected due to adminMode."""
+    """Assert the invoked command was rejected due to adminMode."""
     exc = getattr(pytest, "command_failed_exception", None)
     assert (
         exc is not None
