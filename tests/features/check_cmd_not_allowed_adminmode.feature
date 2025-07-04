@@ -8,7 +8,7 @@
 		| cspcontroller       | OFFLINE      | On               |
 		| cspcontroller       | OFFLINE      | AssignResources  |
 		| sdpcontroller       | NOT_FITTED   | AssignResources  |
-		| sdpcontroller       | OFFLINE      | ReleaseResources |
+		| sdpcontroller       | NOT_FITTED   | ReleaseResources |
 		| sdpcontroller       | OFFLINE      | standby          |
 		| sdpcontroller       | NOT_FITTED   | ReleaseResources |
 
