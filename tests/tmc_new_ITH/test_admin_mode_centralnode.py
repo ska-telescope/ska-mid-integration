@@ -1,4 +1,5 @@
 """Test the command not allowed when adminmode NOT_FITTED/OFFLINE"""
+import time
 
 import pytest
 import tango
@@ -42,6 +43,7 @@ def set_admin_mode(subsystem, adminmode):
     proxy = tango.DeviceProxy(device_name)
     mode_enum = AdminMode[adminmode]
     proxy.adminMode = mode_enum
+    time.sleep(0.2)
     assert proxy.adminMode == mode_enum
 
 
