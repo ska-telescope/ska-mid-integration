@@ -18,7 +18,6 @@
 		Given the adminmode of subsystem subarray <subsystem> is <adminmode>
 		When I invoke command <command> on subarraynode
 		Then the subarraynode rejects the command
-		
 		Examples:
 		| subsystem         | adminmode    | command   |
 		| cspsubarray       | OFFLINE      | Configure |
