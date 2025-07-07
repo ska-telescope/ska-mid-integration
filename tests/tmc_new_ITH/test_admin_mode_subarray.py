@@ -7,13 +7,13 @@ from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import AdminMode
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 
-from tests.resources.test_support.constant import csp_master, sdp_master
+from tests.resources.test_support.constant import csp_subarray1, sdp_subarray1
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 
 TIMEOUT = 100
 SUBSYSTEM_DEVICES = {
-    "cspcontroller": csp_master,
-    "sdpcontroller": sdp_master,
+    "cspsubarray": csp_subarray1,
+    "sdpsubarray": sdp_subarray1,
 }
 
 
