@@ -148,7 +148,7 @@ deviceServers:
     KValueValidRange:
       min: 1
       max: 1177
-    CommandTimeOut: 120
+    CommandTimeOut: 30
     DishVccInitTimeout: 180
     LivelinessCheckPeriod: 2.0
     EventSubscriptionCheckPeriod: 2.0
@@ -162,7 +162,7 @@ deviceServers:
     CspAssignResourcesInterfaceURL: "https://schema.skao.int/ska-csp-assignresources/2.0"
     CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.0"
     SdpScanInterfaceURL: "https://schema.skao.int/ska-sdp-scan/0.4"
-    CommandTimeOut: 110
+    CommandTimeOut: 20
     AbortCommandTimeOut: 130
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
