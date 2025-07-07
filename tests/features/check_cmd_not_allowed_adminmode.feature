@@ -24,3 +24,4 @@
 		| cspsubarray       | NOT_FITTED   | Scan      |
 		| sdpsubarray       | OFFLINE      | End       |
 		| sdpsubarray       | NOT_FITTED   | EndScan   |
+		

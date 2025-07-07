@@ -17,7 +17,6 @@ SUBSYSTEM_DEVICES = {
 }
 
 
-@pytest.mark.aki
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
