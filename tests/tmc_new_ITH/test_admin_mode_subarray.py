@@ -17,7 +17,7 @@ SUBSYSTEM_DEVICES = {
 }
 
 
-@pytest.mark.batch1
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../features/check_cmd_not_allowed_adminmode.feature",
