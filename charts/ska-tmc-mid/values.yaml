@@ -95,14 +95,14 @@ subarraynode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-subarraynode
-    tag: 0.34.5
+    tag: 0.35.0
     pullPolicy: IfNotPresent
 
 sdpleafnodes:
   image:
     registry: artefact.skao.int
     image: ska-tmc-sdpleafnodes
-    tag: 0.23.1
+    tag: 0.23.2
     pullPolicy: IfNotPresent
 
 cspmasterleafnode:
@@ -182,7 +182,7 @@ deviceServers:
     AdapterTimeOut: 2
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
-    SDPSubarrayAdminModeEnabled: false
+    SDPSubarrayAdminModeEnabled: true
     family: "subarray-leaf-node-sdp"
 
   sdpmasterleafnode:
@@ -192,7 +192,7 @@ deviceServers:
     AdapterTimeOut: 2
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
-    SDPMasterAdminModeEnabled: false
+    SDPMasterAdminModeEnabled: true
     family: "leaf-node-sdp"
     member : "0"
 
