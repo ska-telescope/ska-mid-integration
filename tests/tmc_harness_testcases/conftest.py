@@ -480,23 +480,22 @@ def validate_error_message_reporting(
 
     pytest.defective_subarray.SetDefective(json.dumps({"enabled": False}))
 
-    event_tracer.clear_events()
 
-
-@then(parsers.parse("the TMC SubarrayNode remains in {stuck} obsState"))
+@then("the TMC SubarrayNode transitions to FAULT obsState")
 def validate_subarry_obsState(
-    subarray_node: SubarrayNodeWrapper,
-    stuck,
+    subarray_node_low: SubarrayNodeWrapper,
+    event_tracer: TangoEventTracer,
 ):
     """
     Check if TMC subarray remains in stuck Obs-State.
     """
-
-    attribute_value = subarray_node.subarray_node.read_attribute(
-        "obsState"
-    ).value
-
-    if stuck == "READY":
-        assert attribute_value == ObsState.READY
-    elif stuck == "SCANNING":
-        assert attribute_value == ObsState.SCANNING
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "THEN" STEP: '
+        '"the TMC SubarrayNode transitions to FAULT obsState"'
+        f"({subarray_node_low.subarray_node.dev_name()}) "
+        "is expected to be in FAULT obstate",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        subarray_node_low.subarray_node,
+        "obsState",
+        ObsState.FAULT,
+    )

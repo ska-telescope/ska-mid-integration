@@ -15,7 +15,8 @@ KUBE_NAMESPACE_SDP ?= ska-tmc-integration-sdp
 K8S_TIMEOUT ?= 800s
 PYTHON_LINT_TARGET ?= tests/
 DEPLOYMENT_TYPE = $(shell echo $(TELESCOPE) | cut -d '-' -f2)
-MARK ?= $(shell echo $(TELESCOPE) | sed "s/-/_/g") ## What -m opt to pass to pytest
+# MARK ?= $(shell echo $(TELESCOPE) | sed "s/-/_/g") ## What -m opt to pass to pytest
+MARK = SKA_fault
 # run one test with FILE=acceptance/test_subarray_node.py::test_check_internal_model_according_to_the_tango_ecosystem_deployed
 FILE ?= tests## A specific test file to pass to pytest
 ADD_ARGS ?= ## Additional args to pass to pytest
@@ -24,14 +25,14 @@ FILE_NAME?= alarm_rules.txt
 
 # ----------------------------------------------------------------------------
 # Exit at failure flag
-# 
+#
 # The following flag is used to determine whether the test run should exit at
 # the first failure or continue running tests after a failure. By default, the
 # test run will exit at the first failure. To continue running tests after a
 # failure, set the flag to 'false'.
 
-EXIT_AT_FAIL ?= false ## Flag for determining exit at failure. 
-# Set 'true' to exit at first failure. Set 'false' to continue running 
+EXIT_AT_FAIL ?= false ## Flag for determining exit at failure.
+# Set 'true' to exit at first failure. Set 'false' to continue running
 # tests after failure. It defaults to 'true' if not set.
 # Actually, any value other than 'false' will be treated as 'true'.
 
@@ -214,12 +215,12 @@ cred:
 test-requirements:
 	@poetry export --without-hashes --with dev --format requirements.txt --output tests/requirements.txt
 
-k8s-pre-test: test-requirements    
+k8s-pre-test: test-requirements
 
 # ----------------------------------------------------------------------------
 # Trick to select a subset of the tests to run by their python name
 # Very useful when debugging a single test
-# 
+#
 # Example:
 # make k8s-test MARK=tmc_csp PYTHON_TEST_NAME="abort"
 # # Expected result: among all the tests with "tmc_csp" as a marker,
@@ -236,10 +237,10 @@ endif
 # test results files
 # (The following variables are used to generate the various test results files
 # i.e., cucumber.json, report.json, and report.html)
-# 
+#
 # report.html is used to generate the BDD test report by the pytest-bdd-report
 # plugin. The plugin generates a BDD test report in HTML format, that will
-# then be published in the artifacts and that will be linked in the 
+# then be published in the artifacts and that will be linked in the
 # Jira ticket of the test execution.
 
 # target file names for the cucumber-related test results json files
@@ -258,7 +259,7 @@ HTML_REPORT_TARGET_FILE ?= build/report.html
 # ----------------------------------------------------------------------------
 # Add all the flags needed to generate the test results files
 
-# Add BDD report output 
+# Add BDD report output
 PYTHON_VARS_AFTER_PYTEST += \
 	--cucumberjson="$(CUCUMBER_JSON_RESULT_FILE)" \
 	--json-report \
@@ -275,7 +276,7 @@ endif
 # Jira test execution issue
 
 ## General flag to enable/disable the publishing of the BDD HTML test report
-# to the Jira test execution issue. 
+# to the Jira test execution issue.
 # Set to any value other than "true" to disable it
 ENRICH_TEST_EXECUTIONS ?= true
 ENRICH_TEST_EXECUTIONS_PARAMS ?=
@@ -291,9 +292,9 @@ ENRICH_TEST_EXECUTIONS_PARAMS += --jira-url="$(strip $(JIRA_URL))" \
 
 # NOTE: we assume CI_JOB_ID and CI_COMMIT_SHA are available in the environment
 
-## Flag to set to "true" if you want to add also a link to the 
+## Flag to set to "true" if you want to add also a link to the
 # BDD test documentation in the Jira test execution issue
-# (Set to false to disable the link to the BDD test documentation 
+# (Set to false to disable the link to the BDD test documentation
 # in the Jira test execution issue)
 ADD_DOCS_LINK_TO_JIRA ?= false
 ## The folder where the documentation will be generated
@@ -305,7 +306,7 @@ endif
 
 
 ## After the test run and the Test Execution Jira ticket is created,
-# if the HTML report is enabled and 
+# if the HTML report is enabled and
 # the script to publish the HTML report to Jira is available,
 # then publish a link to the HTML report to Jira
 # xray-post-publish:
