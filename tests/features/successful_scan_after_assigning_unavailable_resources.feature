@@ -1,5 +1,5 @@
 Feature: Successfully execute a scan after a failed assign resources
-    @XTP-20320 @SKA_mid
+    @XTP-20320 @XTP-28347 @SKA_mid
     Scenario: Successfully execute a scan after invoking assign resources with unavailable resources
         Given a subarray <subarray_id> with resources <resources_list> in obsState EMPTY
         When I issue the command AssignResources with unavailable resources <resources_list> to the subarray <subarray_id>
@@ -19,7 +19,7 @@ Feature: Successfully execute a scan after a failed assign resources
         | subarray_id  | resources_list |
         | 1            | "SKA999"       |
 
-    @XTP-20320 @SKA_mid
+    @XTP-20320 @XTP-28347 @SKA_mid
     Scenario: Successfully execute a scan after invoking successive assign resources with unavailable resources
         Given a subarray <subarray_id> with resources <resources_list> in obsState EMPTY
         When I issue the command AssignResources with unavailable resources <resources_list> to the subarray <subarray_id>

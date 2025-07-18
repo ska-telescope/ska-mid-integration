@@ -1,5 +1,5 @@
 Feature: TMC SubarrayNode handles failure for Configure command    
-    @SKA_mid @XTP-28835
+    @SKA_mid @XTP-28835 @XTP-28347
     Scenario Outline: TMC behavior when SDP Subarray Configure raises exception
         Given a TMC
         And the resources are assigned to TMC SubarrayNode

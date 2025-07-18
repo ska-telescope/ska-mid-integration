@@ -1,5 +1,5 @@
 Feature: TMC SubarrayNode handles failure for Configure command
-    @SKA_mid @XTP-28834
+    @SKA_mid @XTP-28834 @XTP-28347
     Scenario Outline: TMC behavior when Csp Subarray is stuck in obsState CONFIGURING
         Given a TMC
         And the resources are assigned to TMC SubarrayNode
