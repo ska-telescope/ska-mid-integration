@@ -1,5 +1,5 @@
 # This Feature cover scenario from excel sheet: https://docs.google.com/spreadsheets/d/1XbNb8We7fK-EhmOcw3S-h0V_Pu-WAfPTkEd13MSmIns/edit#gid=747888622
-@XTP-85072 @@XTP-73574 @XTP-28347
+@XTP-85072 @XTP-73574 @XTP-28347
 Scenario Outline: Subarray Health State should be Failed or Degraded when one or more devices health state is Failed or Degraded
 Given csp subarray, sdp subarray and dish masters health state is OK 
 When The <Devices> health state changes to <Device_Health_State> 
