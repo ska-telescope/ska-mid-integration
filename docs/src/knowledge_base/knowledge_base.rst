@@ -10,3 +10,4 @@ Knowledge Base
    components/components
    deployment/deployment
    fqdns
+   admin_mode
