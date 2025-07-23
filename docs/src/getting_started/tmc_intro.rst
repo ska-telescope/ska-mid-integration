@@ -1,7 +1,7 @@
 .. _tmc_intro:
 
 Introduction to TMC
-======================================
+====================
 
 The Telescope Monitor and Control (TMC) is the software module identified to perform the telescope management, 
 and data management functions of the Telescope Manager. 
