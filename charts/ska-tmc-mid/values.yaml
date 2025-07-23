@@ -80,8 +80,8 @@ dsconfig:
 itango:
   image:
     registry: artefact.skao.int
-    image: ska-tango-images-tango-itango
-    tag: 9.3.10
+    image: ska-cicd-k8s-tools-build-deploy
+    tag: 0.13.4
     pullPolicy: IfNotPresent
 
 centralnode:
