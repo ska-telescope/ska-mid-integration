@@ -571,7 +571,10 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 LOGGER.info("Calling Abort and Restart on SubarrayNode")
                 self.subarray_abort()
                 self.subarray_restart()
-            elif self.subarray_node.obsState == ObsState.ABORTED:
+            elif self.subarray_node.obsState in [
+                ObsState.ABORTED,
+                ObsState.FAULT,
+            ]:
                 self.subarray_restart()
 
             LOGGER.info("telescope_state - %s", self.telescope_state)
