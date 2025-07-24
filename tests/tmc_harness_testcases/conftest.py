@@ -483,7 +483,7 @@ def validate_error_message_reporting(
 
 @then("the TMC SubarrayNode transitions to FAULT obsState")
 def validate_subarry_obsState(
-    subarray_node_low: SubarrayNodeWrapper,
+    subarray_node: SubarrayNodeWrapper,
     event_tracer: TangoEventTracer,
 ):
     """
@@ -492,10 +492,10 @@ def validate_subarry_obsState(
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "THEN" STEP: '
         '"the TMC SubarrayNode transitions to FAULT obsState"'
-        f"({subarray_node_low.subarray_node.dev_name()}) "
+        f"({subarray_node.subarray_node.dev_name()}) "
         "is expected to be in FAULT obstate",
     ).within_timeout(TIMEOUT).has_change_event_occurred(
-        subarray_node_low.subarray_node,
+        subarray_node.subarray_node,
         "obsState",
         ObsState.FAULT,
     )
