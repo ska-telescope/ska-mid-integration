@@ -5,7 +5,7 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 ************
 Added
 -----
-* Update
+* Incorporated Cable/static delays in the TMC Mid.
 
 
 [1.5.0-rc.1]
