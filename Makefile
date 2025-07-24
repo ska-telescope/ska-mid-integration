@@ -221,8 +221,8 @@ k8s-pre-test: test-requirements
 # Very useful when debugging a single test
 # 
 # Example:
-# make k8s-test MARK=tmc_csp PYTHON_TEST_NAME="abort"
-# # Expected result: among all the tests with "tmc_csp" as a marker,
+# make k8s-test MARK=tmc PYTHON_TEST_NAME="abort"
+# # Expected result: among all the tests with "tmc" as a marker,
 # #  			  only the ones with "abort" in their name will be run.
 
 PYTHON_TEST_NAME ?= ## -k parameter for pytest

@@ -1,4 +1,4 @@
-@XTP-49365 @XTP-73592 @Team_SAHYADRI
+@XTP-49365 @XTP-73592 @XTP-28347 @Team_SAHYADRI
 Scenario: Verify error propogation with defective CSP Subarray on ReleaseResources
 	Given the telescope is in ON state
 	And TMC subarray is in ObsState IDLE

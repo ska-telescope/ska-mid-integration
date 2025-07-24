@@ -1,5 +1,5 @@
 Feature: TMC able to Configure Subarray with ADR-63 based changes 
-    @SKA_mid @XTP-75211
+    @SKA_mid @XTP-75211 @XTP-28347
     Scenario Outline: TMC behavior when configure command is invoked with ADR-63 JSON
         Given a TMC
         When the resources are assigned to TMC SubarrayNode

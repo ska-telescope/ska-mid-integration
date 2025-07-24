@@ -1,5 +1,5 @@
 
-@Team_SAHYADRI @XTP-64365 @SKA_mid
+@Team_SAHYADRI @XTP-64365 @XTP-28347 @SKA_mid
 Scenario: TMC mid executes Abort command on DISH with pointingState SLEW
     Given TMC subarray <subarray_id> with <dish_ids> is in obsState CONFIGURING
     And DishMaster <dish_ids> is in dishMode OPERATE with pointingState SLEW

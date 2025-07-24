@@ -1,5 +1,5 @@
 Feature:  TMC executes successive configure commands
-    @SKA_mid
+    @SKA_mid @XTP-85071 @XTP-28347
     Scenario: TMC validates reconfigure functionality
         Given the TMC is On
         And the subarray is in IDLE obsState
