@@ -36,6 +36,7 @@ from tests.tmc_harness_testcases.conftest import (
 )
 
 
+@pytest.mark.SKA_fault
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
@@ -49,6 +50,7 @@ def test_tmc_command_error_propagation():
     """
 
 
+@pytest.mark.SKA_fault
 @pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
@@ -244,5 +246,3 @@ def validate_error_message_reporting(
 
     pytest.defective_subarray.SetDefective(json.dumps({"enabled": False}))
     pytest.defective_subarray.ResetDelayInfo()
-
-    event_tracer.clear_events()
