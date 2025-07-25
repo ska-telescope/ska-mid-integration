@@ -70,7 +70,7 @@ def test_tmc_command_timeout_error_propagation():
 def execute_command(
     device,
     command,
-    central_node: CentralNodeWrapperMid,
+    central_node_mid: CentralNodeWrapperMid,
     subarray_node: SubarrayNodeWrapper,
     event_tracer: TangoEventTracer,
     command_input_factory: JsonFactory,
@@ -86,7 +86,7 @@ def execute_command(
                 )
                 LOGGER.info("Working on Configure")
                 perform_ready_transition(
-                    central_node,
+                    central_node_mid,
                     subarray_node,
                     event_tracer,
                     command_input_factory,
@@ -137,7 +137,7 @@ def execute_command(
                 )
                 LOGGER.info("Working on Configure")
                 perform_ready_transition(
-                    central_node,
+                    central_node_mid,
                     subarray_node,
                     event_tracer,
                     command_input_factory,
@@ -173,7 +173,7 @@ def execute_command(
 
 @when(parsers.parse("{command} is invoked on a {defectiveSubsystem} Subarray"))
 def execute_command_on_tmc_with_defectivesetup(
-    central_node: CentralNodeWrapperMid,
+    central_node_mid: CentralNodeWrapperMid,
     subarray_node: SubarrayNodeWrapper,
     event_tracer: TangoEventTracer,
     simulator_factory: SimulatorFactory,
@@ -199,7 +199,7 @@ def execute_command_on_tmc_with_defectivesetup(
             execute_command(
                 "CSP",
                 command,
-                central_node,
+                central_node_mid,
                 subarray_node,
                 event_tracer,
                 command_input_factory,
@@ -215,7 +215,7 @@ def execute_command_on_tmc_with_defectivesetup(
             execute_command(
                 "SDP",
                 command,
-                central_node,
+                central_node_mid,
                 subarray_node,
                 event_tracer,
                 command_input_factory,
@@ -234,7 +234,7 @@ def execute_command_on_tmc_with_defectivesetup(
             execute_command(
                 "DISH",
                 command,
-                central_node,
+                central_node_mid,
                 subarray_node,
                 event_tracer,
                 command_input_factory,

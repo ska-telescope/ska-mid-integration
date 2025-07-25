@@ -447,7 +447,7 @@ def execute_command_on_tmc_with_defectivesetup(
 
 @then(
     parsers.parse(
-        "the command failure is reported by subarray with" " error message"
+        "the command failure is reported by subarray with error message"
     )
 )
 def validate_error_message_reporting(
