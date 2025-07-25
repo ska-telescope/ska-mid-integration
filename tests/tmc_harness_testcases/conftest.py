@@ -389,7 +389,6 @@ def move_tmc_to_intial_state(
     )
 )
 def execute_command_on_tmc_with_defectivesetup(
-    central_node_mid: CentralNodeWrapperMid,
     subarray_node: SubarrayNodeWrapper,
     event_tracer: TangoEventTracer,
     simulator_factory: SimulatorFactory,
@@ -434,12 +433,10 @@ def execute_command_on_tmc_with_defectivesetup(
 
     match command:
         case "CONFIGURE":
-            perform_ready_transition(
-                central_node_mid,
-                subarray_node,
-                event_tracer,
-                command_input_factory,
+            configure_input_json = prepare_json_args_for_commands(
+                "configure_mid", command_input_factory
             )
+            subarray_node.store_configuration_data(configure_input_json)
 
         case "END":
             perform_ready_transition_with_end(
