@@ -467,7 +467,9 @@ class SubarrayNodeWrapper(object):
     def tear_down(self):
         """Tear down after each test run"""
 
-        LOGGER.info("Calling Tear down for subarray")
+        LOGGER.info(
+            "Calling tear down for subarray with %s obsState", self.obs_state
+        )
         self._clear_command_call_and_transition_data(clear_transition=True)
 
         if self.obs_state in ("RESOURCING", "CONFIGURING", "SCANNING"):
