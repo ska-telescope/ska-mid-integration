@@ -17,6 +17,7 @@ from ska_control_model import ResultCode
 from ska_tango_testing.integration import TangoEventTracer
 
 from tests.conftest import LOGGER
+from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.simulator_factory import SimulatorFactory
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
@@ -24,12 +25,14 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.constant import (
     INTERMEDIATE_CONFIGURING_STATE_DEFECT,
     INTERMEDIATE_CONFIGURING_STATE_DEFECT_DISH,
+    INTERMEDIATE_READY_STATE_DEFECT,
     INTERMEDIATE_SCANNING_STATE_DEFECT,
     tmc_csp_subarray_leaf_node,
     tmc_dish_leaf_node1,
     tmc_sdp_subarray_leaf_node,
 )
 from tests.tmc_harness_testcases.conftest import (
+    perform_ready_transition,
     perform_ready_transition_with_end,
     perform_scan,
     verify_scanning_transition_with_endscan,
@@ -67,6 +70,7 @@ def test_tmc_command_timeout_error_propagation():
 def execute_command(
     device,
     command,
+    central_node: CentralNodeWrapperMid,
     subarray_node: SubarrayNodeWrapper,
     event_tracer: TangoEventTracer,
     command_input_factory: JsonFactory,
@@ -76,6 +80,17 @@ def execute_command(
     """
     if device in ["CSP", "DISH"]:
         match command:
+            case "CONFIGURE":
+                pytest.defective_subarray.SetDefective(
+                    INTERMEDIATE_CONFIGURING_STATE_DEFECT
+                )
+                LOGGER.info("Working on Configure")
+                perform_ready_transition(
+                    central_node,
+                    subarray_node,
+                    event_tracer,
+                    command_input_factory,
+                )
             case "END":
                 if device == "DISH":
                     pytest.defective_subarray.SetDefective(
@@ -84,7 +99,7 @@ def execute_command(
 
                 else:
                     pytest.defective_subarray.SetDefective(
-                        INTERMEDIATE_CONFIGURING_STATE_DEFECT
+                        INTERMEDIATE_READY_STATE_DEFECT
                     )
 
                 LOGGER.info("Working on Ready State")
@@ -106,7 +121,7 @@ def execute_command(
             case "SCAN":
 
                 pytest.defective_subarray.SetDefective(
-                    INTERMEDIATE_CONFIGURING_STATE_DEFECT
+                    INTERMEDIATE_READY_STATE_DEFECT
                 )
                 LOGGER.info("Workng on Scan")
                 perform_scan(
@@ -115,10 +130,20 @@ def execute_command(
                     command_input_factory,
                 )
     elif device == "SDP":
-
         match command:
-            case "END":
+            case "CONFIGURE":
+                pytest.defective_subarray.SetDelayInfo(
+                    json.dumps({"Configure": 55})
+                )
+                LOGGER.info("Working on Configure")
+                perform_ready_transition(
+                    central_node,
+                    subarray_node,
+                    event_tracer,
+                    command_input_factory,
+                )
 
+            case "END":
                 pytest.defective_subarray.SetDelayInfo(json.dumps({"End": 55}))
                 LOGGER.info("Working on Ready State")
                 perform_ready_transition_with_end(
@@ -127,7 +152,6 @@ def execute_command(
                 )
 
             case "ENDSCAN":
-
                 pytest.defective_subarray.SetDelayInfo(
                     json.dumps({"EndScan": 55})
                 )
@@ -135,8 +159,8 @@ def execute_command(
                 verify_scanning_transition_with_endscan(
                     subarray_node,
                 )
-            case "SCAN":
 
+            case "SCAN":
                 pytest.defective_subarray.SetDelayInfo(
                     json.dumps({"Scan": 55})
                 )
@@ -149,6 +173,7 @@ def execute_command(
 
 @when(parsers.parse("{command} is invoked on a {defectiveSubsystem} Subarray"))
 def execute_command_on_tmc_with_defectivesetup(
+    central_node: CentralNodeWrapperMid,
     subarray_node: SubarrayNodeWrapper,
     event_tracer: TangoEventTracer,
     simulator_factory: SimulatorFactory,
@@ -174,6 +199,7 @@ def execute_command_on_tmc_with_defectivesetup(
             execute_command(
                 "CSP",
                 command,
+                central_node,
                 subarray_node,
                 event_tracer,
                 command_input_factory,
@@ -189,6 +215,7 @@ def execute_command_on_tmc_with_defectivesetup(
             execute_command(
                 "SDP",
                 command,
+                central_node,
                 subarray_node,
                 event_tracer,
                 command_input_factory,
@@ -207,6 +234,7 @@ def execute_command_on_tmc_with_defectivesetup(
             execute_command(
                 "DISH",
                 command,
+                central_node,
                 subarray_node,
                 event_tracer,
                 command_input_factory,
