@@ -341,37 +341,41 @@ def move_tmc_to_intial_state(
     """
 
     match initialObsState:
+        case "IDLE":
+            perform_idle_transition(
+                central_node_mid,
+                subarray_node,
+                event_tracer,
+                command_input_factory,
+            )
+
         case "READY":
-
             perform_idle_transition(
                 central_node_mid,
                 subarray_node,
                 event_tracer,
                 command_input_factory,
             )
-
             perform_ready_transition(
                 central_node_mid,
                 subarray_node,
                 event_tracer,
                 command_input_factory,
             )
+
         case "SCANNING":
-
             perform_idle_transition(
                 central_node_mid,
                 subarray_node,
                 event_tracer,
                 command_input_factory,
             )
-
             perform_ready_transition(
                 central_node_mid,
                 subarray_node,
                 event_tracer,
                 command_input_factory,
             )
-
             perform_scanning_transition(
                 subarray_node,
                 event_tracer,
