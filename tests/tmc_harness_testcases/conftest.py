@@ -229,9 +229,7 @@ def perform_ready_transition(
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    _, pytest.unique_id = subarray_node.store_configuration_data(
-        configure_input_json
-    )
+    _, unique_id = subarray_node.store_configuration_data(configure_input_json)
 
     event_tracer.subscribe_event(
         subarray_node.subarray_devices.get("sdp_subarray"), "obsState"
@@ -320,10 +318,7 @@ def perform_ready_transition(
     ).within_timeout(TIMEOUT).has_change_event_occurred(
         central_node_mid.subarray_node,
         "longRunningCommandResult",
-        (
-            pytest.unique_id[0],
-            json.dumps((int(ResultCode.OK), "Command Completed")),
-        ),
+        (unique_id[0], json.dumps((int(ResultCode.OK), "Command Completed"))),
     )
 
 
@@ -390,6 +385,7 @@ def move_tmc_to_intial_state(
     )
 )
 def execute_command_on_tmc_with_defectivesetup(
+    central_node_mid: CentralNodeWrapperMid,
     subarray_node: SubarrayNodeWrapper,
     event_tracer: TangoEventTracer,
     simulator_factory: SimulatorFactory,
@@ -433,20 +429,25 @@ def execute_command_on_tmc_with_defectivesetup(
             LOGGER.info("Work on dish in Progress")
 
     match command:
-        case "END":
+        case "CONFIGURE":
+            perform_ready_transition(
+                central_node_mid,
+                subarray_node,
+                event_tracer,
+                command_input_factory,
+            )
 
+        case "END":
             perform_ready_transition_with_end(
                 subarray_node,
                 event_tracer,
             )
 
         case "ENDSCAN":
-
             verify_scanning_transition_with_endscan(
                 subarray_node,
             )
         case "SCAN":
-
             perform_scan(subarray_node, command_input_factory)
 
 
