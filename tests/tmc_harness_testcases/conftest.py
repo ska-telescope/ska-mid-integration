@@ -436,7 +436,7 @@ def execute_command_on_tmc_with_defectivesetup(
             configure_input_json = prepare_json_args_for_commands(
                 "configure_mid", command_input_factory
             )
-            subarray_node.store_configuration_data(configure_input_json)
+            subarray_node.subarray_node.Configure(configure_input_json)
 
         case "END":
             perform_ready_transition_with_end(
