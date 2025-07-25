@@ -509,7 +509,7 @@ class SubarrayNodeWrapper(object):
             )
             self.event_recorder.clear_events()
 
-        elif self.obs_state in [ObsState.ABORTED, ObsState.FAULT]:
+        elif self.obs_state in [ObsState.ABORTED, "FAULT"]:
             """Invoke Restart"""
             LOGGER.info("Invoking Restart on Subarray")
             _, unique_id = self.restart_subarray()
