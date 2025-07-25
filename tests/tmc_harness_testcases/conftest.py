@@ -229,7 +229,9 @@ def perform_ready_transition(
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    _, unique_id = subarray_node.store_configuration_data(configure_input_json)
+    _, pytest.unique_id = subarray_node.store_configuration_data(
+        configure_input_json
+    )
 
     event_tracer.subscribe_event(
         subarray_node.subarray_devices.get("sdp_subarray"), "obsState"
@@ -318,7 +320,10 @@ def perform_ready_transition(
     ).within_timeout(TIMEOUT).has_change_event_occurred(
         central_node_mid.subarray_node,
         "longRunningCommandResult",
-        (unique_id[0], json.dumps((int(ResultCode.OK), "Command Completed"))),
+        (
+            pytest.unique_id[0],
+            json.dumps((int(ResultCode.OK), "Command Completed")),
+        ),
     )
 
 
