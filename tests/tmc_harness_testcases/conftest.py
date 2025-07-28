@@ -48,6 +48,7 @@ def check_telescope_is_in_on_state(
     event_tracer.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
+    event_tracer.subscribe_event(subarray_node.subarray_node, "obsState")
     log_events(
         {
             central_node_mid.central_node: ["telescopeState"],
@@ -457,7 +458,7 @@ def execute_command_on_tmc_with_defectivesetup(
             #     pytest.unique_id,
             # ) = central_node_mid.central_node.
             # AssignResources(assign_input_str)
-            assign_input_str = prepare_json_args_for_centralnode_commands(
+            assign_input_str = prepare_json_args_for_commands(
                 "assign_resources_mid", command_input_factory
             )
             _, pytest.unique_id = subarray_node.subarray_node.AssignResources(
