@@ -11,6 +11,7 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
 )
 from tests.resources.test_harness.simulator_factory import SimulatorFactory
+from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 
 
@@ -19,7 +20,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 @scenario(
     "../features/test_harness/"
     + "xtp_49350_test_recover_subarray_stuck_in_resourcing_with_abort.feature",
-    "TMC behavior when subarray stuck in obsState RESOURCING "
+    "TMC behavior when subarray stuck in obsState FAULT "
     + "with defective SDP",
 )
 def test_recover_subarray_stuck_in_resourcing() -> None:
@@ -35,13 +36,14 @@ def test_recover_subarray_stuck_in_resourcing() -> None:
 @given(parsers.parse("TMC subarray {subarray_id} busy in assigning resources"))
 def telescope_is_in_resourcing_obsstate(
     central_node_mid: CentralNodeWrapperMid,
+    subarray_node: SubarrayNodeWrapper,
     event_recorder: EventRecorder,
     command_input_factory: JsonFactory,
     subarray_id: str,
 ):
     """A method to check if telescope in is resourcing obsSstate."""
     central_node_mid.set_subarray_id(subarray_id)
-
+    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     event_recorder.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
     )

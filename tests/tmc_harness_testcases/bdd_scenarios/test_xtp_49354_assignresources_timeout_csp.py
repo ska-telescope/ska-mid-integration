@@ -3,6 +3,7 @@ import json
 
 import pytest
 from pytest_bdd import scenario, then, when
+from ska_control_model import ObsState
 from ska_tango_testing.mock.placeholders import Anything
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
@@ -11,6 +12,7 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
 )
 from tests.resources.test_harness.simulator_factory import SimulatorFactory
+from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.constant import (
@@ -40,9 +42,12 @@ def test_assignrsources_timeout_csp() -> None:
 @when("I issue the AssignResources to TMC while CSP subarray is set defective")
 def invoke_assignresources_command_with_csp_subarray_defective(
     central_node_mid: CentralNodeWrapperMid,
+    subarray_node: SubarrayNodeWrapper,
+    event_recorder: EventRecorder,
     command_input_factory: JsonFactory,
     simulator_factory: SimulatorFactory,
 ) -> None:
+    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     pytest.csp_sim = simulator_factory.get_or_create_simulator_device(
         SimulatorDeviceType.MID_CSP_DEVICE
     )
@@ -59,7 +64,9 @@ def invoke_assignresources_command_with_csp_subarray_defective(
 
 @then("Exception is propagated to TMC on longRunningCommandResult")
 def check_timeout_error(
-    central_node_mid: CentralNodeWrapperMid, event_recorder: EventRecorder
+    central_node_mid: CentralNodeWrapperMid,
+    subarray_node: SubarrayNodeWrapper,
+    event_recorder: EventRecorder,
 ):
     """A method to check SubarrayNode.longRunningCommandResult attribute
     change for exception
@@ -81,6 +88,9 @@ def check_timeout_error(
     assert (
         exception_message
         in json.loads(assertion_data["attribute_value"][1])[1]
+    )
+    event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node, "obsState", ObsState.FAULT
     )
 
     # Reset Defect
