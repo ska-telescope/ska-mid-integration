@@ -446,7 +446,7 @@ def execute_command_on_tmc_with_defectivesetup(
             (
                 _,
                 pytest.unique_id,
-            ) = subarray_node.subarray_node.ReleaseAllResources()()
+            ) = subarray_node.subarray_node.ReleaseAllResources()
 
         case "ASSIGNRESOURCES":
             # assign_input_str = prepare_json_args_for_centralnode_commands(
