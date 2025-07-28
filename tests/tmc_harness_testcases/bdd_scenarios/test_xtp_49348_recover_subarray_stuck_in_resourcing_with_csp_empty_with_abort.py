@@ -13,6 +13,7 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
 )
 from tests.resources.test_harness.simulator_factory import SimulatorFactory
+from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.constant import (
     COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_EMPTY,
@@ -25,7 +26,7 @@ from tests.resources.test_support.constant import (
 @scenario(
     "../features/test_harness/xtp-49348_test_recover_"
     + "subarray_stuck_in_resourcing_with_csp_empty_with_abort.feature",
-    "TMC behavior when subarray stuck in obsState RESOURCING "
+    "TMC behavior when subarray stuck in obsState FAULT "
     + "with defective CSP",
 )
 def test_recover_subarray_stuck_in_resourcing_with_defective_csp() -> None:
@@ -41,6 +42,7 @@ def test_recover_subarray_stuck_in_resourcing_with_defective_csp() -> None:
 @given(parsers.parse("TMC subarray {subarray_id} busy in assigning resources"))
 def telescope_is_in_resourcing_obsstate(
     central_node_mid: CentralNodeWrapperMid,
+    subarray_node: SubarrayNodeWrapper,
     event_recorder: EventRecorder,
     command_input_factory: JsonFactory,
     simulator_factory: SimulatorFactory,
@@ -53,6 +55,7 @@ def telescope_is_in_resourcing_obsstate(
     event_recorder.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
     )
+    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     # After AssignResources invocation, CSP Subarray first transtions to
     # obsState RESOURCING and then to the obsState EMPTY due to fault injection
     csp_sim.SetDefective(

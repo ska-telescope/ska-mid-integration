@@ -4,6 +4,7 @@ import logging
 
 import pytest
 from pytest_bdd import scenario, then, when
+from ska_control_model import ObsState
 from ska_ser_logging import configure_logging
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
@@ -13,6 +14,7 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
 )
 from tests.resources.test_harness.simulator_factory import SimulatorFactory
+from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.common_utils.result_code import ResultCode
 
@@ -41,6 +43,8 @@ def test_assignrsources_timeout_sdp() -> None:
 @when("I issue the AssignResources to TMC while SDP subarray is set defective")
 def invoke_assignresources_command_with_sdp_subarray_defective(
     central_node_mid: CentralNodeWrapperMid,
+    subarray_node: SubarrayNodeWrapper,
+    event_recorder: EventRecorder,
     command_input_factory: JsonFactory,
     simulator_factory: SimulatorFactory,
 ) -> None:
@@ -48,6 +52,7 @@ def invoke_assignresources_command_with_sdp_subarray_defective(
     # Set sdp defective
     sdp_sim.SetDelayInfo(json.dumps({"AssignResources": 170}))
 
+    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
@@ -60,6 +65,7 @@ def invoke_assignresources_command_with_sdp_subarray_defective(
 @then("Exception is propagated to TMC on longRunningCommandResult")
 def check_timeout_error(
     central_node_mid: CentralNodeWrapperMid,
+    subarray_node: SubarrayNodeWrapper,
     event_recorder: EventRecorder,
     simulator_factory: SimulatorFactory,
 ):
@@ -82,5 +88,7 @@ def check_timeout_error(
         ),
         lookahead=25,
     )
-
+    event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node, "obsState", ObsState.FAULT
+    )
     sdp_sim.ResetDelayInfo()

@@ -3,6 +3,7 @@ import json
 
 import pytest
 from pytest_bdd import scenario, then, when
+from ska_control_model import ObsState
 from ska_tango_testing.mock.placeholders import Anything
 
 from tests.resources.test_harness.event_recorder import EventRecorder
@@ -64,6 +65,7 @@ def invoke_configure(
     """
     Invokes Configure command on TMC SubarrayNode
     """
+    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     event_recorder.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
@@ -99,6 +101,10 @@ def check_timeout_error(
     assert (
         exception_message
         in json.loads(assertion_data["attribute_value"][1])[1]
+    )
+
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node, "obsState", ObsState.FAULT
     )
 
     pytest.csp_sim.SetDefective(RESET_DEFECT)

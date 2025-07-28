@@ -3,6 +3,7 @@ import json
 
 import pytest
 from pytest_bdd import scenario, then, when
+from ska_control_model import ObsState
 from ska_tango_testing.mock.placeholders import Anything
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
@@ -11,6 +12,7 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
 )
 from tests.resources.test_harness.simulator_factory import SimulatorFactory
+from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.constant import (
@@ -53,12 +55,14 @@ def set_csp_subarray_defective(simulator_factory: SimulatorFactory):
 @when("I issue the ReleaseResources command to the TMC")
 def invoke_release_resources(
     central_node_mid: CentralNodeWrapperMid,
+    subarray_node: SubarrayNodeWrapper,
     command_input_factory: JsonFactory,
     event_recorder: EventRecorder,
 ) -> None:
     """
     Invokes ReleaseResources command on TMC.
     """
+    event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
     event_recorder.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
     )
@@ -72,7 +76,9 @@ def invoke_release_resources(
 
 @then("Exception is propagated to TMC on longRunningCommandResult")
 def check_timeout_error(
-    central_node_mid: CentralNodeWrapperMid, event_recorder: EventRecorder
+    central_node_mid: CentralNodeWrapperMid,
+    subarray_node: SubarrayNodeWrapper,
+    event_recorder: EventRecorder,
 ):
     """A method to check SubarrayNode.longRunningCommandResult attribute
     change for exception
@@ -95,5 +101,7 @@ def check_timeout_error(
         exception_message
         in json.loads(assertion_data["attribute_value"][1])[1]
     )
-
+    event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node, "obsState", ObsState.FAULT
+    )
     pytest.csp_sim.SetDefective(RESET_DEFECT)
