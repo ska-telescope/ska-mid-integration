@@ -434,25 +434,32 @@ def execute_command_on_tmc_with_defectivesetup(
 
     match command:
         case "RELEASERESOURCES":
-            release_input_str = prepare_json_args_for_centralnode_commands(
-                "release_resources_mid", command_input_factory
-            )
-            (
-                _,
-                pytest.unique_id,
-            ) = central_node_mid.central_node.ReleaseResources(
-                release_input_str
-            )
+            # release_input_str = prepare_json_args_for_centralnode_commands(
+            #     "release_resources_mid", command_input_factory
+            # )
+            # (
+            #     _,
+            #     pytest.unique_id,
+            # ) = central_node_mid.central_node.ReleaseResources(
+            #     release_input_str
+            # )
+            _, pytest.unique_id = subarray_node.release_resources_subarray()
 
         case "ASSIGNRESOURCES":
+            # assign_input_str = prepare_json_args_for_centralnode_commands(
+            #     "assign_resources_mid", command_input_factory
+            # )
+            # (
+            #     _,
+            #     pytest.unique_id,
+            # ) = central_node_mid.central_node.
+            # AssignResources(assign_input_str)
             assign_input_str = prepare_json_args_for_centralnode_commands(
                 "assign_resources_mid", command_input_factory
             )
-            (
-                _,
-                pytest.unique_id,
-            ) = central_node_mid.central_node.AssignResources(assign_input_str)
-
+            _, pytest.unique_id = subarray_node.store_resources(
+                assign_input_str
+            )
         case "CONFIGURE":
             configure_input_json = prepare_json_args_for_commands(
                 "configure_mid", command_input_factory
