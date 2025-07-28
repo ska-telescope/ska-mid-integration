@@ -443,7 +443,10 @@ def execute_command_on_tmc_with_defectivesetup(
             # ) = central_node_mid.central_node.ReleaseResources(
             #     release_input_str
             # )
-            _, pytest.unique_id = subarray_node.release_resources_subarray()
+            (
+                _,
+                pytest.unique_id,
+            ) = subarray_node.subarray_node.ReleaseAllResources()()
 
         case "ASSIGNRESOURCES":
             # assign_input_str = prepare_json_args_for_centralnode_commands(
@@ -457,7 +460,7 @@ def execute_command_on_tmc_with_defectivesetup(
             assign_input_str = prepare_json_args_for_centralnode_commands(
                 "assign_resources_mid", command_input_factory
             )
-            _, pytest.unique_id = subarray_node.store_resources(
+            _, pytest.unique_id = subarray_node.subarray_node.AssignResources(
                 assign_input_str
             )
         case "CONFIGURE":
