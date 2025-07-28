@@ -103,7 +103,7 @@ def telescope_wrapper(
     telescope = test_harness_builder.build()
     telescope.actions_default_timeout = 120
     yield telescope
-    _tear_down(tmc, event_tracer)
+    _tear_down(telescope.tmc, event_tracer)
     # after a test is completed, reset the telescope to its initial state
     # (obsState=READY, telescopeState=OFF, no resources assigned)
     telescope.tear_down()
