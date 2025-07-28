@@ -6,6 +6,7 @@ from typing import Any
 
 import pytest
 import tango
+from assertpy import assert_that
 from ska_control_model import ObsState
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
 from ska_integration_test_harness.facades.dishes_facade import DishesFacade
@@ -57,9 +58,30 @@ def default_commands_inputs() -> TestHarnessInputs:
     )
 
 
+def _tear_down(tmc: TMCFacade, event_tracer: TangoEventTracer):
+    """Function to handle TMC tear down in observation
+    state FAULT.
+
+    :param tmc: TMCFacade object to invoke TMC commands
+    :type tmc: TMCFacade
+    :param event_tracer: TangoEventTracer object for event handling
+    :type event_tracer: TangoEventTracer
+    """
+    if tmc.subarray_node.obsState == ObsState.FAULT:
+        tmc.restart(wait_termination=True)
+        assert_that(event_tracer).described_as(
+            f"TMC Subarray Node device ({tmc.subarray_node})"
+            "ObsState attribute value should move "
+            f"from {ObsState.FAULT} to EMPTY."
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+            tmc.subarray_node, "obsState", ObsState.EMPTY
+        )
+
+
 @pytest.fixture
 def telescope_wrapper(
     default_commands_inputs: TestHarnessInputs,
+    event_tracer: TangoEventTracer,
 ) -> TelescopeWrapper:
     """Create an unique test harness with proxies to all devices."""
     test_harness_builder = TestHarnessBuilder()
@@ -81,7 +103,7 @@ def telescope_wrapper(
     telescope = test_harness_builder.build()
     telescope.actions_default_timeout = 120
     yield telescope
-
+    _tear_down(tmc, event_tracer)
     # after a test is completed, reset the telescope to its initial state
     # (obsState=READY, telescopeState=OFF, no resources assigned)
     telescope.tear_down()
@@ -131,6 +153,37 @@ def event_tracer() -> TangoEventTracer:
 
 # ------------------------------------------------------------
 # Other fixtures and common steps
+
+
+@dataclass
+class TestContextData:
+    """A class to store shared variables between steps."""
+
+    starting_state: ObsState | None = None
+    """The state of the system before the WHEN step."""
+
+    expected_next_state: ObsState | None = None
+    """The expected state to be reached if no WHEN step is executed.
+
+    It is meaningful when the starting state is transient and so it will
+    automatically change to another state (different both from the starting
+    state and the expected next state).
+
+    Leave empty if the starting state is not transient.
+    """
+
+    when_action_result: Any | None = None
+    """The result of the WHEN step command."""
+
+    when_action_name: str | None = None
+    """The name of the Tango command executed in the WHEN step."""
+
+    def is_starting_state_transient(self) -> bool:
+        """Check if the starting state is transient."""
+        return self.expected_next_state is not None
+
+    csp_obsstate: ObsState | None = None
+    sdp_obsstate: ObsState | None = None
 
 
 @dataclass

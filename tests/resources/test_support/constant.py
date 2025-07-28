@@ -214,6 +214,42 @@ COMMAND_NOT_ALLOWED_DEFECT = {
     "result": ResultCode.FAILED,
 }
 
+READY_STATE_DEFECT = json.dumps(
+    {
+        "enabled": True,
+        "fault_type": FaultType.STUCK_IN_INTERMEDIATE_STATE,
+        "error_message": "Device stuck in intermediate state",
+        "result": ResultCode.FAILED,
+        "intermediate_state": ObsState.READY,
+    }
+)
+
+IDLE_STATE_DEFECT = json.dumps(
+    {
+        "enabled": True,
+        "fault_type": FaultType.STUCK_IN_INTERMEDIATE_STATE,
+        "error_message": "Device stuck in intermediate state",
+        "result": ResultCode.FAILED,
+        "intermediate_state": ObsState.IDLE,
+    }
+)
+
+OBS_STATE_RESOURCING_STUCK_DEFECT = {
+    "enabled": True,
+    "fault_type": FaultType.STUCK_IN_OBSTATE,
+    "error_message": "Device stuck in Resourcing state",
+    "result": ResultCode.FAILED,
+    "intermediate_state": ObsState.RESOURCING,
+}
+
+INTERMEDIATE_FAULT_OBS_STATE_DEFECT = {
+    "enabled": True,
+    "fault_type": FaultType.STUCK_IN_INTERMEDIATE_STATE,
+    "error_message": "Device stuck in intermediate state",
+    "result": ResultCode.FAILED,
+    "intermediate_state": ObsState.FAULT,
+}
+
 
 class CorrectionKey(IntEnum):
     """An enum class for correction keys"""
