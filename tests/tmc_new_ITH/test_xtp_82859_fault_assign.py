@@ -158,7 +158,7 @@ def verify_tmc_subarray_observation_state_fault(
     reset_defects(csp, sdp)
 
 
-@when("I invoke restart command on the TMC Subarray")
+@when("I invoke Restart Command on the TMC Subarray")
 def invoke_restart_command(tmc: TMCFacade):
     """Invokes restart command on the TMC Subarray."""
     tmc.restart()
