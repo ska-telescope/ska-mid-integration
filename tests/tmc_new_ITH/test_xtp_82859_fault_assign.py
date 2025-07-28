@@ -15,10 +15,7 @@ from ska_tango_base.commands import ResultCode
 from ska_tango_testing.integration import TangoEventTracer, log_events
 from ska_tango_testing.mock.placeholders import Anything
 
-from tests.tmc_csp_new_ITH.conftest import (
-    ASSERTIONS_TIMEOUT,
-    SubarrayTestContextData,
-)
+from tests.tmc_csp_new_ITH.conftest import ASSERTIONS_TIMEOUT
 from tests.tmc_new_ITH.conftest import TestContextData
 from tests.tmc_new_ITH.utils.utils import (
     invoke_command_with_defect,
@@ -83,7 +80,6 @@ def test_verify_fault_after_assign_or_scan():
     )
 )
 def subarray_in_idle_state(
-    context_fixt: SubarrayTestContextData,
     tmc: TMCFacade,
     sdp: SDPFacade,
     csp: CSPFacade,

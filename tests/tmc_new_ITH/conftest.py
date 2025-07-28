@@ -186,6 +186,22 @@ class TestContextData:
     sdp_obsstate: ObsState | None = None
 
 
+@pytest.fixture
+def context_data() -> TestContextData:
+    """A collection of variables shared between steps.
+
+    The shared variables are the following:
+
+    - previous_state: the previous state of the subarray.
+    - expected_next_state: the expected next state of the subarray (specified
+        only if the previous st
+    - trigger: the trigger that caused the state change.
+
+    :return: the shared variables.
+    """
+    return TestContextData()
+
+
 @dataclass
 class SubarrayTestContextData:
     """A class to store shared variables between steps."""
