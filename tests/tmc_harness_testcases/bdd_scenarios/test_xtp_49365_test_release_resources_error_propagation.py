@@ -22,6 +22,7 @@ from tests.resources.test_support.constant import (
 )
 
 
+@pytest.mark.SKA_fault
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
