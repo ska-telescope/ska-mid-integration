@@ -6,19 +6,24 @@ Scenario Outline: Error Propagation Reported by TMC Mid End/EndScan/Scan Command
 		Then the command failure is reported by subarray with error message
 		Then the TMC SubarrayNode transitions to FAULT obsState
 		Examples:
-		            |initialObsState  | command   | defectiveSubsystem   |
-		            |READY            | END       | CSP                  |
-		            |SCANNING         | ENDSCAN   | CSP                  |
-		            |READY            | SCAN      | CSP                  |
-		            |READY            | END       | SDP                  |
-		            |SCANNING         | ENDSCAN   | SDP                  |
-		            |READY            | SCAN      | SDP                  |
-		            |READY            | END       | DISH                 |
-		            |SCANNING         | ENDSCAN   | DISH                 |
-		            |READY            | SCAN      | DISH                 |
-					|IDLE             | CONFIGURE | CSP                  |
-					|IDLE             | CONFIGURE | SDP                  |
-					|IDLE             | CONFIGURE | DISH                 |
+		            |initialObsState  | command          | defectiveSubsystem   |
+		            |READY            | END              | CSP                  |
+		            |SCANNING         | ENDSCAN          | CSP                  |
+		            |READY            | SCAN             | CSP                  |
+		            |READY            | END              | SDP                  |
+		            |SCANNING         | ENDSCAN          | SDP                  |
+		            |READY            | SCAN             | SDP                  |
+		            |READY            | END              | DISH                 |
+		            |SCANNING         | ENDSCAN          | DISH                 |
+		            |READY            | SCAN             | DISH                 |
+					|IDLE             | CONFIGURE        | CSP                  |
+					|IDLE             | CONFIGURE        | SDP                  |
+					|IDLE             | CONFIGURE        | DISH                 |
+					|IDLE             | RELEASERESOURCES | CSP                  |
+					|IDLE             | RELEASERESOURCES | SDP                  |
+					|EMPTY            | ASSIGNRESOURCES  | CSP                  |
+					|EMPTY            | ASSIGNRESOURCES  | SDP                  |
+
 
 
 @SKA_mid @XTP-73592 @XTP-76069 @XTP-28347
