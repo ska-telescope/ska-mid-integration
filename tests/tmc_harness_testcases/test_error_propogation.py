@@ -28,7 +28,6 @@ from tests.resources.test_support.constant import (
     INTERMEDIATE_CONFIGURING_STATE_DEFECT_DISH,
     INTERMEDIATE_READY_STATE_DEFECT,
     INTERMEDIATE_SCANNING_STATE_DEFECT,
-    INTERMEDIATE_STUCK_CONFIGURING_STATE_DEFECT_DISH,
     tmc_csp_subarray_leaf_node,
     tmc_dish_leaf_node1,
     tmc_sdp_subarray_leaf_node,
@@ -100,7 +99,7 @@ def execute_command(
             case "CONFIGURE":
                 if device == "DISH":
                     pytest.defective_subarray.SetDefective(
-                        INTERMEDIATE_STUCK_CONFIGURING_STATE_DEFECT_DISH
+                        INTERMEDIATE_CONFIGURING_STATE_DEFECT_DISH
                     )
                 else:
                     pytest.defective_subarray.SetDefective(
@@ -225,6 +224,7 @@ def execute_command_on_tmc_with_defectivesetup(
     """
 
     LOGGER.info("Inside %s  is invoked for %s", command, defectiveSubsystem)
+    pytest.command = command
 
     pytest.defective_subarray = None
     match defectiveSubsystem:
@@ -293,8 +293,16 @@ def validate_error_message_reporting(
     """
     Send next command on TMC
     """
-
     exception_message = "Timeout has occurred, command failed"
+
+    if (
+        pytest.command == "CONFIGURE"
+        and pytest.defective_device == tmc_dish_leaf_node1
+    ):
+        exception_message = (
+            "Timeout occurred while waiting for SetOperateMode"
+            " command to be completed in Configure command"
+        )
 
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "THEN" STEP: '
