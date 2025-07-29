@@ -12,7 +12,7 @@ Scenario Outline: Test Restart Command during failure of AssignResources and Sca
         | AssignResources | FAULT        | RESOURCING       |
         | AssignResources | IDLE         | FAULT            |
         | AssignResources | RESOURCING   | FAULT            |
-        | AssignResources | RESOUCRING   | IDLE             |
+        | AssignResources | RESOURCING   | IDLE             |
         | AssignResources | RESOURCING   | RESOURCING       |
         | AssignResources | IDLE         | RESOURCING       |
         | Scan            | SCANNING     | FAULT            |
