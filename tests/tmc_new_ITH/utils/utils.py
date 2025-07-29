@@ -11,10 +11,13 @@ from ska_integration_test_harness.inputs.test_harness_inputs import (
 )
 from ska_tango_testing.integration import TangoEventTracer, log_events
 
+from tests.resources.test_harness.utils.enums import DishMode, PointingState
 from tests.resources.test_support.constant import (
     IDLE_STATE_DEFECT,
     INTERMEDIATE_CONFIGURING_OBS_STATE_DEFECT,
     INTERMEDIATE_FAULT_OBS_STATE_DEFECT,
+    INTERMEDIATE_READY_STATE_DEFECT_DISH,
+    INTERMEDIATE_SLEW_STATE_DEFECT_DISH,
     INTERMEDIATE_STATE_DEFECT,
     READY_STATE_DEFECT,
     RESET_DEFECT,
@@ -61,6 +64,20 @@ def setup_event_subscriptions(
     )
 
 
+def setup_event_dish_subscription(event_tracer, dishes_list):
+    """Setup Event subscription for dishes"""
+    for dish in dishes_list:
+        event_tracer.subscribe_event(dish, "pointingState")
+        event_tracer.subscribe_event(dish, "dishMode")
+        log_events(
+            {dish: ["pointingState", "dishMode"]},
+            event_enum_mapping={
+                "pointingState": PointingState,
+                "dishMode": DishMode,
+            },
+        )
+
+
 command_defect_mapping = {
     "AssignResources": {
         "RESOURCING": json.dumps(INTERMEDIATE_STATE_DEFECT),
@@ -70,6 +87,8 @@ command_defect_mapping = {
     "Configure": {
         "CONFIGURING": json.dumps(INTERMEDIATE_CONFIGURING_OBS_STATE_DEFECT),
         "FAULT": json.dumps(INTERMEDIATE_FAULT_OBS_STATE_DEFECT),
+        "SLEW": json.dumps(INTERMEDIATE_SLEW_STATE_DEFECT_DISH),
+        "READY": json.dumps(INTERMEDIATE_READY_STATE_DEFECT_DISH),
     },
     "Scan": {
         "READY": READY_STATE_DEFECT,
@@ -91,6 +110,8 @@ def set_subsystem_defects(
     csp_obsstate: str,
     sdp_obsstate: str,
     command: str,
+    dish_pointingstate: str = "",
+    dishes: list = [],
 ):
     """
     Set defects for the CSP and SDP subsystems based on their
@@ -114,6 +135,14 @@ def set_subsystem_defects(
         sdp.sdp_subarray.SetDefective(
             command_defect_mapping.get(command).get(sdp_obsstate, RESET_DEFECT)
         )
+    if dish_pointingstate:
+        for dish in dishes:
+            dish.SetDefective(
+                command_defect_mapping.get(command).get(
+                    dish_pointingstate, RESET_DEFECT
+                )
+            )
+            break
 
 
 def invoke_command_with_defect(
@@ -124,6 +153,8 @@ def invoke_command_with_defect(
     csp_obsstate: str,
     sdp_obsstate: str,
     command: str,
+    pointing_state: str = "",
+    dishes: list = [],
 ):
     """
     Invoke a TMC command while setting defects on CSP and SDP subsystems based
@@ -163,6 +194,8 @@ def invoke_command_with_defect(
                 csp_obsstate,
                 sdp_obsstate,
                 command,
+                dish_pointingstate=pointing_state,
+                dishes=dishes,
             )
             tmc.configure(
                 default_commands_inputs.configure_input, wait_termination=False

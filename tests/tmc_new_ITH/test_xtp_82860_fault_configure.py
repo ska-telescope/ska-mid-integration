@@ -5,6 +5,7 @@ import pytest
 from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
+from ska_integration_test_harness.facades import DishesFacade
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
 from ska_integration_test_harness.facades.sdp_facade import SDPFacade
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
@@ -15,11 +16,13 @@ from ska_tango_base.commands import ResultCode
 from ska_tango_testing.integration import TangoEventTracer, log_events
 from ska_tango_testing.mock.placeholders import Anything
 
+from tests.resources.test_harness.utils.enums import PointingState
 from tests.tmc_csp_new_ITH.conftest import ASSERTIONS_TIMEOUT
 from tests.tmc_new_ITH.conftest import TestContextData
 from tests.tmc_new_ITH.utils.utils import (
     invoke_command_with_defect,
     reset_defects,
+    setup_event_dish_subscription,
     setup_event_subscriptions,
 )
 
@@ -66,32 +69,36 @@ def _check_abort_flow(
 @pytest.mark.batch1_fault
 @pytest.mark.SKA_mid
 @scenario(
-    "../tmc_new_ITH/features/xtp_82859_fault_assign_scan.feature",
-    "Test Restart Command during failure of AssignResources and Scan Command",
+    "../tmc_new_ITH/features/xtp_82860_fault_configure.feature",
+    "Test Restart Command during failure of Configure Command",
 )
-def test_verify_fault_after_assign_or_scan():
-    """Test Restart command behaviour after Assign or Scan command fails"""
+def test_verify_fault_after_configure():
+    """Test Restart command behaviour after configure command fails"""
 
 
 @given(
     parsers.parse(
-        "CSP and SDP in observation states {csp_obsstate} and {sdp_obsstate} "
-        "after {command}"
+        "CSP, SDP and DISH in <csp_obsstate>,<sdp_obsstate>,"
+        "<dish_pointingstate> and <DISH_dishmode> after <command>"
     )
 )
-def subarray_in_idle_state(
+def subarray_in_ready_state(
     tmc: TMCFacade,
     sdp: SDPFacade,
     csp: CSPFacade,
+    dishes: DishesFacade,
     event_tracer: TangoEventTracer,
     default_commands_inputs: TestHarnessInputs,
     csp_obsstate,
     sdp_obsstate,
+    dish_pointingstate,
+    dish_dishmode,
     command,
     context_data: TestContextData,
 ):
     """Ensure the subarray is in the IDLE state."""
     setup_event_subscriptions(tmc, csp, sdp, event_tracer)
+    setup_event_dish_subscription(event_tracer, dishes.dish_master_list)
     invoke_command_with_defect(
         tmc,
         default_commands_inputs,
@@ -100,6 +107,8 @@ def subarray_in_idle_state(
         csp_obsstate,
         sdp_obsstate,
         command,
+        dish_pointingstate,
+        dishes.dish_master_list,
     )
     assert_that(event_tracer).described_as(
         f"CSP Subarray device ({csp.csp_subarray})"
@@ -115,6 +124,15 @@ def subarray_in_idle_state(
         f" to {sdp_obsstate}."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         sdp.sdp_subarray, "obsState", ObsState[sdp_obsstate]
+    )
+    assert_that(event_tracer).described_as(
+        f"Dish device ({dishes.dish_master_list[0]})"
+        "PointingState attribute value should move "
+        f"to {dish_pointingstate}."
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        dishes.dish_master_list[0],
+        "pointingState",
+        PointingState[dish_pointingstate],
     )
     context_data.csp_obsstate = ObsState[csp_obsstate]
     context_data.sdp_obsstate = ObsState[sdp_obsstate]
@@ -202,6 +220,29 @@ def verify_sdp_csp_in_empty_observation_state(
     ).has_change_event_occurred(
         sdp.sdp_subarray, "obsState", ObsState.EMPTY
     )
+
+
+@then("Dish transitions to dishMode StandbyFP and PointingState READY")
+def verify_dishes_is_in_ready_state(
+    event_tracer: TangoEventTracer,
+    dishes: DishesFacade,
+):
+    """Verifies the observation states of SDP,CSP
+    after command Restart.
+    """
+    for dish in dishes.dish_master_list:
+        (
+            assert_that(event_tracer)
+            .described_as(
+                f", Dish Device ({dish}) "
+                "PointingState attribute values should move "
+                f"to READY."
+            )
+            .within_timeout(ASSERTIONS_TIMEOUT)
+            .has_change_event_occurred(
+                dish, "pointingState", PointingState.READY
+            )
+        )
 
 
 @then("TMC subarray transitions to observation state EMPTY")

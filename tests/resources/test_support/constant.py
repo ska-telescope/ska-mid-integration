@@ -274,6 +274,14 @@ OBS_STATE_RESOURCING_STUCK_DEFECT = {
     "intermediate_state": ObsState.RESOURCING,
 }
 
+POINTING_STATE_READY_STUCK_DEFECT = {
+    "enabled": True,
+    "fault_type": FaultType.STUCK_IN_OBSTATE,
+    "error_message": "Device stuck in Resourcing state",
+    "result": ResultCode.FAILED,
+    "intermediate_state": ObsState.RESOURCING,
+}
+
 
 OBS_STATE_CONFIGURING_STUCK_DEFECT = {
     "enabled": True,
@@ -489,6 +497,26 @@ INTERMEDIATE_CONFIGURING_STATE_DEFECT_DISH = json.dumps(
         "error_message": "Device stuck in intermediate state",
         "result": ResultCode.FAILED,
         "intermediate_state": PointingState.TRACK,
+    }
+)
+
+INTERMEDIATE_READY_STATE_DEFECT_DISH = json.dumps(
+    {
+        "enabled": True,
+        "fault_type": FaultType.STUCK_IN_INTERMEDIATE_STATE,
+        "error_message": "Device stuck in intermediate state",
+        "result": ResultCode.FAILED,
+        "intermediate_state": PointingState.READY,
+    }
+)
+
+INTERMEDIATE_SLEW_STATE_DEFECT_DISH = json.dumps(
+    {
+        "enabled": True,
+        "fault_type": FaultType.STUCK_IN_INTERMEDIATE_STATE,
+        "error_message": "Device stuck in intermediate state",
+        "result": ResultCode.FAILED,
+        "intermediate_state": PointingState.SLEW,
     }
 )
 
