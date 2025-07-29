@@ -33,7 +33,6 @@ from tests.resources.test_support.constant import (
     tmc_sdp_subarray_leaf_node,
 )
 from tests.tmc_harness_testcases.conftest import (
-    perform_ready_transition,
     perform_ready_transition_with_end,
     perform_scan,
     verify_scanning_transition_with_endscan,
@@ -148,16 +147,32 @@ def execute_command(
                 )
     elif device == "SDP":
         match command:
+            case "RELEASERESOURCES":
+                (
+                    _,
+                    pytest.unique_id,
+                ) = subarray_node.subarray_node.ReleaseAllResources()
+
+            case "ASSIGNRESOURCES":
+                assign_input_str = prepare_json_args_for_commands(
+                    "assign_resources_mid", command_input_factory
+                )
+                (
+                    _,
+                    pytest.unique_id,
+                ) = subarray_node.subarray_node.AssignResources(
+                    assign_input_str
+                )
             case "CONFIGURE":
                 pytest.defective_subarray.SetDelayInfo(
                     json.dumps({"Configure": 55})
                 )
                 LOGGER.info("Working on Configure")
-                perform_ready_transition(
-                    central_node_mid,
-                    subarray_node,
-                    event_tracer,
-                    command_input_factory,
+                configure_input_json = prepare_json_args_for_commands(
+                    "configure_mid", command_input_factory
+                )
+                _, pytest.unique_id = subarray_node.subarray_node.Configure(
+                    configure_input_json
                 )
 
             case "END":
