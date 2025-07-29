@@ -1,7 +1,7 @@
 #This test covers scenarios of Restart command flow when Configure command fails and TMC Subarray transitions to FAULT observation state.
 @XTP-82860 @XTP-82747 @TEAM_HIMALAYA
 Scenario Outline: Test Restart Command during failure of Configure Command
-    Given CSP, SDP and DISH in <csp_obsstate>,<sdp_obsstate>,<dish_pointingstate> and <DISH_dishmode> after <command>
+    Given CSP, SDP and DISH in <csp_obsstate>,<sdp_obsstate>,<dish_pointingstate> and <dish_dishmode> after <command>
     And TMC Subarray in observation state FAULT
     When I invoke Restart Command on the TMC Subarray
     Then CSP and SDP transitions to observation state EMPTY
