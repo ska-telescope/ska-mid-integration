@@ -34,13 +34,20 @@ Scenario Outline: Error Propagation Reported by TMC Mid End/EndScan/Scan Command
 		Then the command failure is reported by subarray with appropriate error message
 		Then the TMC SubarrayNode transitions to FAULT obsState
 		Examples:
-		            |initialObsState  | command | defectiveSubsystem   |
-		            |READY            | END     | CSP                  |
-		            |SCANNING         | ENDSCAN | CSP                  |
-		            |READY            | SCAN    | CSP                  |
-		            |READY            | END     | SDP                  |
-		            |SCANNING         | ENDSCAN | SDP                  |
-		            |READY            | SCAN    | SDP                  |
-		            |SCANNING         | ENDSCAN | DISH                 |
-		            |READY            | SCAN    | DISH                 |
-		            |READY            | END     | DISH                 |
+		            |initialObsState  | command 		 | defectiveSubsystem   |
+		            |READY            | END     		 | CSP                  |
+		            |SCANNING         | ENDSCAN 		 | CSP                  |
+		            |READY            | SCAN    		 | CSP                  |
+		            |READY            | END     		 | SDP                  |
+		            |SCANNING         | ENDSCAN 		 | SDP                  |
+		            |READY            | SCAN    		 | SDP                  |
+		            |SCANNING         | ENDSCAN 		 | DISH                 |
+		            |READY            | SCAN    		 | DISH                 |
+		            |READY            | END     		 | DISH                 |
+					|IDLE             | CONFIGURE        | CSP                  |
+					|IDLE             | CONFIGURE        | SDP                  |
+					|IDLE             | CONFIGURE        | DISH                 |
+					|IDLE             | RELEASERESOURCES | CSP                  |
+					|IDLE             | RELEASERESOURCES | SDP                  |
+					|EMPTY            | ASSIGNRESOURCES  | CSP                  |
+					|EMPTY            | ASSIGNRESOURCES  | SDP                  |

@@ -18,6 +18,7 @@ from ska_tango_testing.integration import TangoEventTracer
 
 from tests.conftest import LOGGER
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
+from tests.resources.test_harness.helpers import prepare_json_args_for_commands
 from tests.resources.test_harness.simulator_factory import SimulatorFactory
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
@@ -80,6 +81,22 @@ def execute_command(
     """
     if device in ["CSP", "DISH"]:
         match command:
+            case "RELEASERESOURCES":
+                (
+                    _,
+                    pytest.unique_id,
+                ) = subarray_node.subarray_node.ReleaseAllResources()
+
+            case "ASSIGNRESOURCES":
+                assign_input_str = prepare_json_args_for_commands(
+                    "assign_resources_mid", command_input_factory
+                )
+                (
+                    _,
+                    pytest.unique_id,
+                ) = subarray_node.subarray_node.AssignResources(
+                    assign_input_str
+                )
             case "CONFIGURE":
                 pytest.defective_subarray.SetDefective(
                     INTERMEDIATE_CONFIGURING_STATE_DEFECT
