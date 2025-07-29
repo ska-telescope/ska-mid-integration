@@ -102,11 +102,11 @@ def execute_command(
                     INTERMEDIATE_CONFIGURING_STATE_DEFECT
                 )
                 LOGGER.info("Working on Configure")
-                perform_ready_transition(
-                    central_node_mid,
-                    subarray_node,
-                    event_tracer,
-                    command_input_factory,
+                configure_input_json = prepare_json_args_for_commands(
+                    "configure_mid", command_input_factory
+                )
+                _, pytest.unique_id = subarray_node.subarray_node.Configure(
+                    configure_input_json
                 )
             case "END":
                 if device == "DISH":
