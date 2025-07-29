@@ -97,9 +97,15 @@ def execute_command(
                     assign_input_str
                 )
             case "CONFIGURE":
-                pytest.defective_subarray.SetDefective(
-                    INTERMEDIATE_CONFIGURING_STATE_DEFECT
-                )
+                if device == "DISH":
+                    pytest.defective_subarray.SetDefective(
+                        INTERMEDIATE_CONFIGURING_STATE_DEFECT_DISH
+                    )
+                else:
+                    pytest.defective_subarray.SetDefective(
+                        INTERMEDIATE_CONFIGURING_STATE_DEFECT
+                    )
+
                 LOGGER.info("Working on Configure")
                 configure_input_json = prepare_json_args_for_commands(
                     "configure_mid", command_input_factory
