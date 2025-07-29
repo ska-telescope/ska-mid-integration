@@ -28,6 +28,7 @@ from tests.resources.test_support.constant import (
     INTERMEDIATE_CONFIGURING_STATE_DEFECT_DISH,
     INTERMEDIATE_READY_STATE_DEFECT,
     INTERMEDIATE_SCANNING_STATE_DEFECT,
+    INTERMEDIATE_STUCK_CONFIGURING_STATE_DEFECT_DISH,
     tmc_csp_subarray_leaf_node,
     tmc_dish_leaf_node1,
     tmc_sdp_subarray_leaf_node,
@@ -99,7 +100,7 @@ def execute_command(
             case "CONFIGURE":
                 if device == "DISH":
                     pytest.defective_subarray.SetDefective(
-                        INTERMEDIATE_CONFIGURING_STATE_DEFECT_DISH
+                        INTERMEDIATE_STUCK_CONFIGURING_STATE_DEFECT_DISH
                     )
                 else:
                     pytest.defective_subarray.SetDefective(
