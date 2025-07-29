@@ -161,12 +161,18 @@ def execute_command(
     elif device == "SDP":
         match command:
             case "RELEASERESOURCES":
+                pytest.defective_subarray.SetDelayInfo(
+                    json.dumps({"ReleaseAllResources": 55})
+                )
                 (
                     _,
                     pytest.unique_id,
                 ) = subarray_node.subarray_node.ReleaseAllResources()
 
             case "ASSIGNRESOURCES":
+                pytest.defective_subarray.SetDelayInfo(
+                    json.dumps({"AssignResources": 55})
+                )
                 assign_input_str = prepare_json_args_for_commands(
                     "assign_resources_mid", command_input_factory
                 )
