@@ -88,7 +88,6 @@ command_defect_mapping = {
         "CONFIGURING": json.dumps(INTERMEDIATE_CONFIGURING_OBS_STATE_DEFECT),
         "FAULT": json.dumps(INTERMEDIATE_FAULT_OBS_STATE_DEFECT),
         "SLEW": json.dumps(INTERMEDIATE_SLEW_STATE_DEFECT_DISH),
-        "READY": json.dumps(INTERMEDIATE_READY_STATE_DEFECT_DISH),
     },
     "Scan": {
         "READY": READY_STATE_DEFECT,
@@ -137,11 +136,16 @@ def set_subsystem_defects(
         )
     if dish_pointingstate:
         for dish in dishes:
-            dish.SetDefective(
-                command_defect_mapping.get(command).get(
-                    dish_pointingstate, RESET_DEFECT
+            if dish_pointingstate == "READY" and command == "Configure":
+                dish.SetDefective(
+                    json.dumps(INTERMEDIATE_READY_STATE_DEFECT_DISH)
                 )
-            )
+            else:
+                dish.SetDefective(
+                    command_defect_mapping.get(command).get(
+                        dish_pointingstate, RESET_DEFECT
+                    )
+                )
             break
 
 
