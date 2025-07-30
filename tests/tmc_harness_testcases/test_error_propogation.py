@@ -27,6 +27,7 @@ from tests.resources.test_support.constant import (
     INTERMEDIATE_CONFIGURING_STATE_DEFECT,
     INTERMEDIATE_CONFIGURING_STATE_DEFECT_DISH,
     INTERMEDIATE_READY_STATE_DEFECT,
+    INTERMEDIATE_RESOURCING_STATE_DEFECT,
     INTERMEDIATE_SCANNING_STATE_DEFECT,
     tmc_csp_subarray_leaf_node,
     tmc_dish_leaf_node1,
@@ -81,12 +82,18 @@ def execute_command(
     if device in ["CSP", "DISH"]:
         match command:
             case "RELEASERESOURCES":
+                pytest.defective_subarray.SetDefective(
+                    INTERMEDIATE_RESOURCING_STATE_DEFECT
+                )
                 (
                     _,
                     pytest.unique_id,
                 ) = subarray_node.subarray_node.ReleaseAllResources()
 
             case "ASSIGNRESOURCES":
+                pytest.defective_subarray.SetDefective(
+                    INTERMEDIATE_RESOURCING_STATE_DEFECT
+                )
                 assign_input_str = prepare_json_args_for_commands(
                     "assign_resources_mid", command_input_factory
                 )
@@ -154,12 +161,18 @@ def execute_command(
     elif device == "SDP":
         match command:
             case "RELEASERESOURCES":
+                pytest.defective_subarray.SetDelayInfo(
+                    json.dumps({"ReleaseAllResources": 55})
+                )
                 (
                     _,
                     pytest.unique_id,
                 ) = subarray_node.subarray_node.ReleaseAllResources()
 
             case "ASSIGNRESOURCES":
+                pytest.defective_subarray.SetDelayInfo(
+                    json.dumps({"AssignResources": 55})
+                )
                 assign_input_str = prepare_json_args_for_commands(
                     "assign_resources_mid", command_input_factory
                 )
