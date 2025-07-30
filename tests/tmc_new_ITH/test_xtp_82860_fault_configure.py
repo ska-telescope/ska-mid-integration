@@ -78,8 +78,8 @@ def test_verify_fault_after_configure():
 
 @given(
     parsers.parse(
-        "CSP, SDP and DISH in <csp_obsstate>,<sdp_obsstate>,"
-        "<dish_pointingstate> and <dish_dishmode> after <command>"
+        "CSP, SDP and DISH in {csp_obsstate},{sdp_obsstate},"
+        "{dish_pointingstate} and {dish_dishmode} after {command}"
     )
 )
 def subarray_in_ready_state(
