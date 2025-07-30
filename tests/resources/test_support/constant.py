@@ -500,15 +500,13 @@ INTERMEDIATE_CONFIGURING_STATE_DEFECT_DISH = json.dumps(
     }
 )
 
-INTERMEDIATE_READY_STATE_DEFECT_DISH = json.dumps(
-    {
-        "enabled": True,
-        "fault_type": FaultType.STUCK_IN_INTERMEDIATE_STATE,
-        "error_message": "Device stuck in intermediate state",
-        "result": ResultCode.FAILED,
-        "intermediate_state": PointingState.READY,
-    }
-)
+INTERMEDIATE_READY_STATE_DEFECT_DISH = {
+    "enabled": True,
+    "fault_type": FaultType.STUCK_IN_INTERMEDIATE_STATE,
+    "error_message": "Device stuck in intermediate state",
+    "result": ResultCode.FAILED,
+    "intermediate_state": PointingState.READY,
+}
 
 INTERMEDIATE_SLEW_STATE_DEFECT_DISH = json.dumps(
     {
