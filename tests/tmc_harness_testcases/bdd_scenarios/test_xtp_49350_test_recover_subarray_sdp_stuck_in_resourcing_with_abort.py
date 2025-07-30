@@ -15,7 +15,7 @@ from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 
 
-@pytest.mark.SKA_fault
+@pytest.mark.skip(reason="Scenario is covered under XTP-76068")
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
