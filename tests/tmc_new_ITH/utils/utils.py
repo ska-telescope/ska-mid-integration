@@ -137,9 +137,7 @@ def set_subsystem_defects(
     if dish_pointingstate:
         for dish in dishes:
             if dish_pointingstate == "READY" and command == "Configure":
-                dish.SetDefective(
-                    json.dumps(INTERMEDIATE_READY_STATE_DEFECT_DISH)
-                )
+                dish.SetDefective(INTERMEDIATE_READY_STATE_DEFECT_DISH)
             else:
                 dish.SetDefective(
                     command_defect_mapping.get(command).get(
