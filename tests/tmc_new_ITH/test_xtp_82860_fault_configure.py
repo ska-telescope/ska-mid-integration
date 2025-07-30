@@ -144,6 +144,7 @@ def verify_tmc_subarray_observation_state_fault(
     tmc: TMCFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
+    dishes: DishesFacade,
 ):
     """Verifies the TMC subarray observation state FAULT"""
     assert_that(event_tracer).described_as(
@@ -173,7 +174,7 @@ def verify_tmc_subarray_observation_state_fault(
         ResultCode.FAILED,
     )
 
-    reset_defects(csp, sdp)
+    reset_defects(csp, sdp, dishes.dish_master_list)
 
 
 @when("I invoke Restart Command on the TMC Subarray")

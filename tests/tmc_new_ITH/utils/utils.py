@@ -258,7 +258,9 @@ def invoke_command_with_defect(
             tmc.end_scan(wait_termination=False)
 
 
-def reset_defects(csp: CSPFacade, sdp: SDPFacade):
+def reset_defects(csp: CSPFacade, sdp: SDPFacade, dish_master_list: list = []):
     """Reset the defects for csp and sdp"""
     csp.csp_subarray.SetDefective(RESET_DEFECT)
     sdp.sdp_subarray.SetDefective(RESET_DEFECT)
+    for dish in dish_master_list:
+        dish.SetDefective(RESET_DEFECT)
