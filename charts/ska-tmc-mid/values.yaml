@@ -162,7 +162,7 @@ deviceServers:
     CspAssignResourcesInterfaceURL: "https://schema.skao.int/ska-csp-assignresources/2.0"
     CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.0"
     SdpScanInterfaceURL: "https://schema.skao.int/ska-sdp-scan/0.4"
-    CommandTimeOut: 110
+    CommandTimeOut: 50
     AbortCommandTimeOut: 130
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
@@ -178,7 +178,7 @@ deviceServers:
   sdpsubarrayleafnode:
     enabled: true
     file: "data/sdpsubarrayleafnode.yaml"
-    CommandTimeOut: 50
+    CommandTimeOut: 30
     AdapterTimeOut: 2
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
@@ -215,7 +215,7 @@ deviceServers:
     DelayCadence: 10.0
     DelayValidityPeriod: 20.0
     DelayModelTimeInAdvance: 30
-    CommandTimeOut: 50
+    CommandTimeOut: 30
     AdapterTimeOut: 2.0
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
@@ -231,7 +231,7 @@ deviceServers:
       requests:
         cpu: 2000m
         memory: 300Mi
-    CommandTimeOut: 90
+    CommandTimeOut: 40
     MaxTrackTableRetry: 3
     TrackTableRetryDuration: 0.2
     LivelinessCheckPeriod: 1.5
