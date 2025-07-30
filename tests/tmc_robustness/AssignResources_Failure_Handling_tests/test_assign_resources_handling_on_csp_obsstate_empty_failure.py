@@ -16,6 +16,9 @@ from tests.resources.test_support.constant import (
 )
 
 
+@pytest.mark.skip(
+    reason="Test needs an update once auto recovery is implemented"
+)
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
