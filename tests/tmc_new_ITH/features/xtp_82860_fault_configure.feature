@@ -8,7 +8,48 @@ Scenario Outline: Test Restart Command during failure of Configure Command
     And Dish transitions to dishMode StandbyFP and PointingState READY
     And TMC subarray transitions to observation state EMPTY
     Examples:
-        | command         | csp_obsstate | sdp_obsstate     | dish_pointingstates     | dish_dishmode |
-        | Configure       | FAULT        | READY            | READY,TRACK,TRACK,READY | CONFIG        |
-        | Configure       | FAULT        | READY            | READY,READY,READY,READY | OPERATE       |
-        | Configure       | FAULT        | READY            | SLEW,READY,SLEW,READY   | OPERATE       |
+        | command   | csp_obsstate | sdp_obsstate | dish_pointingstates     | dish_dishmode |
+        | Configure | FAULT        | READY        | READY,TRACK,TRACK,READY | CONFIG        |
+        | Configure | FAULT        | READY        | READY,READY,READY,READY | OPERATE       |
+        | Configure | FAULT        | READY        | SLEW,READY,SLEW,READY   | OPERATE       |
+        | Configure | FAULT        | READY        | TRACK,TRACK,TRACK,TRACK | CONFIG        |
+        | Configure | FAULT        | READY        | READY,TRACK,TRACK,TRACK | OPERATE       |
+        | Configure | FAULT        | CONFIGURING  | TRACK,READY,TRACK,TRACK | CONFIG        |
+        | Configure | FAULT        | CONFIGURING  | TRACK,TRACK,TRACK,TRACK | OPERATE       |
+        | Configure | FAULT        | CONFIGURING  | TRACK,SLEW,SLEW,TRACK   | OPERATE       |
+        | Configure | FAULT        | CONFIGURING  | TRACK,TRACK,TRACK,TRACK | CONFIG        |
+        | Configure | FAULT        | CONFIGURING  | READY,TRACK,TRACK,READY | OPERATE       |
+        | Configure | READY        | FAULT        | READY,TRACK,TRACK,TRACK | CONFIG        |
+        | Configure | READY        | FAULT        | TRACK,TRACK,TRACK,TRACK | OPERATE       |
+        | Configure | READY        | FAULT        | SLEW,TRACK,TRACK,TRACK  | OPERATE       |
+        | Configure | READY        | FAULT        | TRACK,TRACK,TRACK,TRACK | CONFIG        |
+        | Configure | READY        | FAULT        | TRACK,READY,TRACK,TRACK | OPERATE       |
+        | Configure | CONFIGURING  | FAULT        | TRACK,TRACK,READY,TRACK | CONFIG        |
+        | Configure | CONFIGURING  | FAULT        | TRACK,TRACK,TRACK,TRACK | OPERATE       |
+        | Configure | CONFIGURING  | FAULT        | TRACK,TRACK,SLEW,SLEW   | OPERATE       |
+        | Configure | CONFIGURING  | FAULT        | TRACK,TRACK,TRACK,TRACK | CONFIG        |
+        | Configure | CONFIGURING  | FAULT        | READY,TRACK,TRACK,READY | OPERATE       |
+        | Configure | CONFIGURING  | READY        | TRACK,READY,READY,TRACK | OPERATE       |
+        | Configure | CONFIGURING  | READY        | READY,READY,READY,READY | CONFIG        |
+        | Configure | CONFIGURING  | READY        | TRACK,TRACK,TRACK,TRACK | OPERATE       |
+        | Configure | CONFIGURING  | READY        | SLEW,SLEW,SLEW,SLEW     | OPERATE       |
+        | Configure | CONFIGURING  | READY        | TRACK,TRACK,TRACK,TRACK | CONFIG        |
+        | Configure | CONFIGURING  | CONFIGURING  | READY,TRACK,TRACK,TRACK | CONFIG        |
+        | Configure | CONFIGURING  | CONFIGURING  | TRACK,TRACK,TRACK,TRACK | OPERATE       |
+        | Configure | CONFIGURING  | CONFIGURING  | SLEW,TRACK,TRACK,TRACK  | OPERATE       |
+        | Configure | CONFIGURING  | CONFIGURING  | TRACK,TRACK,TRACK,TRACK | CONFIG        |
+        | Configure | CONFIGURING  | CONFIGURING  | TRACK,READY,TRACK,TRACK | OPERATE       |
+        | Configure | READY        | CONFIGURING  | TRACK,TRACK,READY,TRACK | CONFIG        |
+        | Configure | READY        | CONFIGURING  | TRACK,TRACK,TRACK,TRACK | OPERATE       |
+        | Configure | READY        | CONFIGURING  | TRACK,TRACK,TRACK,SLEW  | OPERATE       |
+        | Configure | READY        | CONFIGURING  | TRACK,TRACK,TRACK,TRACK | CONFIG        |
+        | Configure | READY        | CONFIGURING  | READY,TRACK,TRACK,TRACK | OPERATE       |
+        | Configure | READY        | READY        | READY,READY,TRACK,TRACK | CONFIG        |
+        | Configure | READY        | READY        | READY,TRACK,TRACK,TRACK | OPERATE       |
+        | End       | FAULT        | IDLE         | READY,READY,READY,READY | OPERATE       |
+        | End       | IDLE         | FAULT        | READY,READY,READY,READY | OPERATE       |
+        | End       | IDLE         | IDLE         | TRACK,READY,TRACK,TRACK | OPERATE       |
+        | End       | IDLE         | FAULT        | TRACK,TRACK,TRACK,TRACK | OPERATE       |
+        | End       | FAULT        | FAULT        | READY,READY,READY,READY | OPERATE       |
+        | End       | FAULT        | IDLE         | READY,READY,READY,READY | OPERATE       |
+
