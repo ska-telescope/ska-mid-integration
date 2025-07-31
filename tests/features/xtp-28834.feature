@@ -7,7 +7,6 @@ Feature: TMC SubarrayNode handles failure for Configure command
         And Sdp Subarray <subarray_id> completes Configure
         And Csp Subarray <subarray_id> is stuck in obsState CONFIGURING
         And the TMC SubarrayNode <subarray_id> transitions to FAULT
-        When I issue the Abort command on TMC SubarrayNode <subarray_id>
         When I issue the Restart command on TMC SubarrayNode <subarray_id>
         Then the SDP subarray <subarray_id> transitions to obsState EMPTY
         And the CSP subarray <subarray_id> transitions to obsState EMPTY
