@@ -363,6 +363,8 @@ def move_csp_sdp_to_fault_obsstate(
     """
     match subsystem:
         case "CSP":
-            subarray_node.csp_subarray1.SetDirectObsState(ObsState.FAULT)
+            csp_subarray = subarray_node.subarray_devices.get("csp_subarray")
+            csp_subarray.SetDirectObsState(ObsState.FAULT)
         case "SDP":
-            subarray_node.sdp_subarray1.SetDirectObsState(ObsState.FAULT)
+            sdp_subarray = subarray_node.subarray_devices.get("sdp_subarray")
+            sdp_subarray.SetDirectObsState(ObsState.FAULT)
