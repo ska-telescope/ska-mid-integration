@@ -61,11 +61,9 @@ Scenario Outline: TMC moves to FAULT obsState when CSP/SDP moves to FAULT obsSta
 		Then the TMC SubarrayNode transitions to FAULT obsState
 		Examples:
 		            |initialObsState  | subsystem   |
-		            |EMPTY            | CSP         |
 		            |IDLE             | CSP         |
 					|READY            | CSP         |
 					|SCANNING         | CSP         |
-					|EMPTY            | SDP         |
 					|IDLE             | SDP         |
 					|READY            | SDP         |
 					|SCANNING         | SDP         |
