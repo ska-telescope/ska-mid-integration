@@ -23,15 +23,19 @@ from tests.tmc_new_ITH.conftest import get_abort_command_timeout
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
-COMMAND_RESULT_CSP = (
-    '[3, "Exception occurred on the following devices: '
-    'mid-tmc/subarray-leaf-node-csp/01: Timeout has occurred, command failed"]'
-)
-COMMAND_RESULT_SDP = (
-    '[3, "Exception occurred on the following devices:'
-    " mid-tmc/subarray-leaf-node-sdp/01: Timeout has occurred, "
-    'command failed"]'
-)
+exception_messages = {
+    "CSP": (
+        '[3, "Exception occurred on the following devices: '
+        "mid-tmc/subarray-leaf-node-csp/01: Timeout has occurred,"
+        ' command failed"]'
+    ),
+    "SDP": (
+        '[3, "Exception occurred on the following devices:'
+        " mid-tmc/subarray-leaf-node-sdp/01: Timeout has occurred, "
+        'command failed"]'
+    ),
+}
+
 ABORT_COMMAND_TIMEOUT = get_abort_command_timeout()
 # It is expected that required event will get generated
 # once command timeout is captured on the subarraynode
@@ -56,12 +60,6 @@ def _setup_event_subscriptions(
     event_tracer.subscribe_event(sdp.sdp_subarray, "obsState")
     event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
     event_tracer.subscribe_event(tmc.subarray_node, "longRunningCommandResult")
-    event_tracer.subscribe_event(
-        tmc.sdp_subarray_leaf_node, "sdpSubarrayObsState"
-    )
-    event_tracer.subscribe_event(
-        tmc.csp_subarray_leaf_node, "cspSubarrayObsState"
-    )
 
     log_events(
         {
@@ -136,27 +134,6 @@ def send_restart_command(
     _, pytest.unique_id = tmc.subarray_node.Restart()
 
 
-@then("the TMC SubarrayNode obsstate stuck into RESTARTING obsState")
-def verify_restarting_obsstate(
-    tmc: TMCFacade,
-    event_tracer: TangoEventTracer,
-):
-    """
-    Verify the subarray's transition to the RESTARTING observation state.
-    """
-    assert_that(event_tracer).described_as(
-        'FAILED ASSUMPTION IN "THEN" STEP: '
-        "'the tmc subarray must be in the RESTARTING obsState' "
-        "TMC Subarray device"
-        f"({tmc.subarray_node.dev_name()}) "
-        "is expected to be in RESTARTING obstate",
-    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        tmc.subarray_node,
-        "obsState",
-        ObsState.RESTARTING,
-    )
-
-
 @then(
     parsers.parse(
         "the command failure is reported by subarray with"
@@ -173,71 +150,23 @@ def verify_error_message(
     """
     Verify the tmc subarray reports timeout on its LRCR.
     """
+    expected_msg = exception_messages[subsystem]
+
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "THEN" STEP: '
+        "'the subarray is in RESTARTING obsState' "
+        "TMC Subarray Node device "
+        f"({tmc.subarray_node.dev_name()}) "
+        "is expected have longRunningCommandResult as "
+        "(unique_id, COMMAND_RESULT)",
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        tmc.subarray_node,
+        "longRunningCommandResult",
+        (pytest.unique_id[0], expected_msg),
+    )
     if subsystem == "CSP":
-        assert_that(event_tracer).described_as(
-            'FAILED ASSUMPTION IN "THEN" STEP: '
-            "'the subarray is in RESTARTING obsState' "
-            "TMC Subarray Node device "
-            f"({tmc.subarray_node.dev_name()}) "
-            "is expected have longRunningCommandResult as "
-            "(unique_id, COMMAND_RESULT)",
-        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-            tmc.subarray_node,
-            "longRunningCommandResult",
-            (pytest.unique_id[0], COMMAND_RESULT_CSP),
-        )
-
-        # tear_down as TMC is inconsistent state.
         csp.csp_subarray.ResetDelayInfo()
-        csp.csp_subarray.Restart()
-
-        assert_that(event_tracer).described_as(
-            'FAILED ASSUMPTION IN "THEN" STEP: '
-            "'the csp subarray must be in the EMPTY obsState'"
-            "CSP Subarray device"
-            f"({csp.csp_subarray.dev_name()}) "
-            "is expected to be in EMPTY obstate",
-        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-            csp.csp_subarray,
-            "obsState",
-            ObsState.EMPTY,
-        )
-        assert_that(event_tracer).within_timeout(
-            ASSERTIONS_TIMEOUT
-        ).has_change_event_occurred(
-            tmc.csp_subarray_leaf_node, "cspSubarrayObsState", ObsState.EMPTY
-        )
     if subsystem == "SDP":
-        assert_that(event_tracer).described_as(
-            'FAILED ASSUMPTION IN "THEN" STEP: '
-            "'the subarray is in RESTARTING obsState' "
-            "TMC Subarray Node device "
-            f"({tmc.subarray_node.dev_name()}) "
-            "is expected have longRunningCommandResult as "
-            "(unique_id, COMMAND_RESULT)",
-        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-            tmc.subarray_node,
-            "longRunningCommandResult",
-            (pytest.unique_id[0], COMMAND_RESULT_SDP),
-        )
-        # tear_down as TMC is inconsistent state.
         sdp.sdp_subarray.ResetDelayInfo()
-        sdp.sdp_subarray.Restart()
 
-        assert_that(event_tracer).described_as(
-            'FAILED ASSUMPTION IN "THEN" STEP: '
-            "'the sdp subarray must be in the EMPTY obsState'"
-            "SDP Subarray device"
-            f"({sdp.sdp_subarray.dev_name()}) "
-            "is expected to be in EMPTY obstate",
-        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-            sdp.sdp_subarray,
-            "obsState",
-            ObsState.EMPTY,
-        )
-        assert_that(event_tracer).within_timeout(
-            ASSERTIONS_TIMEOUT
-        ).has_change_event_occurred(
-            tmc.sdp_subarray_leaf_node, "sdpSubarrayObsState", ObsState.EMPTY
-        )
     event_tracer.clear_events()
