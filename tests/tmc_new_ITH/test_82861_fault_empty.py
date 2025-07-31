@@ -66,6 +66,13 @@ def verify_tmc_subarray_resourcing_fault(
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         tmc.subarray_node, "obsState", ObsState.FAULT
     )
+    assert_that(event_tracer).described_as(
+        f"CSP Subarray device ({csp.csp_subarray})"
+        "ObsState attribute value should move "
+        f"from {ObsState.IDLE}."
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        csp.csp_subarray, "obsState", ObsState.IDLE
+    )
 
 
 @given("CSP and SDP in observation state IDLE and EMPTY")

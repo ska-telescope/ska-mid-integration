@@ -130,7 +130,7 @@ def set_subsystem_defects(
     )
 
     if sdp_obsstate == "EMPTY" and command == "AssignResources":
-        sdp.sdp_subarray.SetDefective(json.dumps(SDP_BACK_TO_INITIAL_STATE))
+        sdp.sdp_subarray.SetDefective(SDP_BACK_TO_INITIAL_STATE)
     else:
         sdp.sdp_subarray.SetDefective(
             command_defect_mapping.get(command).get(sdp_obsstate, RESET_DEFECT)
