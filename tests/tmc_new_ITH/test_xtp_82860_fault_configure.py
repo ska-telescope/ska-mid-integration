@@ -99,6 +99,7 @@ def subarray_in_ready_state(
     """Ensure the subarray is in the IDLE state."""
     setup_event_subscriptions(tmc, csp, sdp, event_tracer)
     setup_event_dish_subscription(event_tracer, dishes.dish_master_list)
+    dish_pointing_state_list = dish_pointingstates.split(",")
     invoke_command_with_defect(
         tmc,
         default_commands_inputs,
@@ -107,7 +108,7 @@ def subarray_in_ready_state(
         csp_obsstate,
         sdp_obsstate,
         command,
-        dish_pointingstates,
+        dish_pointing_state_list,
         dishes.dish_master_list,
     )
     assert_that(event_tracer).described_as(
@@ -126,7 +127,7 @@ def subarray_in_ready_state(
         sdp.sdp_subarray, "obsState", ObsState[sdp_obsstate]
     )
     for dish, dish_pointingstate in zip(
-        dishes.dish_master_list, dish_pointingstates
+        dishes.dish_master_list, dish_pointing_state_list
     ):
         assert_that(event_tracer).described_as(
             f"Dish device ({dish})"
