@@ -214,6 +214,8 @@ def invoke_command_with_defect(
                 csp_obsstate,
                 sdp_obsstate,
                 command,
+                dish_pointingstate=pointing_state,
+                dishes=dishes,
             )
             tmc.scan(
                 default_commands_inputs.scan_input, wait_termination=False
@@ -242,6 +244,8 @@ def invoke_command_with_defect(
                 csp_obsstate,
                 sdp_obsstate,
                 command,
+                dish_pointingstate=pointing_state,
+                dishes=dishes,
             )
             tmc.end_observation(wait_termination=False)
         case "EndScan":
@@ -256,6 +260,8 @@ def invoke_command_with_defect(
                 csp_obsstate,
                 sdp_obsstate,
                 command,
+                dish_pointingstate=pointing_state,
+                dishes=dishes,
             )
             tmc.end_scan(wait_termination=False)
 
