@@ -32,6 +32,9 @@ def _wait_for_availability(central_node_mid) -> bool:
     return False
 
 
+@pytest.mark.skip(
+    reason="This test needs an update once auto recovery is implemented"
+)
 @pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(

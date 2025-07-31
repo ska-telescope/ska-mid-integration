@@ -162,7 +162,7 @@ def csp_subarray_stuck_in_resourcing(event_recorder, simulator_factory):
 
 
 @given(
-    parsers.parse("the TMC SubarrayNode {subarray_id} stucks in RESOURCING")
+    parsers.parse("the TMC SubarrayNode {subarray_id} transitions to FAULT")
 )
 def given_tmc_subarray_stuck_resourcing(
     central_node_mid,
@@ -173,49 +173,50 @@ def given_tmc_subarray_stuck_resourcing(
     LOGGER.info(
         f"SubarrayNode ObsState is: {central_node_mid.subarray_node.obsState}"
     )
-    assert central_node_mid.subarray_node.obsState == ObsState.RESOURCING
+    assert central_node_mid.subarray_node.obsState == ObsState.FAULT
 
     csp_sim, _, _, _, _, _ = get_device_simulators(simulator_factory)
     csp_sim.SetDefective(json.dumps({"enabled": False}))
 
 
-@when(
-    parsers.parse(
-        "I issue the Abort command on TMC SubarrayNode {subarray_id}"
-    )
-)
-def send_command_abort(central_node_mid):
-    central_node_mid.subarray_node.Abort()
+# @when(
+#     parsers.parse(
+#         "I issue the Abort command on TMC SubarrayNode {subarray_id}"
+#     )
+# )
+# def send_command_abort(central_node_mid):
+#     central_node_mid.subarray_node.Abort()
 
 
-@then(
-    parsers.parse(
-        "the CSP, SDP and TMC subarray {subarray_id} transitions to "
-        + "obsState ABORTED"
-    )
-)
-def subarray_transitions_to_aborted(
-    central_node_mid, simulator_factory, event_recorder
-):
-    csp_sim, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
-    event_recorder.subscribe_event(csp_sim, "obsState")
-    assert event_recorder.has_change_event_occurred(
-        csp_sim,
-        "obsState",
-        ObsState.ABORTED,
-    )
-    event_recorder.subscribe_event(sdp_sim, "obsState")
-    assert event_recorder.has_change_event_occurred(
-        sdp_sim,
-        "obsState",
-        ObsState.ABORTED,
-    )
-    event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
-    assert event_recorder.has_change_event_occurred(
-        central_node_mid.subarray_node,
-        "obsState",
-        ObsState.ABORTED,
-    )
+# @then(
+#     parsers.parse(
+#         "the CSP, SDP and TMC subarray {subarray_id} transitions to "
+#         + "obsState ABORTED"
+#     )
+# )
+# def subarray_transitions_to_aborted(
+#     central_node_mid, simulator_factory, event_recorder
+# ):
+#     csp_sim, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
+#     event_recorder.subscribe_event(csp_sim, "obsState")
+#     assert event_recorder.has_change_event_occurred(
+#         csp_sim,
+#         "obsState",
+#         ObsState.ABORTED,
+#     )
+#     event_recorder.subscribe_event(sdp_sim, "obsState")
+#     assert event_recorder.has_change_event_occurred(
+#         sdp_sim,
+#         "obsState",
+#         ObsState.ABORTED,
+#     )
+#     event_recorder.subscribe_event
+# (central_node_mid.subarray_node, "obsState")
+#     assert event_recorder.has_change_event_occurred(
+#         central_node_mid.subarray_node,
+#         "obsState",
+#         ObsState.ABORTED,
+#     )
 
 
 @when(

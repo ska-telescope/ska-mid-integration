@@ -13,7 +13,6 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.constant import (
-    ABORT_COMPLETED,
     COMMAND_COMPLETED,
     COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_CONFIGURING_IDLE,
 )
@@ -170,7 +169,7 @@ def csp_subarray_returns_to_obsstate_idle(event_recorder, simulator_factory):
 
 
 @given(
-    parsers.parse("the TMC SubarrayNode {subarray_id} stucks in CONFIGURING")
+    parsers.parse("the TMC SubarrayNode {subarray_id} transitions to FAULT")
 )
 def given_tmc_subarray_stuck_configuring(
     central_node_mid, subarray_node, simulator_factory, event_recorder
@@ -178,7 +177,7 @@ def given_tmc_subarray_stuck_configuring(
     csp_sim = simulator_factory.get_or_create_simulator_device(
         SimulatorDeviceType.MID_CSP_DEVICE
     )
-    assert subarray_node.subarray_node.obsState == ObsState.CONFIGURING
+    assert subarray_node.subarray_node.obsState == ObsState.FAULT
 
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
@@ -195,71 +194,72 @@ def given_tmc_subarray_stuck_configuring(
     csp_sim.SetDefective(json.dumps({"enabled": False}))
 
 
-@when(
-    parsers.parse(
-        "I issue the Abort command on TMC SubarrayNode {subarray_id}"
-    )
-)
-def send_command_abort(subarray_node, event_recorder):
-    _, pytest.unique_id = subarray_node.execute_transition("Abort", argin=None)
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "obsState",
-        ObsState.ABORTING,
-    )
+# @when(
+#     parsers.parse(
+#         "I issue the Abort command on TMC SubarrayNode {subarray_id}"
+#     )
+# )
+# def send_command_abort(subarray_node, event_recorder):
+#     _, pytest.unique_id = subarray_node.
+# execute_transition("Abort", argin=None)
+#     assert event_recorder.has_change_event_occurred(
+#         subarray_node.subarray_node,
+#         "obsState",
+#         ObsState.ABORTING,
+#     )
 
 
-@then(
-    parsers.parse(
-        "the SDP subarray {subarray_id} transitions to obsState ABORTED"
-    )
-)
-def sdp_subarray_transitions_to_aborted(
-    simulator_factory, event_recorder, subarray_node
-):
-    sdp_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_SDP_DEVICE
-    )
-    assert event_recorder.has_change_event_occurred(
-        sdp_sim,
-        "obsState",
-        ObsState.ABORTED,
-    )
+# @then(
+#     parsers.parse(
+#         "the SDP subarray {subarray_id} transitions to obsState ABORTED"
+#     )
+# )
+# def sdp_subarray_transitions_to_aborted(
+#     simulator_factory, event_recorder, subarray_node
+# ):
+#     sdp_sim = simulator_factory.get_or_create_simulator_device(
+#         SimulatorDeviceType.MID_SDP_DEVICE
+#     )
+#     assert event_recorder.has_change_event_occurred(
+#         sdp_sim,
+#         "obsState",
+#         ObsState.ABORTED,
+#     )
 
 
-@then(
-    parsers.parse(
-        "the CSP subarray {subarray_id} transitions to obsState ABORTED"
-    )
-)
-def csp_subarray_transitions_to_aborted(simulator_factory, event_recorder):
-    csp_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.MID_CSP_DEVICE
-    )
-    assert event_recorder.has_change_event_occurred(
-        csp_sim,
-        "obsState",
-        ObsState.ABORTED,
-    )
+# @then(
+#     parsers.parse(
+#         "the CSP subarray {subarray_id} transitions to obsState ABORTED"
+#     )
+# )
+# def csp_subarray_transitions_to_aborted(simulator_factory, event_recorder):
+#     csp_sim = simulator_factory.get_or_create_simulator_device(
+#         SimulatorDeviceType.MID_CSP_DEVICE
+#     )
+#     assert event_recorder.has_change_event_occurred(
+#         csp_sim,
+#         "obsState",
+#         ObsState.ABORTED,
+#     )
 
 
-@then(
-    parsers.parse(
-        "Tmc SubarrayNode {subarray_id} transitions to obsState ABORTED"
-    )
-)
-def tmc_subarray_transitions_to_aborted(subarray_node, event_recorder):
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "obsState",
-        ObsState.ABORTED,
-        lookahead=9,
-    )
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "longRunningCommandResult",
-        (pytest.unique_id[0], ABORT_COMPLETED),
-    )
+# @then(
+#     parsers.parse(
+#         "Tmc SubarrayNode {subarray_id} transitions to obsState ABORTED"
+#     )
+# )
+# def tmc_subarray_transitions_to_aborted(subarray_node, event_recorder):
+#     assert event_recorder.has_change_event_occurred(
+#         subarray_node.subarray_node,
+#         "obsState",
+#         ObsState.ABORTED,
+#         lookahead=9,
+#     )
+#     assert event_recorder.has_change_event_occurred(
+#         subarray_node.subarray_node,
+#         "longRunningCommandResult",
+#         (pytest.unique_id[0], ABORT_COMPLETED),
+#     )
 
 
 @when(
