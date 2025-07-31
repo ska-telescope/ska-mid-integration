@@ -19,6 +19,7 @@ from tests.resources.test_support.constant import (
     INTERMEDIATE_READY_STATE_DEFECT_DISH,
     INTERMEDIATE_SLEW_STATE_DEFECT_DISH,
     INTERMEDIATE_STATE_DEFECT,
+    INTERMEDIATE_TRACK_STATE_DEFECT_DISH,
     READY_STATE_DEFECT,
     RESET_DEFECT,
     SDP_BACK_TO_INITIAL_STATE,
@@ -139,6 +140,10 @@ def set_subsystem_defects(
             if dish_pointingstate == "READY" and command == "Configure":
                 dish.SetDefective(
                     json.dumps(INTERMEDIATE_READY_STATE_DEFECT_DISH)
+                )
+            elif dish_pointingstate == "TRACK" and command == "End":
+                dish.SetDefective(
+                    json.dumps(INTERMEDIATE_TRACK_STATE_DEFECT_DISH)
                 )
             else:
                 dish.SetDefective(
