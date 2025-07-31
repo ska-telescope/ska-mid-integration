@@ -22,6 +22,7 @@ from tests.tmc_new_ITH.utils.utils import (
 
 
 @pytest.mark.batch1_fault
+@pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/xtp_82861_fault_empty.feature",
     "Test Restart Command when TMC subarray transitions to "
