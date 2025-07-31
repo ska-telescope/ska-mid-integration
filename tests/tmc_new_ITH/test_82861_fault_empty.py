@@ -48,7 +48,7 @@ def verify_tmc_subarray_resourcing_fault(
     AssignResources failure.
     """
     setup_event_subscriptions(tmc, csp, sdp, event_tracer)
-    set_subsystem_defects(csp, sdp, "EMPTY", "IDLE", "AssignResources")
+    set_subsystem_defects(csp, sdp, "IDLE", "EMPTY", "AssignResources")
     tmc.assign_resources(
         default_commands_inputs.assign_input, wait_termination=False
     )
@@ -68,28 +68,28 @@ def verify_tmc_subarray_resourcing_fault(
     )
 
 
-@given("CSP and SDP in observation state EMPTY and IDLE")
+@given("CSP and SDP in observation state IDLE and EMPTY")
 def verify_csp_mccs_sdp_obs_state_empty(csp: CSPFacade, sdp: SDPFacade):
     """Verifies observation states of the subsystems."""
-    assert csp.csp_subarray.obsState == ObsState.EMPTY
-    assert sdp.sdp_subarray.obsState == ObsState.IDLE
+    assert csp.csp_subarray.obsState == ObsState.IDLE
+    assert sdp.sdp_subarray.obsState == ObsState.EMPTY
     reset_defects(csp, sdp)
 
 
 @given(
-    "SDP transitions to observation state EMPTY after resources are released"
+    "CSP transitions to observation state EMPTY after resources are released"
 )
-def invoke_release_on_mccs_controller(
-    sdp: SDPFacade, event_tracer: TangoEventTracer
+def invoke_release_on_csp_subarray(
+    csp: CSPFacade, event_tracer: TangoEventTracer
 ):
-    """Invokes release command on sdp subarray"""
-    sdp.sdp_subarray.ReleaseAllResources()
+    """Invokes release command on csp subarray"""
+    csp.csp_subarray.ReleaseAllResources()
     assert_that(event_tracer).described_as(
-        f"SDP Subarray device ({sdp.sdp_subarray})"
+        f"CSP Subarray device ({csp.csp_subarray})"
         "ObsState attribute value should move "
         f"from {ObsState.EMPTY}."
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        sdp.sdp_subarray, "obsState", ObsState.EMPTY
+        csp.csp_subarray, "obsState", ObsState.EMPTY
     )
 
 
