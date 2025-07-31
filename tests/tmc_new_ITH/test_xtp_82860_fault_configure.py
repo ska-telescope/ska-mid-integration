@@ -66,7 +66,7 @@ def _check_abort_flow(
         )
 
 
-@pytest.mark.batch1_fault_1
+@pytest.mark.batch1_fault
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/xtp_82860_fault_configure.feature",
@@ -79,7 +79,7 @@ def test_verify_fault_after_configure():
 @given(
     parsers.parse(
         "CSP, SDP and DISH in {csp_obsstate},{sdp_obsstate},"
-        "{dish_pointingstate} and {dish_dishmode} after {command}"
+        "{dish_pointingstates} and {dish_dishmode} after {command}"
     )
 )
 def subarray_in_ready_state(
@@ -91,7 +91,7 @@ def subarray_in_ready_state(
     default_commands_inputs: TestHarnessInputs,
     csp_obsstate,
     sdp_obsstate,
-    dish_pointingstate,
+    dish_pointingstates,
     dish_dishmode,
     command,
     context_data: TestContextData,
@@ -107,7 +107,7 @@ def subarray_in_ready_state(
         csp_obsstate,
         sdp_obsstate,
         command,
-        dish_pointingstate,
+        dish_pointingstates,
         dishes.dish_master_list,
     )
     assert_that(event_tracer).described_as(
@@ -125,15 +125,18 @@ def subarray_in_ready_state(
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         sdp.sdp_subarray, "obsState", ObsState[sdp_obsstate]
     )
-    assert_that(event_tracer).described_as(
-        f"Dish device ({dishes.dish_master_list[0]})"
-        "PointingState attribute value should move "
-        f"to {dish_pointingstate}."
-    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        dishes.dish_master_list[0],
-        "pointingState",
-        PointingState[dish_pointingstate],
-    )
+    for dish, dish_pointingstate in zip(
+        dishes.dish_master_list, dish_pointingstates
+    ):
+        assert_that(event_tracer).described_as(
+            f"Dish device ({dish})"
+            "PointingState attribute value should move "
+            f"to {dish_pointingstate}."
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+            dish,
+            "pointingState",
+            PointingState[dish_pointingstate],
+        )
     context_data.csp_obsstate = ObsState[csp_obsstate]
     context_data.sdp_obsstate = ObsState[sdp_obsstate]
 

@@ -110,7 +110,7 @@ def set_subsystem_defects(
     csp_obsstate: str,
     sdp_obsstate: str,
     command: str,
-    dish_pointingstate: str = "",
+    dish_pointingstates: list = [],
     dishes: list = [],
 ):
     """
@@ -135,8 +135,8 @@ def set_subsystem_defects(
         sdp.sdp_subarray.SetDefective(
             command_defect_mapping.get(command).get(sdp_obsstate, RESET_DEFECT)
         )
-    if dish_pointingstate:
-        for dish in dishes:
+    if dish_pointingstates:
+        for dish, dish_pointingstate in zip(dishes, dish_pointingstates):
             if dish_pointingstate == "READY" and command == "Configure":
                 dish.SetDefective(
                     json.dumps(INTERMEDIATE_READY_STATE_DEFECT_DISH)
@@ -151,7 +151,6 @@ def set_subsystem_defects(
                         dish_pointingstate, RESET_DEFECT
                     )
                 )
-            break
 
 
 def invoke_command_with_defect(
@@ -162,7 +161,7 @@ def invoke_command_with_defect(
     csp_obsstate: str,
     sdp_obsstate: str,
     command: str,
-    pointing_state: str = "",
+    pointing_states: list = [],
     dishes: list = [],
 ):
     """
@@ -203,7 +202,7 @@ def invoke_command_with_defect(
                 csp_obsstate,
                 sdp_obsstate,
                 command,
-                dish_pointingstate=pointing_state,
+                dish_pointingstates=pointing_states,
                 dishes=dishes,
             )
             tmc.configure(
@@ -219,7 +218,7 @@ def invoke_command_with_defect(
                 csp_obsstate,
                 sdp_obsstate,
                 command,
-                dish_pointingstate=pointing_state,
+                dish_pointingstates=pointing_states,
                 dishes=dishes,
             )
             tmc.scan(
@@ -249,7 +248,7 @@ def invoke_command_with_defect(
                 csp_obsstate,
                 sdp_obsstate,
                 command,
-                dish_pointingstate=pointing_state,
+                dish_pointingstates=pointing_states,
                 dishes=dishes,
             )
             tmc.end_observation(wait_termination=False)
@@ -265,7 +264,7 @@ def invoke_command_with_defect(
                 csp_obsstate,
                 sdp_obsstate,
                 command,
-                dish_pointingstate=pointing_state,
+                dish_pointingstates=pointing_states,
                 dishes=dishes,
             )
             tmc.end_scan(wait_termination=False)
