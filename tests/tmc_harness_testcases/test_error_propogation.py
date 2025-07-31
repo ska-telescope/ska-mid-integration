@@ -46,7 +46,8 @@ from tests.tmc_harness_testcases.conftest import (
 @pytest.mark.SKA_mid
 @scenario(
     "../features/check_error_propagation.feature",
-    "Error Propagation Reported by TMC Mid End/EndScan/Scan "
+    "Error Propagation Reported by TMC Mid "
+    "AssignResources/ReleaseAllResources/Configure/End/EndScan/Scan "
     "Commands for Defective Subarray",
 )
 def test_tmc_command_error_propagation():
@@ -60,7 +61,8 @@ def test_tmc_command_error_propagation():
 @pytest.mark.SKA_mid
 @scenario(
     "../features/check_error_propagation.feature",
-    "TimeOut Reported by TMC Mid End/EndScan/Scan "
+    "TimeOut Reported by TMC Mid "
+    "AssignResources/ReleaseAllResources/Configure/End/EndScan/Scan "
     "Commands for Defective Subarray",
 )
 def test_tmc_command_timeout_error_propagation():
