@@ -56,6 +56,12 @@ def _setup_event_subscriptions(
     event_tracer.subscribe_event(sdp.sdp_subarray, "obsState")
     event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
     event_tracer.subscribe_event(tmc.subarray_node, "longRunningCommandResult")
+    event_tracer.subscribe_event(
+        tmc.sdp_subarray_leaf_node, "sdpSubarrayObsState"
+    )
+    event_tracer.subscribe_event(
+        tmc.csp_subarray_leaf_node, "cspSubarrayObsState"
+    )
 
     log_events(
         {
@@ -183,6 +189,7 @@ def verify_error_message(
 
         # tear_down as TMC is inconsistent state.
         csp.csp_subarray.ResetDelayInfo()
+        csp.csp_subarray.Restart()
 
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
@@ -195,7 +202,11 @@ def verify_error_message(
             "obsState",
             ObsState.EMPTY,
         )
-
+        assert_that(event_tracer).within_timeout(
+            ASSERTIONS_TIMEOUT
+        ).has_change_event_occurred(
+            tmc.csp_subarray_leaf_node, "cspSubarrayObsState", ObsState.EMPTY
+        )
     if subsystem == "SDP":
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
@@ -211,6 +222,8 @@ def verify_error_message(
         )
         # tear_down as TMC is inconsistent state.
         sdp.sdp_subarray.ResetDelayInfo()
+        sdp.sdp_subarray.Restart()
+
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
             "'the sdp subarray must be in the EMPTY obsState'"
@@ -222,3 +235,9 @@ def verify_error_message(
             "obsState",
             ObsState.EMPTY,
         )
+        assert_that(event_tracer).within_timeout(
+            ASSERTIONS_TIMEOUT
+        ).has_change_event_occurred(
+            tmc.sdp_subarray_leaf_node, "sdpSubarrayObsState", ObsState.EMPTY
+        )
+    event_tracer.clear_events()
