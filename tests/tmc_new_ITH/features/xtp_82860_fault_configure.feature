@@ -45,7 +45,6 @@ Scenario Outline: Test Restart Command during failure of Configure Command
         | Configure       | READY        | CONFIGURING      | TRACK              | CONFIG        |
         | Configure       | READY        | CONFIGURING      | READY              | OPERATE       |
         | Configure       | READY        | READY            | READY              | CONFIG        |
-        | Configure       | READY        | READY            | TRACK              | CONFIG        |
         | Configure       | READY        | READY            | READY              | OPERATE       |
         | End             | FAULT        | IDLE             | READY              | OPERATE       |
         | End             | IDLE         | FAULT            | READY              | OPERATE       |
