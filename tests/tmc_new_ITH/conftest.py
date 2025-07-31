@@ -6,6 +6,7 @@ from typing import Any
 
 import pytest
 import tango
+from assertpy import assert_that
 from ska_control_model import ObsState
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
 from ska_integration_test_harness.facades.dishes_facade import DishesFacade
@@ -23,6 +24,7 @@ from ska_integration_test_harness.structure.telescope_wrapper import (
 )
 from ska_tango_testing.integration import TangoEventTracer
 
+from tests.resources.test_support.constant import TIMEOUT
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDevicesFacade
 
