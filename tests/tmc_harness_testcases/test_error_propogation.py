@@ -14,6 +14,7 @@ import pytest
 from assertpy import assert_that
 from pytest_bdd import parsers, scenario, then, when
 from ska_control_model import ResultCode
+from ska_tango_base.control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer
 
 from tests.conftest import LOGGER
@@ -65,6 +66,20 @@ def test_tmc_command_error_propagation():
 def test_tmc_command_timeout_error_propagation():
     """
     Test case to verify TMC TimeOut Error Propagation functionality.
+    """
+
+
+@pytest.mark.SKA_fault
+@pytest.mark.batch2
+@pytest.mark.SKA_mid
+@scenario(
+    "../features/check_error_propagation.feature",
+    "TMC moves to FAULT obsState when CSP/SDP " "moves to FAULT obsState",
+)
+def test_tmc_moves_to_fault_with_subsystem():
+    """
+    Test case to verify TMC moves to FAULT observation state if
+    one of the subsystem moves to FAULT observation state.
     """
 
 
@@ -334,3 +349,18 @@ def validate_error_message_reporting(
 
     pytest.defective_subarray.SetDefective(json.dumps({"enabled": False}))
     pytest.defective_subarray.ResetDelayInfo()
+
+
+@when(parsers.parse("the {subsystem} subarray moves to FAULT obsState"))
+def move_csp_sdp_to_fault_obsstate(
+    subarray_node: SubarrayNodeWrapper,
+    subsystem,
+):
+    """
+    Move CSP/SDP to Fault obsState
+    """
+    match subsystem:
+        case "CSP":
+            subarray_node.csp_subarray1.SetDirectObsState(ObsState.FAULT)
+        case "SDP":
+            subarray_node.sdp_subarray1.SetDirectObsState(ObsState.FAULT)

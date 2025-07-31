@@ -51,3 +51,21 @@ Scenario Outline: Error Propagation Reported by TMC Mid End/EndScan/Scan Command
 					|IDLE             | RELEASERESOURCES | SDP                  |
 					|EMPTY            | ASSIGNRESOURCES  | CSP                  |
 					|EMPTY            | ASSIGNRESOURCES  | SDP                  |
+
+
+@SKA_mid
+Scenario Outline: TMC moves to FAULT obsState when CSP/SDP moves to FAULT obsState
+		Given the telescope is is ON state
+		And the TMC subarray is in the <initialObsState> observation state
+		When the <subsystem> subarray moves to FAULT obsState
+		Then the TMC SubarrayNode transitions to FAULT obsState
+		Examples:
+		            |initialObsState  | subsystem   |
+		            |EMPTY            | CSP         |
+		            |IDLE             | CSP         |
+					|READY            | CSP         |
+					|SCANNING         | CSP         |
+					|EMPTY            | SDP         |
+					|IDLE             | SDP         |
+					|READY            | SDP         |
+					|SCANNING         | SDP         |
