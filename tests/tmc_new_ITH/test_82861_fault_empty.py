@@ -21,7 +21,7 @@ from tests.tmc_new_ITH.utils.utils import (
 )
 
 
-@pytest.mark.batch1_fault
+@pytest.mark.SKA_tmc_mid_restart
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/xtp_82861_fault_empty.feature",

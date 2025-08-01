@@ -63,7 +63,7 @@ def _check_abort_flow(
         )
 
 
-@pytest.mark.batch1_fault
+@pytest.mark.SKA_tmc_mid_restart
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/xtp_82859_fault_assign_scan.feature",

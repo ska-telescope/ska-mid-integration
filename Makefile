@@ -100,6 +100,12 @@ SDP_SIMULATION_ENABLED ?= true
 DISH_SIMULATION_ENABLED ?= true
 SDP_PROCCONTROL_REPLICAS ?= 1
 
+# Set Default Time Out for Leaf nodes
+SUBARRAY_COMMAND_TIMEOUT = 110
+CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT = 50
+SDP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT = 50
+DISH_LEAF_NODE_COMMAND_TIMEOUT = 90
+
 ifeq ($(MAKECMDGOALS),k8s-test)
 ADD_ARGS +=  --true-context
 MARK ?= $(shell echo $(TELESCOPE) | sed "s/-/_/g")
@@ -143,6 +149,10 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set global.namespace_dish.dish_names[3]="$(DISH_NAME_100)"\
 	--set tmc-mid.deviceServers.mocks.dish=$(DISH_SIMULATION_ENABLED)\
 	--set tmc-mid.subarray_count=$(SUBARRAY_COUNT)\
+	--set tmc-mid.deviceServers.subarraynode.CommandTimeOut=$(SUBARRAY_COMMAND_TIMEOUT)\
+	--set tmc-mid.deviceServers.sdpsubarrayleafnode.CommandTimeOut=$(SDP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT)\
+	--set tmc-mid.deviceServers.cspsubarrayleafnode.CommandTimeOut=$(CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT)\
+	--set tmc-mid.deviceServers.dishleafnode.CommandTimeOut=$(DISH_LEAF_NODE_COMMAND_TIMEOUT)\
 	$(CUSTOM_VALUES1)\
 	$(CUSTOM_VALUES2)
 
