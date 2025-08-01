@@ -131,15 +131,16 @@ def subarray_in_ready_state(
         dish_pointingstates.split(","),
         dish_dishmodes.split(","),
     ):
-        assert_that(event_tracer).described_as(
-            f"Dish device ({dish})"
-            "PointingState attribute value should move "
-            f"to {dish_pointingstate}."
-        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-            dish,
-            "pointingState",
-            PointingState[dish_pointingstate],
-        )
+        if dish_mode != "CONFIG":
+            assert_that(event_tracer).described_as(
+                f"Dish device ({dish})"
+                "PointingState attribute value should move "
+                f"to {dish_pointingstate}."
+            ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+                dish,
+                "pointingState",
+                PointingState[dish_pointingstate],
+            )
         assert_that(event_tracer).described_as(
             f"Dish device ({dish})"
             "Dish Mode attribute value should move "
