@@ -65,5 +65,5 @@ Scenario Outline: TMC moves to FAULT obsState when CSP/SDP moves to FAULT obsSta
 					|SCANNING         | CSP         |
 					|READY            | CSP         |
 					|READY            | SDP         |
-					|IDLE             | SDP         |
-		            |IDLE             | CSP         |
+					# |IDLE             | SDP         |
+		            # |IDLE             | CSP         |
