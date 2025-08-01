@@ -17,7 +17,7 @@ from tests.resources.test_support.constant import (
 )
 
 
-@pytest.mark.skip(reason="Test case needs debugging")
+@pytest.mark.ska_fault
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
