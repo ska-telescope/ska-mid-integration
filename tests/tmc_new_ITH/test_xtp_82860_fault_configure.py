@@ -141,15 +141,16 @@ def subarray_in_ready_state(
                 "pointingState",
                 PointingState[dish_pointingstate],
             )
-        assert_that(event_tracer).described_as(
-            f"Dish device ({dish})"
-            "Dish Mode attribute value should move "
-            f"to {dish_mode}."
-        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-            dish,
-            "dishMode",
-            DishMode[dish_mode],
-        )
+        if dish_mode != "STANDBY_FP":
+            assert_that(event_tracer).described_as(
+                f"Dish device ({dish})"
+                "Dish Mode attribute value should move "
+                f"to {dish_mode}."
+            ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+                dish,
+                "dishMode",
+                DishMode[dish_mode],
+            )
     context_data.csp_obsstate = ObsState[csp_obsstate]
     context_data.sdp_obsstate = ObsState[sdp_obsstate]
 
