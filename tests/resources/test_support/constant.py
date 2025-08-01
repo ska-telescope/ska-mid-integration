@@ -7,6 +7,7 @@ import numpy as np
 from ska_control_model import ObsState
 
 from tests.resources.test_harness.utils.enums import (
+    DishMode,
     FaultType,
     PointingState,
     ResultCode,
@@ -514,6 +515,15 @@ INTERMEDIATE_TRACK_STATE_DEFECT_DISH = {
     "error_message": "Device stuck in intermediate state",
     "result": ResultCode.FAILED,
     "intermediate_state": PointingState.TRACK,
+}
+
+INTERMEDIATE_DISH_MODE_STATE_DEFECT_DISH = {
+    "enabled": True,
+    "fault_type": FaultType.STUCK_IN_INTERMEDIATE_STATE,
+    "error_message": "Device stuck in intermediate state",
+    "result": ResultCode.FAILED,
+    "intermediate_state": DishMode.CONFIG,
+    "is_dish_mode": True,
 }
 
 INTERMEDIATE_SLEW_STATE_DEFECT_DISH = {

@@ -9,6 +9,7 @@ Scenario Outline: Test Restart Command during failure of Configure Command
     And TMC subarray transitions to observation state EMPTY
     Examples:
         | command   | csp_obsstate | sdp_obsstate | dish_pointingstates     | dish_dishmode |
+        | Configure | READY        | READY        | TRACK,TRACK,TRACK,TRACK | CONFIG        |
         | Configure | FAULT        | READY        | READY,TRACK,TRACK,READY | CONFIG        |
         | Configure | FAULT        | READY        | READY,READY,READY,READY | OPERATE       |
         | Configure | FAULT        | READY        | SLEW,READY,SLEW,READY   | OPERATE       |
@@ -44,7 +45,6 @@ Scenario Outline: Test Restart Command during failure of Configure Command
         | Configure | READY        | CONFIGURING  | TRACK,TRACK,TRACK,SLEW  | OPERATE       |
         | Configure | READY        | CONFIGURING  | TRACK,TRACK,TRACK,TRACK | CONFIG        |
         | Configure | READY        | CONFIGURING  | READY,TRACK,TRACK,TRACK | OPERATE       |
-        | Configure | READY        | READY        | READY,READY,TRACK,TRACK | CONFIG        |
         | Configure | READY        | READY        | READY,TRACK,TRACK,TRACK | OPERATE       |
         | End       | FAULT        | IDLE         | READY,READY,READY,READY | OPERATE       |
         | End       | IDLE         | FAULT        | READY,READY,READY,READY | OPERATE       |

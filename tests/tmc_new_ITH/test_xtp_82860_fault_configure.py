@@ -110,6 +110,7 @@ def subarray_in_ready_state(
         command,
         dish_pointing_state_list,
         dishes.dish_master_list,
+        dish_dishmode,
     )
     assert_that(event_tracer).described_as(
         f"CSP Subarray device ({csp.csp_subarray})"

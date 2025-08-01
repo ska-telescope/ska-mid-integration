@@ -15,6 +15,7 @@ from tests.resources.test_harness.utils.enums import DishMode, PointingState
 from tests.resources.test_support.constant import (
     IDLE_STATE_DEFECT,
     INTERMEDIATE_CONFIGURING_OBS_STATE_DEFECT,
+    INTERMEDIATE_DISH_MODE_STATE_DEFECT_DISH,
     INTERMEDIATE_FAULT_OBS_STATE_DEFECT,
     INTERMEDIATE_READY_STATE_DEFECT_DISH,
     INTERMEDIATE_SLEW_STATE_DEFECT_DISH,
@@ -112,6 +113,7 @@ def set_subsystem_defects(
     command: str,
     dish_pointingstates: list = [],
     dishes: list = [],
+    dish_mode: str = "",
 ):
     """
     Set defects for the CSP and SDP subsystems based on their
@@ -145,6 +147,14 @@ def set_subsystem_defects(
                 dish.SetDefective(
                     json.dumps(INTERMEDIATE_TRACK_STATE_DEFECT_DISH)
                 )
+            elif (
+                set(dish_pointingstates) == {"TRACK"}
+                and dish_mode == "CONFIG"
+                and command == "Configure"
+            ):
+                dish.SetDefective(
+                    json.dumps(INTERMEDIATE_DISH_MODE_STATE_DEFECT_DISH)
+                )
             else:
                 dish.SetDefective(
                     command_defect_mapping.get(command).get(
@@ -163,6 +173,7 @@ def invoke_command_with_defect(
     command: str,
     pointing_states: list = [],
     dishes: list = [],
+    dish_mode: str = "",
 ):
     """
     Invoke a TMC command while setting defects on CSP and SDP subsystems based
@@ -204,6 +215,7 @@ def invoke_command_with_defect(
                 command,
                 dish_pointingstates=pointing_states,
                 dishes=dishes,
+                dish_mode=dish_mode,
             )
             tmc.configure(
                 default_commands_inputs.configure_input, wait_termination=False
