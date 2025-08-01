@@ -327,49 +327,53 @@ def tmc_subarray_transitions_to_empty(subarray_node, event_recorder):
 )
 def configure_executed_on_subarray(
     central_node_mid,
-    simulator_factory,
     subarray_node,
+    simulator_factory,
     event_recorder,
     command_input_factory,
 ):
     sdp_sim = simulator_factory.get_or_create_simulator_device(
         SimulatorDeviceType.MID_SDP_DEVICE
     )
-    valid_receiptor_json = prepare_json_args_for_commands(
-        "science_A_receiver_address", command_input_factory
-    )
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
+    valid_receiptor_json = prepare_json_args_for_commands(
+        "science_A_receiver_address", command_input_factory
+    )
+    _, unique_id = central_node_mid.perform_action(
+        "AssignResources", assign_input_json
+    )
     sdp_sim.SetDirectreceiveAddresses(valid_receiptor_json)
-    central_node_mid.perform_action("AssignResources", assign_input_json)
-
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_devices["csp_subarray"],
-        "obsState",
-        ObsState.IDLE,
-    )
-
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_devices["sdp_subarray"],
-        "obsState",
-        ObsState.IDLE,
-    )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_node,
         "obsState",
         ObsState.IDLE,
     )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (unique_id[0], COMMAND_COMPLETED),
+    )
+    assert check_for_device_command_event(
+        subarray_node.subarray_node,
+        "longRunningCommandResult",
+        COMMAND_COMPLETED,
+        event_recorder,
+        "AssignResources",
+    )
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
-    _, unique_id = subarray_node.store_configuration_data(configure_input_json)
-
+    _, unique_id = subarray_node.execute_transition(
+        "Configure", configure_input_json
+    )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
     )
+
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
