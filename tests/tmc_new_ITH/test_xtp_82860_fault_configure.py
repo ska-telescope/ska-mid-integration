@@ -16,7 +16,7 @@ from ska_tango_base.commands import ResultCode
 from ska_tango_testing.integration import TangoEventTracer, log_events
 from ska_tango_testing.mock.placeholders import Anything
 
-from tests.resources.test_harness.utils.enums import PointingState
+from tests.resources.test_harness.utils.enums import DishMode, PointingState
 from tests.tmc_csp_new_ITH.conftest import ASSERTIONS_TIMEOUT
 from tests.tmc_new_ITH.conftest import TestContextData
 from tests.tmc_new_ITH.utils.utils import (
@@ -79,7 +79,7 @@ def test_verify_fault_after_configure():
 @given(
     parsers.parse(
         "CSP, SDP and DISH in {csp_obsstate},{sdp_obsstate},"
-        "{dish_pointingstates} and {dish_dishmode} after {command}"
+        "{dish_pointingstates} and {dish_dishmodes} after {command}"
     )
 )
 def subarray_in_ready_state(
@@ -92,14 +92,13 @@ def subarray_in_ready_state(
     csp_obsstate,
     sdp_obsstate,
     dish_pointingstates,
-    dish_dishmode,
+    dish_dishmodes,
     command,
     context_data: TestContextData,
 ):
     """Ensure the subarray is in the IDLE state."""
     setup_event_subscriptions(tmc, csp, sdp, event_tracer)
     setup_event_dish_subscription(event_tracer, dishes.dish_master_list)
-    dish_pointing_state_list = dish_pointingstates.split(",")
     invoke_command_with_defect(
         tmc,
         default_commands_inputs,
@@ -108,9 +107,9 @@ def subarray_in_ready_state(
         csp_obsstate,
         sdp_obsstate,
         command,
-        dish_pointing_state_list,
+        dish_pointingstates.split(","),
         dishes.dish_master_list,
-        dish_dishmode,
+        dish_dishmodes.split(","),
     )
     assert_that(event_tracer).described_as(
         f"CSP Subarray device ({csp.csp_subarray})"
@@ -127,8 +126,10 @@ def subarray_in_ready_state(
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         sdp.sdp_subarray, "obsState", ObsState[sdp_obsstate]
     )
-    for dish, dish_pointingstate in zip(
-        dishes.dish_master_list, dish_pointing_state_list
+    for dish, dish_pointingstate, dish_mode in zip(
+        dishes.dish_master_list,
+        dish_pointingstates.split(","),
+        dish_dishmodes.split(","),
     ):
         assert_that(event_tracer).described_as(
             f"Dish device ({dish})"
@@ -138,6 +139,15 @@ def subarray_in_ready_state(
             dish,
             "pointingState",
             PointingState[dish_pointingstate],
+        )
+        assert_that(event_tracer).described_as(
+            f"Dish device ({dish})"
+            "Dish Mode attribute value should move "
+            f"to {dish_mode}."
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+            dish,
+            "dishMode",
+            DishMode[dish_mode],
         )
     context_data.csp_obsstate = ObsState[csp_obsstate]
     context_data.sdp_obsstate = ObsState[sdp_obsstate]

@@ -90,6 +90,7 @@ command_defect_mapping = {
         "CONFIGURING": json.dumps(INTERMEDIATE_CONFIGURING_OBS_STATE_DEFECT),
         "FAULT": json.dumps(INTERMEDIATE_FAULT_OBS_STATE_DEFECT),
         "SLEW": json.dumps(INTERMEDIATE_SLEW_STATE_DEFECT_DISH),
+        "CONFIG": json.dumps(INTERMEDIATE_DISH_MODE_STATE_DEFECT_DISH),
     },
     "Scan": {
         "READY": READY_STATE_DEFECT,
@@ -113,7 +114,7 @@ def set_subsystem_defects(
     command: str,
     dish_pointingstates: list = [],
     dishes: list = [],
-    dish_mode: str = "",
+    dish_mode_list: list = [],
 ):
     """
     Set defects for the CSP and SDP subsystems based on their
@@ -138,7 +139,9 @@ def set_subsystem_defects(
             command_defect_mapping.get(command).get(sdp_obsstate, RESET_DEFECT)
         )
     if dish_pointingstates:
-        for dish, dish_pointingstate in zip(dishes, dish_pointingstates):
+        for dish, dish_pointingstate, dish_mode in zip(
+            dishes, dish_pointingstates, dish_mode_list
+        ):
             if dish_pointingstate == "READY" and command == "Configure":
                 dish.SetDefective(
                     json.dumps(INTERMEDIATE_READY_STATE_DEFECT_DISH)
@@ -147,18 +150,16 @@ def set_subsystem_defects(
                 dish.SetDefective(
                     json.dumps(INTERMEDIATE_TRACK_STATE_DEFECT_DISH)
                 )
-            elif (
-                set(dish_pointingstates) == {"TRACK"}
-                and dish_mode == "CONFIG"
-                and command == "Configure"
-            ):
-                dish.SetDefective(
-                    json.dumps(INTERMEDIATE_DISH_MODE_STATE_DEFECT_DISH)
-                )
             else:
                 dish.SetDefective(
                     command_defect_mapping.get(command).get(
                         dish_pointingstate, RESET_DEFECT
+                    )
+                )
+            if dish_mode == "CONFIG":
+                dish.SetDefective(
+                    command_defect_mapping.get(command).get(
+                        dish_mode, RESET_DEFECT
                     )
                 )
 
@@ -173,7 +174,7 @@ def invoke_command_with_defect(
     command: str,
     pointing_states: list = [],
     dishes: list = [],
-    dish_mode: str = "",
+    dish_mode_list: list = [],
 ):
     """
     Invoke a TMC command while setting defects on CSP and SDP subsystems based
@@ -215,7 +216,7 @@ def invoke_command_with_defect(
                 command,
                 dish_pointingstates=pointing_states,
                 dishes=dishes,
-                dish_mode=dish_mode,
+                dish_mode_list=dish_mode_list,
             )
             tmc.configure(
                 default_commands_inputs.configure_input, wait_termination=False
@@ -232,6 +233,7 @@ def invoke_command_with_defect(
                 command,
                 dish_pointingstates=pointing_states,
                 dishes=dishes,
+                dish_mode_list=dish_mode_list,
             )
             tmc.scan(
                 default_commands_inputs.scan_input, wait_termination=False
@@ -262,6 +264,7 @@ def invoke_command_with_defect(
                 command,
                 dish_pointingstates=pointing_states,
                 dishes=dishes,
+                dish_mode_list=dish_mode_list,
             )
             tmc.end_observation(wait_termination=False)
         case "EndScan":
@@ -278,6 +281,7 @@ def invoke_command_with_defect(
                 command,
                 dish_pointingstates=pointing_states,
                 dishes=dishes,
+                dish_mode_list=dish_mode_list,
             )
             tmc.end_scan(wait_termination=False)
 
