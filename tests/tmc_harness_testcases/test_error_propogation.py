@@ -69,7 +69,6 @@ def test_tmc_command_timeout_error_propagation():
     """
 
 
-@pytest.mark.SKA_fault
 @pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
