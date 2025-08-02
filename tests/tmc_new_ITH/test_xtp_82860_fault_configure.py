@@ -66,7 +66,7 @@ def _check_abort_flow(
         )
 
 
-@pytest.mark.SKA_tmc_mid_restart_1
+@pytest.mark.SKA_tmc_mid_restart
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/xtp_82860_fault_configure.feature",
