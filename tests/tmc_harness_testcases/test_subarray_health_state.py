@@ -555,7 +555,7 @@ class TestSubarrayHealthState(object):
         ],
     )
     @pytest.mark.batch2
-    @pytest.mark.SKA_mid1
+    @pytest.mark.SKA_mid
     def test_health_state_failed_when_dish_unknown(
         self,
         subarray_node,
@@ -638,7 +638,6 @@ class TestSubarrayHealthState(object):
             subarray_node.subarray_node,
             "healthState",
             HealthState.UNKNOWN,
-            lookahead=15,
         ), "Expected Subarray Node HealthState to be UNKNOWN"
 
     @pytest.mark.parametrize(
