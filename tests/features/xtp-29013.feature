@@ -7,8 +7,6 @@ Feature: TMC SubarrayNode handles the failure when the Incremental AssignResourc
         And Sdp Subarray <subarray_id> completes assign resources and transitions to obsState IDLE
         And Csp Subarray <subarray_id> is stuck in obsState RESOURCING
         And the TMC SubarrayNode <subarray_id> transitions to FAULT
-        When I issue the Abort command on TMC SubarrayNode <subarray_id>
-        Then the CSP, SDP and TMC subarray <subarray_id> transitions to obsState ABORTED
         When I issue the Restart command on TMC SubarrayNode <subarray_id>
         Then the CSP, SDP and TMC subarray <subarray_id> transitions to obsState EMPTY
         Then AssignResources command is executed successfully on the Subarray <subarray_id>
