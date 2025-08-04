@@ -11,6 +11,7 @@ from tests.resources.test_harness.helpers import (
     set_desired_health_state,
 )
 
+
 @pytest.mark.skip("subarray fix in progress")
 @pytest.mark.batch2
 @pytest.mark.SKA_mid
@@ -24,6 +25,7 @@ def test_subarray_health_state_with_csp_and_sdp():
     Test Subarray Health is Failed or degraded when csp or sdp is
     FAILED or DEGRADED
     """
+
 
 @pytest.mark.skip("subarray fix in progress")
 @pytest.mark.batch2
