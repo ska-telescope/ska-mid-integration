@@ -4,7 +4,7 @@ Scenario Outline: Test Restart Command during failure of AssignResources and Sca
     Given CSP and SDP in observation states <csp_obsstate> and <sdp_obsstate> after <command>
     And TMC Subarray in observation state FAULT
     When I invoke Restart Command on the TMC Subarray
-    Then CSP and SDP transitions to observation state EMPTY
+    Then CSP and SDP subarrays transitions to observation state EMPTY
     And TMC subarray transitions to observation state EMPTY
     Examples:
         | command         | csp_obsstate | sdp_obsstate     |
