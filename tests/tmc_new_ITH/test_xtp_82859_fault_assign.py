@@ -164,7 +164,7 @@ def invoke_restart_command(tmc: TMCFacade):
     tmc.restart()
 
 
-@then("CSP and SDP transitions to observation state EMPTY")
+@then("CSP and SDP subarrays transitions to observation state EMPTY")
 def verify_sdp_csp_in_empty_observation_state(
     event_tracer: TangoEventTracer,
     csp: CSPFacade,

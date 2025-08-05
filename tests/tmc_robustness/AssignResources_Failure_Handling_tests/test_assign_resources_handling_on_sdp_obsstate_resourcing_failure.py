@@ -117,7 +117,9 @@ def sdp_subarray_stuck_in_resouring(event_recorder, simulator_factory):
     )
 
 
-@given(parsers.parse("the TMC SubarrayNode {subarray_id} stucks in FAULT"))
+@given(
+    parsers.parse("the TMC SubarrayNode {subarray_id} transitions to FAULT")
+)
 def given_tmc_subarray_stuck_resourcing(
     central_node_mid,
     simulator_factory,
