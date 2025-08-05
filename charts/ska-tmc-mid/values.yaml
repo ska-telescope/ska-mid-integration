@@ -126,9 +126,9 @@ dishleafnode:
 
 skatmccommon:
   image:
-    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-common
+    registry: artefact.skao.int
     image: ska-tmc-common
-    tag: 0.28.6-dev.c298333a3
+    tag: 0.28.7
     pullPolicy: IfNotPresent
 
 resources:
