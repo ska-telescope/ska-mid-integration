@@ -122,7 +122,9 @@ def csp_subarray_stuck_in_resourcing(event_recorder, simulator_factory):
     )
 
 
-@given(parsers.parse("the TMC SubarrayNode {subarray_id} stucks in FAULT"))
+@given(
+    parsers.parse("the TMC SubarrayNode {subarray_id} transitions to FAULT")
+)
 def given_tmc_subarray_stuck_fault(
     central_node_mid,
     simulator_factory,
