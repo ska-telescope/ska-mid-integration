@@ -24,6 +24,7 @@ from ska_integration_test_harness.structure.telescope_wrapper import (
 )
 from ska_tango_testing.integration import TangoEventTracer, log_events
 
+from tests.resources.test_harness.subarray_node import TIMEOUT
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 
 ASSERTIONS_TIMEOUT = 60
@@ -60,6 +61,7 @@ def default_commands_inputs() -> TestHarnessInputs:
 @pytest.fixture
 def telescope_wrapper(
     default_commands_inputs: TestHarnessInputs,
+    event_tracer: TangoEventTracer,
 ) -> TelescopeWrapper:
     """Create an unique test harness with proxies to all devices."""
     test_harness_builder = TestHarnessBuilder()
@@ -84,6 +86,7 @@ def telescope_wrapper(
 
     # after a test is completed, reset the telescope to its initial state
     # (obsState=READY, telescopeState=OFF, no resources assigned)
+    _tear_down(telescope.tmc, event_tracer)
     telescope.tear_down()
 
 
@@ -169,6 +172,26 @@ def context_fixt() -> SubarrayTestContextData:
     :return: the shared variables.
     """
     return SubarrayTestContextData()
+
+
+def _tear_down(tmc: TMCFacade, event_tracer: TangoEventTracer):
+    """Function to handle TMC tear down in observation
+    state FAULT.
+
+    :param tmc: TMCFacade object to invoke TMC commands
+    :type tmc: TMCFacade
+    :param event_tracer: TangoEventTracer object for event handling
+    :type event_tracer: TangoEventTracer
+    """
+    if tmc.subarray_node.obsState == ObsState.FAULT:
+        tmc.restart(wait_termination=True)
+        assert_that(event_tracer).described_as(
+            f"TMC Subarray Node device ({tmc.subarray_node})"
+            "ObsState attribute value should move "
+            f"from {ObsState.FAULT} to EMPTY."
+        ).within_timeout(TIMEOUT).has_change_event_occurred(
+            tmc.subarray_node, "obsState", ObsState.EMPTY
+        )
 
 
 def _setup_event_subscriptions(

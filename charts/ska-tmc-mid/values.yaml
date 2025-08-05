@@ -9,7 +9,6 @@ system: TM-mid
 telescope: SKA-mid
 subsystem: ska-tmc-mid
 
-
 labels:
   app: ska-tmc-mid
 annotations:
@@ -45,7 +44,6 @@ global:
     - "cspsubarrayleafnode"
     - "sdpsubarrayleafnode"
     - "subarraynode"
-
 
   # fqdn for mid devices
   tmc_central_node: "mid-tmc/central-node/0"
@@ -93,9 +91,9 @@ centralnode:
 
 subarraynode:
   image:
-    registry: artefact.skao.int
+    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-subarraynode
     image: ska-tmc-subarraynode
-    tag: 0.39.0
+    tag: 0.39.2-dev.cff431023
     pullPolicy: IfNotPresent
 
 sdpleafnodes:
@@ -134,11 +132,9 @@ skatmccommon:
     pullPolicy: IfNotPresent
 
 resources:
-
   requests:
     cpu: 200m
     memory: 200Mi
-
 
 deviceServers:
   centralnode:
@@ -160,7 +156,7 @@ deviceServers:
     LivelinessCheckPeriod: 2.0
     EventSubscriptionCheckPeriod: 2.0
     family: "central-node"
-    member : "0"
+    member: "0"
 
   subarraynode:
     enabled: true
@@ -201,7 +197,7 @@ deviceServers:
     EventSubscriptionCheckPeriod: 1.5
     SDPMasterAdminModeEnabled: true
     family: "leaf-node-sdp"
-    member : "0"
+    member: "0"
 
   cspmasterleafnode:
     enabled: true
@@ -211,8 +207,7 @@ deviceServers:
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
     family: "leaf-node-csp"
-    member : "0"
-
+    member: "0"
 
   cspsubarrayleafnode:
     enabled: true
@@ -260,7 +255,7 @@ deviceServers:
     resources:
       limits:
         memory: 1000Mi
-        cpu : 500m
+        cpu: 500m
       requests:
         cpu: 500m
         memory: 300Mi

@@ -5,9 +5,7 @@ Feature: TMC SubarrayNode handles the failure when the AssignResources command f
         And the TMC SubarrayNode <subarray_id> assign resources is in progress
         And Csp Subarray <subarray_id> completes assignResources
         And Sdp Subarray <subarray_id> is stuck in obsState RESOURCING
-        And the TMC SubarrayNode <subarray_id> stucks in RESOURCING
-        When I issue the Abort command on TMC SubarrayNode <subarray_id>
-        Then the CSP, SDP and TMC subarray <subarray_id> transitions to obsState ABORTED
+        And the TMC SubarrayNode <subarray_id> stucks in FAULT
         When I issue the Restart command on TMC SubarrayNode <subarray_id>
         Then the CSP, SDP and TMC subarray <subarray_id> transitions to obsState EMPTY
         And AssignResources command is executed successfully on the Subarray <subarray_id>

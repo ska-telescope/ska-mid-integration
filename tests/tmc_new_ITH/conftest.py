@@ -24,6 +24,7 @@ from ska_integration_test_harness.structure.telescope_wrapper import (
 )
 from ska_tango_testing.integration import TangoEventTracer
 
+from tests.resources.test_support.constant import TIMEOUT
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDevicesFacade
 
@@ -73,7 +74,7 @@ def _tear_down(tmc: TMCFacade, event_tracer: TangoEventTracer):
             f"TMC Subarray Node device ({tmc.subarray_node})"
             "ObsState attribute value should move "
             f"from {ObsState.FAULT} to EMPTY."
-        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        ).within_timeout(TIMEOUT).has_change_event_occurred(
             tmc.subarray_node, "obsState", ObsState.EMPTY
         )
 
@@ -103,9 +104,9 @@ def telescope_wrapper(
     telescope = test_harness_builder.build()
     telescope.actions_default_timeout = 120
     yield telescope
-    _tear_down(telescope.tmc, event_tracer)
     # after a test is completed, reset the telescope to its initial state
     # (obsState=READY, telescopeState=OFF, no resources assigned)
+    _tear_down(TMCFacade(telescope), event_tracer)
     telescope.tear_down()
 
 
