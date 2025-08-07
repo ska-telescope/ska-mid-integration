@@ -742,15 +742,42 @@ def wait_and_validate_device_attribute_value(
 
 def update_eb_pb_ids(input_json: str) -> str:
     """
-    Method to generate different eb_id and pb_id
-    :param input_json: json to utilised to update values.
+    Method to safely generate different eb_id and pb_id.
+    Only updates execution_block and processing_blocks if present.
+
+    :param input_json: JSON string used to update values.
+    :return: Updated JSON string.
     """
-    input_json = json.loads(input_json)
-    input_json["sdp"]["execution_block"]["eb_id"] = generate_id("eb-test")
-    for pb in input_json["sdp"]["processing_blocks"]:
-        pb["pb_id"] = generate_id("pb-test")
-    input_json = json.dumps(input_json)
-    return input_json
+    input_data = json.loads(input_json)
+
+    sdp_data = input_data.get("sdp", {})
+
+    # Safely update execution_block ID
+    execution_block = sdp_data.get("execution_block")
+    if isinstance(execution_block, dict):  # ensure it's a dict and not None
+        execution_block["eb_id"] = generate_id("eb-test")
+
+    # Safely update each processing block ID
+    processing_blocks = sdp_data.get("processing_blocks")
+    if isinstance(processing_blocks, list):
+        for pb in processing_blocks:
+            if isinstance(pb, dict):  # Ensure each pb is a dict
+                pb["pb_id"] = generate_id("pb-test")
+
+    return json.dumps(input_data)
+
+
+# def update_eb_pb_ids(input_json: str) -> str:
+#     """
+#     Method to generate different eb_id and pb_id
+#     :param input_json: json to utilised to update values.
+#     """
+#     input_json = json.loads(input_json)
+#     input_json["sdp"]["execution_block"]["eb_id"] = generate_id("eb-test")
+#     for pb in input_json["sdp"]["processing_blocks"]:
+#         pb["pb_id"] = generate_id("pb-test")
+#     input_json = json.dumps(input_json)
+#     return input_json
 
 
 def update_scan_type(configure_json: str, json_value: str) -> str:
@@ -899,38 +926,6 @@ def check_device_event_value(
     matching_events = event_tracer.query_events(_matches, timeout=100)
     LOGGER.info("Matching events found: %s", matching_events)
     return len(matching_events) > 0
-
-
-# def check_device_event_value(
-#     device: DeviceProxy,
-#     attr_name: str,
-#     expected_value: Any,
-#     event_tracer: TangoEventTracer,
-# ) -> bool:
-#     """Check if a device emitted an event with the expected scalar value.
-
-#     Args:
-#         device (DeviceProxy): The Tango device proxy.
-#         attr_name (str): Attribute name to check.
-#         expected_value (Any): The expected attribute value
-#         (can be enum, str, etc.).
-#         event_tracer (TangoEventTracer): Event tracer instance.
-
-#     Returns:
-#         bool: True if the event was found, False otherwise.
-#     """
-#     matching_events = event_tracer.query_events(
-#         lambda e: (
-#             e.has_device(device.dev_name())
-#             and e.has_attribute(attr_name)
-#             and str(e.attribute_value) == str(expected_value)
-#         ),
-#         timeout=100,
-#     )
-
-#     LOGGER.info("Matching events found: %s", matching_events)
-
-#     return len(matching_events) > 0
 
 
 def retry_tango_command(

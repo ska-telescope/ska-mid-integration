@@ -89,9 +89,7 @@ def invoke_assign_resources(
             "subarray_id", 1
         )
         # .with_attribute("sdp", {})# Setting SDP directly in the input object
-        .with_attribute(
-            "sdp", {"execution_block": None, "processing_blocks": []}
-        )
+        .with_attribute("sdp", {})
     )
 
     tmc.central_node.AssignResources(json_input.as_str())
