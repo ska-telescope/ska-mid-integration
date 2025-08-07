@@ -55,7 +55,7 @@ def _setup_event_subscriptions(
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/skb_617.feature",
-    "Test AssignResources with blank SDP block",
+    "Test AssignResources with empty SDP block",
 )
 def test_verify_617():
     """Test AssignResources with empty SDP block to verify SKB-617 fix."""
