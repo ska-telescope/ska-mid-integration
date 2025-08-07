@@ -1,6 +1,15 @@
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[1.5.0-rc.3]
+************
+Added
+-----
+* Added a new test case to verify Bug SKB-617:
+Ensure that the "Assign Resource" succeeds even when the SDP block is empty.
+* Updated SubarrayNode image to 0.39.2
+
+
 [1.5.0-rc.2]
 ************
 Added
