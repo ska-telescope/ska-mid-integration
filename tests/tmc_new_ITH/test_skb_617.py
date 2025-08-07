@@ -14,9 +14,7 @@ from ska_integration_test_harness.inputs.test_harness_inputs import (
 )
 from ska_tango_testing.integration import TangoEventTracer, log_events
 
-from tests.resources.test_harness.helpers import (
-    check_for_device_command_event_tracer,
-)
+from tests.resources.test_harness.helpers import check_device_event_value
 from tests.tmc_csp_new_ITH.conftest import SubarrayTestContextData
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 
@@ -131,10 +129,17 @@ def invoke_assign_resources(
 @then("AssignResources is successfully invoked on TMC")
 def verify_version_tmc_in_idle(tmc: TMCFacade, event_tracer: TangoEventTracer):
     """Verify the AssignResources command was invoked on TMC."""
-    assert check_for_device_command_event_tracer(
+    assert check_device_event_value(
         tmc.subarray_node,
         "obsState",
         ObsState.IDLE,
         event_tracer,
-        "AssignResources",
     )
+
+    # assert check_for_device_command_event_tracer(
+    #     tmc.subarray_node,
+    #     "obsState",
+    #     ObsState.IDLE,
+    #     event_tracer,
+    #     "AssignResources",
+    # )

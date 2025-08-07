@@ -880,6 +880,38 @@ def check_for_device_command_event_tracer(
     return event_found
 
 
+def check_device_event_value(
+    device: DeviceProxy,
+    attr_name: str,
+    expected_value: Any,
+    event_tracer: TangoEventTracer,
+) -> bool:
+    """Check if a device emitted an event with the expected scalar value.
+
+    Args:
+        device (DeviceProxy): The Tango device proxy.
+        attr_name (str): Attribute name to check.
+        expected_value (Any): The expected attribute value
+        (can be enum, str, etc.).
+        event_tracer (TangoEventTracer): Event tracer instance.
+
+    Returns:
+        bool: True if the event was found, False otherwise.
+    """
+    matching_events = event_tracer.query_events(
+        lambda e: (
+            e.has_device(device.dev_name())
+            and e.has_attribute(attr_name)
+            and str(e.attribute_value) == str(expected_value)
+        ),
+        timeout=100,
+    )
+
+    LOGGER.info("Matching events found: %s", matching_events)
+
+    return len(matching_events) > 0
+
+
 def retry_tango_command(
     device: DeviceProxy, command_name: str, argin=None
 ) -> bool:
