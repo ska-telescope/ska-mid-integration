@@ -81,7 +81,7 @@ def subarray_in_empty_state(
     )
 
 
-@when("I assign resources with empty SDP block")
+@when("I invoke assign resources with empty SDP block")
 def invoke_assign_resources(
     context_fixt: SubarrayTestContextData, tmc: TMCFacade
 ):
