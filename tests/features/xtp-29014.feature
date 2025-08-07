@@ -1,5 +1,5 @@
 Feature: TMC SubarrayNode handles the failure when the Incremental AssignResources command fails on SDP Subarray
-    @XTP-29014 @SKA_mid
+    @XTP-29014 @XTP-28347 @SKA_mid
     Scenario Outline: TMC behavior when SDP Subarray incremental AssignResources raises exception
         Given a TMC
         And AssignResources is executed with <input_json1> successfully on SubarrayNode <subarray_id>

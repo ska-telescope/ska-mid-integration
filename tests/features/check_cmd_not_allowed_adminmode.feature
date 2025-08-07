@@ -1,4 +1,4 @@
-	@XTP-84035 @XTP-84039 @TEAM_HIMALAYA
+	@XTP-84035 @XTP-84039 @XTP-28347 @TEAM_HIMALAYA
 	Scenario: Command not allowed from CentralNode when subsystem adminmode is OFFLINE/NOT_FITTED
 		Given the adminmode of subsystem controller <subsystem> is <adminmode>
 		When I invoke command <command> on centralnode
@@ -13,7 +13,7 @@
 		| sdpcontroller       | NOT_FITTED   | ReleaseResources |
 
 
-	@XTP-84042 @XTP-84039 @TEAM_HIMALAYA
+	@XTP-84042 @XTP-84039 @XTP-28347 @TEAM_HIMALAYA
 	Scenario: Command not allowed from SubarrayNode when subsystem adminmode is OFFLINE/NOT_FITTED
 		Given the adminmode of subsystem subarray <subsystem> is <adminmode>
 		When I invoke command <command> on subarraynode

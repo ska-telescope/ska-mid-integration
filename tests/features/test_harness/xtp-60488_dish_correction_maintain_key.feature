@@ -1,6 +1,6 @@
 @SP-4209
 Feature: TMC Dish Pointing (ADR-95 and ADR-76)
-	@XTP-60488 @SKA_mid
+	@XTP-60488 @XTP-28347 @SKA_mid
 	Scenario Outline: TMC Behavior During correction key handling
 		Given a TMC
 		When I configure subarray with existed offsets using correction key <correction_key> 

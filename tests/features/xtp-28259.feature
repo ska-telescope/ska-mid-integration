@@ -1,5 +1,5 @@
 Feature: TMC SubarrayNode handles the failure when the AssignResources command fails on CSP Subarray
-    @XTP-28259 @SKA_mid
+    @XTP-28259 @XTP-28347 @SKA_mid
     Scenario Outline: TMC behavior when Csp Subarray AssignResources raises exception
         Given a TMC 
         And the TMC SubarrayNode <subarray_id> assign resources is in progress

@@ -1,5 +1,5 @@
 Feature: TMC is able to load Dish and VCC map configuration file and display current version of file
-    @XTP-28676
+    @XTP-28676 @XTP-28347
     Scenario Outline: TMC is able to load Dish and VCC configuration file  
         Given a TMC
         And Telescope is in ON state 

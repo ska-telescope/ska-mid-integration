@@ -10,7 +10,7 @@ Feature: Default
 	#e) execute a) at least three times, verify that the SUT responds as expected (i.e. can handle successive invalid commands).
 	#d) execute b) at least three times, verify that the SUT responds as expected (i.e. can handle successive requests to assign resources that are not available).
 	#Note: Error reporting for cases a) and b) may be different (find out details and update the scenario accordingly). 
-	@XTP-20320 @SKA_mid
+	@XTP-20320 @XTP-28347 @SKA_mid
     Scenario: Successfully execute a scan after a failed attempt to assign resources
         Given a subarray <subarray_id> with resources <resources_list> in obsState EMPTY
         When I issue the command AssignResources passing an invalid JSON script to the subarray <subarray_id>
@@ -31,7 +31,7 @@ Feature: Default
         | 1            | "SKA001"       |
 
 
-    @XTP-20320 @SKA_mid
+    @XTP-20320 @XTP-28347 @SKA_mid
     Scenario: Successfully execute a scan after a successive failed attempt to assign resources
         Given a subarray <subarray_id> with resources <resources_list> in obsState EMPTY
         When I issue the command AssignResources passing an invalid JSON script to the subarray <subarray_id>

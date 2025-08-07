@@ -1,5 +1,5 @@
 Feature: TMC SubarrayNode handles the failure when the Incremental AssignResources command fails on CSP Subarray
-    @XTP-29013 @SKA_mid
+    @XTP-29013 @XTP-28347 @SKA_mid
     Scenario Outline: TMC behavior when Csp Subarray is stuck in obsState RESOURCING after incremental AssignResources
         Given a TMC
         And AssignResources is executed successfully on SubarrayNode <subarray_id>

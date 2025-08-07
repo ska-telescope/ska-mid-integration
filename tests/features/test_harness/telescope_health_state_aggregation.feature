@@ -1,4 +1,5 @@
 # This Feature cover scenario from excel sheet: https://docs.google.com/spreadsheets/d/1XbNb8We7fK-EhmOcw3S-h0V_Pu-WAfPTkEd13MSmIns/edit#gid=825874621
+@XTP-85070 @XTP-28347 @XTP-73574
 Scenario Outline: Verify CentralNode TelescopeHealthState
     Given csp master, sdp master and dish masters health state is OK 
     When The <devices> health state changes to <health_state> 

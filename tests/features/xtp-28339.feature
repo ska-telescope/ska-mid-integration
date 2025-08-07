@@ -1,5 +1,5 @@
 Feature: TMC SubarrayNode handles the failure when the AssignResources command fails on SDP Subarray
-    @XTP-28339 @SKA_mid
+    @XTP-28339 @XTP-28347 @SKA_mid
     Scenario Outline: TMC behavior when Sdp Subarray is stuck in obsState RESOURCING
         Given a TMC 
         And the TMC SubarrayNode <subarray_id> assign resources is in progress
