@@ -614,15 +614,38 @@ def generate_id(id_pattern: str) -> str:
 
 def generate_eb_pb_ids(input_json: dict):
     """
-    Method to generate different eb_id and pb_id
+    Generate EB and PB IDs for the input SDP section if applicable.
 
-    :param input_json: json to utilised to update values.
+    :param input_json: Dictionary representing the assign
+     resources JSON input.
     """
-    input_json["sdp"]["execution_block"]["eb_id"] = generate_id(
-        "eb-mvp01-********-*****"
-    )
-    for pb in input_json["sdp"]["processing_blocks"]:
-        pb["pb_id"] = generate_id("pb-mvp01-********-*****")
+    sdp = input_json.get("sdp", {})
+
+    # Handle execution_block only if it exists
+    execution_block = sdp.get("execution_block")
+    if execution_block is not None:
+        # Assumes execution_block is a dict and must follow schema if present
+        execution_block["eb_id"] = generate_id("eb-mvp01-********-*****")
+        # Add more mandatory execution_block fields here if needed
+
+    # Handle processing_blocks if they exist
+    processing_blocks = sdp.get("processing_blocks")
+    if processing_blocks and isinstance(processing_blocks, list):
+        for pb in processing_blocks:
+            pb["pb_id"] = generate_id("pb-mvp01-********-*****")
+
+
+# def generate_eb_pb_ids(input_json: dict):
+#     """
+#     Method to generate different eb_id and pb_id
+
+#     :param input_json: json to utilised to update values.
+#     """
+#     input_json["sdp"]["execution_block"]["eb_id"] = generate_id(
+#         "eb-mvp01-********-*****"
+#     )
+#     for pb in input_json["sdp"]["processing_blocks"]:
+#         pb["pb_id"] = generate_id("pb-mvp01-********-*****")
 
 
 def check_subarray_instance(device, subarray_id):
