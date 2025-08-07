@@ -126,7 +126,7 @@ k8s-tmc-scaling:
   extends:
     - k8s-test
   tags:
-    - ska-tmc-staging
+    - ska-staging-tmc
   variables:
     SERVICE_ACCOUNT: "ska-tmc-staging"
     DISH_SIMULATION_ENABLED: "true"
