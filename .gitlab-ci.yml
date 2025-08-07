@@ -135,7 +135,7 @@ k8s-tmc-scaling:
     KUBE_NAMESPACE: "ska-tmc-staging"
     CI_KEEP_NAMESPACE: true
   environment:
-    name: ska-tmc-staging
+    name: ska-tmc-staging-env
     on_stop: stop-k8s-tmc-scaling
     auto_stop_in: 1 minute
 
@@ -145,5 +145,5 @@ stop-k8s-tmc-scaling:
   variables:
     KUBE_NAMESPACE: "ska-tmc-staging"
   environment:
-    name: k8s-tmc-scaling
+    name: ska-tmc-staging-env
     action: stop
