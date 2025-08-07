@@ -80,26 +80,39 @@ def subarray_in_empty_state(
         wait_termination=True,
     )
 
-
 @when("I invoke assign resources with empty SDP block")
-def invoke_assign_resources(
-    context_fixt: SubarrayTestContextData, tmc: TMCFacade
-):
+def invoke_assign_resources(context_fixt: SubarrayTestContextData, tmc: TMCFacade):
     """Invoke Assign Resources"""
-    json_input = MyFileJSONInput(
-        "centralnode", "assign_resources_mid"
-    ).with_attribute("subarray_id", 1)
-    assign_json = json_input.as_dict()
-    assign_json["sdp"] = {}
+    json_input = (
+        MyFileJSONInput("centralnode", "assign_resources_mid")
+        .with_attribute("subarray_id", 1)
+        .with_attribute("sdp", {})  # Setting SDP directly in the input object
+    )
+
     context_fixt.when_action_result = tmc.assign_resources(
-        assign_json,
+        json_input, 
         wait_termination=True,
     )
-    # json_input = json.dumps(assign_json)
-    # context_fixt.when_action_result = tmc.assign_resources(
-    #     json_input,
-    #     wait_termination=True,
-    # )
+
+# @when("I invoke assign resources with empty SDP block")
+# def invoke_assign_resources(
+#     context_fixt: SubarrayTestContextData, tmc: TMCFacade
+# ):
+#     """Invoke Assign Resources"""
+#     json_input = MyFileJSONInput(
+#         "centralnode", "assign_resources_mid"
+#     ).with_attribute("subarray_id", 1)
+#     assign_json = json_input.as_dict()
+#     assign_json["sdp"] = {}
+#     context_fixt.when_action_result = tmc.assign_resources(
+#         assign_json,
+#         wait_termination=True,
+#     )
+#     # json_input = json.dumps(assign_json)
+#     # context_fixt.when_action_result = tmc.assign_resources(
+#     #     json_input,
+#     #     wait_termination=True,
+#     # )
 
 
 @then("AssignResources is successfully invoked on TMC")
