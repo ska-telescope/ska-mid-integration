@@ -87,13 +87,19 @@ def invoke_assign_resources(
 ):
     """Invoke Assign Resources"""
     json_input = (
-        MyFileJSONInput("centralnode", "assign_resources_mid")
-        .with_attribute("subarray_id", 1)
-        .with_attribute("sdp", {})  # Setting SDP directly in the input object
+        MyFileJSONInput("centralnode", "assign_resources_mid").with_attribute(
+            "subarray_id", 1
+        )
+        # .with_attribute("sdp", {})# Setting SDP directly in the input object
+        .with_attribute(
+            "sdp", {"execution_block": None, "processing_blocks": []}
+        )
     )
 
+    tmc.central_node.AssignResources(json_input.as_str())
+
     # tmc.central_node.AssignResources(json_input)
-    tmc.central_node.AssignResources(json_input.as_str)
+    # tmc.central_node.AssignResources(json_input.as_str)
 
     # context_fixt.when_action_result = tmc.assign_resources(
     #     json_input,
