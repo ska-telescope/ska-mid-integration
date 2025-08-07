@@ -242,6 +242,23 @@ deploy-mid-integration:
     name: integration-ska-mid
     on_stop: stop-mid-integration
 
+
+deploy-test-environment:
+  extends:
+    - deploy-dev-environment
+  variables:
+    SKIP_CI: 1
+    KUBE_NAMESPACE: "integration-ska-mid-hm-716"
+  script:
+    - make k8s-install-chart SDP_PROCCONTROL_REPLICAS=0
+    - make k8s-wait
+
+stop-test-environment:
+  extends:
+    - stop-dev-environment
+  variables:
+    KUBE_NAMESPACE: "integration-ska-mid-hm-716"
+
 info-mid-integration:
   extends: info-integration
   when: manual
@@ -276,5 +293,3 @@ redeploy-mid-integration:
     KUBE_NAMESPACE: "integration-ska-mid"
   environment:
     name: integration-ska-mid
-
-
