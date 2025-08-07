@@ -1,7 +1,7 @@
 """Verifies bug SKB-617
 """
 
-import json
+# import json
 
 import pytest
 from pytest_bdd import given, scenario, then, when
@@ -91,11 +91,15 @@ def invoke_assign_resources(
     ).with_attribute("subarray_id", 1)
     assign_json = json_input.as_dict()
     assign_json["sdp"] = {}
-    json_input = json.dumps(assign_json)
     context_fixt.when_action_result = tmc.assign_resources(
-        json_input,
+        assign_json,
         wait_termination=True,
     )
+    # json_input = json.dumps(assign_json)
+    # context_fixt.when_action_result = tmc.assign_resources(
+    #     json_input,
+    #     wait_termination=True,
+    # )
 
 
 @then("AssignResources is successfully invoked on TMC")
