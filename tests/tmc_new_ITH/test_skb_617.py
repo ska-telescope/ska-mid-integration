@@ -92,7 +92,8 @@ def invoke_assign_resources(
         .with_attribute("sdp", {})  # Setting SDP directly in the input object
     )
 
-    tmc.central_node.AssignResources(json_input)
+    # tmc.central_node.AssignResources(json_input)
+    tmc.central_node.AssignResources(json_input.as_str)
 
     # context_fixt.when_action_result = tmc.assign_resources(
     #     json_input,
