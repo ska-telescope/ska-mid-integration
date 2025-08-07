@@ -92,10 +92,12 @@ def invoke_assign_resources(
         .with_attribute("sdp", {})  # Setting SDP directly in the input object
     )
 
-    context_fixt.when_action_result = tmc.assign_resources(
-        json_input,
-        wait_termination=True,
-    )
+    tmc.central_node.AssignResources(json_input)
+
+    # context_fixt.when_action_result = tmc.assign_resources(
+    #     json_input,
+    #     wait_termination=True,
+    # )
 
 
 # @when("I invoke assign resources with empty SDP block")
