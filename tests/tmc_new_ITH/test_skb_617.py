@@ -17,7 +17,6 @@ from ska_tango_testing.integration import TangoEventTracer, log_events
 from tests.resources.test_harness.helpers import (
     check_for_device_command_event_tracer,
 )
-
 from tests.tmc_csp_new_ITH.conftest import SubarrayTestContextData
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 
