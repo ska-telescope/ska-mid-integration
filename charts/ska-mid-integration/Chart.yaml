@@ -31,7 +31,7 @@ dependencies:
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-csp-lmc-mid.enabled
   - name: ska-mid-cbf-tdc-mcs
-    version: 1.3.2
+    version: 1.3.3
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-mid-cbf-tdc-mcs.enabled
   # - name: ska-mid-cbf-mcs
