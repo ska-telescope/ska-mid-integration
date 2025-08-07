@@ -51,7 +51,8 @@ def _setup_event_subscriptions(
     )
 
 
-@pytest.mark.batch1
+# @pytest.mark.batch1
+@pytest.mark.test
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/skb_617.feature",
