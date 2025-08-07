@@ -1,3 +1,5 @@
+.. _tmc_integration_testing:
+
 ==============================
 TMC Level Integration Testing
 ==============================
@@ -39,16 +41,16 @@ Timeout
 
 The following tests verify the timeout behavior of the Configure command on various leaf nodes:
 
-- **Test Configure Timeout on CSP, SDP, and MCCS Leaf Nodes**
+- **Test Configure Timeout on CSP, SDP and Dish Leaf Nodes**
 
-   - Induces a fault in the CSP, SDP, and MCCS Leaf Nodes to simulate a timeout scenario.
+   - Induces a fault in the CSP, SDP, and Dish Leaf Nodes to simulate a timeout scenario.
    - Verifies that the subarray transitions to the CONFIGURING state.
    - Checks that the long-running command result indicates a timeout and specifies the respective Leaf Node as the source of the failure.
 
 Error Propagation
 ------------------
 
-- Test case to verify error propagation for the Configure command of MCCS Leaf Nodes. This test ensures that when the MCCS Subarray is identified as defective, and the Configure command is executed on the TMC Low, the command reports an error.
+- Test case to verify error propagation for the Configure command of CSP and SDP Subarray Leaf Nodes. This test ensures that if either CSP or SDP subarray is identified as defective, and the Configure command is executed on the TMC Mid, the command reports an error.
 
 Invalid Json
 -------------
@@ -60,7 +62,7 @@ Command Not Allowed
 
 The following tests verify the command not allowed error propagation for the AssignResources command on various leaf nodes:
 
-- **Command Not Allowed Exception Propagation from CSP, SDP, and MCCS Leaf Nodes**
+- **Command Not Allowed Exception Propagation from CSP, SDP, and Dish Leaf Nodes**
 
   - Induces a command not allowed exception in the Leaf Nodes to simulate a failure scenario.
   - Verifies that the long-running command result indicates a failure and specifies the Leaf Node as the source of the failure.
