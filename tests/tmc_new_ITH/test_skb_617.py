@@ -80,8 +80,11 @@ def subarray_in_empty_state(
         wait_termination=True,
     )
 
+
 @when("I invoke assign resources with empty SDP block")
-def invoke_assign_resources(context_fixt: SubarrayTestContextData, tmc: TMCFacade):
+def invoke_assign_resources(
+    context_fixt: SubarrayTestContextData, tmc: TMCFacade
+):
     """Invoke Assign Resources"""
     json_input = (
         MyFileJSONInput("centralnode", "assign_resources_mid")
@@ -90,9 +93,10 @@ def invoke_assign_resources(context_fixt: SubarrayTestContextData, tmc: TMCFacad
     )
 
     context_fixt.when_action_result = tmc.assign_resources(
-        json_input, 
+        json_input,
         wait_termination=True,
     )
+
 
 # @when("I invoke assign resources with empty SDP block")
 # def invoke_assign_resources(
