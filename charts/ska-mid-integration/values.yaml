@@ -173,9 +173,9 @@ ska-tmc-mid:
       CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.2"
   subarraynode:
     image:
-      registry: artefact.skao.int
+      registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-subarraynode
       image: ska-tmc-subarraynode
-      tag: 0.39.2
+      tag: 0.39.2-dev.c3cb563f0
       pullPolicy: IfNotPresent
 
   sdpleafnodes:
