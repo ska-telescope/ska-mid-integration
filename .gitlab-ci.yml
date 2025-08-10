@@ -77,6 +77,52 @@ include:
 - local: '/gitlab_ci/.gitlab-ci-staging.yml'
 
 
+k8s-test:
+  variables:
+    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA"
+    DISH_SIMULATION_ENABLED: "true"
+    SUBARRAY_COUNT: 2
+    COUNT: 1
+    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA'
+    ADDMARK: "and test"
+    CI_KEEP_NAMESPACE: true
+
+  before_script:
+    - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
+    - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
+    - make k8s-install-chart
+    - make k8s-wait
+
+  after_script:
+    - pip3 install -q -U git+https://gitlab.com/ska-telescope/ska-ser-xray.git
+    - XRAY_TEST_RESULT_FILE="build/cucumber.json" make xray-publish
+
+k8s-test-batch2:
+  extends:
+    - k8s-test
+  variables:
+    SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch2"
+    DISH_SIMULATION_ENABLED: "true"
+    SUBARRAY_COUNT: 2
+    COUNT: 1
+    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch2'
+    ADDMARK: "and batch2"
+    CI_KEEP_NAMESPACE: true
+  environment:
+    name: test/$CI_COMMIT_REF_SLUG-batch2
+    on_stop: stop-k8s-test-batch2
+    auto_stop_in: 1 minute
+
+stop-k8s-test-batch2:
+  extends:
+    - stop-k8s-test
+  variables:
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch2"
+  environment:
+    name: test/$CI_COMMIT_REF_SLUG-batch2
+    action: stop
+
+
 
 k8s-tmc-scaling:
   when: manual
