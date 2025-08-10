@@ -921,6 +921,17 @@ def check_device_event_value(
         expected_str = str(expected_value).split(".")[-1].upper()
         value_match = actual_value == expected_str
 
+        LOGGER.info(
+            "Event: dev=%s attr=%s value=%r "
+            "match_dev=%s match_attr=%s match_val=%s",
+            getattr(e, "device", None),
+            getattr(e, "attribute_name", None),
+            e.attribute_value,
+            device_match,
+            attr_match,
+            value_match,
+        )
+
         return device_match and attr_match and value_match
 
     matching_events = event_tracer.query_events(_matches, timeout=100)
