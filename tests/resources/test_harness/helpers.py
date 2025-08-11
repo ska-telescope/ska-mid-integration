@@ -623,7 +623,8 @@ def generate_eb_pb_ids(input_json: dict):
     sdp = input_json.get("sdp", {})
 
     # Handle execution_block only if it exists
-    execution_block = sdp.get("execution_block")
+    # execution_block = sdp.get("execution_block")
+    execution_block = input_json.get("sdp", {}).get("execution_block")
     if execution_block is not None:
         # Assumes execution_block is a dict and must follow schema if present
         execution_block["eb_id"] = generate_id("eb-mvp01-********-*****")
@@ -951,7 +952,8 @@ def check_device_event_value(device, attr_name, expected_value, event_tracer):
 
     matching_events = event_tracer.query_events(_matches, timeout=100)
     LOGGER.info("Matching events found: %s", matching_events)
-    return bool(matching_events)
+    # return bool(matching_events)
+    return False
 
     # def check_device_event_value(
     #     device: DeviceProxy,
