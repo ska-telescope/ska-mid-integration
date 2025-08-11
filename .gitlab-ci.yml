@@ -146,6 +146,7 @@ k8s-tmc-scaling:
     auto_stop_in: 1 minute
 
 stop-k8s-tmc-scaling:
+  stage: scaling
   extends:
     - stop-k8s-test
   variables:
