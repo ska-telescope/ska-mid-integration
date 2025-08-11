@@ -4,6 +4,7 @@ import os
 import re
 import time
 from datetime import datetime
+from enum import Enum
 from typing import Any, List
 
 from astropy.time import Time
@@ -907,24 +908,38 @@ def check_for_device_command_event_tracer(
     return event_found
 
 
-def check_device_event_value(
-    device: DeviceProxy,
-    attr_name: str,
-    expected_value: Any,
-    event_tracer: TangoEventTracer,
-) -> bool:
+def check_device_event_value(device, attr_name, expected_value, event_tracer):
+    """Check if a device emitted an event with the expected attribute value."""
+    if isinstance(expected_value, Enum):
+        expected_str = expected_value.name.upper()
+    else:
+        expected_str = str(expected_value).split(".")[-1].upper()
+
+    LOGGER.info(
+        "Waiting for %s.%s == %s",
+        device.dev_name(),
+        attr_name,
+        expected_str,
+    )
+
     def _matches(e):
+        # Extract the device name from the event
+        dev_name = getattr(e, "device_name", getattr(e, "device", None))
+
         device_match = e.has_device(device.dev_name())
         attr_match = e.has_attribute(attr_name)
 
-        actual_value = str(e.attribute_value).upper()
-        expected_str = str(expected_value).split(".")[-1].upper()
+        if isinstance(e.attribute_value, Enum):
+            actual_value = e.attribute_value.name.upper()
+        else:
+            actual_value = str(e.attribute_value).split(".")[-1].upper()
+
         value_match = actual_value == expected_str
 
         LOGGER.info(
-            "Event: dev=%s attr=%s value=%r "
-            "match_dev=%s match_attr=%s match_val=%s",
-            getattr(e, "device", None),
+            "Event: dev=%s attr=%s value=%r match_dev=%s "
+            "match_attr=%s match_val=%s",
+            dev_name,
             getattr(e, "attribute_name", None),
             e.attribute_value,
             device_match,
@@ -933,6 +948,37 @@ def check_device_event_value(
         )
 
         return device_match and attr_match and value_match
+
+    matching_events = event_tracer.query_events(_matches, timeout=100)
+    LOGGER.info("Matching events found: %s", matching_events)
+    return bool(matching_events)
+
+    # def check_device_event_value(
+    #     device: DeviceProxy,
+    #     attr_name: str,
+    #     expected_value: Any,
+    #     event_tracer: TangoEventTracer,
+    # ) -> bool:
+    #     def _matches(e):
+    #         device_match = e.has_device(device.dev_name())
+    #         attr_match = e.has_attribute(attr_name)
+
+    #         actual_value = str(e.attribute_value).upper()
+    #         expected_str = str(expected_value).split(".")[-1].upper()
+    #         value_match = actual_value == expected_str
+
+    #         LOGGER.info(
+    #             "Event: dev=%s attr=%s value=%r "
+    #             "match_dev=%s match_attr=%s match_val=%s",
+    #             getattr(e, "device", None),
+    #             getattr(e, "attribute_name", None),
+    #             e.attribute_value,
+    #             device_match,
+    #             attr_match,
+    #             value_match,
+    #         )
+
+    #         return device_match and attr_match and value_match
 
     matching_events = event_tracer.query_events(_matches, timeout=100)
     LOGGER.info("Matching events found: %s", matching_events)
