@@ -136,7 +136,7 @@ k8s-tmc-scaling:
     DEPLOY_ALL_DISHES: "true"
     SERVICE_ACCOUNT: "ska-tmc-staging"
     DISH_SIMULATION_ENABLED: "true"
-    SUBARRAY_COUNT: 2
+    SUBARRAY_COUNT: 4
     COUNT: 1
     KUBE_NAMESPACE: "ska-tmc-staging"
     CI_KEEP_NAMESPACE: true
