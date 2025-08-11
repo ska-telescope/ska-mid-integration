@@ -27,7 +27,6 @@ CUSTOM_VALUES3 ?=
 ifeq ($(strip $(DEPLOY_ALL_DISHES)),true)
 CUSTOM_VALUES3 = -f charts/ska-tmc-testing-mid/dish_scaled.yaml
 endif
-
 # ----------------------------------------------------------------------------
 # Exit at failure flag
 # 
