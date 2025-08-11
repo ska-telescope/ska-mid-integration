@@ -23,23 +23,18 @@ FILE_NAME?= alarm_rules.txt
 
 DEPLOY_ALL_DISHES ?= false ## Flag to deploy all dishes or no
 
+DISH_LIST_SHORT = '"001","036","063","100"'
+DISH_LIST_LONG  = '"001","002","003","004","005","006","007","008","009",\
+"010","011","012","013","014","015","016","017","018","019","020","021",\
+"022","023","024","025","026","027","028","029","030","031","032","033",\
+"034","035","036","037","038","039","040","041","042","043","044","045",\
+"046","047","048","049","050","051","052","053","054","055","056","057",\
+"058","059","060","061","062","063","064","065","066","067","068"'
+
 ifeq ($(DEPLOY_ALL_DISHES),true)
-# Long list as indexed keys (keeps leading zeros)
-K8S_CHART_PARAMS += \
-	--set global.dishes[0]="001"  --set global.dishes[1]="002"  --set global.dishes[2]="003"  --set global.dishes[3]="004"  --set global.dishes[4]="005"  --set global.dishes[5]="006"  --set global.dishes[6]="007"  --set global.dishes[7]="008"  --set global.dishes[8]="009" \
-	--set global.dishes[9]="010"  --set global.dishes[10]="011" --set global.dishes[11]="012" --set global.dishes[12]="013" --set global.dishes[13]="014" --set global.dishes[14]="015" --set global.dishes[15]="016" --set global.dishes[16]="017" --set global.dishes[17]="018" \
-	--set global.dishes[18]="019" --set global.dishes[19]="020" --set global.dishes[20]="021" --set global.dishes[21]="022" --set global.dishes[22]="023" --set global.dishes[23]="024" --set global.dishes[24]="025" --set global.dishes[25]="026" --set global.dishes[26]="027" \
-	--set global.dishes[27]="028" --set global.dishes[28]="029" --set global.dishes[29]="030" --set global.dishes[30]="031" --set global.dishes[31]="032" --set global.dishes[32]="033" --set global.dishes[33]="034" --set global.dishes[34]="035" --set global.dishes[35]="036" \
-	--set global.dishes[36]="037" --set global.dishes[37]="038" --set global.dishes[38]="039" --set global.dishes[39]="040" --set global.dishes[40]="041" --set global.dishes[41]="042" --set global.dishes[42]="043" --set global.dishes[43]="044" --set global.dishes[44]="045" \
-	--set global.dishes[45]="046" --set global.dishes[46]="047" --set global.dishes[47]="048" --set global.dishes[48]="049" --set global.dishes[49]="050" --set global.dishes[50]="051" --set global.dishes[51]="052" --set global.dishes[52]="053" --set global.dishes[53]="054" \
-	--set global.dishes[54]="055" --set global.dishes[55]="056" --set global.dishes[56]="057" --set global.dishes[57]="058" --set global.dishes[58]="059" --set global.dishes[59]="060" --set global.dishes[60]="061" --set global.dishes[61]="062" --set global.dishes[62]="063" \
-	--set global.dishes[63]="064" --set global.dishes[64]="065" --set global.dishes[65]="066" --set global.dishes[66]="067" --set global.dishes[67]="068"
+K8S_CHART_PARAMS += --set global.dishes='{ $(DISH_LIST_LONG) }'
 else
-K8S_CHART_PARAMS += \
-	--set global.dishes[0]="001" \
-	--set global.dishes[1]="036" \
-	--set global.dishes[2]="063" \
-	--set global.dishes[3]="100"
+K8S_CHART_PARAMS += --set global.dishes='{ $(DISH_LIST_SHORT) }'
 endif
 
 # ----------------------------------------------------------------------------
