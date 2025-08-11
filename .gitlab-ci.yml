@@ -22,6 +22,7 @@ cache:
 stages:
   - lint
   - build
+  - scaling
   - on-demand
   - test
   - integration
@@ -125,6 +126,7 @@ stop-k8s-test-batch2:
 
 
 k8s-tmc-scaling:
+  stage: scaling
   when: manual
   extends:
     - k8s-test
@@ -136,7 +138,7 @@ k8s-tmc-scaling:
     DISH_SIMULATION_ENABLED: "true"
     SUBARRAY_COUNT: 2
     COUNT: 1
-    KUBE_NAMESPACE: "ci-ska-tmc-staging"
+    KUBE_NAMESPACE: "ska-tmc-staging"
     CI_KEEP_NAMESPACE: true
   environment:
     name: ska-tmc-staging-env
@@ -147,7 +149,7 @@ stop-k8s-tmc-scaling:
   extends:
     - stop-k8s-test
   variables:
-    KUBE_NAMESPACE: "ci-ska-tmc-staging"
+    KUBE_NAMESPACE: "ska-tmc-staging"
   environment:
     name: ska-tmc-staging-env
     action: stop

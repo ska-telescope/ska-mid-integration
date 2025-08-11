@@ -61,6 +61,7 @@ ska-taranta:
 
 # Tmc-Mid
 tmc-mid:
+  dishes: ["001","036","063","100"]
   labels:
     app: ska-tmc-integration
   enabled: true
