@@ -48,6 +48,7 @@ def check_telescope_is_in_on_state(
     event_tracer.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
+    event_tracer.subscribe_event(subarray_node.subarray_node, "obsState")
     log_events(
         {
             central_node_mid.central_node: ["telescopeState"],
@@ -341,37 +342,41 @@ def move_tmc_to_intial_state(
     """
 
     match initialObsState:
+        case "IDLE":
+            perform_idle_transition(
+                central_node_mid,
+                subarray_node,
+                event_tracer,
+                command_input_factory,
+            )
+
         case "READY":
-
             perform_idle_transition(
                 central_node_mid,
                 subarray_node,
                 event_tracer,
                 command_input_factory,
             )
-
             perform_ready_transition(
                 central_node_mid,
                 subarray_node,
                 event_tracer,
                 command_input_factory,
             )
+
         case "SCANNING":
-
             perform_idle_transition(
                 central_node_mid,
                 subarray_node,
                 event_tracer,
                 command_input_factory,
             )
-
             perform_ready_transition(
                 central_node_mid,
                 subarray_node,
                 event_tracer,
                 command_input_factory,
             )
-
             perform_scanning_transition(
                 subarray_node,
                 event_tracer,
@@ -385,6 +390,7 @@ def move_tmc_to_intial_state(
     )
 )
 def execute_command_on_tmc_with_defectivesetup(
+    central_node_mid: CentralNodeWrapperMid,
     subarray_node: SubarrayNodeWrapper,
     event_tracer: TangoEventTracer,
     simulator_factory: SimulatorFactory,
@@ -428,26 +434,44 @@ def execute_command_on_tmc_with_defectivesetup(
             LOGGER.info("Work on dish in Progress")
 
     match command:
-        case "END":
+        case "RELEASERESOURCES":
+            (
+                _,
+                pytest.unique_id,
+            ) = subarray_node.subarray_node.ReleaseAllResources()
 
+        case "ASSIGNRESOURCES":
+            assign_input_str = prepare_json_args_for_commands(
+                "assign_resources_mid", command_input_factory
+            )
+            _, pytest.unique_id = subarray_node.subarray_node.AssignResources(
+                assign_input_str
+            )
+        case "CONFIGURE":
+            configure_input_json = prepare_json_args_for_commands(
+                "configure_mid", command_input_factory
+            )
+            _, pytest.unique_id = subarray_node.subarray_node.Configure(
+                configure_input_json
+            )
+
+        case "END":
             perform_ready_transition_with_end(
                 subarray_node,
                 event_tracer,
             )
 
         case "ENDSCAN":
-
             verify_scanning_transition_with_endscan(
                 subarray_node,
             )
         case "SCAN":
-
             perform_scan(subarray_node, command_input_factory)
 
 
 @then(
     parsers.parse(
-        "the command failure is reported by subarray with" " error message"
+        "the command failure is reported by subarray with error message"
     )
 )
 def validate_error_message_reporting(
@@ -480,23 +504,22 @@ def validate_error_message_reporting(
 
     pytest.defective_subarray.SetDefective(json.dumps({"enabled": False}))
 
-    event_tracer.clear_events()
 
-
-@then(parsers.parse("the TMC SubarrayNode remains in {stuck} obsState"))
+@then("the TMC SubarrayNode transitions to FAULT obsState")
 def validate_subarry_obsState(
     subarray_node: SubarrayNodeWrapper,
-    stuck,
+    event_tracer: TangoEventTracer,
 ):
     """
     Check if TMC subarray remains in stuck Obs-State.
     """
-
-    attribute_value = subarray_node.subarray_node.read_attribute(
-        "obsState"
-    ).value
-
-    if stuck == "READY":
-        assert attribute_value == ObsState.READY
-    elif stuck == "SCANNING":
-        assert attribute_value == ObsState.SCANNING
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "THEN" STEP: '
+        '"the TMC SubarrayNode transitions to FAULT obsState"'
+        f"({subarray_node.subarray_node.dev_name()}) "
+        "is expected to be in FAULT obstate",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.FAULT,
+    )

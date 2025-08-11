@@ -7,6 +7,12 @@ This project is integration of the TMC components for the `Square Kilometre Arra
    :caption: Getting started
 
    getting_started/getting_started
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Knowledge Base
+
+   knowledge_base/tmc_recovery
    
 .. toctree::
    :maxdepth: 2

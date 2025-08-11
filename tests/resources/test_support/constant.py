@@ -7,6 +7,7 @@ import numpy as np
 from ska_control_model import ObsState
 
 from tests.resources.test_harness.utils.enums import (
+    DishMode,
     FaultType,
     PointingState,
     ResultCode,
@@ -214,6 +215,42 @@ COMMAND_NOT_ALLOWED_DEFECT = {
     "result": ResultCode.FAILED,
 }
 
+READY_STATE_DEFECT = json.dumps(
+    {
+        "enabled": True,
+        "fault_type": FaultType.STUCK_IN_INTERMEDIATE_STATE,
+        "error_message": "Device stuck in intermediate state",
+        "result": ResultCode.FAILED,
+        "intermediate_state": ObsState.READY,
+    }
+)
+
+IDLE_STATE_DEFECT = json.dumps(
+    {
+        "enabled": True,
+        "fault_type": FaultType.STUCK_IN_INTERMEDIATE_STATE,
+        "error_message": "Device stuck in intermediate state",
+        "result": ResultCode.FAILED,
+        "intermediate_state": ObsState.IDLE,
+    }
+)
+
+OBS_STATE_RESOURCING_STUCK_DEFECT = {
+    "enabled": True,
+    "fault_type": FaultType.STUCK_IN_OBSTATE,
+    "error_message": "Device stuck in Resourcing state",
+    "result": ResultCode.FAILED,
+    "intermediate_state": ObsState.RESOURCING,
+}
+
+INTERMEDIATE_FAULT_OBS_STATE_DEFECT = {
+    "enabled": True,
+    "fault_type": FaultType.STUCK_IN_INTERMEDIATE_STATE,
+    "error_message": "Device stuck in intermediate state",
+    "result": ResultCode.FAILED,
+    "intermediate_state": ObsState.FAULT,
+}
+
 
 class CorrectionKey(IntEnum):
     """An enum class for correction keys"""
@@ -231,6 +268,14 @@ DISH_ERROR_MESSAGE = (
 TIMOUT_ERROR = "Timeout has occurred, command failed"
 
 OBS_STATE_RESOURCING_STUCK_DEFECT = {
+    "enabled": True,
+    "fault_type": FaultType.STUCK_IN_OBSTATE,
+    "error_message": "Device stuck in Resourcing state",
+    "result": ResultCode.FAILED,
+    "intermediate_state": ObsState.RESOURCING,
+}
+
+POINTING_STATE_READY_STUCK_DEFECT = {
     "enabled": True,
     "fault_type": FaultType.STUCK_IN_OBSTATE,
     "error_message": "Device stuck in Resourcing state",
@@ -436,13 +481,33 @@ FAILED_DEFECT = json.dumps(
     }
 )
 
-INTERMEDIATE_CONFIGURING_STATE_DEFECT = json.dumps(
+INTERMEDIATE_READY_STATE_DEFECT = json.dumps(
     {
         "enabled": True,
         "fault_type": FaultType.STUCK_IN_INTERMEDIATE_STATE,
         "error_message": "Device stuck in intermediate state",
         "result": ResultCode.FAILED,
         "intermediate_state": ObsState.READY,
+    }
+)
+
+INTERMEDIATE_RESOURCING_STATE_DEFECT = json.dumps(
+    {
+        "enabled": True,
+        "fault_type": FaultType.STUCK_IN_INTERMEDIATE_STATE,
+        "error_message": "Device stuck in intermediate state",
+        "result": ResultCode.FAILED,
+        "intermediate_state": ObsState.RESOURCING,
+    }
+)
+
+INTERMEDIATE_CONFIGURING_STATE_DEFECT = json.dumps(
+    {
+        "enabled": True,
+        "fault_type": FaultType.STUCK_IN_INTERMEDIATE_STATE,
+        "error_message": "Device stuck in intermediate state",
+        "result": ResultCode.FAILED,
+        "intermediate_state": ObsState.CONFIGURING,
     }
 )
 
@@ -455,6 +520,39 @@ INTERMEDIATE_CONFIGURING_STATE_DEFECT_DISH = json.dumps(
         "intermediate_state": PointingState.TRACK,
     }
 )
+
+INTERMEDIATE_READY_STATE_DEFECT_DISH = {
+    "enabled": True,
+    "fault_type": FaultType.STUCK_IN_INTERMEDIATE_STATE,
+    "error_message": "Device stuck in intermediate state",
+    "result": ResultCode.FAILED,
+    "intermediate_state": PointingState.READY,
+}
+
+INTERMEDIATE_TRACK_STATE_DEFECT_DISH = {
+    "enabled": True,
+    "fault_type": FaultType.STUCK_IN_INTERMEDIATE_STATE,
+    "error_message": "Device stuck in intermediate state",
+    "result": ResultCode.FAILED,
+    "intermediate_state": PointingState.TRACK,
+}
+
+INTERMEDIATE_DISH_MODE_STATE_DEFECT_DISH = {
+    "enabled": True,
+    "fault_type": FaultType.STUCK_IN_INTERMEDIATE_STATE,
+    "error_message": "Device stuck in intermediate state",
+    "result": ResultCode.FAILED,
+    "intermediate_state": DishMode.CONFIG,
+    "is_dish_mode": True,
+}
+
+INTERMEDIATE_SLEW_STATE_DEFECT_DISH = {
+    "enabled": True,
+    "fault_type": FaultType.STUCK_IN_INTERMEDIATE_STATE,
+    "error_message": "Device stuck in intermediate state",
+    "result": ResultCode.FAILED,
+    "intermediate_state": PointingState.SLEW,
+}
 
 INTERMEDIATE_SCANNING_STATE_DEFECT = json.dumps(
     {

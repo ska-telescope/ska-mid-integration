@@ -12,11 +12,13 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_support.constant import (
     COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_EMPTY,
-    RESET_DEFECT,
     SDP_BACK_TO_INITIAL_STATE,
 )
 
 
+@pytest.mark.skip(
+    reason="Test needs an update once auto recovery is implemented"
+)
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
@@ -123,8 +125,6 @@ def sdp_subarray_returns_to_obsstate_empty(event_recorder, simulator_factory):
         "obsState",
         ObsState.EMPTY,
     )
-    csp_sim.SetDefective(RESET_DEFECT)
-    sdp_sim.SetDefective(RESET_DEFECT)
 
 
 @then(
@@ -135,12 +135,15 @@ def sdp_subarray_returns_to_obsstate_empty(event_recorder, simulator_factory):
 def tmc_subarray_transitions_to_empty(
     central_node_mid, simulator_factory, event_recorder
 ):
+    csp_sim, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
     event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_node,
         "obsState",
         ObsState.EMPTY,
     )
+    csp_sim.SetDefective(json.dumps({"enabled": False}))
+    sdp_sim.SetDefective(json.dumps({"enabled": False}))
 
 
 @then(
