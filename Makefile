@@ -32,9 +32,9 @@ DISH_LIST_LONG  = '"001","002","003","004","005","006","007","008","009",\
 "058","059","060","061","062","063","064","065","066","067","068"'
 
 ifeq ($(DEPLOY_ALL_DISHES),true)
-K8S_CHART_PARAMS += --set global.dishes='{ $(DISH_LIST_LONG) }'
+CUSTOM_VALUES3 = --set global.dishes='{ $(DISH_LIST_LONG) }'
 else
-K8S_CHART_PARAMS += --set global.dishes='{ $(DISH_LIST_SHORT) }'
+CUSTOM_VALUES3 = --set global.dishes='{ $(DISH_LIST_SHORT) }'
 endif
 
 # ----------------------------------------------------------------------------
@@ -159,7 +159,8 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set tmc-mid.deviceServers.mocks.dish=$(DISH_SIMULATION_ENABLED)\
 	--set tmc-mid.subarray_count=$(SUBARRAY_COUNT)\
 	$(CUSTOM_VALUES1)\
-	$(CUSTOM_VALUES2)
+	$(CUSTOM_VALUES2)\
+	$(CUSTOM_VALUES3)
 
 PYTHON_VARS_BEFORE_PYTEST ?= PYTHONPATH=.:./src \
 							 TANGO_HOST=$(TANGO_HOST) \
