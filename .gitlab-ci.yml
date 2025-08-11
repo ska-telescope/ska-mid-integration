@@ -131,9 +131,9 @@ k8s-tmc-scaling:
   tags:
     - ska-staging-tmc
   variables:
+    DEPLOY_ALL_DISHES: "true"
     SERVICE_ACCOUNT: "ska-tmc-staging"
     DISH_SIMULATION_ENABLED: "true"
-    DEPLOY_ALL_DISHES: "true"
     SUBARRAY_COUNT: 2
     COUNT: 1
     KUBE_NAMESPACE: "ci-ska-tmc-staging"
