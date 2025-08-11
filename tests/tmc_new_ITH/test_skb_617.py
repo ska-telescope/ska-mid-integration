@@ -49,8 +49,7 @@ def _setup_event_subscriptions(
     )
 
 
-# @pytest.mark.batch1
-@pytest.mark.test
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/skb_617.feature",
@@ -88,40 +87,11 @@ def invoke_assign_resources(
         MyFileJSONInput("centralnode", "assign_resources_mid").with_attribute(
             "subarray_id", 1
         )
-        # .with_attribute("sdp", {})# Setting SDP directly in the input object
         .with_attribute("sdp", {})
     )
 
     tmc.central_node.AssignResources(json_input.as_str())
 
-    # tmc.central_node.AssignResources(json_input)
-    # tmc.central_node.AssignResources(json_input.as_str)
-
-    # context_fixt.when_action_result = tmc.assign_resources(
-    #     json_input,
-    #     wait_termination=True,
-    # )
-
-
-# @when("I invoke assign resources with empty SDP block")
-# def invoke_assign_resources(
-#     context_fixt: SubarrayTestContextData, tmc: TMCFacade
-# ):
-#     """Invoke Assign Resources"""
-#     json_input = MyFileJSONInput(
-#         "centralnode", "assign_resources_mid"
-#     ).with_attribute("subarray_id", 1)
-#     assign_json = json_input.as_dict()
-#     assign_json["sdp"] = {}
-#     context_fixt.when_action_result = tmc.assign_resources(
-#         assign_json,
-#         wait_termination=True,
-#     )
-#     # json_input = json.dumps(assign_json)
-#     # context_fixt.when_action_result = tmc.assign_resources(
-#     #     json_input,
-#     #     wait_termination=True,
-#     # )
 
 
 @then("AssignResources is successfully invoked on TMC")
@@ -134,10 +104,3 @@ def verify_version_tmc_in_idle(tmc: TMCFacade, event_tracer: TangoEventTracer):
         event_tracer,
     )
 
-    # assert check_for_device_command_event_tracer(
-    #     tmc.subarray_node,
-    #     "obsState",
-    #     ObsState.IDLE,
-    #     event_tracer,
-    #     "AssignResources",
-    # )
