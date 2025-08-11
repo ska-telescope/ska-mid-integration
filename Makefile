@@ -33,11 +33,10 @@ DISH_LIST_LONG  := {"001","002","003","004","005","006","007","008","009",\
 "058","059","060","061","062","063","064","065","066","067","068"}
 
 ifeq ($(strip $(DEPLOY_ALL_DISHES)),true)
-CUSTOM_VALUES3 = --set 'global.dishes=$(DISH_LIST_LONG)'
+CUSTOM_VALUES3 = --set global.dishes=$(DISH_LIST_LONG)
 else
-CUSTOM_VALUES3 = --set 'global.dishes=$(DISH_LIST_SHORT)'
+CUSTOM_VALUES3 = --set global.dishes=$(DISH_LIST_SHORT)
 endif
-
 # ----------------------------------------------------------------------------
 # Exit at failure flag
 # 
