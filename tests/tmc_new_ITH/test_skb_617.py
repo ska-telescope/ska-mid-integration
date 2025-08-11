@@ -84,14 +84,12 @@ def invoke_assign_resources(
 ):
     """Invoke Assign Resources"""
     json_input = (
-        MyFileJSONInput("centralnode", "assign_resources_mid").with_attribute(
-            "subarray_id", 1
-        )
+        MyFileJSONInput("centralnode", "assign_resources_mid")
+        .with_attribute("subarray_id", 1)
         .with_attribute("sdp", {})
     )
 
     tmc.central_node.AssignResources(json_input.as_str())
-
 
 
 @then("AssignResources is successfully invoked on TMC")
@@ -103,4 +101,3 @@ def verify_version_tmc_in_idle(tmc: TMCFacade, event_tracer: TangoEventTracer):
         ObsState.IDLE,
         event_tracer,
     )
-

@@ -754,6 +754,7 @@ def update_eb_pb_ids(input_json: str) -> str:
 
     return json.dumps(input_data)
 
+
 def update_scan_type(configure_json: str, json_value: str) -> str:
     """
     Method to update json with different scan type
@@ -925,6 +926,7 @@ def check_device_event_value(device, attr_name, expected_value, event_tracer):
     matching_events = event_tracer.query_events(_matches, timeout=100)
     LOGGER.info("Matching events found: %s", matching_events)
     return bool(matching_events)
+
 
 def retry_tango_command(
     device: DeviceProxy, command_name: str, argin=None
