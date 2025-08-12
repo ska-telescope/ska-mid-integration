@@ -140,9 +140,9 @@ k8s-tmc-scaling:
     COUNT: 1
     KUBE_NAMESPACE: "ska-tmc-staging"
     CI_KEEP_NAMESPACE: true
-    K8S_TIMEOUT: "300"
+    K8S_TIMEOUT: "5m"
   script:
-    - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
+    - make taranta-link
   environment:
     name: ska-tmc-staging-env
     on_stop: stop-k8s-tmc-scaling
@@ -155,6 +155,9 @@ stop-k8s-tmc-scaling:
     - stop-k8s-test
   variables:
     KUBE_NAMESPACE: "ska-tmc-staging"
+  script:
+    - make k8s-delete-namespace
+    - kubectl delete namespace $(KUBE_NAMESPACE)
   environment:
     name: ska-tmc-staging-env
     action: stop
