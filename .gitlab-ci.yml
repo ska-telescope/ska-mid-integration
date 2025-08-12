@@ -150,6 +150,7 @@ k8s-tmc-scaling:
 
     
 stop-k8s-tmc-scaling:
+  stage: scaling
   extends: stop-integration
   variables:
     KUBE_NAMESPACE: "ska-tmc-staging"
