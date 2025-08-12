@@ -11,3 +11,4 @@ Knowledge Base
    deployment/deployment
    fqdns
    admin_mode
+   tmc_recovery

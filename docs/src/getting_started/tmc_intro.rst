@@ -1,7 +1,5 @@
-.. _tmc_intro:
-
-Introduction to TMC
-====================
+TMC (Telescope Monitoring and Control) Mid
+==========================================
 
 The Telescope Monitor and Control (TMC) is the software module identified to perform the telescope management, 
 and data management functions of the Telescope Manager. 
@@ -26,3 +24,10 @@ The components(CentralNode, SubarrayNode, Leaf Nodes) of the TMC system are inte
 the Helm chart to deploy the TMC. More details on the design of the TMC and how
 to run it locally or in the integration environment can be found in the `Documentation 
 <https://gitlab.com/ska-telescope/ska-tmc/ska-tmc-mid-integration/-/blob/main/docs/src/getting_started/getting_started.rst>`_
+
+Impact of AdminMode on command execution
+-----------------------------------------
+
+1. The command invocation is **not allowed** from **TMC CentralNode** if the adminMode of any subsystem's controller is  either **OFFLINE** or **NOT_FITTED**
+2. The command invocation is **not allowed** from **TMC SubarrayNode** if the adminMode of any subsystem's subarray is  either **OFFLINE** or **NOT_FITTED**
+3. The command invocation is **allowed** if the adminMode of subsystem is either **ONLINE** or **ENGINEERING**

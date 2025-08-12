@@ -467,7 +467,9 @@ class SubarrayNodeWrapper(object):
     def tear_down(self):
         """Tear down after each test run"""
 
-        LOGGER.info("Calling Tear down for subarray")
+        LOGGER.info(
+            "Calling tear down for subarray with %s obsState", self.obs_state
+        )
         self._clear_command_call_and_transition_data(clear_transition=True)
 
         if self.obs_state in ("RESOURCING", "CONFIGURING", "SCANNING"):
@@ -507,7 +509,7 @@ class SubarrayNodeWrapper(object):
             )
             self.event_recorder.clear_events()
 
-        elif self.obs_state == "ABORTED":
+        elif self.obs_state in [ObsState.ABORTED, "FAULT"]:
             """Invoke Restart"""
             LOGGER.info("Invoking Restart on Subarray")
             _, unique_id = self.restart_subarray()

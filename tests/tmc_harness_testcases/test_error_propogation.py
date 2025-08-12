@@ -14,9 +14,12 @@ import pytest
 from assertpy import assert_that
 from pytest_bdd import parsers, scenario, then, when
 from ska_control_model import ResultCode
+from ska_tango_base.control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer
 
 from tests.conftest import LOGGER
+from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
+from tests.resources.test_harness.helpers import prepare_json_args_for_commands
 from tests.resources.test_harness.simulator_factory import SimulatorFactory
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
@@ -24,6 +27,8 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.constant import (
     INTERMEDIATE_CONFIGURING_STATE_DEFECT,
     INTERMEDIATE_CONFIGURING_STATE_DEFECT_DISH,
+    INTERMEDIATE_READY_STATE_DEFECT,
+    INTERMEDIATE_RESOURCING_STATE_DEFECT,
     INTERMEDIATE_SCANNING_STATE_DEFECT,
     tmc_csp_subarray_leaf_node,
     tmc_dish_leaf_node1,
@@ -40,7 +45,8 @@ from tests.tmc_harness_testcases.conftest import (
 @pytest.mark.SKA_mid
 @scenario(
     "../features/check_error_propagation.feature",
-    "Error Propagation Reported by TMC Mid End/EndScan/Scan "
+    "Error Propagation Reported by TMC Mid "
+    "AssignResources/ReleaseAllResources/Configure/End/EndScan/Scan "
     "Commands for Defective Subarray",
 )
 def test_tmc_command_error_propagation():
@@ -53,7 +59,8 @@ def test_tmc_command_error_propagation():
 @pytest.mark.SKA_mid
 @scenario(
     "../features/check_error_propagation.feature",
-    "TimeOut Reported by TMC Mid End/EndScan/Scan "
+    "TimeOut Reported by TMC Mid "
+    "AssignResources/ReleaseAllResources/Configure/End/EndScan/Scan "
     "Commands for Defective Subarray",
 )
 def test_tmc_command_timeout_error_propagation():
@@ -62,9 +69,23 @@ def test_tmc_command_timeout_error_propagation():
     """
 
 
+@pytest.mark.batch2
+@pytest.mark.SKA_mid
+@scenario(
+    "../features/check_error_propagation.feature",
+    "TMC moves to FAULT obsState when CSP/SDP " "moves to FAULT obsState",
+)
+def test_tmc_moves_to_fault_with_subsystem():
+    """
+    Test case to verify TMC moves to FAULT observation state if
+    one of the subsystem moves to FAULT observation state.
+    """
+
+
 def execute_command(
     device,
     command,
+    central_node_mid: CentralNodeWrapperMid,
     subarray_node: SubarrayNodeWrapper,
     event_tracer: TangoEventTracer,
     command_input_factory: JsonFactory,
@@ -74,6 +95,45 @@ def execute_command(
     """
     if device in ["CSP", "DISH"]:
         match command:
+            case "RELEASERESOURCES":
+                pytest.defective_subarray.SetDefective(
+                    INTERMEDIATE_RESOURCING_STATE_DEFECT
+                )
+                (
+                    _,
+                    pytest.unique_id,
+                ) = subarray_node.subarray_node.ReleaseAllResources()
+
+            case "ASSIGNRESOURCES":
+                pytest.defective_subarray.SetDefective(
+                    INTERMEDIATE_RESOURCING_STATE_DEFECT
+                )
+                assign_input_str = prepare_json_args_for_commands(
+                    "assign_resources_mid", command_input_factory
+                )
+                (
+                    _,
+                    pytest.unique_id,
+                ) = subarray_node.subarray_node.AssignResources(
+                    assign_input_str
+                )
+            case "CONFIGURE":
+                if device == "DISH":
+                    pytest.defective_subarray.SetDefective(
+                        INTERMEDIATE_CONFIGURING_STATE_DEFECT_DISH
+                    )
+                else:
+                    pytest.defective_subarray.SetDefective(
+                        INTERMEDIATE_CONFIGURING_STATE_DEFECT
+                    )
+
+                LOGGER.info("Working on Configure")
+                configure_input_json = prepare_json_args_for_commands(
+                    "configure_mid", command_input_factory
+                )
+                _, pytest.unique_id = subarray_node.subarray_node.Configure(
+                    configure_input_json
+                )
             case "END":
                 if device == "DISH":
                     pytest.defective_subarray.SetDefective(
@@ -82,7 +142,7 @@ def execute_command(
 
                 else:
                     pytest.defective_subarray.SetDefective(
-                        INTERMEDIATE_CONFIGURING_STATE_DEFECT
+                        INTERMEDIATE_READY_STATE_DEFECT
                     )
 
                 LOGGER.info("Working on Ready State")
@@ -104,7 +164,7 @@ def execute_command(
             case "SCAN":
 
                 pytest.defective_subarray.SetDefective(
-                    INTERMEDIATE_CONFIGURING_STATE_DEFECT
+                    INTERMEDIATE_READY_STATE_DEFECT
                 )
                 LOGGER.info("Workng on Scan")
                 perform_scan(
@@ -113,10 +173,42 @@ def execute_command(
                     command_input_factory,
                 )
     elif device == "SDP":
-
         match command:
-            case "END":
+            case "RELEASERESOURCES":
+                pytest.defective_subarray.SetDelayInfo(
+                    json.dumps({"ReleaseAllResources": 55})
+                )
+                (
+                    _,
+                    pytest.unique_id,
+                ) = subarray_node.subarray_node.ReleaseAllResources()
 
+            case "ASSIGNRESOURCES":
+                pytest.defective_subarray.SetDelayInfo(
+                    json.dumps({"AssignResources": 55})
+                )
+                assign_input_str = prepare_json_args_for_commands(
+                    "assign_resources_mid", command_input_factory
+                )
+                (
+                    _,
+                    pytest.unique_id,
+                ) = subarray_node.subarray_node.AssignResources(
+                    assign_input_str
+                )
+            case "CONFIGURE":
+                pytest.defective_subarray.SetDelayInfo(
+                    json.dumps({"Configure": 55})
+                )
+                LOGGER.info("Working on Configure")
+                configure_input_json = prepare_json_args_for_commands(
+                    "configure_mid", command_input_factory
+                )
+                _, pytest.unique_id = subarray_node.subarray_node.Configure(
+                    configure_input_json
+                )
+
+            case "END":
                 pytest.defective_subarray.SetDelayInfo(json.dumps({"End": 55}))
                 LOGGER.info("Working on Ready State")
                 perform_ready_transition_with_end(
@@ -125,7 +217,6 @@ def execute_command(
                 )
 
             case "ENDSCAN":
-
                 pytest.defective_subarray.SetDelayInfo(
                     json.dumps({"EndScan": 55})
                 )
@@ -133,8 +224,8 @@ def execute_command(
                 verify_scanning_transition_with_endscan(
                     subarray_node,
                 )
-            case "SCAN":
 
+            case "SCAN":
                 pytest.defective_subarray.SetDelayInfo(
                     json.dumps({"Scan": 55})
                 )
@@ -147,6 +238,7 @@ def execute_command(
 
 @when(parsers.parse("{command} is invoked on a {defectiveSubsystem} Subarray"))
 def execute_command_on_tmc_with_defectivesetup(
+    central_node_mid: CentralNodeWrapperMid,
     subarray_node: SubarrayNodeWrapper,
     event_tracer: TangoEventTracer,
     simulator_factory: SimulatorFactory,
@@ -159,6 +251,7 @@ def execute_command_on_tmc_with_defectivesetup(
     """
 
     LOGGER.info("Inside %s  is invoked for %s", command, defectiveSubsystem)
+    pytest.command = command
 
     pytest.defective_subarray = None
     match defectiveSubsystem:
@@ -172,6 +265,7 @@ def execute_command_on_tmc_with_defectivesetup(
             execute_command(
                 "CSP",
                 command,
+                central_node_mid,
                 subarray_node,
                 event_tracer,
                 command_input_factory,
@@ -187,6 +281,7 @@ def execute_command_on_tmc_with_defectivesetup(
             execute_command(
                 "SDP",
                 command,
+                central_node_mid,
                 subarray_node,
                 event_tracer,
                 command_input_factory,
@@ -205,6 +300,7 @@ def execute_command_on_tmc_with_defectivesetup(
             execute_command(
                 "DISH",
                 command,
+                central_node_mid,
                 subarray_node,
                 event_tracer,
                 command_input_factory,
@@ -224,8 +320,16 @@ def validate_error_message_reporting(
     """
     Send next command on TMC
     """
-
     exception_message = "Timeout has occurred, command failed"
+
+    if (
+        pytest.command == "CONFIGURE"
+        and pytest.defective_device == tmc_dish_leaf_node1
+    ):
+        exception_message = (
+            "Timeout occurred while waiting for SetOperateMode"
+            " command to be completed in Configure command"
+        )
 
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "THEN" STEP: '
@@ -245,4 +349,19 @@ def validate_error_message_reporting(
     pytest.defective_subarray.SetDefective(json.dumps({"enabled": False}))
     pytest.defective_subarray.ResetDelayInfo()
 
-    event_tracer.clear_events()
+
+@when(parsers.parse("the {subsystem} subarray moves to FAULT obsState"))
+def move_csp_sdp_to_fault_obsstate(
+    subarray_node: SubarrayNodeWrapper,
+    subsystem,
+):
+    """
+    Move CSP/SDP to Fault obsState
+    """
+    match subsystem:
+        case "CSP":
+            csp_subarray = subarray_node.subarray_devices.get("csp_subarray")
+            csp_subarray.SetDirectObsState(ObsState.FAULT)
+        case "SDP":
+            sdp_subarray = subarray_node.subarray_devices.get("sdp_subarray")
+            sdp_subarray.SetDirectObsState(ObsState.FAULT)

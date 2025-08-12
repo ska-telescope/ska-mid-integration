@@ -75,6 +75,12 @@ def given_a_tmc_in_scanning_obs_state(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
     event_tracer.subscribe_event(central_node_mid.subarray_node, "obsState")
+    event_tracer.subscribe_event(
+        subarray_node.csp_subarray_leaf_node, "cspSubarrayObsState"
+    )
+    event_tracer.subscribe_event(
+        subarray_node.sdp_subarray_leaf_node, "sdpSubarrayObsState"
+    )
 
     # Logging events
     log_events(
@@ -87,6 +93,8 @@ def given_a_tmc_in_scanning_obs_state(
                 "longRunningCommandResult",
                 "obsState",
             ],
+            subarray_node.csp_subarray_leaf_node: ["cspSubarrayObsState"],
+            subarray_node.sdp_subarray_leaf_node: ["sdpSubarrayObsState"],
         }
     )
 
@@ -184,6 +192,40 @@ def given_a_tmc_in_scanning_obs_state(
         central_node_mid.subarray_node,
         "obsState",
         ObsState.SCANNING,
+    )
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'a TMC in SCANNING obsState'"
+        "Csp Subarray Node device"
+        f"({subarray_node.csp_subarray_leaf_node.dev_name()}) "
+        "is expected to be in SCANNING obstate",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        subarray_node.csp_subarray_leaf_node,
+        "cspSubarrayObsState",
+        ObsState.SCANNING,
+    )
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'a TMC in SCANNING obsState'"
+        "Subarray Node device"
+        f"({subarray_node.sdp_subarray_leaf_node.dev_name()}) "
+        "is expected to be in SCANNING obstate",
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        subarray_node.sdp_subarray_leaf_node,
+        "sdpSubarrayObsState",
+        ObsState.SCANNING,
+    )
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "GIVEN" STEP: '
+        "'a TMC in SCANNING obsState'"
+        "Subarray Node device"
+        f"({central_node_mid.subarray_node.dev_name()}) "
+        "is expected have longRunningCommand as"
+        '(unique_id,(ResultCode.OK,"Command Completed"))',
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        central_node_mid.subarray_node,
+        "longRunningCommandResult",
+        (unique_id[0], json.dumps((int(ResultCode.OK), "Command Completed"))),
     )
     event_tracer.clear_events()
 
