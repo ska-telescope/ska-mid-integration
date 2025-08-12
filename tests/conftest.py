@@ -401,9 +401,7 @@ def csp_subarray_is_in_idle(
     )
 
 
-@given(
-    parsers.parse("TMC subarray {subarray_id} stuck in obsState RESOURCING")
-)
+@given(parsers.parse("TMC subarray {subarray_id} stuck in obsState FAULT"))
 def tmc_subarray_stuck_in_resourcing(
     subarray_node: SubarrayNodeWrapper,
     event_recorder: EventRecorder,
@@ -415,7 +413,7 @@ def tmc_subarray_stuck_in_resourcing(
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
-        ObsState.RESOURCING,
+        ObsState.FAULT,
     )
 
 

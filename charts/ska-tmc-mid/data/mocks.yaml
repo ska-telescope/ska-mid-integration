@@ -72,4 +72,3 @@ image:
   tag: "{{.Values.skatmccommon.image.tag}}"
   pullPolicy: "{{.Values.skatmccommon.image.pullPolicy}}"
 
-
