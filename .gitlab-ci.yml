@@ -139,7 +139,7 @@ k8s-tmc-scaling:
     COUNT: 1
     KUBE_NAMESPACE: "ska-tmc-staging"
     CI_KEEP_NAMESPACE: true
-    K8S_TIMEOUT: "5m"
+    K8S_TIMEOUT: "30m"
   script:
     - make taranta-link
   environment:
