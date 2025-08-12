@@ -1,15 +1,15 @@
-release=1.5.0-rc.3
-tag=1.5.0-rc.3
+release=1.6.0-rc.1
+tag=1.6.0-rc.1
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.5.0-rc.2 to v1.5.0-rc.3**
+**1. Updated ska-tmc-mid from v1.5.0 to v1.6.0-rc.1**
         * TMC Subarray moves to FAULT after command timed out
         * TMC Restart command is updated to invoke abort and restart on sub system to bring obs state to EMPTY
         * TMC Subarray is updated to transition Obs State to FAULT after command failure
     
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.5.0-rc.2 to v1.5.0-rc.3**
+**1. Updated ska-tmc-mid from v1.5.0 to v1.6.0-rc.1**
 
         * TMC Subarray moves to FAULT after command timed out
         * TMC Restart command is updated to invoke abort and restart on sub system to bring obs state to EMPTY
