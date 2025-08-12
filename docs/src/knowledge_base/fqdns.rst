@@ -3,7 +3,9 @@ TRL's for TMC Mid devices
 ######################################################
 
 
-The TRL's of all the TMC Mid devices are updated to comply with ADR-9
+TRL for TMC Mid devices
+=======================
+The TRLs of all the TMC Mid devices are updated to comply with ADR-9
 
 +-------------------------+----------------------------------------+---------------------------------------+
 |  **TMC Mid Node**       |        **Previous TRL**                | **Updated TRL**                       |
