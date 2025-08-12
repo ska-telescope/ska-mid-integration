@@ -150,15 +150,13 @@ k8s-tmc-scaling:
 
     
 stop-k8s-tmc-scaling:
-  stage: scaling
-  extends:
-    - stop-k8s-test
+  extends: stop-integration
   variables:
-    SERVICE_ACCOUNT: "ska-tmc-staging"
     KUBE_NAMESPACE: "ska-tmc-staging"
-  script:
-    - make k8s-delete-namespace
-    - kubectl delete namespace ska-tmc-staging
   environment:
     name: ska-tmc-staging-env
     action: stop
+  when: manual
+
+
+
