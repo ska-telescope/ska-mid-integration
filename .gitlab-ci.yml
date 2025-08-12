@@ -134,7 +134,6 @@ k8s-tmc-scaling:
     - ska-staging-tmc
   variables:
     DEPLOY_ALL_DISHES: "true"
-    SERVICE_ACCOUNT: "ska-tmc-staging"
     DISH_SIMULATION_ENABLED: "true"
     SUBARRAY_COUNT: 4
     COUNT: 1
