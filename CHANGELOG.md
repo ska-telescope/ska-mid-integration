@@ -10,7 +10,7 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Added
 -----
 * Added a new test case to verify Bug SKB-617:
-Ensure that the "Assign Resource" succeeds even when the SDP block is empty.
+  Ensure that the "Assign Resource" succeeds even when the SDP block is empty.
 * Updated SubarrayNode image to 0.39.2
 
 
