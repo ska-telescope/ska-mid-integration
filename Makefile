@@ -34,7 +34,6 @@ endif
 # the first failure or continue running tests after a failure. By default, the
 # test run will exit at the first failure. To continue running tests after a
 # failure, set the flag to 'false'.
-
 EXIT_AT_FAIL ?= false ## Flag for determining exit at failure. 
 # Set 'true' to exit at first failure. Set 'false' to continue running 
 # tests after failure. It defaults to 'true' if not set.
