@@ -25,7 +25,9 @@ DEPLOY_ALL_DISHES ?= false ## Flag to deploy all dishes or no
 
 CUSTOM_VALUES3 ?= 
 ifeq ($(strip $(DEPLOY_ALL_DISHES)),true)
-CUSTOM_VALUES3 = -f charts/ska-tmc-testing-mid/dish_scaled.yaml
+CUSTOM_VALUES3 = -f charts/ska-tmc-testing-mid/dish_scaled.yaml \
+				 --set ska-tango-taranta.ingress.hostname=$(CLUSTER_DOMAIN)
+
 endif
 # ----------------------------------------------------------------------------
 # Exit at failure flag
@@ -205,7 +207,7 @@ ifeq ($(SDP_SIMULATION_ENABLED),false)
 endif
 
 taranta-link:
-	@echo "#            https://k8s.stfc.skao.int/$(KUBE_NAMESPACE)/taranta/dashboard"
+	@echo "#            https://${CLUSTER_DOMAIN}/$(KUBE_NAMESPACE)/taranta/dashboard"
 
 alarm-handler-configurator-link:
 	@echo "#            https://k8s.stfc.skao.int/$(KUBE_NAMESPACE)/alarm-handler/"
