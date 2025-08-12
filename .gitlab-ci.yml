@@ -154,6 +154,7 @@ stop-k8s-tmc-scaling:
   extends:
     - stop-k8s-test
   variables:
+    SERVICE_ACCOUNT: "ska-tmc-staging"
     KUBE_NAMESPACE: "ska-tmc-staging"
   script:
     - make k8s-delete-namespace
