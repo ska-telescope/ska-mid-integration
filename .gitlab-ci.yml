@@ -146,7 +146,7 @@ k8s-tmc-scaling:
   environment:
     name: ska-tmc-staging-env
     on_stop: stop-k8s-tmc-scaling
-    auto_stop_in: 1 minute
+
 
     
 stop-k8s-tmc-scaling:
