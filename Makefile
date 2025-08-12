@@ -25,9 +25,7 @@ DEPLOY_ALL_DISHES ?= false ## Flag to deploy all dishes or no
 
 CUSTOM_VALUES3 ?= 
 ifeq ($(strip $(DEPLOY_ALL_DISHES)),true)
-CUSTOM_VALUES3 = -f charts/ska-tmc-testing-mid/dish_scaled.yaml \
-				 --set ska-tango-taranta.ingress.hostname=$(CLUSTER_DOMAIN)
-
+CUSTOM_VALUES3 = -f charts/ska-tmc-testing-mid/dish_scaled.yaml
 endif
 # ----------------------------------------------------------------------------
 # Exit at failure flag
