@@ -79,7 +79,7 @@ CI_REGISTRY ?= gitlab.com
 # K8S_TEST_IMAGE_TO_TEST ?= artefact.skao.int/ska-tango-images-tango-itango:9.3.12## docker image that will be run for testing purpose
 K8S_TEST_IMAGE_TO_TEST ?= $(CAR_OCI_REGISTRY_HOST)/ska-cicd-k8s-tools-build-deploy:0.13.4
 
-TARANTA_ENABLED ?= true 
+TARANTA_ENABLED ?= false
 
 CI_PROJECT_DIR ?= .
 

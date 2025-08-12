@@ -137,9 +137,10 @@ k8s-tmc-scaling:
     DISH_SIMULATION_ENABLED: "true"
     SUBARRAY_COUNT: 4
     COUNT: 1
-    KUBE_NAMESPACE: "ska-tmc-staging"
+    KUBE_NAMESPACE: "integration-ska-tmc-staging"
     CI_KEEP_NAMESPACE: true
     K8S_TIMEOUT: "30m"
+    TARANTA_ENABLED: "true"
   script:
     - make taranta-link
   environment:
@@ -155,7 +156,7 @@ stop-k8s-tmc-scaling:
   tags:
     - ska-staging-tmc
   variables:
-    KUBE_NAMESPACE: "ska-tmc-staging"
+    KUBE_NAMESPACE: "integration-ska-tmc-staging"
   environment:
     name: ska-tmc-staging-env
     action: stop

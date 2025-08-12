@@ -43,7 +43,7 @@ ska-tango-base:
     use_pv: false
 
 ska-taranta:
-  enabled: true
+  enabled: false
   ingress:
     enabled: true
     nginx: true
