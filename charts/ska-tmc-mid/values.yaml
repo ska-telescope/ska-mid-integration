@@ -206,6 +206,7 @@ deviceServers:
     AdapterTimeOut: 2.0
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
+    CommandTimeOut: 30
     family: "leaf-node-csp"
     member: "0"
 
