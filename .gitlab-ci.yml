@@ -157,7 +157,7 @@ stop-k8s-tmc-scaling:
     KUBE_NAMESPACE: "ska-tmc-staging"
   script:
     - make k8s-delete-namespace
-    - kubectl delete namespace $(KUBE_NAMESPACE)
+    - kubectl delete namespace ska-tmc-staging
   environment:
     name: ska-tmc-staging-env
     action: stop
