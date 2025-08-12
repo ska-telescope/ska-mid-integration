@@ -44,6 +44,8 @@ ska-tango-base:
 
 ska-taranta:
   enabled: false
+  ska-tango-examples:
+    enabled: false
   ingress:
     enabled: true
     nginx: true
@@ -148,4 +150,8 @@ ska-mid-wms:
     enabled: false
     itango:
       enabled: false
-  
+
+ska-tango-tangogql:
+  ska-tango-base:
+    enabled: false
+
