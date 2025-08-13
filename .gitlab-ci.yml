@@ -145,6 +145,7 @@ k8s-tmc-scaling:
     - make taranta-link
   environment:
     name: ska-tmc-staging-env
+    auto_stop_in: never
     on_stop: stop-k8s-tmc-scaling
 
 
