@@ -1,7 +1,16 @@
 name: "mocks-{{.Release.Name}}"
 function: testing
 domain: mocks
-instances: ["01","02","03","04","05","001","036","063","100"]
+instances:
+  - "01"        
+  - "02"
+  - "03"
+  - "04"
+  - "05"
+{{- range .Values.global.dishes }}
+  - "{{ . }}"
+{{- end }}
+
 {{- $midSdpControlFqdn := .Values.global.sdp_master }}
 {{- $midSdpSubarrayFqdn1 := .Values.global.mid_sdp_subarray_1 }}
 {{- $midSdpSubarrayFqdn2 := .Values.global.mid_sdp_subarray_2 }}
