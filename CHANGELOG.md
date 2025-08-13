@@ -5,7 +5,7 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
-[1.5.0-rc.3]
+[1.6.0-rc.2]
 ************
 Added
 -----
@@ -13,6 +13,13 @@ Added
   Ensure that the "Assign Resource" succeeds even when the SDP block is empty.
 * Updated SubarrayNode image to 0.39.2
 
+[1.6.0-rc.1]
+************
+Added
+-----
+* TMC Subarray moves to FAULT after command timed out
+* TMC Restart command is updated to invoke abort and restart on sub system to bring obs state to EMPTY
+* TMC Subarray is updated to transition Obs State to FAULT after command failure
 
 [1.5.0-rc.2]
 ************
