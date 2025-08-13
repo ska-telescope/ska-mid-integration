@@ -64,8 +64,8 @@ server:
           - "{{.Values.deviceServers.centralnode.DishVccConfig.DishKvalueAggregationAllowedPercent}}"
         - name: "DishIDs"
           values:
-          {{- range .Values.global.dishes }}
-          - "SKA{{ . }}"
+          {{- range  (.Values.deviceServers.centralnode.DishIDs)  }}
+          - "{{ . }}"
           {{- end }}
         - name: "DishMasterFQDNs"
           values:
