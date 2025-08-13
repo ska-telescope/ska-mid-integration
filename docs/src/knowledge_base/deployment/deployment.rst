@@ -76,7 +76,7 @@ This option sets the timeout value till which the TMC components wait for
 completion of commands invoked on lower level Tango devices. This timeout 
 should be set for each TMC component. To set the desired timeout value, 
 navigate to **deviceServers -> <component name>** in `values.yaml` file. 
-Locate **CommandTimeOut** variable and set an integer value equivalant in 
+Locate **CommandTimeOutDefault** variable and set an integer value equivalant in 
 seconds.
 
 .. warning::
@@ -156,7 +156,7 @@ Central Node
     #. **DishIDs** : User can set this value to provide the ID's of dishes present in the deployment. Default is ["SKA001", "SKA036", "SKA063", "SKA100"]
     #. **LivelinessCheckPeriod** : This refers to the Period (in seconds) for the liveliness probe to monitor each device in a loop. Currently defaults to 2 seconds.
     #. **EventSubscriptionCheckPeriod** : This refers to the Period (in seconds) for the event subscriber to check the device subscriptions in a loop. Currently defaults to 2 seconds.
-    #. **CommandTimeOut** : This refers to the timeout (in seconds) for the command execution. Currently defaults to 120 seconds.
+    #. **CommandTimeOutDefault** : This refers to the timeout (in seconds) for the command execution. Currently defaults to 120 seconds.
     #. **DishVccInitTimeout** : This refers to the timeout (in seconds) for the dish vcc initialization. Currently defaults to 180 seconds.
     #. **family** : This refers to the family name of CentralNode TANGO device. Currently defaults to "central-node".
     #. **member** : This refers to the member of CentralNode TANGO device. Currently defaults to "0".
@@ -178,7 +178,7 @@ SDP Subarray Leaf Node
 
     #. **LivelinessCheckPeriod** : This refers to the Period (in seconds) for the liveliness probe to monitor each device in a loop. Currently defaults to 1.5 seconds.
     #. **EventSubscriptionCheckPeriod** : This refers to the Period (in seconds) for the event subscriber to check the device subscriptions in a loop. Currently defaults to 1.5 seconds.
-    #. **CommandTimeOut** : This refers to the timeout (in seconds) for the command execution. Currently defaults to 50 seconds.
+    #. **CommandTimeOutDefault** : This refers to the timeout (in seconds) for the command execution. Currently defaults to 50 seconds.
     #. **AdapterTimeOut** : This refers to the timeout (in seconds) for the adapter creation. This property is for internal use. Currently defaults to 2 seconds.
 
 SDP Master Leaf Node
@@ -203,7 +203,7 @@ CSP Subarray Leaf Node
     #. **DelayModelTimeInAdvance** : This indicates the time in seconds by which delay values need to be available in advance. Currently defaults to 30 seconds.
     #. **LivelinessCheckPeriod** :  his refers to the Period (in seconds) for the liveliness probe to monitor each device in a loop. Currently defaults to 1.5 seconds.
     #. **EventSubscriptionCheckPeriod** : This refers to the Period (in seconds) for the event subscriber to check the device subscriptions in a loop. Currently defaults to 1.5 seconds.
-    #. **CommandTimeOut** : This refers to the timeout (in seconds) for the command execution. Currently defaults to 50 seconds.
+    #. **CommandTimeOutDefault** : This refers to the timeout (in seconds) for the command execution. Currently defaults to 50 seconds.
     #. **AdapterTimeOut** : This refers to the timeout (in seconds) for the adapter creation. This property is for internal use. Currently defaults to 2 seconds.
     #. **TelmodelSource** : This refers to the telmodel source for array layout. Currently defaults to "gitlab://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata".
     #. **TelmodelPath** : This refers to the telmodel path for array layout. Currently defaults to "instrument/ska1_mid/layout/mid-layout.json".

@@ -151,7 +151,7 @@ deviceServers:
     KValueValidRange:
       min: 1
       max: 1177
-    CommandTimeOut: 120
+    CommandTimeOutDefault: 120
     DishVccInitTimeout: 180
     LivelinessCheckPeriod: 2.0
     EventSubscriptionCheckPeriod: 2.0
@@ -181,7 +181,7 @@ deviceServers:
   sdpsubarrayleafnode:
     enabled: true
     file: "data/sdpsubarrayleafnode.yaml"
-    CommandTimeOut: 50
+    CommandTimeOutDefault: 50
     AdapterTimeOut: 2
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
@@ -206,7 +206,7 @@ deviceServers:
     AdapterTimeOut: 2.0
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
-    CommandTimeOut: 30
+    CommandTimeOutDefault: 30
     family: "leaf-node-csp"
     member: "0"
 
@@ -218,7 +218,7 @@ deviceServers:
     DelayCadence: 10.0
     DelayValidityPeriod: 20.0
     DelayModelTimeInAdvance: 30
-    CommandTimeOut: 50
+    CommandTimeOutDefault: 50
     AdapterTimeOut: 2.0
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
