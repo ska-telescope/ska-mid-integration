@@ -188,6 +188,7 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set ska-tango-archiver.dbpassword=$(ARCHIVER_PWD)\
 	--set ska-tango-archiver.hostname=$(ARCHIVER_HOSTNAME)\
 	--set ska-tango-archiver.archwizard_config=$(ARCHWIZARD_CONFIG)\
+	--set vault.secretPath="kv/data/users/kvsudhirreddy/archiver"\
 	$(K8S_EXTRA_PARAMS)
 
 
