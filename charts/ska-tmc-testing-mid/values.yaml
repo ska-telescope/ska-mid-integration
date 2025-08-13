@@ -141,3 +141,6 @@ ska-tango-tangogql-ariadne:
   ska-tango-base:
     enabled: false
 
+ska-tango-tangogql:
+  ska-tango-base:
+    enabled: false
