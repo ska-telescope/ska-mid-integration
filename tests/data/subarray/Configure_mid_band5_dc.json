@@ -42,8 +42,7 @@
     "interface": "https://schema.skao.int/ska-csp-configurescan/4.1",
     "common": {
       "config_id": "my_config",
-      "frequency_band": "1",
-      "band5_downconversion_subband": "1"
+      "frequency_band": "1"
     },
     "midcbf": {
       "correlation": {
