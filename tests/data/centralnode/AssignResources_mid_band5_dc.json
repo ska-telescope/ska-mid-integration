@@ -1,0 +1,101 @@
+{
+  "interface": "https://schema.skao.int/ska-tmc-assignresources/2.2",
+  "transaction_id": "txn-....-00001",
+  "subarray_id": 1,
+  "dish": {
+    "receptor_ids": [
+      "SKA001",
+      "SKA036",
+      "SKA063",
+      "SKA100"
+    ]
+  },
+  "sdp": {
+    "interface": "https://schema.skao.int/ska-sdp-assignres/1.0",
+    "execution_block": {
+      "eb_id": "",
+      "max_length": 100,
+      "context": {},
+      "beams": [
+        {
+          "beam_id": "vis0",
+          "visibility_beam_id": 1,
+          "function": "visibilities"
+        }
+      ],
+      "scan_types": [
+        {
+          "scan_type_id": "my_scan",
+          "beams":
+            {
+              "vis0": {
+                "field_ref": "my_field",
+                "channels_ref": "vis_channels",
+                "polarisations_ref": "all"
+              }
+            }
+        }
+      ],
+      "channels": [
+        {
+          "channels_id": "vis_channels",
+          "spectral_windows": [
+            {
+              "spectral_window_id": "fsp_1_channels",
+              "count": 52080,
+              "start": 0,
+              "stride": 1,
+              "freq_min": 11450044800,
+              "freq_max": 12150000000
+            }
+          ]
+        }
+      ],
+      "polarisations": [
+        {
+          "polarisations_id": "all",
+          "corr_type": [
+            "XX",
+            "XY",
+            "YX",
+            "YY"
+          ]
+        }
+      ],
+      "fields": [
+        {
+          "field_id": "my_field",
+          "phase_dir": {
+            "target_name": "Polaris Australis",
+            "reference_frame": "icrs",
+            "attrs": {
+              "c1": 317.19966667,
+              "c2": -88.95636111
+            }
+          }
+        }
+      ]
+    },
+    "processing_blocks": [
+      {
+        "pb_id": "",
+        "sbi_refs": [
+          
+        ],
+        "script": {
+          "version": "5.1.1",
+          "name": "vis_receive",
+          "kind": "realtime"
+        }
+      }
+    ],
+    "resources": {
+      "receptors": [
+        "SKA001",
+        "SKA036",
+        "SKA063",
+        "SKA100"
+      ]
+    }
+  }
+}
