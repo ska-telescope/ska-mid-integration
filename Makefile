@@ -21,7 +21,12 @@ FILE ?= tests## A specific test file to pass to pytest
 ADD_ARGS ?= ## Additional args to pass to pytest
 FILE_NAME?= alarm_rules.txt
 
+DEPLOY_ALL_DISHES ?= false ## Flag to deploy all dishes or no
 
+CUSTOM_VALUES3 ?= 
+ifeq ($(strip $(DEPLOY_ALL_DISHES)),true)
+CUSTOM_VALUES3 = -f charts/ska-tmc-testing-mid/dish_scaled.yaml
+endif
 # ----------------------------------------------------------------------------
 # Exit at failure flag
 #
@@ -154,7 +159,8 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set tmc-mid.deviceServers.cspsubarrayleafnode.CommandTimeOut=$(CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT)\
 	--set tmc-mid.deviceServers.dishleafnode.CommandTimeOut=$(DISH_LEAF_NODE_COMMAND_TIMEOUT)\
 	$(CUSTOM_VALUES1)\
-	$(CUSTOM_VALUES2)
+	$(CUSTOM_VALUES2)\
+	$(CUSTOM_VALUES3)
 
 PYTHON_VARS_BEFORE_PYTEST ?= PYTHONPATH=.:./src \
 							 TANGO_HOST=$(TANGO_HOST) \
@@ -210,7 +216,7 @@ ifeq ($(SDP_SIMULATION_ENABLED),false)
 endif
 
 taranta-link:
-	@echo "#            https://k8s.stfc.skao.int/$(KUBE_NAMESPACE)/taranta/dashboard"
+	@echo "#            https://${CLUSTER_DOMAIN}/$(KUBE_NAMESPACE)/taranta/dashboard"
 
 alarm-handler-configurator-link:
 	@echo "#            https://k8s.stfc.skao.int/$(KUBE_NAMESPACE)/alarm-handler/"
