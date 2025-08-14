@@ -1,7 +1,7 @@
 name: "dishpointingdevice-test"
 function: dish-pointing
 domain: pattern-mapping
-instances:                                   
+instances:
 {{- range .Values.global.dishes }}
   {{- $num := regexReplaceAll "^[A-Za-z]+" . "" }}
   - "{{ $num }}"
@@ -23,15 +23,19 @@ server:
   {{- $isSimulatedDish := .Values.deviceServers.mocks.dish }}
   {{- $real_dish_name := .Values.global.namespace_dish.dish_names }}
   {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true)  }}
-  {{- range $instance := .Values.global.dishes }}
-  {{- $instance_list = append $instance_list ($instance) }}
-  {{- end }}
+    {{- range $instance := .Values.global.dishes }}
+      {{- $num := regexReplaceAll "^[A-Za-z]+" $instance "" }}
+      {{- $instance_list = append $instance_list $num }}
+    {{- end }}
   {{- else }}
-  {{- range $instance_real := $real_dish_name }}
-  {{- $match := (regexFind "SKA(\\d{3})" $instance_real) -}}
-  {{- $instance_list = append $instance_list (trimPrefix "SKA" $match) }}
+    {{- range $instance_real := $real_dish_name }}
+      {{- $digits := regexFind "(\\d{3})" $instance_real }}
+      {{- if $digits }}
+        {{- $instance_list = append $instance_list $digits }}
+      {{- end }}
+    {{- end }}
   {{- end }}
-  {{- end }}
+
   {{- range $index, $number := $instance_list }}
     - name: "{{ $number }}"
       classes:
