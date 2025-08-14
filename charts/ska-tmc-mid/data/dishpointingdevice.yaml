@@ -3,7 +3,8 @@ function: dish-pointing
 domain: pattern-mapping
 instances:                                   
 {{- range .Values.global.dishes }}
-  - "{{ . }}"
+  {{- $num := regexReplaceAll "^[A-Za-z]+" . "" }}
+  - "{{ $num }}"
 {{- end }}
 entrypoints:
   - name: "ska_dishln_pointing_device.dishln_pointing_device.DishPointingDevice"
