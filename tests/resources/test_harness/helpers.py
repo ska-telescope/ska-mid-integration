@@ -4,6 +4,7 @@ import os
 import re
 import time
 from datetime import datetime
+from enum import Enum
 from typing import Any, List
 
 from astropy.time import Time
@@ -614,15 +615,25 @@ def generate_id(id_pattern: str) -> str:
 
 def generate_eb_pb_ids(input_json: dict):
     """
-    Method to generate different eb_id and pb_id
+    Generate EB and PB IDs for the input SDP section if applicable.
 
-    :param input_json: json to utilised to update values.
+    :param input_json: Dictionary representing the assign
+     resources JSON input.
     """
-    input_json["sdp"]["execution_block"]["eb_id"] = generate_id(
-        "eb-mvp01-********-*****"
-    )
-    for pb in input_json["sdp"]["processing_blocks"]:
-        pb["pb_id"] = generate_id("pb-mvp01-********-*****")
+    sdp = input_json.get("sdp", {})
+
+    # Handle execution_block only if it exists
+    execution_block = input_json.get("sdp", {}).get("execution_block")
+    if execution_block is not None:
+        # Assumes execution_block is a dict and must follow schema if present
+        execution_block["eb_id"] = generate_id("eb-mvp01-********-*****")
+        # Add more mandatory execution_block fields here if needed
+
+    # Handle processing_blocks if they exist
+    processing_blocks = sdp.get("processing_blocks")
+    if processing_blocks and isinstance(processing_blocks, list):
+        for pb in processing_blocks:
+            pb["pb_id"] = generate_id("pb-mvp01-********-*****")
 
 
 def check_subarray_instance(device, subarray_id):
@@ -719,15 +730,29 @@ def wait_and_validate_device_attribute_value(
 
 def update_eb_pb_ids(input_json: str) -> str:
     """
-    Method to generate different eb_id and pb_id
-    :param input_json: json to utilised to update values.
+    Method to safely generate different eb_id and pb_id.
+    Only updates execution_block and processing_blocks if present.
+
+    :param input_json: JSON string used to update values.
+    :return: Updated JSON string.
     """
-    input_json = json.loads(input_json)
-    input_json["sdp"]["execution_block"]["eb_id"] = generate_id("eb-test")
-    for pb in input_json["sdp"]["processing_blocks"]:
-        pb["pb_id"] = generate_id("pb-test")
-    input_json = json.dumps(input_json)
-    return input_json
+    input_data = json.loads(input_json)
+
+    sdp_data = input_data.get("sdp", {})
+
+    # Safely update execution_block ID
+    execution_block = sdp_data.get("execution_block")
+    if isinstance(execution_block, dict):  # ensure it's a dict and not None
+        execution_block["eb_id"] = generate_id("eb-test")
+
+    # Safely update each processing block ID
+    processing_blocks = sdp_data.get("processing_blocks")
+    if isinstance(processing_blocks, list):
+        for pb in processing_blocks:
+            if isinstance(pb, dict):  # Ensure each pb is a dict
+                pb["pb_id"] = generate_id("pb-test")
+
+    return json.dumps(input_data)
 
 
 def update_scan_type(configure_json: str, json_value: str) -> str:
@@ -855,6 +880,52 @@ def check_for_device_command_event_tracer(
     LOGGER.info("The assertion data is %s", assertion_data)
 
     return event_found
+
+
+def check_device_event_value(device, attr_name, expected_value, event_tracer):
+    """Check if a device emitted an event with the expected attribute value."""
+    if isinstance(expected_value, Enum):
+        expected_str = expected_value.name.upper()
+    else:
+        expected_str = str(expected_value).split(".")[-1].upper()
+
+    LOGGER.info(
+        "Waiting for %s.%s == %s",
+        device.dev_name(),
+        attr_name,
+        expected_str,
+    )
+
+    def _matches(e):
+        # Extract the device name from the event
+        dev_name = getattr(e, "device_name", getattr(e, "device", None))
+
+        device_match = e.has_device(device.dev_name())
+        attr_match = e.has_attribute(attr_name)
+
+        if isinstance(e.attribute_value, Enum):
+            actual_value = e.attribute_value.name.upper()
+        else:
+            actual_value = str(e.attribute_value).split(".")[-1].upper()
+
+        value_match = actual_value == expected_str
+
+        LOGGER.info(
+            "Event: dev=%s attr=%s value=%r match_dev=%s "
+            "match_attr=%s match_val=%s",
+            dev_name,
+            getattr(e, "attribute_name", None),
+            e.attribute_value,
+            device_match,
+            attr_match,
+            value_match,
+        )
+
+        return device_match and attr_match and value_match
+
+    matching_events = event_tracer.query_events(_matches, timeout=100)
+    LOGGER.info("Matching events found: %s", matching_events)
+    return bool(matching_events)
 
 
 def retry_tango_command(
