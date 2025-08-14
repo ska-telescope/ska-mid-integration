@@ -29,7 +29,7 @@ httpx = "^0.19.0"
 msgpack = "1.0.7"
 msgpack_numpy = "0.4.8"
 astropy = "^5.0.4"
-ska-telmodel = "1.15.1"
+ska-telmodel = { git = "https://gitlab.com/ska-telescope/ska-telmodel.git", branch = "sah-1768" }
 ska-ser-xray = "^0.6.0"
 ska-integration-test-harness = "^0.2.4"
 assertpy = "^1.1"
