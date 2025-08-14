@@ -2,14 +2,16 @@ name: "mocks-{{.Release.Name}}"
 function: testing
 domain: mocks
 instances:
-  - "01"        
+  - "01"
   - "02"
   - "03"
   - "04"
   - "05"
 {{- range .Values.global.dishes }}
-  - "{{ . }}"
+  {{- $num := regexReplaceAll "^[A-Za-z]+" . "" }}
+  - "{{ $num }}"
 {{- end }}
+
 
 {{- $midSdpControlFqdn := .Values.global.sdp_master }}
 {{- $midSdpSubarrayFqdn1 := .Values.global.mid_sdp_subarray_1 }}
@@ -63,15 +65,16 @@ server:
           devices:
           - name: "{{ $midCspSubarray1 }}"
           - name: "{{ $midCspSubarray2 }}"
-        {{- end }}
-        {{- if eq $isSimulatedDish true }}
-  {{- range .Values.global.dishes }}
-    - name: "{{ . }}"
+      {{- end }}
+      {{- if eq $isSimulatedDish true }}
+{{- range .Values.global.dishes }}
+  {{- $num := regexReplaceAll "^[A-Za-z]+" . "" }}
+    - name: "{{ $num }}"
       classes:
         - name: "HelperDishDevice"
           devices:
-          - name: "{{ $dishManagerSuffix }}{{ printf . }}"
-      {{- end }}
+            - name: "{{ $dishManagerSuffix }}{{ $num }}"
+{{- end }}
       {{- end }}
 depends_on:
   - device: sys/database/2
@@ -80,4 +83,3 @@ image:
   image: "{{.Values.skatmccommon.image.image}}"
   tag: "{{.Values.skatmccommon.image.tag}}"
   pullPolicy: "{{.Values.skatmccommon.image.pullPolicy}}"
-

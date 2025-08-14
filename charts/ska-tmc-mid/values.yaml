@@ -23,7 +23,7 @@ subarray_count: 2
 global:
   minikube: false
   tango_host: databaseds-tango-base-test:10000
-  dishes: ["001","036", "063", "100"]
+  dishes: ["SKA001","SKA036", "SKA063", "SKA100"]
 
 
 
@@ -133,7 +133,7 @@ skatmccommon:
 resources:
   requests:
     cpu: 200m
-    memory: 200Mi
+    memory: 
 
 deviceServers:
   centralnode:

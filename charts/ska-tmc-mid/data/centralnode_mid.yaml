@@ -65,7 +65,7 @@ server:
         - name: "DishIDs"
           values:
           {{- range .Values.global.dishes }}
-          - "SKA{{ . }}"
+          - "{{ . }}"
           {{- end }}
         - name: "DishMasterFQDNs"
           values:
