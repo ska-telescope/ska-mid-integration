@@ -1,5 +1,5 @@
 Feature:  TMC executes band 5 down conversion observation
-    @SKA_mid @XTP-85071 @XTP-28347
+    @SKA_mid @XTP-87827 @XTP-28347
     Scenario: TMC executes band 5 down conversion observation
         Given the TMC is On
         And the subarray is in IDLE obsState

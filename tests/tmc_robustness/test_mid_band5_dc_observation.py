@@ -19,11 +19,11 @@ from tests.resources.test_support.constant import COMMAND_COMPLETED
 @pytest.mark.SKA_mid
 @scenario(
     "../features/band5_down_conversion_observation.feature",
-    "TMC validates reconfigure functionality",
+    "TMC executes band 5 down conversion observation",
 )
-def test_multiple_configure_functionality():
+def test_band5_down_conversion_observation():
     """
-    Test TMC allows multiple configuration
+    Test for the TMC to executes band 5 down conversion observation
 
     """
 
@@ -76,12 +76,12 @@ def given_subarray_in_idle(
     central_node_mid: CentralNodeWrapperMid,
 ):
     """
-    Method to check subarray is in READY obsState
+    Method to check subarray is in IDLE obsState
 
     Args:
         command_input_factory: fixture for creating input required
         for command
-        event_recorder: Fixture for EventRecorder class
+        event_tracer: Fixture for EventRecorder class
         central_node_mid: Fixture for a TMC CentralNode wrapper class
     """
 
@@ -122,22 +122,20 @@ def given_subarray_in_idle(
 
 
 @when("the command configure is issued with band 5 dc configuration")
-def invoke_configure(
+def invoke_band5_dc_configure(
     subarray_node: SubarrayNodeWrapper,
     command_input_factory: JsonFactory,
     event_tracer: TangoEventTracer,
 ):
     """
-    Method to check subarray is in READY obsState
+    Method to execute band 5 observation and check if the subarray is in
+    READY obsState
 
     Args:
         subarray_node: Fixture for a Subarray Node wrapper class
         command_input_factory: fixture for creating input required
         for command
-        event_recorder: Fixture for EventRecorder class
-        central_node_mid: Fixture for a TMC CentralNode wrapper class
-        subarray_id (str): Subarray ID
-        dish_ids (str): Comma-separated IDs of DISH components.
+        event_tracer: Fixture for EventRecorder class
     """
     event_tracer.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
@@ -183,22 +181,19 @@ def check_for_ready(
 
 
 @then(parsers.parse("the subarray executes scan"))
-def invoke_successive_configure(
+def execute_scan(
     subarray_node: SubarrayNodeWrapper,
     command_input_factory: JsonFactory,
     event_tracer: TangoEventTracer,
 ):
     """
-    Method to check subarray is in READY obsState
+    Method to check subarray performs scan
 
     Args:
         subarray_node: Fixture for a Subarray Node wrapper class
         command_input_factory: fixture for creating input required
         for command
-        event_recorder: Fixture for EventRecorder class
-        central_node_mid: Fixture for a TMC CentralNode wrapper class
-        subarray_id (str): Subarray ID
-        dish_ids (str): Comma-separated IDs of DISH components.
+        event_tracer: Fixture for EventRecorder class
     """
     event_tracer.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
