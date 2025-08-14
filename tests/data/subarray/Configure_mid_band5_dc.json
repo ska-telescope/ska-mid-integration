@@ -39,7 +39,7 @@
     ]
   },
   "csp": {
-    "interface": "https://schema.skao.int/ska-csp-configurescan/4.1",
+    "interface": "https://schema.skao.int/ska-csp-configurescan/8.1",
     "common": {
       "config_id": "my_config",
       "frequency_band": "1"
