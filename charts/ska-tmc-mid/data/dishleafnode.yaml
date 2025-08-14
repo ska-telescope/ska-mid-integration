@@ -1,7 +1,7 @@
 name: "dishleafnode-test"
 function: telescope-monitoring
 domain: general-monitoring
-instances:                                       
+instances:
 {{- range .Values.global.dishes }}
   {{- $num := regexReplaceAll "^[A-Za-z]+" . "" }}
   - "{{ $num }}"
@@ -28,16 +28,21 @@ server:
   {{- $isSimulatedDish := .Values.deviceServers.mocks.dish }}
   {{- $isDishAbortEnabled := .Values.deviceServers.dishleafnode.IsDishAbortEnabled }}
   {{- $real_dish_name := .Values.global.namespace_dish.dish_names }}
-  {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true)  }}
-  {{- range $instance := .Values.global.dishes }}
-  {{- $instance_list = append $instance_list ($instance) }}
-  {{- end }}
+
+  {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
+    {{- range $instance := .Values.global.dishes }}
+      {{- $num := regexReplaceAll "^[A-Za-z]+" $instance "" }}
+      {{- $instance_list = append $instance_list $num }}
+    {{- end }}
   {{- else }}
-  {{- range $instance_real := $real_dish_name }}
-  {{- $match := (regexFind "SKA(\\d{3})" $instance_real) -}}
-  {{- $instance_list = append $instance_list (trimPrefix "SKA" $match) }}
+    {{- range $instance_real := $real_dish_name }}
+      {{- $digits := regexFind "(\\d{3})" $instance_real }}
+      {{- if $digits }}
+        {{- $instance_list = append $instance_list $digits }}
+      {{- end }}
+    {{- end }}
   {{- end }}
-  {{- end }}
+
   {{- range $index, $number := $instance_list }}
     - name: "{{ $number }}"
       classes:
@@ -47,14 +52,14 @@ server:
           properties:
             - name: "MidDishControl"
               values:
-                {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true)  }}
-                - "{{ $dishManagerSuffix }}{{ printf $number }}" # Mock device FQDN
+                {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
+                - "{{ $dishManagerSuffix }}{{ $number }}" # Mock device FQDN
                 {{- else }}
-                {{- range $index_real, $instance_real := $real_dish_name }}
-                {{- if eq $index_real $index }}
+                  {{- range $index_real, $instance_real := $real_dish_name }}
+                    {{- if eq $index_real $index }}
                 - "{{ $instance_real }}"
-                {{- end }}
-                {{- end }}
+                    {{- end }}
+                  {{- end }}
                 {{- end }}
             - name: "MidPointingDevice"
               values:
@@ -92,7 +97,6 @@ server:
             - name: "DishAvailabilityCheckTimeout"
               values:
                 - "{{ $DishAvailabilityCheckTimeout }}"
-
   {{- end }}
 depends_on:
   - device: sys/database/2
