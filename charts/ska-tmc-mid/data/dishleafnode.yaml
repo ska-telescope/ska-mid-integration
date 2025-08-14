@@ -3,7 +3,8 @@ function: telescope-monitoring
 domain: general-monitoring
 instances:                                       
 {{- range .Values.global.dishes }}
-  - "{{ . }}"
+  {{- $num := regexReplaceAll "^[A-Za-z]+" . "" }}
+  - "{{ $num }}"
 {{- end }}
 entrypoints:
   - name: "ska_tmc_dishleafnode.dish_leaf_node.MidTmcLeafNodeDish"
