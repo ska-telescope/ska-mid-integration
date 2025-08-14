@@ -1,0 +1,74 @@
+{
+  "interface": "https://schema.skao.int/ska-tmc-configure/4.0",
+  "dish": {
+    "receiver_band": "5b",
+    "band5_downconversion_subband": "1"
+  },
+  "pointing": {
+    "wrap_sector": 0,
+    "ca_offset_arcsec": 0.0,
+    "ie_offset_arcsec": 0.0,
+    "groups": [
+      {
+        "receptors": [
+          "SKA001",
+          "SKA036",
+          "SKA063",
+          "SKA100"
+        ],
+        "field": {
+          "target_name": "Polaris Australis",
+          "reference_frame": "icrs",
+          "attrs": {
+            "c1": 317.19966667,
+            "c2": -88.95636111
+          }
+        },
+        "trajectory": {
+          "name": "fixed",
+          "attrs": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        "projection": {
+          "name": "SIN",
+          "alignment": "icrs"
+        }
+      }
+    ]
+  },
+  "csp": {
+    "interface": "https://schema.skao.int/ska-csp-configurescan/8.1",
+    "common": {
+      "config_id": "my_config",
+      "frequency_band": "1"
+    },
+    "midcbf": {
+      "correlation": {
+        "processing_regions": [
+          {
+            "fsp_ids": [
+              1,
+              2,
+              3,
+              4
+            ],
+            "start_freq": 350006720,
+            "channel_width": 13440,
+            "channel_count": 52080,
+            "sdp_start_channel_id": 0,
+            "integration_factor": 1
+          }
+        ]
+      }
+    }
+  },
+  "sdp": {
+    "interface": "https://schema.skao.int/ska-sdp-configure/1.0",
+    "scan_type": "science_A"
+  },
+  "tmc": {
+    "scan_duration": 10.0
+  }
+}
