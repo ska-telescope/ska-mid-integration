@@ -124,6 +124,7 @@ dishleafnode:
     tag: 0.23.1
     pullPolicy: IfNotPresent
 
+  
 skatmccommon:
   image:
     registry: artefact.skao.int

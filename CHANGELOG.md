@@ -5,6 +5,14 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[Unreleased]
+************
+Added
+-----
+* Added a new test case to verify Bug SKB-617:
+  Ensure that the "Assign Resource" succeeds even when the SDP block is empty.
+* Updated helper in common and also update image to 0.28.8
+
 [1.6.0-rc.1]
 ************
 Added
