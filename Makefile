@@ -157,7 +157,7 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set tmc-mid.deviceServers.subarraynode.CommandTimeOut=$(SUBARRAY_COMMAND_TIMEOUT)\
 	--set tmc-mid.deviceServers.sdpsubarrayleafnode.CommandTimeOutDefault=$(SDP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT)\
 	--set tmc-mid.deviceServers.cspsubarrayleafnode.CommandTimeOutDefault=$(CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT)\
-	--set tmc-mid.deviceServers.dishleafnode.CommandTimeOut=$(DISH_LEAF_NODE_COMMAND_TIMEOUT)\
+	--set tmc-mid.deviceServers.dishleafnode.CommandTimeOutDefault=$(DISH_LEAF_NODE_COMMAND_TIMEOUT)\
 	$(CUSTOM_VALUES1)\
 	$(CUSTOM_VALUES2)\
 	$(CUSTOM_VALUES3)

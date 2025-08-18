@@ -212,7 +212,7 @@ Dish Leaf Node
 ^^^^^^^^^^^^^^^^^^^^^^^^
     #. **LivelinessCheckPeriod** : This refers to the Period (in seconds) for the liveliness probe to monitor each device in a loop. Currently defaults to 1.5 seconds.
     #. **EventSubscriptionCheckPeriod** : This refers to the Period (in seconds) for the event subscriber to check the device subscriptions in a loop. Currently defaults to 1.5 seconds.
-    #. **CommandTimeOut** : This refers to the timeout (in seconds) for the command execution. Currently defaults to 90 seconds.
+    #. **CommandTimeOutDefault** : This refers to the timeout (in seconds) for the command execution. Currently defaults to 90 seconds.
     #. **MaxTrackTableRetry** :This refers to the maximum retries for the programTrackTable write operation. Currently defaults to 3.
     #. **TrackTableRetryDuration** : This refers to the retry duration (in seconds) for programTrackTable write operation in seconds. Currently defaults to 0.2 seconds.
     #. **DishAvailabilityCheckTimeout** : This refers to the timeout for the dish availability check during intialisation. This property is for internal use. Currently defaults to 3 seconds.
