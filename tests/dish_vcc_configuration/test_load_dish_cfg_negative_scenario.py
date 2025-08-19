@@ -220,7 +220,7 @@ def test_dish_vcc_command_status_complete(central_node_mid, event_recorder):
 @then(parsers.parse("TMC rejects the command with error {error_message}"))
 def test_tmc_rejects_command_with_error(error_message):
     """Test validate that command failed with error message"""
-    assert pytest.command_result_code == ResultCode.REJECTED
+    assert pytest.command_result_code[0] == ResultCode.REJECTED
     assert error_message in pytest.command_result_message[0]
 
 
