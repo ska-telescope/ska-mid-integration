@@ -45,7 +45,7 @@ def test_central_node_return_error_for_invalid_file():
 
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
-@pytest.mark.skip(reason="Rewrite the test scenarion")
+@pytest.mark.test
 @scenario(
     "../features/load_dish_cfg_command_negative_scenario.feature",
     "TMC returns error when invalid dish id is provided in configuration",
@@ -221,10 +221,19 @@ def test_dish_vcc_command_status_complete(central_node_mid, event_recorder):
 
 
 @then(parsers.parse("TMC rejects the command with error {error_message}"))
-def test_tmc_rejects_command_with_error(error_message):
+def test_tmc_rejects_command_with_error(
+    error_message, event_recorder, central_node_mid
+):
     """Test validate that command failed with error message"""
-    assert pytest.command_result_code[0] == ResultCode.REJECTED
-    assert error_message in pytest.command_result_message[0]
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+    assert event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (ResultCode.FAILED, error_message),
+        lookahead=5,
+    )
 
 
 @then(
@@ -276,11 +285,10 @@ def invoke_command_with_invalid_dish_id(
         "load_dish_cfg_invalid_dish_id", command_input_factory
     )
 
-    result_code, message = central_node_mid.load_dish_vcc_configuration(
+    result_code, _ = central_node_mid.load_dish_vcc_configuration(
         load_dish_cfg_json
     )
-    pytest.command_result_code = result_code
-    pytest.command_result_message = message
+    assert result_code == ResultCode.QUEUED
 
 
 @when(
