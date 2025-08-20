@@ -5,6 +5,17 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[1.6.0]
+************
+This is the final version of TMC Mid delivering features SP-5340 and SP-5341
+Both the features improve TMC robustness by handling inconsistent subsystem obsStates.
+
+Added
+-----
+* TMC Subarray moves to FAULT after command timed out
+* TMC Restart command is updated to invoke abort and restart on sub system to bring obs state to EMPTY
+* TMC Subarray is updated to transition Obs State to FAULT after command failure
+
 [1.6.0-rc.1]
 ************
 Added
