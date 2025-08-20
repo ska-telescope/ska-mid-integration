@@ -272,6 +272,7 @@ def test_tmc_rejects_command_for_duplicate_vcc_id(
 ):
     """Test validate that command failed with error message"""
 
+    exp_msg = "Duplicate Vcc ids found in json"
     event_recorder.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
     )
@@ -280,11 +281,10 @@ def test_tmc_rejects_command_for_duplicate_vcc_id(
         "longRunningCommandResult",
         (
             Anything,
-            json.dumps([ResultCode.FAILED, Anything]),
+            json.dumps([ResultCode.FAILED, exp_msg]),
         ),
         lookahead=5,
     )
-    exp_msg = "Duplicate Vcc ids found in json"
     assert exp_msg in json.loads(assertion_data["attribute_value"][1])[1]
 
 
