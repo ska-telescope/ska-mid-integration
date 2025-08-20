@@ -16,10 +16,14 @@ instances:
 {{- $midSdpControlFqdn := .Values.global.sdp_master }}
 {{- $midSdpSubarrayFqdn1 := .Values.global.mid_sdp_subarray_1 }}
 {{- $midSdpSubarrayFqdn2 := .Values.global.mid_sdp_subarray_2 }}
+{{- $midSdpSubarrayFqdn3 := .Values.global.mid_sdp_subarray_3 }}
+{{- $midSdpSubarrayFqdn4 := .Values.global.mid_sdp_subarray_4 }}
 {{- $midSdpQueueConnector := .Values.global.mid_sdp_queueconnector }}
 {{- $midCspControl := .Values.global.mid_csp_control }}
 {{- $midCspSubarray1 := .Values.global.mid_csp_subarray_1 }}
 {{- $midCspSubarray2 := .Values.global.mid_csp_subarray_2 }}
+{{- $midCspSubarray3 := .Values.global.mid_csp_subarray_3 }}
+{{- $midCspSubarray4 := .Values.global.mid_csp_subarray_4 }}
 {{- $dishManagerSuffix := .Values.global.dish_manager_suffix }}
 entrypoints:
   - name: "ska_tmc_common.test_helpers.helper_base_device.HelperBaseDevice"
@@ -46,6 +50,8 @@ server:
           devices:
           - name: "{{ $midSdpSubarrayFqdn1 }}"
           - name: "{{ $midSdpSubarrayFqdn2 }}"
+          - name: "{{ $midSdpSubarrayFqdn3 }}"
+          - name: "{{ $midSdpSubarrayFqdn4 }}"
     - name: "03"
       classes:
         - name: "HelperSdpQueueConnector"
@@ -65,6 +71,8 @@ server:
           devices:
           - name: "{{ $midCspSubarray1 }}"
           - name: "{{ $midCspSubarray2 }}"
+          - name: "{{ $midCspSubarray3 }}"
+          - name: "{{ $midCspSubarray4 }}"
       {{- end }}
       {{- if eq $isSimulatedDish true }}
 {{- range .Values.global.dishes }}
