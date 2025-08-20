@@ -1,5 +1,8 @@
+import json
+
 import pytest
 from pytest_bdd import parsers, scenario, then, when
+from ska_tango_testing.mock.placeholders import Anything
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.event_recorder import EventRecorder
@@ -50,20 +53,31 @@ def invoke_load_dish_cfg(
     load_dish_cfg_json = prepare_json_args_for_centralnode_commands(
         "kvalue_out_of_range", command_input_factory
     )
-
-    result_code, message = central_node_mid.load_dish_vcc_configuration(
+    result_code, _ = central_node_mid.load_dish_vcc_configuration(
         load_dish_cfg_json
     )
 
-    pytest.command_result_code = result_code
-    pytest.command_result_message = message
+    assert result_code == ResultCode.QUEUED
 
 
 @then(parsers.parse("TMC rejects the command with error {error_message}"))
-def test_tmc_rejects_command_with_error(error_message: str):
+def test_tmc_rejects_command_with_error(
+    error_message: str, event_recorder, central_node_mid
+):
     """
     Test validate that command failed with error message
     :param error_message: error message to be validated for command rejection
     """
-    assert pytest.command_result_code[0] == ResultCode.REJECTED
-    assert error_message in pytest.command_result_message[0]
+
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
+    )
+
+    assertion_data = event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (Anything, json.dumps([ResultCode.FAILED, error_message])),
+        lookahead=5,
+    )
+
+    assert error_message in json.loads(assertion_data["attribute_value"][1])[1]
