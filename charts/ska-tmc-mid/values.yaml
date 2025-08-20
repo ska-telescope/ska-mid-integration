@@ -98,28 +98,28 @@ sdpleafnodes:
   image:
     registry: artefact.skao.int
     image: ska-tmc-sdpleafnodes
-    tag: 0.23.3
+    tag: 0.24.0
     pullPolicy: IfNotPresent
 
 cspmasterleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.27.5
+    tag: 0.31.0
     pullPolicy: IfNotPresent
 
 cspsubarrayleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.27.5
+    tag: 0.31.0
     pullPolicy: IfNotPresent
 
 dishleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-dishleafnode
-    tag: 0.23.1
+    tag: 0.24.0
     pullPolicy: IfNotPresent
 
   
@@ -127,7 +127,7 @@ skatmccommon:
   image:
     registry: artefact.skao.int
     image: ska-tmc-common
-    tag: 0.28.8
+    tag: 0.30.0
     pullPolicy: IfNotPresent
 
 resources:
@@ -150,7 +150,7 @@ deviceServers:
     KValueValidRange:
       min: 1
       max: 1177
-    CommandTimeOut: 120
+    CommandTimeOutDefault: 120
     DishVccInitTimeout: 180
     LivelinessCheckPeriod: 2.0
     EventSubscriptionCheckPeriod: 2.0
@@ -180,7 +180,7 @@ deviceServers:
   sdpsubarrayleafnode:
     enabled: true
     file: "data/sdpsubarrayleafnode.yaml"
-    CommandTimeOut: 50
+    CommandTimeOutDefault: 50
     AdapterTimeOut: 2
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
@@ -205,7 +205,7 @@ deviceServers:
     AdapterTimeOut: 2.0
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
-    CommandTimeOut: 30
+    CommandTimeOutDefault: 30
     family: "leaf-node-csp"
     member: "0"
 
@@ -217,7 +217,7 @@ deviceServers:
     DelayCadence: 10.0
     DelayValidityPeriod: 20.0
     DelayModelTimeInAdvance: 30
-    CommandTimeOut: 50
+    CommandTimeOutDefault: 50
     AdapterTimeOut: 2.0
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
@@ -233,7 +233,7 @@ deviceServers:
       requests:
         cpu: 2000m
         memory: 300Mi
-    CommandTimeOut: 90
+    CommandTimeOutDefault: 90
     MaxTrackTableRetry: 3
     TrackTableRetryDuration: 0.2
     LivelinessCheckPeriod: 1.5

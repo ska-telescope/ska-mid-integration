@@ -99,7 +99,6 @@ k8s-test:
     - XRAY_TEST_RESULT_FILE="build/cucumber.json" make xray-publish
 
 k8s-test-mid-restart:
-  when: manual
   extends:
     - k8s-test
   variables:
@@ -124,7 +123,6 @@ stop-k8s-test-tmc-mid-restart:
     KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-mid-restart'
 
 k8s-test-batch2:
-  when: manual
   extends:
     - k8s-test
   variables:
