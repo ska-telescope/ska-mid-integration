@@ -24,7 +24,7 @@ from tests.resources.test_support.constant import (
 
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
-@pytest.mark.skip(reason="Rewrite the test scenarion")
+@pytest.mark.test
 @scenario(
     "../features/load_dish_cfg_command_negative_scenario.feature",
     "TMC returns error message when non existent file is provided "
@@ -59,7 +59,7 @@ def test_central_node_return_error_for_invalid_dish_id():
 
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
-@pytest.mark.skip(reason="Rewrite the test scenarion")
+@pytest.mark.test
 @scenario(
     "../features/load_dish_cfg_command_negative_scenario.feature",
     "TMC returns error when duplicate vcc id is provided in configuration",
@@ -141,8 +141,7 @@ def invoke_load_dish_cfg(central_node_mid, command_input_factory, file_name):
     result_code, message = central_node_mid.load_dish_vcc_configuration(
         load_dish_cfg_json
     )
-    pytest.command_result_code = result_code
-    pytest.command_result_message = message
+    result_code == ResultCode.QUEUED
 
 
 @given("a LoadDishCfg command is currently in progress")
@@ -252,26 +251,41 @@ def test_validates_longrunningcommandresult_with_error(
     event_recorder.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
     )
-    assert event_recorder.has_change_event_occurred(
+    assertion_data = event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
         (
-            pytest.command_result_message[0],
+            Anything,
             json.dumps([ResultCode.FAILED, error_message]),
         ),
         lookahead=5,
     )
 
+    assert error_message in json.loads(assertion_data["attribute_value"][1])[1]
+
 
 @then(
     "TMC rejects the command with error due to Duplicate Vcc ids found in json"
 )
-def test_tmc_rejects_command_for_duplicate_vcc_id():
+def test_tmc_rejects_command_for_duplicate_vcc_id(
+    event_recorder, central_node_mid
+):
     """Test validate that command failed with error message"""
-    assert pytest.command_result_code == ResultCode.REJECTED
-    assert (
-        "Duplicate Vcc ids found in json" in pytest.command_result_message[0]
+
+    event_recorder.subscribe_event(
+        central_node_mid.central_node, "longRunningCommandResult"
     )
+    assertion_data = event_recorder.has_change_event_occurred(
+        central_node_mid.central_node,
+        "longRunningCommandResult",
+        (
+            Anything,
+            json.dumps([ResultCode.FAILED, Anything]),
+        ),
+        lookahead=5,
+    )
+    exp_msg = "Duplicate Vcc ids found in json"
+    assert exp_msg in json.loads(assertion_data["attribute_value"][1])[1]
 
 
 @when(
@@ -310,8 +324,7 @@ def invoke_command_with_duplicate_vcc_id(
     result_code, message = central_node_mid.load_dish_vcc_configuration(
         load_dish_cfg_json
     )
-    pytest.command_result_code = result_code
-    pytest.command_result_message = message
+    result_code == ResultCode.QUEUED
 
 
 @when(

@@ -12,6 +12,7 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
+@pytest.mark.test
 @scenario(
     "../features/dish_vcc_initialization/xtp_44892_kval_out_of_range.feature",
     "TMC is able to reject command when kValue is out of range",
@@ -64,5 +65,5 @@ def test_tmc_rejects_command_with_error(error_message: str):
     Test validate that command failed with error message
     :param error_message: error message to be validated for command rejection
     """
-    assert pytest.command_result_code == ResultCode.REJECTED
+    assert pytest.command_result_code[0] == ResultCode.REJECTED
     assert error_message in pytest.command_result_message[0]
