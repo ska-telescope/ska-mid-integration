@@ -19,7 +19,7 @@ server:
   {{- $real_dish_name := .Values.global.namespace_dish.dish_names }}
   {{- $isSimulatedCsp := .Values.deviceServers.mocks.csp }}
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
-  {{- $CommandTimeOut := .Values.deviceServers.centralnode.CommandTimeOut}}
+  {{- $CommandTimeOutDefault := .Values.deviceServers.centralnode.CommandTimeOutDefault}}
   {{- $DishVccInitTimeout := .Values.deviceServers.centralnode.DishVccInitTimeout}}
   {{- $LivelinessCheckPeriod := .Values.deviceServers.centralnode.LivelinessCheckPeriod}}
   {{- $EventSubscriptionCheckPeriod := .Values.deviceServers.centralnode.EventSubscriptionCheckPeriod}}

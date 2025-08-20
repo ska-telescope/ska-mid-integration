@@ -22,7 +22,7 @@ server:
   {{- $EventSubscriptionCheckPeriod := .Values.deviceServers.dishleafnode.EventSubscriptionCheckPeriod}}
   {{- $AdapterTimeOut := .Values.deviceServers.dishleafnode.AdapterTimeOut}}
   {{- $DishAvailabilityCheckTimeout := .Values.deviceServers.dishleafnode.DishAvailabilityCheckTimeout}}
-  {{- $CommandTimeOut := .Values.deviceServers.dishleafnode.CommandTimeOut }}
+  {{- $CommandTimeOutDefault := .Values.deviceServers.dishleafnode.CommandTimeOutDefault }}
   {{- $instance_list := list -}}
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
   {{- $isSimulatedDish := .Values.deviceServers.mocks.dish }}
