@@ -72,6 +72,25 @@ should be set with comma separated string values of the Dish TRLs.
 Command timeout
 ---------------
 
+The ``CommandTimeout`` attribute is introduced to allow updating the timeout value
+for commands without requiring a redeployment. This provides flexibility in tuning
+the timeout dynamically at runtime based on operational needs.
+
+The ``CommandTimeOutDefault`` property is also introduced, which can be used to set
+a default timeout value during the deployment phase. This ensures that an initial
+timeout value is preconfigured when the component starts for the first time.
+
+Usage
+-----
+
+* **CommandTimeout attribute**
+  - Can be updated at runtime without redeployment.
+  - Helps in adapting to varying command execution times.
+
+* **CommandTimeOutDefault property**
+  - Configurable in the deployment configuration (e.g., ``values.yaml``).
+  - Sets the initial timeout value at startup.
+
 This option sets the timeout value till which the TMC components wait for
 completion of commands invoked on lower level Tango devices. This timeout 
 should be set for each TMC component. To set the desired timeout value, 
