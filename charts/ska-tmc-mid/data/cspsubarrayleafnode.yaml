@@ -54,9 +54,9 @@ server:
               - name: "DelayValidityPeriod"
                 values:
                 - "{{ $DelayValidityPeriod }}"
-              - name: "CommandTimeOut"
+              - name: "CommandTimeOutDefault"
                 values:
-                - "{{ $CommandTimeOut }}"
+                - "{{ $CommandTimeOutDefault }}"
               - name: "AdapterTimeOut"
                 values:
                 - "{{ $AdapterTimeOut }}"

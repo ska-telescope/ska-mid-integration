@@ -32,9 +32,9 @@ server:
         - name: "AdapterTimeOut"
           values:
             - "{{.Values.deviceServers.cspmasterleafnode.AdapterTimeOut}}"
-        - name: "CommandTimeOut"
+        - name: "CommandTimeOutDefault"
           values:
-            - "{{ $CommandTimeOut }}"
+            - "{{ $CommandTimeOutDefault }}"
         - name: "LivelinessCheckPeriod"
           values:
             - "{{.Values.deviceServers.cspmasterleafnode.LivelinessCheckPeriod}}"
