@@ -24,7 +24,6 @@ from tests.resources.test_support.constant import (
 
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
-@pytest.mark.test
 @scenario(
     "../features/load_dish_cfg_command_negative_scenario.feature",
     "TMC returns error message when non existent file is provided "
@@ -46,7 +45,6 @@ def test_central_node_return_error_for_invalid_file():
 
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
-@pytest.mark.test
 @scenario(
     "../features/load_dish_cfg_command_negative_scenario.feature",
     "TMC returns error when invalid dish id is provided in configuration",
@@ -59,7 +57,6 @@ def test_central_node_return_error_for_invalid_dish_id():
 
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
-@pytest.mark.test
 @scenario(
     "../features/load_dish_cfg_command_negative_scenario.feature",
     "TMC returns error when duplicate vcc id is provided in configuration",
