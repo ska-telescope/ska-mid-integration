@@ -9,7 +9,7 @@ entrypoints:
 {{- $DelayValidityPeriod := .Values.deviceServers.cspsubarrayleafnode.DelayValidityPeriod }}
 {{- $TelmodelSource := .Values.deviceServers.cspsubarrayleafnode.TelmodelSource }}
 {{- $TelmodelPath := .Values.deviceServers.cspsubarrayleafnode.TelmodelPath }}
-{{- $CommandTimeOut := .Values.deviceServers.cspsubarrayleafnode.CommandTimeOut}}
+{{- $CommandTimeOutDefault := .Values.deviceServers.cspsubarrayleafnode.CommandTimeOutDefault}}
 {{- $AdapterTimeOut := .Values.deviceServers.cspsubarrayleafnode.AdapterTimeOut}}
 {{- $LivelinessCheckPeriod := .Values.deviceServers.cspsubarrayleafnode.LivelinessCheckPeriod}}
 {{- $EventSubscriptionCheckPeriod := .Values.deviceServers.cspsubarrayleafnode.EventSubscriptionCheckPeriod}}
@@ -54,9 +54,9 @@ server:
               - name: "DelayValidityPeriod"
                 values:
                 - "{{ $DelayValidityPeriod }}"
-              - name: "CommandTimeOut"
+              - name: "CommandTimeOutDefault"
                 values:
-                - "{{ $CommandTimeOut }}"
+                - "{{ $CommandTimeOutDefault }}"
               - name: "AdapterTimeOut"
                 values:
                 - "{{ $AdapterTimeOut }}"
