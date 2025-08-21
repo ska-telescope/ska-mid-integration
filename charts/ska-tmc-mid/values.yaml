@@ -23,16 +23,14 @@ subarray_count: 2
 global:
   minikube: false
   tango_host: databaseds-tango-base-test:10000
+  dishes: ["SKA001","SKA036", "SKA063", "SKA100"]
 
-  ##  Order of instances resolution ##
-  # .Values.global.dishes
-  # .Values.deviceServers.<device>.instances
-  # File, data/<device>.yaml, instances
+
 
   # List the dishes, if set, then this list will be applied to instances of:
   # deviceServers.dishmaster, deviceServers.dishleafnode
   dish_devices: ["dishmaster", "dishleafnode"]
-  dishes: ["001", "036", "063", "100"]
+  
   domain: "mid-tmc"
 
   namespace_dish:
@@ -91,9 +89,9 @@ centralnode:
 
 subarraynode:
   image:
-    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-subarraynode
+    registry: artefact.skao.int
     image: ska-tmc-subarraynode
-    tag: 0.40.0-dev.c3a9cdbd5
+    tag: 0.40.1-dev.c75f2e987
     pullPolicy: IfNotPresent
 
 sdpleafnodes:
@@ -124,17 +122,18 @@ dishleafnode:
     tag: 0.23.1
     pullPolicy: IfNotPresent
 
+  
 skatmccommon:
   image:
     registry: artefact.skao.int
     image: ska-tmc-common
-    tag: 0.28.7
+    tag: 0.28.8
     pullPolicy: IfNotPresent
 
 resources:
   requests:
     cpu: 200m
-    memory: 200Mi
+    memory: 
 
 deviceServers:
   centralnode:
@@ -206,6 +205,7 @@ deviceServers:
     AdapterTimeOut: 2.0
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
+    CommandTimeOut: 30
     family: "leaf-node-csp"
     member: "0"
 

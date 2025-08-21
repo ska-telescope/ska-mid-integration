@@ -1,5 +1,25 @@
+###########
+Change Log
+###########
+
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
+
+[Unreleased]
+************
+Added
+-----
+* Added a new test case to verify Bug SKB-617:
+  Ensure that the "Assign Resource" succeeds even when the SDP block is empty.
+* Updated helper in common and also update image to 0.28.8
+
+[1.6.0-rc.1]
+************
+Added
+-----
+* TMC Subarray moves to FAULT after command timed out
+* TMC Restart command is updated to invoke abort and restart on sub system to bring obs state to EMPTY
+* TMC Subarray is updated to transition Obs State to FAULT after command failure
 
 [1.5.0-rc.2]
 ************

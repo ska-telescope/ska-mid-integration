@@ -2,7 +2,7 @@
 Test case to verify error propagation functionality for
 the End / Scan /EndScan command
 
-This test case verifies that one of  the MCCS/CSP/SDP Subarray
+This test case verifies that one of  the CSP/SDP Subarray
 is identified as defective,
  and the required command is executed on the TMC Mid,
  then Subarry node
