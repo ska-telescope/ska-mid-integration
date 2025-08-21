@@ -51,6 +51,26 @@ affects the number of instances of following components.
 #. CSP Subarray Leaf Node
 #. SDP Subarray Leaf Node 
 
+global.dishes (changed)
+----------------------------
+
+The **global.dishes**  parameter has been refactored to support dynamic scaling.
+This is **not a new feature**, but a change to existing behavior.
+
+Example:
+
+.. code-block:: yaml
+
+   global:
+     dishes:
+       count: 4
+       identifiers:
+         - SKA001
+         - SKA002
+         - SKA003
+         - SKA004
+
+
 Tango host
 ----------
 
