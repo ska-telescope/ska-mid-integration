@@ -18,7 +18,7 @@ annotations:
 ##  Order of instances resolution ##
 # .Values.subarray_count
 # subarray_count, this will be expanded (1 to N inclusive)
-subarray_count: 4
+subarray_count: 2
 
 global:
   minikube: false
@@ -60,14 +60,10 @@ global:
   dishln_pointing_suffix: "mid-tmc/dish-pointing/ska"
   mid_sdp_subarray_1: "mid-sdp/subarray/01"
   mid_sdp_subarray_2: "mid-sdp/subarray/02"
-  mid_sdp_subarray_3: "mid-sdp/subarray/03"
-  mid_sdp_subarray_4: "mid-sdp/subarray/04"
   mid_sdp_queueconnector: "mid-sdp/queueconnector/01"
   mid_csp_control: "mid-csp/control/0"
   mid_csp_subarray_1: "mid-csp/subarray/01"
   mid_csp_subarray_2: "mid-csp/subarray/02"
-  mid_csp_subarray_3: "mid-csp/subarray/03"
-  mid_csp_subarray_4: "mid-csp/subarray/04"
 
 dsconfig:
   configuration_file: data/tmc-mid-config.json
