@@ -13,6 +13,10 @@ Added
   Ensure that the "Assign Resource" succeeds even when the SDP block is empty.
 * Updated helper in common and also update image to 0.28.8
 
+Fixed
+-----
+* Fix for bug SKB-813.
+
 [1.6.0-rc.1]
 ************
 Added
