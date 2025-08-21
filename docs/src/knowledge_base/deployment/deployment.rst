@@ -189,7 +189,7 @@ Subarray Node
     #. **SdpScanInterfaceURL** : Interface version for SDP scan command. Currently defaults to "https://schema.skao.int/ska-sdp-scan/0.4".
     #. **LivelinessCheckPeriod** : This refers to the Period (in seconds) for the liveliness probe to monitor each device in a loop. Currently defaults to 1.5 seconds.
     #. **EventSubscriptionCheckPeriod** : This refers to the Period (in seconds) for the event subscriber to check the device subscriptions in a loop. Currently defaults to 1.5 seconds.
-    #. **CommandTimeOut** : This refers to the timeout (in seconds) for the command execution. Currently defaults to 110 seconds.
+    #. **CommandTimeOutDefault** : This refers to the timeout (in seconds) for the command execution. Currently defaults to 110 seconds.
     #. **AbortCommandTimeOut** : This refers to the timeout for the Subarray ABORTED obsState transition. Once the AbortCommandTimeOut exceeds, SubarrayNode transitions to obsState FAULT. Currently defaults to 130 seconds.
 
 SDP Subarray Leaf Node
