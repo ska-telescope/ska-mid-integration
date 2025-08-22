@@ -13,6 +13,12 @@ Added
 * Added a new test case to verify Bug SKB-617:
   Ensure that the "Assign Resource" succeeds even when the SDP block is empty.
 * Updated helper in common and also update image to 0.28.8
+* Introduced `subarray_count` variable in `mock.yaml` to support configurable subarray scaling.
+
+Changed
+-------
+* Refactored helm chart for scaling from now the global dishes variable accepts 
+  dish_id in ["SKA001","SKA002","SKA003", ....."SKA067","SKA100"]   
 
 [1.6.0-rc.1]
 ************
