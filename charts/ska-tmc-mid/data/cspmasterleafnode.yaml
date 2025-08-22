@@ -5,7 +5,7 @@ instances: ["01"]
 {{- $domain := .Values.global.domain }}
 {{- $family := .Values.deviceServers.cspmasterleafnode.family }}
 {{- $member := .Values.deviceServers.cspmasterleafnode.member }}
-{{- $CommandTimeOut := .Values.deviceServers.cspmasterleafnode.CommandTimeOut}}
+{{- $CommandTimeOutDefault := .Values.deviceServers.cspmasterleafnode.CommandTimeOutDefault}}
 entrypoints:
   - name: "ska_tmc_cspmasterleafnode.csp_master_leaf_node_mid.MidTmcLeafNodeCspControl"
 server:
@@ -32,9 +32,9 @@ server:
         - name: "AdapterTimeOut"
           values:
             - "{{.Values.deviceServers.cspmasterleafnode.AdapterTimeOut}}"
-        - name: "CommandTimeOut"
+        - name: "CommandTimeOutDefault"
           values:
-            - "{{ $CommandTimeOut }}"
+            - "{{ $CommandTimeOutDefault }}"
         - name: "LivelinessCheckPeriod"
           values:
             - "{{.Values.deviceServers.cspmasterleafnode.LivelinessCheckPeriod}}"

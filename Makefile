@@ -21,7 +21,12 @@ FILE ?= tests## A specific test file to pass to pytest
 ADD_ARGS ?= ## Additional args to pass to pytest
 FILE_NAME?= alarm_rules.txt
 
+DEPLOY_ALL_DISHES ?= false ## Flag to deploy all dishes or no
 
+CUSTOM_VALUES3 ?= 
+ifeq ($(strip $(DEPLOY_ALL_DISHES)),true)
+CUSTOM_VALUES3 = -f charts/ska-tmc-testing-mid/dish_scaled.yaml
+endif
 # ----------------------------------------------------------------------------
 # Exit at failure flag
 #
@@ -149,12 +154,13 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set global.namespace_dish.dish_names[3]="$(DISH_NAME_100)"\
 	--set tmc-mid.deviceServers.mocks.dish=$(DISH_SIMULATION_ENABLED)\
 	--set tmc-mid.subarray_count=$(SUBARRAY_COUNT)\
-	--set tmc-mid.deviceServers.subarraynode.CommandTimeOut=$(SUBARRAY_COMMAND_TIMEOUT)\
-	--set tmc-mid.deviceServers.sdpsubarrayleafnode.CommandTimeOut=$(SDP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT)\
-	--set tmc-mid.deviceServers.cspsubarrayleafnode.CommandTimeOut=$(CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT)\
-	--set tmc-mid.deviceServers.dishleafnode.CommandTimeOut=$(DISH_LEAF_NODE_COMMAND_TIMEOUT)\
+	--set tmc-mid.deviceServers.subarraynode.CommandTimeOutDefault=$(SUBARRAY_COMMAND_TIMEOUT)\
+	--set tmc-mid.deviceServers.sdpsubarrayleafnode.CommandTimeOutDefault=$(SDP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT)\
+	--set tmc-mid.deviceServers.cspsubarrayleafnode.CommandTimeOutDefault=$(CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT)\
+	--set tmc-mid.deviceServers.dishleafnode.CommandTimeOutDefault=$(DISH_LEAF_NODE_COMMAND_TIMEOUT)\
 	$(CUSTOM_VALUES1)\
-	$(CUSTOM_VALUES2)
+	$(CUSTOM_VALUES2)\
+	$(CUSTOM_VALUES3)
 
 PYTHON_VARS_BEFORE_PYTEST ?= PYTHONPATH=.:./src \
 							 TANGO_HOST=$(TANGO_HOST) \
@@ -210,7 +216,7 @@ ifeq ($(SDP_SIMULATION_ENABLED),false)
 endif
 
 taranta-link:
-	@echo "#            https://k8s.stfc.skao.int/$(KUBE_NAMESPACE)/taranta/dashboard"
+	@echo "#            https://${CLUSTER_DOMAIN}/$(KUBE_NAMESPACE)/taranta/dashboard"
 
 alarm-handler-configurator-link:
 	@echo "#            https://k8s.stfc.skao.int/$(KUBE_NAMESPACE)/alarm-handler/"
