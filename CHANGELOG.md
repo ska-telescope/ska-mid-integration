@@ -15,7 +15,14 @@ Added
 * Introduced `subarray_count` variable in `mock.yaml` to support configurable subarray scaling.
 * CommandTimeout attribute is introduced which can help to update timeout without redeployment.
 * CommandTimeOutDefault property is introduced which 
-can be used to set default value at the time of deployment.
+  can be used to set default value at the time of deployment.
+* Updated TMC tags:
+    centralnode: 0.21.3
+    subarraynode: 0.41.0
+    sdpleafnodes:0.24.0
+    cspsubarrayleafnode: 0.31.0
+    dishleafnode:tag: 0.24.0
+    tmccommon: 0.30.0
 
 Changed
 -------
