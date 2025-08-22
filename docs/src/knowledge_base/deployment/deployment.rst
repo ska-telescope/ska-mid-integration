@@ -266,4 +266,5 @@ Dish Pointing Device
     #. **ElevationMinLimit** : This refers to the minimum elevation allowed for observation. Currently defaults to 15.0.
     #. **AzimuthMaxLimit** : This refers to the Maximum value of Azimuth where dish can point. Currently defaults to 270.0.
     #. **AzimuthMinLimit** : This refers to the Minimum value of Azimuth where dish can point. Currently defaults to -270.0.
+    #. **SchedularQueuePreEntries** : ProgramTrackTable entries queued ahead in the track thread scheduler, primarily for developer-side debugging.
 

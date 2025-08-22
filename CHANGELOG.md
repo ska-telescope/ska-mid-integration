@@ -22,6 +22,7 @@ Changed
 Fixed
 -----
 * Fix for bug SKB-813.
+* Fix for bug SKB-930
 
 [1.6.0-rc.1]
 ************
