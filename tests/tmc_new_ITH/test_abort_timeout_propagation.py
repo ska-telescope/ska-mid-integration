@@ -86,7 +86,7 @@ def _setup_event_subscriptions(
 
 
 @pytest.mark.batch1
-@pytest.mark.SKA_mid12
+@pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/timeout_handling.feature",
     "Timeout reported by TMC Mid Abort command for subsystem subarray",
