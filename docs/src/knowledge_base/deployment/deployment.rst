@@ -51,6 +51,26 @@ affects the number of instances of following components.
 #. CSP Subarray Leaf Node
 #. SDP Subarray Leaf Node 
 
+global.dishes (changed)
+----------------------------
+
+The **global.dishes**  parameter has been refactored to support dynamic scaling.
+This is **not a new feature**, but a change to existing behavior.
+
+Example:
+
+.. code-block:: yaml
+
+   global:
+     dishes:
+       count: 4
+       identifiers:
+         - SKA001
+         - SKA002
+         - SKA003
+         - SKA004
+
+
 Tango host
 ----------
 
@@ -72,11 +92,30 @@ should be set with comma separated string values of the Dish TRLs.
 Command timeout
 ---------------
 
+The ``CommandTimeout`` attribute is introduced to allow updating the timeout value
+for commands without requiring a redeployment. This provides flexibility in tuning
+the timeout dynamically at runtime based on operational needs.
+
+The ``CommandTimeOutDefault`` property is also introduced, which can be used to set
+a default timeout value during the deployment phase. This ensures that an initial
+timeout value is preconfigured when the component starts for the first time.
+
+Usage
+-----
+
+* **CommandTimeout attribute**
+  - Can be updated at runtime without redeployment.
+  - Helps in adapting to varying command execution times.
+
+* **CommandTimeOutDefault property**
+  - Configurable in the deployment configuration (e.g., ``values.yaml``).
+  - Sets the initial timeout value at startup.
+
 This option sets the timeout value till which the TMC components wait for
 completion of commands invoked on lower level Tango devices. This timeout 
 should be set for each TMC component. To set the desired timeout value, 
 navigate to **deviceServers -> <component name>** in `values.yaml` file. 
-Locate **CommandTimeOut** variable and set an integer value equivalant in 
+Locate **CommandTimeOutDefault** variable and set an integer value equivalant in 
 seconds.
 
 .. warning::
@@ -156,7 +195,7 @@ Central Node
     #. **DishIDs** : User can set this value to provide the ID's of dishes present in the deployment. Default is ["SKA001", "SKA036", "SKA063", "SKA100"]
     #. **LivelinessCheckPeriod** : This refers to the Period (in seconds) for the liveliness probe to monitor each device in a loop. Currently defaults to 2 seconds.
     #. **EventSubscriptionCheckPeriod** : This refers to the Period (in seconds) for the event subscriber to check the device subscriptions in a loop. Currently defaults to 2 seconds.
-    #. **CommandTimeOut** : This refers to the timeout (in seconds) for the command execution. Currently defaults to 120 seconds.
+    #. **CommandTimeOutDefault** : This refers to the timeout (in seconds) for the command execution. Currently defaults to 120 seconds.
     #. **DishVccInitTimeout** : This refers to the timeout (in seconds) for the dish vcc initialization. Currently defaults to 180 seconds.
     #. **family** : This refers to the family name of CentralNode TANGO device. Currently defaults to "central-node".
     #. **member** : This refers to the member of CentralNode TANGO device. Currently defaults to "0".
@@ -170,7 +209,7 @@ Subarray Node
     #. **SdpScanInterfaceURL** : Interface version for SDP scan command. Currently defaults to "https://schema.skao.int/ska-sdp-scan/0.4".
     #. **LivelinessCheckPeriod** : This refers to the Period (in seconds) for the liveliness probe to monitor each device in a loop. Currently defaults to 1.5 seconds.
     #. **EventSubscriptionCheckPeriod** : This refers to the Period (in seconds) for the event subscriber to check the device subscriptions in a loop. Currently defaults to 1.5 seconds.
-    #. **CommandTimeOut** : This refers to the timeout (in seconds) for the command execution. Currently defaults to 110 seconds.
+    #. **CommandTimeOutDefault** : This refers to the timeout (in seconds) for the command execution. Currently defaults to 110 seconds.
     #. **AbortCommandTimeOut** : This refers to the timeout for the Subarray ABORTED obsState transition. Once the AbortCommandTimeOut exceeds, SubarrayNode transitions to obsState FAULT. Currently defaults to 130 seconds.
 
 SDP Subarray Leaf Node
@@ -178,7 +217,7 @@ SDP Subarray Leaf Node
 
     #. **LivelinessCheckPeriod** : This refers to the Period (in seconds) for the liveliness probe to monitor each device in a loop. Currently defaults to 1.5 seconds.
     #. **EventSubscriptionCheckPeriod** : This refers to the Period (in seconds) for the event subscriber to check the device subscriptions in a loop. Currently defaults to 1.5 seconds.
-    #. **CommandTimeOut** : This refers to the timeout (in seconds) for the command execution. Currently defaults to 50 seconds.
+    #. **CommandTimeOutDefault** : This refers to the timeout (in seconds) for the command execution. Currently defaults to 50 seconds.
     #. **AdapterTimeOut** : This refers to the timeout (in seconds) for the adapter creation. This property is for internal use. Currently defaults to 2 seconds.
 
 SDP Master Leaf Node
@@ -203,7 +242,7 @@ CSP Subarray Leaf Node
     #. **DelayModelTimeInAdvance** : This indicates the time in seconds by which delay values need to be available in advance. Currently defaults to 30 seconds.
     #. **LivelinessCheckPeriod** :  his refers to the Period (in seconds) for the liveliness probe to monitor each device in a loop. Currently defaults to 1.5 seconds.
     #. **EventSubscriptionCheckPeriod** : This refers to the Period (in seconds) for the event subscriber to check the device subscriptions in a loop. Currently defaults to 1.5 seconds.
-    #. **CommandTimeOut** : This refers to the timeout (in seconds) for the command execution. Currently defaults to 50 seconds.
+    #. **CommandTimeOutDefault** : This refers to the timeout (in seconds) for the command execution. Currently defaults to 50 seconds.
     #. **AdapterTimeOut** : This refers to the timeout (in seconds) for the adapter creation. This property is for internal use. Currently defaults to 2 seconds.
     #. **TelmodelSource** : This refers to the telmodel source for array layout. Currently defaults to "gitlab://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata".
     #. **TelmodelPath** : This refers to the telmodel path for array layout. Currently defaults to "instrument/ska1_mid/layout/mid-layout.json".
@@ -212,7 +251,7 @@ Dish Leaf Node
 ^^^^^^^^^^^^^^^^^^^^^^^^
     #. **LivelinessCheckPeriod** : This refers to the Period (in seconds) for the liveliness probe to monitor each device in a loop. Currently defaults to 1.5 seconds.
     #. **EventSubscriptionCheckPeriod** : This refers to the Period (in seconds) for the event subscriber to check the device subscriptions in a loop. Currently defaults to 1.5 seconds.
-    #. **CommandTimeOut** : This refers to the timeout (in seconds) for the command execution. Currently defaults to 90 seconds.
+    #. **CommandTimeOutDefault** : This refers to the timeout (in seconds) for the command execution. Currently defaults to 90 seconds.
     #. **MaxTrackTableRetry** :This refers to the maximum retries for the programTrackTable write operation. Currently defaults to 3.
     #. **TrackTableRetryDuration** : This refers to the retry duration (in seconds) for programTrackTable write operation in seconds. Currently defaults to 0.2 seconds.
     #. **DishAvailabilityCheckTimeout** : This refers to the timeout for the dish availability check during intialisation. This property is for internal use. Currently defaults to 3 seconds.
@@ -227,4 +266,5 @@ Dish Pointing Device
     #. **ElevationMinLimit** : This refers to the minimum elevation allowed for observation. Currently defaults to 15.0.
     #. **AzimuthMaxLimit** : This refers to the Maximum value of Azimuth where dish can point. Currently defaults to 270.0.
     #. **AzimuthMinLimit** : This refers to the Minimum value of Azimuth where dish can point. Currently defaults to -270.0.
+    #. **SchedularQueuePreEntries** : ProgramTrackTable entries queued ahead in the track thread scheduler, primarily for developer-side debugging.
 
