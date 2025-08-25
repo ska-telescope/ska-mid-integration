@@ -3,6 +3,7 @@ Test for Abort() error propagation verification
 """
 import json
 import logging
+import time
 
 import pytest
 from assertpy import assert_that
@@ -18,7 +19,7 @@ from ska_integration_test_harness.inputs.test_harness_inputs import (
 from ska_ser_logging import configure_logging
 from ska_tango_testing.integration import TangoEventTracer, log_events
 
-# from tests.resources.test_support.enum import PointingState
+from tests.resources.test_support.enum import PointingState
 from tests.tmc_csp_new_ITH.conftest import SubarrayTestContextData
 from tests.tmc_new_ITH.conftest import get_abort_command_timeout
 
@@ -216,17 +217,17 @@ def verify_error_message(
         # FAULT obsState is not considered in tear_down
         csp.csp_subarray.ResetDelayInfo()
 
-        # assert_that(event_tracer).described_as(
-        #     'FAILED ASSUMPTION IN "THEN" STEP: '
-        #     "'the csp subarray must be in the ABORTED obsState'"
-        #     "CSP Subarray device"
-        #     f"({csp.csp_subarray.dev_name()}) "
-        #     "is expected to be in ABORTED obstate",
-        # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        #     csp.csp_subarray,
-        #     "obsState",
-        #     ObsState.ABORTED,
-        # )
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "THEN" STEP: '
+            "'the csp subarray must be in the ABORTED obsState'"
+            "CSP Subarray device"
+            f"({csp.csp_subarray.dev_name()}) "
+            "is expected to be in ABORTED obstate",
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+            csp.csp_subarray,
+            "obsState",
+            ObsState.ABORTED,
+        )
 
     if subsystem == "SDP":
         assert_that(event_tracer).described_as(
@@ -244,17 +245,17 @@ def verify_error_message(
         # tear_down as TMC is inconsistent state. Also
         # FAULT obsState is not considered in tear_down
         sdp.sdp_subarray.ResetDelayInfo()
-        # assert_that(event_tracer).described_as(
-        #     'FAILED ASSUMPTION IN "THEN" STEP: '
-        #     "'the sdp subarray must be in the ABORTED obsState'"
-        #     "SDP Subarray device"
-        #     f"({sdp.sdp_subarray.dev_name()}) "
-        #     "is expected to be in ABORTED obstate",
-        # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        #     sdp.sdp_subarray,
-        #     "obsState",
-        #     ObsState.ABORTED,
-        # )
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "THEN" STEP: '
+            "'the sdp subarray must be in the ABORTED obsState'"
+            "SDP Subarray device"
+            f"({sdp.sdp_subarray.dev_name()}) "
+            "is expected to be in ABORTED obstate",
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+            sdp.sdp_subarray,
+            "obsState",
+            ObsState.ABORTED,
+        )
 
     if subsystem == "Dish":
         assert_that(event_tracer).described_as(
@@ -273,16 +274,17 @@ def verify_error_message(
         # FAULT obsState is not considered in tear_down
         dish1 = dishes.dish_master_dict["dish_001"]
         dish1.ResetDelayInfo()
-    #     assert_that(event_tracer).described_as(
-    #         'FAILED ASSUMPTION IN "THEN" STEP: '
-    #         "'the dish must be in the READY pointingState' "
-    #         "Dish device"
-    #         f"({dish1.dev_name()}) "
-    #         "is expected to be in READY pointingState",
-    #     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-    #         dish1,
-    #         "pointingState",
-    #         PointingState.READY,
-    #     )
-    #
-    # tmc.restart()
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "THEN" STEP: '
+            "'the dish must be in the READY pointingState' "
+            "Dish device"
+            f"({dish1.dev_name()}) "
+            "is expected to be in READY pointingState",
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+            dish1,
+            "pointingState",
+            PointingState.READY,
+        )
+        time.sleep(1)
+
+    tmc.restart()
