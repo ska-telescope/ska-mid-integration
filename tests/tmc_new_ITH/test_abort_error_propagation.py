@@ -1,7 +1,7 @@
 """
 Test for Abort() error propagation verification
 """
-# import json
+import json
 import logging
 
 import pytest
@@ -84,7 +84,7 @@ def _setup_event_subscriptions(
 
 
 @pytest.mark.batch1
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid12
 @scenario(
     "../tmc_new_ITH/features/error_propagation.feature",
     "Error Propagation Reported by TMC Mid Abort command for"
@@ -211,7 +211,7 @@ def verify_error_message(
 
         # tear_down as TMC is inconsistent state. Also
         # FAULT obsState is not considered in tear_down
-        # csp.csp_subarray.SetDefective(json.dumps({"enabled": False}))
+        csp.csp_subarray.SetDefective(json.dumps({"enabled": False}))
         # csp.csp_subarray.Abort()
         # assert_that(event_tracer).described_as(
         #     'FAILED ASSUMPTION IN "THEN" STEP: '
@@ -240,7 +240,7 @@ def verify_error_message(
         )
         # tear_down as TMC is inconsistent state. Also
         # FAULT obsState is not considered in tear_down
-        # sdp.sdp_subarray.SetDefective(json.dumps({"enabled": False}))
+        sdp.sdp_subarray.SetDefective(json.dumps({"enabled": False}))
         # sdp.sdp_subarray.Abort()
         # assert_that(event_tracer).described_as(
         #     'FAILED ASSUMPTION IN "THEN" STEP: '
@@ -267,8 +267,8 @@ def verify_error_message(
             "longRunningCommandResult",
             (pytest.unique_id[0], COMMAND_RESULT_DISH),
         )
-        # dish1 = dishes.dish_master_dict["dish_001"]
-        # dish1.SetDefective(json.dumps({"enabled": False}))
+        dish1 = dishes.dish_master_dict["dish_001"]
+        dish1.SetDefective(json.dumps({"enabled": False}))
         # dish1.Abort()
         # assert_that(event_tracer).described_as(
         #     'FAILED ASSUMPTION IN "THEN" STEP: '
