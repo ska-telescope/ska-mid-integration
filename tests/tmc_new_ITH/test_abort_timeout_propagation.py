@@ -285,6 +285,6 @@ def verify_error_message(
             "pointingState",
             PointingState.READY,
         )
-        time.sleep(1)
 
+    time.sleep(1)
     tmc.restart()
