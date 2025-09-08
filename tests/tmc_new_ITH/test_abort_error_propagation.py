@@ -22,8 +22,6 @@ from tests.resources.test_support.constant import (
     ERROR_PROPAGATION_DEFECT,
     FAILED_RESULT_DEFECT,
 )
-
-# from tests.resources.test_support.enum import PointingState
 from tests.tmc_csp_new_ITH.conftest import (
     ASSERTIONS_TIMEOUT,
     SubarrayTestContextData,
@@ -209,21 +207,7 @@ def verify_error_message(
             (pytest.unique_id[0], COMMAND_RESULT_CSP),
         )
 
-        # tear_down as TMC is inconsistent state. Also
-        # FAULT obsState is not considered in tear_down
         csp.csp_subarray.SetDefective(json.dumps({"enabled": False}))
-        # csp.csp_subarray.Abort()
-        # assert_that(event_tracer).described_as(
-        #     'FAILED ASSUMPTION IN "THEN" STEP: '
-        #     "'the csp subarray must be in the ABORTED obsState'"
-        #     "CSP Subarray device"
-        #     f"({csp.csp_subarray.dev_name()}) "
-        #     "is expected to be in ABORTED obstate",
-        # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        #     csp.csp_subarray,
-        #     "obsState",
-        #     ObsState.ABORTED,
-        # )
 
     if defective_subsystem == "SDP":
         assert_that(event_tracer).described_as(
@@ -238,21 +222,8 @@ def verify_error_message(
             "longRunningCommandResult",
             (pytest.unique_id[0], COMMAND_RESULT_SDP),
         )
-        # tear_down as TMC is inconsistent state. Also
-        # FAULT obsState is not considered in tear_down
+
         sdp.sdp_subarray.SetDefective(json.dumps({"enabled": False}))
-        # sdp.sdp_subarray.Abort()
-        # assert_that(event_tracer).described_as(
-        #     'FAILED ASSUMPTION IN "THEN" STEP: '
-        #     "'the sdp subarray must be in the ABORTED obsState'"
-        #     "SDP Subarray device"
-        #     f"({sdp.sdp_subarray.dev_name()}) "
-        #     "is expected to be in ABORTED obstate",
-        # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        #     sdp.sdp_subarray,
-        #     "obsState",
-        #     ObsState.ABORTED,
-        # )
 
     if defective_subsystem == "Dish":
         assert_that(event_tracer).described_as(
@@ -269,16 +240,3 @@ def verify_error_message(
         )
         dish1 = dishes.dish_master_dict["dish_001"]
         dish1.SetDefective(json.dumps({"enabled": False}))
-        # dish1.Abort()
-        # assert_that(event_tracer).described_as(
-        #     'FAILED ASSUMPTION IN "THEN" STEP: '
-        #     "'the Dish must be in the READY pointingState' "
-        #     "Dish device "
-        #     f"({dish1.dev_name()}) "
-        #     "is expected to be in READY pointingState",
-        # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        #     dish1,
-        #     "pointingState",
-        #     PointingState.READY,
-        # )
-    # tmc.restart()

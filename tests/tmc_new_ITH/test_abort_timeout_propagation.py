@@ -286,5 +286,6 @@ def verify_error_message(
             PointingState.READY,
         )
 
+    # SetDelayInfo
     time.sleep(1)
     tmc.restart()
