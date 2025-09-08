@@ -3,7 +3,6 @@ Test for Abort() error propagation verification
 """
 import json
 import logging
-import time
 
 import pytest
 from assertpy import assert_that
@@ -22,6 +21,9 @@ from ska_tango_testing.integration import TangoEventTracer, log_events
 from tests.resources.test_support.enum import PointingState
 from tests.tmc_csp_new_ITH.conftest import SubarrayTestContextData
 from tests.tmc_new_ITH.conftest import get_abort_command_timeout
+
+# import time
+
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -86,7 +88,7 @@ def _setup_event_subscriptions(
 
 
 @pytest.mark.batch1
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid20
 @scenario(
     "../tmc_new_ITH/features/timeout_handling.feature",
     "Timeout reported by TMC Mid Abort command for subsystem subarray",
@@ -287,5 +289,5 @@ def verify_error_message(
         )
 
     # SetDelayInfo
-    time.sleep(1)
+    # time.sleep(1)
     tmc.restart()
