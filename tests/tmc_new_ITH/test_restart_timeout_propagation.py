@@ -3,6 +3,7 @@ Test for Restart timeout error propagation verification
 """
 import json
 import logging
+import time
 
 import pytest
 from assertpy import assert_that
@@ -131,6 +132,13 @@ def send_restart_command(
     if subsystem == "SDP":
         sdp.sdp_subarray.SetDelayInfo(json.dumps({"Restart": delay}))
     context_fixt.when_action_name = "Restart"
+
+    # Adding a 1-second sleep before invoking the Restart command to ensure
+    # Abort command postprocessing (e.g., clearing command_in_progress and
+    # event data) completes. This prevents transient states where
+    # command_in_progress is unexpectedly blank due to asynchronous cleanup
+    # of the prior Abort command.
+    time.sleep(1)
     _, pytest.unique_id = tmc.subarray_node.Restart()
 
 
