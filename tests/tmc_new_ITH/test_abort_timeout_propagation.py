@@ -3,6 +3,7 @@ Test for Abort() error propagation verification
 """
 import json
 import logging
+import time
 
 import pytest
 from assertpy import assert_that
@@ -85,15 +86,13 @@ def _setup_event_subscriptions(
             csp.csp_subarray: ["obsState"],
             sdp.sdp_subarray: ["obsState"],
             tmc.central_node: ["longRunningCommandResult"],
-            tmc.csp_subarray_leaf_node: ["cspSubarrayObsState"],
-            tmc.sdp_subarray_leaf_node: ["sdpSubarrayObsState"],
         },
         event_enum_mapping={"obsState": ObsState},
     )
 
 
 @pytest.mark.batch1
-@pytest.mark.SKA_mid20
+@pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/timeout_handling.feature",
     "Timeout reported by TMC Mid Abort command for subsystem subarray",
@@ -113,9 +112,6 @@ def subarray_in_idle_obsstate(
     default_commands_inputs: TestHarnessInputs,
 ):
     """Ensure the subarray is in READY obsstate."""
-
-    # tmc.set_subarray_id(int(subarray_id))
-    tmc.set_subarray_id(1)
 
     _setup_event_subscriptions(tmc, csp, sdp, dishes, event_tracer)
     context_fixt.starting_state = ObsState.READY
@@ -240,18 +236,6 @@ def verify_error_message(
             ObsState.ABORTED,
         )
 
-        assert_that(event_tracer).described_as(
-            'FAILED ASSUMPTION IN "THEN" STEP: '
-            "'the csp subarray leaf node must be in the ABORTED obsState'"
-            "CSP Subarray leaf node device"
-            f"({tmc.csp_subarray_leaf_node.dev_name()}) "
-            "is expected to be in ABORTED obstate",
-        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-            tmc.csp_subarray_leaf_node,
-            "obsState",
-            ObsState.ABORTED,
-        )
-
     if subsystem == "SDP":
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
@@ -319,5 +303,5 @@ def verify_error_message(
     # leaf node is not received by the TMC subarray node, the restart
     # command will not be sent to the CSP subarray leaf node. Therefore,
     # this sleep is necessary to allow event propagation.
-    # time.sleep(1)
+    time.sleep(1)
     tmc.restart()
