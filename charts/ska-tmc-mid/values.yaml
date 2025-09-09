@@ -127,7 +127,7 @@ skatmccommon:
   image:
     registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-common
     image: ska-tmc-common
-    tag: 0.30.1-dev.c348ea729
+    tag: 0.30.1-dev.cb1cd7209
     pullPolicy: IfNotPresent
 
 resources:
