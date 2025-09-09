@@ -70,12 +70,6 @@ def _setup_event_subscriptions(
     event_tracer.subscribe_event(
         dishes.dish_master_dict["dish_001"], "pointingState"
     )
-    event_tracer.subscribe_event(
-        tmc.csp_subarray_leaf_node, "cspSubarrayObsState"
-    )
-    event_tracer.subscribe_event(
-        tmc.sdp_subarray_leaf_node, "sdpSubarrayObsState"
-    )
 
     log_events(
         {
@@ -303,5 +297,7 @@ def verify_error_message(
     # leaf node is not received by the TMC subarray node, the restart
     # command will not be sent to the CSP subarray leaf node. Therefore,
     # this sleep is necessary to allow event propagation.
-    time.sleep(1)
+    # It needs to be updated once required support to check
+    # leaf nodes obsState is implemented in the ITH.
+    time.sleep(0.5)
     tmc.restart()
