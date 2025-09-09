@@ -138,7 +138,7 @@ def send_restart_command(
     # event data) completes. This prevents transient states where
     # command_in_progress is unexpectedly blank due to asynchronous cleanup
     # of the prior Abort command.
-    time.sleep(1)
+    time.sleep(0.1)
     _, pytest.unique_id = tmc.subarray_node.Restart()
 
 
