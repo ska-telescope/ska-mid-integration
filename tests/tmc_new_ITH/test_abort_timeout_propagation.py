@@ -113,6 +113,7 @@ def subarray_in_idle_obsstate(
     default_commands_inputs: TestHarnessInputs,
 ):
     """Ensure the subarray is in READY obsstate."""
+    tmc.set_subarray_id(int(1))
     _setup_event_subscriptions(tmc, csp, sdp, dishes, event_tracer)
     context_fixt.starting_state = ObsState.READY
 
