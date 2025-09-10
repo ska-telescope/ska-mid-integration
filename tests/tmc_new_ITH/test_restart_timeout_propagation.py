@@ -78,6 +78,7 @@ def _setup_event_subscriptions(
     )
 
 
+@pytest.mark.repeat(5)
 @pytest.mark.batch1
 @pytest.mark.SKA_mid20
 @scenario(
