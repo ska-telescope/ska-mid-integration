@@ -3,6 +3,7 @@ Test for Abort() error propagation verification
 """
 import json
 import logging
+import time
 
 import pytest
 from assertpy import assert_that
@@ -302,5 +303,5 @@ def verify_error_message(
     # this sleep is necessary to allow event propagation.
     # It needs to be updated once required support to check
     # leaf nodes obsState is implemented in the ITH.
-    # time.sleep(0.5)
+    time.sleep(0.5)
     tmc.restart()
