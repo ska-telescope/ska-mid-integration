@@ -3,7 +3,6 @@ Test for Restart timeout error propagation verification
 """
 import json
 import logging
-import time
 
 import pytest
 from assertpy import assert_that
@@ -20,6 +19,9 @@ from ska_tango_testing.integration import TangoEventTracer, log_events
 
 from tests.tmc_csp_new_ITH.conftest import SubarrayTestContextData
 from tests.tmc_new_ITH.conftest import get_abort_command_timeout
+
+# import time
+
 
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
@@ -77,7 +79,7 @@ def _setup_event_subscriptions(
 
 
 @pytest.mark.batch1
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid20
 @scenario(
     "../tmc_new_ITH/features/timeout_handling.feature",
     "Timeout reported by TMC Mid Restart command for subsystem subarray",
@@ -138,7 +140,7 @@ def send_restart_command(
     # event data) completes. This prevents transient states where
     # command_in_progress is unexpectedly blank due to asynchronous cleanup
     # of the prior Abort command.
-    time.sleep(1)
+    # time.sleep(1)
     _, pytest.unique_id = tmc.subarray_node.Restart()
 
 
