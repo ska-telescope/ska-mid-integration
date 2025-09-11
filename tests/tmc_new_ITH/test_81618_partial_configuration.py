@@ -59,7 +59,7 @@ def update_configuration_json(config_json: dict, config_data: str):
 
 
 @pytest.mark.batch1
-@pytest.mark.SKA_mid20
+@pytest.mark.SKA_midskip
 @scenario(
     "../tmc_new_ITH/features/xtp_81618_partial_configuration.feature",
     "TMC Behaviour when partial configuration is provided",
