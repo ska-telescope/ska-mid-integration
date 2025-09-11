@@ -79,7 +79,7 @@ def _setup_event_subscriptions(
 
 
 @pytest.mark.batch1
-@pytest.mark.SKA_mid20
+@pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/timeout_handling.feature",
     "Timeout reported by TMC Mid Restart command for subsystem subarray",
@@ -135,12 +135,6 @@ def send_restart_command(
         sdp.sdp_subarray.SetDelayInfo(json.dumps({"Restart": delay}))
     context_fixt.when_action_name = "Restart"
 
-    # Adding a 1-second sleep before invoking the Restart command to ensure
-    # Abort command postprocessing (e.g., clearing command_in_progress and
-    # event data) completes. This prevents transient states where
-    # command_in_progress is unexpectedly blank due to asynchronous cleanup
-    # of the prior Abort command.
-    # time.sleep(1)
     _, pytest.unique_id = tmc.subarray_node.Restart()
 
 
