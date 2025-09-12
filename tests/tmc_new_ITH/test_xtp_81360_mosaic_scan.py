@@ -24,9 +24,9 @@ from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDevicesFacade
 from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
 
 
-@pytest.mark.repeat(10)
+@pytest.mark.repeat
 @pytest.mark.batch1
-@pytest.mark.SKA_mid20
+@pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/xtp_81360_mosiac_scan.feature",
     "TMC Mid execute mosiac scan",
