@@ -25,7 +25,7 @@ from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
 
 
 @pytest.mark.batch1
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_midskip
 @scenario(
     "../tmc_new_ITH/features/xtp_81360_mosiac_scan.feature",
     "TMC Mid execute mosiac scan",
