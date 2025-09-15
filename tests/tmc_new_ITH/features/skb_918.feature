@@ -8,7 +8,7 @@ Feature: Default
         When I invoke configure command with scan_type_id <scan_type_id> on TMC Subarray
         Then mock SDP subarray mock successfully executes the Configure command and goes to READY obsstate
 		Examples:
-            | scan_type     |
+            | scan_type_id  |
             | science6      |
             | target:c      |
             | calibration:x | 
