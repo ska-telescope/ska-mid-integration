@@ -12,3 +12,11 @@ Feature: Default
             | science6      |
             | target:c      |
             | calibration:x | 
+    
+
+    Scenario: Test abort command to verify skb-1013
+        Given subarray is in observation state EMPTY
+        And I assign resources to TMC Subarray
+        When I invoke abort command on TMC Subarray
+        Then the commandCallInfo gets clear on SDP subarray mock device, preventing overflow issue
+    

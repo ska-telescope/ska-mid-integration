@@ -1,15 +1,14 @@
-"""Verifies bug SKB-918
+"""Verifies bug SKB-1013
 """
 import json
 
 import pytest
 from assertpy import assert_that
-from pytest_bdd import given, parsers, scenario, then, when
+from pytest_bdd import given, scenario, then, when
 from ska_control_model import ObsState
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
 from ska_integration_test_harness.facades.sdp_facade import SDPFacade
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
-from ska_integration_test_harness.inputs.json_input import DictJSONInput
 from ska_integration_test_harness.inputs.test_harness_inputs import (
     TestHarnessInputs,
 )
@@ -73,7 +72,7 @@ def _setup_event_subscriptions(
     "../tmc_new_ITH/features/skb_918_1013.feature",
     "Test Configure command to verify skb-918",
 )
-def test_verify_918():
+def test_verify_1013():
     """Test Configure command with and scan_type_id provided."""
 
 
@@ -100,11 +99,7 @@ def subarray_in_idle_state(
     )
 
 
-@given(
-    parsers.parse(
-        "I assign resources with scan_type_id {scan_type_id} to TMC Subarray"
-    )
-)
+@given("I assign resources to TMC Subarray")
 def invoke_assign_resources(
     context_fixt: SubarrayTestContextData, tmc: TMCFacade, scan_type_id: str
 ):
@@ -112,77 +107,38 @@ def invoke_assign_resources(
     json_input = MyFileJSONInput(
         "centralnode", "assign_resources_mid"
     ).with_attribute("subarray_id", 1)
-    assign_json = json.loads(json_input.as_str())
-    assign_json["sdp"]["execution_block"]["scan_types"][1][
-        "scan_type_id"
-    ] = scan_type_id
 
     context_fixt.when_action_result = tmc.assign_resources(
-        DictJSONInput(assign_json),
+        json_input,
         wait_termination=True,
     )
 
 
-@when(
-    parsers.parse(
-        "I invoke configure command with "
-        "scan_type_id {scan_type_id} on TMC Subarray"
-    )
-)
-def verify_version_sdp_mock_interface(
-    tmc: TMCFacade, scan_type_id: str, context_fixt: SubarrayTestContextData
-):
-    """Verify the scan_type_id on SDP Mock device"""
-    json_input = MyFileJSONInput("subarray", "command_Configure")
-    configure_json = json.loads(json_input.as_str())
-    configure_json["sdp"]["scan_type"] = scan_type_id
-    context_fixt.when_action_result = tmc.configure(
-        DictJSONInput(configure_json),
-        wait_termination=False,
-    )
+@when("I invoke abort command on TMC Subarray")
+def verify_abort_command_invoked(tmc: TMCFacade):
+    """Invoke Abort command on TMC Subarray"""
+    tmc.abort(wait_termination=True)
 
 
 @then(
-    "mock SDP subarray mock successfully executes the "
-    "Configure command and goes to READY obsstate"
+    "the commandCallInfo gets clear on SDP subarray mock device, "
+    "preventing overflow issue"
 )
-def verify_ready_state(
-    context_fixt: SubarrayTestContextData,
-    tmc: TMCFacade,
-    csp: CSPFacade,
+def verify_command_call_info_cleared(
     sdp: SDPFacade,
-    event_tracer: TangoEventTracer,
 ):
-    """
-    Verify the subarray's transition to the READY state.
+    """Verify the commandCallInfo on SDP Mock device"""
 
-    This step checks that the ObsState attribute of the TMC Subarray Node,
-    CSP Subarray, and SDP Subarray devices all transition from the starting
-    state to the READY state. It uses the event_tracer to assert that these
-    state changes occur within a specified timeout. After verification, it
-    updates the starting state in the context fixture for subsequent steps.
-    """
-    context_fixt.starting_state = ObsState.CONFIGURING
-    assert_that(event_tracer).described_as(
-        f"Both TMC Subarray Node device ({tmc.subarray_node})"
-        f", CSP Subarray device ({csp.csp_subarray}) "
-        f"and SDP Subarray device ({sdp.sdp_subarray}) "
-        "ObsState attribute values should move "
-        f"from {str(context_fixt.starting_state)} to READY."
-    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        tmc.subarray_node,
-        "obsState",
-        ObsState.READY,
-        previous_value=context_fixt.starting_state,
-    ).has_change_event_occurred(
-        csp.csp_subarray,
-        "obsState",
-        ObsState.READY,
-        previous_value=context_fixt.starting_state,
-    ).has_change_event_occurred(
-        sdp.sdp_subarray,
-        "obsState",
-        ObsState.READY,
-        previous_value=context_fixt.starting_state,
-    )
-    context_fixt.starting_state = ObsState.READY
+    def check_command_call_info():
+        cmd_info = sdp.sdp_subarray.commandCallInfo
+        if cmd_info:
+            try:
+                cmd_info_json = json.loads(cmd_info)
+                return len(cmd_info_json) == 0
+            except json.JSONDecodeError:
+                return False
+        return False
+
+    assert_that(check_command_call_info).described_as(
+        "SDP subarray mock device's commandCallInfo is expected to be cleared"
+    ).within_timeout(ASSERTIONS_TIMEOUT).is_true()
