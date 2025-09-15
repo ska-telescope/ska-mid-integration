@@ -100,7 +100,7 @@ def subarray_in_idle_state(
     )
 
 
-@given("I assign resources with scan_type {scan_type_id} to TMC Subarray")
+@given("I assign resources with scan_type_id {scan_type_id} to TMC Subarray")
 def invoke_assign_resources(
     context_fixt: SubarrayTestContextData, tmc: TMCFacade, scan_type_id: str
 ):
@@ -121,7 +121,7 @@ def invoke_assign_resources(
 
 @when(
     "I invoke configure command with "
-    "scan_type_id {scan_type_id} on TMC Subarray"
+    "scan_type_id <scan_type_id> on TMC Subarray"
 )
 def verify_version_sdp_mock_interface(
     tmc: TMCFacade, scan_type_id: str, context_fixt: SubarrayTestContextData
