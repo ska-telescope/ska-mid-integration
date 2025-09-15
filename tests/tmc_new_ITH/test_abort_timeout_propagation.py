@@ -3,6 +3,7 @@ Test for Abort() error propagation verification
 """
 import json
 import logging
+import time
 
 import pytest
 from assertpy import assert_that
@@ -105,6 +106,7 @@ def subarray_in_idle_obsstate(
     default_commands_inputs: TestHarnessInputs,
 ):
     """Ensure the subarray is in READY obsstate."""
+
     _setup_event_subscriptions(tmc, csp, sdp, dishes, event_tracer)
     context_fixt.starting_state = ObsState.READY
 
@@ -285,4 +287,17 @@ def verify_error_message(
             PointingState.READY,
         )
 
+    # After the TMC SubarrayNode reaches the FAULT obsState, we need to bring
+    # it back to EMPTY by sending a restart command.
+    # Before sending the restart, we wait briefly to ensure that the CSP
+    # subarray leaf node has reported the ABORTED obsState to the TMC
+    # subarray node. This ensures the restart command will be processed
+    # correctly.
+    # In some cases, if the ABORTED obsState event from the CSP subarray
+    # leaf node is not received by the TMC subarray node, the restart
+    # command will not be sent to the CSP subarray leaf node. Therefore,
+    # this sleep is necessary to allow event propagation.
+    # It needs to be updated once required support to check
+    # leaf nodes obsState is implemented in the ITH.
+    time.sleep(0.5)
     tmc.restart()
