@@ -20,9 +20,6 @@ from ska_tango_testing.integration import TangoEventTracer, log_events
 from tests.tmc_csp_new_ITH.conftest import SubarrayTestContextData
 from tests.tmc_new_ITH.conftest import get_abort_command_timeout
 
-# import time
-
-
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
