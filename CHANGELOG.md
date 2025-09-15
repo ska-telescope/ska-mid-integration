@@ -10,9 +10,9 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 ************
 Added
 -----
-* Updated Subarray Node to update ObsState aggregation rule for Aborted ObsState.
+* Updated Subarray Node to update ObsState aggregation rule for Abort and Configure command.
 * Updated TMC tags:
-    subarraynode: 0.41.1-dev
+    subarraynode: 0.41.3
 
 [1.7.0-rc.1]
 ************
