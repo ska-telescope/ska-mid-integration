@@ -143,8 +143,8 @@ def verify_version_sdp_mock_interface(
 
 
 @then(
-    "mock SDP subarray mock successfully executes "
-    "the Configure command and goes to READY obsstate"
+    "mock SDP subarray mock successfully executes the "
+    "Configure command and goes to READY obsstate"
 )
 def verify_ready_state(
     context_fixt: SubarrayTestContextData,
