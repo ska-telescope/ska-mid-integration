@@ -12,7 +12,7 @@ Added
 -----
 * Updated Subarray Node to update ObsState aggregation rule for Aborted ObsState.
 * Updated TMC tags:
-    subarraynode: 0.41.1
+    subarraynode: 0.41.1-dev
 
 [1.7.0-rc.1]
 ************
