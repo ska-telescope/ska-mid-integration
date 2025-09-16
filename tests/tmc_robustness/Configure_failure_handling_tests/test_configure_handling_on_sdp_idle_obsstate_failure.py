@@ -14,7 +14,7 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.constant import (
     COMMAND_COMPLETED,
-    COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_CONFIGURING_IDLE,
+    SDP_BACK_TO_INITIAL_STATE,
 )
 from tests.resources.test_support.enum import PointingState
 
@@ -124,9 +124,10 @@ def given_tmc_subarray_configure_is_in_progress(
     subarray_node, event_recorder, command_input_factory, simulator_factory
 ):
     csp_sim, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
-    sdp_sim.SetDefective(
-        json.dumps(COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_CONFIGURING_IDLE)
-    )
+    # sdp_sim.SetDefective(
+    #     json.dumps(COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_CONFIGURING_IDLE)
+    # )
+    sdp_sim.SetDefective(SDP_BACK_TO_INITIAL_STATE)
     configure_input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
     )
