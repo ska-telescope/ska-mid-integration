@@ -1,3 +1,4 @@
+import json
 import logging
 
 import pytest
@@ -20,6 +21,7 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
+@pytest.mark.trial
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
@@ -76,12 +78,13 @@ def given_tmc_subarray_assign_resources(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-    invalid_receiptor_json = prepare_json_args_for_commands(
-        "invalid_receiver_address1", command_input_factory
-    )
-    sdp_sim.SetDirectreceiveAddresses(invalid_receiptor_json)
+    assign_json = json.loads(assign_input_json)
+    assign_json["sdp"]["execution_block"]["scan_types"][1][
+        "scan_type_id"
+    ] = "zzzzzzz_Z"
+
     _, unique_id = central_node_mid.perform_action(
-        "AssignResources", assign_input_json
+        "AssignResources", json.dumps(assign_json)
     )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
