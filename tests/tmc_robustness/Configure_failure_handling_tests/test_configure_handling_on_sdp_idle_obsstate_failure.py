@@ -123,7 +123,7 @@ def given_tmc_subarray_assign_resources(
 def given_tmc_subarray_configure_is_in_progress(
     subarray_node, event_recorder, command_input_factory, simulator_factory
 ):
-    _, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
+    csp_sim, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
     sdp_sim.SetDefective(
         json.dumps(COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_CONFIGURING_IDLE)
     )
@@ -135,6 +135,16 @@ def given_tmc_subarray_configure_is_in_progress(
     )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
+        "obsState",
+        ObsState.CONFIGURING,
+    )
+    assert event_recorder.has_change_event_occurred(
+        sdp_sim,
+        "obsState",
+        ObsState.CONFIGURING,
+    )
+    assert event_recorder.has_change_event_occurred(
+        csp_sim,
         "obsState",
         ObsState.CONFIGURING,
     )
