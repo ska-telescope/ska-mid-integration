@@ -128,7 +128,7 @@ def given_tmc_subarray_configure_is_in_progress(
         json.dumps(COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_CONFIGURING_IDLE)
     )
     configure_input_json = prepare_json_args_for_commands(
-        "configure_with_invalid_scan_type", command_input_factory
+        "configure_mid", command_input_factory
     )
     pytest.command_result = subarray_node.execute_transition(
         "Configure", configure_input_json
@@ -191,7 +191,7 @@ def given_tmc_subarray_stuck_configuring(
             PointingState.TRACK,
             lookahead=15,
         )
-    # Disable CSP Subarray fault
+    # Disable SDP Subarray fault
     sdp_sim.SetDefective(json.dumps({"enabled": False}))
 
 
