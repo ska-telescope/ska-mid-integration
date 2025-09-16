@@ -122,4 +122,4 @@ def verify_abort_command_invoked(tmc: TMCFacade):
 def verify_command_call_info_cleared(sdp: SDPFacade):
     """Verify the commandCallInfo on SDP Mock device"""
 
-    assert device_received_this_command(sdp.sdp_subarray, "Abort", "{}")
+    assert device_received_this_command(sdp.sdp_subarray, "Abort", "")
