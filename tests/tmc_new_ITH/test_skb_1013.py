@@ -70,7 +70,7 @@ def _setup_event_subscriptions(
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/skb_918_1013.feature",
-    "Test Configure command to verify skb-918",
+    "Test abort command to verify skb-1013",
 )
 def test_verify_1013():
     """Test Configure command with and scan_type_id provided."""
