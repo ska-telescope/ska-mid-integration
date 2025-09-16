@@ -1,5 +1,3 @@
-import json
-
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
@@ -79,13 +77,13 @@ def given_tmc_subarray_assign_resources(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-    assign_json = json.loads(assign_input_json)
-    assign_json["sdp"]["execution_block"]["scan_types"][1][
-        "scan_type_id"
-    ] = "zzzzzzz_Z"
+    # invalid_receiptor_json = prepare_json_args_for_commands(
+    #     "invalid_receiver_address2", command_input_factory
+    # )
     _, unique_id = central_node_mid.perform_action(
-        "AssignResources", json.dumps(assign_json)
+        "AssignResources", assign_input_json
     )
+    # sdp_sim.SetDirectreceiveAddresses(invalid_receiptor_json)
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["csp_subarray"],
