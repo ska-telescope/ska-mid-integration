@@ -14,7 +14,6 @@ from tests.resources.test_support.constant import COMMAND_COMPLETED
 from tests.resources.test_support.enum import PointingState
 
 
-@pytest.mark.trial
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
