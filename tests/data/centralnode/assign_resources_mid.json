@@ -69,7 +69,7 @@
                    }
                }
            }, {
-               "scan_type_id": "science6",
+               "scan_type_id": "target:a",
                "derive_from": ".default",
                "beams": {
                    "vis0": {

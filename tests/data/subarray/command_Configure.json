@@ -39,7 +39,7 @@
 },
   "sdp": {
       "interface": "https://schema.skao.int/ska-sdp-configure/0.4",
-      "scan_type": "science6"
+      "scan_type": "target:a"
   },
   "tmc": {
       "scan_duration": 10.0,

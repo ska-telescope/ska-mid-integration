@@ -66,7 +66,7 @@ def _setup_event_subscriptions(
     "Test abort command to verify skb-1013",
 )
 def test_verify_1013():
-    """Test Configure command with and scan_type_id provided."""
+    """Test Abort command with commandcallInfo attribute gets cleared."""
 
 
 @given("subarray is in observation state EMPTY")
@@ -78,7 +78,7 @@ def subarray_in_idle_state(
     event_tracer: TangoEventTracer,
     default_commands_inputs: TestHarnessInputs,
 ):
-    """Ensure the subarray is in the IDLE state."""
+    """Ensure the subarray is in the EMPTY state."""
     _setup_event_subscriptions(tmc, csp, sdp, event_tracer)
     context_fixt.starting_state = ObsState.IDLE
     sdp.sdp_subarray.SetDirectreceiveAddresses("{}")
