@@ -1,7 +1,6 @@
 """Verifies bug SKB-1013
 """
 import pytest
-from assertpy import assert_that
 from pytest_bdd import given, scenario, then, when
 from ska_control_model import ObsState
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
@@ -12,15 +11,13 @@ from ska_integration_test_harness.inputs.test_harness_inputs import (
 )
 from ska_tango_testing.integration import TangoEventTracer, log_events
 
+from tests.resources.test_harness.helpers import device_received_this_command
 from tests.resources.test_support.constant import (
     EVENT_DEFECT,
     RECEIVE_ADDRESSES,
     RESET_DEFECT,
 )
-from tests.tmc_csp_new_ITH.conftest import (
-    ASSERTIONS_TIMEOUT,
-    SubarrayTestContextData,
-)
+from tests.tmc_csp_new_ITH.conftest import SubarrayTestContextData
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 
 
@@ -122,11 +119,7 @@ def verify_abort_command_invoked(tmc: TMCFacade):
     "the commandCallInfo gets clear on SDP subarray mock device, "
     "preventing overflow issue"
 )
-def verify_command_call_info_cleared(
-    sdp: SDPFacade, event_tracer: TangoEventTracer
-):
+def verify_command_call_info_cleared(sdp: SDPFacade):
     """Verify the commandCallInfo on SDP Mock device"""
 
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(sdp.sdp_subarray, "commandCallInfo", "[]")
+    assert device_received_this_command(sdp.sdp_subarray, "Abort", "{}")
