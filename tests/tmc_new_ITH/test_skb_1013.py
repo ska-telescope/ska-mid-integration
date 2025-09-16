@@ -125,20 +125,10 @@ def verify_abort_command_invoked(tmc: TMCFacade):
     "preventing overflow issue"
 )
 def verify_command_call_info_cleared(
-    sdp: SDPFacade,
+    sdp: SDPFacade, event_tracer: TangoEventTracer
 ):
     """Verify the commandCallInfo on SDP Mock device"""
 
-    def check_command_call_info():
-        cmd_info = sdp.sdp_subarray.commandCallInfo
-        if cmd_info:
-            try:
-                cmd_info_json = json.loads(cmd_info)
-                return len(cmd_info_json) == 0
-            except json.JSONDecodeError:
-                return False
-        return False
-
-    assert_that(check_command_call_info).described_as(
-        "SDP subarray mock device's commandCallInfo is expected to be cleared"
-    ).within_timeout(ASSERTIONS_TIMEOUT).is_true()
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(sdp.sdp_subarray, "commandCallInfo", "[]")
