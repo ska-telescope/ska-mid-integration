@@ -11,7 +11,6 @@ from ska_integration_test_harness.inputs.test_harness_inputs import (
 )
 from ska_tango_testing.integration import TangoEventTracer, log_events
 
-from tests.resources.test_harness.helpers import device_received_this_command
 from tests.resources.test_support.constant import (
     EVENT_DEFECT,
     RECEIVE_ADDRESSES,
