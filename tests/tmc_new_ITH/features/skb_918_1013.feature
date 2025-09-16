@@ -2,21 +2,24 @@ Feature: Default
 
 	#This test verifies that hardcoding present in SDP Subarray mock devices is removed and TMC is now able to accept configure command json with scan_type provided in AssignResources json
 	
-    Scenario: Test Configure command to verify skb-918
-        Given subarray is in observation state EMPTY
-        And I assign resources with scan_type_id <scan_type_id> to TMC Subarray
-        When I invoke configure command with scan_type_id <scan_type_id> on TMC Subarray
-        Then mock SDP subarray mock successfully executes the Configure command and goes to READY obsstate
-        Examples:
-            | scan_type_id  |
-            | science6      |
-            | target:c      |
-            | calibration:x | 
+	@XTP-89592 @XTP-28347 @TEAM_HIMALAYA
+	Scenario Outline: Test Configure command to verify skb-918
+		Given subarray is in observation state EMPTY
+		And I assign resources with scan_type_id <scan_type_id> to TMC Subarray
+		When I invoke configure command with scan_type_id <scan_type_id> on TMC Subarray
+		Then mock SDP subarray mock successfully executes the Configure command and goes to READY obsstate
+		Examples:
+		    | scan_type_id  |
+		    | science6      |
+		    | target:c      |
+		    | calibration:x |
     
+    # Test abort command to verify skb-1013
 
-    Scenario: Test abort command to verify skb-1013
-        Given subarray is in observation state EMPTY
-        And I assign resources to TMC Subarray
-        When I invoke abort command on TMC Subarray
-        Then the commandCallInfo gets clear on SDP subarray mock device, preventing overflow issue
+	@XTP-89593 @XTP-28347 @TEAM_HIMALAYA
+	Scenario: Test abort command to verify skb-1013
+		Given subarray is in observation state EMPTY
+		And I assign resources to TMC Subarray
+		When I invoke abort command on TMC Subarray
+		Then the commandCallInfo gets clear on SDP subarray mock device, preventing overflow issue
     
