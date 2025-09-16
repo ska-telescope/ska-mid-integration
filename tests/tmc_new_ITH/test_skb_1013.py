@@ -101,7 +101,7 @@ def subarray_in_idle_state(
 
 @given("I assign resources to TMC Subarray")
 def invoke_assign_resources(
-    context_fixt: SubarrayTestContextData, tmc: TMCFacade, scan_type_id: str
+    context_fixt: SubarrayTestContextData, tmc: TMCFacade
 ):
     """Invoke Assign Resources"""
     json_input = MyFileJSONInput(
