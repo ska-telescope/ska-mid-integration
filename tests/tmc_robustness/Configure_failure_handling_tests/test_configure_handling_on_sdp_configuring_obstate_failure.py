@@ -1,3 +1,4 @@
+import json
 import logging
 
 import pytest
@@ -13,7 +14,10 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_commands,
 )
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
-from tests.resources.test_support.constant import COMMAND_COMPLETED
+from tests.resources.test_support.constant import (
+    COMMAND_COMPLETED,
+    OBS_STATE_CONFIGURING_STUCK_DEFECT,
+)
 from tests.resources.test_support.enum import PointingState
 
 configure_logging(logging.DEBUG)
@@ -76,10 +80,6 @@ def given_tmc_subarray_assign_resources(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-    invalid_receiptor_json = prepare_json_args_for_commands(
-        "invalid_receiver_address1", command_input_factory
-    )
-    sdp_sim.SetDirectreceiveAddresses(invalid_receiptor_json)
     _, unique_id = central_node_mid.perform_action(
         "AssignResources", assign_input_json
     )
@@ -109,11 +109,13 @@ def given_tmc_subarray_assign_resources(
     )
 )
 def given_tmc_subarray_configure_is_in_progress(
-    subarray_node, event_recorder, command_input_factory
+    subarray_node, event_recorder, command_input_factory, simulator_factory
 ):
+    _, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
     configure_input_json = prepare_json_args_for_commands(
-        "configure_with_invalid_interface", command_input_factory
+        "configure_mid", command_input_factory
     )
+    sdp_sim.SetDefective(json.dumps(OBS_STATE_CONFIGURING_STUCK_DEFECT))
     pytest.command_result = subarray_node.execute_transition(
         "Configure", configure_input_json
     )
@@ -150,6 +152,7 @@ def sdp_subarray_stuck_in_configuring(event_recorder, simulator_factory):
         "obsState",
         ObsState.CONFIGURING,
     )
+    sdp_sim.SetDefective(json.dumps({"enabled": False}))
 
 
 @given(

@@ -1,3 +1,5 @@
+import json
+
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
@@ -10,7 +12,10 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_commands,
 )
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
-from tests.resources.test_support.constant import COMMAND_COMPLETED
+from tests.resources.test_support.constant import (
+    COMMAND_COMPLETED,
+    SDP_BACK_TO_INITIAL_STATE,
+)
 from tests.resources.test_support.enum import PointingState
 
 
@@ -69,20 +74,14 @@ def given_tmc_subarray_assign_resources(
     central_node_mid,
     subarray_node,
     event_recorder,
-    simulator_factory,
     command_input_factory,
 ):
-    _, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
-    )
-    invalid_receiptor_json = prepare_json_args_for_commands(
-        "invalid_receiver_address2", command_input_factory
     )
     _, unique_id = central_node_mid.perform_action(
         "AssignResources", assign_input_json
     )
-    sdp_sim.SetDirectreceiveAddresses(invalid_receiptor_json)
 
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_devices["csp_subarray"],
@@ -121,16 +120,29 @@ def given_tmc_subarray_assign_resources(
     )
 )
 def given_tmc_subarray_configure_is_in_progress(
-    subarray_node, event_recorder, command_input_factory
+    subarray_node, event_recorder, command_input_factory, simulator_factory
 ):
+    csp_sim, sdp_sim, _, _, _, _ = get_device_simulators(simulator_factory)
+
+    sdp_sim.SetDefective(SDP_BACK_TO_INITIAL_STATE)
     configure_input_json = prepare_json_args_for_commands(
-        "configure_with_invalid_scan_type", command_input_factory
+        "configure_mid", command_input_factory
     )
     pytest.command_result = subarray_node.execute_transition(
         "Configure", configure_input_json
     )
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
+        "obsState",
+        ObsState.CONFIGURING,
+    )
+    assert event_recorder.has_change_event_occurred(
+        sdp_sim,
+        "obsState",
+        ObsState.CONFIGURING,
+    )
+    assert event_recorder.has_change_event_occurred(
+        csp_sim,
         "obsState",
         ObsState.CONFIGURING,
     )
@@ -171,8 +183,11 @@ def sdp_subarray_returns_to_obsstate_idle(event_recorder, simulator_factory):
     parsers.parse("the TMC SubarrayNode {subarray_id} transitions to FAULT")
 )
 def given_tmc_subarray_stuck_configuring(
-    central_node_mid, subarray_node, event_recorder
+    central_node_mid, subarray_node, event_recorder, simulator_factory
 ):
+    sdp_sim = simulator_factory.get_or_create_simulator_device(
+        SimulatorDeviceType.MID_SDP_DEVICE
+    )
     assert subarray_node.subarray_node.obsState == ObsState.FAULT
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
@@ -184,6 +199,8 @@ def given_tmc_subarray_stuck_configuring(
             PointingState.TRACK,
             lookahead=15,
         )
+    # Disable SDP Subarray fault
+    sdp_sim.SetDefective(json.dumps({"enabled": False}))
 
 
 @when(

@@ -216,7 +216,7 @@ ifeq ($(SDP_SIMULATION_ENABLED),false)
 endif
 
 taranta-link:
-	@echo "#            https://${CLUSTER_DOMAIN}/$(KUBE_NAMESPACE)/taranta/dashboard"
+	@echo "#            https://k8s.stfc.skao.int/$(KUBE_NAMESPACE)/taranta/dashboard"
 
 alarm-handler-configurator-link:
 	@echo "#            https://k8s.stfc.skao.int/$(KUBE_NAMESPACE)/alarm-handler/"
