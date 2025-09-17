@@ -1,38 +1,20 @@
-release=1.7.0-rc.2
-tag=1.7.0-rc.2
+release=1.7.1-rc.1
+tag=1.7.1-rc.1
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.6.0 to v1.7.0-rc.1**
-        * Added a new test case to verify Bug SKB-617
-        * Ensure that the "Assign Resource" succeeds even when the SDP block is empty.
-        * Updated helper in common and also update image to 0.28.8
-        * Introduced `subarray_count` variable in `mock.yaml` to support configurable subarray scaling.
-        * CommandTimeout attribute is introduced which can help to update timeout without redeployment.
-        * CommandTimeOutDefault property is introduced which 
-        can be used to set default value at the time of deployment.
+**1. Updated ska-tmc-mid from v1.7.0-rc.2 to v1.7.1-rc.1**
+        * Added a new test case to verify Bug SKB-918, SKB-1013
+        * Updated the ska-tango-utils and ska-tango-base image to 0.4.24
         * Updated TMC tags:
-                centralnode: 0.21.3
-                subarraynode: 0.41.0
-                sdpleafnodes:0.24.0
-                cspsubarrayleafnode: 0.31.0
-                dishleafnode:tag: 0.24.0
-                tmccommon: 0.30.0
+                sdpleafnodes:0.24.2
+                tmccommon: 0.30.3
     
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.6.0 to v1.7.0-rc.1**
+**1. Updated ska-tmc-mid from v1.7.0-rc.2 to v1.7.1-rc.1**
 
-        * Added a new test case to verify Bug SKB-617
-        * Ensure that the "Assign Resource" succeeds even when the SDP block is empty.
-        * Updated helper in common and also update image to 0.28.8
-        * Introduced `subarray_count` variable in `mock.yaml` to support configurable subarray scaling.
-        * CommandTimeout attribute is introduced which can help to update timeout without redeployment.
-        * CommandTimeOutDefault property is introduced which 
-        can be used to set default value at the time of deployment.
+        * Added a new test case to verify Bug SKB-918, SKB-1013
+        * Updated the ska-tango-utils and ska-tango-base image to 0.4.24
         * Updated TMC tags:
-                centralnode: 0.21.3
-                subarraynode: 0.41.0
-                sdpleafnodes:0.24.0
-                cspsubarrayleafnode: 0.31.0
-                dishleafnode:tag: 0.24.0
-                tmccommon: 0.30.0
+                sdpleafnodes:0.24.2
+                tmccommon: 0.30.3
