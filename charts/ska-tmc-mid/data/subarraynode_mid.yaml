@@ -14,12 +14,12 @@ server:
   {{- $isSimulatedDish := .Values.deviceServers.mocks.dish }}
   {{- $real_dish_name := .Values.global.namespace_dish.dish_names }}
   {{- $DishMasterIdentifier := .Values.global.dish_suffix }}
-  {{- $dish_id := .Values.deviceServers.subarraynode.DishIDs }}
+  {{- $dish_id := .Values.global.dishes }}
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
   {{- $csp_assign_interface := .Values.deviceServers.subarraynode.CspAssignResourcesInterfaceURL }}
   {{- $csp_scan_interface := .Values.deviceServers.subarraynode.CspScanInterfaceURL }}
   {{- $sdp_scan_interface := .Values.deviceServers.subarraynode.SdpScanInterfaceURL }}
-  {{- $CommandTimeOut := .Values.deviceServers.subarraynode.CommandTimeOut}}
+  {{- $CommandTimeOutDefault := .Values.deviceServers.subarraynode.CommandTimeOutDefault}}
   {{- $AbortCommandTimeOut := .Values.deviceServers.subarraynode.AbortCommandTimeOut}}
   {{- $LivelinessCheckPeriod := .Values.deviceServers.subarraynode.LivelinessCheckPeriod}}
   {{- $EventSubscriptionCheckPeriod := .Values.deviceServers.subarraynode.EventSubscriptionCheckPeriod}}
@@ -71,9 +71,9 @@ server:
           - name: "LoggingLevelDefault"
             values:
               - "5"
-          - name: "CommandTimeOut"
+          - name: "CommandTimeOutDefault"
             values:
-              - "{{ $CommandTimeOut }}"
+              - "{{ $CommandTimeOutDefault }}"
           - name: "AbortCommandTimeOut"
             values:
               - "{{ $AbortCommandTimeOut}}"

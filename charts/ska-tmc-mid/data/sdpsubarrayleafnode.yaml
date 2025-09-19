@@ -7,7 +7,7 @@ entrypoints:
 server:
   name: "sdp_subarray_leaf_node"
   instances:
-  {{ $CommandTimeOut := .Values.deviceServers.sdpsubarrayleafnode.CommandTimeOut}}
+  {{ $CommandTimeOutDefault := .Values.deviceServers.sdpsubarrayleafnode.CommandTimeOutDefault}}
   {{ $sdp_sa_fqdn_prefix:= .Values.global.sdp_subarray_prefix}}
   {{- $AdapterTimeOut := .Values.deviceServers.sdpsubarrayleafnode.AdapterTimeOut}}
   {{- $LivelinessCheckPeriod := .Values.deviceServers.sdpsubarrayleafnode.LivelinessCheckPeriod}}
@@ -34,9 +34,9 @@ server:
               - name: "LoggingLevelDefault"
                 values:
                 - "5"
-              - name: "CommandTimeOut"
+              - name: "CommandTimeOutDefault"
                 values:
-                - "{{ $CommandTimeOut }}"
+                - "{{ $CommandTimeOutDefault }}"
               - name: "AdapterTimeOut"
                 values:
                 - "{{ $AdapterTimeOut }}"

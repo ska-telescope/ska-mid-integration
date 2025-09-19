@@ -5,13 +5,66 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
-[Unreleased]
+[1.7.1.rc.1]
+************
+Added
+-----
+* Added a new test case to verify Bug SKB-918, SKB-1013
+* Updated the ska-tango-utils and ska-tango-base image to 0.4.24
+* Updated TMC tags:
+        sdpleafnodes:0.24.2
+        tmccommon: 0.30.3
+Removed
+-------
+* Removed invalid receive addresses jsons from data, because they were no longer required
+
+[1.7.0-rc.2]
+************
+Added
+-----
+* Updated Subarray Node to update ObsState aggregation rule for Abort and Configure command.
+* Updated TMC tags:
+    subarraynode: 0.41.3
+
+[1.7.0-rc.1]
 ************
 Added
 -----
 * Added a new test case to verify Bug SKB-617:
   Ensure that the "Assign Resource" succeeds even when the SDP block is empty.
 * Updated helper in common and also update image to 0.28.8
+* Introduced `subarray_count` variable in `mock.yaml` to support configurable subarray scaling.
+* CommandTimeout attribute is introduced which can help to update timeout without redeployment.
+* CommandTimeOutDefault property is introduced which 
+  can be used to set default value at the time of deployment.
+* Updated TMC tags:
+    centralnode: 0.21.3
+    subarraynode: 0.41.0
+    sdpleafnodes:0.24.0
+    cspsubarrayleafnode: 0.31.0
+    dishleafnode:tag: 0.24.0
+    tmccommon: 0.30.0
+
+Changed
+-------
+* Refactored helm chart for scaling from now the global dishes variable accepts 
+  dish_id in ["SKA001","SKA002","SKA003", ....."SKA067","SKA100"]   
+
+Fixed
+-----
+* Fix for bug SKB-813.
+
+[1.6.0]
+*******
+This is the final version of TMC Mid delivering features SP-5340 and SP-5341
+Both the features improve TMC robustness by handling inconsistent subsystem obsStates.
+
+Added
+-----
+* TMC Subarray moves to FAULT after command timed out
+* TMC Restart command is updated to invoke abort and restart on sub system to bring obs state to EMPTY
+* TMC Subarray is updated to transition Obs State to FAULT after command failure
+* Fix for bug SKB-930
 
 [1.6.0-rc.1]
 ************

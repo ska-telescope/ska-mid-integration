@@ -1,15 +1,25 @@
 name: "mocks-{{.Release.Name}}"
 function: testing
 domain: mocks
-instances: ["01","02","03","04","05","001","036","063","100"]
+instances:
+  - "01"
+  - "02"
+  - "03"
+  - "04"
+  - "05"
+{{- range .Values.global.dishes }}
+  {{- $num := regexReplaceAll "^[A-Za-z]+" . "" }}
+  - "{{ $num }}"
+{{- end }}
+
 {{- $midSdpControlFqdn := .Values.global.sdp_master }}
-{{- $midSdpSubarrayFqdn1 := .Values.global.mid_sdp_subarray_1 }}
-{{- $midSdpSubarrayFqdn2 := .Values.global.mid_sdp_subarray_2 }}
 {{- $midSdpQueueConnector := .Values.global.mid_sdp_queueconnector }}
 {{- $midCspControl := .Values.global.mid_csp_control }}
-{{- $midCspSubarray1 := .Values.global.mid_csp_subarray_1 }}
-{{- $midCspSubarray2 := .Values.global.mid_csp_subarray_2 }}
 {{- $dishManagerSuffix := .Values.global.dish_manager_suffix }}
+{{- $subCount := int .Values.subarray_count }}
+{{- $sdpPrefix := .Values.global.sdp_subarray_prefix }}
+{{- $cspPrefix := .Values.global.csp_subarray_prefix }}
+
 entrypoints:
   - name: "ska_tmc_common.test_helpers.helper_base_device.HelperBaseDevice"
   - name: "ska_tmc_common.test_helpers.helper_dish_device.HelperDishDevice"
@@ -33,8 +43,10 @@ server:
       classes:
         - name: "HelperSdpSubarray"
           devices:
-          - name: "{{ $midSdpSubarrayFqdn1 }}"
-          - name: "{{ $midSdpSubarrayFqdn2 }}"
+          {{- range $i, $_ := until $subCount }}
+            {{- $idx := printf "%02d" (add $i 1) }}
+            - name: "{{ $sdpPrefix }}/{{ $idx }}"
+          {{- end }}
     - name: "03"
       classes:
         - name: "HelperSdpQueueConnector"
@@ -52,17 +64,20 @@ server:
       classes:
         - name: "HelperSubArrayDevice"
           devices:
-          - name: "{{ $midCspSubarray1 }}"
-          - name: "{{ $midCspSubarray2 }}"
-        {{- end }}
-        {{- if eq $isSimulatedDish true }}
-  {{- range .Values.global.dishes }}
-    - name: "{{ . }}"
+          {{- range $i, $_ := until $subCount }}
+            {{- $idx := printf "%02d" (add $i 1) }}
+            - name: "{{ $cspPrefix }}/{{ $idx }}"
+          {{- end }}
+      {{- end }}
+      {{- if eq $isSimulatedDish true }}
+{{- range .Values.global.dishes }}
+  {{- $num := regexReplaceAll "^[A-Za-z]+" . "" }}
+    - name: "{{ $num }}"
       classes:
         - name: "HelperDishDevice"
           devices:
-          - name: "{{ $dishManagerSuffix }}{{ printf . }}"
-      {{- end }}
+            - name: "{{ $dishManagerSuffix }}{{ $num }}"
+{{- end }}
       {{- end }}
 depends_on:
   - device: sys/database/2
@@ -71,4 +86,3 @@ image:
   image: "{{.Values.skatmccommon.image.image}}"
   tag: "{{.Values.skatmccommon.image.tag}}"
   pullPolicy: "{{.Values.skatmccommon.image.pullPolicy}}"
-

@@ -131,6 +131,7 @@ def send_restart_command(
     if subsystem == "SDP":
         sdp.sdp_subarray.SetDelayInfo(json.dumps({"Restart": delay}))
     context_fixt.when_action_name = "Restart"
+
     _, pytest.unique_id = tmc.subarray_node.Restart()
 
 
