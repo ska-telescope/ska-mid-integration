@@ -14,6 +14,7 @@ Added
 * Updated TMC tags:
         sdpleafnodes:0.24.2
         tmccommon: 0.30.3
+        
 Removed
 -------
 * Removed invalid receive addresses jsons from data, because they were no longer required
