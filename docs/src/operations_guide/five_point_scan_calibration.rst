@@ -23,74 +23,87 @@ Overview
 Preconditions
 -------------
 
-* TMC Subarray Node and its connected subsystems (SDP, CSP, Dish Leaf Nodes) are online and reachable.
-* Required JSON configuration files are available:
+* TMC Subarray Node must be online, reachable, and in the ``READY`` state.
+* Required configuration JSONs (full or partial) are available:
 
-  - ``scan_mid.json`` (central reference scan)
+  - `scan_mid.json <https://developer.skao.int/projects/ska-telmodel/en/latest/schemas/tmc/ska-tmc-scan.html>`_ (central reference scan)
 
-  - ``partial_configuration_1.json`` to ``partial_configuration_4.json`` (offset scans)
+  - partial_configuration_1.json to partial_configuration_4.json (offset scans)
 
-  - ``configure_mid.json`` (post-calibration science configuration)
+  - `configure_mid.json <https://developer.skao.int/projects/ska-telmodel/en/latest/schemas/tmc/ska-tmc-configure.html>`_ (post-calibration science configuration)
 
-  - ``receive_address_mid.json`` (SDP calibration solution addresses)
+  - `receive_address_mid.json <https://developer.skao.int/projects/ska-telmodel/en/latest/schemas/sdp/ska-sdp-recvaddrs.html>`_ (SDP calibration solution addresses)
 
 * Resources have already been assigned to the subarray and it is in the ``READY`` observation state.
 * Commands can be sent to the Subarray Node using the standard operational interface.
+
 
 Step-by-Step Procedure
 ----------------------
 
 1. **Confirm Subarray state**
 
-   - Verify that the Subarray Node is in ``READY``.
-
+   - Verify that the TMC Subarray Node is online, reachable, and in the ``READY`` state.
    - If not, assign resources and configure until ``READY``.
 
-2. **Central pointing scan**
+2. **Perform five calibration scans**
 
-   - Send a ``Scan`` command with ``scan_mid.json``.
+   The calibration requires **five consecutive configuration + scan cycles**:
 
-   - Observe state transitions: ``READY → SCANNING → READY``.
+   * One central (reference) scan using a full configuration.
+   * Four offset scans, each using a partial configuration that only changes the pointing offsets.
+     All other subarray configuration parameters remain unchanged.
 
-3. **Offset scans**
+   For each cycle:
 
-   - Perform four offset scans using partial configuration JSONs:
-     
-     +--------------------------------------+---------------------------------------------+
-     | JSON file                            | Offset details                              |
-     +======================================+=============================================+
-     | ``partial_configuration_1.json``     | CA offset = 0.0, IE offset = +5.0 arcsec    |
-     +--------------------------------------+---------------------------------------------+
-     | ``partial_configuration_2.json``     | CA offset = 0.0, IE offset = −5.0 arcsec    |
-     +--------------------------------------+---------------------------------------------+
-     | ``partial_configuration_3.json``     | CA offset = +5.0 arcsec, IE offset = 0.0    |
-     +--------------------------------------+---------------------------------------------+
-     | ``partial_configuration_4.json``     | CA offset = −5.0 arcsec, IE offset = 0.0    |
-     +--------------------------------------+---------------------------------------------+
+   - Send the appropriate ``Configure`` command (full or partial).
+   - Send a ``Scan`` command.
+   - Observe the state transitions: ``READY → SCANNING → READY``.
 
-   - For each offset:
+   .. note::
 
-     * Send ``Configure`` with the partial configuration JSON.
+      The procedure is the same regardless of whether the configuration is
+      full (central scan) or partial (offset scans). The difference lies only in
+      the pointing offsets provided.
 
-     * Send ``Scan``.
+   **Example offsets for partial configurations**
 
-     * Confirm Subarray transitions to ``SCANNING`` and returns to ``READY``.
+   +--------------------------------------+---------------------------------------------+
+   | JSON file (example)                  | Offset details                              |
+   +======================================+=============================================+
+   | ``partial_configuration_1.json``     | CA offset = 0.0, IE offset = +5.0 arcsec    |
+   +--------------------------------------+---------------------------------------------+
+   | ``partial_configuration_2.json``     | CA offset = 0.0, IE offset = −5.0 arcsec    |
+   +--------------------------------------+---------------------------------------------+
+   | ``partial_configuration_3.json``     | CA offset = +5.0 arcsec, IE offset = 0.0    |
+   +--------------------------------------+---------------------------------------------+
+   | ``partial_configuration_4.json``     | CA offset = −5.0 arcsec, IE offset = 0.0    |
+   +--------------------------------------+---------------------------------------------+
 
-4. **Validate pointing**
+3. **Validate pointing**
 
-   - After each scan, check that each dish reports updated ``actualPointing`` values.
+   After each scan, verify that the dishes have updated their ``actualPointing`` values
+   and that no errors were reported in the command results.
 
-   - Ensure no errors were reported in command results.
+4. **Apply calibration for science scans**
 
-5. **Apply calibration and proceed to science scan**
+   Once all five calibration scans are complete:
 
-   - Send a ``Configure`` command with ``configure_mid.json``.
+   - Send a ``Configure`` command with the science configuration (for example, ``configure_mid.json``).
+   - TMC will automatically fetch the calibration solutions from SDP using the addresses defined in ``receive_address_mid.json``.
+   - Confirm that calibration solutions are applied to the dishes.
+   - The Subarray should return to ``READY``.
 
-   - TMC will fetch calibration solutions from SDP according to ``receive_address_mid.json``.
+   .. note::
 
-   - Confirm calibration solutions are applied to dishes.
+      Applying calibration via ``Configure`` is a standard step before starting
+      science observations. It is mentioned here only to highlight that the
+      solutions obtained from the five-point scan will be applied at this stage.
 
-   - Subarray should return to ``READY``.
+5. **Proceed to science observations**
+
+   - After confirming the calibration has been applied, the subarray is ready
+     for science scans using the configured pointing solutions.
 
    
 
@@ -126,7 +139,7 @@ If the calibration sequence does not complete:
 JSON Interface References
 -------------------------
 
-* TMC Configure schema: https://schema.skao.int/ska-tmc-configure/2.2
+* `TMC Configure schema <https://developer.skao.int/projects/ska-telmodel/en/latest/schemas/tmc/ska-tmc-configure.html>`_ 
 
 * Example partial configurations:
 
@@ -227,7 +240,7 @@ JSON Interface References
                      [744, "06-00-00-00-00-01"]
                  ],
                  "delay_cal": "mid-sdp/telstate/rcal0/delay",
-                 "pointing_cal": "tango://mid-sdp/queueconnector/01/pointing_cal_{dish_id}"
+                 "pointing_cal": "tango://mid-sdp/queueconnector/01/pointing_cal_{SKA001}"
              }
          }
      }

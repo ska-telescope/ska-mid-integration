@@ -12,4 +12,3 @@ Knowledge Base
    fqdns
    admin_mode
    tmc_recovery
-   five_point_scan_calibration
