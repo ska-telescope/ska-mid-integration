@@ -15,7 +15,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.constant import COMMAND_COMPLETED
 
 
-@pytest.mark.batch1_sah1769
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/band5_down_conversion_observation.feature",
