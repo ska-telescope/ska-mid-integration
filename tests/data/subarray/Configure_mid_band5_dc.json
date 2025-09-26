@@ -1,6 +1,7 @@
 {
-  "interface": "https://schema.skao.int/ska-tmc-configure/4.0",
+  "interface": "https://schema.skao.int/ska-tmc-configure/5.0",
   "dish": {
+    "interface": "https://schema.skao.int/ska-dish-configure/1.0",
     "receiver_band": "5b",
     "band5_downconversion_subband": "1"
   },
