@@ -74,9 +74,10 @@ Step-by-Step Procedure
 
    Once all five calibration scans are complete:
 
-   - Send a ``Configure`` command with the science configuration (for example, ``configure_mid.json``).
-   - TMC automatically fetch the calibration solutions from SDP using the addresses defined in ``receive_address_mid.json``.
+   - Send a `Configure_mid.json <https://developer.skao.int/projects/ska-telmodel/en/latest/schemas/tmc/ska-tmc-configure.html>`_  command with the science configuration.
+   - TMC automatically fetch the calibration solutions from SDP using the addresses defined in `receive_address_mid.json <https://developer.skao.int/projects/ska-telmodel/en/latest/schemas/sdp/ska-sdp-recvaddrs.html>`_.
    - Confirm that calibration solutions are applied to the dishes.
+   
 
    .. note::
 
@@ -184,32 +185,4 @@ JSON Interface References
          }
      }
 
-* Receive address schema (``receive_addresses_mid.json`` — used mainly for testing):
-
-  .. code-block:: json
-
-     {
-         "science_A": {
-             "vis0": {
-                 "function": "visibilities",
-                 "host": [
-                     [0, "192.168.0.1"],
-                     [400, "192.168.0.2"],
-                     [744, "192.168.0.3"],
-                     [1144, "192.168.0.4"]
-                 ],
-                 "port": [
-                     [0, 9000, 1],
-                     [400, 9000, 1],
-                     [744, 9000, 1],
-                     [1144, 9000, 1]
-                 ],
-                 "mac": [
-                     [0, "06-00-00-00-00-00"],
-                     [744, "06-00-00-00-00-01"]
-                 ],
-                 "delay_cal": "mid-sdp/telstate/rcal0/delay",
-                 "pointing_cal": "tango://mid-sdp/queueconnector/01/pointing_cal_{SKA001}"
-             }
-         }
-     }
+* `receive_address_mid.json <https://developer.skao.int/projects/ska-telmodel/en/latest/schemas/sdp/ska-sdp-recvaddrs.html>`_ (used mainly for testing)
