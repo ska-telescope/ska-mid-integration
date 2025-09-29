@@ -34,7 +34,7 @@
         },
         "projection": {
           "name": "SIN",
-          "alignment": "icrs"
+          "alignment": "ICRS"
         }
       }
     ]
