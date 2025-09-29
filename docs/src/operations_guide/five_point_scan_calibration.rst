@@ -1,4 +1,3 @@
-
 .. _`Five Point Calibration Scan`:
 
 TMC Five-Point Calibration Scan
@@ -11,46 +10,29 @@ The procedure is intended for operators, to establish pointing calibration solut
 Overview
 --------
 
-- The subarray must first be in the ``READY`` observation state.
-- The calibration scan sequence includes:
+A five-point calibration scan requires the resources must be assigned to the subarray and
+subarray must be online and available to accept commands.
 
-  * One central pointing scan (reference),
+The calibration scan sequence includes:
 
-  * Four offset scans (north, south, east, west) using partial configuration JSONs.
+* One pointing scan (reference) using the full configuration.
+* Four offset scans using partial configuration. 
 
-- After calibration, the subarray returns to ``READY`` and the calibration solutions are available for subsequent science scans.
-
-Preconditions
--------------
-
-* TMC Subarray Node must be online, reachable, and in the ``READY`` state.
-* Required configuration JSONs (full or partial) are available:
-
-  - `scan_mid.json <https://developer.skao.int/projects/ska-telmodel/en/latest/schemas/tmc/ska-tmc-scan.html>`_ (central reference scan)
-
-  - partial_configuration_1.json to partial_configuration_4.json (offset scans)
-
-  - `configure_mid.json <https://developer.skao.int/projects/ska-telmodel/en/latest/schemas/tmc/ska-tmc-configure.html>`_ (post-calibration science configuration)
-
-  - `receive_address_mid.json <https://developer.skao.int/projects/ska-telmodel/en/latest/schemas/sdp/ska-sdp-recvaddrs.html>`_ (SDP calibration solution addresses)
-
-* Resources have already been assigned to the subarray and it is in the ``READY`` observation state.
-* Commands can be sent to the Subarray Node using the standard operational interface.
-
+Together, these five scans provide data to derive calibration solutions and calibration solutions are available for science observations.
 
 Step-by-Step Procedure
 ----------------------
 
 1. **Confirm Subarray state**
 
-   - Verify that the TMC Subarray Node is online, reachable, and in the ``READY`` state.
-   - If not, assign resources and configure until ``READY``.
+   - Verify that the TMC Subarray Node is online, reachable, and available.
+   - If not, assign resources and configure until available.
 
 2. **Perform five calibration scans**
 
    The calibration requires **five consecutive configuration + scan cycles**:
 
-   * One central (reference) scan using a full configuration.
+   * One scan using a full configuration.
    * Four offset scans, each using a partial configuration that only changes the pointing offsets.
      All other subarray configuration parameters remain unchanged.
 
@@ -63,7 +45,7 @@ Step-by-Step Procedure
    .. note::
 
       The procedure is the same regardless of whether the configuration is
-      full (central scan) or partial (offset scans). The difference lies only in
+      full or partial (offset scans). The difference lies only in
       the pointing offsets provided.
 
    **Example offsets for partial configurations**
@@ -85,14 +67,16 @@ Step-by-Step Procedure
    After each scan, verify that the dishes have updated their ``actualPointing`` values
    and that no errors were reported in the command results.
 
-4. **Apply calibration for science scans**
+   The Dish Leaf Node exposes this attribute, which can be monitored to verify
+   that the commanded pointing offsets are correctly applied.
+
+4. **(Optional) Apply calibration for science scans**
 
    Once all five calibration scans are complete:
 
    - Send a ``Configure`` command with the science configuration (for example, ``configure_mid.json``).
-   - TMC will automatically fetch the calibration solutions from SDP using the addresses defined in ``receive_address_mid.json``.
+   - TMC automatically fetch the calibration solutions from SDP using the addresses defined in ``receive_address_mid.json``.
    - Confirm that calibration solutions are applied to the dishes.
-   - The Subarray should return to ``READY``.
 
    .. note::
 
@@ -100,48 +84,33 @@ Step-by-Step Procedure
       science observations. It is mentioned here only to highlight that the
       solutions obtained from the five-point scan will be applied at this stage.
 
-5. **Proceed to science observations**
+Troubleshooting Calibration Issues
+----------------------------------
 
-   - After confirming the calibration has been applied, the subarray is ready
-     for science scans using the configured pointing solutions.
-
-   
-
-Failure to Complete Five-Point Scan
------------------------------------
-
-If the calibration sequence does not complete:
+If one of the calibration steps fails:
 
 * **Check observation state transitions**
 
-  - Verify Subarray moves to ``SCANNING`` during each scan and returns to ``READY``.
+  - Confirm the Subarray moves to ``SCANNING`` during each scan and returns to ``READY``.
 
 * **Inspect Dish Leaf Nodes**
 
-  - Ensure ``actualPointing`` is updated after each offset scan.
+  - Check the ``actualPointing`` attribute to confirm that commanded offsets are applied.
 
 * **Verify JSON payloads**
 
-  - Confirm offsets are correct and ``"partial_configuration": true`` is included.
+  - Ensure offsets are correct and ``"partial_configuration": true`` is included.
 
 * **Check calibration availability**
 
-  - Ensure SDP has published calibration data at the addresses listed in ``receive_address_mid.json``.
-
-* **Re-run failed steps if required**
-
-  - If an offset scan fails, repeat that partial configuration and scan.
-
-* **Proceed to science only after success**
-
-  - Do not configure for science scans until all five calibration scans are complete.
+  - Confirm that SDP publishes calibration data at the expected addresses.
 
 JSON Interface References
 -------------------------
 
-* `TMC Configure schema <https://developer.skao.int/projects/ska-telmodel/en/latest/schemas/tmc/ska-tmc-configure.html>`_ 
+* `TMC Configure schema <https://developer.skao.int/projects/ska-telmodel/en/latest/schemas/tmc/ska-tmc-configure.html>`_
 
-* Example partial configurations:
+* Example partial configurations (for reference/testing):
 
   **partial_configuration_1.json**
 
@@ -215,7 +184,7 @@ JSON Interface References
          }
      }
 
-* Receive address schema (``receive_addresses_mid.json``):
+* Receive address schema (``receive_addresses_mid.json`` — used mainly for testing):
 
   .. code-block:: json
 
@@ -244,9 +213,3 @@ JSON Interface References
              }
          }
      }
-
-
-
-
-
-
