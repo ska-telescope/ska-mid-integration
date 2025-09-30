@@ -5,6 +5,13 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[Unreleased]
+************
+Added
+-----
+* Added new documentation: `TMC Five-Point Calibration Scan` guide 
+  (five-point calibration scan procedure, JSON examples, and step-by-step instructions).
+
 [1.7.1.rc.1]
 ************
 Added
@@ -14,6 +21,7 @@ Added
 * Updated TMC tags:
         sdpleafnodes:0.24.2
         tmccommon: 0.30.3
+        
 Removed
 -------
 * Removed invalid receive addresses jsons from data, because they were no longer required
