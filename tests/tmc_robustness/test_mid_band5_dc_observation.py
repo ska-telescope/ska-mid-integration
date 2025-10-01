@@ -14,6 +14,8 @@ from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.constant import COMMAND_COMPLETED
 
+TIMEOUT = 80
+
 
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
@@ -49,7 +51,7 @@ def given_tmc(
         "TMC Central Node device"
         f"({central_node_mid.central_node.dev_name()}) "
         "is expected to be in ON telescope state",
-    ).within_timeout(150).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         central_node_mid.central_node,
         "telescopeState",
         DevState.ON,
@@ -60,7 +62,7 @@ def given_tmc(
         "TMC Subarray device"
         f"({central_node_mid.subarray_node.dev_name()}) "
         "is expected to be in EMPTY obstate",
-    ).within_timeout(100).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         central_node_mid.subarray_node,
         "obsState",
         ObsState.EMPTY,
@@ -101,7 +103,7 @@ def given_subarray_in_idle(
         "TMC Subarray device"
         f"({central_node_mid.subarray_node.dev_name()}) "
         "is expected to be in IDLE obstate",
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         central_node_mid.subarray_node,
         "obsState",
         ObsState.IDLE,
@@ -114,7 +116,7 @@ def given_subarray_in_idle(
         f"({central_node_mid.central_node.dev_name()}) "
         "is expected have longRunningCommand as"
         '(unique_id,(ResultCode.OK,"Command Completed"))',
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
         (unique_id[0], COMMAND_COMPLETED),
@@ -154,7 +156,7 @@ def invoke_band5_dc_configure(
         f"({subarray_node.subarray_node.dev_name()}) "
         "is expected have longRunningCommand as"
         '(unique_id,(ResultCode.OK,"Command Completed"))',
-    ).within_timeout(120).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
         (unique_id[0], COMMAND_COMPLETED),
@@ -172,7 +174,7 @@ def check_for_ready(
         "TMC Subarray device"
         f"({subarray_node.subarray_node.dev_name()}) "
         "is expected to be in READY obstate",
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
@@ -210,7 +212,7 @@ def execute_scan(
         "TMC Subarray device"
         f"({subarray_node.subarray_node.dev_name()}) "
         "is expected to be in READY obstate",
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.SCANNING,
@@ -221,7 +223,7 @@ def execute_scan(
         f"({subarray_node.subarray_node.dev_name()}) "
         "is expected have longRunningCommand as"
         '(unique_id,(ResultCode.OK,"Command Completed"))',
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_node,
         "longRunningCommandResult",
         (unique_id[0], COMMAND_COMPLETED),
@@ -232,7 +234,7 @@ def execute_scan(
         "TMC Subarray device"
         f"({subarray_node.subarray_node.dev_name()}) "
         "is expected to be in READY obstate",
-    ).within_timeout(60).has_change_event_occurred(
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         subarray_node.subarray_node,
         "obsState",
         ObsState.READY,
