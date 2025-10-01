@@ -89,7 +89,7 @@ THIS_HOST := $(shell ip a 2> /dev/null | sed -En 's/127.0.0.1//;s/.*inet (addr:)
 DISPLAY ?= $(THIS_HOST):0
 JIVE ?= false# Enable jive
 TARANTA ?= false
-MINIKUBE ?= true ## Minikube or not
+MINIKUBE ?= false ## Minikube or not
 FAKE_DEVICES ?= false ## Install fake devices or not
 
 ITANGO_DOCKER_IMAGE = $(CAR_OCI_REGISTRY_HOST)/ska-cicd-k8s-tools-build-deploy:0.13.4
