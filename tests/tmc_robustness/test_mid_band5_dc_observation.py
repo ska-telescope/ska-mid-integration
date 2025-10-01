@@ -86,7 +86,7 @@ def given_subarray_in_idle(
     """
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
-        "AssignResources_mid_band5_dc", command_input_factory
+        "AssignResources_band5_dc", command_input_factory
     )
 
     _, unique_id = central_node_mid.store_resources(assign_input_json)
@@ -142,7 +142,7 @@ def invoke_band5_dc_configure(
     )
     log_events({subarray_node.subarray_node: ["longRunningCommandResult"]})
     configure_input_json = prepare_json_args_for_commands(
-        "Configure_mid_band5_dc", command_input_factory
+        "Configure_band5_dc", command_input_factory
     )
 
     _, unique_id = subarray_node.execute_transition(
