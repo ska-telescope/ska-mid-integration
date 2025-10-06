@@ -7,9 +7,13 @@ import re
 import pytest
 from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
+from ska_control_model import ObsState
 from ska_integration_test_harness.facades import DishesFacade
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_integration_test_harness.inputs.json_input import DictJSONInput
+from ska_integration_test_harness.inputs.test_harness_inputs import (
+    TestHarnessInputs,
+)
 from ska_tango_testing.integration import TangoEventTracer, log_events
 from ska_tango_testing.mock.placeholders import Anything
 
@@ -57,7 +61,11 @@ def given_a_tmc(
     assign_input = json.loads(assign_input.as_str())
     assign_input["dish"]["receptor_ids"] = ["SKA036"]
     assign_input["sdp"]["resources"]["receptors"] = ["SKA036"]
-    tmc.assign_resources(DictJSONInput(assign_input), wait_termination=True)
+    tmc.force_change_of_obs_state(
+        ObsState.IDLE,
+        TestHarnessInputs(assign_input=DictJSONInput(assign_input)),
+        wait_termination=True,
+    )
     dish_63 = dishes.dish_master_dict["dish_063"]
     dish_63.SetDefective(ERROR_PROPAGATION_DEFECT)
     logger.info("<<< ASSIGN : %s TYPE: %s", assign_input, type(assign_input))
