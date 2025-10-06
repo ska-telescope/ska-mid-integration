@@ -153,7 +153,7 @@ def tmc_reports_gpm_status_on_dish(
         )
         .within_timeout(ASSERTIONS_TIMEOUT)
         .has_change_event_occurred(
-            tmc.subarray_node,
+            tmc.central_node,
             "longRunningCommandResult",
             (pytest.unique_id[0], Anything),
         )
