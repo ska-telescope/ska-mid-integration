@@ -51,7 +51,7 @@ def given_a_tmc(
     )
     tmc.move_to_on()
     # Setup TMC before invoking SetGlobalPointingModel command on TMC
-    dish_63 = dishes.dish_master_dict["SKA063"]
+    dish_63 = dishes.dish_master_dict["dish_063"]
     dish_63.SetDefective(ERROR_PROPAGATION_DEFECT)
     assign_input = MyFileJSONInput("centralnode", "assign_resources_mid")
     logger.info("ASSIGN : %s TYPE: %s", assign_input, type(assign_input))
