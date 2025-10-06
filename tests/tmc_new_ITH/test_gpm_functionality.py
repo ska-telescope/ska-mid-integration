@@ -1,6 +1,7 @@
 """Test module to test the GPM functionality"""
 
 import json
+import time
 import logging
 import re
 
@@ -55,6 +56,7 @@ def given_a_tmc(
             ],
         }
     )
+    time.sleep(30)
     tmc.move_to_on(wait_termination=True, is_long_running_command=True)
     # Setup TMC before invoking SetGlobalPointingModel command on TMC
     assign_input = MyFileJSONInput("centralnode", "assign_resources_mid")
@@ -66,6 +68,7 @@ def given_a_tmc(
         TestHarnessInputs(assign_input=DictJSONInput(assign_input)),
         wait_termination=True,
     )
+    time.sleep(5)
     dish_63 = dishes.dish_master_dict["dish_063"]
     dish_63.SetDefective(ERROR_PROPAGATION_DEFECT)
     logger.info("<<< ASSIGN : %s TYPE: %s", assign_input, type(assign_input))
