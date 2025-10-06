@@ -21,7 +21,8 @@ logger = logging.getLogger(__name__)
 
 
 @pytest.mark.batch1
-@pytest.mark.test1
+@pytest.mark.SKA_mid
+@pytest.mark.test_gpm_functionality
 @scenario(
     "../tmc_new_ITH/features/tmc_gpm.feature",
     "TMC processes GPM JSON and reports status per dish",
