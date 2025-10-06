@@ -55,7 +55,7 @@ def given_a_tmc(
     # Setup TMC before invoking SetGlobalPointingModel command on TMC
     assign_input = MyFileJSONInput("centralnode", "assign_resources_mid")
     assign_input = json.loads(assign_input.as_str())
-    assign_input["dish"]["receptors"] = ["SKA036"]
+    assign_input["dish"]["receptor_ids"] = ["SKA036"]
     assign_input["sdp"]["resources"]["receptors"] = ["SKA036"]
     tmc.assign_resources(DictJSONInput(assign_input), wait_termination=True)
     dish_63 = dishes.dish_master_dict["dish_063"]
