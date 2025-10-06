@@ -159,4 +159,5 @@ def tmc_reports_gpm_status_on_dish(
         )
     )
 
-    logger.info("Assertion data: %s", assertion_data["attribute_value"][1])
+    logger.info(">>>>>>> Assertion data: %s", assertion_data)
+    assert 0
