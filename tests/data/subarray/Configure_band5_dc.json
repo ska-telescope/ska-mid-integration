@@ -3,28 +3,7 @@
   "dish": {
     "interface": "https://schema.skao.int/ska-dish-configure/1.0",
     "receiver_band": "5b",
-    "band5_downconversion_subband": "1",
-    "spfrx_processing_parameters": [
-      {
-        "dishes": [
-          "SKA001",
-          "SKA036",
-          "SKA063",
-          "SKA100"
-        ],
-        "sync_pps": false,
-        "attenuation_pol_x": 20.0,
-        "attenuation_pol_y": 20.0,
-        "saturation_threshold": 0.7,
-        "noise_diode": {
-          "pseudo_random": {
-            "binary_polynomial": 2,
-            "seed": 2,
-            "dwell": 2
-          }
-        }
-      }
-    ]
+    "band5_downconversion_subband": "1"
   },
   "pointing": {
     "wrap_sector": 0,
@@ -42,8 +21,8 @@
           "target_name": "Polaris Australis",
           "reference_frame": "icrs",
           "attrs": {
-            "c1": 317.19966666666664,
-            "c2": -88.95636111111111
+            "c1": 317.19966667,
+            "c2": -88.95636111
           }
         },
         "trajectory": {
@@ -87,7 +66,7 @@
     }
   },
   "sdp": {
-    "interface": "https://schema.skao.int/ska-sdp-configure/0.4",
+    "interface": "https://schema.skao.int/ska-sdp-configure/1.0",
     "scan_type": "science_A"
   },
   "tmc": {

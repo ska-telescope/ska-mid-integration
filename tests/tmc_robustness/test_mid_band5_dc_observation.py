@@ -14,7 +14,7 @@ from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.constant import COMMAND_COMPLETED
 
-TIMEOUT = 100
+TIMEOUT = 80
 
 
 @pytest.mark.batch1_test
