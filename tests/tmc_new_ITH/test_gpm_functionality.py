@@ -52,14 +52,12 @@ def given_a_tmc(
     tmc.move_to_on(wait_termination=True, is_long_running_command=True)
     # Setup TMC before invoking SetGlobalPointingModel command on TMC
     assign_input = MyFileJSONInput("centralnode", "assign_resources_mid")
-    logger.info("ASSIGN : %s TYPE: %s", assign_input, type(assign_input))
-    assign_input = json.loads(assign_input)
     assign_input["dish"]["receptors"] = ["SKA036"]
-    logger.info("<<< ASSIGN : %s TYPE: %s", assign_input, type(assign_input))
-    assign_input = json.dumps(assign_input)
+    assign_input["sdp"]["resources"]["receptors"] = ["SKA036"]
     tmc.assign_resources(assign_input)
     dish_63 = dishes.dish_master_dict["dish_063"]
     dish_63.SetDefective(ERROR_PROPAGATION_DEFECT)
+    logger.info("<<< ASSIGN : %s TYPE: %s", assign_input, type(assign_input))
 
 
 @given("a GPM JSON is provided with version <Version>")
