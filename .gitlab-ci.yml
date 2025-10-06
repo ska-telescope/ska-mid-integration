@@ -20,36 +20,34 @@ cache:
 # It is also specified that only the master branch will be subject of this job.
 
 stages:
+  - lint
+  - build
+  - scaling
+  - on-demand
   - test
   - integration
-  # - lint
-  # - build
-  # - scaling
-  # - on-demand
-  # - test
-  # - integration
-  # - publish
-  # - staging
-  # - pages
-  # - scan
-  # - lifecycle
+  - publish
+  - staging
+  - pages
+  - scan
+  - lifecycle
 
 include:
 # Docs Pages
-- project: 'ska-telescope/templates-repository'
-  file: 'gitlab-ci/includes/docs.gitlab-ci.yml'
+# - project: 'ska-telescope/templates-repository'
+#   file: 'gitlab-ci/includes/docs.gitlab-ci.yml'
 
-# Release Automation
-- project: 'ska-telescope/templates-repository'
-  file: 'gitlab-ci/includes/release.gitlab-ci.yml'
+# # Release Automation
+# - project: 'ska-telescope/templates-repository'
+#   file: 'gitlab-ci/includes/release.gitlab-ci.yml'
 
-# Python packages build,lint, test and publish
-- project: 'ska-telescope/templates-repository'
-  file: 'gitlab-ci/includes/python-lint.gitlab-ci.yml'
+# # Python packages build,lint, test and publish
+# - project: 'ska-telescope/templates-repository'
+#   file: 'gitlab-ci/includes/python-lint.gitlab-ci.yml'
 
-# # Helm Chart linting and Publish
-- project: 'ska-telescope/templates-repository'
-  file: 'gitlab-ci/includes/helm-chart.gitlab-ci.yml'
+# # # Helm Chart linting and Publish
+# - project: 'ska-telescope/templates-repository'
+#   file: 'gitlab-ci/includes/helm-chart.gitlab-ci.yml'
 
 # k8s steps
 - project: 'ska-telescope/templates-repository'
@@ -151,43 +149,43 @@ k8s-test:
 
 
 
-k8s-tmc-scaling:
-  stage: scaling
-  when: manual
-  extends:
-    - k8s-test
-  tags:
-    - ska-staging-tmc
-  variables:
-    DEPLOY_ALL_DISHES: "true"
-    DISH_SIMULATION_ENABLED: "true"
-    SUBARRAY_COUNT: 4
-    COUNT: 1
-    KUBE_NAMESPACE: "staging-ska-tmc-mid"
-    CI_KEEP_NAMESPACE: true
-    K8S_TIMEOUT: "1800s"
-    TARANTA_ENABLED: "true"
-  script:
-    - make taranta-link
-  environment:
-    name: ska-tmc-staging-env
-    auto_stop_in: never
-    on_stop: stop-k8s-tmc-scaling
+# k8s-tmc-scaling:
+#   stage: scaling
+#   when: manual
+#   extends:
+#     - k8s-test
+#   tags:
+#     - ska-staging-tmc
+#   variables:
+#     DEPLOY_ALL_DISHES: "true"
+#     DISH_SIMULATION_ENABLED: "true"
+#     SUBARRAY_COUNT: 4
+#     COUNT: 1
+#     KUBE_NAMESPACE: "staging-ska-tmc-mid"
+#     CI_KEEP_NAMESPACE: true
+#     K8S_TIMEOUT: "1800s"
+#     TARANTA_ENABLED: "true"
+#   script:
+#     - make taranta-link
+#   environment:
+#     name: ska-tmc-staging-env
+#     auto_stop_in: never
+#     on_stop: stop-k8s-tmc-scaling
 
 
     
-stop-k8s-tmc-scaling:
-  stage: scaling
-  extends:
-    - stop-k8s-test
-  tags:
-    - ska-staging-tmc
-  variables:
-    KUBE_NAMESPACE: "staging-ska-tmc-mid"
-  environment:
-    name: ska-tmc-staging-env
-    action: stop
-  when: manual
+# stop-k8s-tmc-scaling:
+#   stage: scaling
+#   extends:
+#     - stop-k8s-test
+#   tags:
+#     - ska-staging-tmc
+#   variables:
+#     KUBE_NAMESPACE: "staging-ska-tmc-mid"
+#   environment:
+#     name: ska-tmc-staging-env
+#     action: stop
+#   when: manual
 
 
 
