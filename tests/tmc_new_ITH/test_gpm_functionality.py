@@ -2,12 +2,14 @@
 
 import json
 import logging
+import re
 
 import pytest
 from assertpy import assert_that
-from pytest_bdd import given, scenario, then, when
+from pytest_bdd import given, parsers, scenario, then, when
 from ska_integration_test_harness.facades import DishesFacade
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
+from ska_integration_test_harness.inputs.json_input import DictJSONInput
 from ska_tango_testing.integration import TangoEventTracer, log_events
 from ska_tango_testing.mock.placeholders import Anything
 
@@ -16,8 +18,6 @@ from tests.resources.test_support.constant import (  # RESET_DEFECT,
 )
 from tests.tmc_csp_new_ITH.conftest import ASSERTIONS_TIMEOUT
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
-from ska_integration_test_harness.inputs.json_input import DictJSONInput
-
 
 logger = logging.getLogger(__name__)
 
@@ -63,49 +63,74 @@ def given_a_tmc(
     logger.info("<<< ASSIGN : %s TYPE: %s", assign_input, type(assign_input))
 
 
-@given("a GPM JSON is provided with version <Version>")
-def given_a_gpm_json(context, version):
-    """Build a GPM json from data provided in feature examples"""
+@given(
+    parsers.re(
+        r"the following GPM configurations are provided for version "
+        r"(?P<version>[\d\.]+):\n"
+        r"(?P<table>(?:\s*\|.*\|\s*\n?)+)",
+        re.MULTILINE | re.DOTALL,
+    ),
+    target_fixture="gpm_config",
+)
+def given_a_gpm_json(version, table):
+    """Build a GPM json from data provided in feature"""
 
+    lines = [
+        line.strip() for line in table.strip().split("\n") if line.strip()
+    ]
+    headers = [h.strip() for h in lines[0].split("|") if h.strip()]
     receptors = {}
+    gpm_input_data = {}
 
-    for row in context.table:
-        dish_id = row["Dish ID"].lower()
-        bands = row["Bands"].split(", ")
+    for row in lines[1:]:
+        values = [v.strip() for v in row.split("|") if v.strip()]
+        entry = dict(zip(headers, values))
+        dish_id = entry["Dish_ID"].lower()
+        bands = [b.strip() for b in entry["Bands"].split(",")]
         receptors[dish_id] = bands
 
-    context.gpm_json = {"version": version, "receptors": receptors}
+    gpm_input_data = {"version": version, "receptors": receptors}
 
-    context.reporting_status = {}
-
-    for row in context.table:
-        dish_id = row["Dish ID"].lower()
-        context.reporting_status[dish_id] = {
-            "status": row["Status"],
-            "Reason": row["Reason"],
-        }
-    logger.info(
-        "GPM_JSON: %s Reporting_Status: %s",
-        context.gpm_json,
-        context.reporting_status,
-    )
+    logger.info(">>>> %s", gpm_input_data)
+    return gpm_input_data
 
 
 @when("the GPM configuration is applied via TMC")
-def apply_gpm_to_dishes(context, tmc: TMCFacade):
+def apply_gpm_to_dishes(context, tmc: TMCFacade, gpm_config):
     """Invoke SetGlobalPointingModel on dishes"""
+
     message, pytest.unique_id = tmc.central_node.SetGlobalPointingModel(
-        json.dumps(context.gpm_json)
+        json.dumps(gpm_config)
     )
     logger.info("Command ID: %s Message: %s", message, pytest.unique_id)
 
 
-@then("TMC should report the following status per dish")
+@then(
+    parsers.re(
+        r"TMC reports the status as below for the respective dish id:\n"
+        r"(?P<table>.+)",
+        re.MULTILINE | re.DOTALL,
+    )
+)
 def tmc_reports_gpm_status_on_dish(
-    tmc: TMCFacade, event_tracer: TangoEventTracer
+    tmc: TMCFacade, event_tracer: TangoEventTracer, table
 ):
     """Check the status of GPM on dish"""
 
+    lines = [
+        line.strip() for line in table.strip().split("\n") if line.strip()
+    ]
+    headers = [h.strip() for h in lines[0].split("|") if h.strip()]
+    gpm_report = {}
+    for row in lines[1:]:
+        values = [v.strip() for v in row.split("|") if v.strip()]
+        entry = dict(zip(headers, values))
+        dish_id = entry["Dish_ID"].lower()
+        status = entry["Status"]
+        reason = entry["Reason"]
+        gpm_report[dish_id] = {"status": status, "reason": reason}
+
+    logger.info(" **** %s", gpm_report)
     assertion_data = (
         assert_that(event_tracer)
         .described_as(
