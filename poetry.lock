@@ -263,14 +263,14 @@ reference = "PyPI-public"
 
 [[package]]
 name = "certifi"
-version = "2025.8.3"
+version = "2025.10.5"
 description = "Python package for providing Mozilla's CA Bundle."
 optional = false
 python-versions = ">=3.7"
 groups = ["main", "docs"]
 files = [
-    {file = "certifi-2025.8.3-py3-none-any.whl", hash = "sha256:f6c12493cfb1b06ba2ff328595af9350c65d6644968e5d3a2ffd78699af217a5"},
-    {file = "certifi-2025.8.3.tar.gz", hash = "sha256:e564105f78ded564e3ae7c923924435e1daa7463faeab5bb932bc53ffae63407"},
+    {file = "certifi-2025.10.5-py3-none-any.whl", hash = "sha256:0f212c2744a9bb6de0c56639a6f68afe01ecd92d91f14ae897c4fe7bbeeef0de"},
+    {file = "certifi-2025.10.5.tar.gz", hash = "sha256:47c09d31ccf2acf0be3f701ea53595ee7e0b8fa08801c6624be771df09ae7b43"},
 ]
 
 [package.source]
@@ -1649,14 +1649,14 @@ reference = "PyPI-public"
 
 [[package]]
 name = "pydantic"
-version = "2.11.9"
+version = "2.11.10"
 description = "Data validation using Python type hints"
 optional = false
 python-versions = ">=3.9"
 groups = ["main"]
 files = [
-    {file = "pydantic-2.11.9-py3-none-any.whl", hash = "sha256:c42dd626f5cfc1c6950ce6205ea58c93efa406da65f479dcb4029d5934857da2"},
-    {file = "pydantic-2.11.9.tar.gz", hash = "sha256:6b8ffda597a14812a7975c90b82a8a2e777d9257aba3453f973acd3c032a18e2"},
+    {file = "pydantic-2.11.10-py3-none-any.whl", hash = "sha256:802a655709d49bd004c31e865ef37da30b540786a46bfce02333e0e24b5fe29a"},
+    {file = "pydantic-2.11.10.tar.gz", hash = "sha256:dc280f0982fbda6c38fada4e476dc0a4f3aeaf9c6ad4c28df68a666ec3c61423"},
 ]
 
 [package.dependencies]
@@ -2795,14 +2795,14 @@ reference = "ska-nexus"
 
 [[package]]
 name = "ska-telmodel"
-version = "1.24.3"
+version = "1.25.0"
 description = "SKA telescope model library"
 optional = false
 python-versions = ">=3.10.0,<4.0.0"
 groups = ["main"]
 files = [
-    {file = "ska_telmodel-1.24.3-py3-none-any.whl", hash = "sha256:1ca97aa3454dbff631e1c46f61c686ea5fcdb2adbd7b44a9ac8d55833f6fef09"},
-    {file = "ska_telmodel-1.24.3.tar.gz", hash = "sha256:f387563b582a1fbbb42cd16f08e02f4f9539374360ae9c62b3c9219daeca1b80"},
+    {file = "ska_telmodel-1.25.0-py3-none-any.whl", hash = "sha256:6d213014003863dd6b4714277ec0b7b7e72dca9413dc0e9931b98f430bfeb7fb"},
+    {file = "ska_telmodel-1.25.0.tar.gz", hash = "sha256:43970a59f7fc26553793b85e09e52b7624dbb491d2e2b253642c4d8632a3a06a"},
 ]
 
 [package.dependencies]
@@ -3501,4 +3501,4 @@ reference = "PyPI-public"
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.10"
-content-hash = "abcbb808c4faf7616e65e3f43dffb525530358a8291309d722a087a39aedfe9c"
+content-hash = "c874b12dd40d72ce465ddd97fb4dcafaf30a7d9cec767806ab3a0eea02fa166c"
