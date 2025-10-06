@@ -107,7 +107,7 @@ def given_a_gpm_json(version, table):
 
 
 @when("the GPM configuration is applied via TMC")
-def apply_gpm_to_dishes(context, tmc: TMCFacade, gpm_config):
+def apply_gpm_to_dishes(tmc: TMCFacade, gpm_config):
     """Invoke SetGlobalPointingModel on dishes"""
 
     message, pytest.unique_id = tmc.central_node.SetGlobalPointingModel(
