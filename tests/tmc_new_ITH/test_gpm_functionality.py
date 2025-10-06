@@ -16,6 +16,8 @@ from tests.resources.test_support.constant import (  # RESET_DEFECT,
 )
 from tests.tmc_csp_new_ITH.conftest import ASSERTIONS_TIMEOUT
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
+from ska_integration_test_harness.inputs.json_input import DictJSONInput
+
 
 logger = logging.getLogger(__name__)
 
@@ -52,9 +54,10 @@ def given_a_tmc(
     tmc.move_to_on(wait_termination=True, is_long_running_command=True)
     # Setup TMC before invoking SetGlobalPointingModel command on TMC
     assign_input = MyFileJSONInput("centralnode", "assign_resources_mid")
+    assign_input = json.loads(assign_input.as_str())
     assign_input["dish"]["receptors"] = ["SKA036"]
     assign_input["sdp"]["resources"]["receptors"] = ["SKA036"]
-    tmc.assign_resources(assign_input)
+    tmc.assign_resources(DictJSONInput(assign_input), wait_termination=True)
     dish_63 = dishes.dish_master_dict["dish_063"]
     dish_63.SetDefective(ERROR_PROPAGATION_DEFECT)
     logger.info("<<< ASSIGN : %s TYPE: %s", assign_input, type(assign_input))
