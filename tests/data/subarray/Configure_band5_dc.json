@@ -7,7 +7,10 @@
     "spfrx_processing_parameters": [
       {
         "dishes": [
-          "SKA001"
+          "SKA001",
+          "SKA036",
+          "SKA063",
+          "SKA100"
         ],
         "sync_pps": false,
         "attenuation_pol_x": 20.0,
@@ -30,7 +33,10 @@
     "groups": [
       {
         "receptors": [
-          "SKA001"
+          "SKA001",
+          "SKA036",
+          "SKA063",
+          "SKA100"
         ],
         "field": {
           "target_name": "Polaris Australis",
