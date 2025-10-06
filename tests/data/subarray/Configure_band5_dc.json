@@ -3,7 +3,26 @@
   "dish": {
     "interface": "https://schema.skao.int/ska-dish-configure/1.0",
     "receiver_band": "5b",
-    "band5_downconversion_subband": "1"
+    "band5_downconversion_subband": "1",
+    "spfrx_processing_parameters": [
+      {
+        "dishes": [
+          "SKA001"
+        ],
+        "sync_pps": false,
+        "attenuation_pol_x": 20.0,
+        "attenuation_pol_y": 20.0,
+        "saturation_threshold": 0.7,
+        "noise_diode": {
+          "pseudo_random": {
+            "binary_polynomial": 2,
+            "seed": 2,
+            "dwell": 2
+          }
+        }
+      }
+    ]
+
   },
   "pointing": {
     "wrap_sector": 0,
