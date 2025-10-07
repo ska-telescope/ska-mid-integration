@@ -5,8 +5,6 @@ import json
 import logging
 import re
 import time
-from collections import namedtuple
-from datetime import datetime
 
 import pytest
 from assertpy import assert_that
@@ -128,10 +126,11 @@ def apply_gpm_to_dishes(tmc: TMCFacade, gpm_config):
     )
 )
 def tmc_reports_gpm_status_on_dish(
-    tmc: TMCFacade, event_tracer: TangoEventTracer, table
+    tmc: TMCFacade, event_tracer: TangoEventTracer, table, gpm_config
 ):
     """Check the status of GPM on dish"""
 
+    version = gpm_config["version"]
     lines = [
         line.strip() for line in table.strip().split("\n") if line.strip()
     ]
@@ -146,7 +145,8 @@ def tmc_reports_gpm_status_on_dish(
         gpm_report[dish_id] = {"status": status, "reason": reason}
 
     logger.info(" **** %s", gpm_report)
-    assertion_data = (
+
+    (
         assert_that(event_tracer)
         .described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
@@ -162,24 +162,52 @@ def tmc_reports_gpm_status_on_dish(
             (pytest.unique_id[0], Anything),
         )
     )
-    ReceivedEvent = namedtuple(
-        "ReceivedEvent",
-        ["device_name", "attribute_name", "attribute_value", "reception_time"],
-    )
 
     for event in event_tracer.events:
         logger.info(">>>> %s: ", event)
 
     event_data = None
+    lrcr_flag = True
+    gpms_flag = True
+    global_pointing_model_status = {}
     for event in event_tracer.events:
-        if isinstance(event.attribute_value, tuple):
+        if isinstance(event.attribute_value, tuple) and lrcr_flag:
             if "SetGlobalPointingModel" in event.attribute_value[0]:
                 event_data = json.loads(event.attribute_value[1])
                 if event_data[0] == int(ResultCode.FAILED):
-                    break
-    logger.info(">>>>>> %s", event_data)
-    logger.info(
-        "<<<<< %s",
-        ast.literal_eval(event_data[1].split("SetGPM failed on: ", 1)[1]),
+                    lrcr_flag = False
+        if isinstance(event.attribute_value, dict) and gpms_flag:
+            if "globalpointingmodelstatus" in event.attribute_name:
+                global_pointing_model_status = event.attribute_value
+                gpms_flag = False
+        if not gpms_flag and not lrcr_flag:
+            break
+
+    event_tracer_lrcr_data = ast.literal_eval(
+        event_data[1].split("SetGPM failed on: ", 1)[1]
     )
+
+    for dish_id, validation_data in gpm_report.items():
+        status = validation_data["status"]
+        reason = validation_data["reason"]
+        if "Applied" not in status:
+            dish_gpm_lrcr_data = event_tracer_lrcr_data[dish_id]
+            if isinstance(dish_gpm_lrcr_data, str):
+                logger.info("Reason: %s Data: %s ", reason, dish_gpm_lrcr_data)
+                assert reason in dish_gpm_lrcr_data
+            elif isinstance(dish_gpm_lrcr_data, dict):
+                reasons = reason.split(",")
+                lrcr_messages = [
+                    value[1].lower() for value in dish_gpm_lrcr_data.values()
+                ]
+                logger.info(f"reasons: {reasons}, messages: {lrcr_messages}")
+                for message_to_validate in reasons:
+                    assert any(
+                        message_to_validate.lower() in msg.lower()
+                        for msg in lrcr_messages
+                    )
+        else:
+            assert version == global_pointing_model_status[dish_id]["Band_1"]
+            assert version == global_pointing_model_status[dish_id]["Band_5a"]
+
     assert 0
