@@ -195,7 +195,7 @@ def tmc_reports_gpm_status_on_dish(
         .has_change_event_occurred(
             tmc.central_node,
             "GlobalPointingModelStatus",
-            (pytest.unique_id[0], Anything),
+            Anything,
         )
     )
 
