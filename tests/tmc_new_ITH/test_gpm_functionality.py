@@ -30,9 +30,43 @@ from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 logger = logging.getLogger(__name__)
 
 
+def get_gpm_report(table):
+    """Generates GPM report from table data for test validation."""
+
+    gpm_report = {}
+    lines = [
+        line.strip() for line in table.strip().split("\n") if line.strip()
+    ]
+    headers = [h.strip() for h in lines[0].split("|") if h.strip()]
+    for row in lines[1:]:
+        values = [v.strip() for v in row.split("|") if v.strip()]
+        entry = dict(zip(headers, values))
+        dish_id = entry["Dish_ID"].lower()
+        status = entry["Status"]
+        reason = entry["Reason"]
+        gpm_report[dish_id] = {"status": status, "reason": reason}
+
+    return gpm_report
+
+
+def extract_gpm_failure_details(events_tracer):
+    """Extracts parsed failure details from first failed GPM command."""
+
+    event_data = None
+    for event in events_tracer.events:
+        if isinstance(event.attribute_value, tuple):
+            if "SetGlobalPointingModel" in event.attribute_value[0]:
+                event_data = json.loads(event.attribute_value[1])
+                if event_data[0] == int(ResultCode.FAILED):
+                    break
+
+    return ast.literal_eval(event_data[1].split("SetGPM failed on: ", 1)[1])
+
+
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @pytest.mark.test_gpm_functionality
+@pytest.mark.repeat(5)
 @scenario(
     "../tmc_new_ITH/features/tmc_gpm.feature",
     "TMC processes GPM JSON and reports status per dish",
@@ -61,7 +95,7 @@ def given_a_tmc(
             ],
         }
     )
-    time.sleep(30)
+    time.sleep(5)
     tmc.move_to_on(wait_termination=True, is_long_running_command=True)
     # Setup TMC before invoking SetGlobalPointingModel command on TMC
     assign_input = MyFileJSONInput("centralnode", "assign_resources_mid")
@@ -73,10 +107,8 @@ def given_a_tmc(
         TestHarnessInputs(assign_input=DictJSONInput(assign_input)),
         wait_termination=True,
     )
-    time.sleep(5)
     dish_63 = dishes.dish_master_dict["dish_063"]
     dish_63.SetDefective(ERROR_PROPAGATION_DEFECT)
-    logger.info("<<< ASSIGN : %s TYPE: %s", assign_input, type(assign_input))
 
 
 @given(
@@ -107,7 +139,7 @@ def given_a_gpm_json(version, table):
 
     gpm_input_data = {"version": version, "receptors": receptors}
 
-    logger.info(">>>> %s", gpm_input_data)
+    logger.info("Formed GPM input: %s", gpm_input_data)
     return gpm_input_data
 
 
@@ -135,24 +167,9 @@ def tmc_reports_gpm_status_on_dish(
     gpm_config,
     dishes: DishesFacade,
 ):
-    """Check the status of GPM on dish"""
+    """Test TMC reports GPM for specified bands on dishes"""
 
-    version = gpm_config["version"]
-    lines = [
-        line.strip() for line in table.strip().split("\n") if line.strip()
-    ]
-    headers = [h.strip() for h in lines[0].split("|") if h.strip()]
-    gpm_report = {}
-    for row in lines[1:]:
-        values = [v.strip() for v in row.split("|") if v.strip()]
-        entry = dict(zip(headers, values))
-        dish_id = entry["Dish_ID"].lower()
-        status = entry["Status"]
-        reason = entry["Reason"]
-        gpm_report[dish_id] = {"status": status, "reason": reason}
-
-    logger.info(" **** %s", gpm_report)
-
+    logger.info("GPM data for validation %s", get_gpm_report(table))
     (
         assert_that(event_tracer)
         .described_as(
@@ -170,28 +187,15 @@ def tmc_reports_gpm_status_on_dish(
         )
     )
 
-    event_data = None
-    for event in event_tracer.events:
-        if isinstance(event.attribute_value, tuple):
-            if "SetGlobalPointingModel" in event.attribute_value[0]:
-                event_data = json.loads(event.attribute_value[1])
-                if event_data[0] == int(ResultCode.FAILED):
-                    break
+    event_tracer_lrcr_data = extract_gpm_failure_details(event_tracer)
 
-    event_tracer_lrcr_data = ast.literal_eval(
-        event_data[1].split("SetGPM failed on: ", 1)[1]
-    )
-
-    for dish_id, validation_data in gpm_report.items():
-        status = validation_data["status"]
-        reason = validation_data["reason"]
-        if "Applied" not in status:
+    for dish_id, validation_data in get_gpm_report(table).items():
+        if "Applied" not in validation_data["status"]:
             dish_gpm_lrcr_data = event_tracer_lrcr_data[dish_id]
             if isinstance(dish_gpm_lrcr_data, str):
-                logger.info("Reason: %s Data: %s ", reason, dish_gpm_lrcr_data)
-                assert reason in dish_gpm_lrcr_data
+                assert validation_data["reason"] in dish_gpm_lrcr_data
             elif isinstance(dish_gpm_lrcr_data, dict):
-                reasons = reason.split(",")
+                reasons = validation_data["reason"].split(",")
                 lrcr_messages = [
                     value[1].lower() for value in dish_gpm_lrcr_data.values()
                 ]
@@ -199,21 +203,31 @@ def tmc_reports_gpm_status_on_dish(
                     value[0] for value in dish_gpm_lrcr_data.values()
                 ]
                 logger.info(
-                    f"reasons: {reasons}, messages: {lrcr_messages}, result_codes: {lrcr_result_codes}"
+                    "Test reasons for validations: %s"
+                    "LRCR messages: %s"
+                    "Result codes: %s",
+                    reasons,
+                    lrcr_messages,
+                    lrcr_result_codes,
                 )
-                for message_to_validate in reasons:
+                for value in reasons:
                     assert any(
-                        message_to_validate.lower() in msg.lower()
-                        for msg in lrcr_messages
+                        value.lower() in msg.lower() for msg in lrcr_messages
                     )
-                for result_code in lrcr_result_codes:
-                    assert int(ResultCode.FAILED) == result_code
+                for value in lrcr_result_codes:
+                    assert int(ResultCode.FAILED) == value
         else:
             global_pointing_model_status = json.loads(
                 tmc.central_node.globalpointingmodelstatus
             )
-            assert version == global_pointing_model_status[dish_id]["Band_1"]
-            assert version == global_pointing_model_status[dish_id]["Band_5a"]
+            assert (
+                gpm_config["version"]
+                == global_pointing_model_status[dish_id]["Band_1"]
+            )
+            assert (
+                gpm_config["version"]
+                == global_pointing_model_status[dish_id]["Band_5a"]
+            )
 
     dishes.dish_master_dict["dish_063"].SetDefective(RESET_DEFECT)
     release_input = MyFileJSONInput("centralnode", "release_resources_mid")
