@@ -48,6 +48,8 @@ def given_a_tmc(
     event_tracer: TangoEventTracer,
 ):
     """Given a TMC"""
+
+    event_tracer.clear_events()
     event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
     event_tracer.subscribe_event(tmc.central_node, "GlobalPointingModelStatus")
     log_events(
@@ -167,24 +169,51 @@ def tmc_reports_gpm_status_on_dish(
         logger.info(">>>> %s: ", event)
 
     event_data = None
-    lrcr_flag = True
-    gpms_flag = True
     global_pointing_model_status = {}
     for event in event_tracer.events:
-        logger.info("Attribute Name %s %s %s", event.attribute_name, type(event.attribute_name), event.attribute_value)
-        if isinstance(event.attribute_value, tuple) and lrcr_flag:
+        logger.info(
+            "Attribute Name %s %s %s",
+            event.attribute_name,
+            type(event.attribute_name),
+            event.attribute_value,
+        )
+        if isinstance(event.attribute_value, tuple):
             if "SetGlobalPointingModel" in event.attribute_value[0]:
                 event_data = json.loads(event.attribute_value[1])
                 if event_data[0] == int(ResultCode.FAILED):
-                    lrcr_flag = False
-        if gpms_flag:
-            if "globalpointingmodelstatus".lower() in event.attribute_name.lower():
-                global_pointing_model_status = event.attribute_value
-                gpms_flag = False
-        if not gpms_flag and not lrcr_flag:
-            break
-    
-    logger.info("<<< %s %s", global_pointing_model_status, type(global_pointing_model_status))
+                    break
+
+    (
+        assert_that(event_tracer)
+        .described_as(
+            'FAILED ASSUMPTION IN "THEN" STEP: '
+            "TMC Central Node device "
+            f"({tmc.central_node.dev_name()}) "
+            "is expected to have change event on GlobalPointingModelStatus",
+        )
+        .within_timeout(ASSERTIONS_TIMEOUT)
+        .has_change_event_occurred(
+            tmc.central_node,
+            "GlobalPointingModelStatus",
+            (pytest.unique_id[0], Anything),
+        )
+    )
+
+    for event in event_tracer.events:
+        logger.info(
+            "Attribute Name %s %s %s",
+            event.attribute_name,
+            type(event.attribute_name),
+            event.attribute_value,
+        )
+        if "globalpointingmodelstatus".lower() in event.attribute_name.lower():
+            global_pointing_model_status = json.loads(event.attribute_value)
+
+    logger.info(
+        "<<< %s %s",
+        global_pointing_model_status,
+        type(global_pointing_model_status),
+    )
     event_tracer_lrcr_data = ast.literal_eval(
         event_data[1].split("SetGPM failed on: ", 1)[1]
     )
