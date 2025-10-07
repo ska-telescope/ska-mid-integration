@@ -20,8 +20,9 @@ from ska_tango_testing.integration import TangoEventTracer, log_events
 from ska_tango_testing.mock.placeholders import Anything
 
 from tests.resources.test_harness.utils.enums import ResultCode
-from tests.resources.test_support.constant import (  # RESET_DEFECT,
+from tests.resources.test_support.constant import (
     ERROR_PROPAGATION_DEFECT,
+    RESET_DEFECT,
 )
 from tests.tmc_csp_new_ITH.conftest import ASSERTIONS_TIMEOUT
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
@@ -128,7 +129,11 @@ def apply_gpm_to_dishes(tmc: TMCFacade, gpm_config):
     )
 )
 def tmc_reports_gpm_status_on_dish(
-    tmc: TMCFacade, event_tracer: TangoEventTracer, table, gpm_config
+    tmc: TMCFacade,
+    event_tracer: TangoEventTracer,
+    table,
+    gpm_config,
+    dishes: DishesFacade,
 ):
     """Check the status of GPM on dish"""
 
@@ -165,55 +170,14 @@ def tmc_reports_gpm_status_on_dish(
         )
     )
 
-    for event in event_tracer.events:
-        logger.info(">>>> %s: ", event)
-
     event_data = None
-    global_pointing_model_status = {}
     for event in event_tracer.events:
-        logger.info(
-            "Attribute Name %s %s %s",
-            event.attribute_name,
-            type(event.attribute_name),
-            event.attribute_value,
-        )
         if isinstance(event.attribute_value, tuple):
             if "SetGlobalPointingModel" in event.attribute_value[0]:
                 event_data = json.loads(event.attribute_value[1])
                 if event_data[0] == int(ResultCode.FAILED):
                     break
 
-    (
-        assert_that(event_tracer)
-        .described_as(
-            'FAILED ASSUMPTION IN "THEN" STEP: '
-            "TMC Central Node device "
-            f"({tmc.central_node.dev_name()}) "
-            "is expected to have change event on GlobalPointingModelStatus",
-        )
-        .within_timeout(ASSERTIONS_TIMEOUT)
-        .has_change_event_occurred(
-            tmc.central_node,
-            "GlobalPointingModelStatus",
-            Anything,
-        )
-    )
-
-    for event in event_tracer.events:
-        logger.info(
-            "Attribute Name %s %s %s",
-            event.attribute_name,
-            type(event.attribute_name),
-            event.attribute_value,
-        )
-        if "globalpointingmodelstatus".lower() in event.attribute_name.lower():
-            global_pointing_model_status = json.loads(event.attribute_value)
-
-    logger.info(
-        "<<< %s %s",
-        global_pointing_model_status,
-        type(global_pointing_model_status),
-    )
     event_tracer_lrcr_data = ast.literal_eval(
         event_data[1].split("SetGPM failed on: ", 1)[1]
     )
@@ -231,14 +195,27 @@ def tmc_reports_gpm_status_on_dish(
                 lrcr_messages = [
                     value[1].lower() for value in dish_gpm_lrcr_data.values()
                 ]
-                logger.info(f"reasons: {reasons}, messages: {lrcr_messages}")
+                lrcr_result_codes = [
+                    value[0] for value in dish_gpm_lrcr_data.values()
+                ]
+                logger.info(
+                    f"reasons: {reasons}, messages: {lrcr_messages}, result_codes: {lrcr_result_codes}"
+                )
                 for message_to_validate in reasons:
                     assert any(
                         message_to_validate.lower() in msg.lower()
                         for msg in lrcr_messages
                     )
+                for result_code in lrcr_result_codes:
+                    assert int(ResultCode.FAILED) == result_code
         else:
+            global_pointing_model_status = json.loads(
+                tmc.central_node.globalpointingmodelstatus
+            )
             assert version == global_pointing_model_status[dish_id]["Band_1"]
             assert version == global_pointing_model_status[dish_id]["Band_5a"]
 
-    assert 0
+    dishes.dish_master_dict["dish_063"].SetDefective(RESET_DEFECT)
+    release_input = MyFileJSONInput("centralnode", "release_resources_mid")
+    tmc.release_resources(release_input)
+    event_tracer.clear_events()
