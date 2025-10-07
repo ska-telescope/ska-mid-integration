@@ -1,9 +1,12 @@
 """Test module to test the GPM functionality"""
 
+import ast
 import json
-import time
 import logging
 import re
+import time
+from collections import namedtuple
+from datetime import datetime
 
 import pytest
 from assertpy import assert_that
@@ -18,6 +21,7 @@ from ska_integration_test_harness.inputs.test_harness_inputs import (
 from ska_tango_testing.integration import TangoEventTracer, log_events
 from ska_tango_testing.mock.placeholders import Anything
 
+from tests.resources.test_harness.utils.enums import ResultCode
 from tests.resources.test_support.constant import (  # RESET_DEFECT,
     ERROR_PROPAGATION_DEFECT,
 )
@@ -158,6 +162,24 @@ def tmc_reports_gpm_status_on_dish(
             (pytest.unique_id[0], Anything),
         )
     )
+    ReceivedEvent = namedtuple(
+        "ReceivedEvent",
+        ["device_name", "attribute_name", "attribute_value", "reception_time"],
+    )
 
-    logger.info(">>>>>>> Assertion data: %s", event_tracer.events)
+    for event in event_tracer.events:
+        logger.info(">>>> %s: ", event)
+
+    event_data = None
+    for event in event_tracer.events:
+        if isinstance(event.attribute_value, tuple):
+            if "SetGlobalPointingModel" in event.attribute_value[0]:
+                event_data = json.loads(event.attribute_value[1])
+                if event_data[0] == int(ResultCode.FAILED):
+                    break
+    logger.info(">>>>>> %s", event_data)
+    logger.info(
+        "<<<<< %s",
+        ast.literal_eval(event_data[1].split("SetGPM failed on: ", 1)[1]),
+    )
     assert 0
