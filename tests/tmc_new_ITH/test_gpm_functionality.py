@@ -171,18 +171,20 @@ def tmc_reports_gpm_status_on_dish(
     gpms_flag = True
     global_pointing_model_status = {}
     for event in event_tracer.events:
+        logger.info("Attribute Name %s %s %s", event.attribute_name, type(event.attribute_name), event.attribute_value)
         if isinstance(event.attribute_value, tuple) and lrcr_flag:
             if "SetGlobalPointingModel" in event.attribute_value[0]:
                 event_data = json.loads(event.attribute_value[1])
                 if event_data[0] == int(ResultCode.FAILED):
                     lrcr_flag = False
-        if isinstance(event.attribute_value, dict) and gpms_flag:
-            if "globalpointingmodelstatus" in event.attribute_name:
+        if gpms_flag:
+            if "globalpointingmodelstatus".lower() in event.attribute_name.lower():
                 global_pointing_model_status = event.attribute_value
                 gpms_flag = False
         if not gpms_flag and not lrcr_flag:
             break
-
+    
+    logger.info("<<< %s %s", global_pointing_model_status, type(global_pointing_model_status))
     event_tracer_lrcr_data = ast.literal_eval(
         event_data[1].split("SetGPM failed on: ", 1)[1]
     )

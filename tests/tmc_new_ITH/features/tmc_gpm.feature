@@ -4,7 +4,7 @@ Feature: Apply GPM configuration to dishes via TMC Mid Telescope
     Given a TMC Mid telescope is operational
 
   Scenario Outline: TMC processes GPM JSON and reports status per dish
-    Given the following GPM configurations are provided for version 1.0.0:
+    Given the following GPM configurations are provided for version 1.1.3:
       | Dish_ID | Bands           |
       | SKA001  | Band_1, Band_5a |
       | SKA036  | Band_2          |
