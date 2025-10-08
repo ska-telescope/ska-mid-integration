@@ -23,7 +23,7 @@ subarray_count: 2
 global:
   minikube: false
   tango_host: databaseds-tango-base-test:10000
-  dish_ids: ["SKA001","SKA036","SKA063","SKA100"]
+  dish_ids: &dish_ids ["SKA001","SKA036","SKA063","SKA100"]
 
 
 
