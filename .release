@@ -1,32 +1,12 @@
-release=1.8.0-rc.1
-tag=1.8.0-rc.1
+release=1.8.0-rc.2
+tag=1.8.0-rc.2
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.7.1-rc.1 to v1.8.0-rc.1**
-        * Added new documentation: `TMC Five-Point Calibration Scan` guide 
-        (five-point calibration scan procedure, JSON examples, and step-by-step instructions).
-        * Band 5 Downconverter (Band5DC) support in the TMC-MID integration chart.
-        * Added documentation related to Band 5 Downconverter (Band5DC) integration and usage.
-
-        Updated
-        --------
-        * ska-telmodel → v1.25.0
-        * ska-tmc-cdm → v14.0.0
-        * ska-tmc-subarraynode → v0.43.1
-        * ska-tmc-dishleafnode → v0.24.2
+**1. Updated ska-tmc-mid from v1.8.0-rc.1 to v1.8.0-rc.2**
+        * Fixed the issue with dishes field provided in dish helm chart
     
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.7.1-rc.1 to v1.8.0-rc.1**
+**1. Updated ska-tmc-mid from v1.8.0-rc.1 to v1.8.0-rc.2**
 
-        * Added new documentation: `TMC Five-Point Calibration Scan` guide 
-        (five-point calibration scan procedure, JSON examples, and step-by-step instructions).
-        * Band 5 Downconverter (Band5DC) support in the TMC-MID integration chart.
-        * Added documentation related to Band 5 Downconverter (Band5DC) integration and usage.
-
-        Updated
-        --------
-        * ska-telmodel → v1.25.0
-        * ska-tmc-cdm → v14.0.0
-        * ska-tmc-subarraynode → v0.43.1
-        * ska-tmc-dishleafnode → v0.24.2
+        * Fixed the issue with dishes field provided in dish helm chart

@@ -5,6 +5,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[1.8.0-rc.2]
+************
+Fixed
+-----
+* Fixed the issue with dishes field provided in dish helm chart
+
 [1.8.0-rc.1]
 ************
 Added
