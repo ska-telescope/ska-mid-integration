@@ -14,7 +14,7 @@ server:
   {{- $isSimulatedDish := .Values.deviceServers.mocks.dish }}
   {{- $real_dish_name := .Values.global.namespace_dish.dish_names }}
   {{- $DishMasterIdentifier := .Values.global.dish_suffix }}
-  {{- $dish_id := .Values.global.dishes }}
+  {{- $dish_id := .Values.global.dish_ids }}
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
   {{- $csp_assign_interface := .Values.deviceServers.subarraynode.CspAssignResourcesInterfaceURL }}
   {{- $csp_scan_interface := .Values.deviceServers.subarraynode.CspScanInterfaceURL }}

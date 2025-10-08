@@ -7,7 +7,7 @@ instances:
   - "03"
   - "04"
   - "05"
-{{- range .Values.global.dishes }}
+{{- range .Values.global.dish_ids }}
   {{- $num := regexReplaceAll "^[A-Za-z]+" . "" }}
   - "{{ $num }}"
 {{- end }}
@@ -70,7 +70,7 @@ server:
           {{- end }}
       {{- end }}
       {{- if eq $isSimulatedDish true }}
-{{- range .Values.global.dishes }}
+{{- range .Values.global.dish_ids }}
   {{- $num := regexReplaceAll "^[A-Za-z]+" . "" }}
     - name: "{{ $num }}"
       classes:
