@@ -51,10 +51,10 @@ affects the number of instances of following components.
 #. CSP Subarray Leaf Node
 #. SDP Subarray Leaf Node 
 
-global.dish_ids (changed)
+global.dishids (changed)
 ----------------------------
 
-The **global.dish_ids**  parameter has been refactored to support dynamic scaling.
+The **global.dishids**  parameter has been refactored to support dynamic scaling.
 This is **not a new feature**, but a change to existing behavior.
 
 Example:
@@ -62,7 +62,7 @@ Example:
 .. code-block:: yaml
 
    global:
-     dish_ids:
+     dishids:
        count: 4
        identifiers:
          - SKA001

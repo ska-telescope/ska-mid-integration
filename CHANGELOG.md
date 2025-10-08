@@ -64,7 +64,7 @@ Added
 
 Changed
 -------
-* Refactored helm chart for scaling from now the global dish_ids variable accepts 
+* Refactored helm chart for scaling from now the global dishids variable accepts 
   dish_id in ["SKA001","SKA002","SKA003", ....."SKA067","SKA100"]   
 
 Fixed

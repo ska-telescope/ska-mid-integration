@@ -2,7 +2,7 @@ name: "dishpointingdevice-test"
 function: dish-pointing
 domain: pattern-mapping
 instances:
-{{- range .Values.global.dish_ids }}
+{{- range .Values.global.dishids }}
   {{- $num := regexReplaceAll "^[A-Za-z]+" . "" }}
   - "{{ $num }}"
 {{- end }}
@@ -23,7 +23,7 @@ server:
   {{- $isSimulatedDish := .Values.deviceServers.mocks.dish }}
   {{- $real_dish_name := .Values.global.namespace_dish.dish_names }}
   {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true)  }}
-    {{- range $instance := .Values.global.dish_ids }}
+    {{- range $instance := .Values.global.dishids }}
       {{- $num := regexReplaceAll "^[A-Za-z]+" $instance "" }}
       {{- $instance_list = append $instance_list $num }}
     {{- end }}
