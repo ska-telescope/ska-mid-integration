@@ -4,7 +4,6 @@ import ast
 import json
 import logging
 import re
-import time
 
 import pytest
 from assertpy import assert_that
@@ -93,9 +92,9 @@ def given_a_tmc(
             ],
         }
     )
-    time.sleep(5)
     tmc.move_to_on(wait_termination=True, is_long_running_command=True)
-    # Setup TMC before invoking SetGlobalPointingModel command on TMC
+    # Setup TMC for testing negative scenarios
+    # before invoking SetGlobalPointingModel command on TMC
     assign_input = MyFileJSONInput("centralnode", "assign_resources_mid")
     assign_input = json.loads(assign_input.as_str())
     assign_input["dish"]["receptor_ids"] = ["SKA036"]
