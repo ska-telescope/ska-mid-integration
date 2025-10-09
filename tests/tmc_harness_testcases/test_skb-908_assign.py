@@ -16,12 +16,12 @@ from ska_tango_testing.integration import TangoEventTracer, log_events
 from tango import DevState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
-from tests.resources.test_harness.simulator_factory import SimulatorFactory
-from tests.resources.test_harness.utils.common_utils import JsonFactory
-from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
 )
+from tests.resources.test_harness.simulator_factory import SimulatorFactory
+from tests.resources.test_harness.utils.common_utils import JsonFactory
+from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.constant import TIMEOUT
 
 
@@ -63,14 +63,14 @@ def given_a_telescope_is_in_on(
             central_node_mid.subarray_node: ["obsState"],
         }
     )
-    central_node_mid.set_subarray_id('2')
+    central_node_mid.set_subarray_id("2")
     event_tracer.subscribe_event(central_node_mid.subarray_node, "obsState")
     log_events(
         {
             central_node_mid.subarray_node: ["obsState"],
         }
     )
-    central_node_mid.set_subarray_id('1')
+    central_node_mid.set_subarray_id("1")
     central_node_mid.move_to_on()
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "GIVEN" STEP: '
@@ -91,7 +91,7 @@ def verify_subarrys_in_empty(
     event_tracer: TangoEventTracer,
 ):
     """Verifies subarray in EMPTY ObsState."""
-    central_node_mid.set_subarray_id('1')
+    central_node_mid.set_subarray_id("1")
     assert_that(event_tracer).described_as(
         "TMC subarray device"
         f"({central_node_mid.subarray_node.dev_name()}) "
@@ -101,7 +101,7 @@ def verify_subarrys_in_empty(
         "obsState",
         ObsState.EMPTY,
     )
-    central_node_mid.set_subarray_id('2')
+    central_node_mid.set_subarray_id("2")
     assert_that(event_tracer).described_as(
         "TMC subarray device"
         f"({central_node_mid.subarray_node.dev_name()}) "
@@ -123,14 +123,14 @@ def central_node_assign_resources(
         "assign_resources_mid", command_input_factory
     )
     assign_data1 = json.loads(assign_input_json)
-    assign_data1['"dish"']['receptor_ids'] = ["SKA001", "SKA036"]
+    assign_data1['"dish"']["receptor_ids"] = ["SKA001", "SKA036"]
     _, pytest.unique_id = central_node_mid.perform_action(
         "AssignResources", json.dumps(assign_data1)
     )
-    central_node_mid.set_subarray_id('2')
+    central_node_mid.set_subarray_id("2")
     assign_data = json.loads(assign_input_json)
     assign_data["subarray_id"] = 2
-    assign_data['"dish"']['receptor_ids'] = ["SKA063", "SKA100"]
+    assign_data['"dish"']["receptor_ids"] = ["SKA063", "SKA100"]
     assign_data["sdp"]["execution_block"]["eb_id"] = "eb-test-20220917-00000"
     _, pytest.unique_id2 = central_node_mid.perform_action(
         "AssignResources", json.dumps(assign_data)
@@ -174,10 +174,7 @@ def verify_result_ok(
     )
 
 
-@then(
-    "the TMC, CSP, SDP subarray 1"
-    " and 2 transition to the IDLE obsState"
-)
+@then("the TMC, CSP, SDP subarray 1" " and 2 transition to the IDLE obsState")
 def verify_subarrays_in_idle(
     central_node_mid: CentralNodeWrapperMid,
     event_tracer: TangoEventTracer,
@@ -185,7 +182,7 @@ def verify_subarrays_in_idle(
 ):
     """Method checks the subarray node observation state EMPTY after
     ReleaseResources is invoked on central node."""
-    central_node_mid.set_subarray_id('1')
+    central_node_mid.set_subarray_id("1")
     sdp_sim = simulator_factory.get_or_create_simulator_device(
         SimulatorDeviceType.MID_SDP_DEVICE
     )
@@ -254,7 +251,7 @@ def verify_subarrays_in_idle(
         "obsState",
         ObsState.IDLE,
     )
-    central_node_mid.set_subarray_id('2')
+    central_node_mid.set_subarray_id("2")
     sdp_sim2 = simulator_factory.get_or_create_simulator_device(
         SimulatorDeviceType.LOW_SDP_DEVICE2
     )
