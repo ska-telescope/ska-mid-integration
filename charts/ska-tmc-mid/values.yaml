@@ -25,8 +25,6 @@ global:
   tango_host: databaseds-tango-base-test:10000
   dishids: &dish_ids ["SKA001","SKA036","SKA063","SKA100"]
 
-
-
   # List the dishes, if set, then this list will be applied to instances of:
   # deviceServers.dishmaster, deviceServers.dishleafnode
   dish_devices: ["dishmaster", "dishleafnode"]

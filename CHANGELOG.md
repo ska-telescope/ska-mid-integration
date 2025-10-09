@@ -9,7 +9,7 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 ************
 Fixed
 -----
-* Fixed the issue with dishes field provided in dish helm chart
+* Renamed the dishes field in values.yaml to dishids for fixing the issue with dish helm chart
 
 [1.8.0-rc.1]
 ************
@@ -70,7 +70,7 @@ Added
 
 Changed
 -------
-* Refactored helm chart for scaling from now the global dishids variable accepts 
+* Refactored helm chart for scaling from now the global dishes variable accepts  
   dish_id in ["SKA001","SKA002","SKA003", ....."SKA067","SKA100"]   
 
 Fixed

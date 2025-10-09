@@ -3,10 +3,10 @@ tag=1.8.0-rc.2
 tag_description=
 **Charts:**
 **1. Updated ska-tmc-mid from v1.8.0-rc.1 to v1.8.0-rc.2**
-        * Fixed the issue with dishes field provided in dish helm chart
+        * Renamed the dishes field in values.yaml to dishids for fixing the issue with dish helm chart
     
 release_notes=
 **Charts:**
 **1. Updated ska-tmc-mid from v1.8.0-rc.1 to v1.8.0-rc.2**
 
-        * Fixed the issue with dishes field provided in dish helm chart
+        * Renamed the dishes field in values.yaml to dishids for fixing the issue with dish helm chart
