@@ -25,6 +25,8 @@ tmc_csp_subarray_leaf_node = "mid-tmc/subarray-leaf-node-csp/01"
 tmc_sdp_subarray_leaf_node = "mid-tmc/subarray-leaf-node-sdp/01"
 sdp_subarray1 = "mid-sdp/subarray/01"
 csp_subarray1 = "mid-csp/subarray/01"
+sdp_subarray2 = "mid-sdp/subarray/02"
+csp_subarray2 = "mid-csp/subarray/02"
 sdp_master = "mid-sdp/control/0"
 csp_master = "mid-csp/control/0"
 dish_master1 = "mid-dish/dish-manager/ska001"
@@ -438,6 +440,8 @@ device_dict = {
 SIMULATOR_DEVICE_FQDN_DICT = {
     SimulatorDeviceType.MID_SDP_DEVICE: [sdp_subarray1],
     SimulatorDeviceType.MID_CSP_DEVICE: [csp_subarray1],
+    SimulatorDeviceType.MID_SDP_DEVICE2: [mid_sdp_subarray2],
+    SimulatorDeviceType.MID_CSP_DEVICE2: [mid_csp_subarray2],
     SimulatorDeviceType.DISH_DEVICE: [
         dish_master1,
         dish_master2,
