@@ -123,14 +123,14 @@ def central_node_assign_resources(
         "assign_resources_mid", command_input_factory
     )
     assign_data1 = json.loads(assign_input_json)
-    assign_data1['"dish"']["receptor_ids"] = ["SKA001", "SKA036"]
+    assign_data1["dish"]["receptor_ids"] = ["SKA001", "SKA036"]
     _, pytest.unique_id = central_node_mid.perform_action(
         "AssignResources", json.dumps(assign_data1)
     )
     central_node_mid.set_subarray_id("2")
     assign_data = json.loads(assign_input_json)
     assign_data["subarray_id"] = 2
-    assign_data['"dish"']["receptor_ids"] = ["SKA063", "SKA100"]
+    assign_data["dish"]["receptor_ids"] = ["SKA063", "SKA100"]
     assign_data["sdp"]["execution_block"]["eb_id"] = "eb-test-20220917-00000"
     _, pytest.unique_id2 = central_node_mid.perform_action(
         "AssignResources", json.dumps(assign_data)
