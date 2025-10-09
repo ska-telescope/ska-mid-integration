@@ -237,9 +237,9 @@ deploy-mid-integration:
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   variables:
-    KUBE_NAMESPACE: "integration-ska-mid"
+    KUBE_NAMESPACE: "integration-mid"
   environment:
-    name: integration-ska-mid
+    name: integration-mid
     on_stop: stop-mid-integration
 
 info-mid-integration:
@@ -262,9 +262,9 @@ stop-mid-integration:
   needs:
     - deploy-mid-integration
   variables:
-    KUBE_NAMESPACE: "integration-ska-mid"
+    KUBE_NAMESPACE: "integration-mid"
   environment:
-    name: integration-ska-mid
+    name: integration-mid
     action: stop
 
 redeploy-mid-integration:
@@ -278,3 +278,35 @@ redeploy-mid-integration:
     name: integration-ska-mid
 
 
+deploy-dev-environment:
+  image: $SKA_K8S_TOOLS_BUILD_DEPLOY
+  tags:
+    - ${SKA_K8S_RUNNER}
+  stage: deploy
+  when: manual
+  variables:
+    SKIP_CI: 1
+    KUBE_NAMESPACE: "manthan"
+  script:
+    - make k8s-install-chart
+    - make k8s-wait
+  environment:
+    name: manthan
+    on_stop: stop-dev-environment
+    auto_stop_in: 4 hours
+
+stop-dev-environment:
+  image: $SKA_K8S_TOOLS_BUILD_DEPLOY
+  tags:
+    - ${SKA_K8S_RUNNER}
+  stage: deploy
+  variables:
+    KUBE_NAMESPACE: "manthan"
+  script:
+    - make k8s-uninstall-chart
+    - kubectl -n $KUBE_NAMESPACE delete pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
+    - make k8s-delete-namespace
+  when: manual
+  environment:
+    name: manthan
+    action: stop
