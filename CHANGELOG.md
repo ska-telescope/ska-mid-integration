@@ -9,8 +9,27 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 ************
 Added
 -----
+* TMC Mid now supports Global Pointing Model (GPM) functionality.
+* Introduced the SetGlobalPointingModel command to apply GPM to specified bands on specified dishes in the input.
+* Added configurable properties — version, interface, data_sources_prefix, and file_path_prefix — for GPM setup.
+* Introduced the GlobalPointingModelStatus attribute to monitor the GPM status.
+* Added the gpmVersion attribute to the DishLeafNode to indicate the GPM version applied to each dish's bands.
+
+[1.8.0-rc.1]
+************
+Added
+-----
 * Added new documentation: `TMC Five-Point Calibration Scan` guide 
   (five-point calibration scan procedure, JSON examples, and step-by-step instructions).
+* Band 5 Downconverter (Band5DC) support in the TMC-MID integration chart.
+* Added documentation related to Band 5 Downconverter (Band5DC) integration and usage.
+
+Updated
+--------
+* ska-telmodel → v1.25.0
+* ska-tmc-cdm → v14.0.0
+* ska-tmc-subarraynode → v0.43.1
+* ska-tmc-dishleafnode → v0.24.2
 
 [1.7.1.rc.1]
 ************

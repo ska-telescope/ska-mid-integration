@@ -8,3 +8,4 @@ Operations Guide
    :maxdepth: 1
 
    five_point_scan_calibration
+   band5dc_support
