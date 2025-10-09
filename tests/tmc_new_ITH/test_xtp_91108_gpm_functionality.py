@@ -65,7 +65,7 @@ def extract_gpm_failure_details(events_tracer):
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
-    "../tmc_new_ITH/features/tmc_gpm.feature",
+    "../tmc_new_ITH/features/xtp_91108_gpm_functionality.feature",
     "TMC processes GPM JSON and reports status per dish",
 )
 def test_verify_gpm_functionality():
