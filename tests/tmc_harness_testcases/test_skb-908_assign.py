@@ -253,10 +253,10 @@ def verify_subarrays_in_idle(
     )
     central_node_mid.set_subarray_id("2")
     sdp_sim2 = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.LOW_SDP_DEVICE2
+        SimulatorDeviceType.MID_SDP_DEVICE2
     )
     csp_sim2 = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.LOW_CSP_DEVICE2
+        SimulatorDeviceType.MID_CSP_DEVICE2
     )
     event_tracer.subscribe_event(csp_sim2, "obsState")
     event_tracer.subscribe_event(sdp_sim2, "obsState")
