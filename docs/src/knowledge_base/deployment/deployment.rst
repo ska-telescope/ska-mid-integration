@@ -143,6 +143,31 @@ The variable **DishVccFilePath** specifies the respective file path of the confi
 file in the telmodel repo. Currently, its default values is set to 
 "instrument/ska1_mid_psi/ska-mid-cbf-system-parameters.json".
 
+Global Pointing Model Configuration
+-----------------------------------
+
+TMC Mid supports Global Pointing Model (GPM) configuration starting from version 1.8.0. 
+The following parameters define the GPM setup:
+
+**Key Parameters**:
+
+**version**: Specified GPM version will be applied to all dishes during TMC initialization
+
+**interface**: Defines the GPM schema interface URL
+
+**data_sources_prefix**: Base URI for GPM data repositories (e.g., CAR URLs)
+
+**file_path_prefix**: Relative path to GPM data within the repository.
+
+Except for version, all other parameters remain consistent across deployments and are used by the 
+**SetGlobalPointingModel** command to apply the specified version from the input JSON. Upon redeployment, 
+only these parameters can be modified.
+
+These parameters are located under the **deviceServers.centralnode.global_pointing_model** section in the 
+**values.yaml** file.
+
+**GlobalPointingModelStatus**: This central node attribute shows the current status of bandwise GPM applied to the dish.
+
 kValue Configuration
 ------------------------
 

@@ -2,7 +2,8 @@ Feature: Apply GPM configuration to dishes via TMC Mid Telescope
 
   Background:
     Given a TMC Mid telescope is operational
-
+  
+  @XTP-91108 @XTP-91105
   Scenario Outline: TMC processes GPM JSON and reports status per dish
     Given the following GPM configurations are provided for version 1.1.3:
       | Dish_ID | Bands           |

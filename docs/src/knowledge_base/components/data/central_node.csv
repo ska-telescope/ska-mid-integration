@@ -30,6 +30,7 @@ vlbi,ModesAvailability (DevEnum),No,
 isDishVccConfigSet,DevBoolean,No,
 DishVccCommandStatus,DishConfigStatus,No,
 DishVccValidationStatus,DevString,Yes,Change Event
+GlobalPointingModelStatus,DevString,Yes,Change Event
 loggingTargets,DevVarStringArray,No,
 longRunningCommandIDsInQueue,DevVarStringArray,No,
 longRunningCommandInProgress,DevVarStringArray,No,
