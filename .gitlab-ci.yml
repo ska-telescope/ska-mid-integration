@@ -288,7 +288,7 @@ deploy-dev-environment:
     SKIP_CI: 1
     KUBE_NAMESPACE: "ci-dev-ska-mid-integration"
   script:
-    - kubectl get deviceservers.tango.tango-controls.org,pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps -n ci-dev-ska-mid-integration --all
+    - kubectl get deviceservers.tango.tango-controls.org,pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps -n ci-dev-ska-mid-integration
     - make k8s-install-chart
     - make k8s-wait
   environment:
