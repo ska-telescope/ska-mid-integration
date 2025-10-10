@@ -111,7 +111,7 @@ def verify_subarrys_in_idle(
     assign_data["subarray_id"] = 2
     assign_data["dish"]["receptor_ids"] = ["SKA063", "SKA100"]
     assign_data["sdp"]["execution_block"]["eb_id"] = "eb-test-20220917-00000"
-    central_node_mid.perform_action("AssignResources", json.dumps(assign_data))
+    central_node_mid.central_node.AssignResources(json.dumps(assign_data))
     assert_that(event_tracer).described_as(
         "TMC subarray device"
         f"({central_node_mid.subarray_node.dev_name()}) "
