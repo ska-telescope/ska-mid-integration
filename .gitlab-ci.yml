@@ -307,6 +307,8 @@ stop-dev-environment:
   script:
     - make k8s-uninstall-chart
     - kubectl -n $KUBE_NAMESPACE delete deviceservers.tango.tango-controls.org,pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
+    - echo "⏳ Waiting 60 seconds for namespace and CRDs to stabilize..."
+    - sleep 60
     - make k8s-delete-namespace
   when: manual
   environment:
