@@ -4,7 +4,6 @@ import os
 import time
 from typing import List, Tuple
 
-from assertpy import assert_that
 from ska_control_model import ObsState, ResultCode
 from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import HealthState
@@ -36,7 +35,6 @@ from tests.resources.test_support.constant import (
     COMMAND_COMPLETED,
     DEFAULT_DISH_VALIDATION_STATUS,
     DEFAULT_DISH_VCC_CONFIG,
-    TIMEOUT,
     centralnode,
     csp_master,
     csp_subarray1,
@@ -623,20 +621,13 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 event_recorder.subscribe_event(
                     self.central_node, "longRunningCommandResult"
                 )
-                assert_that(self.event_tracer).described_as(
-                    "FAILED ASSUMPTION AFTER RELEASE_RESOURCES COMMAND: "
-                    "CentralNode device "
-                    f"({self.central_node.dev_name()}) "
-                    "is expected have longRunningCommand as"
-                    '(unique_id,(ResultCode.OK,"Command Completed"))',
-                ).within_timeout(TIMEOUT).has_change_event_occurred(
+                assert event_recorder.has_change_event_occurred(
                     self.central_node,
                     "longRunningCommandResult",
-                    (
-                        unique_id[0],
-                        json.dumps((int(ResultCode.OK), "Command Completed")),
-                    ),
+                    (unique_id[0], COMMAND_COMPLETED),
+                    lookahead=10,
                 )
+
             if self.subarray_node.obsState in [
                 ObsState.RESOURCING,
                 ObsState.SCANNING,
