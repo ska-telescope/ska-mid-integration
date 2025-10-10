@@ -1,7 +1,6 @@
 import json
 import logging
 import os
-import time
 from typing import List, Tuple
 
 from ska_control_model import ObsState, ResultCode
@@ -556,10 +555,8 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         self._reset_health_state_for_mock_devices()
         self.set_subarray_id("1")
         self.tear_down_subarray()
-        time.sleep(10)
         self.set_subarray_id("2")
         self.tear_down_subarray()
-        time.sleep(10)
         LOGGER.info("telescope_state - %s", self.telescope_state)
         if self.telescope_state != "OFF":
             if (SIMULATED_DEVICES_DICT["sdp"]) and not SIMULATED_DEVICES_DICT[
@@ -593,7 +590,6 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                     self.central_node,
                     "longRunningCommandResult",
                     (unique_id[0], COMMAND_COMPLETED),
-                    lookahead=10,
                 )
                 event_recorder.clear_events()
 
