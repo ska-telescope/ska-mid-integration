@@ -3,9 +3,11 @@ import logging
 import os
 from typing import List, Tuple
 
+from assertpy import assert_that
 from ska_control_model import ObsState, ResultCode
 from ska_ser_logging import configure_logging
 from ska_tango_base.control_model import HealthState
+from ska_tango_testing.integration import TangoEventTracer
 from tango import DeviceProxy, DevState
 from tango.db import Database
 
@@ -33,6 +35,7 @@ from tests.resources.test_support.constant import (
     COMMAND_COMPLETED,
     DEFAULT_DISH_VALIDATION_STATUS,
     DEFAULT_DISH_VCC_CONFIG,
+    TIMEOUT,
     centralnode,
     csp_master,
     csp_subarray1,
@@ -82,7 +85,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             "csp_subarray": DeviceProxy(csp_subarray1),
             "sdp_subarray": DeviceProxy(sdp_subarray1),
         }
-
+        self.event_tracer = TangoEventTracer()
         self.csp_master = DeviceProxy(csp_master)
         if (
             SIMULATED_DEVICES_DICT["csp_and_sdp"]
@@ -454,10 +457,6 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         Args:
             input_string (str): Release resource input json
         """
-        if str(self.subarray_node) == "MidTmcSubarray(mid-tmc/subarray/02)":
-            input_json = json.loads(input_string)
-            input_json["subarray_id"] = 2
-            input_string = json.dumps(input_json)
         result, message = self.central_node.ReleaseResources(input_string)
         return result, message
 
@@ -610,8 +609,29 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             )
             if self.subarray_node.obsState == ObsState.IDLE:
                 LOGGER.info("Calling Release Resource on centralnode")
-                self.invoke_release_resources(self.release_input)
-            elif self.subarray_node.obsState in [
+                release_data = json.loads(self.release_input)
+                release_data["subarray_id"] = int(
+                    self.subarray_node.dev_name().split("/")[-1]
+                )
+                _, unique_id = self.invoke_release_resources(
+                    json.dumps(release_data)
+                )
+                assert_that(self.event_tracer).described_as(
+                    "FAILED ASSUMPTION AFTER RELEASE_RESOURCES COMMAND: "
+                    "SubarrayNode device"
+                    f"({self.central_node.dev_name()}) "
+                    "is expected have longRunningCommand as"
+                    '(unique_id,(ResultCode.OK,"Command Completed"))',
+                ).within_timeout(TIMEOUT).has_change_event_occurred(
+                    self.central_node,
+                    "longRunningCommandResult",
+                    (
+                        unique_id[0],
+                        json.dumps((int(ResultCode.OK), "Command Completed")),
+                    ),
+                )
+
+            if self.subarray_node.obsState in [
                 ObsState.RESOURCING,
                 ObsState.SCANNING,
                 ObsState.CONFIGURING,
