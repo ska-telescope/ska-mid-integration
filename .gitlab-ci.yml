@@ -288,6 +288,7 @@ deploy-dev-environment:
     SKIP_CI: 1
     KUBE_NAMESPACE: "ci-dev-ska-mid-integration"
   script:
+    - kubectl -n $KUBE_NAMESPACE delete deviceservers.tango.tango-controls.org,pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
     - make k8s-install-chart
     - make k8s-wait
   environment:
