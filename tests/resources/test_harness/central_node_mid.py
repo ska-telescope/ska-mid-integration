@@ -454,6 +454,10 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         Args:
             input_string (str): Release resource input json
         """
+        if str(self.subarray_node) == "MidTmcSubarray(mid-tmc/subarray/02)":
+            input_json = json.loads(input_string)
+            input_json["subarray_id"] = 2
+            input_string = json.dumps(input_json)
         result, message = self.central_node.ReleaseResources(input_string)
         return result, message
 
