@@ -31,7 +31,7 @@ from tests.resources.test_support.constant import TIMEOUT
     "../features/skb_908.feature",
     "Verify SKB-908 for assign resources flow",
 )
-def test_verify_skb_908():
+def test_verify_skb_908_assign():
     """BDD test scenario for verifying SKB-908"""
 
 

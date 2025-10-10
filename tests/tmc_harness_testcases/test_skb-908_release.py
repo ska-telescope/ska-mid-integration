@@ -25,12 +25,13 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.constant import TIMEOUT
 
 
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../features/skb_908.feature",
     "Verify SKB-908 for release resources flow",
 )
-def test_verify_skb_908():
+def test_verify_skb_908_release():
     """BDD test scenario for verifying SKB-908"""
 
 
