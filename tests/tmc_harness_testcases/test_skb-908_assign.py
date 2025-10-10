@@ -26,7 +26,7 @@ from tests.resources.test_support.constant import TIMEOUT
 
 
 @pytest.mark.batch2
-@pytest.mark.SKA_mid
+@pytest.mark.SKA_mid1
 @scenario(
     "../features/skb_908.feature",
     "Verify SKB-908 for assign resources flow",
