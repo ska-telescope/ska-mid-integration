@@ -288,8 +288,8 @@ deploy-dev-environment:
     SKIP_CI: 1
     KUBE_NAMESPACE: "ci-dev-ska-mid-integration"
   script:
-    - echo "⏳ Waiting 30 seconds for namespace and CRDs to stabilize..."
-    - sleep 30
+    - echo "⏳ Waiting 60 seconds for namespace and CRDs to stabilize..."
+    - sleep 60
     - make k8s-install-chart
     - make k8s-wait
   environment:
