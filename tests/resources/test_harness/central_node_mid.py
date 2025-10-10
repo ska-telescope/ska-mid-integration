@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import time
 from typing import List, Tuple
 
 from assertpy import assert_that
@@ -557,8 +558,10 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         self._reset_health_state_for_mock_devices()
         self.set_subarray_id("1")
         self.tear_down_subarray()
+        time.sleep(10)
         self.set_subarray_id("2")
         self.tear_down_subarray()
+        time.sleep(10)
         LOGGER.info("telescope_state - %s", self.telescope_state)
         if self.telescope_state != "OFF":
             if (SIMULATED_DEVICES_DICT["sdp"]) and not SIMULATED_DEVICES_DICT[
@@ -613,16 +616,26 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 release_data["subarray_id"] = int(
                     self.subarray_node.dev_name().split("/")[-1]
                 )
-                self.invoke_release_resources(json.dumps(release_data))
+                _, unique_id = self.invoke_release_resources(
+                    json.dumps(release_data)
+                )
                 event_recorder = EventRecorder()
-                event_recorder.subscribe_event(self.subarray_node, "obsState")
+                event_recorder.subscribe_event(
+                    self.central_node, "longRunningCommandResult"
+                )
                 assert_that(self.event_tracer).described_as(
                     "FAILED ASSUMPTION AFTER RELEASE_RESOURCES COMMAND: "
-                    "SubarrayNode device"
-                    f"({self.subarray_node.dev_name()}) "
-                    "is expected have obsState as EMPTY",
+                    "CentralNode device "
+                    f"({self.central_node.dev_name()}) "
+                    "is expected have longRunningCommand as"
+                    '(unique_id,(ResultCode.OK,"Command Completed"))',
                 ).within_timeout(TIMEOUT).has_change_event_occurred(
-                    self.subarray_node, "obsState", ObsState.EMPTY
+                    self.central_node,
+                    "longRunningCommandResult",
+                    (
+                        unique_id[0],
+                        json.dumps((int(ResultCode.OK), "Command Completed")),
+                    ),
                 )
             if self.subarray_node.obsState in [
                 ObsState.RESOURCING,
