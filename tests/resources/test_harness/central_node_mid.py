@@ -613,28 +613,17 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 release_data["subarray_id"] = int(
                     self.subarray_node.dev_name().split("/")[-1]
                 )
-                _, unique_id = self.invoke_release_resources(
-                    json.dumps(release_data)
-                )
+                self.invoke_release_resources(json.dumps(release_data))
                 event_recorder = EventRecorder()
-                event_recorder.subscribe_event(
-                    self.central_node, "longRunningCommandResult"
-                )
+                event_recorder.subscribe_event(self.subarray_node, "obsState")
                 assert_that(self.event_tracer).described_as(
                     "FAILED ASSUMPTION AFTER RELEASE_RESOURCES COMMAND: "
                     "SubarrayNode device"
-                    f"({self.central_node.dev_name()}) "
-                    "is expected have longRunningCommand as"
-                    '(unique_id,(ResultCode.OK,"Command Completed"))',
+                    f"({self.subarray_node.dev_name()}) "
+                    "is expected have obsState as EMPTY",
                 ).within_timeout(TIMEOUT).has_change_event_occurred(
-                    self.central_node,
-                    "longRunningCommandResult",
-                    (
-                        unique_id[0],
-                        json.dumps((int(ResultCode.OK), "Command Completed")),
-                    ),
+                    self.subarray_node, "obsState", ObsState.EMPTY
                 )
-
             if self.subarray_node.obsState in [
                 ObsState.RESOURCING,
                 ObsState.SCANNING,
