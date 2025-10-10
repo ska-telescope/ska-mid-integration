@@ -601,7 +601,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         try:
             Subarray_node_obsstate = self.subarray_node.obsState
             LOGGER.info(
-                f"Calling tear down for CentralNode for SubarrayNode's \
+                f"Calling tear down for {self.subarray_node}'s \
                     {Subarray_node_obsstate} obsstate."
             )
             if self.subarray_node.obsState == ObsState.IDLE:
