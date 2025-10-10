@@ -616,6 +616,10 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 _, unique_id = self.invoke_release_resources(
                     json.dumps(release_data)
                 )
+                event_recorder = EventRecorder()
+                event_recorder.subscribe_event(
+                    self.central_node, "longRunningCommandResult"
+                )
                 assert_that(self.event_tracer).described_as(
                     "FAILED ASSUMPTION AFTER RELEASE_RESOURCES COMMAND: "
                     "SubarrayNode device"
