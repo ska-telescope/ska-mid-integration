@@ -108,6 +108,10 @@ def given_a_tmc(
     dish_63.SetDefective(ERROR_PROPAGATION_DEFECT)
 
 
+# Parse table rows by splitting on '|' to extract Dish_ID
+# (converted to lowercase)
+# and Bands (split by commas into list). Headers are derived
+# from first row.
 @given(
     parsers.re(
         r"the following GPM configurations are provided for version "
@@ -200,7 +204,7 @@ def tmc_reports_gpm_status_on_dish(
                     value[0] for value in dish_gpm_lrcr_data.values()
                 ]
                 logger.info(
-                    "Test reasons for validations: %s"
+                    "Test reasons for validations: %s "
                     "LRCR messages: %s"
                     "Result codes: %s",
                     reasons,

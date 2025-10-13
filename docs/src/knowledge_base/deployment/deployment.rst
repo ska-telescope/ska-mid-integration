@@ -159,6 +159,10 @@ The following parameters define the GPM setup:
 
 **file_path_prefix**: Relative path to GPM data within the repository.
 
+.. warning::
+
+   All parameters are mandatory — missing/incorrect values may cause the command to fail.
+
 Except for version, all other parameters remain consistent across deployments and are used by the 
 **SetGlobalPointingModel** command to apply the specified version from the input JSON. Upon redeployment, 
 only these parameters can be modified.
