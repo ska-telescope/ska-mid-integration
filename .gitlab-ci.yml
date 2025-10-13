@@ -286,12 +286,12 @@ deploy-dev-environment:
   when: manual
   variables:
     SKIP_CI: 1
-    KUBE_NAMESPACE: "ci-dev-ska-mid-integration"
+    KUBE_NAMESPACE: "ci-dev-ska-mid-integration-sah1797"
   script:
     - make k8s-install-chart
     - make k8s-wait
   environment:
-    name: ci-dev-ska-mid-integration
+    name: ci-dev-ska-mid-integration-sah1797
     on_stop: stop-dev-environment
     auto_stop_in: 4 hours
 
@@ -301,12 +301,12 @@ stop-dev-environment:
     - ${SKA_K8S_RUNNER}
   stage: deploy
   variables:
-    KUBE_NAMESPACE: "ci-dev-ska-mid-integration"
+    KUBE_NAMESPACE: "ci-dev-ska-mid-integration-sah1797"
   script:
     - make k8s-uninstall-chart
     - kubectl -n $KUBE_NAMESPACE delete deviceservers.tango.tango-controls.org,pods,svc,daemonsets,deployments,replicasets,statefulsets,cronjobs,jobs,ingresses,configmaps --all
     - make k8s-delete-namespace
   when: manual
   environment:
-    name: ci-dev-ska-mid-integration
+    name: ci-dev-ska-mid-integration-sah1797
     action: stop
