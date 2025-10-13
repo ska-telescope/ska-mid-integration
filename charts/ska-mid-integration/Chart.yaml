@@ -15,7 +15,7 @@ dependencies:
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-tango-util.enabled
   - name: ska-sdp
-    version: 2.1.1
+    version: 2.1.0
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-sdp.enabled
   - name: ska-tmc-mid
@@ -27,7 +27,7 @@ dependencies:
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-dish-lmc.enabled
   - name: ska-csp-lmc-mid
-    version: 1.2.0-rc.1
+    version: 1.2.0-dev.c242368df
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-csp-lmc-mid.enabled
   - name: ska-mid-cbf-tdc-mcs
