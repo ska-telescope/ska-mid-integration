@@ -25,7 +25,7 @@ global:
   dishids: &dish_ids ["SKA001","SKA036","SKA063","SKA100"]
   dishes: ["001", "036","063", "100"]
   namespace_dish: # these are used when TMC is deployed with Dish Leaf Nodes . To override the variable defined in TMC repo, this is useful from configurability
-    dish_names: []
+    dish_names: ['mid-dish/dish-manager/SKA001','mid-dish/dish-manager/SKA036','mid-dish/dish-manager/SKA063','mid-dish/dish-manager/SKA100']
   subarray_devices:
     - "cspsubarrayleafnode"
     - "sdpsubarrayleafnode"
