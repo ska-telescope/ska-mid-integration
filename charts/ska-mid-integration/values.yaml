@@ -22,9 +22,37 @@ global:
   tango_host: databaseds:10000
   device_server_port: 45450
   cluster_domain: techops.internal.skao.int # check with Ugur what it should be? it should be just cloud- cluster.local is what dev teams use
+  dishids: &dish_ids ["SKA001","SKA036","SKA063","SKA100"]
   dishes: ["001", "036","063", "100"]
   namespace_dish: # these are used when TMC is deployed with Dish Leaf Nodes . To override the variable defined in TMC repo, this is useful from configurability
     dish_names: []
+  subarray_devices:
+    - "cspsubarrayleafnode"
+    - "sdpsubarrayleafnode"
+    - "subarraynode"
+
+  # fqdn for mid devices
+  tmc_central_node: "mid-tmc/central-node/0"
+  tmc_subarray_prefix: "mid-tmc/subarray"
+  csp_subarray_ln_prefix: "mid-tmc/subarray-leaf-node-csp/"
+  sdp_subarray_ln_prefix: "mid-tmc/subarray-leaf-node-sdp/"
+  csp_master_ln: "mid-tmc/leaf-node-csp/0"
+  sdp_master_ln: "mid-tmc/leaf-node-sdp/0"
+  csp_subarray_prefix: "mid-csp/subarray"
+  sdp_subarray_prefix: "mid-sdp/subarray"
+  dish_suffix: "mid-dish/dish-manager"
+  dish_manager_suffix: "mid-dish/dish-manager/ska"
+  csp_master: "mid-csp/control/0"
+  sdp_master: "mid-sdp/control/0"
+  dish_ln_prefix: "mid-tmc/leaf-node-dish/ska"
+  dishln_pointing_suffix: "mid-tmc/dish-pointing/ska"
+  mid_sdp_subarray_1: "mid-sdp/subarray/01"
+  mid_sdp_subarray_2: "mid-sdp/subarray/02"
+  mid_sdp_queueconnector: "mid-sdp/queueconnector/01"
+  mid_csp_control: "mid-csp/control/0"
+  mid_csp_subarray_1: "mid-csp/subarray/01"
+  mid_csp_subarray_2: "mid-csp/subarray/02"
+
   data-product-pvc-name: shared
   dsconfig:
     timeout: 300s
