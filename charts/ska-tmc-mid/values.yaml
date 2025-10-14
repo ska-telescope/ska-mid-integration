@@ -104,14 +104,14 @@ cspmasterleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.31.0
+    tag: 0.32.0
     pullPolicy: IfNotPresent
 
 cspsubarrayleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.31.0
+    tag: 0.32.0
     pullPolicy: IfNotPresent
 
 dishleafnode:
@@ -160,7 +160,7 @@ deviceServers:
     file: "data/subarraynode_mid.yaml"
     DishIDs: *dish_ids
     CspAssignResourcesInterfaceURL: "https://schema.skao.int/ska-csp-assignresources/2.0"
-    CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.0"
+    CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.2"
     SdpScanInterfaceURL: "https://schema.skao.int/ska-sdp-scan/0.4"
     CommandTimeOutDefault: 110
     AbortCommandTimeOut: 130
