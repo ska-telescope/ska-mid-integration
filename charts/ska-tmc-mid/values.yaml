@@ -160,7 +160,7 @@ deviceServers:
     file: "data/subarraynode_mid.yaml"
     DishIDs: *dish_ids
     CspAssignResourcesInterfaceURL: "https://schema.skao.int/ska-csp-assignresources/2.0"
-    CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.0"
+    CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.2"
     SdpScanInterfaceURL: "https://schema.skao.int/ska-sdp-scan/0.4"
     CommandTimeOutDefault: 110
     AbortCommandTimeOut: 130
