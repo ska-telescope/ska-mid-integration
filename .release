@@ -1,12 +1,12 @@
-release=1.8.0-rc.2
-tag=1.8.0-rc.2
+release=1.8.0
+tag=1.8.0
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.8.0-rc.1 to v1.8.0-rc.2**
-        * Renamed the dishes field in values.yaml to dishids for fixing the issue with dish helm chart
+**1. Updated ska-tmc-mid from v1.8.0-rc.2 to v1.8.0**
+        * Full release with Band 5 down conversion functionality
     
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.8.0-rc.1 to v1.8.0-rc.2**
+**1. Updated ska-tmc-mid from v1.8.0-rc.2 to v1.8.0**
 
-        * Renamed the dishes field in values.yaml to dishids for fixing the issue with dish helm chart
+        * Full release with Band 5 down conversion functionality
