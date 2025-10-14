@@ -23,6 +23,7 @@ global:
   device_server_port: 45450
   cluster_domain: techops.internal.skao.int # check with Ugur what it should be? it should be just cloud- cluster.local is what dev teams use
   dishes: ["001", "036", "063", "100"]
+  dish_names: ['mid-dish/dish-manager/SKA001','mid-dish/dish-manager/SKA036','mid-dish/dish-manager/SKA063','mid-dish/dish-manager/SKA100']
 
   data-product-pvc-name: shared
   dsconfig:
