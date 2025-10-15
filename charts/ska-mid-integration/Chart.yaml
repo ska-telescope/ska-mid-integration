@@ -23,7 +23,7 @@ dependencies:
     repository: https://gitlab.com/api/v4/projects/34728004/packages/helm/dev
     condition: ska-tmc-mid.enabled
   - name: ska-dish-lmc
-    version: 8.1.0
+    version: 8.4.0
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-dish-lmc.enabled
   - name: ska-csp-lmc-mid
