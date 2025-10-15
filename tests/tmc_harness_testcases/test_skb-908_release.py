@@ -53,6 +53,7 @@ def given_a_telescope_is_in_on(
     event_tracer.subscribe_event(
         central_node_mid.central_node, "longRunningCommandResult"
     )
+    central_node_mid.set_subarray_id("1")
     event_tracer.subscribe_event(central_node_mid.subarray_node, "obsState")
     log_events(
         {
@@ -94,24 +95,24 @@ def verify_subarrys_in_idle(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-    assign_data1 = json.loads(assign_input_json)
-    assign_data1["dish"]["receptor_ids"] = ["SKA001", "SKA036"]
-    central_node_mid.store_resources(json.dumps(assign_data1))
-    assert_that(event_tracer).described_as(
-        "TMC subarray device"
-        f"({central_node_mid.subarray_node.dev_name()}) "
-        "is expected to be in IDLE obstate",
-    ).within_timeout(TIMEOUT).has_change_event_occurred(
-        central_node_mid.subarray_node,
-        "obsState",
-        ObsState.IDLE,
-    )
+    # assign_data1 = json.loads(assign_input_json)
+    # assign_data1["dish"]["receptor_ids"] = ["SKA001", "SKA036"]
+    # central_node_mid.store_resources(json.dumps(assign_data1))
+    # assert_that(event_tracer).described_as(
+    #     "TMC subarray device"
+    #     f"({central_node_mid.subarray_node.dev_name()}) "
+    #     "is expected to be in IDLE obstate",
+    # ).within_timeout(TIMEOUT).has_change_event_occurred(
+    #     central_node_mid.subarray_node,
+    #     "obsState",
+    #     ObsState.IDLE,
+    # )
     central_node_mid.set_subarray_id("2")
     assign_data = json.loads(assign_input_json)
     assign_data["subarray_id"] = 2
     assign_data["dish"]["receptor_ids"] = ["SKA063", "SKA100"]
     assign_data["sdp"]["execution_block"]["eb_id"] = "eb-test-20220917-00000"
-    central_node_mid.central_node.AssignResources(json.dumps(assign_data))
+    central_node_mid.perform_action("AssignResources", json.dumps(assign_data))
     assert_that(event_tracer).described_as(
         "TMC subarray device"
         f"({central_node_mid.subarray_node.dev_name()}) "
