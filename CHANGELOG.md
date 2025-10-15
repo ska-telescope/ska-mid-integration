@@ -5,11 +5,11 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
-[1.8.0]
+[1.8.0-rc.3]
 ************
-Added
+Fixed
 -----
-* Full release with Band 5 down conversion functionality
+* Fixed issues observed in Band 5 down conversion testing
 
 [1.8.0-rc.2]
 ************

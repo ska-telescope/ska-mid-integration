@@ -1,12 +1,12 @@
-release=1.8.0
-tag=1.8.0
+release=1.8.0-rc.3
+tag=1.8.0-rc.3
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.8.0-rc.2 to v1.8.0**
-        * Full release with Band 5 down conversion functionality
+**1. Updated ska-tmc-mid from v1.8.0-rc.2 to v1.8.0-rc.3**
+        * Fixed issues observed in Band 5 down conversion testing
     
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.8.0-rc.2 to v1.8.0**
+**1. Updated ska-tmc-mid from v1.8.0-rc.2 to v1.8.0-rc.3**
 
-        * Full release with Band 5 down conversion functionality
+        * Fixed issues observed in Band 5 down conversion testing
