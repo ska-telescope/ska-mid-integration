@@ -284,11 +284,7 @@ deploy-dev-environment:
     - ${SKA_K8S_RUNNER}
   stage: deploy
   when: manual
-  variables:
-    DISH_NAME_1: mid-dish/dish-manager/SKA001
-    DISH_NAME_36: mid-dish/dish-manager/SKA036
-    DISH_NAME_63: mid-dish/dish-manager/SKA063
-    DISH_NAME_100: mid-dish/dish-manager/SKA100   
+  variables: 
     SKIP_CI: 1
     KUBE_NAMESPACE: "ci-dev-ska-mid-integration-sah1797"
   script:
