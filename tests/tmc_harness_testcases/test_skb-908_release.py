@@ -131,8 +131,9 @@ def central_node_assign_resources(
     command_input_factory: JsonFactory,
 ):
     """Invokes release resources on two subarrays."""
+    central_node_mid.set_subarray_id("1")
     release_input_json = prepare_json_args_for_centralnode_commands(
-        "release_resources_low", command_input_factory
+        "release_resources_mid", command_input_factory
     )
     _, pytest.unique_id = central_node_mid.perform_action(
         "ReleaseResources", release_input_json
@@ -311,3 +312,4 @@ def verify_subarrays_in_idle(
         "sdpSubarrayObsState",
         ObsState.EMPTY,
     )
+    central_node_mid.set_subarray_id("1")
