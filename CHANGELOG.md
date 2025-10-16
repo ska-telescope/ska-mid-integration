@@ -15,6 +15,12 @@ Added
 * Introduced the GlobalPointingModelStatus attribute to monitor the GPM status.
 * Added the gpmVersion attribute to the DishLeafNode to indicate the GPM version applied to each dish's bands.
 
+[1.8.0-rc.3]
+************
+Fixed
+-----
+* Fixed issues observed in Band 5 down conversion testing
+
 [1.8.0-rc.2]
 ************
 Fixed

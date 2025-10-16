@@ -2,8 +2,8 @@ release=1.9.0-rc.1
 tag=1.9.0-rc.1
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.8.0 to v1.9.0-rc.1**
-        *  TMC Mid now supports Global Pointing Model (GPM) functionality.
+**1. Updated ska-tmc-mid from v1.8.0-rc.3 to v1.9.0-rc.1**
+        * TMC Mid now supports Global Pointing Model (GPM) functionality.
         * Introduced the SetGlobalPointingModel command to apply GPM to specified bands on specified dishes in the input.
         * Added configurable properties — version, interface, data_sources_prefix, and file_path_prefix — for GPM setup.
         * Introduced the GlobalPointingModelStatus attribute to monitor the GPM status.
@@ -11,9 +11,9 @@ tag_description=
     
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.8.0 to v1.9.0-rc.1**
+**1. Updated ska-tmc-mid from v1.8.0-rc.3 to v1.9.0-rc.1**
 
-        *  TMC Mid now supports Global Pointing Model (GPM) functionality.
+        * TMC Mid now supports Global Pointing Model (GPM) functionality.
         * Introduced the SetGlobalPointingModel command to apply GPM to specified bands on specified dishes in the input.
         * Added configurable properties — version, interface, data_sources_prefix, and file_path_prefix — for GPM setup.
         * Introduced the GlobalPointingModelStatus attribute to monitor the GPM status.
