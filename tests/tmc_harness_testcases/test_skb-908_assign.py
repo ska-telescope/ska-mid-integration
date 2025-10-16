@@ -25,7 +25,7 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.constant import TIMEOUT
 
 
-@pytest.mark.batch2
+@pytest.mark.batch21
 @pytest.mark.SKA_mid
 @scenario(
     "../features/skb_908.feature",
@@ -302,3 +302,4 @@ def verify_subarrays_in_idle(
         "sdpSubarrayObsState",
         ObsState.IDLE,
     )
+    central_node_mid.set_subarray_id("1")
