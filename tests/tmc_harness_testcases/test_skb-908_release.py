@@ -148,7 +148,7 @@ def central_node_assign_resources(
 
 @then(
     "the TMC central node long running command results"
-    " for both subarrys are OK"
+    " for both subarrays are OK"
 )
 def verify_result_ok(
     central_node_mid: CentralNodeWrapperMid,
@@ -183,7 +183,7 @@ def verify_result_ok(
     )
 
 
-@then("the TMC, CSP, SDP subarray 1" " and 2 transition to the EMPTY obsState")
+@then("the TMC, CSP, SDP subarray 1 and 2 transition to the EMPTY obsState")
 def verify_subarrays_in_idle(
     central_node_mid: CentralNodeWrapperMid,
     event_tracer: TangoEventTracer,
