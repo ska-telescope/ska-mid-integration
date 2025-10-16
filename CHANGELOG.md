@@ -5,6 +5,28 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[Unreleased]
+************
+Added
+-----
+* TMC Mid now supports Global Pointing Model (GPM) functionality.
+* Introduced the SetGlobalPointingModel command to apply GPM to specified bands on specified dishes in the input.
+* Added configurable properties — version, interface, data_sources_prefix, and file_path_prefix — for GPM setup.
+* Introduced the GlobalPointingModelStatus attribute to monitor the GPM status.
+* Added the gpmVersion attribute to the DishLeafNode to indicate the GPM version applied to each dish's bands.
+
+[1.8.0-rc.3]
+************
+Fixed
+-----
+* Fixed issues observed in Band 5 down conversion testing
+
+[1.8.0-rc.2]
+************
+Fixed
+-----
+* Renamed the dishes field in values.yaml to dishids for fixing the issue with dish helm chart
+
 [1.8.0-rc.1]
 ************
 Added
@@ -64,7 +86,7 @@ Added
 
 Changed
 -------
-* Refactored helm chart for scaling from now the global dishes variable accepts 
+* Refactored helm chart for scaling from now the global dishes variable accepts  
   dish_id in ["SKA001","SKA002","SKA003", ....."SKA067","SKA100"]   
 
 Fixed

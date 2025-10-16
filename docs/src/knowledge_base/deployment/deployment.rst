@@ -51,10 +51,10 @@ affects the number of instances of following components.
 #. CSP Subarray Leaf Node
 #. SDP Subarray Leaf Node 
 
-global.dishes (changed)
+global.dishids (changed)
 ----------------------------
 
-The **global.dishes**  parameter has been refactored to support dynamic scaling.
+The **global.dishids**  parameter has been refactored to support dynamic scaling.
 This is **not a new feature**, but a change to existing behavior.
 
 Example:
@@ -62,7 +62,7 @@ Example:
 .. code-block:: yaml
 
    global:
-     dishes:
+     dishids:
        count: 4
        identifiers:
          - SKA001
@@ -142,6 +142,38 @@ value defaults to
 The variable **DishVccFilePath** specifies the respective file path of the configuration 
 file in the telmodel repo. Currently, its default values is set to 
 "instrument/ska1_mid_psi/ska-mid-cbf-system-parameters.json".
+
+Global Pointing Model Configuration
+-----------------------------------
+
+TMC Mid supports Global Pointing Model (GPM) configuration starting from version 1.9.0. 
+The following parameters define the GPM setup:
+
+**Key Parameters**:
+
+**version**: Specified GPM version will be applied to all dishes during TMC initialization
+
+**interface**: Defines the GPM schema interface URL
+
+**data_sources_prefix**: Base URI for GPM data repositories (e.g., CAR URLs)
+
+**file_path_prefix**: Relative path to GPM data within the repository.
+
+.. warning::
+
+   All parameters are mandatory — missing or incorrect values may cause the TMC to fail to apply 
+   the specified version of the GPM during initialization.
+
+Except for version, all other parameters remain consistent across deployments and are used by the 
+**SetGlobalPointingModel** command to apply the specified version from the input JSON. Upon redeployment, 
+only these parameters can be modified.
+
+These parameters are located under the **deviceServers.centralnode.global_pointing_model** section in the 
+**values.yaml** file.
+
+For further information and details, please `click here <https://confluence.skatelescope.org/x/V4TtEQ>`_
+
+**GlobalPointingModelStatus**: This central node attribute shows the current status of bandwise GPM applied to the dish.
 
 kValue Configuration
 ------------------------

@@ -23,13 +23,12 @@ subarray_count: 2
 global:
   minikube: false
   tango_host: databaseds-tango-base-test:10000
-  dishes: &dish_ids ["SKA001","SKA036","SKA063","SKA100"]
-
-
+  dishids: &dish_ids ["SKA001","SKA036","SKA063","SKA100"]
 
   # List the dishes, if set, then this list will be applied to instances of:
   # deviceServers.dishmaster, deviceServers.dishleafnode
   dish_devices: ["dishmaster", "dishleafnode"]
+  dishes: ["001", "036", "063", "100"]
   
   domain: "mid-tmc"
 
@@ -91,7 +90,7 @@ subarraynode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-subarraynode
-    tag: 0.43.1
+    tag: 0.44.1
     pullPolicy: IfNotPresent
 
 sdpleafnodes:
@@ -105,28 +104,28 @@ cspmasterleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.31.0
+    tag: 0.32.0
     pullPolicy: IfNotPresent
 
 cspsubarrayleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.31.0
+    tag: 0.32.0
     pullPolicy: IfNotPresent
 
 dishleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-dishleafnode
-    tag: 0.24.2
+    tag: 0.24.5
     pullPolicy: IfNotPresent
 
-skatmccommon:
+skatmcsimulators:
   image:
     registry: artefact.skao.int
-    image: ska-tmc-common
-    tag: 0.30.3
+    image: ska-tmc-simulators
+    tag: 1.1.5
     pullPolicy: IfNotPresent
 
 resources:
@@ -166,7 +165,7 @@ deviceServers:
     file: "data/subarraynode_mid.yaml"
     DishIDs: *dish_ids
     CspAssignResourcesInterfaceURL: "https://schema.skao.int/ska-csp-assignresources/2.0"
-    CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.0"
+    CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.2"
     SdpScanInterfaceURL: "https://schema.skao.int/ska-sdp-scan/0.4"
     CommandTimeOutDefault: 110
     AbortCommandTimeOut: 130

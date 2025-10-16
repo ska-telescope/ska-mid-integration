@@ -7,7 +7,7 @@ instances:
   - "03"
   - "04"
   - "05"
-{{- range .Values.global.dishes }}
+{{- range .Values.global.dishids }}
   {{- $num := regexReplaceAll "^[A-Za-z]+" . "" }}
   - "{{ $num }}"
 {{- end }}
@@ -21,12 +21,12 @@ instances:
 {{- $cspPrefix := .Values.global.csp_subarray_prefix }}
 
 entrypoints:
-  - name: "ska_tmc_common.test_helpers.helper_base_device.HelperBaseDevice"
-  - name: "ska_tmc_common.test_helpers.helper_dish_device.HelperDishDevice"
-  - name: "ska_tmc_common.test_helpers.helper_subarray_device.HelperSubArrayDevice"
-  - name: "ska_tmc_common.test_helpers.helper_csp_master_device.HelperCspMasterDevice"
-  - name: "ska_tmc_common.test_helpers.helper_sdp_subarray.HelperSdpSubarray"
-  - name: "ska_tmc_common.test_helpers.helper_sdp_queue_connector_device.HelperSdpQueueConnector"
+  - name: "ska_tmc_simulators.helper_base_device.HelperBaseDevice"
+  - name: "ska_tmc_simulators.helper_dish_device.HelperDishDevice"
+  - name: "ska_tmc_simulators.helper_subarray_device.HelperSubArrayDevice"
+  - name: "ska_tmc_simulators.helper_csp_master_device.HelperCspMasterDevice"
+  - name: "ska_tmc_simulators.helper_sdp_subarray.HelperSdpSubarray"
+  - name: "ska_tmc_simulators.helper_sdp_queue_connector_device.HelperSdpQueueConnector"
 server:
   name: "mocks"
   instances:
@@ -70,7 +70,7 @@ server:
           {{- end }}
       {{- end }}
       {{- if eq $isSimulatedDish true }}
-{{- range .Values.global.dishes }}
+{{- range .Values.global.dishids }}
   {{- $num := regexReplaceAll "^[A-Za-z]+" . "" }}
     - name: "{{ $num }}"
       classes:
@@ -82,7 +82,7 @@ server:
 depends_on:
   - device: sys/database/2
 image:
-  registry: "{{.Values.skatmccommon.image.registry}}"
-  image: "{{.Values.skatmccommon.image.image}}"
-  tag: "{{.Values.skatmccommon.image.tag}}"
-  pullPolicy: "{{.Values.skatmccommon.image.pullPolicy}}"
+  registry: "{{.Values.skatmcsimulators.image.registry}}"
+  image: "{{.Values.skatmcsimulators.image.image}}"
+  tag: "{{.Values.skatmcsimulators.image.tag}}"
+  pullPolicy: "{{.Values.skatmcsimulators.image.pullPolicy}}"

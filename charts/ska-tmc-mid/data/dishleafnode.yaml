@@ -2,7 +2,7 @@ name: "dishleafnode-test"
 function: telescope-monitoring
 domain: general-monitoring
 instances:
-{{- range .Values.global.dishes }}
+{{- range .Values.global.dishids }}
   {{- $num := regexReplaceAll "^[A-Za-z]+" . "" }}
   - "{{ $num }}"
 {{- end }}
@@ -30,17 +30,15 @@ server:
   {{- $real_dish_name := .Values.global.namespace_dish.dish_names }}
 
   {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
-    {{- range $instance := .Values.global.dishes }}
+    {{- range $instance := .Values.global.dishids }}
       {{- $num := regexReplaceAll "^[A-Za-z]+" $instance "" }}
       {{- $instance_list = append $instance_list $num }}
     {{- end }}
   {{- else }}
     {{- range $instance_real := $real_dish_name }}
-      {{- $digits := regexFind "(\\d{3})" $instance_real }}
-      {{- if $digits }}
-        {{- $instance_list = append $instance_list $digits }}
-      {{- end }}
-    {{- end }}
+  {{- $match := (regexFind "SKA(\\d{3})" $instance_real) -}}
+  {{- $instance_list = append $instance_list (trimPrefix "SKA" $match) }}
+  {{- end }}
   {{- end }}
 
   {{- range $index, $number := $instance_list }}
