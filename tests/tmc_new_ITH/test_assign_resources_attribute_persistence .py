@@ -23,7 +23,8 @@ from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
 
 @pytest.mark.SKA_mid
 @scenario(
-    "../features/subarray_assignresources_attribute_persistence.feature",
+    "../tmc_new_ITH/features/"
+    + "subarray_assignresources_attribute_persistence.feature",
     "AssignedResources attribute persists after failed second AssignResources",
 )
 def test_assign_resources_attribute_persistence():
