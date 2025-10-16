@@ -83,14 +83,14 @@ centralnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-centralnode
-    tag: 0.21.3
+    tag: 0.23.0
     pullPolicy: IfNotPresent
 
 subarraynode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-subarraynode
-    tag: 0.43.1
+    tag: 0.44.1
     pullPolicy: IfNotPresent
 
 sdpleafnodes:
@@ -118,14 +118,14 @@ dishleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-dishleafnode
-    tag: 0.24.2
+    tag: 0.24.5
     pullPolicy: IfNotPresent
 
-skatmccommon:
+skatmcsimulators:
   image:
     registry: artefact.skao.int
-    image: ska-tmc-common
-    tag: 0.30.3
+    image: ska-tmc-simulators
+    tag: 1.1.5
     pullPolicy: IfNotPresent
 
 resources:
@@ -154,6 +154,11 @@ deviceServers:
     EventSubscriptionCheckPeriod: 2.0
     family: "central-node"
     member: "0"
+    global_pointing_model:
+      version: "1.0.0"
+      interface: "https://schema.skao.int/ska-mid-dish-gpm/1.2"
+      data_sources_prefix: "gitlab://gitlab.com/ska-telescope/ska-tmc/ska-tmc-simulators"
+      file_path_prefix: "instrument/ska_mid1/global_pointing_model_data"
 
   subarraynode:
     enabled: true
