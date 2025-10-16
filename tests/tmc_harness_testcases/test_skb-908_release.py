@@ -6,6 +6,7 @@ Control (TMC) system to verify the SKB-908.
 
 
 import json
+import time
 
 import pytest
 from assertpy import assert_that
@@ -15,6 +16,7 @@ from ska_tango_base.commands import ResultCode
 from ska_tango_testing.integration import TangoEventTracer, log_events
 from tango import DevState
 
+from tests.conftest import LOGGER
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
@@ -112,7 +114,9 @@ def verify_subarrys_in_idle(
     assign_data["subarray_id"] = 2
     assign_data["dish"]["receptor_ids"] = ["SKA063", "SKA100"]
     assign_data["sdp"]["execution_block"]["eb_id"] = "eb-test-20220917-00000"
+    LOGGER.info(f"Assign resources input for subarray 2: {assign_data}")
     central_node_mid.perform_action("AssignResources", json.dumps(assign_data))
+    time.sleep(10)
     assert_that(event_tracer).described_as(
         "TMC subarray device"
         f"({central_node_mid.subarray_node.dev_name()}) "
