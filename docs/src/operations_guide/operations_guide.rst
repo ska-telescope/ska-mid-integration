@@ -9,3 +9,4 @@ Operations Guide
 
    five_point_scan_calibration
    band5dc_support
+   gpm_how_to

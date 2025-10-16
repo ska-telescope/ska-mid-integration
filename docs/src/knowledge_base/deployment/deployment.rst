@@ -146,7 +146,7 @@ file in the telmodel repo. Currently, its default values is set to
 Global Pointing Model Configuration
 -----------------------------------
 
-TMC Mid supports Global Pointing Model (GPM) configuration starting from version 1.8.0. 
+TMC Mid supports Global Pointing Model (GPM) configuration starting from version 1.9.0. 
 The following parameters define the GPM setup:
 
 **Key Parameters**:
@@ -161,7 +161,8 @@ The following parameters define the GPM setup:
 
 .. warning::
 
-   All parameters are mandatory — missing/incorrect values may cause the command to fail.
+   All parameters are mandatory — missing or incorrect values may cause the TMC to fail to apply 
+   the specified version of the GPM during initialization.
 
 Except for version, all other parameters remain consistent across deployments and are used by the 
 **SetGlobalPointingModel** command to apply the specified version from the input JSON. Upon redeployment, 
@@ -169,6 +170,8 @@ only these parameters can be modified.
 
 These parameters are located under the **deviceServers.centralnode.global_pointing_model** section in the 
 **values.yaml** file.
+
+For further information and details, please `click here <https://confluence.skatelescope.org/x/V4TtEQ>`_
 
 **GlobalPointingModelStatus**: This central node attribute shows the current status of bandwise GPM applied to the dish.
 
