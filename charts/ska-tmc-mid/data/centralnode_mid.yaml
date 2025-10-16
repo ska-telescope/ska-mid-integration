@@ -120,7 +120,18 @@ server:
         - name: "EventSubscriptionCheckPeriod"
           values:
             - "{{ $EventSubscriptionCheckPeriod }}"
-
+        - name: "GPMVersion"
+          values:
+          - "{{.Values.deviceServers.centralnode.global_pointing_model.version}}"
+        - name: "GPMInterface"
+          values:
+          - "{{.Values.deviceServers.centralnode.global_pointing_model.interface}}"
+        - name: "GPMFilePathPrefix"
+          values:
+          - "{{.Values.deviceServers.centralnode.global_pointing_model.file_path_prefix}}"
+        - name: "GPMDataSourcesPrefix"
+          values:
+          - "{{.Values.deviceServers.centralnode.global_pointing_model.data_sources_prefix}}"
 {{- else }}
 {{- fail "KValueValidRangeUpperLimit should be greater than KValueValidRangeLowerLimit" }}
 {{- end }}
