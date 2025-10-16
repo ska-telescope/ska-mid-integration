@@ -1,3 +1,5 @@
+.. _`Applying GPM Through TMC`:
+
 ==========================================
 Steps to Apply GPM on Dish(es) Through TMC
 ==========================================
