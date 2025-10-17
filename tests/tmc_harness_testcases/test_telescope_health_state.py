@@ -139,6 +139,13 @@ class TestTelescopeHealthState(object):
             dish_master_sim_4,
         ) = get_master_device_simulators(simulator_factory)
 
+        csp_master_sim.SetDirectHealthState(HealthState.UNKNOWN)
+        sdp_master_sim.SetDirectHealthState(HealthState.UNKNOWN)
+        dish_master_sim_1.SetDirectHealthState(HealthState.UNKNOWN)
+        dish_master_sim_2.SetDirectHealthState(HealthState.UNKNOWN)
+        dish_master_sim_3.SetDirectHealthState(HealthState.UNKNOWN)
+        dish_master_sim_4.SetDirectHealthState(HealthState.UNKNOWN)
+
         csp_master_sim.SetDirectHealthState(HealthState.OK)
         sdp_master_sim.SetDirectHealthState(HealthState.OK)
         dish_master_sim_1.SetDirectHealthState(HealthState.OK)
@@ -188,6 +195,7 @@ class TestTelescopeHealthState(object):
         for sim_device, sim_health_state_val in list(
             zip(sim_devices_list, health_state_list)
         ):
+            sim_device.SetDirectHealthState(HealthState.UNKNOWN)
             sim_device.SetDirectHealthState(HealthState[sim_health_state_val])
 
         LOGGER.info(
