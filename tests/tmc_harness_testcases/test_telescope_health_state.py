@@ -191,6 +191,7 @@ class TestTelescopeHealthState(object):
             central_node_mid.central_node,
             "telescopeHealthState",
             HealthState.OK,
+            10,
         ), "Expected Telescope HealthState to be OK"
 
     @pytest.mark.parametrize(
