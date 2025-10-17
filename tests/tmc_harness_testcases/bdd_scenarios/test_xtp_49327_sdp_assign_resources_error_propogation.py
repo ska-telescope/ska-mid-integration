@@ -97,7 +97,7 @@ def check_timeout_error(
     exception_message = (
         "Exception occurred on the following devices:"
         + f" {tmc_sdp_subarray_leaf_node}:"
-        " ska_tmc_common.exceptions.CommandNotAllowed:"
+        " ska_tmc_simulators.dependencies.exceptions.CommandNotAllowed:"
         " Command is not allowed\n"
     )
     assert (
