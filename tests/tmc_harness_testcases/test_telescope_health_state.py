@@ -175,14 +175,15 @@ class TestTelescopeHealthState(object):
             dish_master_sim_4, "healthState", HealthState.OK
         ), "Expected HealthState to be OK"
 
-        devices = "csp subarray,sdp subarray"
+        devices = "csp subarray,sdp subarray,csp subarray2,sdp subarray2"
         devices_list = devices.split(",")
-        health_state = "OK,OK"
+        health_state = "OK,OK,OK,OK"
         health_state_list = health_state.split(",")
 
         sim_devices_list = get_device_simulator_with_given_name(
             simulator_factory, devices_list
         )
+        LOGGER.info("Sim Devices List: %s", sim_devices_list)
         for sim_device, sim_health_state_val in list(
             zip(sim_devices_list, health_state_list)
         ):
