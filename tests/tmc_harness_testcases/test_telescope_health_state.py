@@ -203,6 +203,37 @@ class TestTelescopeHealthState(object):
                 sim_device.healthState,
             )
 
+        LOGGER.info(
+            "Dish Master 1 HealthState: %s", dish_master_sim_1.healthState
+        )
+        LOGGER.info(
+            "Dish Master 2 HealthState: %s", dish_master_sim_2.healthState
+        )
+        LOGGER.info(
+            "Dish Master 3 HealthState: %s", dish_master_sim_3.healthState
+        )
+        LOGGER.info(
+            "Dish Master 4 HealthState: %s", dish_master_sim_4.healthState
+        )
+        LOGGER.info("CSP Master HealthState: %s", csp_master_sim.healthState)
+        LOGGER.info("SDP Master HealthState: %s", sdp_master_sim.healthState)
+        LOGGER.info(
+            "CSP Subarray HealthState: %s", sim_devices_list[0].healthState
+        )
+        LOGGER.info(
+            "SDP Subarray HealthState: %s", sim_devices_list[1].healthState
+        )
+        LOGGER.info(
+            "CSP Subarray2 HealthState: %s", sim_devices_list[2].healthState
+        )
+        LOGGER.info(
+            "SDP Subarray2 HealthState: %s", sim_devices_list[3].healthState
+        )
+        LOGGER.info(
+            "Central Node Telescope HealthState: %s",
+            central_node_mid.central_node.telescopeHealthState,
+        )
+
         assert event_recorder.has_change_event_occurred(
             central_node_mid.central_node,
             "telescopeHealthState",
