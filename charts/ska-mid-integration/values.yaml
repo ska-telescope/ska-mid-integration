@@ -189,3 +189,17 @@ ska-tango-archiver:
   telescope: SKA-mid
   telescope-environment: MID-STFC
   # archwizard_config: MyHDB=tango://tango-databaseds.test-environment.svc.lowitf.internal.skao.int:10000/low-eda/cm/01 - Updating this from Makefile
+
+# Kafka
+kafka:
+  enabled: true
+  image: apache/kafka
+  version: 3.8.0
+  imagePullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: 1000m
+      memory: 1024Mi
+    limits:
+      cpu: 2000m
+      memory: 4096Mi
