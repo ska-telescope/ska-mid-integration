@@ -75,7 +75,7 @@ ska-tango-base:
 #ska-tmc-mid:
 #  dishleafnode:
 #    image:
-#      tag: 0.19.6 
+#      tag: 0.19.6
 #=== OSO ===#
 # ska-oso-oet:
 #   labels:
@@ -104,8 +104,6 @@ ska-sdp:
   labels:
     app: ska-mid-integration
   enabled: true
-  ska-tango-base:
-    enabled: false
   lmc:
     prefix: mid
     nsubarray: 3
