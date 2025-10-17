@@ -187,21 +187,7 @@ class TestTelescopeHealthState(object):
         for sim_device, sim_health_state_val in list(
             zip(sim_devices_list, health_state_list)
         ):
-            LOGGER.info(
-                "Setting device: %s to HealthState: %s",
-                sim_device,
-                sim_health_state_val,
-            )
             sim_device.SetDirectHealthState(HealthState[sim_health_state_val])
-
-        for sim_device, sim_health_state_val in list(
-            zip(sim_devices_list, health_state_list)
-        ):
-            LOGGER.info(
-                "Verifying device: %s for HealthState: %s",
-                sim_device,
-                sim_device.healthState,
-            )
 
         LOGGER.info(
             "Dish Master 1 HealthState: %s", dish_master_sim_1.healthState
@@ -229,6 +215,22 @@ class TestTelescopeHealthState(object):
         LOGGER.info(
             "SDP Subarray2 HealthState: %s", sim_devices_list[3].healthState
         )
+
+        LOGGER.info("Csp Master AdminMode: %s", csp_master_sim.adminMode)
+        LOGGER.info("Sdp Master AdminMode: %s", sdp_master_sim.adminMode)
+        LOGGER.info(
+            "CSP Subarray AdminMode: %s", sim_devices_list[0].adminMode
+        )
+        LOGGER.info(
+            "SDP Subarray AdminMode: %s", sim_devices_list[1].adminMode
+        )
+        LOGGER.info(
+            "CSP Subarray2 AdminMode: %s", sim_devices_list[2].adminMode
+        )
+        LOGGER.info(
+            "SDP Subarray2 AdminMode: %s", sim_devices_list[3].adminMode
+        )
+
         LOGGER.info(
             "Central Node Telescope HealthState: %s",
             central_node_mid.central_node.telescopeHealthState,
