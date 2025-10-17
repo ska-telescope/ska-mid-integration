@@ -118,7 +118,7 @@ class TestTelescopeHealthState(object):
             HealthState.FAILED,
         )
 
-    @pytest.mark.batch2
+    @pytest.mark.batch21
     @pytest.mark.SKA_mid
     def test_telescope_health_state_ok(
         self,
