@@ -186,6 +186,11 @@ class TestTelescopeHealthState(object):
         for sim_device, sim_health_state_val in list(
             zip(sim_devices_list, health_state_list)
         ):
+            LOGGER.info(
+                "Setting device: %s to HealthState: %s",
+                sim_device,
+                sim_health_state_val,
+            )
             sim_device.SetDirectHealthState(HealthState[sim_health_state_val])
 
         for sim_device, sim_health_state_val in list(
