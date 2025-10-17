@@ -232,7 +232,8 @@ class TestTelescopeHealthState(object):
             "SDP Subarray2 AdminMode: %s", sim_devices_list[3].adminMode
         )
         LOGGER.info(
-            "Subarray Node1 HealthState: %s", subarray_node.healthState
+            "Subarray Node1 HealthState: %s",
+            subarray_node.tmc_subarraynode1.healthState,
         )
         subarray_node2 = tango.DeviceProxy("mid-tmc/subarray/02")
         LOGGER.info(
