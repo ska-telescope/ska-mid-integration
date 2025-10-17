@@ -1,6 +1,7 @@
 import pytest
 from ska_tango_base.control_model import HealthState
 
+from tests.conftest import LOGGER
 from tests.resources.test_harness.helpers import (
     get_device_simulator_with_given_name,
     get_master_device_simulators,
@@ -186,6 +187,15 @@ class TestTelescopeHealthState(object):
             zip(sim_devices_list, health_state_list)
         ):
             sim_device.SetDirectHealthState(HealthState[sim_health_state_val])
+
+        for sim_device, sim_health_state_val in list(
+            zip(sim_devices_list, health_state_list)
+        ):
+            LOGGER.info(
+                "Verifying device: %s for HealthState: %s",
+                sim_device,
+                sim_device.healthState,
+            )
 
         assert event_recorder.has_change_event_occurred(
             central_node_mid.central_node,
