@@ -1,4 +1,5 @@
 import pytest
+import tango
 from ska_tango_base.control_model import HealthState
 
 from tests.conftest import LOGGER
@@ -230,7 +231,13 @@ class TestTelescopeHealthState(object):
         LOGGER.info(
             "SDP Subarray2 AdminMode: %s", sim_devices_list[3].adminMode
         )
-
+        LOGGER.info(
+            "Subarray Node1 HealthState: %s", subarray_node.healthState
+        )
+        subarray_node2 = tango.DeviceProxy("mid-tmc/subarray/02")
+        LOGGER.info(
+            "SubarrayNode 2 HealthState: %s", subarray_node2.healthState
+        )
         LOGGER.info(
             "Central Node Telescope HealthState: %s",
             central_node_mid.central_node.telescopeHealthState,
