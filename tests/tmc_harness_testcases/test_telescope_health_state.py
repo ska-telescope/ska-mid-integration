@@ -233,7 +233,7 @@ class TestTelescopeHealthState(object):
         )
         LOGGER.info(
             "Subarray Node1 HealthState: %s",
-            subarray_node.tmc_subarraynode1.healthState,
+            subarray_node.subarray_node.healthState,
         )
         subarray_node2 = tango.DeviceProxy("mid-tmc/subarray/02")
         LOGGER.info(
