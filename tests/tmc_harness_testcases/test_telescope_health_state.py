@@ -1,8 +1,6 @@
 import pytest
-import tango
 from ska_tango_base.control_model import HealthState
 
-from tests.conftest import LOGGER
 from tests.resources.test_harness.helpers import (
     get_device_simulator_with_given_name,
     get_master_device_simulators,
@@ -139,13 +137,6 @@ class TestTelescopeHealthState(object):
             dish_master_sim_4,
         ) = get_master_device_simulators(simulator_factory)
 
-        csp_master_sim.SetDirectHealthState(HealthState.UNKNOWN)
-        sdp_master_sim.SetDirectHealthState(HealthState.UNKNOWN)
-        dish_master_sim_1.SetDirectHealthState(HealthState.UNKNOWN)
-        dish_master_sim_2.SetDirectHealthState(HealthState.UNKNOWN)
-        dish_master_sim_3.SetDirectHealthState(HealthState.UNKNOWN)
-        dish_master_sim_4.SetDirectHealthState(HealthState.UNKNOWN)
-
         csp_master_sim.SetDirectHealthState(HealthState.OK)
         sdp_master_sim.SetDirectHealthState(HealthState.OK)
         dish_master_sim_1.SetDirectHealthState(HealthState.OK)
@@ -183,80 +174,23 @@ class TestTelescopeHealthState(object):
             dish_master_sim_4, "healthState", HealthState.OK
         ), "Expected HealthState to be OK"
 
-        devices = "csp subarray,sdp subarray,csp subarray2,sdp subarray2"
+        devices = "csp subarray,sdp subarray"
         devices_list = devices.split(",")
-        health_state = "OK,OK,OK,OK"
+        health_state = "OK,OK"
         health_state_list = health_state.split(",")
 
         sim_devices_list = get_device_simulator_with_given_name(
             simulator_factory, devices_list
         )
-        LOGGER.info("Sim Devices List: %s", sim_devices_list)
         for sim_device, sim_health_state_val in list(
             zip(sim_devices_list, health_state_list)
         ):
-            sim_device.SetDirectHealthState(HealthState.UNKNOWN)
             sim_device.SetDirectHealthState(HealthState[sim_health_state_val])
-
-        LOGGER.info(
-            "Dish Master 1 HealthState: %s", dish_master_sim_1.healthState
-        )
-        LOGGER.info(
-            "Dish Master 2 HealthState: %s", dish_master_sim_2.healthState
-        )
-        LOGGER.info(
-            "Dish Master 3 HealthState: %s", dish_master_sim_3.healthState
-        )
-        LOGGER.info(
-            "Dish Master 4 HealthState: %s", dish_master_sim_4.healthState
-        )
-        LOGGER.info("CSP Master HealthState: %s", csp_master_sim.healthState)
-        LOGGER.info("SDP Master HealthState: %s", sdp_master_sim.healthState)
-        LOGGER.info(
-            "CSP Subarray HealthState: %s", sim_devices_list[0].healthState
-        )
-        LOGGER.info(
-            "SDP Subarray HealthState: %s", sim_devices_list[1].healthState
-        )
-        LOGGER.info(
-            "CSP Subarray2 HealthState: %s", sim_devices_list[2].healthState
-        )
-        LOGGER.info(
-            "SDP Subarray2 HealthState: %s", sim_devices_list[3].healthState
-        )
-
-        LOGGER.info("Csp Master AdminMode: %s", csp_master_sim.adminMode)
-        LOGGER.info("Sdp Master AdminMode: %s", sdp_master_sim.adminMode)
-        LOGGER.info(
-            "CSP Subarray AdminMode: %s", sim_devices_list[0].adminMode
-        )
-        LOGGER.info(
-            "SDP Subarray AdminMode: %s", sim_devices_list[1].adminMode
-        )
-        LOGGER.info(
-            "CSP Subarray2 AdminMode: %s", sim_devices_list[2].adminMode
-        )
-        LOGGER.info(
-            "SDP Subarray2 AdminMode: %s", sim_devices_list[3].adminMode
-        )
-        LOGGER.info(
-            "Subarray Node1 HealthState: %s",
-            subarray_node.subarray_node.healthState,
-        )
-        subarray_node2 = tango.DeviceProxy("mid-tmc/subarray/02")
-        LOGGER.info(
-            "SubarrayNode 2 HealthState: %s", subarray_node2.healthState
-        )
-        LOGGER.info(
-            "Central Node Telescope HealthState: %s",
-            central_node_mid.central_node.telescopeHealthState,
-        )
 
         assert event_recorder.has_change_event_occurred(
             central_node_mid.central_node,
             "telescopeHealthState",
             HealthState.OK,
-            10,
         ), "Expected Telescope HealthState to be OK"
 
     @pytest.mark.parametrize(
