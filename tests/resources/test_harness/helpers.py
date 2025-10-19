@@ -204,8 +204,8 @@ def get_device_simulator_with_given_name(simulator_factory, devices):
     device_name_type_dict = {
         "csp subarray": SimulatorDeviceType.MID_CSP_DEVICE,
         "sdp subarray": SimulatorDeviceType.MID_SDP_DEVICE,
-        "csp subarray2": SimulatorDeviceType.MID_CSP_DEVICE2,
-        "sdp subarray2": SimulatorDeviceType.MID_SDP_DEVICE2,
+        # "csp subarray2": SimulatorDeviceType.MID_CSP_DEVICE2,
+        # "sdp subarray2": SimulatorDeviceType.MID_SDP_DEVICE2,
         "csp master": SimulatorDeviceType.MID_CSP_MASTER_DEVICE,
         "sdp master": SimulatorDeviceType.MID_SDP_MASTER_DEVICE,
         "dish master1": SimulatorDeviceType.DISH_DEVICE,
