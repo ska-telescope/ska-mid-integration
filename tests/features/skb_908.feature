@@ -8,7 +8,7 @@ Scenario: Verify SKB-908 for assign resources flow
     And the TMC, CSP, SDP subarray 1 and 2 transition to the IDLE obsState
 
 #This test verifies Release Resources flow with multiple subarrays
-@XTP-91092 @XTP-28347 @SKA_mid
+@XTP-91093 @XTP-28347 @SKA_mid
 Scenario: Verify SKB-908 for release resources flow
     Given the telescope is in the ON state
     And subarray 1 and 2 are in the IDLE ObsState

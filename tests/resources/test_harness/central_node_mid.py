@@ -82,6 +82,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             "csp_subarray": DeviceProxy(csp_subarray1),
             "sdp_subarray": DeviceProxy(sdp_subarray1),
         }
+
         self.csp_master = DeviceProxy(csp_master)
         if (
             SIMULATED_DEVICES_DICT["csp_and_sdp"]
@@ -550,7 +551,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
     def tear_down(self) -> None:
         """Handle Tear down of central Node"""
         # reset HealthState.UNKNOWN for mock devices
-        # self._reset_health_state_for_mock_devices()
+        self._reset_health_state_for_mock_devices()
         self.set_subarray_id("1")
         self.tear_down_subarray()
         self.set_subarray_id("2")

@@ -132,6 +132,7 @@ server:
         - name: "GPMDataSourcesPrefix"
           values:
           - "{{.Values.deviceServers.centralnode.global_pointing_model.data_sources_prefix}}"
+
 {{- else }}
 {{- fail "KValueValidRangeUpperLimit should be greater than KValueValidRangeLowerLimit" }}
 {{- end }}
