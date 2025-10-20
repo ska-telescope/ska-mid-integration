@@ -100,7 +100,7 @@ def given_assign_resources_executed_successfully(
         "longRunningCommandResult",
         (
             pytest.unique_id[0],
-            json.dumps([ResultCode.OK, "Command completed"]),
+            json.dumps((int(ResultCode.OK), "Command Completed")),
         ),
     )
 
