@@ -3,7 +3,7 @@ Feature: SubarrayNode AssignedResources attribute persistence after failed Assig
     As a TMC developer
     I want to ensure that the AssignedResources attribute maintains its state
     after a subsequent AssignResources command fails
-    XTP-92537 @XTP-28347 @TEAM_SAHYADRI
+    @XTP-92537 @XTP-28347 @TEAM_SAHYADRI
     Scenario Outline: AssignedResources attribute persists after failed second AssignResources
         Given a TMC
         And AssignResources is executed successfully on SubarrayNode <subarray_id>
