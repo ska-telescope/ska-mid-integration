@@ -20,7 +20,8 @@ from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 from tests.tmc_new_ITH.conftest import ASSERTIONS_TIMEOUT
 from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
 
-@pytest.mark.batch2
+
+@pytest.mark.batch2_test
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/"
