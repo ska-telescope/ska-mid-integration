@@ -131,7 +131,7 @@ k8s-test-batch2:
     SUBARRAY_COUNT: 2
     COUNT: 1
     KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch2'
-    ADDMARK: "and batch2_test"
+    ADDMARK: "and batch2"
     CI_KEEP_NAMESPACE: true
   environment:
     name: test/$CI_COMMIT_REF_SLUG-batch2
