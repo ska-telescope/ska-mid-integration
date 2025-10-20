@@ -98,7 +98,7 @@ def given_assign_resources_executed_successfully(
         "longRunningCommandResult",
         (
             pytest.unique_id[0],
-            [ResultCode.OK, "Command completed successfully"],
+            [ResultCode.OK, "Command completed"],
         ),
     )
 
