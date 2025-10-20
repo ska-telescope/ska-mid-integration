@@ -1,5 +1,5 @@
 """Test case to verify AssignedResources attribute persistence after failed
-AssignResources"""
+AssignResources."""
 
 import pytest
 from assertpy import assert_that
