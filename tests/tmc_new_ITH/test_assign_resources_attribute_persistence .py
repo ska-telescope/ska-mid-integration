@@ -1,6 +1,8 @@
 """Test case to verify AssignedResources attribute persistence after failed
 AssignResources."""
 
+import json
+
 import pytest
 from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
@@ -98,7 +100,7 @@ def given_assign_resources_executed_successfully(
         "longRunningCommandResult",
         (
             pytest.unique_id[0],
-            [ResultCode.OK, "Command completed"],
+            json.dumps([ResultCode.OK, "Command completed"]),
         ),
     )
 
