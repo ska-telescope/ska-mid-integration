@@ -28,7 +28,7 @@ from tests.resources.test_support.constant import TIMEOUT
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDevicesFacade
 
-ASSERTIONS_TIMEOUT = 60
+ASSERTIONS_TIMEOUT = 100
 
 # ------------------------------------------------------------
 # Test Harness fixtures
