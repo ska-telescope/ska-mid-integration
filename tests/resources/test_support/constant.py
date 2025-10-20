@@ -440,8 +440,8 @@ device_dict = {
 SIMULATOR_DEVICE_FQDN_DICT = {
     SimulatorDeviceType.MID_SDP_DEVICE: [sdp_subarray1],
     SimulatorDeviceType.MID_CSP_DEVICE: [csp_subarray1],
-    # SimulatorDeviceType.MID_SDP_DEVICE2: [sdp_subarray2],
-    # SimulatorDeviceType.MID_CSP_DEVICE2: [csp_subarray2],
+    SimulatorDeviceType.MID_SDP_DEVICE2: [sdp_subarray2],
+    SimulatorDeviceType.MID_CSP_DEVICE2: [csp_subarray2],
     SimulatorDeviceType.DISH_DEVICE: [
         dish_master1,
         dish_master2,

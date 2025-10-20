@@ -61,8 +61,8 @@ class SimulatorDeviceType(IntEnum):
     DISH_DEVICE = 2
     MID_CSP_MASTER_DEVICE = 3
     MID_SDP_MASTER_DEVICE = 4
-    # MID_CSP_DEVICE2 = 5
-    # MID_SDP_DEVICE2 = 6
+    MID_CSP_DEVICE2 = 5
+    MID_SDP_DEVICE2 = 6
 
 
 @unique
