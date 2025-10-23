@@ -17,9 +17,7 @@ from ska_tango_base.commands import ResultCode
 from ska_tango_testing.integration import TangoEventTracer
 from ska_tango_testing.mock.placeholders import Anything
 
-from tests.resources.test_support.constant import (
-    COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE,
-)
+from tests.resources.test_support.constant import FAILED_RESULT_DEFECT,
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 from tests.tmc_new_ITH.conftest import ASSERTIONS_TIMEOUT
 from tests.tmc_new_ITH.utils.utils import (
@@ -144,17 +142,15 @@ def execute_second_assign_resources_fail(
     assign_input = MyFileJSONInput(
         "centralnode", "incremental_assign_resources_02"
     )
-    csp.csp_subarray.SetDefective(
-        json.dumps(COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE)
-    )
+    csp.csp_subarray.SetDefective(FAILED_RESULT_DEFECT)
     _, pytest.unique_id = tmc.assign_resources(
         assign_input, wait_termination=False
     )
 
     assert_that(event_tracer).described_as(
-        "TMC subarray obsState should remain in IDLE"
+        "TMC subarray obsState should move to FAULT"
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        tmc.subarray_node, "obsState", ObsState.IDLE
+        tmc.subarray_node, "obsState", ObsState.FAULT
     )
 
     assert_that(event_tracer).described_as(
@@ -191,9 +187,9 @@ def verify_assigned_resources_unchanged(tmc: TMCFacade):
 @then("the subarray should remain in IDLE state")
 def verify_subarray_state(tmc: TMCFacade):
     """
-    Verify that the subarray remains in IDLE state.
+    Verify that the subarray moves to FAULT state.
     """
     current_state = tmc.subarray_node.read_attribute("obsState").value
     assert_that(current_state).described_as(
-        "Subarray should remain in IDLE state"
-    ).is_equal_to(ObsState.IDLE)
+        "Subarray should move to FAULT state"
+    ).is_equal_to(ObsState.FAULT)
