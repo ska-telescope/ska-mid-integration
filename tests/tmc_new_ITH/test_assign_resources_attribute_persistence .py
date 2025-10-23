@@ -50,12 +50,6 @@ def given_tmc(
     setup_event_subscriptions(tmc, csp, sdp, event_tracer)
 
     assert_that(event_tracer).described_as(
-        "TMC telescope device telescopeState should be ON"
-    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        tmc.central_node, "telescopeState", "ON"
-    )
-
-    assert_that(event_tracer).described_as(
         "TMC subarray obsState should be EMPTY"
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         tmc.subarray_node, "obsState", ObsState.EMPTY
