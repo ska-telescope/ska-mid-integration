@@ -17,7 +17,7 @@ from ska_tango_base.commands import ResultCode
 from ska_tango_testing.integration import TangoEventTracer
 from ska_tango_testing.mock.placeholders import Anything
 
-from tests.resources.test_support.constant import FAILED_RESULT_DEFECT,
+from tests.resources.test_support.constant import FAILED_RESULT_DEFECT
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 from tests.tmc_new_ITH.conftest import ASSERTIONS_TIMEOUT
 from tests.tmc_new_ITH.utils.utils import (
