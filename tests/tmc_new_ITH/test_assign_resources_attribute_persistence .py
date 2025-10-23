@@ -23,6 +23,7 @@ from tests.tmc_new_ITH.conftest import ASSERTIONS_TIMEOUT
 from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
 
 
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/"
@@ -160,6 +161,8 @@ def execute_second_assign_resources_fail(
         "longRunningCommandResult",
         (pytest.unique_id[0], Anything),
     )
+    # reset the defect
++   csp.csp_subarray.SetDefective(json.dumps({"enabled": False}))
 
     event_tracer.clear_events()
 
