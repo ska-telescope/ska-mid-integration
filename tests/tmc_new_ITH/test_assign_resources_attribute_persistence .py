@@ -22,7 +22,10 @@ from tests.resources.test_support.constant import (
 )
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 from tests.tmc_new_ITH.conftest import ASSERTIONS_TIMEOUT
-from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
+from tests.tmc_new_ITH.utils.utils import (
+    reset_defects,
+    setup_event_subscriptions,
+)
 
 
 @pytest.mark.batch2
@@ -141,7 +144,9 @@ def execute_second_assign_resources_fail(
     assign_input = MyFileJSONInput(
         "centralnode", "incremental_assign_resources_02"
     )
-    csp.csp_subarray.SetDefective(COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE)
+    csp.csp_subarray.SetDefective(
+        json.dumps(COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE)
+    )
     _, pytest.unique_id = tmc.assign_resources(assign_input)
 
     assert_that(event_tracer).described_as(
@@ -158,7 +163,7 @@ def execute_second_assign_resources_fail(
         (pytest.unique_id[0], Anything),
     )
     # reset the defect
-    csp.csp_subarray.SetDefective(json.dumps({"enabled": False}))
+    reset_defects(csp, sdp)
 
     event_tracer.clear_events()
 
