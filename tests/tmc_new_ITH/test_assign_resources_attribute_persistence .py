@@ -140,7 +140,7 @@ def execute_second_assign_resources_fail(
         "centralnode", "incremental_assign_resources_02"
     )
     csp.csp_subarray.SetDefective(FAILED_RESULT_DEFECT)
-    _, pytest.unique_id = tmc.assign_resources(assign_input)
+    _, pytest.unique_id = tmc.assign_resources(assign_input, wait_termination=False)
 
     assert_that(event_tracer).described_as(
         "TMC subarray obsState should remain in IDLE"
