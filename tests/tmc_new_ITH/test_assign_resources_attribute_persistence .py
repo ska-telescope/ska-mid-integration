@@ -17,7 +17,9 @@ from ska_tango_base.commands import ResultCode
 from ska_tango_testing.integration import TangoEventTracer
 from ska_tango_testing.mock.placeholders import Anything
 
-from tests.resources.test_support.constant import FAILED_RESULT_DEFECT
+from tests.resources.test_support.constant import (
+    COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE,
+)
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 from tests.tmc_new_ITH.conftest import ASSERTIONS_TIMEOUT
 from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
@@ -139,10 +141,8 @@ def execute_second_assign_resources_fail(
     assign_input = MyFileJSONInput(
         "centralnode", "incremental_assign_resources_02"
     )
-    csp.csp_subarray.SetDefective(FAILED_RESULT_DEFECT)
-    _, pytest.unique_id = tmc.assign_resources(
-        assign_input, wait_termination=False
-    )
+    csp.csp_subarray.SetDefective(COMMAND_FAILED_WITH_EXCEPTION_OBSSTATE_IDLE)
+    _, pytest.unique_id = tmc.assign_resources(assign_input)
 
     assert_that(event_tracer).described_as(
         "TMC subarray obsState should remain in IDLE"
