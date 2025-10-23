@@ -162,7 +162,7 @@ def execute_second_assign_resources_fail(
         (pytest.unique_id[0], Anything),
     )
     # reset the defect
-+   csp.csp_subarray.SetDefective(json.dumps({"enabled": False}))
+    csp.csp_subarray.SetDefective(json.dumps({"enabled": False}))
 
     event_tracer.clear_events()
 
