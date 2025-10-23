@@ -10,7 +10,7 @@ Feature: SubarrayNode AssignedResources attribute persistence after failed Assig
         And the AssignedResources attribute is updated with first assigned resources
         When I execute second AssignResources command on SubarrayNode <subarray_id> that fails
         Then the AssignedResources attribute should retain the first assigned resources
-        And the subarray should remain in IDLE state
+        And the subarray should move to FAULT state
 
         Examples:
         | subarray_id  |

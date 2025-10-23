@@ -184,7 +184,7 @@ def verify_assigned_resources_unchanged(tmc: TMCFacade):
     ).is_equal_to(pytest.first_assigned_resources)
 
 
-@then("the subarray should remain in IDLE state")
+@then("the subarray should move to FAULT state")
 def verify_subarray_state(tmc: TMCFacade):
     """
     Verify that the subarray moves to FAULT state.
