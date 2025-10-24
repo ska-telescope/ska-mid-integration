@@ -9,6 +9,7 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 ************
 Added
 -----
+
 * TMC Mid now supports Global Pointing Model (GPM) functionality.
 * Introduced the SetGlobalPointingModel command to apply GPM to specified bands for specified dishes in the input.
 * Added configurable properties — version, interface, data_sources_prefix, and file_path_prefix — for GPM setup.
