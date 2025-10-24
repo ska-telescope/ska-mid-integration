@@ -63,7 +63,7 @@ def given_tmc(
 
 @given(
     parsers.parse(
-        "AssignResources is executed successfully"
+        "AssignResources is executed successfully with {receptor1}"
         " on SubarrayNode {subarray_id}"
     )
 )
@@ -105,7 +105,8 @@ def given_assign_resources_executed_successfully(
 
 
 @given(
-    "the AssignedResources attribute is updated with first assigned resources"
+    "the AssignedResources attribute is updated with"
+    " first assigned resources {receptor1}"
 )
 def verify_first_assigned_resources(tmc: TMCFacade):
     """
@@ -124,8 +125,8 @@ def verify_first_assigned_resources(tmc: TMCFacade):
 
 @when(
     parsers.parse(
-        "I execute second AssignResources command"
-        " on SubarrayNode {subarray_id} that fails"
+        "second AssignResources with receptor {receptor2}"
+        " on SubarrayNode {subarray_id} fails"
     )
 )
 def execute_second_assign_resources_fail(
@@ -168,7 +169,7 @@ def execute_second_assign_resources_fail(
 
 @then(
     "the AssignedResources attribute"
-    " should retain the first assigned resources"
+    " should retain the first assigned resources {receptor1}"
 )
 def verify_assigned_resources_unchanged(tmc: TMCFacade):
     """
@@ -184,12 +185,12 @@ def verify_assigned_resources_unchanged(tmc: TMCFacade):
     ).is_equal_to(pytest.first_assigned_resources)
 
 
-@then("the subarray should move to FAULT state")
+@then("the subarray should move to observation FAULT")
 def verify_subarray_state(tmc: TMCFacade):
     """
-    Verify that the subarray moves to FAULT state.
+    Verify that the subarray moves to observation FAULT.
     """
     current_state = tmc.subarray_node.read_attribute("obsState").value
     assert_that(current_state).described_as(
-        "Subarray should move to FAULT state"
+        "Subarray should move to observation FAULT"
     ).is_equal_to(ObsState.FAULT)
