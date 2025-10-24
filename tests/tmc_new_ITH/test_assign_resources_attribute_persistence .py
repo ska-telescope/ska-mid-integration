@@ -10,6 +10,7 @@ from ska_control_model import ObsState
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
 from ska_integration_test_harness.facades.sdp_facade import SDPFacade
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
+from ska_integration_test_harness.inputs.json_input import DictJSONInput
 from ska_integration_test_harness.inputs.test_harness_inputs import (
     TestHarnessInputs,
 )
@@ -73,16 +74,19 @@ def given_assign_resources_executed_successfully(
     csp: CSPFacade,
     event_tracer: TangoEventTracer,
     default_commands_inputs: TestHarnessInputs,
+    receptor1: str,
     subarray_id: str,
 ):
     """
     Execute the first AssignResources command which should succeed.
     """
 
-    assign_input = MyFileJSONInput(
-        "centralnode", "incremental_assign_resources_01"
-    )
-    _, pytest.unique_id = tmc.assign_resources(assign_input)
+    json_input = MyFileJSONInput(
+        "centralnode", "assign_resources_mid"
+    ).with_attribute("subarray_id", subarray_id)
+    assign_json = json.loads(json_input.as_str())
+    assign_json["dish"]["receptor_ids"] = receptor1
+    _, pytest.unique_id = tmc.assign_resources(DictJSONInput(assign_json))
 
     assert_that(event_tracer).described_as(
         "TMC subarray obsState should move to IDLE"
@@ -110,7 +114,7 @@ def given_assign_resources_executed_successfully(
         " first assigned resources {receptor1}"
     )
 )
-def verify_first_assigned_resources(tmc: TMCFacade):
+def verify_first_assigned_resources(tmc: TMCFacade, receptor1: str):
     """
     Store the initial AssignedResources for later comparison.
     """
@@ -118,8 +122,8 @@ def verify_first_assigned_resources(tmc: TMCFacade):
         "assignedResources"
     ).value
     assert_that(initial_resources).described_as(
-        "AssignedResources should not be empty after first assignment"
-    ).is_not_none()
+        "AssignedResources should be updated after first assignment"
+    ).is_equal_to(receptor1)
 
     # Store for later comparison
     pytest.first_assigned_resources = initial_resources
@@ -137,17 +141,20 @@ def execute_second_assign_resources_fail(
     csp: CSPFacade,
     event_tracer: TangoEventTracer,
     default_commands_inputs: TestHarnessInputs,
+    receptor2: str,
     subarray_id: str,
 ):
     """
     Execute the second AssignResources command which should fail.
     """
-    assign_input = MyFileJSONInput(
-        "centralnode", "incremental_assign_resources_02"
-    )
+    json_input = MyFileJSONInput(
+        "centralnode", "assign_resources_mid"
+    ).with_attribute("subarray_id", subarray_id)
+    assign_json = json.loads(json_input.as_str())
+    assign_json["dish"]["receptor_ids"] = receptor2
     csp.csp_subarray.SetDefective(FAILED_RESULT_DEFECT)
     _, pytest.unique_id = tmc.assign_resources(
-        assign_input, wait_termination=False
+        DictJSONInput(assign_json), wait_termination=False
     )
 
     assert_that(event_tracer).described_as(
@@ -175,7 +182,7 @@ def execute_second_assign_resources_fail(
         " should retain the first assigned resources {receptor1}"
     )
 )
-def verify_assigned_resources_unchanged(tmc: TMCFacade):
+def verify_assigned_resources_unchanged(tmc: TMCFacade, receptor1: str):
     """
     Verify that the AssignedResources attribute still
     contains the first assignment.
@@ -187,6 +194,9 @@ def verify_assigned_resources_unchanged(tmc: TMCFacade):
     assert_that(current_resources).described_as(
         "AssignedResources should match the initial assignment"
     ).is_equal_to(pytest.first_assigned_resources)
+    assert_that(current_resources).described_as(
+        "AssignedResources should match the initial assignment"
+    ).is_equal_to(receptor1)
 
 
 @then("the subarray should move to observation FAULT")
