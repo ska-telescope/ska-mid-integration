@@ -121,9 +121,10 @@ def verify_first_assigned_resources(tmc: TMCFacade, receptor1: str):
     initial_resources = tmc.subarray_node.read_attribute(
         "assignedResources"
     ).value
+    receptor_tuple = tuple(receptor1.split(","))
     assert_that(initial_resources).described_as(
         "AssignedResources should be updated after first assignment"
-    ).is_equal_to(receptor1)
+    ).is_equal_to(receptor_tuple)
 
     # Store for later comparison
     pytest.first_assigned_resources = initial_resources
@@ -191,12 +192,13 @@ def verify_assigned_resources_unchanged(tmc: TMCFacade, receptor1: str):
     current_resources = tmc.subarray_node.read_attribute(
         "assignedResources"
     ).value
+    receptor_tuple = tuple(receptor1.split(","))
     assert_that(current_resources).described_as(
         "AssignedResources should match the initial assignment"
     ).is_equal_to(pytest.first_assigned_resources)
     assert_that(current_resources).described_as(
         "AssignedResources should match the initial assignment"
-    ).is_equal_to(receptor1)
+    ).is_equal_to(receptor_tuple)
 
 
 @then("the subarray should move to observation FAULT")
