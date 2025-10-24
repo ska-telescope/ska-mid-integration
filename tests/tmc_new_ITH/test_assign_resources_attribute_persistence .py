@@ -85,7 +85,7 @@ def given_assign_resources_executed_successfully(
         "centralnode", "assign_resources_mid"
     ).with_attribute("subarray_id", subarray_id)
     assign_json = json.loads(json_input.as_str())
-    assign_json["dish"]["receptor_ids"] = receptor1
+    assign_json["dish"]["receptor_ids"] = [receptor1]
     _, pytest.unique_id = tmc.assign_resources(DictJSONInput(assign_json))
 
     assert_that(event_tracer).described_as(
@@ -151,7 +151,7 @@ def execute_second_assign_resources_fail(
         "centralnode", "assign_resources_mid"
     ).with_attribute("subarray_id", subarray_id)
     assign_json = json.loads(json_input.as_str())
-    assign_json["dish"]["receptor_ids"] = receptor2
+    assign_json["dish"]["receptor_ids"] = [receptor2]
     csp.csp_subarray.SetDefective(FAILED_RESULT_DEFECT)
     _, pytest.unique_id = tmc.assign_resources(
         DictJSONInput(assign_json), wait_termination=False
