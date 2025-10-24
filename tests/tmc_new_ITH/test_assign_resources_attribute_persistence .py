@@ -105,8 +105,10 @@ def given_assign_resources_executed_successfully(
 
 
 @given(
-    "the AssignedResources attribute is updated with"
-    " first assigned resources {receptor1}"
+    parsers.parse(
+        "the AssignedResources attribute is updated with"
+        " first assigned resources {receptor1}"
+    )
 )
 def verify_first_assigned_resources(tmc: TMCFacade):
     """
@@ -168,8 +170,10 @@ def execute_second_assign_resources_fail(
 
 
 @then(
-    "the AssignedResources attribute"
-    " should retain the first assigned resources {receptor1}"
+    parsers.parse(
+        "the AssignedResources attribute"
+        " should retain the first assigned resources {receptor1}"
+    )
 )
 def verify_assigned_resources_unchanged(tmc: TMCFacade):
     """
