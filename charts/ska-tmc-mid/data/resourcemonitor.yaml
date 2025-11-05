@@ -1,0 +1,45 @@
+name: "resourcemonitor-test"
+function: telescope-monitoring
+domain: resource-monitoring
+instances: ["01"]
+
+{{- $LivelinessCheckPeriod := .Values.deviceServers.resourcemonitor.LivelinessCheckPeriod }}
+{{- $EventSubscriptionCheckPeriod := .Values.deviceServers.resourcemonitor.EventSubscriptionCheckPeriod }}
+{{- $Domain := .Values.global.domain }}
+{{- $Family := .Values.deviceServers.resourcemonitor.family }}
+entrypoints:
+  - name: "ska_tmc_resource_monitor.resource_monitor_mid.MidResourceMonitor"
+
+command: "python3 /app/src/ska_tmc_resource_monitor/resource_monitor_mid.py"
+server:
+  name: "resource_monitor_mid"
+  instances:
+  {{- range  .Values.deviceServers.resourcemonitor.instances }}
+    - name: "{{ . }}"
+      classes:
+      - name: "MidResourceMonitor"
+        devices:
+        - name: "{{ $.Values.global.domain }}/{{ $.Values.deviceServers.resourcemonitor.family }}/{{ . }}"
+          properties:
+            - name: "SubarrayPrefix"
+              values:
+                  - "{{ $.Values.deviceServers.resourcemonitor.SubarrayPrefix }}"
+            - name: "DishLeafNodePrefix"
+              values:
+                - "{{ $.Values.deviceServers.resourcemonitor.DishLeafNodePrefix }}{{ $.Values.deviceServers.resourcemonitor.DishType }}"
+            - name: "DishIDs"
+              values:
+              {{- range  ( $.Values.deviceServers.resourcemonitor.DishIDs) }}
+              - "{{ . }}"
+              {{- end }}
+  {{- end}}
+
+
+depends_on:
+  - device: sys/database/2
+image:
+  registry: "{{.Values.resource_monitor.image.registry}}"
+  image: "{{.Values.resource_monitor.image.image}}"
+  tag: "{{.Values.resource_monitor.image.tag}}"
+  pullPolicy: "{{.Values.resource_monitor.image.pullPolicy}}"
+

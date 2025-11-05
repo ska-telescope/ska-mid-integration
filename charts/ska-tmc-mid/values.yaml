@@ -63,6 +63,7 @@ global:
   mid_csp_control: "mid-csp/control/0"
   mid_csp_subarray_1: "mid-csp/subarray/01"
   mid_csp_subarray_2: "mid-csp/subarray/02"
+  resource_monitor_prefix: "low-tmc/resource-monitor/"
 
 dsconfig:
   configuration_file: data/tmc-mid-config.json
@@ -126,6 +127,13 @@ skatmcsimulators:
     registry: artefact.skao.int
     image: ska-tmc-simulators
     tag: 1.1.5
+    pullPolicy: IfNotPresent
+
+resource_monitor:
+  image:
+    registry: artefact.skao.int
+    image: ska-tmc-resource-monitor
+    tag: 0.3.0
     pullPolicy: IfNotPresent
 
 resources:
@@ -262,6 +270,14 @@ deviceServers:
       requests:
         cpu: 500m
         memory: 300Mi
+
+  resourcemonitor:
+    enabled: true
+    instances: [ "01" ]
+    file: "data/resourcemonitor.yaml"
+    LivelinessCheckPeriod: 1.0
+    EventSubscriptionCheckPeriod: 1.0
+    family: "resource-monitor"
 
   mocks:
     enabled: false
