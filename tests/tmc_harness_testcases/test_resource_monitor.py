@@ -7,6 +7,7 @@ dishesData attribute after resources are assigned through the SubarrayNode.
 """
 
 import json
+import time
 
 import pytest
 from assertpy import assert_that
@@ -97,6 +98,7 @@ def given_subarray_idle(
 
     event_tracer.clear_events()
     given_subarray_idle.assign_input_json = assign_input_json
+    time.sleep(5)
 
 
 @then(
@@ -117,7 +119,11 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
             for receptor_id in assigned_resources
         }
     }
-
+    subarry_node = DeviceProxy("mid-tmc/subarray/01")
+    assigned_resources_attr = subarry_node.read_attribute(
+        "assignedResources"
+    ).value
+    print(f"Assigned resources in SubarrayNode: {assigned_resources_attr}")
     assert_that(event_tracer).described_as(
         "ResourceMonitor did not update dishesData after AssignResources"
     ).within_timeout(TIMEOUT).has_change_event_occurred(
