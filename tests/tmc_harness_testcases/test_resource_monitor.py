@@ -1,15 +1,16 @@
 """
 Test case for verifying Resource Monitor updates when SubarrayNode assigned
-resources change in the MID system.
-This test simulates a change in assigned resources and checks that the
-ResourceMonitor device reflects the update in its dishesData attribute.
+resources change in the system.
+
+This test verifies that the ResourceMonitor device correctly updates its
+dishesData attribute after resources are assigned through the SubarrayNode.
 """
+
 import json
-import time
 
 import pytest
 from assertpy import assert_that
-from pytest_bdd import given, scenario, then, when
+from pytest_bdd import given, scenario, then
 from ska_tango_base.control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer, log_events
 from tango import DeviceProxy, DevState
@@ -23,21 +24,20 @@ from tests.resources.test_support.constant import TIMEOUT
 
 RESOURCE_MONITOR_FQDN = "mid-tmc/resource-monitor/01"
 
-
-@pytest.mark.batch1_test
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/resource_monitor.feature",
-    "Test Resource Monitoring updates when SubarrayNode attributes change",
+    "Verify ResourceMonitor updates when SubarrayNode assigned resources "
+    "change",
 )
-def test_resource_monitor_updates_mid():
-    """BDD scenario for verifying Resource Monitor updates on MID."""
+def test_resource_monitor_updates():
+    """BDD scenario for verifying Resource Monitor updates."""
 
 
-@given("the MID TMC and ResourceMonitor devices are ON")
+@given("the TMC and ResourceMonitor devices are ON")
 def given_tmc_on(
-    event_tracer: TangoEventTracer,
-    central_node_mid: CentralNodeWrapperMid,
+    event_tracer: TangoEventTracer, central_node_mid: CentralNodeWrapperMid
 ):
     """
     Ensure that the TMC and ResourceMonitor devices are available and ON.
@@ -64,7 +64,7 @@ def given_tmc_on(
     central_node_mid.move_to_on()
 
     assert_that(event_tracer).described_as(
-        "FAILED ASSUMPTION: TMC CentralNode should be ON"
+        "FAILED ASSUMPTION: CentralNode should be ON"
     ).within_timeout(TIMEOUT).has_change_event_occurred(
         central_node_mid.central_node, "telescopeState", DevState.ON
     )
@@ -73,14 +73,14 @@ def given_tmc_on(
     event_tracer.clear_events()
 
 
-@given("the MID subarray is in IDLE obsState")
+@given("the subarray has assigned resources and is in IDLE obsState")
 def given_subarray_idle(
     command_input_factory: JsonFactory,
     event_tracer: TangoEventTracer,
     central_node_mid: CentralNodeWrapperMid,
 ):
     """
-    Assign resources to move the subarray to IDLE state.
+    Assign resources and verify that the subarray reaches IDLE state.
     """
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
@@ -99,51 +99,27 @@ def given_subarray_idle(
     given_subarray_idle.assign_input_json = assign_input_json
 
 
-@when("the SubarrayNode assigned resources are modified")
-def when_assigned_resources_changed(
-    central_node_mid: CentralNodeWrapperMid,
-):
-    """
-    Simulate a change in the SubarrayNode assigned resources by re-invoking
-    the AssignResources command with updated parameters.
-    """
-    modified_assigned_resources = {
-        "subarray_beam_ids": ["1"],
-        "receptor_ids": ["0001", "0002", "0003"],
-        "frequency_band": "5b",
-        "channels": [64],
-    }
-
-    # Trigger AssignResources again with modified resources
-    central_node_mid.perform_action(
-        "AssignResources", json.dumps(modified_assigned_resources)
-    )
-
-    when_assigned_resources_changed.assigned_resources = (
-        modified_assigned_resources
-    )
-    time.sleep(5)
-
-
-@then("the ResourceMonitoring dishesData attribute should reflect the change")
+@then(
+    "the ResourceMonitor dishesData attribute should reflect the assigned "
+    "resources"
+)
 def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
     """
-    Verify that ResourceMonitor dishesData reflects the updated assigned
-    resources.
+    Verify that ResourceMonitor dishesData reflects the assigned resources.
     """
     resource_monitor = given_tmc_on.resource_monitor
-    assigned_resources = when_assigned_resources_changed.assigned_resources
+    assign_input_json = given_subarray_idle.assign_input_json
+    assigned_resources = json.loads(assign_input_json)["receptors"]
 
     expected_dishes_data = {
         "dishes": {
             receptor_id: {"subarray_allocation": 1}
-            for receptor_id in assigned_resources["receptor_ids"]
+            for receptor_id in assigned_resources
         }
     }
 
     assert_that(event_tracer).described_as(
-        "ResourceMonitor did not update dishesData after the assigned "
-        "resources were changed"
+        "ResourceMonitor did not update dishesData after AssignResources"
     ).within_timeout(TIMEOUT).has_change_event_occurred(
         resource_monitor, "dishesData", json.dumps(expected_dishes_data)
     )
