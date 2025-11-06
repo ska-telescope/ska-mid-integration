@@ -123,7 +123,10 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
     assigned_resources_attr = subarry_node.read_attribute(
         "assignedResources"
     ).value
-    print(f"Assigned resources in SubarrayNode: {assigned_resources_attr}")
+    print(
+        f"Assigned resources in SubarrayNode: {assigned_resources_attr}, "
+        f"type: {type(assigned_resources_attr)}"
+    )
     assert_that(event_tracer).described_as(
         "ResourceMonitor did not update dishesData after AssignResources"
     ).within_timeout(TIMEOUT).has_change_event_occurred(
