@@ -1,9 +1,9 @@
-Given the telescope is in ON state
-When I invoke AssignResources on CN with arraylayout 
-Then SN arraylayout attribute gets updated
-And DLN target data attribute gets updated with arraylayout provided by subarray
-
-
-without AssignResources arraylayout json it will take default
-# Json for AssignResources needs to be updated
-assing -> configure 
+@XTP-93827 @XTP-93825 @TEAM_HIMALAYA
+Scenario: Verify array layout functionality in TMC mid
+    Given the telescope is in ON state
+    And AssignResources is invoked on the SubarrayNode with an arrayLayoutUri so that the SN.arrayLayoutUri attribute is updated
+    When I invoke the Configure command on the SubarrayNode
+    Then the DLN targetData attribute is updated using the array layout referenced by SN.arrayLayoutUri
+    #And the Dish receives the layout data and generates the corresponding PTT configuration
+    #And the DPD targetData attribute reflects the correct processed layout data
+    #And the delay calculation module uses the updated layout information to compute and publish the delay values
