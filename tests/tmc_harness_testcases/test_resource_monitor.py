@@ -25,6 +25,7 @@ from tests.resources.test_support.constant import TIMEOUT
 
 RESOURCE_MONITOR_FQDN = "mid-tmc/resource-monitor/01"
 
+
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
