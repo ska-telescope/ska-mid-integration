@@ -3,7 +3,7 @@ Feature: Resource Monitor updates
   when the SubarrayNode updates its assignedResources attribute.
 
   @SKA_mid
-  Scenario: Verify ResourceMonitor updates when SubarrayNode assigned resources change
+  Scenario: Check ResourceMonitor updates after resource assignment
     Given the TMC and ResourceMonitor devices are ON
     And the subarray has assigned resources and is in IDLE obsState
     Then the ResourceMonitor dishesData attribute should reflect the assigned resources
