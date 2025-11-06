@@ -114,14 +114,11 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
     assigned_resources = json.loads(assign_input_json).get("receptor_ids", [])
 
     expected_dishes_data = {
-    "dishes": {
-        receptor_id: {
-            "subarray_allocation": 1,
-            "availability": True 
+        "dishes": {
+            receptor_id: {"subarray_allocation": 1, "availability": True}
+            for receptor_id in assigned_resources
         }
-        for receptor_id in assigned_resources
     }
-}
     subarry_node = DeviceProxy("mid-tmc/subarray/01")
     assigned_resources_attr = subarry_node.read_attribute(
         "assignedResources"
