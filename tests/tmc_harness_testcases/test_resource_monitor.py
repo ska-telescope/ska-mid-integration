@@ -1,6 +1,6 @@
 """
 Test case for verifying Resource Monitor updates when SubarrayNode assigned
-resources change in MID system.
+resources change in the MID system.
 This test simulates a change in assigned resources and checks that the
 ResourceMonitor device reflects the update in its dishesData attribute.
 """
@@ -18,9 +18,7 @@ from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
 )
-from tests.resources.test_harness.simulator_factory import SimulatorFactory
 from tests.resources.test_harness.utils.common_utils import JsonFactory
-from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.constant import TIMEOUT
 
 RESOURCE_MONITOR_FQDN = "mid-tmc/resource-monitor/01"
@@ -33,7 +31,7 @@ RESOURCE_MONITOR_FQDN = "mid-tmc/resource-monitor/01"
     "Test Resource Monitoring updates when SubarrayNode attributes change",
 )
 def test_resource_monitor_updates_mid():
-    """BDD scenario for verifying Resource Monitor update on MID."""
+    """BDD scenario for verifying Resource Monitor updates on MID."""
 
 
 @given("the MID TMC and ResourceMonitor devices are ON")
@@ -82,7 +80,7 @@ def given_subarray_idle(
     central_node_mid: CentralNodeWrapperMid,
 ):
     """
-    Assign resources to move subarray to IDLE state.
+    Assign resources to move the subarray to IDLE state.
     """
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
@@ -98,29 +96,32 @@ def given_subarray_idle(
     )
 
     event_tracer.clear_events()
+    given_subarray_idle.assign_input_json = assign_input_json
 
 
-@when("a change is triggered in the SubarrayNode assigned resources")
+@when("the SubarrayNode assigned resources are modified")
 def when_assigned_resources_changed(
     central_node_mid: CentralNodeWrapperMid,
-    simulator_factory: SimulatorFactory,
 ):
     """
-    Simulate a change in SubarrayNode assigned resources using CSP simulator.
+    Simulate a change in the SubarrayNode assigned resources by re-invoking
+    the AssignResources command with updated parameters.
     """
-    csp_sim = simulator_factory.get_or_create_simulator_device(
-        SimulatorDeviceType.CSP_SUBARRAY_DEVICE
-    )
-
-    assigned_resources = {
+    modified_assigned_resources = {
         "subarray_beam_ids": ["1"],
         "receptor_ids": ["0001", "0002", "0003"],
-        "frequency_band": "5a",
-        "channels": [32],
+        "frequency_band": "5b",
+        "channels": [64],
     }
 
-    csp_sim.SetDirectassignedResources(json.dumps(assigned_resources))
-    when_assigned_resources_changed.assigned_resources = assigned_resources
+    # Trigger AssignResources again with modified resources
+    central_node_mid.perform_action(
+        "AssignResources", json.dumps(modified_assigned_resources)
+    )
+
+    when_assigned_resources_changed.assigned_resources = (
+        modified_assigned_resources
+    )
     time.sleep(5)
 
 
@@ -141,8 +142,8 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
     }
 
     assert_that(event_tracer).described_as(
-        "ResourceMonitor did not update dishesData after assigned resources "
-        "change"
+        "ResourceMonitor did not update dishesData after the assigned "
+        "resources were changed"
     ).within_timeout(TIMEOUT).has_change_event_occurred(
         resource_monitor, "dishesData", json.dumps(expected_dishes_data)
     )
