@@ -114,11 +114,14 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
     assigned_resources = json.loads(assign_input_json).get("receptor_ids", [])
 
     expected_dishes_data = {
-        "dishes": {
-            receptor_id: {"subarray_allocation": 1}
-            for receptor_id in assigned_resources
+    "dishes": {
+        receptor_id: {
+            "subarray_allocation": 1,
+            "availability": True 
         }
+        for receptor_id in assigned_resources
     }
+}
     subarry_node = DeviceProxy("mid-tmc/subarray/01")
     assigned_resources_attr = subarry_node.read_attribute(
         "assignedResources"
@@ -127,6 +130,9 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
         f"Assigned resources in SubarrayNode: {assigned_resources_attr}, "
         f"type: {type(assigned_resources_attr)}"
     )
+    time.sleep(5)
+    attr_val = resource_monitor.read_attribute("dishesData").value
+    print("Value from RM device %s", attr_val)
     assert_that(event_tracer).described_as(
         "ResourceMonitor did not update dishesData after AssignResources"
     ).within_timeout(TIMEOUT).has_change_event_occurred(
