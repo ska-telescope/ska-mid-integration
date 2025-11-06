@@ -88,7 +88,7 @@ def given_assign_resources_executed_successfully(
     """
     Execute the first AssignResources command which should succeed.
     """
-
+    _setup_event_subscriptions(tmc, csp, sdp, event_tracer)
     json_input = MyFileJSONInput(
         "centralnode", "assing_resources_array_layout"
     ).with_attribute("subarray_id", subarray_id)
