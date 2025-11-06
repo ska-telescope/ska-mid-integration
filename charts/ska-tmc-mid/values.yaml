@@ -133,7 +133,7 @@ resource_monitor:
   image:
     registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-resource-monitor
     image: ska-tmc-resource-monitor
-    tag: 0.3.0-dev.cb7ce33d6
+    tag: 0.3.0-dev.c227ca65b
     pullPolicy: IfNotPresent
 
 resources:
@@ -183,10 +183,10 @@ deviceServers:
     resources:
       limits:
         cpu: 600m
-        memory: 1000Mi
+        memory: 5000Mi
       requests:
-        cpu: 400m
-        memory: 300Mi
+        cpu: 500m
+        memory: 500Mi
 
   sdpsubarrayleafnode:
     enabled: true
@@ -240,10 +240,10 @@ deviceServers:
     IsDishAbortEnabled: True
     resources:
       limits:
-        memory: 3000Mi
+        memory: 5000Mi
       requests:
-        cpu: 2000m
-        memory: 300Mi
+        cpu: 5000m
+        memory: 500Mi
     CommandTimeOutDefault: 90
     MaxTrackTableRetry: 3
     TrackTableRetryDuration: 0.2
@@ -265,11 +265,11 @@ deviceServers:
     AzimuthMinLimit: -270
     resources:
       limits:
-        memory: 1000Mi
-        cpu: 500m
+        memory: 5000Mi
+        cpu: 1000m
       requests:
         cpu: 500m
-        memory: 300Mi
+        memory: 500Mi
 
   resourcemonitor:
     enabled: true
@@ -278,6 +278,10 @@ deviceServers:
     LivelinessCheckPeriod: 1.0
     EventSubscriptionCheckPeriod: 1.0
     family: "resource-monitor"
+    DishLeafNodePrefix: "mid-tmc/leaf-node-dish/"
+    SubarrayPrefix: "mid-tmc/subarray/"
+    DishType: "SKA"
+    DishIDs: [ "SKA001", "SKA036" ]
 
   mocks:
     enabled: false
