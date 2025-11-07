@@ -174,9 +174,18 @@ def when_release_all_resources(
 def then_verify_resource_monitor_empty(event_tracer: TangoEventTracer):
     """Verify that ResourceMonitor dishesData becomes empty after release."""
     resource_monitor = pytest.resource_monitor
+    assign_input_json = pytest.assign_input_json
+    previously_assigned_dishes = (
+        json.loads(assign_input_json).get("dish").get("receptor_ids", [])
+    )
 
-    expected_empty_data = {"dishes": {}}
-    results = json.dumps(expected_empty_data)
+    expected_dishes_data = {
+        "dishes": {
+            receptor_id: {"subarray_allocation": -1, "availability": True}
+            for receptor_id in previously_assigned_dishes
+        }
+    }
+    results = json.dumps(expected_dishes_data)
 
     time.sleep(5)
     attr_val = resource_monitor.read_attribute("dishesData").value
