@@ -39,25 +39,29 @@ def update_configuration_json(config_json: dict, config_data: str):
         case "configuration_with_all_dish":
             config_json["dish"][
                 "spfrx_processing_parameters"
-            ] = expected_json_spfrx_param_case_all_dishes[
+            ] = expected_json_spfrx_param_case_all_dishes["dish"][
                 "spfrx_processing_parameters"
             ]
         case "configuration_with_single_parameter_per_dish":
             config_json["dish"][
                 "spfrx_processing_parameters"
             ] = expected_json_spfrx_param_case_single_parameter_per_dish[
+                "dish"
+            ][
                 "spfrx_processing_parameters"
             ]
         case "configuration_with_multiple_dish_same_parameter":
             config_json["dish"][
                 "spfrx_processing_parameters"
             ] = expected_json_spfrx_param_case_multiple_dish_same_parameter[
+                "dish"
+            ][
                 "spfrx_processing_parameters"
             ]
         case "configuration_with_all_different":
             config_json["dish"][
                 "spfrx_processing_parameters"
-            ] = expected_json_spfrx_param_case_all_different[
+            ] = expected_json_spfrx_param_case_all_different["dish"][
                 "spfrx_processing_parameters"
             ]
         case _:
