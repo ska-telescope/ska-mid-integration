@@ -124,7 +124,7 @@ def verify_version_sdp_mock_interface(
     assert_that(event_tracer).described_as(
         "AssignResources command should complete successfully"
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        tmc.central_node,
+        tmc.subarray_node,
         "longRunningCommandResult",
         (
             pytest.unique_id[0],
@@ -144,3 +144,4 @@ def then_dln_target_data_updated(
     for dish_pointing_device in dish_pointing_facade.dish_pointing_device_list:
         target_data = json.loads(dish_pointing_device.targetData)
         LOGGER.info(f"DishPointingDevice target data {target_data} ")
+    assert 0
