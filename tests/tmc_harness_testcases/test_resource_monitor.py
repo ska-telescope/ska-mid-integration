@@ -88,6 +88,7 @@ def given_subarray_idle(
     )
 
     central_node_mid.perform_action("AssignResources", assign_input_json)
+    time.sleep(2)
 
     assert_that(event_tracer).described_as(
         "FAILED ASSUMPTION: Subarray must reach IDLE obsState after "
@@ -97,7 +98,7 @@ def given_subarray_idle(
     )
 
     given_subarray_idle.assign_input_json = assign_input_json
-    time.sleep(10)
+    time.sleep(5)
 
 
 @then(
