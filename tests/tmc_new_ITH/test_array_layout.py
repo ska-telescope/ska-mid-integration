@@ -152,10 +152,10 @@ def verify_version_sdp_mock_interface(
     "referenced by SN.arrayLayoutUri"
 )
 def then_dln_target_data_updated(
-    dish_pointing_facade: DishPointingDevicesFacade,
+    dish_pointng_devices: DishPointingDevicesFacade,
 ):
     """Verify that DLN targetData attribute is updated correctly."""
-    for dish_pointing_device in dish_pointing_facade.dish_pointing_device_list:
+    for dish_pointing_device in dish_pointng_devices.dish_pointing_device_list:
         target_data = json.loads(dish_pointing_device.targetData)
         LOGGER.info(f"DishPointingDevice target data {target_data} ")
     assert 0
