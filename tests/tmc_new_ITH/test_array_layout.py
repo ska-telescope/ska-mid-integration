@@ -78,7 +78,7 @@ def given_assign_resources_executed_successfully(
     sdp: SDPFacade,
     csp: CSPFacade,
     event_tracer: TangoEventTracer,
-    subarray_id: str,
+    subarray_id: str = "1",
 ):
     """
     Execute the first AssignResources command which should succeed.
