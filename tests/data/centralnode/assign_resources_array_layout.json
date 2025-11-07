@@ -1,10 +1,11 @@
 {
   "interface": "https://schema.skao.int/ska-tmc-assignresources/2.2",
-"telmodel":{ "source_uris": [
-            "gitlab://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata"
-        ],
-        "array_layout_path": "instrument/ska1_mid/layout/mid-layout.json"
-    },
+  "telmodel": {
+    "source_uris": [
+      "gitlab://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata"
+    ],
+    "array_layout_path": "instrument/ska1_mid/layout/mid-layout.json"
+  },
   "transaction_id": "txn-....-00001",
   "subarray_id": 1,
   "dish": {

@@ -149,7 +149,7 @@ def verify_version_sdp_mock_interface(
 
 @then(
     "the DLN targetData attribute is updated using the array layout "
-    "referenced by SN.arrayLayoutUri"
+    "from Telmodel"
 )
 def then_dln_target_data_updated(
     dish_pointng_devices: DishPointingDevicesFacade,
@@ -158,4 +158,13 @@ def then_dln_target_data_updated(
     for dish_pointing_device in dish_pointng_devices.dish_pointing_device_list:
         target_data = json.loads(dish_pointing_device.targetData)
         LOGGER.info(f"DishPointingDevice target data {target_data} ")
-    assert 0
+
+        assert "array_layout" in target_data, "array_layout missing"
+        array_layout = target_data["array_layout"]
+
+        assert (
+            array_layout.get("interface")
+            == "https://schema.skao.int/ska-telmodel-layout-receptor/1.1"
+        )
+
+        assert array_layout.get("station_label") == "SKA001"
