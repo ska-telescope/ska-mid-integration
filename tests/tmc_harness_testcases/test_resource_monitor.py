@@ -112,7 +112,7 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
     resource_monitor = pytest.resource_monitor
     assign_input_json = pytest.assign_input_json
     assigned_resources = (
-        json.loads(assign_input_json).get("dishes").get("receptor_ids", [])
+        json.loads(assign_input_json).get("dish").get("receptor_ids", [])
     )
     #  Debug prints for clarity
     print("\n---- Debug Info ----")
