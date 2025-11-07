@@ -123,6 +123,8 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
     assigned_resources_attr = subarry_node.read_attribute(
         "assignedResources"
     ).value
+    results = json.dumps(expected_dishes_data)
+    print(f"Results {results}, expected data {expected_dishes_data}")
     print(
         f"Assigned resources in SubarrayNode: {assigned_resources_attr}, "
         f"type: {type(assigned_resources_attr)}"
@@ -131,9 +133,7 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
     attr_val = resource_monitor.read_attribute("dishesData").value
     print("Value from RM device %s", attr_val)
     assert_that(event_tracer).described_as(
-        f"ResourceMonitor device {resource_monitor} "
-        f"dishesData attribute value should move to "
-        f"{json.dumps(expected_dishes_data)}"
+        f"ResourceMonitor dishesData attribute value should update"
     ).within_timeout(TIMEOUT).has_change_event_occurred(
-        resource_monitor, "dishesData", json.dumps(expected_dishes_data)
+        resource_monitor, "dishesData", results
     )
