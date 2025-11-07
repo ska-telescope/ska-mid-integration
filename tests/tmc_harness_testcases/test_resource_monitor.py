@@ -11,7 +11,7 @@ import time
 
 import pytest
 from assertpy import assert_that
-from pytest_bdd import given, scenario, then
+from pytest_bdd import given, scenario, then, when
 from ska_tango_base.control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer, log_events
 from tango import DeviceProxy, DevState
@@ -142,6 +142,42 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
     print("Value from RM device %s", attr_val)
     assert_that(event_tracer).described_as(
         "ResourceMonitor dishesData attribute value should update"
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        resource_monitor, "dishesData", results
+    )
+
+
+@when("all assigned resources are released")
+def when_release_all_resources(
+    event_tracer: TangoEventTracer,
+    central_node_mid: CentralNodeWrapperMid,
+    command_input_factory: JsonFactory,
+):
+    """Release all previously assigned resources."""
+    print("\nReleasing all assigned resources...\n")
+    release_input_json = prepare_json_args_for_centralnode_commands(
+        "release_resources_mid", command_input_factory
+    )
+    central_node_mid.perform_action("ReleaseAllResources", release_input_json)
+    time.sleep(5)
+    event_tracer.clear_events()
+
+
+@then("the ResourceMonitor dishesData attribute should be empty")
+def then_verify_resource_monitor_empty(event_tracer: TangoEventTracer):
+    """Verify that ResourceMonitor dishesData becomes empty after release."""
+    resource_monitor = pytest.resource_monitor
+
+    expected_empty_data = {"dishes": {}}
+    results = json.dumps(expected_empty_data)
+
+    time.sleep(5)
+    attr_val = resource_monitor.read_attribute("dishesData").value
+    print(f"Value from RM device after release: {attr_val}")
+
+    assert_that(event_tracer).described_as(
+        "ResourceMonitor dishesData attribute should be empty after "
+        "ReleaseAllResources"
     ).within_timeout(TIMEOUT).has_change_event_occurred(
         resource_monitor, "dishesData", results
     )

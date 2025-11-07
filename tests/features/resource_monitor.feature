@@ -7,3 +7,5 @@ Feature: Resource Monitor updates
     Given the TMC and ResourceMonitor devices are ON
     And the subarray has assigned resources and is in IDLE obsState
     Then the ResourceMonitor dishesData attribute should reflect the assigned resources
+    When all assigned resources are released
+    Then the ResourceMonitor dishesData attribute should be empty
