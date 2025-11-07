@@ -168,7 +168,6 @@ def when_release_all_resources(
         central_node_mid.subarray_node, "obsState", ObsState.EMPTY
     )
     time.sleep(5)
-    event_tracer.clear_events()
 
 
 @then("the ResourceMonitor dishesData attribute should be empty")
