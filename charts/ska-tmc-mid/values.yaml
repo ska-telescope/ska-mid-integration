@@ -183,10 +183,10 @@ deviceServers:
     resources:
       limits:
         cpu: 600m
-        memory: 5000Mi
+        memory: 1000Mi
       requests:
-        cpu: 500m
-        memory: 500Mi
+        cpu: 400m
+        memory: 300Mi
 
   sdpsubarrayleafnode:
     enabled: true
@@ -240,10 +240,10 @@ deviceServers:
     IsDishAbortEnabled: True
     resources:
       limits:
-        memory: 5000Mi
+        memory: 3000Mi
       requests:
-        cpu: 5000m
-        memory: 500Mi
+        cpu: 2000m
+        memory: 300Mi
     CommandTimeOutDefault: 90
     MaxTrackTableRetry: 3
     TrackTableRetryDuration: 0.2
@@ -265,11 +265,11 @@ deviceServers:
     AzimuthMinLimit: -270
     resources:
       limits:
-        memory: 5000Mi
-        cpu: 1000m
+        memory: 1000Mi
+        cpu: 500m
       requests:
         cpu: 500m
-        memory: 500Mi
+        memory: 300Mi
 
   resourcemonitor:
     enabled: true
