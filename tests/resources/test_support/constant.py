@@ -721,7 +721,7 @@ expected_json_spfrx_param_case_all_different = {
                     },
                     "periodic": {
                         "period": 8,
-                        "duty_cycle": 0.5,
+                        "duty_cycle": 1,
                         "phase_shift": 2,
                     },
                 },
@@ -742,7 +742,7 @@ expected_json_spfrx_param_case_all_different = {
                     },
                     "periodic": {
                         "period": 10,
-                        "duty_cycle": 0.7,
+                        "duty_cycle": 1,
                         "phase_shift": 3,
                     },
                 },
