@@ -114,7 +114,6 @@ def verify_version_sdp_mock_interface(
     json_input = MyFileJSONInput("subarray", "command_Configure")
     _, pytest.unique_id = tmc.configure(
         json_input,
-        wait_termination=False,
     )
 
     assert_that(event_tracer).described_as(
