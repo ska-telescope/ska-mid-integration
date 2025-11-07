@@ -81,8 +81,6 @@ def given_assign_resources_executed_successfully(
     sdp: SDPFacade,
     csp: CSPFacade,
     event_tracer: TangoEventTracer,
-    default_commands_inputs: TestHarnessInputs,
-    receptor1: str,
     subarray_id: str,
 ):
     """
