@@ -130,8 +130,10 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
     time.sleep(5)
     attr_val = resource_monitor.read_attribute("dishesData").value
     print("Value from RM device %s", attr_val)
-    assert_that(event_tracer).within_timeout(
-        TIMEOUT
-    ).has_change_event_occurred(
+    assert_that(event_tracer).described_as(
+        f"ResourceMonitor device {resource_monitor} "
+        f"dishesData attribute value should move to "
+        f"{json.dumps(expected_dishes_data)}"
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
         resource_monitor, "dishesData", json.dumps(expected_dishes_data)
     )
