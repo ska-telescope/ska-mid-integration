@@ -18,6 +18,7 @@ from tests.tmc_csp_new_ITH.conftest import (
     SubarrayTestContextData,
 )
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
+from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDevicesFacade
 
 
 def _setup_event_subscriptions(
@@ -125,10 +126,9 @@ def verify_version_sdp_mock_interface(
     "referenced by SN.arrayLayoutUri"
 )
 def then_dln_target_data_updated(
-    tmc: TMCFacade,
+    dish_pointing_facade: DishPointingDevicesFacade,
 ):
     """Verify that DLN targetData attribute is updated correctly."""
-    initial_resources = (
-        tmc.dish_leaf_node_list[0].read_attribute("targetData").value
-    )
-    LOGGER.info(f"DLN targetData attribute: {initial_resources}")
+    for dish_pointing_device in dish_pointing_facade.dish_pointing_device_list:
+        target_data = json.loads(dish_pointing_device.targetData)
+        LOGGER.info(f"DishPointingDevice target data {target_data} ")
