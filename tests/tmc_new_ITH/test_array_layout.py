@@ -84,7 +84,7 @@ def given_assign_resources_executed_successfully(
     """
     _setup_event_subscriptions(tmc, csp, sdp, event_tracer)
     json_input = MyFileJSONInput(
-        "centralnode", "assing_resources_array_layout"
+        "centralnode", "assign_resources_array_layout"
     )
     _, pytest.unique_id = tmc.assign_resources(json_input)
 
