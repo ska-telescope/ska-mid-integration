@@ -96,9 +96,8 @@ def given_subarray_idle(
         central_node_mid.subarray_node, "obsState", ObsState.IDLE
     )
 
-    event_tracer.clear_events()
     given_subarray_idle.assign_input_json = assign_input_json
-    time.sleep(5)
+    time.sleep(10)
 
 
 @then(
