@@ -137,7 +137,7 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
         f"Assigned resources in SubarrayNode: {assigned_resources_attr}, "
         f"type: {type(assigned_resources_attr)}"
     )
-    time.sleep(5)
+    time.sleep(2)
     attr_val = resource_monitor.read_attribute("dishesData").value
     print("Value from RM device %s", attr_val)
     assert_that(event_tracer).described_as(
@@ -158,7 +158,15 @@ def when_release_all_resources(
     release_input_json = prepare_json_args_for_centralnode_commands(
         "release_resources_mid", command_input_factory
     )
-    central_node_mid.perform_action("ReleaseAllResources", release_input_json)
+    _, pytest.unique_id = central_node_mid.perform_action(
+        "ReleaseResources", release_input_json
+    )
+    assert_that(event_tracer).described_as(
+        "FAILED ASSUMPTION: Subarray should return to EMPTY obsState after "
+        "ReleaseAllResources"
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        central_node_mid.subarray_node, "obsState", ObsState.EMPTY
+    )
     time.sleep(5)
     event_tracer.clear_events()
 
