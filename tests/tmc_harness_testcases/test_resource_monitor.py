@@ -70,7 +70,7 @@ def given_tmc_on(
         central_node_mid.central_node, "telescopeState", DevState.ON
     )
 
-    given_tmc_on.resource_monitor = resource_monitor
+    pytest.resource_monitor = resource_monitor
     event_tracer.clear_events()
 
 
@@ -97,7 +97,7 @@ def given_subarray_idle(
         central_node_mid.subarray_node, "obsState", ObsState.IDLE
     )
 
-    given_subarray_idle.assign_input_json = assign_input_json
+    pytest.assign_input_json = assign_input_json
     time.sleep(5)
 
 
@@ -109,9 +109,15 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
     """
     Verify that ResourceMonitor dishesData reflects the assigned resources.
     """
-    resource_monitor = given_tmc_on.resource_monitor
-    assign_input_json = given_subarray_idle.assign_input_json
+    resource_monitor = pytest.resource_monitor
+    assign_input_json = pytest.assign_input_json
     assigned_resources = json.loads(assign_input_json).get("receptor_ids", [])
+    #  Debug prints for clarity
+    print("\n---- Debug Info ----")
+    print(f"Resource Monitor: {resource_monitor}")
+    print(f"Assign Input JSON: {assign_input_json}")
+    print(f"Assigned Resources: {assigned_resources}")
+    print("---------------------\n")
 
     expected_dishes_data = {
         "dishes": {
