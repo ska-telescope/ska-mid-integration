@@ -187,7 +187,9 @@ def then_verify_resource_monitor_empty(event_tracer: TangoEventTracer):
     }
     print("\n---- Debug Info Before Reading RM ----")
     print(f"Previously Assigned: {previously_assigned_dishes}")
-    print(f"Expected Dishes Data: {json.dumps(expected_dishes_data, indent=2)}")
+    print(
+        f"Expected Dishes Data: {json.dumps(expected_dishes_data, indent=2)}"
+    )
     print("---------------------\n")
     results = json.dumps(expected_dishes_data)
 
