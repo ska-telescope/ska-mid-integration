@@ -85,9 +85,7 @@ def test_verify_array_layout_functionality():
     """Test array layout functionality."""
 
 
-@given(
-    "AssignResources is invoked on the SubarrayNode with an " "arrayLayoutUri"
-)
+@given("AssignResources is invoked on the SubarrayNode with an arrayLayoutUri")
 def given_assign_resources_executed_successfully(
     tmc: TMCFacade,
     sdp: SDPFacade,
@@ -121,7 +119,7 @@ def given_assign_resources_executed_successfully(
     )
 
 
-@given('TMC subarray node "arrayLayout" attribute is updated with layout data')
+@given("TMC subarray node arrayLayout attribute is updated with layout data")
 def verify_subarray_array_layout(
     event_tracer: TangoEventTracer,
     tmc: TMCFacade,
