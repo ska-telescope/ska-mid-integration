@@ -1,6 +1,6 @@
 Feature: Resource Monitor updates
-  Verify that the Resource Monitor device reflects changes to assigned resources
-  when the SubarrayNode updates its assignedResources attribute.
+  Validate that the ResourceMonitor accurately updates dishesData after the 
+  SubarrayNode assigns and releases resources
 
   @SKA_mid
   Scenario: Check ResourceMonitor updates after resource assignment
@@ -8,4 +8,4 @@ Feature: Resource Monitor updates
     And the subarray has assigned resources and is in IDLE obsState
     Then the ResourceMonitor dishesData attribute should reflect the assigned resources
     When all assigned resources are released
-    Then the ResourceMonitor dishesData attribute should be empty
+    Then the ResourceMonitor dishesData attribute should reflect the updated state after resource release

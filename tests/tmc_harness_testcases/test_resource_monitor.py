@@ -114,12 +114,6 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
     assigned_resources = (
         json.loads(assign_input_json).get("dish").get("receptor_ids", [])
     )
-    #  Debug prints for clarity
-    print("\n---- Debug Info ----")
-    print(f"Resource Monitor: {resource_monitor}")
-    print(f"Assign Input JSON: {assign_input_json}")
-    print(f"Assigned Resources: {assigned_resources}")
-    print("---------------------\n")
 
     expected_dishes_data = {
         "dishes": {
@@ -127,16 +121,7 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
             for receptor_id in assigned_resources
         }
     }
-    subarry_node = DeviceProxy("mid-tmc/subarray/01")
-    assigned_resources_attr = subarry_node.read_attribute(
-        "assignedResources"
-    ).value
     results = json.dumps(expected_dishes_data)
-    print(f"Results {results}, expected data {expected_dishes_data}")
-    print(
-        f"Assigned resources in SubarrayNode: {assigned_resources_attr}, "
-        f"type: {type(assigned_resources_attr)}"
-    )
     time.sleep(2)
     attr_val = resource_monitor.read_attribute("dishesData").value
     print("Value from RM device %s", attr_val)
@@ -154,7 +139,6 @@ def when_release_all_resources(
     command_input_factory: JsonFactory,
 ):
     """Release all previously assigned resources."""
-    print("\nReleasing all assigned resources...\n")
     release_input_json = prepare_json_args_for_centralnode_commands(
         "release_resources_mid", command_input_factory
     )
@@ -170,7 +154,10 @@ def when_release_all_resources(
     time.sleep(5)
 
 
-@then("the ResourceMonitor dishesData attribute should be empty")
+@then(
+    "the ResourceMonitor dishesData attribute should reflect the updated "
+    "state after resource release"
+)
 def then_verify_resource_monitor_empty(event_tracer: TangoEventTracer):
     """Verify that ResourceMonitor dishesData becomes empty after release."""
     resource_monitor = pytest.resource_monitor
@@ -185,12 +172,6 @@ def then_verify_resource_monitor_empty(event_tracer: TangoEventTracer):
             for receptor_id in previously_assigned_dishes
         }
     }
-    print("\n---- Debug Info Before Reading RM ----")
-    print(f"Previously Assigned: {previously_assigned_dishes}")
-    print(
-        f"Expected Dishes Data: {json.dumps(expected_dishes_data, indent=2)}"
-    )
-    print("---------------------\n")
     results = json.dumps(expected_dishes_data)
 
     time.sleep(5)
