@@ -285,7 +285,7 @@ def tmc_able_to_memorize_the_array_layout(
     cn_device_server = tango.DeviceProxy(
         f"dserver/{tmc.central_node.info().server_id}"
     )
-    cn_device_server.restartserver()
+    cn_device_server.init()
     assert wait_and_validate_device_attribute_value(
         tmc.central_node,
         "IsDishVccConfigSet",
