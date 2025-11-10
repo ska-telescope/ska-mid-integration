@@ -290,9 +290,15 @@ def tmc_able_to_memorize_the_array_layout(
         tmc.central_node,
         "state",
         "ON",
-        timeout=500,
+        timeout=300,
     )
-    tmc.move_to_on(wait_termination=True)
+    tmc.move_to_off()
+    wait_and_validate_device_attribute_value(
+        tmc.central_node,
+        "telescopeState",
+        "OFF",
+        timeout=300,
+    )
     assert (
         pytest.source_uris
         == json.loads(tmc.central_node.defaultarraylayouturl)["source_uris"]
