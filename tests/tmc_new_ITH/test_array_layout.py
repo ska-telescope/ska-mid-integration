@@ -127,6 +127,7 @@ def verify_version_sdp_mock_interface(
     sdp,
 ):
     """Invoke Configure command on SubarrayNode."""
+
     json_input = MyFileJSONInput("subarray", "command_Configure")
     context_fixt.when_action_result = tmc.configure(
         json_input,
@@ -156,6 +157,7 @@ def verify_version_sdp_mock_interface(
         previous_value=context_fixt.starting_state,
     )
     context_fixt.starting_state = ObsState.READY
+    pytest.SOURCE_VISIBILITY = True
 
 
 @then(
