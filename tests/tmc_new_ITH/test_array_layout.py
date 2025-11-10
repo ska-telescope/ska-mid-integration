@@ -25,6 +25,7 @@ from tests.resources.test_harness.helpers import (
     wait_and_validate_device_attribute_value,
     wait_till_delay_values_are_populated,
 )
+from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.tmc_csp_new_ITH.conftest import (  # SubarrayTestContextData,
     ASSERTIONS_TIMEOUT,
     TIMEOUT,
@@ -239,13 +240,13 @@ def then_dln_target_data_updated():
     "CSP Subarray Leaf Node starts generating delay values with proper epoch"
 )
 def check_if_delay_values_are_generating(
-    tmc: TMCFacade,
+    subarray_node: SubarrayNodeWrapper,
 ) -> None:
     """Check if delay values are generating."""
     ska_epoch_tai = generate_ska_epoch_tai_value()
     LOGGER.info(f"ska_epoch_tai : {ska_epoch_tai}")
     delay_json, delay_generated_time = wait_till_delay_values_are_populated(
-        tmc.csp_subarray_leaf_node
+        subarray_node.csp_subarray_leaf_node
     )
     LOGGER.info(f"delay_json: {delay_json}")
     LOGGER.info(f"delay_generated_time: {delay_generated_time}")
@@ -275,7 +276,6 @@ def dish_that_is_tracking(
 def tmc_able_to_memorize_the_array_layout(
     tmc: TMCFacade,
     default_commands_inputs: TestHarnessInputs,
-    event_tracer: TangoEventTracer,
 ):
     """
     Verifies that TMC is able to memorize the array layout
@@ -291,7 +291,7 @@ def tmc_able_to_memorize_the_array_layout(
         f"dserver/{tmc.central_node.info().server_id}"
     )
     cn_device_server.RestartServer()
-    time.sleep(6)
+    time.sleep(8)
     assert wait_and_validate_device_attribute_value(
         tmc.central_node,
         "IsDishVccConfigSet",
