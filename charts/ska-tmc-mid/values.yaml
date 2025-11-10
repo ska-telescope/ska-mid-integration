@@ -63,7 +63,7 @@ global:
   mid_csp_control: "mid-csp/control/0"
   mid_csp_subarray_1: "mid-csp/subarray/01"
   mid_csp_subarray_2: "mid-csp/subarray/02"
-  resource_monitor_prefix: "low-tmc/resource-monitor/"
+  resource_monitor_prefix: "mid-tmc/resource-monitor/"
 
 dsconfig:
   configuration_file: data/tmc-mid-config.json

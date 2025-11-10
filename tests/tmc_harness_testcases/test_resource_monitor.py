@@ -3,7 +3,8 @@ Test case for verifying Resource Monitor updates when SubarrayNode assigned
 resources change in the system.
 
 This test verifies that the ResourceMonitor device correctly updates its
-dishesData attribute after resources are assigned through the SubarrayNode.
+dishesData attribute after resources are assigned and released through the
+SubarrayNode.
 """
 
 import json
