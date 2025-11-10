@@ -56,6 +56,8 @@ def _setup_event_subscriptions(
     event_tracer.subscribe_event(sdp.sdp_subarray, "receiveAddresses")
     event_tracer.subscribe_event(sdp.sdp_subarray, "commandCallInfo")
     event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
+    event_tracer.subscribe_event(tmc.central_node, "telescopeState")
+    event_tracer.subscribe_event(tmc.central_node, "IsDishVccConfigSet")
     event_tracer.subscribe_event(tmc.subarray_node, "longRunningCommandResult")
     event_tracer.subscribe_event(tmc.subarray_node, "arraylayouturi")
     log_events(
