@@ -15,6 +15,7 @@ from ska_integration_test_harness.inputs.test_harness_inputs import (
     TestHarnessInputs,
 )
 from ska_tango_testing.integration import TangoEventTracer, log_events
+from ska_tango_testing.mock.placeholders import Anything
 
 from tests.conftest import LOGGER
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
@@ -27,9 +28,12 @@ from tests.resources.test_harness.helpers import (
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.tmc_csp_new_ITH.conftest import (  # SubarrayTestContextData,
     ASSERTIONS_TIMEOUT,
+    TIMEOUT,
     SubarrayTestContextData,
 )
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
+
+# from ska_telmodel.data import TMData
 
 
 def _setup_event_subscriptions(
@@ -82,8 +86,7 @@ def test_verify_array_layout_functionality():
 
 
 @given(
-    "AssignResources is invoked on the SubarrayNode with an "
-    "arrayLayoutUri so that the SN.arrayLayoutUri attribute is updated"
+    "AssignResources is invoked on the SubarrayNode with an " "arrayLayoutUri"
 )
 def given_assign_resources_executed_successfully(
     tmc: TMCFacade,
@@ -116,6 +119,37 @@ def given_assign_resources_executed_successfully(
             json.dumps(((ResultCode.OK), "Command Completed")),
         ),
     )
+
+
+@given('TMC subarray node "arrayLayout" attribute is updated with layout data')
+def verify_subarray_array_layout(
+    event_tracer: TangoEventTracer,
+    tmc: TMCFacade,
+):
+    """Verifies the arrayLayout attribute of TMC Subarray Node
+    after command AssignResources.
+    """
+
+    assert_that(event_tracer).described_as(
+        f"TMC Subarray Node device ({tmc.subarray_node})"
+        "arrayLayout attribute holds downloaded layout data."
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        tmc.subarray_node,
+        "arraylayouturi",
+        Anything,
+    )
+
+    source_uris = json.loads(tmc.central_node.defaultarraylayouturl)[
+        "source_uris"
+    ]
+
+    layout_path = json.loads(tmc.central_node.defaultarraylayouturl)[
+        "array_layout_path"
+    ]
+
+    # Verify array layout links
+    assert pytest.source_uris == source_uris
+    assert pytest.array_layout_path == layout_path
 
 
 @when("I invoke the Configure command on the SubarrayNode")
