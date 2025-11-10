@@ -292,6 +292,7 @@ def tmc_able_to_memorize_the_array_layout(
         "ON",
         timeout=500,
     )
+    tmc.move_to_on(wait_termination=True)
     assert (
         pytest.source_uris
         == json.loads(tmc.central_node.defaultarraylayouturl)["source_uris"]
