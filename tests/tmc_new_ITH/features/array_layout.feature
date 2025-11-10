@@ -4,3 +4,4 @@ Scenario: Verify array layout functionality in TMC mid
     And AssignResources is invoked on the SubarrayNode with an arrayLayoutUri so that the SN.arrayLayoutUri attribute is updated
     When I invoke the Configure command on the SubarrayNode
     Then the DLN targetData attribute is updated using the array layout from Telmodel
+    And CSP Subarray Leaf Node starts generating delay values with proper epoch

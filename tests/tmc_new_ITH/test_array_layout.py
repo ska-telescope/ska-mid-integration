@@ -14,6 +14,12 @@ from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_tango_testing.integration import TangoEventTracer, log_events
 
 from tests.conftest import LOGGER
+from tests.resources.test_harness.helpers import (
+    calculate_epoch_difference,
+    generate_ska_epoch_tai_value,
+    wait_till_delay_values_are_populated,
+)
+from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.tmc_csp_new_ITH.conftest import (  # SubarrayTestContextData,
     ASSERTIONS_TIMEOUT,
     SubarrayTestContextData,
@@ -171,3 +177,24 @@ def then_dln_target_data_updated():
     # 3. Validate dish/station identity
     assert array_layout.get("station_label") == "SKA001"
     assert array_layout.get("station_id") == 65
+
+
+@then(
+    "CSP Subarray Leaf Node starts generating delay values with proper epoch"
+)
+def check_if_delay_values_are_generating(
+    subarray_node: SubarrayNodeWrapper,
+) -> None:
+    """Check if delay values are generating."""
+    ska_epoch_tai = generate_ska_epoch_tai_value()
+    LOGGER.info(f"ska_epoch_tai : {ska_epoch_tai}")
+    delay_json, delay_generated_time = wait_till_delay_values_are_populated(
+        subarray_node.csp_subarray_leaf_node
+    )
+    LOGGER.info(f"delay_json: {delay_json}")
+    LOGGER.info(f"delay_generated_time: {delay_generated_time}")
+    epoch_difference = calculate_epoch_difference(
+        delay_generated_time, ska_epoch_tai, delay_json
+    )
+    LOGGER.info(f"epoch_difference: {epoch_difference}")
+    assert epoch_difference < 30
