@@ -11,12 +11,17 @@ from ska_control_model import ObsState, ResultCode
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
 from ska_integration_test_harness.facades.sdp_facade import SDPFacade
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
+from ska_integration_test_harness.inputs.test_harness_inputs import (
+    TestHarnessInputs,
+)
 from ska_tango_testing.integration import TangoEventTracer, log_events
 
 from tests.conftest import LOGGER
+from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.helpers import (
     calculate_epoch_difference,
     generate_ska_epoch_tai_value,
+    wait_and_validate_device_attribute_value,
     wait_till_delay_values_are_populated,
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
@@ -66,7 +71,7 @@ def _setup_event_subscriptions(
     )
 
 
-@pytest.mark.batch1
+@pytest.mark.batch12
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/array_layout.feature",
@@ -168,15 +173,25 @@ def then_dln_target_data_updated():
 
     array_layout = target_data["array_layout"]
 
-    # 2. Validate schema interface version
     assert (
         array_layout.get("interface")
         == "https://schema.skao.int/ska-telmodel-layout-receptor/1.1"
     ), "Unexpected array_layout interface version"
 
-    # 3. Validate dish/station identity
     assert array_layout.get("station_label") == "SKA001"
     assert array_layout.get("station_id") == 65
+    # 4. Verify geocentric coordinates exist and are numeric
+    geoc = array_layout["location"]["geocentric"]
+    assert geoc["coordinate_frame"] == "ITRF"
+    assert isinstance(geoc["x"], (float, int))
+    assert isinstance(geoc["y"], (float, int))
+    assert isinstance(geoc["z"], (float, int))
+
+    # 5. Verify geodetic coordinates are valid Earth coordinates
+    geod = array_layout["location"]["geodetic"]
+    assert geod["coordinate_frame"] == "WGS84"
+    assert -90 <= geod["lat"] <= 90
+    assert -180 <= geod["lon"] <= 180
 
 
 @then(
@@ -198,3 +213,53 @@ def check_if_delay_values_are_generating(
     )
     LOGGER.info(f"epoch_difference: {epoch_difference}")
     assert epoch_difference < 30
+
+
+@then("Program Track Table is populated correctly")
+def dish_that_is_tracking(
+    central_node_mid: CentralNodeWrapperMid,
+):
+    """A configured subarray"""
+    if pytest.SOURCE_VISIBILITY:
+        programTrackTable = central_node_mid.get_track_table_for_dish_id(
+            "SKA001"
+        )
+        LOGGER.info("Value for programTrackTable is: %s", programTrackTable)
+        assert len(programTrackTable) == 150
+    else:
+        LOGGER.info("No source is visible within Elevation limits right now")
+
+
+@then("TMC is able to memorize the array layout link on restart")
+def tmc_able_to_memorize_the_array_layout(
+    tmc, default_commands_inputs: TestHarnessInputs
+):
+    """
+    Verifies that TMC is able to memorize the array layout
+    link on restart.
+    """
+
+    tmc.force_change_of_obs_state(
+        ObsState.EMPTY, default_commands_inputs, wait_termination=True
+    )
+
+    # Restart TMC central node device server
+    cn_device_server = tango.DeviceProxy(
+        f"dserver/{tmc.central_node.info().server_id}"
+    )
+    cn_device_server.restartserver()
+    wait_and_validate_device_attribute_value(
+        tmc.central_node,
+        "state",
+        "ON",
+    )
+    assert (
+        pytest.source_uris
+        == json.loads(tmc.central_node.defaultarraylayouturl)["source_uris"]
+    )
+    assert (
+        pytest.array_layout_path
+        == json.loads(tmc.central_node.defaultarraylayouturl)[
+            "array_layout_path"
+        ]
+    )
