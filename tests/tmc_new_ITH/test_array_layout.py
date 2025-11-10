@@ -19,25 +19,18 @@ from ska_tango_testing.integration import TangoEventTracer, log_events
 from ska_tango_testing.mock.placeholders import Anything
 
 from tests.conftest import LOGGER
-from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.helpers import (
     calculate_epoch_difference,
     generate_ska_epoch_tai_value,
     wait_and_validate_device_attribute_value,
     wait_till_delay_values_are_populated,
 )
-from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
 from tests.tmc_csp_new_ITH.conftest import (  # SubarrayTestContextData,
     ASSERTIONS_TIMEOUT,
     TIMEOUT,
     SubarrayTestContextData,
 )
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
-
-# from tango import DevState
-
-
-# from ska_telmodel.data import TMData
 
 
 def _setup_event_subscriptions(
@@ -246,13 +239,13 @@ def then_dln_target_data_updated():
     "CSP Subarray Leaf Node starts generating delay values with proper epoch"
 )
 def check_if_delay_values_are_generating(
-    subarray_node: SubarrayNodeWrapper,
+    tmc: TMCFacade,
 ) -> None:
     """Check if delay values are generating."""
     ska_epoch_tai = generate_ska_epoch_tai_value()
     LOGGER.info(f"ska_epoch_tai : {ska_epoch_tai}")
     delay_json, delay_generated_time = wait_till_delay_values_are_populated(
-        subarray_node.csp_subarray_leaf_node
+        tmc.csp_subarray_leaf_node
     )
     LOGGER.info(f"delay_json: {delay_json}")
     LOGGER.info(f"delay_generated_time: {delay_generated_time}")
@@ -265,11 +258,11 @@ def check_if_delay_values_are_generating(
 
 @then("Program Track Table is populated correctly")
 def dish_that_is_tracking(
-    central_node_mid: CentralNodeWrapperMid,
+    tmc: TMCFacade,
 ):
     """A configured subarray"""
     if pytest.SOURCE_VISIBILITY:
-        programTrackTable = central_node_mid.get_track_table_for_dish_id(
+        programTrackTable = tmc.central_node.get_track_table_for_dish_id(
             "SKA001"
         )
         LOGGER.info("Value for programTrackTable is: %s", programTrackTable)
@@ -298,7 +291,7 @@ def tmc_able_to_memorize_the_array_layout(
         f"dserver/{tmc.central_node.info().server_id}"
     )
     cn_device_server.RestartServer()
-    time.sleep(3)
+    time.sleep(6)
     assert wait_and_validate_device_attribute_value(
         tmc.central_node,
         "IsDishVccConfigSet",
