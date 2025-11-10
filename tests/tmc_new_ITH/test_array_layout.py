@@ -2,6 +2,7 @@
 """
 
 import json
+import time
 
 import pytest
 import tango
@@ -286,6 +287,12 @@ def tmc_able_to_memorize_the_array_layout(
         f"dserver/{tmc.central_node.info().server_id}"
     )
     cn_device_server.init()
+    time.sleep(3)
+    assert wait_and_validate_device_attribute_value(
+        tmc.central_node,
+        "IsDishVccConfigSet",
+        "True",
+    )
     wait_and_validate_device_attribute_value(
         tmc.central_node,
         "state",
