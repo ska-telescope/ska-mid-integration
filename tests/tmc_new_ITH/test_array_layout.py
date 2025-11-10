@@ -19,6 +19,7 @@ from ska_tango_testing.integration import TangoEventTracer, log_events
 from ska_tango_testing.mock.placeholders import Anything
 
 from tests.conftest import LOGGER
+from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.helpers import (
     calculate_epoch_difference,
     generate_ska_epoch_tai_value,
@@ -259,11 +260,11 @@ def check_if_delay_values_are_generating(
 
 @then("Program Track Table is populated correctly")
 def dish_that_is_tracking(
-    tmc: TMCFacade,
+    central_node_mid: CentralNodeWrapperMid,
 ):
     """A configured subarray"""
     if pytest.SOURCE_VISIBILITY:
-        programTrackTable = tmc.central_node.get_track_table_for_dish_id(
+        programTrackTable = central_node_mid.get_track_table_for_dish_id(
             "SKA001"
         )
         LOGGER.info("Value for programTrackTable is: %s", programTrackTable)
