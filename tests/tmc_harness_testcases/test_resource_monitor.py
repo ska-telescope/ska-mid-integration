@@ -22,9 +22,7 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_centralnode_commands,
 )
 from tests.resources.test_harness.utils.common_utils import JsonFactory
-from tests.resources.test_support.constant import TIMEOUT
-
-RESOURCE_MONITOR_FQDN = "mid-tmc/resource-monitor/01"
+from tests.resources.test_support.constant import TIMEOUT, tmc_resource_monitor
 
 
 @pytest.mark.batch1
@@ -44,7 +42,7 @@ def given_tmc_on(
     """
     Ensure that the TMC and ResourceMonitor devices are available and ON.
     """
-    resource_monitor = DeviceProxy(RESOURCE_MONITOR_FQDN)
+    resource_monitor = DeviceProxy(tmc_resource_monitor)
 
     event_tracer.subscribe_event(
         central_node_mid.central_node, "telescopeState"
@@ -147,7 +145,7 @@ def when_release_all_resources(
     ).within_timeout(TIMEOUT).has_change_event_occurred(
         central_node_mid.subarray_node, "obsState", ObsState.EMPTY
     )
-    time.sleep(5)
+    time.sleep(2)
 
 
 @then(
