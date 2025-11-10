@@ -270,7 +270,7 @@ def dish_that_is_tracking(
 
 @then("TMC is able to memorize the array layout link on restart")
 def tmc_able_to_memorize_the_array_layout(
-    tmc, default_commands_inputs: TestHarnessInputs
+    tmc: TMCFacade, default_commands_inputs: TestHarnessInputs
 ):
     """
     Verifies that TMC is able to memorize the array layout
