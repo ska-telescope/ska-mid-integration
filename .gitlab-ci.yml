@@ -112,7 +112,8 @@ k8s-test-mid-restart:
     DISH_LEAF_NODE_COMMAND_TIMEOUT: 40
     COUNT: 1
     KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-mid-restart'
-    ADDMARK: "and SKA_tmc_mid_restart"
+  script:
+    - make k8s-test MARK="KA_tmc_mid_restart"
   environment:
     name: test/$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-test-tmc-mid-restart
