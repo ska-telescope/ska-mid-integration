@@ -8,86 +8,105 @@ Overview
 --------
 
 This page provides instructions for applying an **Array Layout** configuration through the TMC for **SKA-Mid**.
- 
+
 TMC allows operators to specify which Array Layout should be used for observations by providing its reference in the **AssignResources** command.
 
-When the Array Layout is applied successfully, TMC distributes it automatically to all relevant subsystems during configuration.  
-No manual updates are required on Dish or CSP components.
+When the Array Layout is applied successfully, TMC automatically distributes it to all relevant subsystems.
 
 How to Apply Array Layout
 -------------------------
 
-The Array Layout is specified during the **AssignResources** step using the ``telmodel`` section in the JSON payload.
+There are two ways to apply an Array Layout in TMC:
 
-1. **Prepare the AssignResources JSON**
+1. **Set a Telescope-level Default Layout**  
 
-   Add the ``telmodel`` block to your AssignResources payload.  
-   It defines the source and path of the Array Layout data in the TelModel repository.
+   Define a default layout once at telescope level.  
+   This layout applies automatically to all subarrays unless a specific layout is later provided.  
+   You can set this using the **DefaultArrayLayoutURL** attribute.
 
-   **Example:**
+2. **Set a Subarray-specific Layout**  
 
-   .. code-block:: json
+   Provide a custom layout for a particular subarray using the ``telmodel`` section in the **AssignResources** JSON payload.  
+   This overrides the default layout only for that subarray.  
+   You can confirm that the **ArrayLayoutURL** attribute reflects the correct layout reference.
 
-      {
-        "interface": "https://schema.skao.int/ska-mid-tmc-assignresources/4.3",
-        "transaction_id": "txn-00000-assign-mid-4.3",
-        "subarray_id": 1,
-        "telmodel": {
-          "source_uris": [
-            "gitlab://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata"
-          ],
-          "array_layout_path": "instrument/ska1_mid/layout/mid-layout.json"
-        },
-        "dish": {
-          "receptor_ids": ["SKA001", "SKA036", "SKA100"]
-        },
-        "csp": {
-          "subarray_id": 1
-        },
-        "sdp": {
-          "resources": {
-            "receptors": ["SKA001", "SKA002"]
-          }
-        }
-      }
+.. note::
 
-   .. note::
+   The ``telmodel`` section is **optional**.  
+   If it is not included in the AssignResources JSON, the system will use the **default Array Layout** already configured.
 
-      Only the ``telmodel`` section is new in this payload.
-      Other fields follow the standard AssignResources format.
-
-2. **Send the AssignResources command**
-
-   - Send the above JSON to the **Central Node** using the standard AssignResources interface.  
-   - TMC automatically retrieves and validates the specified Array Layout.
-
-   If the ``telmodel`` section is not provided, the **default Array Layout** configured in the Central Node will be used.
-
-3. **Verify the layout reference**
-
-   - After AssignResources completes successfully, Check that the **ArrayLayoutURL** attribute on the Central Node shows the expected layout reference.
-   - The Subarray can now be configured for observations using this layout.
-
-Central Node Attributes
+AssignResources Example
 -----------------------
 
-The Central Node maintains two key attributes for Array Layout management:
+The Array Layout can be provided as part of the **AssignResources** command using the ``telmodel`` section.
 
-- **DefaultArrayLayoutURL**  
-  The baseline layout used when no custom layout is specified in the AssignResources payload.
-  This default layout remains active system-wide until a new layout is explicitly provided, at which point the ArrayLayoutURL attribute is updated to reflect the overridden configuration.
+This feature is supported from schema version  
+``"https://schema.skao.int/ska-mid-tmc-assignresources/4.3"`` onwards.
 
-- **ArrayLayoutURL**  
-  The currently active layout that was last applied.  
-  This value updates automatically when a new layout is assigned.
+Only this section is new — the rest of the AssignResources JSON remains unchanged.
 
-Outcome
--------
+**Example:**
 
-Once applied, the selected Array Layout is used across all TMC-managed components:
+.. code-block:: none
 
-- **Dish:**  
-  The Dish nodes parses the layout data and uses it to generate the Program Track Table.
+   {
+     "interface": "https://schema.skao.int/ska-mid-tmc-assignresources/4.3",
+     "transaction_id": "txn-00000-assign-mid-4.3",
+     "subarray_id": 1,
+     "telmodel": {
+       "source_uris": [
+         "gitlab://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata"
+       ],
+       "array_layout_path": "instrument/ska1_mid/layout/mid-layout.json"
+     },
+     ...
+   }
 
-- **CSP:**  
-  CSP Subarray Leaf Node parses the layout data and uses it to perform delay calculations.
+Explanation of the ``telmodel`` Section
+---------------------------------------
+
+The ``telmodel`` section provides the reference to the Array Layout data stored in the TelModel repository.
+
+- **source_uris**  
+  Specifies the source location of the TelModel data repository.  
+  This can be a GitLab, HTTP, or local URI pointing to the repository containing the telescope configuration data.  
+  In the example above, it points to the official SKA TelModel data repository.
+
+  Example:  
+  ``"gitlab://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata"``  
+  → Fetches layout data from the **main** branch of the ``ska-telmodel-data`` repository, under the ``tmdata`` directory.
+
+- **array_layout_path**  
+  Specifies the path within the TelModel data where the layout JSON file is located.  
+  This file defines the telescope’s dish or receptor arrangement for SKA-Mid.
+
+  Example:  
+  ``"instrument/ska1_mid/layout/mid-layout.json"``  
+  → Refers to the layout file defining the **SKA-Mid** array configuration.
+
+Behavior Scenarios
+------------------
+
+This section explains how TMC behaves under different layout assignment conditions.
+
+1. **Default layout only**  
+
+   - If a default layout is set (via `DefaultArrayLayoutURL`), it applies automatically to all subarrays.  
+   - No ``telmodel`` section is required in the AssignResources payload.
+
+2. **Custom layout for a subarray**  
+
+   - If a ``telmodel`` section is provided, that subarray will use the specified layout.  
+   - Other subarrays continue using the default layout.
+
+3. **Multiple AssignResources calls**  
+
+   - When AssignResources is issued multiple times:
+
+     * If the latest JSON includes a ``telmodel`` section, that layout replaces the previous one.  
+     * If the latest JSON does **not** include a ``telmodel`` section, the last successfully applied layout remains active.
+
+4. **Optional use of telmodel section**  
+
+   - The ``telmodel`` block is **not mandatory**.  
+   - If omitted, the default or previously applied layout continues to be used.
