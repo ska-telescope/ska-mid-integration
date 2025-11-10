@@ -4,6 +4,7 @@
 import json
 
 import pytest
+import tango
 from assertpy import assert_that
 from pytest_bdd import given, scenario, then, when
 from ska_control_model import ObsState, ResultCode
@@ -18,7 +19,6 @@ from tests.tmc_csp_new_ITH.conftest import (  # SubarrayTestContextData,
     SubarrayTestContextData,
 )
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
-from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDevicesFacade
 
 
 def _setup_event_subscriptions(
@@ -151,22 +151,23 @@ def verify_version_sdp_mock_interface(
     "the DLN targetData attribute is updated using the array layout "
     "from Telmodel"
 )
-def then_dln_target_data_updated(
-    dish_pointng_devices: DishPointingDevicesFacade,
-):
-    """Verify that DLN targetData attribute is updated correctly."""
-    for dish_pointing_device in dish_pointng_devices.dish_pointing_device_list:
-        target_data = json.loads(dish_pointing_device.targetData)
-        LOGGER.info(
-            f"DishPointingDevice target {target_data} type {type(target_data)}"
-        )
+def then_dln_target_data_updated():
 
-        assert "array_layout" in target_data, "array_layout missing"
-        array_layout = target_data["array_layout"]
+    """Verify that the DLN targetData attribute is updated."""
+    # This is verified in the DPDA test, so no need to re-verify here.
+    dpd = tango.DeviceProxy("mid-tmc/dish-pointing/ska001")
+    target_data = json.loads(dpd.targetData)
+    LOGGER.info(f"DPD targetData attribute: {target_data}")
+    assert "array_layout" in target_data
 
-        assert (
-            array_layout.get("interface")
-            == "https://schema.skao.int/ska-telmodel-layout-receptor/1.1"
-        )
+    array_layout = target_data["array_layout"]
 
-        assert array_layout.get("station_label") == "SKA001"
+    # 2. Validate schema interface version
+    assert (
+        array_layout.get("interface")
+        == "https://schema.skao.int/ska-telmodel-layout-receptor/1.1"
+    ), "Unexpected array_layout interface version"
+
+    # 3. Validate dish/station identity
+    assert array_layout.get("station_label") == "SKA001"
+    assert array_layout.get("station_id") == 65
