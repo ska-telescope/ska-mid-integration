@@ -81,7 +81,7 @@ def _setup_event_subscriptions(
     )
 
 
-@pytest.mark.batch12
+@pytest.mark.restart_cn
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/array_layout.feature",
@@ -208,7 +208,6 @@ def verify_version_sdp_mock_interface(
 def then_dln_target_data_updated():
 
     """Verify that the DLN targetData attribute is updated."""
-    # This is verified in the DPDA test, so no need to re-verify here.
     dpd = tango.DeviceProxy("mid-tmc/dish-pointing/ska001")
     target_data = json.loads(dpd.targetData)
     LOGGER.info(f"DPD targetData attribute: {target_data}")
@@ -299,11 +298,6 @@ def tmc_able_to_memorize_the_array_layout(
         True,
     )
 
-    # assert_that(event_tracer).described_as(
-    #     "TMC central node device should move to ON state"
-    # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-    #     tmc.central_node, "telescopeState", DevState.ON
-    # )
     assert (
         pytest.source_uris
         == json.loads(tmc.central_node.defaultarraylayouturl)["source_uris"]
