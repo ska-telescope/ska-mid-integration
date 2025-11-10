@@ -290,6 +290,7 @@ def tmc_able_to_memorize_the_array_layout(
         tmc.central_node,
         "state",
         "ON",
+        timeout=500,
     )
     assert (
         pytest.source_uris
