@@ -157,7 +157,9 @@ def then_dln_target_data_updated(
     """Verify that DLN targetData attribute is updated correctly."""
     for dish_pointing_device in dish_pointng_devices.dish_pointing_device_list:
         target_data = json.loads(dish_pointing_device.targetData)
-        LOGGER.info(f"DishPointingDevice target data {target_data} ")
+        LOGGER.info(
+            f"DishPointingDevice target {target_data} type {type(target_data)}"
+        )
 
         assert "array_layout" in target_data, "array_layout missing"
         array_layout = target_data["array_layout"]
