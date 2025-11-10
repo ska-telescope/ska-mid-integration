@@ -100,6 +100,10 @@ def given_assign_resources_executed_successfully(
     json_input = MyFileJSONInput(
         "centralnode", "assign_resources_array_layout"
     )
+    json_input_str = json.loads(json_input.as_str())
+    telmodel = json_input_str["telmodel"]
+    pytest.source_uris = telmodel["source_uris"]
+    pytest.array_layout_path = telmodel["array_layout_path"]
     _, pytest.unique_id = tmc.assign_resources(json_input)
 
     assert_that(event_tracer).described_as(
@@ -137,7 +141,6 @@ def verify_subarray_array_layout(
         "arraylayouturi",
         Anything,
     )
-
     source_uris = json.loads(tmc.central_node.defaultarraylayouturl)[
         "source_uris"
     ]
