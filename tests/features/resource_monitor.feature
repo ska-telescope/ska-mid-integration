@@ -3,7 +3,7 @@ Feature: Resource Monitor updates
   SubarrayNode assigns and releases resources
 
   @XTP-94112 @XTP-28347 @
-  Scenario: Check ResourceMonitor updates after resource assignment
+  Scenario: Check ResourceMonitor updates after resource assignment and release
     Given the TMC and ResourceMonitor devices are ON
     And the subarray has assigned resources and is in IDLE obsState
     Then the ResourceMonitor dishesData attribute should reflect the assigned resources

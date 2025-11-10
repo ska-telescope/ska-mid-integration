@@ -30,7 +30,7 @@ RESOURCE_MONITOR_FQDN = "mid-tmc/resource-monitor/01"
 @pytest.mark.SKA_mid
 @scenario(
     "../features/resource_monitor.feature",
-    "Check ResourceMonitor updates after resource assignment",
+    "Check ResourceMonitor updates after resource assignment and release",
 )
 def test_resource_monitor_updates():
     """BDD scenario for verifying Resource Monitor updates."""
