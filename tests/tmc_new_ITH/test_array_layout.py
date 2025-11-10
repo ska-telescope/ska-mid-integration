@@ -23,6 +23,7 @@ from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.helpers import (
     calculate_epoch_difference,
     generate_ska_epoch_tai_value,
+    wait_and_validate_device_attribute_value,
     wait_till_delay_values_are_populated,
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
@@ -298,10 +299,10 @@ def tmc_able_to_memorize_the_array_layout(
     )
     cn_device_server.RestartServer()
     time.sleep(3)
-    assert_that(event_tracer).described_as(
-        "TMC central node device should have IsDishVccConfigSet attribute set"
-    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        tmc.central_node, "IsDishVccConfigSet", True
+    assert wait_and_validate_device_attribute_value(
+        tmc.central_node,
+        "IsDishVccConfigSet",
+        True,
     )
 
     # assert_that(event_tracer).described_as(
