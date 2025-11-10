@@ -86,10 +86,7 @@ def given_subarray_idle(
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
-
     central_node_mid.perform_action("AssignResources", assign_input_json)
-    time.sleep(2)
-
     assert_that(event_tracer).described_as(
         "FAILED ASSUMPTION: Subarray must reach IDLE obsState after "
         "AssignResources"
@@ -123,8 +120,6 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
     }
     results = json.dumps(expected_dishes_data)
     time.sleep(2)
-    attr_val = resource_monitor.read_attribute("dishesData").value
-    print("Value from RM device %s", attr_val)
     assert_that(event_tracer).described_as(
         "ResourceMonitor dishesData attribute value should update"
     ).within_timeout(TIMEOUT).has_change_event_occurred(
@@ -175,8 +170,6 @@ def then_verify_resource_monitor_empty(event_tracer: TangoEventTracer):
     results = json.dumps(expected_dishes_data)
 
     time.sleep(5)
-    attr_val = resource_monitor.read_attribute("dishesData").value
-    print(f"Value from RM device after release: {attr_val}")
 
     assert_that(event_tracer).described_as(
         "ResourceMonitor dishesData attribute should be empty after "
