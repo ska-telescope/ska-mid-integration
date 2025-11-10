@@ -17,13 +17,13 @@ from ska_integration_test_harness.inputs.test_harness_inputs import (
 )
 from ska_tango_testing.integration import TangoEventTracer, log_events
 from ska_tango_testing.mock.placeholders import Anything
+from tango import DevState
 
 from tests.conftest import LOGGER
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
 from tests.resources.test_harness.helpers import (
     calculate_epoch_difference,
     generate_ska_epoch_tai_value,
-    wait_and_validate_device_attribute_value,
     wait_till_delay_values_are_populated,
 )
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
@@ -71,7 +71,11 @@ def _setup_event_subscriptions(
                 "commandCallInfo",
                 "receiveAddresses",
             ],
-            tmc.central_node: ["longRunningCommandResult"],
+            tmc.central_node: [
+                "longRunningCommandResult",
+                "telescopeState",
+                "IsDishVccConfigSet",
+            ],
         },
         event_enum_mapping={"obsState": ObsState},
     )
@@ -271,7 +275,9 @@ def dish_that_is_tracking(
 
 @then("TMC is able to memorize the array layout link on restart")
 def tmc_able_to_memorize_the_array_layout(
-    tmc: TMCFacade, default_commands_inputs: TestHarnessInputs
+    tmc: TMCFacade,
+    default_commands_inputs: TestHarnessInputs,
+    event_tracer: TangoEventTracer,
 ):
     """
     Verifies that TMC is able to memorize the array layout
@@ -288,16 +294,16 @@ def tmc_able_to_memorize_the_array_layout(
     )
     cn_device_server.RestartServer()
     time.sleep(3)
-    assert wait_and_validate_device_attribute_value(
-        tmc.central_node,
-        "IsDishVccConfigSet",
-        "True",
+    assert_that(event_tracer).described_as(
+        "TMC central node device should have IsDishVccConfigSet attribute set"
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        tmc.central_node, "IsDishVccConfigSet", "True"
     )
-    wait_and_validate_device_attribute_value(
-        tmc.central_node,
-        "state",
-        "ON",
-        timeout=300,
+
+    assert_that(event_tracer).described_as(
+        "TMC central node device should move to ON state"
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        tmc.central_node, "telescopeState", DevState.ON
     )
     assert (
         pytest.source_uris
