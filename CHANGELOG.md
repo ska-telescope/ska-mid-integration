@@ -5,8 +5,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
-[Unreleased]
+[1.9.0-rc.2]
 ************
+Fixed
+-----
+* Verified the Band 5 observation in mid-psi environment with real subsystems dish, CSP, CBF
+
 Added
 -----
 * Added new RTD page to document Array Layout support.
