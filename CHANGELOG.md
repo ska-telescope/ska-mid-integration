@@ -13,7 +13,6 @@ Fixed
 
 Added
 -----
-* TMC Mid now supports configuring attenuation, saturation threshold and noise diode via Mid TMC Configure command.
 * Added new RTD page to document Array Layout support.
 
 [1.9.0-rc.1]
