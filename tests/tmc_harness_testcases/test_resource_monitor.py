@@ -34,7 +34,7 @@ def test_resource_monitor_updates():
     """BDD scenario for verifying Resource Monitor updates."""
 
 
-@given("the TMC and ResourceMonitor devices are ON")
+@given("the telescope is in ON state")
 def given_tmc_on(
     event_tracer: TangoEventTracer, central_node_mid: CentralNodeWrapperMid
 ):
@@ -73,8 +73,8 @@ def given_tmc_on(
 
 
 @given(
-    "the resources are assigned to the subarray {subarray_id} and is in "
-    "IDLE obsState"
+    "the resources are assigned to the subarray <subarray_id> and is in IDLE "
+    "obsState"
 )
 def given_subarray_idle(
     command_input_factory: JsonFactory,
