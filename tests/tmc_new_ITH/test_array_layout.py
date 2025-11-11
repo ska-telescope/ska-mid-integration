@@ -1,4 +1,4 @@
-"""Verifies scan functionality
+"""Verifies arraylayout functionality
 """
 
 import json
@@ -160,7 +160,7 @@ def verify_subarray_array_layout(
 
 
 @when("I invoke the Configure command on the SubarrayNode")
-def verify_version_sdp_mock_interface(
+def verify_configure_command(
     tmc: TMCFacade,
     context_fixt: SubarrayTestContextData,
     event_tracer: TangoEventTracer,
