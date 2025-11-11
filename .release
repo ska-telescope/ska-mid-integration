@@ -1,20 +1,12 @@
-release=1.9.0-rc.1
-tag=1.9.0-rc.1
+release=1.9.0-rc.2
+tag=1.9.0-rc.2
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.8.0-rc.3 to v1.9.0-rc.1**
-        * TMC Mid now supports Global Pointing Model (GPM) functionality.
-        * Introduced the SetGlobalPointingModel command to apply GPM to specified bands for specified dishes in the input.
-        * Added configurable properties — version, interface, data_sources_prefix, and file_path_prefix — for GPM setup.
-        * Introduced the GlobalPointingModelStatus attribute to monitor the GPM status.
-        * Added the gpmVersion attribute to the DishLeafNode to indicate the GPM version applied to each dish's bands.
+**1. Updated ska-tmc-mid from v1.9.0-rc.1 to v1.9.0-rc.2**
+        * Verified the Band 5 observation in mid-psi environment with real subsystems dish, CSP, CBF
     
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.8.0-rc.3 to v1.9.0-rc.1**
+**1. Updated ska-tmc-mid from v1.9.0-rc.1 to v1.9.0-rc.2**
 
-        * TMC Mid now supports Global Pointing Model (GPM) functionality.
-        * Introduced the SetGlobalPointingModel command to apply GPM to specified bands for specified dishes in the input.
-        * Added configurable properties — version, interface, data_sources_prefix, and file_path_prefix — for GPM setup.
-        * Introduced the GlobalPointingModelStatus attribute to monitor the GPM status.
-        * Added the gpmVersion attribute to the DishLeafNode to indicate the GPM version applied to each dish's bands.
+        * Verified the Band 5 observation in mid-psi environment with real subsystems dish, CSP, CBF
