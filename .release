@@ -4,7 +4,7 @@ tag_description=
 **Charts:**
 **1. Updated ska-tmc-mid from v1.9.0-rc.1 to v1.9.0-rc.2**
         * Verified the Band 5 observation in mid-psi environment with real subsystems dish, CSP, CBF
-    
+
 release_notes=
 **Charts:**
 **1. Updated ska-tmc-mid from v1.9.0-rc.1 to v1.9.0-rc.2**
