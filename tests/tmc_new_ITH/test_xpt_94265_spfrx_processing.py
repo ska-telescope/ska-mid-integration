@@ -109,7 +109,7 @@ def subarray_in_ready_state(
 
 @when(
     parsers.parse(
-        "I execute SPFRx configure command with {configuration_data}"
+        "I execute configure command with SPFRx {configuration_data}"
     )
 )
 def send_partial_configure_command(
