@@ -5,7 +5,7 @@ SPFRx Processing Parameters in TMC Configure (v5.0+)
 ============================================================
 
 *Confluence page:*
-`SPFRx Processing Parameters in TMC Configure <https://confluence.skatelescope.org/display/SE/SPFRx+Processing+Parameters+in+TMC+Configure>`_
+`SPFRx Processing Parameters in TMC Configure command <https://confluence.skatelescope.org/display/SE/TMC+Configure+Change+Proposal+for+SPFRx>`_
 
 Overview
 --------
