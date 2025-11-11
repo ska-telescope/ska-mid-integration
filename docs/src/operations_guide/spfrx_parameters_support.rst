@@ -4,6 +4,9 @@
 SPFRx Processing Parameters in TMC Configure (v5.0+)
 ============================================================
 
+*Confluence page:*
+`SPFRx Processing Parameters in TMC Configure <https://confluence.skatelescope.org/display/SE/SPFRx+Processing+Parameters+in+TMC+Configure>`_
+
 Overview
 --------
 
@@ -17,7 +20,7 @@ Key Fields
 - ``sync_pps``: ``true`` (required)
 - ``attenuation_pol_x/y``: total attenuation (optional)
 - ``attenuation_1/2_pol_x/y``: per-attenuator (all 4 required if used)
-- ``saturation_threshold``: % SNR (0.0-1.0)
+- ``saturation_threshold``: Optional. Saturation threshold as % of SNR (0.0-1.0).
 - ``noise_diode``: either ``psuedo_random`` **or** ``periodic`` (not both)
 
 .. note::
@@ -52,11 +55,6 @@ Examples
        "sync_pps": true,
        "attenuation_1_pol_x": 20,
        "attenuation_2_pol_y": 10
-     },
-     {
-       "dishes": ["SKA036"],
-       "sync_pps": true,
-       "saturation_threshold": 0.7
      }
    ]
 
@@ -65,7 +63,7 @@ Behavior
 
 - Omitted fields → revert to **device property defaults**
 - ``noise_diode`` omitted → turned **OFF**
-- ``sub_band``: optional (used only for band 5b)
+- ``sub_band``: optional (for band 5b)
 
 TMC Mapping (v5.0+)
 -------------------
