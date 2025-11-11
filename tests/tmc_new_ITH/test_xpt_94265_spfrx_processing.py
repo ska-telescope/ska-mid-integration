@@ -1,4 +1,4 @@
-"""Test case to verify fixed trajectory works as expected
+"""Test case to verify configure command with SPFRx parameters
 """
 import json
 
@@ -75,9 +75,7 @@ def update_configuration_json(config_json: dict, config_data: str):
     "TMC Behaviour when SPFRx configuration is provided",
 )
 def test_spfrx_configuration():
-    """Test TMC handle partial configuration when only partial configuration
-    provided
-    """
+    """Test TMC  configuration when SPFRx  configuration provided"""
 
 
 @given("a TMC")
@@ -117,7 +115,7 @@ def send_partial_configure_command(
     tmc: TMCFacade,
     configuration_data: str,
 ):
-    """Update partial configuration json as per configuration data
+    """Update configuration json as per configuration data
     and execute configure command
     """
     json_input = MyFileJSONInput("subarray", "Configure_band5_dc")
