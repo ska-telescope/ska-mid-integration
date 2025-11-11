@@ -97,7 +97,7 @@ def given_subarray_idle(
     time.sleep(5)
 
 
-@then(
+@when(
     "the ResourceMonitor dishesData attribute should reflect the assigned "
     "resources"
 )
@@ -118,7 +118,6 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
         }
     }
     results = json.dumps(expected_dishes_data)
-    time.sleep(2)
     assert_that(event_tracer).described_as(
         "ResourceMonitor dishesData attribute value should update"
     ).within_timeout(TIMEOUT).has_change_event_occurred(
@@ -126,7 +125,7 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
     )
 
 
-@when("all assigned resources are released")
+@then("all assigned resources are released")
 def when_release_all_resources(
     event_tracer: TangoEventTracer,
     central_node_mid: CentralNodeWrapperMid,
@@ -167,8 +166,6 @@ def then_verify_resource_monitor_empty(event_tracer: TangoEventTracer):
         }
     }
     results = json.dumps(expected_dishes_data)
-
-    time.sleep(5)
 
     assert_that(event_tracer).described_as(
         "ResourceMonitor dishesData attribute should be empty after "

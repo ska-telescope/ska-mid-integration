@@ -6,6 +6,6 @@ Feature: Resource Monitor updates
   Scenario: Check ResourceMonitor updates after resource assignment and release
     Given the TMC and ResourceMonitor devices are ON
     And the subarray has assigned resources and is in IDLE obsState
-    Then the ResourceMonitor dishesData attribute should reflect the assigned resources
-    When all assigned resources are released
-    Then the ResourceMonitor dishesData attribute should reflect the updated state after resource release
+    When the ResourceMonitor dishesData attribute should reflect the assigned resources
+    Then all assigned resources are released
+    And the ResourceMonitor dishesData attribute should reflect the updated state after resource release
