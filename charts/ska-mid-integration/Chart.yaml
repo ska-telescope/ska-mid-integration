@@ -24,7 +24,7 @@ dependencies:
     condition: ska-tmc-mid.enabled
   - name: ska-dish-lmc
     version: 8.4.7-dev.c7f5cdca3
-    repository: registry.gitlab.com/ska-telescope/mid-dish/ska-mid-dish-manager/ska-mid-dish-manager
+    repository: https://registry.gitlab.com/ska-telescope/mid-dish/ska-mid-dish-manager/ska-mid-dish-manager
     condition: ska-dish-lmc.enabled
   - name: ska-csp-lmc-mid
     version: 1.2.0-rc.1
