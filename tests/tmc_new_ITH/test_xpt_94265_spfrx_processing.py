@@ -71,7 +71,7 @@ def update_configuration_json(config_json: dict, config_data: str):
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
-    "../tmc_new_ITH/features/xtp_spfrx_processing.feature",
+    "../tmc_new_ITH/features/xtp_94265_spfrx_processing.feature",
     "TMC Behaviour when SPFRx configuration is provided",
 )
 def test_spfrx_configuration():
