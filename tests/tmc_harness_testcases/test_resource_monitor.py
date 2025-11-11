@@ -24,7 +24,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.constant import TIMEOUT, tmc_resource_monitor
 
 
-@pytest.mark.batch2
+@pytest.mark.batch2_test
 @pytest.mark.SKA_mid
 @scenario(
     "../features/resource_monitor.feature",
@@ -72,15 +72,20 @@ def given_tmc_on(
     event_tracer.clear_events()
 
 
-@given("the resources are assigned to the subarray and is in IDLE obsState")
+@given(
+    "the resources are assigned to the subarray {subarray_id} and is in "
+    "IDLE obsState"
+)
 def given_subarray_idle(
     command_input_factory: JsonFactory,
     event_tracer: TangoEventTracer,
     central_node_mid: CentralNodeWrapperMid,
+    subarray_id: str,
 ):
     """
     Assign resources and verify that the subarray reaches IDLE state.
     """
+    central_node_mid.set_subarray_id(subarray_id)
     assign_input_json = prepare_json_args_for_centralnode_commands(
         "assign_resources_mid", command_input_factory
     )
