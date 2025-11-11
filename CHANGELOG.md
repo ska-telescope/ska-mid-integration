@@ -5,8 +5,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
-[2.0.0-rc.1]
+[1.9.0-rc.2]
 ************
+Fixed
+-----
+* Verified the Band 5 observation in mid-psi environment with real subsystems dish, CSP, CBF
+
 Added
 -----
 * TMC Mid now supports configuring attenuation, saturation threshold and noise diode via Mid TMC Configure command.
