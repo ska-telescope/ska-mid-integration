@@ -8,7 +8,6 @@ SubarrayNode.
 """
 
 import json
-import time
 
 import pytest
 from assertpy import assert_that
@@ -25,7 +24,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.constant import TIMEOUT, tmc_resource_monitor
 
 
-@pytest.mark.batch1
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../features/resource_monitor.feature",
@@ -73,7 +72,7 @@ def given_tmc_on(
     event_tracer.clear_events()
 
 
-@given("the subarray has assigned resources and is in IDLE obsState")
+@given("the resources are assigned to the subarray and is in IDLE obsState")
 def given_subarray_idle(
     command_input_factory: JsonFactory,
     event_tracer: TangoEventTracer,
@@ -94,7 +93,6 @@ def given_subarray_idle(
     )
 
     pytest.assign_input_json = assign_input_json
-    time.sleep(5)
 
 
 @when(
@@ -125,7 +123,7 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
     )
 
 
-@then("all assigned resources are released")
+@when("all assigned resources are released")
 def when_release_all_resources(
     event_tracer: TangoEventTracer,
     central_node_mid: CentralNodeWrapperMid,
@@ -144,7 +142,6 @@ def when_release_all_resources(
     ).within_timeout(TIMEOUT).has_change_event_occurred(
         central_node_mid.subarray_node, "obsState", ObsState.EMPTY
     )
-    time.sleep(2)
 
 
 @then(
