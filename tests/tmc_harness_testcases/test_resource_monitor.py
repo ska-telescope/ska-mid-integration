@@ -95,7 +95,7 @@ def given_subarray_idle(
     pytest.assign_input_json = assign_input_json
 
 
-@when(
+@given(
     "the ResourceMonitor dishesData attribute should reflect the assigned "
     "resources"
 )
