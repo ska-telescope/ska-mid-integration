@@ -13,7 +13,7 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.constant import tmc_csp_master_leaf_node
 
 
-@pytest.mark.SKA_tmc_mid_device_restart1
+@pytest.mark.SKA_tmc_mid_device_restart
 @pytest.mark.SKA_mid
 @scenario(
     "../features/dish_vcc_initialization/"
@@ -49,10 +49,10 @@ def given_tmc_with_already_loaded_dish_vcc_config_version(tmc_mid):
 def restart_the_dish_leaf_nodes(tmc_mid):
     """Restart the dish leaf nodes"""
     # [0, 1, 2, 3] are index for dish leaf node list
-    tmc_mid.init_device("DISHLN_0")
-    tmc_mid.init_device("DISHLN_1")
-    tmc_mid.init_device("DISHLN_2")
-    tmc_mid.init_device("DISHLN_3")
+    tmc_mid.RestartServer("DISHLN_0")
+    tmc_mid.RestartServer("DISHLN_1")
+    tmc_mid.RestartServer("DISHLN_2")
+    tmc_mid.RestartServer("DISHLN_3")
 
 
 @when(
@@ -78,25 +78,21 @@ def check_dishln_is_on_and_kvalue_validation_accomplished(tmc_mid):
         tmc_mid.central_node.dish_leaf_node_list[0],
         "kValueValidationResult",
         str(int(ResultCode.OK)),
-        timeout=500,
     )
     assert wait_and_validate_device_attribute_value(
         tmc_mid.central_node.dish_leaf_node_list[1],
         "kValueValidationResult",
         str(int(ResultCode.OK)),
-        timeout=500,
     )
     assert wait_and_validate_device_attribute_value(
         tmc_mid.central_node.dish_leaf_node_list[2],
         "kValueValidationResult",
         str(int(ResultCode.OK)),
-        timeout=500,
     )
     assert wait_and_validate_device_attribute_value(
         tmc_mid.central_node.dish_leaf_node_list[3],
         "kValueValidationResult",
         str(int(ResultCode.OK)),
-        timeout=500,
     )
 
 
@@ -114,25 +110,21 @@ def check_kvalue_validation_result_event_received(tmc_mid, event_recorder):
         tmc_mid.central_node.dish_leaf_node_list[0],
         "kValueValidationResult",
         str(int(ResultCode.OK)),
-        timeout=500,
     )
     assert event_recorder.has_change_event_occurred(
         tmc_mid.central_node.dish_leaf_node_list[1],
         "kValueValidationResult",
         str(int(ResultCode.OK)),
-        timeout=500,
     )
     assert event_recorder.has_change_event_occurred(
         tmc_mid.central_node.dish_leaf_node_list[2],
         "kValueValidationResult",
         str(int(ResultCode.OK)),
-        timeout=500,
     )
     assert event_recorder.has_change_event_occurred(
         tmc_mid.central_node.dish_leaf_node_list[3],
         "kValueValidationResult",
         str(int(ResultCode.OK)),
-        timeout=500,
     )
 
 

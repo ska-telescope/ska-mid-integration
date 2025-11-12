@@ -49,7 +49,7 @@ def given_tmc_using_default_version(tmc_mid, command_input_factory):
 @when("I restart the CspMasterLeafNode and CentralNode is running")
 def restart_csp_master_leaf_node(tmc_mid):
     """Restart Csp Master Leaf Node"""
-    tmc_mid.init_device(server_type="CSP_MLN")
+    tmc_mid.RestartServer(server_type="CSP_MLN")
 
     assert wait_and_validate_device_attribute_value(
         tmc_mid.csp_master_leaf_node,
@@ -108,7 +108,7 @@ def test_load_dish_vcc_after_central_node_restart():
 @when("I restart the CentralNode and CspMasterLeafNode is running")
 def restart_central_node(tmc_mid):
     """Restart Csp Master Leaf Node"""
-    tmc_mid.init_device(server_type="CENTRAL_NODE")
+    tmc_mid.RestartServer(server_type="CENTRAL_NODE")
 
 
 @then("TMC should set Dish-VCC config set to True after restart")
@@ -206,10 +206,10 @@ def validate_source_disc_vcc_param_attribute_set(
 @when("I restart the CentralNode, CspMasterLeafNode and DishLeafNode")
 def restart_central_node_and_csp_mln(tmc_mid):
     """Restart Csp Master Leaf Node"""
-    tmc_mid.init_device(server_type="CSP_MLN")
-    tmc_mid.init_device(server_type="CENTRAL_NODE")
-    tmc_mid.init_device(server_type="DISHLN_0")
-    tmc_mid.init_device(server_type="DISHLN_1")
+    tmc_mid.RestartServer(server_type="CSP_MLN")
+    tmc_mid.RestartServer(server_type="CENTRAL_NODE")
+    tmc_mid.RestartServer(server_type="DISHLN_0")
+    tmc_mid.RestartServer(server_type="DISHLN_1")
 
 
 @then("TMC should set version of Dish-VCC version used before restart")
@@ -283,7 +283,7 @@ def set_dish_vcc_empty_and_restart(tmc_mid):
     # set memorized attribute of dish vcc config to empty
     tmc_mid.csp_master_leaf_node.memorizedDishVccMap = ""
     # Restart CSP Master Leaf Node
-    tmc_mid.init_device(server_type="CSP_MLN")
+    tmc_mid.RestartServer(server_type="CSP_MLN")
 
 
 @then("TMC should set Dish-VCC config set to False after Restart")
