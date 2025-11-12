@@ -117,10 +117,8 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
     )
 
     expected_dishes_data = {
-        "dishes": {
-            receptor_id: {"subarray_allocation": 1, "availability": True}
-            for receptor_id in assigned_resources
-        }
+        receptor_id: {"subarray_allocation": 1, "availability": True}
+        for receptor_id in assigned_resources
     }
     results = json.dumps(expected_dishes_data)
     assert_that(event_tracer).described_as(
@@ -164,10 +162,8 @@ def then_verify_resource_monitor_empty(event_tracer: TangoEventTracer):
     )
 
     expected_dishes_data = {
-        "dishes": {
-            receptor_id: {"subarray_allocation": -1, "availability": True}
-            for receptor_id in previously_assigned_dishes
-        }
+        receptor_id: {"subarray_allocation": -1, "availability": True}
+        for receptor_id in previously_assigned_dishes
     }
     results = json.dumps(expected_dishes_data)
 
