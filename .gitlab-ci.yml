@@ -113,7 +113,7 @@ k8s-test-mid-restart:
     KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-mid-restart'
   script:
     # - make k8s-test MARK="SKA_tmc_mid_restart"
-    - make k8s-test MARK="SKA_tmc_mid_device_restart"
+    - make k8s-test MARK="SKA_tmc_mid_device_restart1"
   environment:
     name: test/$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-test-tmc-mid-restart
