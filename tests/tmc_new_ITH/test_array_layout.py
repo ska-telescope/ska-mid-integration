@@ -57,13 +57,13 @@ def _setup_event_subscriptions(
     event_tracer.subscribe_event(tmc.central_node, "telescopeState")
     event_tracer.subscribe_event(tmc.central_node, "IsDishVccConfigSet")
     event_tracer.subscribe_event(tmc.subarray_node, "longRunningCommandResult")
-    event_tracer.subscribe_event(tmc.subarray_node, "arraylayouturi")
+    event_tracer.subscribe_event(tmc.subarray_node, "arraylouturl")
     log_events(
         {
             tmc.subarray_node: [
                 "obsState",
                 "longRunningCommandResult",
-                "arraylayouturi",
+                "arraylouturl",
             ],
             csp.csp_subarray: ["obsState"],
             sdp.sdp_subarray: [
@@ -91,7 +91,7 @@ def test_verify_array_layout_functionality():
     """Test array layout functionality."""
 
 
-@given("AssignResources is invoked on the SubarrayNode with an arrayLayoutUri")
+@given("AssignResources is invoked on the SubarrayNode with an arrayLayoutUrl")
 def given_assign_resources_executed_successfully(
     tmc: TMCFacade,
     sdp: SDPFacade,
@@ -143,7 +143,7 @@ def verify_subarray_array_layout(
         "arrayLayout attribute holds downloaded layout data."
     ).within_timeout(TIMEOUT).has_change_event_occurred(
         tmc.subarray_node,
-        "arraylayouturi",
+        "arraylouturl",
         Anything,
     )
     source_uris = json.loads(tmc.central_node.defaultarraylayouturl)[
