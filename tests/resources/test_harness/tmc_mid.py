@@ -4,7 +4,10 @@ import time
 
 from tango import DeviceProxy
 
-from tests.resources.test_support.constant import tmc_csp_master_leaf_node
+from tests.resources.test_support.constant import (
+    centralnode,
+    tmc_csp_master_leaf_node,
+)
 
 from .central_node_mid import CentralNodeWrapperMid
 
@@ -14,6 +17,7 @@ class TMCMid:
         """Set all devices proxy required for TMC"""
         self.central_node = CentralNodeWrapperMid()
         self.csp_master_leaf_node = DeviceProxy(tmc_csp_master_leaf_node)
+        self.central_node_device = DeviceProxy(centralnode)
         self.csp_master_ln_server = DeviceProxy(
             f"dserver/{self.csp_master_leaf_node.info().server_id}"
         )
@@ -37,12 +41,25 @@ class TMCMid:
         """Return Dish Leaf Node List"""
         return self.central_node.dish_leaf_node_list
 
-    def RestartServer(self, server_type: str):
+    def init_device(self, device: str):
         """Restart server based on provided server type"""
+        if device == "CSP_MLN":
+            self.csp_master_leaf_node.init()
+        elif device == "CENTRAL_NODE":
+            self.central_node_device.init()
+        elif device.startswith("DISHLN"):
+            index = int(device.split("_")[-1])
+            self.central_node.dish_leaf_node_list[index].init()
+            # Give some time to other device restart
+            # to keep the kube-system stable
+            time.sleep(3)
+
+    def RestartServer(self, server_type: str):
+        """Initialize server based on provided server type"""
         if server_type == "CSP_MLN":
-            self.csp_master_ln_server.init()
+            self.csp_master_ln_server.RestartServer()
         elif server_type == "CENTRAL_NODE":
-            self.central_node_server.init()
+            self.central_node_server.RestartServer()
         elif server_type.startswith("DISHLN"):
             index = int(server_type.split("_")[-1])
             dish_leaf_node_server_id = (
@@ -51,7 +68,7 @@ class TMCMid:
             self.dish_leaf_node_server = DeviceProxy(
                 f"dserver/{dish_leaf_node_server_id}"
             )
-            self.dish_leaf_node_server.init()
+            self.dish_leaf_node_server.RestartServer()
             # Give some time to other device restart
             # to keep the kube-system stable
             time.sleep(3)

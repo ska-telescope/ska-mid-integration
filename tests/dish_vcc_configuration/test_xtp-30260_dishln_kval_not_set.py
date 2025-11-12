@@ -63,8 +63,8 @@ def restart_the_dish_leaf_nodes(tmc_mid):
             datetime.utcnow().strftime("%d/%m/%Y %H:%M:%S:%f"),
         )
     # [0, 1, 2, 3] are index for dish leaf node list
-    tmc_mid.RestartServer("DISHLN_0")
-    tmc_mid.RestartServer("DISHLN_3")
+    tmc_mid.init_device("DISHLN_0")
+    tmc_mid.init_device("DISHLN_3")
 
 
 @when(

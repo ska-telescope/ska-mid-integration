@@ -49,10 +49,10 @@ def given_tmc_with_already_loaded_dish_vcc_config_version(tmc_mid):
 def restart_the_dish_leaf_nodes(tmc_mid):
     """Restart the dish leaf nodes"""
     # [0, 1, 2, 3] are index for dish leaf node list
-    tmc_mid.RestartServer("DISHLN_0")
-    tmc_mid.RestartServer("DISHLN_1")
-    tmc_mid.RestartServer("DISHLN_2")
-    tmc_mid.RestartServer("DISHLN_3")
+    tmc_mid.init_device("DISHLN_0")
+    tmc_mid.init_device("DISHLN_1")
+    tmc_mid.init_device("DISHLN_2")
+    tmc_mid.init_device("DISHLN_3")
 
 
 @when(

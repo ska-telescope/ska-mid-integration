@@ -63,7 +63,7 @@ def restart_the_dish_leaf_nodes(tmc_mid):
     tmc_mid.central_node.dish_leaf_node_list[0].kValue = 0
 
     # [0, 1, 2, 3] are index for dish leaf node list
-    tmc_mid.RestartServer("DISHLN_0")
+    tmc_mid.init_device("DISHLN_0")
 
 
 @when("the Dish Leaf Node finds k-value not set on Dish Leaf Node")
