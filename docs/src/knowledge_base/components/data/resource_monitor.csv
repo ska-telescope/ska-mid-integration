@@ -1,5 +1,5 @@
 Attribute Name,Data Type,Is archived?,Archiver config
-dishesData,DevString,Yes,Change Event
+dishes,DevString,Yes,Change Event
 State,DevState (Enum),Yes,Change Event
 Status,DevString,No,
 adminMode,AdminMode (DevEnum),No,

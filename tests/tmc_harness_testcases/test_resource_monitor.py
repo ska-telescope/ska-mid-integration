@@ -3,7 +3,7 @@ Test case for verifying Resource Monitor updates when SubarrayNode assigned
 resources change in the system.
 
 This test verifies that the ResourceMonitor device correctly updates its
-dishesData attribute after resources are assigned and released through the
+dishes attribute after resources are assigned and released through the
 SubarrayNode.
 """
 
@@ -24,7 +24,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.constant import TIMEOUT, tmc_resource_monitor
 
 
-@pytest.mark.batch2
+@pytest.mark.batch2_test
 @pytest.mark.SKA_mid
 @scenario(
     "../features/resource_monitor.feature",
@@ -50,13 +50,13 @@ def given_tmc_on(
     event_tracer.subscribe_event(
         central_node_mid.subarray_node, "assignedResources"
     )
-    event_tracer.subscribe_event(resource_monitor, "dishesData")
+    event_tracer.subscribe_event(resource_monitor, "dishes")
 
     log_events(
         {
             central_node_mid.central_node: ["telescopeState"],
             central_node_mid.subarray_node: ["obsState", "assignedResources"],
-            resource_monitor: ["dishesData"],
+            resource_monitor: ["dishes"],
         }
     )
 
@@ -103,12 +103,12 @@ def given_subarray_idle(
 
 
 @given(
-    "the ResourceMonitor dishesData attribute should reflect the assigned "
+    "the ResourceMonitor dishes attribute should reflect the assigned "
     "resources"
 )
 def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
     """
-    Verify that ResourceMonitor dishesData reflects the assigned resources.
+    Verify that ResourceMonitor dishes reflects the assigned resources.
     """
     resource_monitor = pytest.resource_monitor
     assign_input_json = pytest.assign_input_json
@@ -124,9 +124,9 @@ def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
     }
     results = json.dumps(expected_dishes_data)
     assert_that(event_tracer).described_as(
-        "ResourceMonitor dishesData attribute value should update"
+        "ResourceMonitor dishes attribute value should update"
     ).within_timeout(TIMEOUT).has_change_event_occurred(
-        resource_monitor, "dishesData", results
+        resource_monitor, "dishes", results
     )
 
 
@@ -152,11 +152,11 @@ def when_release_all_resources(
 
 
 @then(
-    "the ResourceMonitor dishesData attribute should reflect the updated "
+    "the ResourceMonitor dishes attribute should reflect the updated "
     "state after resource release"
 )
 def then_verify_resource_monitor_empty(event_tracer: TangoEventTracer):
-    """Verify that ResourceMonitor dishesData becomes empty after release."""
+    """Verify that ResourceMonitor dishes becomes empty after release."""
     resource_monitor = pytest.resource_monitor
     assign_input_json = pytest.assign_input_json
     previously_assigned_dishes = (
@@ -172,8 +172,8 @@ def then_verify_resource_monitor_empty(event_tracer: TangoEventTracer):
     results = json.dumps(expected_dishes_data)
 
     assert_that(event_tracer).described_as(
-        "ResourceMonitor dishesData attribute should be empty after "
+        "ResourceMonitor dishes attribute should be empty after "
         "ReleaseAllResources"
     ).within_timeout(TIMEOUT).has_change_event_occurred(
-        resource_monitor, "dishesData", results
+        resource_monitor, "dishes", results
     )
