@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 [1.10.0-rc.1]
-************
+*************
 Added
 -----
 * TMC Mid now supports configuring attenuation, saturation threshold and noise diode via Mid TMC Configure command.
