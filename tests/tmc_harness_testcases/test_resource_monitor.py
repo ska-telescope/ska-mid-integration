@@ -1,6 +1,6 @@
 """
 Test case for verifying Resource Monitor updates when SubarrayNode assigned
-resources change in the system.
+and released resources change in the system.
 
 This test verifies that the ResourceMonitor device correctly updates its
 dishes attribute after resources are assigned and released through the
