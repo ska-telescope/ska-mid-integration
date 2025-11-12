@@ -40,9 +40,9 @@ class TMCMid:
     def RestartServer(self, server_type: str):
         """Restart server based on provided server type"""
         if server_type == "CSP_MLN":
-            self.csp_master_ln_server.RestartServer()
+            self.csp_master_ln_server.init()
         elif server_type == "CENTRAL_NODE":
-            self.central_node_server.RestartServer()
+            self.central_node_server.init()
         elif server_type.startswith("DISHLN"):
             index = int(server_type.split("_")[-1])
             dish_leaf_node_server_id = (
@@ -51,7 +51,7 @@ class TMCMid:
             self.dish_leaf_node_server = DeviceProxy(
                 f"dserver/{dish_leaf_node_server_id}"
             )
-            self.dish_leaf_node_server.RestartServer()
+            self.dish_leaf_node_server.init()
             # Give some time to other device restart
             # to keep the kube-system stable
             time.sleep(3)
