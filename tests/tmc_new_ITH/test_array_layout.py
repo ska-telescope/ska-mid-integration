@@ -81,7 +81,7 @@ def _setup_event_subscriptions(
     )
 
 
-@pytest.mark.restart_cn
+@pytest.mark.SKA_tmc_mid_device_restart
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/array_layout.feature",
