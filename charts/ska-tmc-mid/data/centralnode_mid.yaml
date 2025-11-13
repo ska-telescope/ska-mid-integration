@@ -26,6 +26,8 @@ server:
   {{- $domain := .Values.global.domain }}
   {{- $family := .Values.deviceServers.centralnode.family }}
   {{- $member := .Values.deviceServers.centralnode.member }}
+  {{- $DefaultArrayLayoutSourceURIs := .Values.deviceServers.centralnode.DefaultArrayLayoutSourceURIs }}
+  {{- $DefaultArrayLayoutPath := .Values.deviceServers.centralnode.DefaultArrayLayoutPath }}
   - name: "01"
     classes:
     - name: "MidTmcCentralNode"
@@ -116,10 +118,10 @@ server:
             - "{{ $CommandTimeOutDefault }}"
         - name: "DefaultArrayLayoutSourceURIs"
           values:
-            - "{{.Values.deviceServers.centralnode.DefaultArrayLayoutSourceURIs}}"
+            - "{{ $DefaultArrayLayoutSourceURIs }}"
         - name: "DefaultArrayLayoutPath"
           values:
-            - "{{.Values.deviceServers.centralnode.DefaultArrayLayoutPath}}"
+            - "{{ $DefaultArrayLayoutPath }}"
         - name: "LivelinessCheckPeriod"
           values:
             - "{{ $LivelinessCheckPeriod }}"
