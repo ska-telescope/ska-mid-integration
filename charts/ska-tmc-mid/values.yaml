@@ -153,7 +153,7 @@ deviceServers:
     LivelinessCheckPeriod: 2.0
     EventSubscriptionCheckPeriod: 2.0
     DefaultArrayLayoutSourceURIs: "gitlab://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata"
-    DefaultArrayLayoutPath: "instrument/ska1_low/layout/low-layout.json"
+    DefaultArrayLayoutPath: "instrument/ska1_mid/layout/mid-layout.json"
     family: "central-node"
     member: "0"
     global_pointing_model:
