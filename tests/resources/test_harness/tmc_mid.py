@@ -61,17 +61,22 @@ class TMCMid:
         elif server_type == "CENTRAL_NODE":
             self.central_node_server.RestartServer()
         elif server_type.startswith("DISHLN"):
-            index = int(server_type.split("_")[-1])
-            dish_leaf_node_server_id = (
-                self.central_node.dish_leaf_node_list[index].info().server_id
-            )
-            self.dish_leaf_node_server = DeviceProxy(
-                f"dserver/{dish_leaf_node_server_id}"
-            )
-            self.dish_leaf_node_server.RestartServer()
-            # Give some time to other device restart
-            # to keep the kube-system stable
-            time.sleep(3)
+            try:
+                index = int(server_type.split("_")[-1])
+                dish_leaf_node_server_id = (
+                    self.central_node.dish_leaf_node_list[index]
+                    .info()
+                    .server_id
+                )
+                self.dish_leaf_node_server = DeviceProxy(
+                    f"dserver/{dish_leaf_node_server_id}"
+                )
+                self.dish_leaf_node_server.RestartServer()
+                # Give some time to other device restart
+                # to keep the kube-system stable
+                time.sleep(3)
+            except Exception as e:
+                print(f"Error restarting dish leaf node server: {e}")
 
     def load_dish_vcc_configuration(self, dish_vcc_config):
         """Load Dish Vcc config on TMC"""

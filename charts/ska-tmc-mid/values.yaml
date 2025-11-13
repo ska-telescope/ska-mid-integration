@@ -236,8 +236,8 @@ deviceServers:
       limits:
         memory: 3000Mi
       requests:
-        cpu: 2200m
-        memory: 300Mi
+        cpu: 2000m
+        memory: 500Mi
     CommandTimeOutDefault: 90
     MaxTrackTableRetry: 3
     TrackTableRetryDuration: 0.2
