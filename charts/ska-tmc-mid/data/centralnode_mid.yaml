@@ -37,6 +37,12 @@ server:
         - name: "CspMasterLeafNodeFQDN"
           values:
           - "{{.Values.global.csp_master_ln}}"
+        - name: "DefaultArrayLayoutSourceURIs"
+          values:
+            - "{{ .Values.deviceServers.centralnode.DefaultArrayLayoutSourceURIs }}"
+        - name: "DefaultArrayLayoutPath"
+          values:
+            - "{{ .Values.deviceServers.centralnode.DefaultArrayLayoutPath }}"
         - name: "CspMasterFQDN"
           values:
           - "{{.Values.global.csp_master}}"
@@ -116,12 +122,6 @@ server:
         - name: "CommandTimeOutDefault"
           values:
             - "{{ $CommandTimeOutDefault }}"
-        - name: "DefaultArrayLayoutSourceURIs"
-          values:
-            - "{{ $DefaultArrayLayoutSourceURIs }}"
-        - name: "DefaultArrayLayoutPath"
-          values:
-            - "{{ $DefaultArrayLayoutPath }}"
         - name: "LivelinessCheckPeriod"
           values:
             - "{{ $LivelinessCheckPeriod }}"
