@@ -152,6 +152,8 @@ deviceServers:
     DishVccInitTimeout: 180
     LivelinessCheckPeriod: 2.0
     EventSubscriptionCheckPeriod: 2.0
+    DefaultArrayLayoutSourceURIs: "gitlab://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata"
+    DefaultArrayLayoutPath: "instrument/ska1_low/layout/low-layout.json"
     family: "central-node"
     member: "0"
     global_pointing_model:

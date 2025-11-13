@@ -114,6 +114,12 @@ server:
         - name: "CommandTimeOutDefault"
           values:
             - "{{ $CommandTimeOutDefault }}"
+        - name: "DefaultArrayLayoutSourceURIs"
+          values:
+            - "{{.Values.deviceServers.centralnode.DefaultArrayLayoutSourceURIs}}"
+        - name: "DefaultArrayLayoutPath"
+          values:
+            - "{{.Values.deviceServers.centralnode.DefaultArrayLayoutPath}}"
         - name: "LivelinessCheckPeriod"
           values:
             - "{{ $LivelinessCheckPeriod }}"
