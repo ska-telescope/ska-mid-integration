@@ -133,7 +133,7 @@ resource_monitor:
   image:
     registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-resource-monitor
     image: ska-tmc-resource-monitor
-    tag: 0.3.0-dev.ce8ef060e
+    tag: 0.4.0-dev.ccda273f0
     pullPolicy: IfNotPresent
 
 resources:
@@ -282,6 +282,7 @@ deviceServers:
     SubarrayPrefix: "mid-tmc/subarray/"
     DishType: "SKA"
     DishIDs: [ "SKA001", "SKA036", "SKA063", "SKA100" ]
+    MidSubarrayNodeFQDN: "mid-tmc/subarray/01"
 
   mocks:
     enabled: false

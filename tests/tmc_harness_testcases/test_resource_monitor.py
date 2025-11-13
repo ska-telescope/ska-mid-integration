@@ -24,7 +24,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.constant import TIMEOUT, tmc_resource_monitor
 
 
-@pytest.mark.batch2
+@pytest.mark.batch2_test
 @pytest.mark.SKA_mid
 @scenario(
     "../features/resource_monitor.feature",
