@@ -20,7 +20,7 @@ from tests.resources.test_support.constant import (
 
 
 @pytest.mark.tmc_csp_dish
-@pytest.mark.batch1
+@pytest.mark.SKA_tmc_mid_device_restart
 @pytest.mark.SKA_mid
 @scenario(
     "../features/dish_vcc_initialization/xtp_30249_csp_mln_init.feature",
@@ -91,7 +91,7 @@ def validate_central_node_dish_vcc_config(tmc_mid):
 
 
 @pytest.mark.tmc_csp_dish
-@pytest.mark.batch1
+@pytest.mark.SKA_tmc_mid_device_restart
 @pytest.mark.SKA_mid
 @scenario(
     "../features/dish_vcc_initialization/"
@@ -132,7 +132,7 @@ def validate_dish_vcc_config_flag(tmc_mid):
 
 
 @pytest.mark.tmc_csp_dish
-@pytest.mark.batch1
+@pytest.mark.SKA_tmc_mid_device_restart
 @pytest.mark.SKA_mid
 @scenario(
     "../features/dish_vcc_initialization/xtp_30250_restart.feature",
@@ -261,7 +261,7 @@ def validate_dish_vcc_config_after_central_node_and_csp_mln_restart(
 
 
 @pytest.mark.tmc_csp_dish
-@pytest.mark.batch1
+@pytest.mark.SKA_tmc_mid_device_restart
 @pytest.mark.SKA_mid
 @scenario(
     "../features/dish_vcc_initialization/xtp_30253_dish_vcc_mismatch.feature",

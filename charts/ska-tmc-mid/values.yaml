@@ -84,14 +84,14 @@ centralnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-centralnode
-    tag: 0.24.0
+    tag: 0.25.1
     pullPolicy: IfNotPresent
 
 subarraynode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-subarraynode
-    tag: 0.46.0
+    tag: 0.47.3
     pullPolicy: IfNotPresent
 
 sdpleafnodes:
@@ -160,6 +160,8 @@ deviceServers:
     DishVccInitTimeout: 180
     LivelinessCheckPeriod: 2.0
     EventSubscriptionCheckPeriod: 2.0
+    DefaultArrayLayoutSourceURIs: "gitlab://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata"
+    DefaultArrayLayoutPath: "instrument/ska1_mid/layout/mid-layout.json"
     family: "central-node"
     member: "0"
     global_pointing_model:
@@ -243,7 +245,7 @@ deviceServers:
         memory: 3000Mi
       requests:
         cpu: 2000m
-        memory: 300Mi
+        memory: 700Mi
     CommandTimeOutDefault: 90
     MaxTrackTableRetry: 3
     TrackTableRetryDuration: 0.2
@@ -269,7 +271,7 @@ deviceServers:
         cpu: 500m
       requests:
         cpu: 500m
-        memory: 300Mi
+        memory: 500Mi
 
   resourcemonitor:
     enabled: true
