@@ -5,10 +5,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
-[Unreleased]
+[1.10.0-rc.1]
 ************
 Added
 -----
+* Arraylayout work is integrated in TMC mid integration work
+* Added two device property for CentralNode DefaultArrayLayoutSourceURIs, DefaultArrayLayoutPath
 * TMC Mid now supports configuring attenuation, saturation threshold and noise diode via Mid TMC Configure command.
 
 [1.9.0-rc.2]
