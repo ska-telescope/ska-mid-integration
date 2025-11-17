@@ -1,7 +1,6 @@
 """Implement negative scenario test cases for subarray
 """
 import json
-from venv import logger
 
 import pytest
 from ska_tango_base.control_model import ObsState
@@ -168,7 +167,6 @@ class TestSubarrayNodeNegative(object):
         input_json = prepare_json_args_for_commands(
             "configure_mid", command_input_factory
         )
-        logger.info(f"Input JSON for configure: {input_json}")
 
         dish_sim = simulator_factory.get_or_create_simulator_device(
             SimulatorDeviceType.DISH_DEVICE
