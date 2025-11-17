@@ -5,14 +5,21 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[1.12.0-rc.1]
+*************
+* Updated dish-leafnodes tag to 0.27.0 to support Configure attenuation, saturation threshold, and noise diode
+
 [1.11.0-rc.1]
 *************
 Added
 -----
-* Updated dish-leafnodes tag to 0.27.0 to support Configure attenuation, saturation threshold, and noise diode
-* Updated tmc-simulator tag to 1.4.1.
+* Introduced ResourceMonitor device in the ska-tmc-mid.
+* Added device configuration and FQDN under chart templates.
+* TMC Mid now supports reporting subarray allocations through the dishes attribute of the Resource Monitor.
+* Updated documentation to include ResourceMonitor configuration details and usage.
+* Utilised the latest ResourceMonitor release version v0.4.0 for integration and verification.
 
-[1.11.0-rc.1]
+[1.10.0-rc.1]
 *************
 Added
 -----

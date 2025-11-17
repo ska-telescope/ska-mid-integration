@@ -63,6 +63,7 @@ global:
   mid_csp_control: "mid-csp/control/0"
   mid_csp_subarray_1: "mid-csp/subarray/01"
   mid_csp_subarray_2: "mid-csp/subarray/02"
+  resource_monitor_prefix: "mid-tmc/resource-monitor/"
 
 dsconfig:
   configuration_file: data/tmc-mid-config.json
@@ -97,35 +98,42 @@ sdpleafnodes:
   image:
     registry: artefact.skao.int
     image: ska-tmc-sdpleafnodes
-    tag: 0.24.2
+    tag: 0.24.5
     pullPolicy: IfNotPresent
 
 cspmasterleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.33.0
+    tag: 0.33.1
     pullPolicy: IfNotPresent
 
 cspsubarrayleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.33.0
+    tag: 0.33.1
     pullPolicy: IfNotPresent
 
 dishleafnode:
   image:
-    registry: artefact.skao.int
+    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-dishleafnode
     image: ska-tmc-dishleafnode
-    tag: 0.27.0
+    tag: 0.27.1-dev.c91f1b9d3
     pullPolicy: IfNotPresent
 
 skatmcsimulators:
   image:
     registry: artefact.skao.int
     image: ska-tmc-simulators
-    tag: 1.4.1
+    tag: 1.5.1
+    pullPolicy: IfNotPresent
+
+resource_monitor:
+  image:
+    registry: artefact.skao.int
+    image: ska-tmc-resource-monitor
+    tag: 0.4.0
     pullPolicy: IfNotPresent
 
 resources:
@@ -264,6 +272,19 @@ deviceServers:
       requests:
         cpu: 500m
         memory: 500Mi
+
+  resourcemonitor:
+    enabled: true
+    instances: ["01"]
+    file: "data/resourcemonitor.yaml"
+    LivelinessCheckPeriod: 1.0
+    EventSubscriptionCheckPeriod: 1.0
+    family: "resource-monitor"
+    DishLeafNodePrefix: "mid-tmc/leaf-node-dish/"
+    SubarrayPrefix: "mid-tmc/subarray/"
+    DishType: "SKA"
+    DishIDs: ["SKA001", "SKA036", "SKA063", "SKA100"]
+    MidSubarrayNodeFQDN: "mid-tmc/subarray/01"
 
   mocks:
     enabled: false

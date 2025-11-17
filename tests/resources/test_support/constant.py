@@ -44,6 +44,7 @@ tmc_sdp_subarrayln_prefix = "mid-tmc/subarray-leaf-node-sdp"
 sdp_subarray_prefix = "mid-sdp/subarray"
 csp_subarray_prefix = "mid-csp/subarray"
 sdp_queue_connector = "mid-sdp/queueconnector/01"
+tmc_resource_monitor = "mid-tmc/resource-monitor/01"
 COMMAND_COMPLETED = json.dumps([ResultCode.OK, "Command Completed"])
 
 TIMEOUT = 100

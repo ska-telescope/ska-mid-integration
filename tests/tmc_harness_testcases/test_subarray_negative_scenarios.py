@@ -158,7 +158,6 @@ class TestSubarrayNodeNegative(object):
 
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
-    @pytest.mark.spfrx
     def test_subarray_configure_when_dish_stuck_in_slew(
         self,
         subarray_node,
