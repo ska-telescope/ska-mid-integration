@@ -4,7 +4,7 @@ and released resources change in the system.
 
 This test verifies that the ResourceMonitor device correctly updates its
 dishes attribute after resources are assigned and released through the
-SubarrayNode
+SubarrayNode.
 """
 
 import json
