@@ -20,6 +20,7 @@ default number of instances deployed for each of the TMC component.
 #. SDP Master Leaf Node - 1
 #. SDP Subarray Leaf Node - 1
 #. Dish Leaf Node - 4
+#. Resource Monitor - 1
 
 
 .. warning:: The number of instances of Central Node, SDP Master Leaf Node and 
@@ -300,3 +301,9 @@ Dish Pointing Device
     #. **AzimuthMinLimit** : This refers to the Minimum value of Azimuth where dish can point. Currently defaults to -270.0.
     #. **SchedularQueuePreEntries** : ProgramTrackTable entries queued ahead in the track thread scheduler, primarily for developer-side debugging.
 
+Resource Monitor
+^^^^^^^^^^^^^^^^^^^^^
+
+    #. **LivelinessCheckPeriod** : This defines how often (in seconds) the system checks if each connected device is active. The default value is 0.5 seconds.
+    #. **EventSubscriptionCheckPeriod** :  This defines the period (in seconds) for the event subscriber to verify and maintain active subscriptions. Currently defaults to 0.5 seconds.
+    #. **family** :  This refers to the family name of the Resource Monitor Tango device. Currently defaults to **"resource-monitor"**.

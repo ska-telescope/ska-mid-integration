@@ -16,3 +16,4 @@ This section specifies the attributes exposed by each of the TMC Mid component.
    sdp_master_leaf_node
    sdp_subarray_leaf_node
    dish_leaf_node
+   resource_monitor
