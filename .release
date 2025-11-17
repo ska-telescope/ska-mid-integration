@@ -1,12 +1,12 @@
-release=1.10.0-rc.1
-tag=1.10.0-rc.1
+release=1.11.0-rc.1
+tag=1.11.0-rc.1
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.9.0-rc.2 to v1.10.0-rc.1**
-        * Verified the Band 5 observation in mid-psi environment with real subsystems dish, CSP, CBF
+**1. Updated ska-tmc-mid from v1.9.0-rc.2 to v1.11.0-rc.1**
+        * Updated dish-leafnodes tag to 0.27.0 to support Configure attenuation, saturation threshold, and noise diode
 
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.9.0-rc.1 to v1.10.0-rc.1**
+**1. Updated ska-tmc-mid from v1.9.0-rc.1 to v1.11.0-rc.1**
 
-        * Verified the Band 5 observation in mid-psi environment with real subsystems dish, CSP, CBF
+        * Updated dish-leafnodes tag to 0.27.0 to support Configure attenuation, saturation threshold, and noise diode

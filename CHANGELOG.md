@@ -5,8 +5,15 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
-[1.10.0-rc.1]
-************
+[1.11.0-rc.1]
+*************
+Added
+-----
+* Updated dish-leafnodes tag to 0.27.0 to support Configure attenuation, saturation threshold, and noise diode
+* Updated tmc-simulator tag to 1.4.1.
+
+[1.11.0-rc.1]
+*************
 Added
 -----
 * Arraylayout work is integrated in TMC mid integration work
