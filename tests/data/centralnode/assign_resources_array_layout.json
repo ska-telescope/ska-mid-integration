@@ -9,12 +9,12 @@
   "transaction_id": "txn-....-00001",
   "subarray_id": 1,
   "dish": {
-      "receptor_ids": ["SKA001", "SKA036", "SKA063", "SKA100"]
+      "receptor_ids": ["SKA001"]
   },
   "sdp": {
       "interface": "https://schema.skao.int/ska-sdp-assignres/1.0",
       "execution_block": {
-          "eb_id": "eb-mvp01-20211623-00000",
+          "eb_id": "eb-mvp01-20210623-00000",
           "max_length": 100.0,
           "context": {},
           "beams": [{
@@ -150,7 +150,7 @@
         ]
       },
       "processing_blocks": [{
-          "pb_id": "pb-mvp01-20210613-00000",
+          "pb_id": "pb-mvp01-20210623-00000",
           "sbi_ids": ["sbi-mvp01-20200325-00001"],
           "script": {
               "kind": "realtime",
@@ -159,7 +159,7 @@
           },
           "parameters": {}
       }, {
-          "pb_id": "pb-mvp01-20220623-00001",
+          "pb_id": "pb-mvp01-20210623-00001",
           "sbi_ids": ["sbi-mvp01-20200325-00001"],
           "script": {
               "kind": "realtime",
@@ -168,7 +168,7 @@
           },
           "parameters": {}
       }, {
-          "pb_id": "pb-mvp01-20213623-00002",
+          "pb_id": "pb-mvp01-20210623-00002",
           "sbi_ids": ["sbi-mvp01-20200325-00002"],
           "script": {
               "kind": "batch",
@@ -177,11 +177,11 @@
           },
           "parameters": {},
           "dependencies": [{
-              "pb_id": "pb-mvp01-20240623-00000",
+              "pb_id": "pb-mvp01-20210623-00000",
               "kind": ["visibilities"]
           }]
       }, {
-          "pb_id": "pb-mvp01-20215623-00003",
+          "pb_id": "pb-mvp01-20210623-00003",
           "sbi_ids": ["sbi-mvp01-20200325-00001", "sbi-mvp01-20200325-00002"],
           "script": {
               "kind": "batch",
@@ -190,7 +190,7 @@
           },
           "parameters": {},
           "dependencies": [{
-              "pb_id": "pb-mvp01-26210623-00002",
+              "pb_id": "pb-mvp01-20210623-00002",
               "kind": ["calibration"]
           }]
       }],
