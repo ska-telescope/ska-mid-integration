@@ -33,50 +33,49 @@ stages:
   - lifecycle
 
 include:
-# Docs Pages
-- project: 'ska-telescope/templates-repository'
-  file: 'gitlab-ci/includes/docs.gitlab-ci.yml'
+  # Docs Pages
+  - project: "ska-telescope/templates-repository"
+    file: "gitlab-ci/includes/docs.gitlab-ci.yml"
 
-# Release Automation
-- project: 'ska-telescope/templates-repository'
-  file: 'gitlab-ci/includes/release.gitlab-ci.yml'
+  # Release Automation
+  - project: "ska-telescope/templates-repository"
+    file: "gitlab-ci/includes/release.gitlab-ci.yml"
 
-# Python packages build,lint, test and publish
-- project: 'ska-telescope/templates-repository'
-  file: 'gitlab-ci/includes/python-lint.gitlab-ci.yml'
+  # Python packages build,lint, test and publish
+  - project: "ska-telescope/templates-repository"
+    file: "gitlab-ci/includes/python-lint.gitlab-ci.yml"
 
-# # Helm Chart linting and Publish
-- project: 'ska-telescope/templates-repository'
-  file: 'gitlab-ci/includes/helm-chart.gitlab-ci.yml'
+  # # Helm Chart linting and Publish
+  - project: "ska-telescope/templates-repository"
+    file: "gitlab-ci/includes/helm-chart.gitlab-ci.yml"
 
-# k8s steps
-- project: 'ska-telescope/templates-repository'
-  file: 'gitlab-ci/includes/k8s.gitlab-ci.yml'
+  # k8s steps
+  - project: "ska-telescope/templates-repository"
+    file: "gitlab-ci/includes/k8s.gitlab-ci.yml"
 
-# integration job
-- project: 'ska-telescope/templates-repository'
-  file: 'gitlab-ci/includes/deploy.integration.gitlab-ci.yml'
+  # integration job
+  - project: "ska-telescope/templates-repository"
+    file: "gitlab-ci/includes/deploy.integration.gitlab-ci.yml"
 
-# staging job
-- project: "ska-telescope/templates-repository"
-  file: "gitlab-ci/includes/deploy.staging.gitlab-ci.yml"
+  # staging job
+  - project: "ska-telescope/templates-repository"
+    file: "gitlab-ci/includes/deploy.staging.gitlab-ci.yml"
 
-# Create Gitlab CI badges from CI metrics
-# https://developer.skatelescope.org/en/latest/tools/continuousintegration.html#automated-collection-of-ci-health-metrics-as-part-of-the-ci-pipeline
-- project: 'ska-telescope/templates-repository'
-  file: 'gitlab-ci/includes/finaliser.gitlab-ci.yml'
+  # Create Gitlab CI badges from CI metrics
+  # https://developer.skatelescope.org/en/latest/tools/continuousintegration.html#automated-collection-of-ci-health-metrics-as-part-of-the-ci-pipeline
+  - project: "ska-telescope/templates-repository"
+    file: "gitlab-ci/includes/finaliser.gitlab-ci.yml"
 
-# # Publish bdd test results on Jira.
-# - project: 'ska-telescope/templates-repository'
-#   file: 'gitlab-ci/includes/xray-publish.gitlab-ci.yml'
+  # # Publish bdd test results on Jira.
+  # - project: 'ska-telescope/templates-repository'
+  #   file: 'gitlab-ci/includes/xray-publish.gitlab-ci.yml'
 
-- local: '/gitlab_ci/.gitlab-ci-tmc-csp-new-ith.yml'
-- local: '/gitlab_ci/.gitlab-ci-on-demand.yml'
-- local: '/gitlab_ci/.gitlab-ci-dish.yml'
-- local: '/gitlab_ci/.gitlab-ci-csp-dish.yml'
-- local: '/gitlab_ci/.gitlab-ci-integration.yml'
-- local: '/gitlab_ci/.gitlab-ci-staging.yml'
-
+  - local: "/gitlab_ci/.gitlab-ci-tmc-csp-new-ith.yml"
+  - local: "/gitlab_ci/.gitlab-ci-on-demand.yml"
+  - local: "/gitlab_ci/.gitlab-ci-dish.yml"
+  - local: "/gitlab_ci/.gitlab-ci-csp-dish.yml"
+  - local: "/gitlab_ci/.gitlab-ci-integration.yml"
+  - local: "/gitlab_ci/.gitlab-ci-staging.yml"
 
 k8s-test:
   variables:
@@ -84,7 +83,7 @@ k8s-test:
     DISH_SIMULATION_ENABLED: "true"
     SUBARRAY_COUNT: 2
     COUNT: 1
-    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA'
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA"
     CI_KEEP_NAMESPACE: true
   script:
     - make k8s-test MARK="batch1"
@@ -110,7 +109,7 @@ k8s-test-mid-restart:
     CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT: 30
     DISH_LEAF_NODE_COMMAND_TIMEOUT: 40
     COUNT: 1
-    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-mid-restart'
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-mid-restart"
   script:
     - make k8s-test MARK="SKA_tmc_mid_restart"
   environment:
@@ -121,7 +120,7 @@ stop-k8s-test-tmc-mid-restart:
   extends:
     - stop-k8s-test
   variables:
-    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-mid-restart'
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-mid-restart"
 
 k8s-test-mid-restart-device:
   extends:
@@ -135,7 +134,7 @@ k8s-test-mid-restart-device:
     CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT: 30
     DISH_LEAF_NODE_COMMAND_TIMEOUT: 40
     COUNT: 1
-    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-mid-restart-device'
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-mid-restart-device"
   script:
     - make k8s-test MARK="SKA_tmc_mid_device_restart"
   environment:
@@ -146,7 +145,7 @@ stop-k8s-test-tmc-mid-restart-device:
   extends:
     - stop-k8s-test
   variables:
-    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-mid-restart-device'
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-mid-restart-device"
 
 k8s-test-batch2:
   extends:
@@ -156,10 +155,10 @@ k8s-test-batch2:
     DISH_SIMULATION_ENABLED: "true"
     SUBARRAY_COUNT: 2
     COUNT: 1
-    KUBE_NAMESPACE: 'ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch2'
+    KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch2"
     CI_KEEP_NAMESPACE: true
   script:
-    - make k8s-test MARK="batch2"
+    - make k8s-test MARK="spfrx"
   environment:
     name: test/$CI_COMMIT_REF_SLUG-batch2
     on_stop: stop-k8s-test-batch2
@@ -173,8 +172,6 @@ stop-k8s-test-batch2:
   environment:
     name: test/$CI_COMMIT_REF_SLUG-batch2
     action: stop
-
-
 
 k8s-tmc-scaling:
   stage: scaling
@@ -199,8 +196,6 @@ k8s-tmc-scaling:
     auto_stop_in: never
     on_stop: stop-k8s-tmc-scaling
 
-
-    
 stop-k8s-tmc-scaling:
   stage: scaling
   extends:
@@ -213,6 +208,3 @@ stop-k8s-tmc-scaling:
     name: ska-tmc-staging-env
     action: stop
   when: manual
-
-
-
