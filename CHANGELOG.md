@@ -5,6 +5,16 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[1.11.0-rc.1]
+*************
+Added
+-----
+* Introduced ResourceMonitor device in the ska-tmc-mid.
+* Added device configuration and FQDN under chart templates.
+* TMC Mid now supports reporting subarray allocations through the dishes attribute of the Resource Monitor.
+* Updated documentation to include ResourceMonitor configuration details and usage.
+* Utilised the latest ResourceMonitor release version v0.4.0 for integration and verification.
+
 [1.10.0-rc.1]
 *************
 Added
