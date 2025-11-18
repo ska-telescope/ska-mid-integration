@@ -119,7 +119,7 @@ dishleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-dishleafnode
-    tag: 0.26.1
+    tag: 0.27.1
     pullPolicy: IfNotPresent
 
 skatmcsimulators:
@@ -275,7 +275,7 @@ deviceServers:
 
   resourcemonitor:
     enabled: true
-    instances: [ "01" ]
+    instances: ["01"]
     file: "data/resourcemonitor.yaml"
     LivelinessCheckPeriod: 1.0
     EventSubscriptionCheckPeriod: 1.0

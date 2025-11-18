@@ -2,18 +2,10 @@ release=1.11.0-rc.1
 tag=1.11.0-rc.1
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.10.0-rc.1 to v1.11.0-rc.1**
-        * Introduced ResourceMonitor device in the ska-tmc-mid.
-        * Added device configuration and FQDN under chart templates.
-        * TMC Mid now supports reporting subarray allocations through the dishes attribute of the Resource Monitor.
-        * Updated documentation to include ResourceMonitor configuration details and usage.
-        * Utilised the latest ResourceMonitor release version v0.4.0 for integration and verification.
+**1. Updated ska-tmc-mid from v1.11.0-rc.1 to v1.12.0-rc.1**
+        * Updated dish-leafnodes tag to 0.27.1 to support Configure attenuation, saturation threshold, and noise diode
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.10.0-rc.1 to v1.11.0-rc.1**
+**1. Updated ska-tmc-mid from v1.11.0-rc.1 to v1.12.0-rc.1**
 
-        * Introduced ResourceMonitor device in the ska-tmc-mid.
-        * Added device configuration and FQDN under chart templates.
-        * TMC Mid now supports reporting subarray allocations through the dishes attribute of the Resource Monitor.
-        * Updated documentation to include ResourceMonitor configuration details and usage.
-        * Utilised the latest ResourceMonitor release version v0.4.0 for integration and verification.
+        * Updated dish-leafnodes tag to 0.27.1 to support Configure attenuation, saturation threshold, and noise diode
