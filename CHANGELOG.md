@@ -7,7 +7,9 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 [1.12.0-rc.1]
 *************
-* Updated dish-leafnodes tag to 0.27.0 to support Configure attenuation, saturation threshold, and noise diode
+Updated
+-------
+* Updated dish-leafnodes tag to 0.27.1 to support Configure attenuation, saturation threshold, and noise diode
 
 [1.11.0-rc.1]
 *************
