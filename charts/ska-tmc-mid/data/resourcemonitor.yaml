@@ -29,7 +29,9 @@ server:
                 - "{{ $.Values.deviceServers.resourcemonitor.DishLeafNodePrefix }}{{ $.Values.deviceServers.resourcemonitor.DishType }}"
             - name: "MidSubarrayNodeFQDN"
               values:
-                - "{{- range $.Values.deviceServers.resourcemonitor.MidSubarrayNodeFQDN }}"
+              {{- range $.Values.deviceServers.resourcemonitor.MidSubarrayNodeFQDN }}
+              - "{{ . }}"
+              {{- end }}
             - name: "DishIDs"
               values:
               {{- range  ( $.Values.deviceServers.resourcemonitor.DishIDs) }}
