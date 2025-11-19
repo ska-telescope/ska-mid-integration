@@ -71,7 +71,7 @@ ITANGO_ENABLED ?= true
 
 HELM_CHARTS_TO_PUBLISH = $(HELM_CHART)
 HELM_CHARTS ?= $(HELM_CHARTS_TO_PUBLISH)
-K8S_EXTRA_PARAMS ?= 
+K8S_EXTRA_PARAMS ?=
 TANGO_HOST_NAME ?= tango-databaseds
 PORT ?= 10000
 CSP_MASTER ?= tango://$(TANGO_HOST_NAME).$(KUBE_NAMESPACE).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-csp/control/0
@@ -80,9 +80,9 @@ SDP_MASTER ?= tango://$(TANGO_HOST_NAME).$(KUBE_NAMESPACE).svc.$(CLUSTER_DOMAIN)
 SDP_SUBARRAY_PREFIX ?= tango://$(TANGO_HOST_NAME).$(KUBE_NAMESPACE).svc.$(CLUSTER_DOMAIN):$(PORT)/mid-sdp/subarray
 HELM_CHARTS_TO_PUBLISH = $(HELM_CHART)
 HELM_CHARTS ?= $(HELM_CHARTS_TO_PUBLISH)
-K8S_EXTRA_PARAMS ?= 
+K8S_EXTRA_PARAMS ?=
 
-#dish variables 
+#dish variables
 DISH_INDICES ?= "001 036 063 100"
 DISH_NAMESPACES ?= "integration-ska-mid-tmc-dish01 integration-ska-mid-tmc-dish36 integration-ska-mid-tmc-dish63 integration-ska-mid-tmc-dish100"
 DISH_TANGO_HOST ?=  $(TANGO_HOST_NAME)
@@ -172,10 +172,8 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set global.device_server_port=$(TANGO_SERVER_PORT) \
 	--set global.operator=$(SKA_TANGO_OPERATOR) \
 	--set global.sdp.processingNamespace=$(KUBE_NAMESPACE_SDP) \
+	--set global.kafka_host=ska-mid-integration-kafka.$(KUBE_NAMESPACE) \
 	--set ska-tango-base.itango.enabled=$(ITANGO_ENABLED) \
-	--set ska-sdp.kafka.zookeeper.clusterDomain=$(CLUSTER_DOMAIN) \
-	--set ska-sdp.kafka.clusterDomain=$(CLUSTER_DOMAIN) \
-	--set ska-sdp.ska-sdp-qa.redis.clusterDomain=$(CLUSTER_DOMAIN) \
 	--set global.namespace_dish.dish_names[0]="$(DISH_NAME_1)"\
 	--set global.namespace_dish.dish_names[1]="$(DISH_NAME_36)"\
 	--set global.namespace_dish.dish_names[2]="$(DISH_NAME_63)"\
@@ -232,4 +230,3 @@ ifeq ($(SDP_DEPLOY),true)
 	@echo "k8s-post-uninstall-chart: deleting the SDP namespace $(KUBE_NAMESPACE_SDP)"
 	@make k8s-delete-namespace KUBE_NAMESPACE=$(KUBE_NAMESPACE_SDP)
 endif
-
