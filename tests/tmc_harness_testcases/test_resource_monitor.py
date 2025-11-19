@@ -80,7 +80,6 @@ def given_subarray_idle(
     command_input_factory: JsonFactory,
     event_tracer: TangoEventTracer,
     central_node_mid: CentralNodeWrapperMid,
-    subarray_id: str,
 ):
     """Verifies subarray in IDLE ObsState."""
     central_node_mid.set_subarray_id("1")
