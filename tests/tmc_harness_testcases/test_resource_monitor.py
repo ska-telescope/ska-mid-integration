@@ -46,12 +46,12 @@ def given_tmc_on(
     event_tracer.subscribe_event(
         central_node_mid.central_node, "telescopeState"
     )
-    event_tracer.subscribe_event(central_node_mid.subarray_node, "obsState")
     event_tracer.subscribe_event(
         central_node_mid.subarray_node, "assignedResources"
     )
     event_tracer.subscribe_event(resource_monitor, "dishes")
     central_node_mid.set_subarray_id("1")
+    event_tracer.subscribe_event(central_node_mid.subarray_node, "obsState")
     log_events(
         {
             central_node_mid.central_node: ["telescopeState"],
@@ -60,6 +60,7 @@ def given_tmc_on(
         }
     )
     central_node_mid.set_subarray_id("2")
+    event_tracer.subscribe_event(central_node_mid.subarray_node, "obsState")
     central_node_mid.move_to_on()
 
     assert_that(event_tracer).described_as(
