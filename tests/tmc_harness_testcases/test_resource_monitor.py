@@ -73,8 +73,8 @@ def given_tmc_on(
 
 
 @given(
-    "The resources are assigned to subarray 1 and subarray 2, and the "
-    "subarrays are in the IDLE ObsState."
+    "the resources are assigned to subarray 1 and subarray 2, and the "
+    "subarrays are in the IDLE ObsState"
 )
 def given_subarray_idle(
     command_input_factory: JsonFactory,
@@ -120,7 +120,7 @@ def given_subarray_idle(
 
 
 @given(
-    "The ResourceMonitor dishes attribute should correctly reflect the "
+    "the ResourceMonitor dishes attribute should correctly reflect the "
     "resources assigned to both subarrays"
 )
 def then_verify_resource_monitor_update(event_tracer: TangoEventTracer):
