@@ -11,7 +11,7 @@ import json
 
 import pytest
 from assertpy import assert_that
-from pytest_bdd import given, parsers, scenario, then, when
+from pytest_bdd import given, scenario, then, when
 from ska_tango_base.control_model import ObsState
 from ska_tango_testing.integration import TangoEventTracer, log_events
 from tango import DeviceProxy, DevState
@@ -73,10 +73,8 @@ def given_tmc_on(
 
 
 @given(
-    parsers.parse(
-        "The resources are assigned to subarray 1 and subarray 2, and the "
-        "subarrays are in the IDLE ObsState."
-    )
+    "The resources are assigned to subarray 1 and subarray 2, and the "
+    "subarrays are in the IDLE ObsState."
 )
 def given_subarray_idle(
     command_input_factory: JsonFactory,
