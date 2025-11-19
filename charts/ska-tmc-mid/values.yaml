@@ -283,7 +283,7 @@ deviceServers:
     DishLeafNodePrefix: "mid-tmc/leaf-node-dish/"
     SubarrayPrefix: "mid-tmc/subarray/"
     DishType: "SKA"
-    DishIDs: [ "SKA001", "SKA036", "SKA063", "SKA100" ]
+    DishIDs: ["SKA001", "SKA036", "SKA063", "SKA100"]
     MidSubarrayNodeFQDN: ["mid-tmc/subarray/01", "mid-tmc/subarray/02"]
 
   mocks:
