@@ -176,7 +176,7 @@ class TestTelescopeHealthState(object):
 
         devices = "csp subarray,sdp subarray"
         devices_list = devices.split(",")
-        health_state = "OK,OK"
+        health_state = "OK,OK,OK,OK"
         health_state_list = health_state.split(",")
 
         sim_devices_list = get_device_simulator_with_given_name(
