@@ -25,7 +25,7 @@ from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.constant import TIMEOUT
 
 
-@pytest.mark.batch2
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/skb_908.feature",
