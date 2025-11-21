@@ -5,6 +5,14 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[1.12.0-rc.2]
+*************
+Updated
+-------
+* Update SubarrayNodeFQDNs property data type from string to array
+* Utilised latest version of Resource Monitor 0.5.0
+* Utilised latest version of dishleafnode 0.27.2
+
 [1.12.0-rc.1]
 *************
 Updated
