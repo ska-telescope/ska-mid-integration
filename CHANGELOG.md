@@ -5,6 +5,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[Unreleased]
+*************
+Fixed
+-----
+Remove keys from input(argin) not required by real CSP, causing command failures.
+
 [1.12.0-rc.2]
 *************
 Updated
