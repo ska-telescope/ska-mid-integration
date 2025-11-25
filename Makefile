@@ -16,6 +16,7 @@ K8S_TIMEOUT ?= 800s
 PYTHON_LINT_TARGET ?= tests/
 DEPLOYMENT_TYPE = $(shell echo $(TELESCOPE) | cut -d '-' -f2)
 MARK ?= $(shell echo $(TELESCOPE) | sed "s/-/_/g") ## What -m opt to pass to pytest
+
 # run one test with FILE=acceptance/test_subarray_node.py::test_check_internal_model_according_to_the_tango_ecosystem_deployed
 FILE ?= tests## A specific test file to pass to pytest
 ADD_ARGS ?= ## Additional args to pass to pytest
@@ -23,7 +24,7 @@ FILE_NAME?= alarm_rules.txt
 
 DEPLOY_ALL_DISHES ?= false ## Flag to deploy all dishes or no
 
-CUSTOM_VALUES3 ?= 
+CUSTOM_VALUES3 ?=
 ifeq ($(strip $(DEPLOY_ALL_DISHES)),true)
 CUSTOM_VALUES3 = -f charts/ska-tmc-testing-mid/dish_scaled.yaml
 endif

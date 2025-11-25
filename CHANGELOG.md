@@ -11,6 +11,38 @@ Updated
 -------
 * TMC Mid full release 1.9.0
 
+[1.12.0-rc.2]
+*************
+Updated
+-------
+* Update SubarrayNodeFQDNs property data type from string to array
+* Utilised latest version of Resource Monitor 0.5.0
+* Utilised latest version of dishleafnode 0.27.2
+
+[1.12.0-rc.1]
+*************
+Updated
+-------
+* Updated dish-leafnodes tag to 0.27.1 to support Configure attenuation, saturation threshold, and noise diode
+
+[1.11.0-rc.1]
+*************
+Added
+-----
+* Introduced ResourceMonitor device in the ska-tmc-mid.
+* Added device configuration and FQDN under chart templates.
+* TMC Mid now supports reporting subarray allocations through the dishes attribute of the Resource Monitor.
+* Updated documentation to include ResourceMonitor configuration details and usage.
+* Utilised the latest ResourceMonitor release version v0.4.0 for integration and verification.
+
+[1.10.0-rc.1]
+*************
+Added
+-----
+* Arraylayout work is integrated in TMC mid integration work
+* Added two device property for CentralNode DefaultArrayLayoutSourceURIs, DefaultArrayLayoutPath
+* TMC Mid now supports configuring attenuation, saturation threshold and noise diode via Mid TMC Configure command.
+
 [1.9.0-rc.2]
 ************
 Fixed
@@ -47,7 +79,7 @@ Fixed
 ************
 Added
 -----
-* Added new documentation: `TMC Five-Point Calibration Scan` guide 
+* Added new documentation: `TMC Five-Point Calibration Scan` guide
   (five-point calibration scan procedure, JSON examples, and step-by-step instructions).
 * Band 5 Downconverter (Band5DC) support in the TMC-MID integration chart.
 * Added documentation related to Band 5 Downconverter (Band5DC) integration and usage.
@@ -68,7 +100,7 @@ Added
 * Updated TMC tags:
         sdpleafnodes:0.24.2
         tmccommon: 0.30.3
-        
+
 Removed
 -------
 * Removed invalid receive addresses jsons from data, because they were no longer required
@@ -90,7 +122,7 @@ Added
 * Updated helper in common and also update image to 0.28.8
 * Introduced `subarray_count` variable in `mock.yaml` to support configurable subarray scaling.
 * CommandTimeout attribute is introduced which can help to update timeout without redeployment.
-* CommandTimeOutDefault property is introduced which 
+* CommandTimeOutDefault property is introduced which
   can be used to set default value at the time of deployment.
 * Updated TMC tags:
     centralnode: 0.21.3
@@ -102,8 +134,8 @@ Added
 
 Changed
 -------
-* Refactored helm chart for scaling from now the global dishes variable accepts  
-  dish_id in ["SKA001","SKA002","SKA003", ....."SKA067","SKA100"]   
+* Refactored helm chart for scaling from now the global dishes variable accepts
+  dish_id in ["SKA001","SKA002","SKA003", ....."SKA067","SKA100"]
 
 Fixed
 -----
@@ -154,7 +186,7 @@ Fixed
 * Attribute on sdpleafnode named `assignResourcesSchemaVersion` which sets default version of
 SDP assign resources schema if not set.
 
-### Updated 
+### Updated
 * TMC Mid supports new TMC AssignResources json v2.2 with SDP v1.0.
 
 ### Fixed
@@ -174,7 +206,7 @@ runtime configurable.This resolves SKB-927.
 ************
 ### Updated
   * Utilised latest version of centralnode v0.19.7 to resolve SKB-860
-  * Utilised latest version of dishleafnode v0.23.1 to 
+  * Utilised latest version of dishleafnode v0.23.1 to
     updated Abort command completion check.
 
 [1.2.0-rc.4]
@@ -186,10 +218,10 @@ runtime configurable.This resolves SKB-927.
 [1.2.0-rc.3]
 ************
 ### Added
-  * Weather Station Device integrated which provides weather data for delay 
+  * Weather Station Device integrated which provides weather data for delay
     correction calculations.
   * Updated SDP leafnode tag to 0.22.3
-  
+
 [1.2.0-rc.2]
 ************
 ### Added
@@ -201,21 +233,21 @@ runtime configurable.This resolves SKB-927.
   * TMC uses wrap sector to generate program track table
   * TMC performs track table generation based on Fixed Trajectory data
   * Partial Configure now supports updating individual configuration keys. The Dish Leaf Node applies changes only to the specified fields.
-  
+
 [1.1.0]
 *******
 ### Added
   * Event Handlers are updated to remove event processing logic and handle it under component manager.
-  * Updated Central node command execution logic for Dishes to send ON/OFF/STANDBY 
+  * Updated Central node command execution logic for Dishes to send ON/OFF/STANDBY
       commands even if it fails for one dish , command will still be sent to other dishes.
   * Utilized refactored event manager in ska-tmc-centralnode version 0.19.5
   * ska-tmc-common version 0.27.5 is utilized for the same
 ### Fixed
   * As a part of SKB-517 resolution pointingState SLEW was accepted as valid Dish
       pointingState , so that TMC subarry can move to READY obsState.
-      But it was found that sometimes TRACK event for the dish which used to 
+      But it was found that sometimes TRACK event for the dish which used to
       come to TMC after it moves to READY was causing issues in obsState aggregation.
-      Hence, going forward TRACK event will not be sent from Dish Leaf Node if 
+      Hence, going forward TRACK event will not be sent from Dish Leaf Node if
       command is not in progress.
 
 
@@ -223,16 +255,16 @@ runtime configurable.This resolves SKB-927.
 ************
 ### Added
   * Event Handlers are updated to remove event processing logic and handle it under component manager.
-  * Updated Central node command execution logic for Dishes to send ON/OFF/STANDBY 
+  * Updated Central node command execution logic for Dishes to send ON/OFF/STANDBY
       commands even if it fails for one dish , command will still be sent to other dishes.
   * Utilized refactored event manager in ska-tmc-centralnode version 0.19.5
   * ska-tmc-common version 0.27.5 is utilized for the same
 ### Fixed
   * As a part of SKB-517 resolution pointingState SLEW was accepted as valid Dish
       pointingState , so that TMC subarry can move to READY obsState.
-      But it was found that sometimes TRACK event for the dish which used to 
+      But it was found that sometimes TRACK event for the dish which used to
       come to TMC after it moves to READY was causing issues in obsState aggregation.
-      Hence, going forward TRACK event will not be sent from Dish Leaf Node if 
+      Hence, going forward TRACK event will not be sent from Dish Leaf Node if
       command is not in progress.
 
 [1.0.0]
@@ -251,8 +283,8 @@ runtime configurable.This resolves SKB-927.
   * Improved health state aggregation logic using rule engine.
   * Utilised Abort API instead of AbortCommands.
   * Updated the TRLs of TMC mid devices as per ADR-9
-    * ska_mid/tm_central/central_node - mid-tmc/central-node/0              
-    * ska_mid/tm_subarray_node/1 - mid-tmc/subarray/01            
+    * ska_mid/tm_central/central_node - mid-tmc/central-node/0
+    * ska_mid/tm_subarray_node/1 - mid-tmc/subarray/01
     * ska_mid/tm_leaf_node/csp_master - mid-tmc/leaf-node-csp/0
     * ska_mid/tm_leaf_node/sdp_master - mid-tmc/leaf-node-sdp/0
     * ska_mid/tm_leaf_node/csp_subarray01 - mid-tmc/subarray-leaf-node-csp/01
@@ -284,7 +316,7 @@ runtime configurable.This resolves SKB-927.
       and utilising it if the change event of receiveAddresses is empty.This is resolved by
       subarray node 0.32.2.
     * Fix issue with trajectory key by utilising dish leaf node tag 0.21.0.
-    
+
 [1.0.0-rc.3]
 ************
 * Resolved the SKB-716
@@ -305,8 +337,8 @@ runtime configurable.This resolves SKB-927.
 * Added `family` and `member` field in deviceServers of each controller leafnode device in values.yaml
 * Added `family` field in deviceServers of each subarray leafnode devices in value.yaml
 * Updated the TRLs of TMC low devices as per ADR-9
-* ska_mid/tm_central/central_node - mid-tmc/central-node/0              
-* ska_mid/tm_subarray_node/1 - mid-tmc/subarray/01            
+* ska_mid/tm_central/central_node - mid-tmc/central-node/0
+* ska_mid/tm_subarray_node/1 - mid-tmc/subarray/01
 * ska_mid/tm_leaf_node/csp_master - mid-tmc/leaf-node-csp/0
 * ska_mid/tm_leaf_node/sdp_master - mid-tmc/leaf-node-sdp/0
 * ska_mid/tm_leaf_node/csp_subarray01 - mid-tmc/subarray-leaf-node-csp/01
@@ -359,7 +391,7 @@ runtime configurable.This resolves SKB-927.
   * CSP subarray leaf node to fix SKB-666
   * Fixed bug SKB-525.
   * Fixed bug SKB-665 on central node.
-  
+
 [0.24.0-rc.1]
 *************
 * Verified the TMC-CSP with ADR-99 interface updates

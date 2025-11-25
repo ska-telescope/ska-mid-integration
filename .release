@@ -1,12 +1,16 @@
-release=1.9.0
-tag=1.9.0
+release=1.12.0-rc.2
+tag=1.12.0-rc.2
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.9.0-rc.2 to v1.9.0**
-        * TMC Mid full release 1.9.0
-    
+**1. Updated ska-tmc-mid from v1.12.0-rc.1 to v1.12.0-rc.2**
+        * Update SubarrayNodeFQDNs property data type from string to array
+        * Utilised latest version of Resource Monitor 0.5.0
+        * Utilised latest version of dishleafnode 0.27.2
+
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.9.0-rc.2 to v1.9.0**
+**1. Updated ska-tmc-mid from v1.12.0-rc.1 to v1.12.0-rc.2**
 
-        * TMC Mid full release 1.9.0
+        * Update SubarrayNodeFQDNs property data type from string to array
+        * Utilised latest version of Resource Monitor 0.5.0
+        * Utilised latest version of dishleafnode 0.27.2

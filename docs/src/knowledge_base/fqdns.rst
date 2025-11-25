@@ -24,3 +24,5 @@ The TRLs of all the TMC Mid devices are updated to comply with ADR-9
 +-------------------------+----------------------------------------+---------------------------------------+
 | SDP Subarray Leaf Node  |`ska_mid/tm_leaf_node/sdp_subarray01`   | `mid-tmc/subarray-leaf-node-sdp/01`   |
 +-------------------------+----------------+-----------------------+---------------------------------------+
+| Resource Monitor        |`ska_mid/tm_resource_monitor/01`        | `mid-tmc/resource-monitor/01`         |
++-------------------------+----------------+-----------------------+---------------------------------------+

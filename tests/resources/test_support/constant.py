@@ -44,6 +44,7 @@ tmc_sdp_subarrayln_prefix = "mid-tmc/subarray-leaf-node-sdp"
 sdp_subarray_prefix = "mid-sdp/subarray"
 csp_subarray_prefix = "mid-csp/subarray"
 sdp_queue_connector = "mid-sdp/queueconnector/01"
+tmc_resource_monitor = "mid-tmc/resource-monitor/01"
 COMMAND_COMPLETED = json.dumps([ResultCode.OK, "Command Completed"])
 
 TIMEOUT = 100
@@ -595,3 +596,196 @@ RECEIVE_ADDRESSES = json.dumps(
         },
     }
 )
+
+
+expected_json_spfrx_param_case_all_dishes = {
+    "dish": {
+        "receiver_band": "1",
+        "sub_band": 1,
+        "spfrx_processing_parameters": [
+            {
+                "dishes": ["all"],
+                "sync_pps": True,
+                "attenuation_pol_x": 10,
+                "attenuation_pol_y": 10,
+                "saturation_threshold": 0.6,
+                "noise_diode": {
+                    "psuedo_random": {
+                        "binary_polynomial": 1,
+                        "seed": 1,
+                        "dwell": 1,
+                    },
+                    "periodic": {
+                        "period": 1,
+                        "duty_cycle": 1,
+                        "phase_shift": 1,
+                    },
+                },
+            }
+        ],
+    }
+}
+
+expected_json_spfrx_param_case_single_parameter_per_dish = {
+    "dish": {
+        "receiver_band": "1",
+        "sub_band": 1,
+        "spfrx_processing_parameters": [
+            {
+                "dishes": ["SKA001"],
+                "sync_pps": True,
+                "attenuation_1_pol_x": 20,
+                "attenuation_1_pol_y": 20,
+                "attenuation_2_pol_x": 10,
+                "attenuation_2_pol_y": 10,
+                "saturation_threshold": 0.7,
+                "noise_diode": {
+                    "psuedo_random": {
+                        "binary_polynomial": 2,
+                        "seed": 2,
+                        "dwell": 2,
+                    },
+                    "periodic": {
+                        "period": 1,
+                        "duty_cycle": 1,
+                        "phase_shift": 1,
+                    },
+                },
+            },
+            {
+                "dishes": ["SKA036"],
+                "sync_pps": True,
+                "attenuation_pol_x": 10,
+                "attenuation_pol_y": 10,
+                "saturation_threshold": 0.6,
+                "noise_diode": {
+                    "psuedo_random": {
+                        "binary_polynomial": 1,
+                        "seed": 1,
+                        "dwell": 1,
+                    },
+                    "periodic": {
+                        "period": 1,
+                        "duty_cycle": 1,
+                        "phase_shift": 1,
+                    },
+                },
+            },
+        ],
+    }
+}
+
+expected_json_spfrx_param_case_multiple_dish_same_parameter = {
+    "dish": {
+        "receiver_band": "1",
+        "sub_band": 1,
+        "spfrx_processing_parameters": [
+            {
+                "dishes": ["SKA001", "SKA036"],
+                "sync_pps": True,
+                "attenuation_pol_x": 10,
+                "attenuation_pol_y": 10,
+                "saturation_threshold": 0.6,
+                "noise_diode": {
+                    "psuedo_random": {
+                        "binary_polynomial": 1,
+                        "seed": 1,
+                        "dwell": 1,
+                    },
+                    "periodic": {
+                        "period": 1,
+                        "duty_cycle": 1,
+                        "phase_shift": 1,
+                    },
+                },
+            }
+        ],
+    }
+}
+
+expected_json_spfrx_param_case_all_different = {
+    "dish": {
+        "receiver_band": "1",
+        "sub_band": 1,
+        "spfrx_processing_parameters": [
+            {
+                "dishes": ["SKA001"],
+                "sync_pps": True,
+                "attenuation_pol_x": 15,
+                "attenuation_pol_y": 12,
+                "saturation_threshold": 0.65,
+                "noise_diode": {
+                    "psuedo_random": {
+                        "binary_polynomial": 3,
+                        "seed": 7,
+                        "dwell": 4,
+                    },
+                    "periodic": {
+                        "period": 8,
+                        "duty_cycle": 1,
+                        "phase_shift": 2,
+                    },
+                },
+            },
+            {
+                "dishes": ["SKA036"],
+                "sync_pps": False,
+                "attenuation_1_pol_x": 25,
+                "attenuation_1_pol_y": 22,
+                "attenuation_2_pol_x": 5,
+                "attenuation_2_pol_y": 8,
+                "saturation_threshold": 0.55,
+                "noise_diode": {
+                    "psuedo_random": {
+                        "binary_polynomial": 1,
+                        "seed": 1,
+                        "dwell": 1,
+                    },
+                    "periodic": {
+                        "period": 10,
+                        "duty_cycle": 1,
+                        "phase_shift": 3,
+                    },
+                },
+            },
+            {
+                "dishes": ["SKA063"],
+                "sync_pps": True,
+                "attenuation_pol_x": 18,
+                "attenuation_pol_y": 18,
+                "saturation_threshold": 0.6,
+                "noise_diode": {
+                    "psuedo_random": {
+                        "binary_polynomial": 5,
+                        "seed": 9,
+                        "dwell": 2,
+                    },
+                    "periodic": {
+                        "period": 1,
+                        "duty_cycle": 1,
+                        "phase_shift": 1,
+                    },
+                },
+            },
+            {
+                "dishes": ["SKA100"],
+                "sync_pps": True,
+                "attenuation_pol_x": 10,
+                "attenuation_pol_y": 10,
+                "saturation_threshold": 0.7,
+                "noise_diode": {
+                    "psuedo_random": {
+                        "binary_polynomial": 2,
+                        "seed": 2,
+                        "dwell": 2,
+                    },
+                    "periodic": {
+                        "period": 1,
+                        "duty_cycle": 1,
+                        "phase_shift": 1,
+                    },
+                },
+            },
+        ],
+    }
+}

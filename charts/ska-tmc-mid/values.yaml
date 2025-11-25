@@ -63,6 +63,7 @@ global:
   mid_csp_control: "mid-csp/control/0"
   mid_csp_subarray_1: "mid-csp/subarray/01"
   mid_csp_subarray_2: "mid-csp/subarray/02"
+  resource_monitor_prefix: "mid-tmc/resource-monitor/"
 
 dsconfig:
   configuration_file: data/tmc-mid-config.json
@@ -83,49 +84,56 @@ centralnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-centralnode
-    tag: 0.24.0
+    tag: 0.25.1
     pullPolicy: IfNotPresent
 
 subarraynode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-subarraynode
-    tag: 0.44.3
+    tag: 0.47.3
     pullPolicy: IfNotPresent
 
 sdpleafnodes:
   image:
     registry: artefact.skao.int
     image: ska-tmc-sdpleafnodes
-    tag: 0.24.2
+    tag: 0.24.5
     pullPolicy: IfNotPresent
 
 cspmasterleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.32.0
+    tag: 0.33.1
     pullPolicy: IfNotPresent
 
 cspsubarrayleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.32.0
+    tag: 0.33.1
     pullPolicy: IfNotPresent
 
 dishleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-dishleafnode
-    tag: 0.26.0
+    tag: 0.27.2
     pullPolicy: IfNotPresent
 
 skatmcsimulators:
   image:
     registry: artefact.skao.int
     image: ska-tmc-simulators
-    tag: 1.1.5
+    tag: 1.5.1
+    pullPolicy: IfNotPresent
+
+resource_monitor:
+  image:
+    registry: artefact.skao.int
+    image: ska-tmc-resource-monitor
+    tag: 0.5.0
     pullPolicy: IfNotPresent
 
 resources:
@@ -152,6 +160,8 @@ deviceServers:
     DishVccInitTimeout: 180
     LivelinessCheckPeriod: 2.0
     EventSubscriptionCheckPeriod: 2.0
+    DefaultArrayLayoutSourceURIs: "gitlab://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata"
+    DefaultArrayLayoutPath: "instrument/ska1_mid/layout/mid-layout.json"
     family: "central-node"
     member: "0"
     global_pointing_model:
@@ -235,7 +245,7 @@ deviceServers:
         memory: 3000Mi
       requests:
         cpu: 2000m
-        memory: 300Mi
+        memory: 700Mi
     CommandTimeOutDefault: 90
     MaxTrackTableRetry: 3
     TrackTableRetryDuration: 0.2
@@ -261,7 +271,20 @@ deviceServers:
         cpu: 500m
       requests:
         cpu: 500m
-        memory: 300Mi
+        memory: 500Mi
+
+  resourcemonitor:
+    enabled: true
+    instances: ["01"]
+    file: "data/resourcemonitor.yaml"
+    LivelinessCheckPeriod: 1.0
+    EventSubscriptionCheckPeriod: 1.0
+    family: "resource-monitor"
+    DishLeafNodePrefix: "mid-tmc/leaf-node-dish/"
+    SubarrayPrefix: "mid-tmc/subarray/"
+    DishType: "SKA"
+    DishIDs: ["SKA001", "SKA036", "SKA063", "SKA100"]
+    MidSubarrayNodeFQDNs: ["mid-tmc/subarray/01", "mid-tmc/subarray/02"]
 
   mocks:
     enabled: false

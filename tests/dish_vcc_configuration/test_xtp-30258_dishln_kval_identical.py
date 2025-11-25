@@ -13,7 +13,7 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.constant import tmc_csp_master_leaf_node
 
 
-@pytest.mark.batch1
+@pytest.mark.SKA_tmc_mid_device_restart
 @pytest.mark.SKA_mid
 @scenario(
     "../features/dish_vcc_initialization/"
