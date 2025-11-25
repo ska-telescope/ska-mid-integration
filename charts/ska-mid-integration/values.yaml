@@ -157,6 +157,12 @@ ska-tmc-mid:
   telescope: SKA-mid
   ska-tango-base:
     enabled: false
+  cspmasterleafnode:
+    image:
+      tag: 0.33.4
+  cspsubarrayleafnode:
+    image:
+      tag: 0.33.4
   deviceServers:
     mocks:
       enabled: false
