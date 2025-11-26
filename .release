@@ -1,16 +1,13 @@
-release=1.12.0-rc.2
-tag=1.12.0-rc.2
+release=1.12.0-rc.3
+tag=1.12.0-rc.3
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.12.0-rc.1 to v1.12.0-rc.2**
-        * Update SubarrayNodeFQDNs property data type from string to array
-        * Utilised latest version of Resource Monitor 0.5.0
-        * Utilised latest version of dishleafnode 0.27.2
+**1. Updated ska-tmc-mid from v1.12.0-rc.2 to v1.12.0-rc.3**
+
+        * Remove keys from input(argin) not required by real CSP, causing command failures.
 
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.12.0-rc.1 to v1.12.0-rc.2**
+**1. Updated ska-tmc-mid from v1.12.0-rc.2 to v1.12.0-rc.3**
 
-        * Update SubarrayNodeFQDNs property data type from string to array
-        * Utilised latest version of Resource Monitor 0.5.0
-        * Utilised latest version of dishleafnode 0.27.2
+        * Remove keys from input(argin) not required by real CSP, causing command failures.
