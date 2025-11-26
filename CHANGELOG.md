@@ -11,6 +11,12 @@ Fixed
 -----
 Remove keys from input(argin) not required by real CSP, causing command failures.
 
+[1.9.0]
+************
+Updated
+-------
+* TMC Mid full release 1.9.0
+
 [1.12.0-rc.2]
 *************
 Updated
