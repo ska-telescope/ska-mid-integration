@@ -5,6 +5,20 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[1.12.0]
+********
+
+Updated
+-------
+* Updated dish-leafnodes tag to 0.27.1 to support Configure attenuation, saturation threshold, and noise diode.
+* Update SubarrayNodeFQDNs property data type from string to array
+* Utilised latest version of Resource Monitor 0.5.0
+* Utilised latest version of dishleafnode 0.27.2
+
+Fixed
+-----
+* Remove keys from input(argin) not required by real CSP, causing command failures.
+
 [1.12.0-rc.3]
 *************
 Fixed
