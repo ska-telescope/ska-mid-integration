@@ -327,7 +327,7 @@ def validate_error_message_reporting(
         and pytest.defective_device == tmc_dish_leaf_node1
     ):
         exception_message = (
-            "Timeout occurred while waiting for SetOperateMode"
+            "Timeout occurred while waiting for configuredBand"
             " command to be completed in Configure command"
         )
 
