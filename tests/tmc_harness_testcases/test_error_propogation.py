@@ -6,7 +6,7 @@ This test case verifies that one of  the CSP/SDP Subarray
 is identified as defective,
  and the required command is executed on the TMC Mid,
  then Subarry node
-   reports an error
+   reports an error.
 """
 import json
 
