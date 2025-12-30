@@ -1,21 +1,13 @@
-release=1.12.0
-tag=1.12.0
+release=1.13.0-rc.1
+tag=1.13.0-rc.1
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.12.0-rc.3 to v1.12.0**
+**1. Updated ska-tmc-mid from v1.12.0 to v1.13.0-rc.1**
 
-        * Updated dish-leafnodes tag to 0.27.1 to support Configure attenuation, saturation threshold, and noise diode.
-        * Update SubarrayNodeFQDNs property data type from string to array
-        * Utilised latest version of Resource Monitor 0.5.0
-        * Utilised latest version of dishleafnode 0.27.2
-        * Remove keys from input(argin) not required by real CSP, causing command failures.
+        * TMC Mid to align with the changes introduced in Dish 9.0.0 namely; Deprecated SetOperateMode() command which is orchestrated in the TMC Configure workflow.
 
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.12.0-rc.3 to v1.12.0**
-        * Updated dish-leafnodes tag to 0.27.1 to support Configure attenuation, saturation threshold, and noise diode.
-        * Update SubarrayNodeFQDNs property data type from string to array
-        * Utilised latest version of Resource Monitor 0.5.0
-        * Utilised latest version of dishleafnode 0.27.2
-        * Remove keys from input(argin) not required by real CSP, causing command failures.
+**1. Updated ska-tmc-mid from v1.12.0 to v1.13.0-rc.1**
+        * TMC Mid to align with the changes introduced in Dish 9.0.0 namely; Deprecated SetOperateMode() command which is orchestrated in the TMC Configure workflow.
 ​
