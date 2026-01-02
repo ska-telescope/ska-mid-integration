@@ -12,6 +12,9 @@ import pytest
 from assertpy import assert_that
 from pytest_bdd import given, scenario, then, when
 from ska_control_model import ObsState
+from ska_integration_test_harness.actions.utils.generate_eb_pb_ids import (
+    generate_eb_pb_ids,
+)
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_tango_base.commands import ResultCode
 from ska_tango_testing.integration import TangoEventTracer, log_events
@@ -84,9 +87,11 @@ def central_node_assign_resources(
         command_input_factory (JsonFactory): Object of json factory
     """
     assign_input = MyFileJSONInput("centralnode", "assign_resources_mid")
-    assign_input = json.loads(assign_input.as_str())
+    cmd_input = generate_eb_pb_ids(assign_input)
     LOGGER.info("Invoking AssignResources command: %s", assign_input)
-    _, pytest.unique_id_assign = tmc.central_node.AssignResources(assign_input)
+    _, pytest.unique_id_assign = tmc.central_node.AssignResources(
+        cmd_input.as_str()
+    )
     LOGGER.info("AssignResources command id: %s", pytest.unique_id_assign)
 
 
