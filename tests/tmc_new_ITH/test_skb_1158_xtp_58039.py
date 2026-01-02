@@ -23,7 +23,8 @@ from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 LOGGER = logging.getLogger(__name__)
 
 
-@pytest.mark.SKA_low
+@pytest.mark.batch123
+@pytest.mark.SKA_mid
 @scenario(
     "../features/tmc/SKB_1158.feature",
     "Verify SKB-1158",
