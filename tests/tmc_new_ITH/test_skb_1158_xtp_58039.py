@@ -26,7 +26,7 @@ from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 LOGGER = logging.getLogger(__name__)
 
 
-@pytest.mark.batch123
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/SKB_1158.feature",
