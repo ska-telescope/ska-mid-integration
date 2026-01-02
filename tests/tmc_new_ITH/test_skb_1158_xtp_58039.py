@@ -26,7 +26,7 @@ LOGGER = logging.getLogger(__name__)
 @pytest.mark.batch123
 @pytest.mark.SKA_mid
 @scenario(
-    "../tmc_new_ITH/features/skb_1158.feature",
+    "../tmc_new_ITH/features/SKB_1158.feature",
     "Verify SKB-1158",
 )
 def test_verify_skb_1158():
