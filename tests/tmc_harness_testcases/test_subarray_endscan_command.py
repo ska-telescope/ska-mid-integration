@@ -14,6 +14,7 @@ from pytest_bdd import given, scenario, then, when
 from ska_control_model import ObsState
 from ska_tango_base.commands import ResultCode
 from ska_tango_testing.integration import TangoEventTracer, log_events
+from ska_tango_testing.mock.placeholders import Anything
 from tango import DevState
 
 from tests.resources.test_harness.central_node_mid import CentralNodeWrapperMid
@@ -32,7 +33,7 @@ from tests.resources.test_support.constant import (
 )
 
 
-@pytest.mark.batch1
+@pytest.mark.batch123
 @pytest.mark.SKA_mid
 @scenario(
     "../features/skb_512.feature",
@@ -73,6 +74,9 @@ def given_a_tmc_in_scanning_obs_state(
     )
     event_tracer.subscribe_event(
         subarray_node.subarray_node, "longRunningCommandResult"
+    )
+    event_tracer.subscribe_event(
+        subarray_node.csp_subarray_leaf_node, "longRunningCommandResult"
     )
     event_tracer.subscribe_event(central_node_mid.subarray_node, "obsState")
     event_tracer.subscribe_event(
@@ -300,5 +304,28 @@ def check_obs_state_ready_for_leaf_nodes(
         subarray_node.sdp_subarray_leaf_node,
         "sdpSubarrayObsState",
         ObsState.READY,
+    )
+
+    # Check for CSP Subarray Leaf Node Timeout event on LRCR attribute before
+    # going for next test
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "THEN" STEP: '
+        "CSP Subarray Leaf Node device"
+        f"({subarray_node.csp_subarray_leaf_node.dev_name()}) "
+        "is expected have longRunningCommand as"
+        '(unique_id,(ResultCode.FAILED,"Timeout has occurred, '
+        'command failed"))',
+    ).within_timeout(TIMEOUT).has_change_event_occurred(
+        subarray_node.csp_subarray_leaf_node,
+        "longRunningCommandResult",
+        (
+            Anything,
+            json.dumps(
+                (
+                    int(ResultCode.FAILED),
+                    "Timeout has occurred, command failed",
+                )
+            ),
+        ),
     )
     event_tracer.clear_events()
