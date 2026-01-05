@@ -216,3 +216,5 @@ def verify_tmc_subarray_in_empty_observation_state(
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         tmc.subarray_node, "obsState", ObsState.EMPTY
     )
+
+    event_tracer.clear_events()
