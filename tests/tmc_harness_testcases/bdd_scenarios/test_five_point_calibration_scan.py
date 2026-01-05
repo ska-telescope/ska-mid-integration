@@ -16,7 +16,7 @@ from tests.resources.test_support.constant import COMMAND_COMPLETED
 TIMEOUT = 50
 
 
-@pytest.mark.batch123
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/five_point_scan.feature",

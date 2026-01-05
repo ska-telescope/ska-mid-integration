@@ -33,7 +33,7 @@ from tests.resources.test_support.constant import (
 )
 
 
-@pytest.mark.batch123
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/skb_512.feature",
