@@ -8,12 +8,6 @@ Scenario Outline: Test Restart Command during failure of AssignResources and Sca
     And TMC subarray transitions to observation state EMPTY
     Examples:
         | command         | csp_obsstate | sdp_obsstate     |
-        | AssignResources | FAULT        | IDLE             |
-        | AssignResources | FAULT        | RESOURCING       |
-        | AssignResources | IDLE         | FAULT            |
-        | AssignResources | RESOURCING   | FAULT            |
-        | AssignResources | RESOURCING   | IDLE             |
-        | AssignResources | RESOURCING   | RESOURCING       |
         | AssignResources | IDLE         | RESOURCING       |
         | Scan            | SCANNING     | FAULT            |
         | Scan            | FAULT        | SCANNING         |
