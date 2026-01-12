@@ -10,6 +10,7 @@ from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import HealthState
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
+from ska_integration_test_harness.facades.dishes_facade import DishesFacade
 from ska_integration_test_harness.facades.sdp_facade import SDPFacade
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_tango_testing.integration import TangoEventTracer
@@ -35,13 +36,13 @@ def test_dish_validation_impacts_health():
 
 
 @pytest.fixture
-def preserve_dish_state(tmc: TMCFacade):
+def preserve_dish_state(tmc: TMCFacade, dish_master: DishesFacade):
     """
     Preserve and restore Dish Leaf Node validation state so
     subsequent tests are not affected.
     """
     dish_ln = tmc.dish_leaf_node_list[0]
-    dish_Master = tmc.dish_master_list[3]
+    dish_Master = dish_master.dish_master_list[3]
 
     # Preserve original values
     original_kvalue_dln = dish_ln.kValue
@@ -106,6 +107,7 @@ def telescope_in_on_state(tmc: TMCFacade):
 )
 def prepare_validation_condition(
     tmc: TMCFacade,
+    dish_master: DishesFacade,
     validation_type: str,
     preserve_dish_state,
 ):
@@ -114,7 +116,8 @@ def prepare_validation_condition(
     assert validation results immediately after setting.
     """
     dish_ln = tmc.dish_leaf_node_list[0]
-    dish_Master = tmc.dish_master_list[3]
+    # dish_Master = tmc.dish_master_list[3]
+    dish_Master = dish_master.dish_master_list[3]
 
     if validation_type == "all_ok":
         dish_ln.kvalue_validation_callback()
