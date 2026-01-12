@@ -110,29 +110,33 @@ def prepare_validation_condition(
     assert validation results immediately after setting.
     """
     dish_ln = tmc.dish_leaf_node_list[0]
+    dish_Master = tmc.dish_master_list[3]
 
     if validation_type == "all_ok":
         dish_ln.kvalue_validation_callback()
         dish_ln.update_gpm_validation_result_callback("band2", "OK")
 
         assert dish_ln.kValueValidationResult == ResultCode.OK
-        assert (
-            dish_ln.component_manager._gpm_validation_result["band2"] == "OK"
-        )
+        assert dish_Master.gpmValidationResult["band2"] == "OK"
+        # assert (
+        #     dish_ln.component_manager._gpm_validation_result["band2"] == "OK"
+        # )
 
     elif validation_type == "gpm mismatch":
         dish_ln.kvalue_validation_callback()
         dish_ln.update_gpm_validation_result_callback("band2", "FAILED")
 
         assert dish_ln.kValueValidationResult == ResultCode.OK
-        assert (
-            dish_ln.component_manager._gpm_validation_result["band2"]
-            == "FAILED"
-        )
+        assert dish_ln.gpmValidationResult["band2"] == "FAILED"
+        # assert (
+        #     dish_ln.component_manager._gpm_validation_result["band2"]
+        #     == "FAILED"
+        # )
 
     elif validation_type == "kvalue mismatch":
         dish_ln.SetKValue(1)
-        dish_ln.component_manager._dish_manager_kvalue = "2"
+        dish_Master.SetKValue(2)
+        # dish_ln.component_manager._dish_manager_kvalue = "2"
         dish_ln.kvalue_validation_callback()
 
         assert dish_ln.kValueValidationResult == ResultCode.FAILED
