@@ -9,6 +9,8 @@ import pytest
 from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import HealthState
+from ska_integration_test_harness.facades.csp_facade import CSPFacade
+from ska_integration_test_harness.facades.sdp_facade import SDPFacade
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_tango_testing.integration import TangoEventTracer
 from tango import DeviceProxy
@@ -69,6 +71,8 @@ def preserve_dish_state(tmc: TMCFacade):
 @given("a TMC")
 def given_a_tmc(
     tmc: TMCFacade,
+    sdp: SDPFacade,
+    csp: CSPFacade,
     event_tracer: TangoEventTracer,
 ):
     """
@@ -78,7 +82,7 @@ def given_a_tmc(
     :param event_tracer: Utility used to trace and assert Tango events.
     """
 
-    setup_event_subscriptions(tmc, None, None, event_tracer)
+    setup_event_subscriptions(tmc, csp, sdp, event_tracer)
 
 
 @given("Telescope is in ON state")
