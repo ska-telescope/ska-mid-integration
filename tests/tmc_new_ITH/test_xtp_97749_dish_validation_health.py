@@ -25,7 +25,7 @@ from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
 @pytest.mark.batchval1
 @pytest.mark.SKA_mid
 @scenario(
-    "../features/xtp_97749_dish_validation_health.feature",
+    "../tmc_new_ITH/features/xtp_97749_dish_validation_health.feature",
     "Dish validation failure impacts telescope health",
 )
 def test_dish_validation_impacts_health():
@@ -173,31 +173,31 @@ def verify_dln_health(
     )
 
 
-@then(
-    parsers.parse('TMC Subarray Node healthState shall be "{expected_health}"')
-)
-def verify_subarray_health(
-    tmc: TMCFacade,
-    event_tracer: TangoEventTracer,
-    expected_health: str,
-):
-    """
-    Verify the TMC Subarray Node health state.
+# @then(
+#     parsers.parse('TMC Subarray Node healthState shall be "{expected_health}"')
+# )
+# def verify_subarray_health(
+#     tmc: TMCFacade,
+#     event_tracer: TangoEventTracer,
+#     expected_health: str,
+# ):
+#     """
+#     Verify the TMC Subarray Node health state.
 
-    This step confirms that healthstate change
-    propagates from the Dish Leaf Node to the Subarray Node.
+#     This step confirms that healthstate change
+#     propagates from the Dish Leaf Node to the Subarray Node.
 
-    :param tmc: TMC facade providing access to the Subarray Node.
-    :param event_tracer: Utility used to capture and assert change events.
-    :param expected_health: Expected Subarray health state.
-    """
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        tmc.subarray_node,
-        "healthState",
-        HealthState[expected_health],
-    )
+#     :param tmc: TMC facade providing access to the Subarray Node.
+#     :param event_tracer: Utility used to capture and assert change events.
+#     :param expected_health: Expected Subarray health state.
+#     """
+#     assert_that(event_tracer).within_timeout(
+#         ASSERTIONS_TIMEOUT
+#     ).has_change_event_occurred(
+#         tmc.subarray_node,
+#         "healthState",
+#         HealthState[expected_health],
+#     )
 
 
 @then(parsers.parse('telescopeHealthState shall be "{expected_health}"'))

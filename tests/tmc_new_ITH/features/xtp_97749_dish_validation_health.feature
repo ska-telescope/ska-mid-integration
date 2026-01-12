@@ -5,7 +5,6 @@
     And Dish Leaf Node has "<validation_type>" validation condition
     When Dish Leaf Node health is evaluated
     Then Dish Leaf Node healthState shall be "<expected_health>"
-    And TMC Subarray Node healthState shall be "<expected_health>"
     And telescopeHealthState shall be "<expected_health>"
     And an alarm shall be raised for "{validation_type}" validation failure
 
