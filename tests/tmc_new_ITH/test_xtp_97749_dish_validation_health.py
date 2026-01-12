@@ -41,18 +41,22 @@ def preserve_dish_state(tmc: TMCFacade):
     subsequent tests are not affected.
     """
     dish_ln = tmc.dish_leaf_node_list[0]
+    dish_Master = tmc.dish_master_list[3]
 
     # Preserve original values
-    original_kvalue = dish_ln.kValue
-    original_gpm_results = dict(
-        dish_ln.component_manager._gpm_validation_result
-    )
+    original_kvalue_dln = dish_ln.kValue
+    original_kvalue_master = dish_Master.kValue
+    original_gpm_results = dict(dish_ln.gpmValidationResult)
+    # original_gpm_results = dict(
+    #     dish_ln.component_manager._gpm_validation_result
+    # )
 
     yield
 
     #  Restore kValue
-    dish_ln.SetKValue(original_kvalue)
-    dish_ln.component_manager._dish_manager_kvalue = str(original_kvalue)
+    dish_ln.SetKValue(original_kvalue_dln)
+    dish_Master.SetKValue(original_kvalue_master)
+    # dish_ln.component_manager._dish_manager_kvalue = str(original_kvalue)
     dish_ln.kvalue_validation_callback()
 
     # Restore GPM
@@ -62,7 +66,7 @@ def preserve_dish_state(tmc: TMCFacade):
     #  Assertions after reset
     assert dish_ln.kValueValidationResult == ResultCode.OK
 
-    for result in dish_ln.component_manager._gpm_validation_result.values():
+    for result in dish_ln.gpmValidationResult.values():
         assert result == "OK"
 
     assert tmc.central_node.IsDishVccConfigSet is True
@@ -117,7 +121,7 @@ def prepare_validation_condition(
         dish_ln.update_gpm_validation_result_callback("band2", "OK")
 
         assert dish_ln.kValueValidationResult == ResultCode.OK
-        assert dish_Master.gpmValidationResult["band2"] == "OK"
+        assert dish_ln.gpmValidationResult["band2"] == "OK"
         # assert (
         #     dish_ln.component_manager._gpm_validation_result["band2"] == "OK"
         # )
