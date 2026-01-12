@@ -174,7 +174,7 @@ def verify_dln_health(
 
 
 # @then(
-#     parsers.parse('TMC Subarray Node healthState shall be "{expected_health}"')
+#  parsers.parse('TMC Subarray Node healthState shall be "{expected_health}"')
 # )
 # def verify_subarray_health(
 #     tmc: TMCFacade,
