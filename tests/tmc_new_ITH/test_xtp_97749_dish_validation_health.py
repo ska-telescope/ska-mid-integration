@@ -157,8 +157,12 @@ def prepare_validation_condition(
         gpm_result = json.loads(dish_ln.gpmValidationResult)
         # assert all(value == "OK" for value in gpm_result.values())
         # assert any(value != "FAILED" for value in gpm_result.values())
-        LOGGER.info("prepare_validation_condition-GPM validation result:")
+        LOGGER.info("prepare_validation_condition-DLN GPM validation result:")
         for band, value in gpm_result.items():
+            LOGGER.info("  %s: %s", band, value)
+        gpm_result1 = json.loads(dish_master.gpmValidationResult)
+        LOGGER.info("prepare_validation -Master GPM validation result:")
+        for band, value in gpm_result1.items():
             LOGGER.info("  %s: %s", band, value)
 
     elif validation_type == "gpm mismatch":
