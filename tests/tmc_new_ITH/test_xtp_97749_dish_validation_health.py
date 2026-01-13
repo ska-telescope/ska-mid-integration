@@ -36,13 +36,13 @@ def test_dish_validation_impacts_health():
 
 
 @pytest.fixture
-def preserve_dish_state(tmc: TMCFacade, dish_master: DishesFacade):
+def preserve_dish_state(tmc: TMCFacade, dishes: DishesFacade):
     """
     Preserve and restore Dish Leaf Node validation state so
     subsequent tests are not affected.
     """
     dish_ln = tmc.dish_leaf_node_list[0]
-    dish_Master = dish_master.dish_master_list[3]
+    dish_Master = dishes.dish_master_dict["dish_063"]
 
     # Preserve original values
     original_kvalue_dln = dish_ln.kValue
@@ -107,7 +107,7 @@ def telescope_in_on_state(tmc: TMCFacade):
 )
 def prepare_validation_condition(
     tmc: TMCFacade,
-    dish_master: DishesFacade,
+    dishes: DishesFacade,
     validation_type: str,
     preserve_dish_state,
 ):
@@ -117,7 +117,7 @@ def prepare_validation_condition(
     """
     dish_ln = tmc.dish_leaf_node_list[0]
     # dish_Master = tmc.dish_master_list[3]
-    dish_Master = dish_master.dish_master_list[3]
+    dish_Master = dishes.dish_master_dict["dish_063"]
 
     if validation_type == "all_ok":
         dish_ln.kvalue_validation_callback()
