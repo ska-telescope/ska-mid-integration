@@ -156,6 +156,7 @@ def prepare_validation_condition(
         assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
         gpm_result = json.loads(dish_ln.gpmValidationResult)
         # assert all(value == "OK" for value in gpm_result.values())
+        # assert any(value != "FAILED" for value in gpm_result.values())
         LOGGER.info("prepare_validation_condition-GPM validation result:")
         for band, value in gpm_result.items():
             LOGGER.info("  %s: %s", band, value)
