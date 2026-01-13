@@ -259,7 +259,7 @@ def verify_dln_health(
     :param event_tracer: Utility used to capture and assert change events.
     :param expected_health: Expected Dish Leaf Node health state.
     """
-    dish_ln = tmc.dish_leaf_node_list[0]
+    dish_ln = tmc.dish_leaf_node_list[2]
 
     assert_that(event_tracer).within_timeout(
         ASSERTIONS_TIMEOUT
