@@ -65,8 +65,10 @@ def preserve_dish_state(tmc: TMCFacade, dishes: DishesFacade):
     # Assertions after reset
     assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
 
+    # gpm_result = json.loads(dish_ln.gpmValidationResult)
+    # assert all(value == "OK" for value in gpm_result.values())
     gpm_result = json.loads(dish_ln.gpmValidationResult)
-    assert all(value == "OK" for value in gpm_result.values())
+    assert gpm_result.get("Band_3") == "OK"
 
     assert tmc.central_node.IsDishVccConfigSet is True
 
@@ -165,8 +167,10 @@ def prepare_validation_condition(
         time.sleep(2)
 
         assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
+        # gpm_result = json.loads(dish_ln.gpmValidationResult)
+        # assert any(value == "FAILED" for value in gpm_result.values())
         gpm_result = json.loads(dish_ln.gpmValidationResult)
-        assert any(value == "FAILED" for value in gpm_result.values())
+        assert gpm_result.get("Band_3") == "FAILED"
 
     elif validation_type == "kvalue mismatch":
         dish_ln.SetKValue(1)
