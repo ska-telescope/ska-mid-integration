@@ -3,6 +3,7 @@ BDD tests to verify Dish Leaf Node validation failures
 (kValue / GPM) degrade Dish, Subarray, and Telescope health.
 """
 
+import json
 import time
 
 import pytest
@@ -47,7 +48,9 @@ def preserve_dish_state(tmc: TMCFacade, dishes: DishesFacade):
     # Preserve original values
     original_kvalue_dln = dish_ln.kValue
     original_kvalue_master = dish_Master.kValue
-    original_gpm_results = dict(dish_ln.gpmValidationResult)
+    # original_gpm_results = dict(dish_ln.gpmValidationResult)
+    original_gpm_results = json.loads(dish_ln.gpmValidationResult)
+
     # original_gpm_results = dict(
     #     dish_ln.component_manager._gpm_validation_result
     # )
