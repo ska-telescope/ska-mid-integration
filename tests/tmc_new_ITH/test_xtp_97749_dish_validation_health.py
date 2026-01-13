@@ -76,37 +76,6 @@ def preserve_dish_state(tmc: TMCFacade, dishes: DishesFacade):
     assert tmc.central_node.IsDishVccConfigSet is True
 
 
-# def preserve_dish_state(tmc: TMCFacade, dishes: DishesFacade):
-#     """
-#     Preserve and restore Dish Leaf Node validation state so
-#     subsequent tests are not affected.
-#     """
-#     dish_ln = tmc.dish_leaf_node_list[0]
-#     dish_Master = dishes.dish_master_dict["dish_063"]
-
-#     # Preserve original values
-#     original_kvalue_dln = dish_ln.kValue
-#     original_kvalue_master = dish_Master.kValue
-#     original_gpm_results = json.loads(dish_ln.gpmValidationResult)
-
-#     yield
-
-#     #  Restore kValue
-#     dish_ln.SetKValue(original_kvalue_dln)
-#     dish_Master.SetKValue(original_kvalue_master)
-
-#     # Restore GPM results
-#     dish_ln.gpmValidationResult = json.dumps(original_gpm_results)
-
-#     #  Assertions after reset
-#     assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
-
-#     for result in dish_ln.gpmValidationResult.values():
-#         assert result == "OK"
-
-#     assert tmc.central_node.IsDishVccConfigSet is True
-
-
 @given("a TMC")
 def given_a_tmc(
     tmc: TMCFacade,
@@ -156,14 +125,14 @@ def prepare_validation_condition(
         assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
         gpm_result = json.loads(dish_ln.gpmValidationResult)
         # assert all(value == "OK" for value in gpm_result.values())
-        # assert any(value != "FAILED" for value in gpm_result.values())
+        assert any(value != "FAILED" for value in gpm_result.values())
         LOGGER.info("prepare_validation_condition-DLN GPM validation result:")
         for band, value in gpm_result.items():
             LOGGER.info("  %s: %s", band, value)
-        gpm_result1 = json.loads(dish_master.gpmValidationResult)
-        LOGGER.info("prepare_validation -Master GPM validation result:")
-        for band, value in gpm_result1.items():
-            LOGGER.info("  %s: %s", band, value)
+        # gpm_result1 = json.loads(dish_master.gpmValidationResult)
+        # LOGGER.info("prepare_validation -Master GPM validation result:")
+        # for band, value in gpm_result1.items():
+        #     LOGGER.info("  %s: %s", band, value)
 
     elif validation_type == "gpm mismatch":
         # Keep kValue consistent
@@ -193,47 +162,6 @@ def prepare_validation_condition(
         raise ValueError(f"Unsupported validation_type: {validation_type}")
 
 
-# def prepare_validation_condition(
-#     tmc: TMCFacade,
-#     dishes: DishesFacade,
-#     validation_type: str,
-#     preserve_dish_state,
-# ):
-#     """
-#     Prepare Dish Leaf Node validation condition and
-#     assert validation results immediately after setting.
-#     """
-#     dish_ln = tmc.dish_leaf_node_list[0]
-#     dish_Master = dishes.dish_master_dict["dish_063"]
-
-#     if validation_type == "all_ok":
-#         assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
-#         # assert dish_ln.gpmValidationResult["band2"] == "OK"
-#         # Assert GPM validation result
-#         gpm_result = json.loads(dish_ln.gpmValidationResult)
-#         assert gpm_result["Band_2"] == "OK"
-
-#     elif validation_type == "gpm mismatch":
-#         dish_ln.SetKValue(1)
-#         dish_Master.SetKValue(1)
-#         dish_ln.gpmValidationResult = json.dumps({"band2": "FAILED"})
-
-#         assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
-#         # assert dish_ln.gpmValidationResult["band2"] == "FAILED"
-#         # Assert GPM validation result
-#         gpm_result = json.loads(dish_ln.gpmValidationResult)
-#         assert any(value == "FAILED" for value in gpm_result.values())
-
-#     elif validation_type == "kvalue mismatch":
-#         dish_ln.SetKValue(1)
-#         dish_Master.SetKValue(2)
-
-#         assert int(dish_ln.kValueValidationResult) == ResultCode.FAILED.value
-
-#     else:
-#         raise ValueError(f"Unsupported validation_type: {validation_type}")
-
-
 @when("Dish Leaf Node health is evaluated")
 def evaluate_health(tmc: TMCFacade):
     """
@@ -261,40 +189,45 @@ def verify_dln_health(
     """
     dish_ln = tmc.dish_leaf_node_list[2]
 
+    LOGGER.info("In verify_dln_health")
+
+    # instead of waiting for an event
+    assert dish_ln.healthState == HealthState.OK
+
+    # assert_that(event_tracer).within_timeout(
+    #     ASSERTIONS_TIMEOUT
+    # ).has_change_event_occurred(
+    #     dish_ln,
+    #     "healthState",
+    #     HealthState[expected_health],
+    # )
+
+
+@then(
+    parsers.parse('TMC Subarray Node healthState shall be "{expected_health}"')
+)
+def verify_subarray_health(
+    tmc: TMCFacade,
+    event_tracer: TangoEventTracer,
+    expected_health: str,
+):
+    """
+    Verify the TMC Subarray Node health state.
+
+    This step confirms that healthstate change
+    propagates from the Dish Leaf Node to the Subarray Node.
+
+    :param tmc: TMC facade providing access to the Subarray Node.
+    :param event_tracer: Utility used to capture and assert change events.
+    :param expected_health: Expected Subarray health state.
+    """
     assert_that(event_tracer).within_timeout(
         ASSERTIONS_TIMEOUT
     ).has_change_event_occurred(
-        dish_ln,
+        tmc.subarray_node,
         "healthState",
         HealthState[expected_health],
     )
-
-
-# @then(
-#  parsers.parse('TMC Subarray Node healthState shall be "{expected_health}"')
-# )
-# def verify_subarray_health(
-#     tmc: TMCFacade,
-#     event_tracer: TangoEventTracer,
-#     expected_health: str,
-# ):
-#     """
-#     Verify the TMC Subarray Node health state.
-
-#     This step confirms that healthstate change
-#     propagates from the Dish Leaf Node to the Subarray Node.
-
-#     :param tmc: TMC facade providing access to the Subarray Node.
-#     :param event_tracer: Utility used to capture and assert change events.
-#     :param expected_health: Expected Subarray health state.
-#     """
-#     assert_that(event_tracer).within_timeout(
-#         ASSERTIONS_TIMEOUT
-#     ).has_change_event_occurred(
-#         tmc.subarray_node,
-#         "healthState",
-#         HealthState[expected_health],
-#     )
 
 
 @then(parsers.parse('telescopeHealthState shall be "{expected_health}"'))
