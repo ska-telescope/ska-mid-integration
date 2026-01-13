@@ -8,7 +8,8 @@ import logging
 import time
 
 import pytest
-from assertpy import assert_that
+
+# from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import HealthState
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
@@ -23,7 +24,8 @@ from tests.resources.test_support.common_utils.tmc_helpers import (
     tear_down_configured_alarms,
 )
 from tests.resources.test_support.constant import alarm_handler1
-from tests.tmc_new_ITH.conftest import ASSERTIONS_TIMEOUT
+
+# from tests.tmc_new_ITH.conftest import ASSERTIONS_TIMEOUT
 from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
 
 LOGGER = logging.getLogger(__name__)
@@ -192,7 +194,8 @@ def verify_dln_health(
     LOGGER.info("In verify_dln_health")
 
     # instead of waiting for an event
-    assert dish_ln.healthState == HealthState.OK
+    # assert dish_ln.healthState == HealthState.OK
+    assert dish_ln.healthState == HealthState[expected_health]
 
     # assert_that(event_tracer).within_timeout(
     #     ASSERTIONS_TIMEOUT
@@ -221,13 +224,17 @@ def verify_subarray_health(
     :param event_tracer: Utility used to capture and assert change events.
     :param expected_health: Expected Subarray health state.
     """
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        tmc.subarray_node,
-        "healthState",
-        HealthState[expected_health],
-    )
+
+    # instead of waiting for an event
+    assert tmc.subarray_node.healthState == HealthState[expected_health]
+
+    # assert_that(event_tracer).within_timeout(
+    #     ASSERTIONS_TIMEOUT
+    # ).has_change_event_occurred(
+    #     tmc.subarray_node,
+    #     "healthState",
+    #     HealthState[expected_health],
+    # )
 
 
 @then(parsers.parse('telescopeHealthState shall be "{expected_health}"'))
@@ -247,13 +254,19 @@ def verify_telescope_health(
     :param event_tracer: Utility used to capture and assert change events.
     :param expected_health: Expected telescope health state.
     """
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        tmc.central_node,
-        "telescopeHealthState",
-        HealthState[expected_health],
+
+    # instead of waiting for an event
+    assert (
+        tmc.central_node.telescopeHealthState == HealthState[expected_health]
     )
+
+    # assert_that(event_tracer).within_timeout(
+    #     ASSERTIONS_TIMEOUT
+    # ).has_change_event_occurred(
+    #     tmc.central_node,
+    #     "telescopeHealthState",
+    #     HealthState[expected_health],
+    # )
 
 
 @then(
