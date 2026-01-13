@@ -81,6 +81,9 @@ def _setup_event_subscriptions(
     )
 
 
+@pytest.mark.xfail(
+    reason="CSP Master restarted from last test so not available sometimes."
+)
 @pytest.mark.SKA_tmc_mid_device_restart
 @pytest.mark.SKA_mid
 @scenario(
