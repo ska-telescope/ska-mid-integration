@@ -11,5 +11,4 @@
   Examples:
     | validation_type | expected_health |
     | all_ok          | OK              |
-    | gpm mismatch    | DEGRADED        |
     | kvalue mismatch | FAILED          |
