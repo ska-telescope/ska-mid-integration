@@ -45,7 +45,7 @@ def preserve_dish_state(tmc: TMCFacade, dishes: DishesFacade):
     Preserve and restore Dish Master and Dish Leaf Node state so
     subsequent tests are not affected.
     """
-    dish_ln = tmc.dish_leaf_node_list[0]
+    dish_ln = tmc.dish_leaf_node_list[2]
     dish_master = dishes.dish_master_dict["dish_063"]
 
     # Preserve original values
@@ -149,7 +149,7 @@ def prepare_validation_condition(
     Prepare Dish Leaf Node validation condition and
     assert validation results immediately after setting.
     """
-    dish_ln = tmc.dish_leaf_node_list[0]
+    dish_ln = tmc.dish_leaf_node_list[2]
     dish_master = dishes.dish_master_dict["dish_063"]
 
     if validation_type == "all_ok":
