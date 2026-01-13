@@ -71,7 +71,8 @@ def preserve_dish_state(tmc: TMCFacade, dishes: DishesFacade):
     dish_ln.gpmValidationResult = json.dumps(original_gpm_results)
 
     #  Assertions after reset
-    assert dish_ln.kValueValidationResult == ResultCode.OK
+    # assert dish_ln.kValueValidationResult == ResultCode.OK
+    assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
 
     for result in dish_ln.gpmValidationResult.values():
         assert result == "OK"
@@ -129,7 +130,8 @@ def prepare_validation_condition(
         # dish_ln.kvalue_validation_callback()
         # dish_ln.update_gpm_validation_result_callback("band2", "OK")
 
-        assert dish_ln.kValueValidationResult == ResultCode.OK
+        # assert dish_ln.kValueValidationResult == ResultCode.OK
+        assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
         assert dish_ln.gpmValidationResult["band2"] == "OK"
         # assert (
         #     dish_ln.component_manager._gpm_validation_result["band2"] == "OK"
@@ -142,7 +144,8 @@ def prepare_validation_condition(
         dish_Master.SetKValue(1)
         dish_ln.gpmValidationResult = json.dumps({"band2": "FAILED"})
 
-        assert dish_ln.kValueValidationResult == ResultCode.OK
+        # assert dish_ln.kValueValidationResult == ResultCode.OK
+        assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
         assert dish_ln.gpmValidationResult["band2"] == "FAILED"
         # assert (
         #     dish_ln.component_manager._gpm_validation_result["band2"]
@@ -155,7 +158,8 @@ def prepare_validation_condition(
         # dish_ln.component_manager._dish_manager_kvalue = "2"
         # dish_ln.kvalue_validation_callback()
 
-        assert dish_ln.kValueValidationResult == ResultCode.FAILED
+        # assert dish_ln.kValueValidationResult == ResultCode.FAILED
+        assert int(dish_ln.kValueValidationResult) == ResultCode.FAILED.value
 
     else:
         raise ValueError(f"Unsupported validation_type: {validation_type}")
