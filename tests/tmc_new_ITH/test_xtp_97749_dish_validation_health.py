@@ -48,9 +48,9 @@ def preserve_dish_state(tmc: TMCFacade, dishes: DishesFacade):
     # Preserve original values
     original_kvalue_dln = dish_ln.kValue
     original_kvalue_master = dish_Master.kValue
-    # original_gpm_results = dict(dish_ln.gpmValidationResult)
     original_gpm_results = json.loads(dish_ln.gpmValidationResult)
 
+    # original_gpm_results = dict(dish_ln.gpmValidationResult)
     # original_gpm_results = dict(
     #     dish_ln.component_manager._gpm_validation_result
     # )
@@ -61,11 +61,14 @@ def preserve_dish_state(tmc: TMCFacade, dishes: DishesFacade):
     dish_ln.SetKValue(original_kvalue_dln)
     dish_Master.SetKValue(original_kvalue_master)
     # dish_ln.component_manager._dish_manager_kvalue = str(original_kvalue)
-    dish_ln.kvalue_validation_callback()
+    # dish_ln.kvalue_validation_callback()
 
     # Restore GPM
-    for band, result in original_gpm_results.items():
-        dish_ln.update_gpm_validation_result_callback(band, result)
+    # for band, result in original_gpm_results.items():
+    #     dish_ln.update_gpm_validation_result_callback(band, result)
+
+    # Restore GPM results
+    dish_ln.gpmValidationResult = json.dumps(original_gpm_results)
 
     #  Assertions after reset
     assert dish_ln.kValueValidationResult == ResultCode.OK
@@ -123,8 +126,8 @@ def prepare_validation_condition(
     dish_Master = dishes.dish_master_dict["dish_063"]
 
     if validation_type == "all_ok":
-        dish_ln.kvalue_validation_callback()
-        dish_ln.update_gpm_validation_result_callback("band2", "OK")
+        # dish_ln.kvalue_validation_callback()
+        # dish_ln.update_gpm_validation_result_callback("band2", "OK")
 
         assert dish_ln.kValueValidationResult == ResultCode.OK
         assert dish_ln.gpmValidationResult["band2"] == "OK"
@@ -133,8 +136,11 @@ def prepare_validation_condition(
         # )
 
     elif validation_type == "gpm mismatch":
-        dish_ln.kvalue_validation_callback()
-        dish_ln.update_gpm_validation_result_callback("band2", "FAILED")
+        # dish_ln.kvalue_validation_callback()
+        # dish_ln.update_gpm_validation_result_callback("band2", "FAILED")
+        dish_ln.SetKValue(1)
+        dish_Master.SetKValue(1)
+        dish_ln.gpmValidationResult = json.dumps({"band2": "FAILED"})
 
         assert dish_ln.kValueValidationResult == ResultCode.OK
         assert dish_ln.gpmValidationResult["band2"] == "FAILED"
@@ -147,7 +153,7 @@ def prepare_validation_condition(
         dish_ln.SetKValue(1)
         dish_Master.SetKValue(2)
         # dish_ln.component_manager._dish_manager_kvalue = "2"
-        dish_ln.kvalue_validation_callback()
+        # dish_ln.kvalue_validation_callback()
 
         assert dish_ln.kValueValidationResult == ResultCode.FAILED
 
