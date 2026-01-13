@@ -158,8 +158,9 @@ def prepare_validation_condition(
         assert gpm_result.get("Band_3") == "FAILED"
 
     elif validation_type == "kvalue mismatch":
-        dish_ln.SetKValue(1)
         dish_master.SetKValue(2)
+        dish_ln.SetKValue(1)
+        # dish_master.SetKValue(2)
 
         assert int(dish_ln.kValueValidationResult) == ResultCode.FAILED.value
 
