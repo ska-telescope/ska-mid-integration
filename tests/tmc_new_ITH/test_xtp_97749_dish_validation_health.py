@@ -39,45 +39,67 @@ def test_dish_validation_impacts_health():
 @pytest.fixture
 def preserve_dish_state(tmc: TMCFacade, dishes: DishesFacade):
     """
-    Preserve and restore Dish Leaf Node validation state so
+    Preserve and restore Dish Master and Dish Leaf Node state so
     subsequent tests are not affected.
     """
     dish_ln = tmc.dish_leaf_node_list[0]
-    dish_Master = dishes.dish_master_dict["dish_063"]
+    dish_master = dishes.dish_master_dict["dish_063"]
 
     # Preserve original values
     original_kvalue_dln = dish_ln.kValue
-    original_kvalue_master = dish_Master.kValue
-    original_gpm_results = json.loads(dish_ln.gpmValidationResult)
-
-    # original_gpm_results = dict(dish_ln.gpmValidationResult)
-    # original_gpm_results = dict(
-    #     dish_ln.component_manager._gpm_validation_result
-    # )
+    original_kvalue_master = dish_master.kValue
+    original_band3_params = list(dish_master.band3PointingModelParams)
 
     yield
 
-    #  Restore kValue
+    # Restore kValue
     dish_ln.SetKValue(original_kvalue_dln)
-    dish_Master.SetKValue(original_kvalue_master)
-    # dish_ln.component_manager._dish_manager_kvalue = str(original_kvalue)
-    # dish_ln.kvalue_validation_callback()
+    dish_master.SetKValue(original_kvalue_master)
 
-    # Restore GPM
-    # for band, result in original_gpm_results.items():
-    #     dish_ln.update_gpm_validation_result_callback(band, result)
+    # Restore Band-2 pointing model params (GPM driver)
+    dish_master.band3PointingModelParams = original_band3_params
 
-    # Restore GPM results
-    dish_ln.gpmValidationResult = json.dumps(original_gpm_results)
+    # Allow validation to settle
+    time.sleep(2)
 
-    #  Assertions after reset
-    # assert dish_ln.kValueValidationResult == ResultCode.OK
+    # Assertions after reset
     assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
 
-    for result in dish_ln.gpmValidationResult.values():
-        assert result == "OK"
+    gpm_result = json.loads(dish_ln.gpmValidationResult)
+    assert all(value == "OK" for value in gpm_result.values())
 
     assert tmc.central_node.IsDishVccConfigSet is True
+
+
+# def preserve_dish_state(tmc: TMCFacade, dishes: DishesFacade):
+#     """
+#     Preserve and restore Dish Leaf Node validation state so
+#     subsequent tests are not affected.
+#     """
+#     dish_ln = tmc.dish_leaf_node_list[0]
+#     dish_Master = dishes.dish_master_dict["dish_063"]
+
+#     # Preserve original values
+#     original_kvalue_dln = dish_ln.kValue
+#     original_kvalue_master = dish_Master.kValue
+#     original_gpm_results = json.loads(dish_ln.gpmValidationResult)
+
+#     yield
+
+#     #  Restore kValue
+#     dish_ln.SetKValue(original_kvalue_dln)
+#     dish_Master.SetKValue(original_kvalue_master)
+
+#     # Restore GPM results
+#     dish_ln.gpmValidationResult = json.dumps(original_gpm_results)
+
+#     #  Assertions after reset
+#     assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
+
+#     for result in dish_ln.gpmValidationResult.values():
+#         assert result == "OK"
+
+#     assert tmc.central_node.IsDishVccConfigSet is True
 
 
 @given("a TMC")
@@ -123,46 +145,78 @@ def prepare_validation_condition(
     assert validation results immediately after setting.
     """
     dish_ln = tmc.dish_leaf_node_list[0]
-    # dish_Master = tmc.dish_master_list[3]
-    dish_Master = dishes.dish_master_dict["dish_063"]
+    dish_master = dishes.dish_master_dict["dish_063"]
 
     if validation_type == "all_ok":
-        # dish_ln.kvalue_validation_callback()
-        # dish_ln.update_gpm_validation_result_callback("band2", "OK")
-
-        # assert dish_ln.kValueValidationResult == ResultCode.OK
         assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
-        assert dish_ln.gpmValidationResult["band2"] == "OK"
-        # assert (
-        #     dish_ln.component_manager._gpm_validation_result["band2"] == "OK"
-        # )
+        gpm_result = json.loads(dish_ln.gpmValidationResult)
+        assert all(value == "OK" for value in gpm_result.values())
 
     elif validation_type == "gpm mismatch":
-        # dish_ln.kvalue_validation_callback()
-        # dish_ln.update_gpm_validation_result_callback("band2", "FAILED")
+        # Keep kValue consistent
         dish_ln.SetKValue(1)
-        dish_Master.SetKValue(1)
-        dish_ln.gpmValidationResult = json.dumps({"band2": "FAILED"})
+        dish_master.SetKValue(1)
 
-        # assert dish_ln.kValueValidationResult == ResultCode.OK
+        # Introduce GPM mismatch via Dish Master Band-3 params
+        invalid_params = [0.0] * 18
+        invalid_params[0] = 999.0
+        dish_master.band3PointingModelParams = invalid_params
+
+        time.sleep(2)
+
         assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
-        assert dish_ln.gpmValidationResult["band2"] == "FAILED"
-        # assert (
-        #     dish_ln.component_manager._gpm_validation_result["band2"]
-        #     == "FAILED"
-        # )
+        gpm_result = json.loads(dish_ln.gpmValidationResult)
+        assert any(value == "FAILED" for value in gpm_result.values())
 
     elif validation_type == "kvalue mismatch":
         dish_ln.SetKValue(1)
-        dish_Master.SetKValue(2)
-        # dish_ln.component_manager._dish_manager_kvalue = "2"
-        # dish_ln.kvalue_validation_callback()
+        dish_master.SetKValue(2)
 
-        # assert dish_ln.kValueValidationResult == ResultCode.FAILED
         assert int(dish_ln.kValueValidationResult) == ResultCode.FAILED.value
 
     else:
         raise ValueError(f"Unsupported validation_type: {validation_type}")
+
+
+# def prepare_validation_condition(
+#     tmc: TMCFacade,
+#     dishes: DishesFacade,
+#     validation_type: str,
+#     preserve_dish_state,
+# ):
+#     """
+#     Prepare Dish Leaf Node validation condition and
+#     assert validation results immediately after setting.
+#     """
+#     dish_ln = tmc.dish_leaf_node_list[0]
+#     dish_Master = dishes.dish_master_dict["dish_063"]
+
+#     if validation_type == "all_ok":
+#         assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
+#         # assert dish_ln.gpmValidationResult["band2"] == "OK"
+#         # Assert GPM validation result
+#         gpm_result = json.loads(dish_ln.gpmValidationResult)
+#         assert gpm_result["Band_2"] == "OK"
+
+#     elif validation_type == "gpm mismatch":
+#         dish_ln.SetKValue(1)
+#         dish_Master.SetKValue(1)
+#         dish_ln.gpmValidationResult = json.dumps({"band2": "FAILED"})
+
+#         assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
+#         # assert dish_ln.gpmValidationResult["band2"] == "FAILED"
+#         # Assert GPM validation result
+#         gpm_result = json.loads(dish_ln.gpmValidationResult)
+#         assert any(value == "FAILED" for value in gpm_result.values())
+
+#     elif validation_type == "kvalue mismatch":
+#         dish_ln.SetKValue(1)
+#         dish_Master.SetKValue(2)
+
+#         assert int(dish_ln.kValueValidationResult) == ResultCode.FAILED.value
+
+#     else:
+#         raise ValueError(f"Unsupported validation_type: {validation_type}")
 
 
 @when("Dish Leaf Node health is evaluated")
