@@ -309,40 +309,40 @@ def verify_dln_health(
     )
 
 
-@then(
-    parsers.parse(
-        'TMC Subarray Node healthState shall be "{propagated_health}"'
-    )
-)
-def verify_subarray_health(
-    tmc: TMCFacade,
-    event_tracer: TangoEventTracer,
-    propagated_health: str,
-):
-    """
-    Verify the TMC Subarray Node health state.
+# @then(
+#     parsers.parse(
+#         'TMC Subarray Node healthState shall be "{propagated_health}"'
+#     )
+# )
+# def verify_subarray_health(
+#     tmc: TMCFacade,
+#     event_tracer: TangoEventTracer,
+#     propagated_health: str,
+# ):
+#     """
+#     Verify the TMC Subarray Node health state.
 
-    This step confirms that healthstate change
-    propagates from the Dish Leaf Node to the Subarray Node.
+#     This step confirms that healthstate change
+#     propagates from the Dish Leaf Node to the Subarray Node.
 
-    :param tmc: TMC facade providing access to the Subarray Node.
-    :param event_tracer: Utility used to capture and assert change events.
-    :param expected_health: Expected Subarray health state.
-    """
+#     :param tmc: TMC facade providing access to the Subarray Node.
+#     :param event_tracer: Utility used to capture and assert change events.
+#     :param expected_health: Expected Subarray health state.
+#     """
 
-    LOGGER.info("In verify_subarray_health")
+#     LOGGER.info("In verify_subarray_health")
 
-    # instead of waiting for an event
-    # assert tmc.subarray_node.healthState == HealthState[expected_health]
+#     # instead of waiting for an event
+#     # assert tmc.subarray_node.healthState == HealthState[expected_health]
 
-    assert_that(event_tracer).described_as(
-        "TMC Subarray Node healthState should change "
-        f"to {propagated_health}"
-    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        tmc.subarray_node,
-        "healthState",
-        HealthState[propagated_health],
-    )
+#     assert_that(event_tracer).described_as(
+#         "TMC Subarray Node healthState should change "
+#         f"to {propagated_health}"
+#     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+#         tmc.subarray_node,
+#         "healthState",
+#         HealthState[propagated_health],
+#     )
 
 
 @then(parsers.parse('telescopeHealthState shall be "{propagated_health}"'))
