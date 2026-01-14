@@ -8,8 +8,7 @@ import logging
 import time
 
 import pytest
-
-# from assertpy import assert_that
+from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import HealthState
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
@@ -27,8 +26,7 @@ from tests.resources.test_support.constant import (
     alarm_handler1,
     tmc_dish_leaf_node3,
 )
-
-# from tests.tmc_new_ITH.conftest import ASSERTIONS_TIMEOUT
+from tests.tmc_new_ITH.conftest import ASSERTIONS_TIMEOUT
 from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
 
 LOGGER = logging.getLogger(__name__)
@@ -117,6 +115,7 @@ def prepare_validation_condition(
     tmc: TMCFacade,
     dishes: DishesFacade,
     validation_type: str,
+    event_tracer: TangoEventTracer,
     preserve_dish_state,
 ):
     """
@@ -128,6 +127,15 @@ def prepare_validation_condition(
 
     LOGGER.info("In prepare_validation_condition")
 
+    LOGGER.info("Subscribing to validation + health events")
+
+    # REQUIRED SUBSCRIPTIONS
+    event_tracer.subscribe_event(dish_ln, "kValueValidationResult")
+    event_tracer.subscribe_event(dish_ln, "gpmValidationResult")
+    event_tracer.subscribe_event(dish_ln, "healthState")
+    event_tracer.subscribe_event(tmc.subarray_node, "healthState")
+    event_tracer.subscribe_event(tmc.central_node, "telescopeHealthState")
+
     if validation_type == "all_ok":
         assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
         gpm_result = json.loads(dish_ln.gpmValidationResult)
@@ -136,10 +144,6 @@ def prepare_validation_condition(
         LOGGER.info("prepare_validation_condition-DLN GPM validation result:")
         for band, value in gpm_result.items():
             LOGGER.info("  %s: %s", band, value)
-        # gpm_result1 = json.loads(dish_master.gpmValidationResult)
-        # LOGGER.info("prepare_validation -Master GPM validation result:")
-        # for band, value in gpm_result1.items():
-        #     LOGGER.info("  %s: %s", band, value)
 
     elif validation_type == "gpm mismatch":
 
@@ -206,15 +210,15 @@ def verify_dln_health(
 
     # instead of waiting for an event
     # assert dish_ln.healthState == HealthState.OK
-    assert dish_ln.healthState == HealthState[expected_health]
+    # assert dish_ln.healthState == HealthState[expected_health]
 
-    # assert_that(event_tracer).within_timeout(
-    #     ASSERTIONS_TIMEOUT
-    # ).has_change_event_occurred(
-    #     dish_ln,
-    #     "healthState",
-    #     HealthState[expected_health],
-    # )
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        dish_ln,
+        "healthState",
+        HealthState[expected_health],
+    )
 
 
 @then(
@@ -239,15 +243,15 @@ def verify_subarray_health(
     LOGGER.info("In verify_subarray_health")
 
     # instead of waiting for an event
-    assert tmc.subarray_node.healthState == HealthState[expected_health]
+    # assert tmc.subarray_node.healthState == HealthState[expected_health]
 
-    # assert_that(event_tracer).within_timeout(
-    #     ASSERTIONS_TIMEOUT
-    # ).has_change_event_occurred(
-    #     tmc.subarray_node,
-    #     "healthState",
-    #     HealthState[expected_health],
-    # )
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        tmc.subarray_node,
+        "healthState",
+        HealthState[expected_health],
+    )
 
 
 @then(parsers.parse('telescopeHealthState shall be "{expected_health}"'))
@@ -270,17 +274,17 @@ def verify_telescope_health(
     LOGGER.info("In verify_telescope_health")
 
     # instead of waiting for an event
-    assert (
-        tmc.central_node.telescopeHealthState == HealthState[expected_health]
-    )
-
-    # assert_that(event_tracer).within_timeout(
-    #     ASSERTIONS_TIMEOUT
-    # ).has_change_event_occurred(
-    #     tmc.central_node,
-    #     "telescopeHealthState",
-    #     HealthState[expected_health],
+    # assert (
+    #     tmc.central_node.telescopeHealthState == HealthState[expected_health]
     # )
+
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        tmc.central_node,
+        "telescopeHealthState",
+        HealthState[expected_health],
+    )
 
 
 # @then(
