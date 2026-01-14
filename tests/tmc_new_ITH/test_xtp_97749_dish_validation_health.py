@@ -167,6 +167,9 @@ def prepare_validation_condition(
     event_tracer.subscribe_event(tmc.subarray_node, "healthState")
     event_tracer.subscribe_event(tmc.central_node, "telescopeHealthState")
 
+    # Allow event_tracer to settle
+    time.sleep(2)
+
     if validation_type == "all_ok":
         # assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
         assert int(dish_ln.kvaluevalidationresult) == ResultCode.OK.value
