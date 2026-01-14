@@ -126,6 +126,8 @@ def prepare_validation_condition(
     dish_ln = tmc.dish_leaf_node_list[2]
     dish_master = dishes.dish_master_dict["dish_063"]
 
+    LOGGER.info("In prepare_validation_condition")
+
     if validation_type == "all_ok":
         assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
         gpm_result = json.loads(dish_ln.gpmValidationResult)
@@ -140,6 +142,9 @@ def prepare_validation_condition(
         #     LOGGER.info("  %s: %s", band, value)
 
     elif validation_type == "gpm mismatch":
+
+        LOGGER.info("In prepare_validation_condition gpm mismatch")
+
         # Keep kValue consistent
         dish_ln.SetKValue(1)
         dish_master.SetKValue(1)
@@ -158,6 +163,7 @@ def prepare_validation_condition(
         assert gpm_result.get("Band_3") == "FAILED"
 
     elif validation_type == "kvalue mismatch":
+        LOGGER.info("In prepare_validation_condition kvalue mismatch")
         dish_master.SetKValue(2)
         dish_ln.SetKValue(1)
         # dish_master.SetKValue(2)
@@ -174,6 +180,7 @@ def evaluate_health(tmc: TMCFacade):
     Health evaluation is triggered implicitly by validation callbacks.
     :param tmc: TMC facade
     """
+    LOGGER.info("In evaluate_health")
     pass
 
 
@@ -229,6 +236,8 @@ def verify_subarray_health(
     :param expected_health: Expected Subarray health state.
     """
 
+    LOGGER.info("In verify_subarray_health")
+
     # instead of waiting for an event
     assert tmc.subarray_node.healthState == HealthState[expected_health]
 
@@ -258,6 +267,7 @@ def verify_telescope_health(
     :param event_tracer: Utility used to capture and assert change events.
     :param expected_health: Expected telescope health state.
     """
+    LOGGER.info("In verify_telescope_health")
 
     # instead of waiting for an event
     assert (
@@ -328,6 +338,8 @@ def verify_alarm_raised(validation_type):
     Verify the corresponding alarm is raised
     on the Alarm Handler.
     """
+    LOGGER.info("In verify_alarm_raised")
+
     alarm_handler = DeviceProxy(alarm_handler1)
 
     if validation_type == "all_ok":
