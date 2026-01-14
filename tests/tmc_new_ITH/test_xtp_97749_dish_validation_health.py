@@ -19,6 +19,9 @@ from ska_tango_testing.integration import TangoEventTracer
 from ska_tango_testing.mock.placeholders import Anything
 from tango import DeviceProxy
 
+from tests.resources.test_harness.helpers import (
+    wait_and_validate_device_attribute_value,
+)
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.common_utils.tmc_helpers import (
     tear_down_configured_alarms,
@@ -192,6 +195,13 @@ def prepare_validation_condition(
         #     "kValueValidationResult",
         #     ResultCode.FAILED.value,
         # )
+
+        assert wait_and_validate_device_attribute_value(
+            dish_ln,
+            "kvaluevalidationresult",
+            ResultCode.FAILED.value,
+        )
+
         assert_that(event_tracer).described_as(
             "Dish Leaf Node kValueValidationResult should change to FAILED"
         ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
@@ -208,6 +218,12 @@ def prepare_validation_condition(
         # Keep kValue consistent
         dish_ln.SetKValue(1)
         dish_master.SetKValue(1)
+
+        assert wait_and_validate_device_attribute_value(
+            dish_ln,
+            "kvaluevalidationresult",
+            ResultCode.OK.value,
+        )
 
         assert_that(event_tracer).described_as(
             "Dish Leaf Node kValueValidationResult should change to Ok"
