@@ -145,27 +145,6 @@ def prepare_validation_condition(
         for band, value in gpm_result.items():
             LOGGER.info("  %s: %s", band, value)
 
-    elif validation_type == "gpm mismatch":
-
-        LOGGER.info("In prepare_validation_condition gpm mismatch")
-
-        # Keep kValue consistent
-        # dish_ln.SetKValue(1)
-        # dish_master.SetKValue(1)
-
-        # Introduce GPM mismatch via Dish Master Band-3 params
-        invalid_params = [0.0] * 18
-        invalid_params[0] = 999.0
-        dish_master.band3PointingModelParams = invalid_params
-
-        time.sleep(2)
-
-        # assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
-        # gpm_result = json.loads(dish_ln.gpmValidationResult)
-        # assert any(value == "FAILED" for value in gpm_result.values())
-        gpm_result = json.loads(dish_ln.gpmValidationResult)
-        assert gpm_result.get("Band_3") == "FAILED"
-
     elif validation_type == "kvalue mismatch":
         LOGGER.info("In prepare_validation_condition kvalue mismatch")
         # dish_master.SetKValue(2)
@@ -186,6 +165,27 @@ def prepare_validation_condition(
         #     "kvaluevalidationresult",
         #     ResultCode.FAILED.value,
         # )
+
+    elif validation_type == "gpm mismatch":
+
+        LOGGER.info("In prepare_validation_condition gpm mismatch")
+
+        # Keep kValue consistent
+        dish_ln.SetKValue(1)
+        dish_master.SetKValue(1)
+
+        # Introduce GPM mismatch via Dish Master Band-3 params
+        invalid_params = [0.0] * 18
+        invalid_params[0] = 999.0
+        dish_master.band3PointingModelParams = invalid_params
+
+        time.sleep(2)
+
+        assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
+        # gpm_result = json.loads(dish_ln.gpmValidationResult)
+        # assert any(value == "FAILED" for value in gpm_result.values())
+        gpm_result = json.loads(dish_ln.gpmValidationResult)
+        assert gpm_result.get("Band_3") == "FAILED"
 
     else:
         raise ValueError(f"Unsupported validation_type: {validation_type}")
