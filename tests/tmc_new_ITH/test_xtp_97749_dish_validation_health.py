@@ -72,38 +72,38 @@ def preserve_dish_state(
     time.sleep(2)
 
     # Assertions after reset
-    # assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
+    assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
 
     # gpm_result = json.loads(dish_ln.gpmValidationResult)
     # assert all(value == "OK" for value in gpm_result.values())
 
-    # gpm_result = json.loads(dish_ln.gpmValidationResult)
-    # assert gpm_result.get("Band_3") == "OK"
+    gpm_result = json.loads(dish_ln.gpmValidationResult)
+    assert gpm_result.get("Band_3") == "OK"
 
-    assert_that(event_tracer).described_as(
-        "Dish Leaf Node kValueValidationResult should change to Ok"
-    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        dish_ln,
-        "kValueValidationResult",
-        ResultCode.OK,
-    )
+    # assert_that(event_tracer).described_as(
+    #     "Dish Leaf Node kValueValidationResult should change to Ok"
+    # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+    #     dish_ln,
+    #     "kValueValidationResult",
+    #     ResultCode.OK,
+    # )
 
-    # Wait for a GPM validation change event
-    event = (
-        assert_that(event_tracer)
-        .described_as("DLN gpmValidationResult should report Band_3 OK")
-        .within_timeout(ASSERTIONS_TIMEOUT)
-        .has_change_event_occurred(
-            dish_ln,
-            "gpmValidationResult",
-            Anything,
-            lookahead=3,
-        )
-    )
+    # # Wait for a GPM validation change event
+    # event = (
+    #     assert_that(event_tracer)
+    #     .described_as("DLN gpmValidationResult should report Band_3 OK")
+    #     .within_timeout(ASSERTIONS_TIMEOUT)
+    #     .has_change_event_occurred(
+    #         dish_ln,
+    #         "gpmValidationResult",
+    #         Anything,
+    #         lookahead=3,
+    #     )
+    # )
 
-    # Validate the event payload
-    gpm_result = json.loads(event["attribute_value"])
-    assert_that(gpm_result.get("Band_3")).is_equal_to("OK")
+    # # Validate the event payload
+    # gpm_result = json.loads(event["attribute_value"])
+    # assert_that(gpm_result.get("Band_3")).is_equal_to("OK")
 
     assert tmc.central_node.IsDishVccConfigSet is True
 
