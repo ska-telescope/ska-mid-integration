@@ -173,7 +173,9 @@ def prepare_validation_condition(
         # dish_master.SetKValue(2)
 
         # assert int(dish_ln.kValueValidationResult) == ResultCode.FAILED.value
-        assert event_tracer.has_change_event_occurred(
+        assert_that(event_tracer).described_as(
+            "Dish Leaf Node kValueValidationResult should change to FAILED"
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
             dish_ln,
             "kValueValidationResult",
             ResultCode.FAILED.value,
@@ -217,13 +219,21 @@ def verify_dln_health(
     # assert dish_ln.healthState == HealthState.OK
     # assert dish_ln.healthState == HealthState[expected_health]
 
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
+    assert_that(event_tracer).described_as(
+        "Dish Leaf Node healthState should change " f"to {expected_health}"
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         dish_ln,
         "healthState",
         HealthState[expected_health],
     )
+
+    # assert_that(event_tracer).within_timeout(
+    #     ASSERTIONS_TIMEOUT
+    # ).has_change_event_occurred(
+    #     dish_ln,
+    #     "healthState",
+    #     HealthState[expected_health],
+    # )
 
 
 @then(
@@ -250,13 +260,21 @@ def verify_subarray_health(
     # instead of waiting for an event
     # assert tmc.subarray_node.healthState == HealthState[expected_health]
 
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
+    assert_that(event_tracer).described_as(
+        "TMC Subarray Node healthState should change " f"to {expected_health}"
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         tmc.subarray_node,
         "healthState",
         HealthState[expected_health],
     )
+
+    # assert_that(event_tracer).within_timeout(
+    #     ASSERTIONS_TIMEOUT
+    # ).has_change_event_occurred(
+    #     tmc.subarray_node,
+    #     "healthState",
+    #     HealthState[expected_health],
+    # )
 
 
 @then(parsers.parse('telescopeHealthState shall be "{expected_health}"'))
@@ -283,13 +301,21 @@ def verify_telescope_health(
     #     tmc.central_node.telescopeHealthState == HealthState[expected_health]
     # )
 
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
+    assert_that(event_tracer).described_as(
+        "Telescope healthState should change " f"to {expected_health}"
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         tmc.central_node,
         "telescopeHealthState",
         HealthState[expected_health],
     )
+
+    # assert_that(event_tracer).within_timeout(
+    #     ASSERTIONS_TIMEOUT
+    # ).has_change_event_occurred(
+    #     tmc.central_node,
+    #     "telescopeHealthState",
+    #     HealthState[expected_health],
+    # )
 
 
 # @then(
