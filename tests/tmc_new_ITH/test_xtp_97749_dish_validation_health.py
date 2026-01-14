@@ -345,7 +345,7 @@ def verify_alarm_raised(validation_type):
 
     alarm_handler.Load(alarm_formula)
     alarm_list = alarm_handler.alarmList
-    assert alarm_list == ("DishLeafNode_kValue_mismatch",)
+    assert alarm_list == ("dishLeafNode_kValue_mismatch",)
     tear_down_configured_alarms(alarm_handler, alarm_list)
 
     # # Load alarm
