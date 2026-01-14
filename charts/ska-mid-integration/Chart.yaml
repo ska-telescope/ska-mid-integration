@@ -23,7 +23,7 @@ dependencies:
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-tmc-mid.enabled
   - name: ska-dish-lmc
-    version: 9.0.0
+    version: 9.1.0
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-dish-lmc.enabled
   - name: ska-csp-lmc-mid
@@ -74,6 +74,6 @@ dependencies:
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-ser-skuid.enabled
   - name: ska-tango-archiver
-    version: 5.0.1-rc.1
+    version: 5.0.1-rc.2
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-tango-archiver.enabled
