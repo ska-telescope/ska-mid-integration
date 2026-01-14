@@ -195,7 +195,7 @@ def prepare_validation_condition(
             dish_ln,
             # "kValueValidationResult",
             "kvaluevalidationresult",
-            ResultCode.FAILED,
+            ResultCode.FAILED.value,
         )
 
     elif validation_type == "gpm mismatch":
@@ -212,7 +212,7 @@ def prepare_validation_condition(
             dish_ln,
             # "kValueValidationResult",
             "kvaluevalidationresult",
-            ResultCode.OK,
+            ResultCode.OK.value,
         )
 
         # Introduce GPM mismatch via Dish Master Band-3 params
