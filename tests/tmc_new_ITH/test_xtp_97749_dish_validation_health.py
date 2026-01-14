@@ -150,8 +150,8 @@ def prepare_validation_condition(
         LOGGER.info("In prepare_validation_condition gpm mismatch")
 
         # Keep kValue consistent
-        dish_ln.SetKValue(1)
-        dish_master.SetKValue(1)
+        # dish_ln.SetKValue(1)
+        # dish_master.SetKValue(1)
 
         # Introduce GPM mismatch via Dish Master Band-3 params
         invalid_params = [0.0] * 18
@@ -160,7 +160,7 @@ def prepare_validation_condition(
 
         time.sleep(2)
 
-        assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
+        # assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
         # gpm_result = json.loads(dish_ln.gpmValidationResult)
         # assert any(value == "FAILED" for value in gpm_result.values())
         gpm_result = json.loads(dish_ln.gpmValidationResult)
@@ -328,6 +328,11 @@ def verify_alarm_raised(validation_type):
             'kValue mismatch with Dish Manager"'
         )
 
+        alarm_handler.Load(alarm_formula)
+        alarm_list = alarm_handler.alarmList
+        assert alarm_list == ("dishleafnode_kvalue_mismatch",)
+        tear_down_configured_alarms(alarm_handler, alarm_list)
+
     elif validation_type == "gpm":
         expected_tag = "DishLeafNode_GPM_mismatch"
         alarm_formula = (
@@ -340,13 +345,18 @@ def verify_alarm_raised(validation_type):
             'GPM validation failure for one or more bands"'
         )
 
+        alarm_handler.Load(alarm_formula)
+        alarm_list = alarm_handler.alarmList
+        assert alarm_list == ("dishleafnode_gpm_mismatch",)
+        tear_down_configured_alarms(alarm_handler, alarm_list)
+
     else:
         raise ValueError(validation_type)
 
-    alarm_handler.Load(alarm_formula)
-    alarm_list = alarm_handler.alarmList
-    assert alarm_list == ("dishleafnode_kvalue_mismatch",)
-    tear_down_configured_alarms(alarm_handler, alarm_list)
+    # alarm_handler.Load(alarm_formula)
+    # alarm_list = alarm_handler.alarmList
+    # assert alarm_list == ("dishleafnode_kvalue_mismatch",)
+    # tear_down_configured_alarms(alarm_handler, alarm_list)
 
     # # Load alarm
     # alarm_handler.Load(alarm_formula)

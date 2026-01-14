@@ -12,3 +12,4 @@
     | validation_type | expected_health |
     | all_ok          | OK              |
     | kvalue mismatch | FAILED          |
+    | gpm mismatch    | DEGRADED        |
