@@ -322,8 +322,8 @@ def verify_alarm_raised(validation_type):
         alarm_formula = (
             f"tag={expected_tag};"
             f"formula=({tmc_dish_leaf_node3}/kValueValidationResult != 'OK');"
-            "priority=high;"
-            "group=dish_validation;"
+            "priority=log;"
+            "group=none;"
             'message="Alarm raised when Dish Leaf Node detects '
             'kValue mismatch with Dish Manager"'
         )
@@ -334,8 +334,8 @@ def verify_alarm_raised(validation_type):
             f"tag={expected_tag};"
             f"formula=({tmc_dish_leaf_node3}/gpmValidationResult "
             "CONTAINS 'FAILED');"
-            "priority=medium;"
-            "group=dish_validation;"
+            "priority=log;"
+            "group=none;"
             'message="Alarm raised when Dish Leaf Node detects '
             'GPM validation failure for one or more bands"'
         )
