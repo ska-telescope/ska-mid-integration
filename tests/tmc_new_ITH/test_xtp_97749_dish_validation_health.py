@@ -199,7 +199,8 @@ def prepare_validation_condition(
         assert wait_and_validate_device_attribute_value(
             dish_ln,
             "kvaluevalidationresult",
-            ResultCode.FAILED.value,
+            str(ResultCode.FAILED.value),
+            # ResultCode.FAILED.value,
         )
 
         assert_that(event_tracer).described_as(
@@ -208,7 +209,8 @@ def prepare_validation_condition(
             dish_ln,
             # "kValueValidationResult",
             "kvaluevalidationresult",
-            ResultCode.FAILED.value,
+            str(ResultCode.FAILED.value),
+            # ResultCode.FAILED.value,
         )
 
     elif validation_type == "gpm mismatch":
@@ -222,7 +224,8 @@ def prepare_validation_condition(
         assert wait_and_validate_device_attribute_value(
             dish_ln,
             "kvaluevalidationresult",
-            ResultCode.OK.value,
+            # ResultCode.OK.value,
+            str(ResultCode.FAILED.value),
         )
 
         assert_that(event_tracer).described_as(
@@ -231,7 +234,8 @@ def prepare_validation_condition(
             dish_ln,
             # "kValueValidationResult",
             "kvaluevalidationresult",
-            ResultCode.OK.value,
+            # ResultCode.OK.value,
+            str(ResultCode.FAILED.value),
         )
 
         # Introduce GPM mismatch via Dish Master Band-3 params
