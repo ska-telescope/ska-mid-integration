@@ -333,7 +333,7 @@ def verify_alarm_raised(validation_type):
         assert alarm_list == ("dishleafnode_kvalue_mismatch",)
         tear_down_configured_alarms(alarm_handler, alarm_list)
 
-    elif validation_type == "gpm":
+    elif validation_type == "gpm mismatch":
         expected_tag = "DishLeafNode_GPM_mismatch"
         alarm_formula = (
             f"tag={expected_tag};"
