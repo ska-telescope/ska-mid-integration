@@ -317,7 +317,7 @@ def verify_alarm_raised(validation_type):
     if validation_type == "all_ok":
         return  # No alarm expected
 
-    if validation_type == "kvalue":
+    if validation_type == "kvalue mismatch":
         expected_tag = "DishLeafNode_kValue_mismatch"
         alarm_formula = (
             f"tag={expected_tag};"
