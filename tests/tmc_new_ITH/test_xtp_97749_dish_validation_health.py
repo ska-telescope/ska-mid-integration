@@ -72,7 +72,8 @@ def preserve_dish_state(
     time.sleep(2)
 
     # Assertions after reset
-    assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
+    # assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
+    assert int(dish_ln.kvaluevalidationresult) == ResultCode.OK.value
 
     # gpm_result = json.loads(dish_ln.gpmValidationResult)
     # assert all(value == "OK" for value in gpm_result.values())
@@ -159,14 +160,16 @@ def prepare_validation_condition(
     LOGGER.info("Subscribing to validation + health events")
 
     # REQUIRED SUBSCRIPTIONS
-    event_tracer.subscribe_event(dish_ln, "kValueValidationResult")
+    # event_tracer.subscribe_event(dish_ln, "kValueValidationResult")
+    event_tracer.subscribe_event(dish_ln, "kvaluevalidationresult")
     event_tracer.subscribe_event(dish_ln, "gpmValidationResult")
     event_tracer.subscribe_event(dish_ln, "healthState")
     event_tracer.subscribe_event(tmc.subarray_node, "healthState")
     event_tracer.subscribe_event(tmc.central_node, "telescopeHealthState")
 
     if validation_type == "all_ok":
-        assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
+        # assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
+        assert int(dish_ln.kvaluevalidationresult) == ResultCode.OK.value
         gpm_result = json.loads(dish_ln.gpmValidationResult)
         # assert all(value == "OK" for value in gpm_result.values())
         assert any(value != "FAILED" for value in gpm_result.values())
@@ -190,7 +193,8 @@ def prepare_validation_condition(
             "Dish Leaf Node kValueValidationResult should change to FAILED"
         ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
             dish_ln,
-            "kValueValidationResult",
+            # "kValueValidationResult",
+            "kvaluevalidationresult",
             ResultCode.FAILED,
         )
 
@@ -206,7 +210,8 @@ def prepare_validation_condition(
             "Dish Leaf Node kValueValidationResult should change to Ok"
         ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
             dish_ln,
-            "kValueValidationResult",
+            # "kValueValidationResult",
+            "kvaluevalidationresult",
             ResultCode.OK,
         )
 
@@ -371,7 +376,8 @@ def verify_alarm_raised(validation_type):
         expected_tag = "DishLeafNode_kValue_mismatch"
         alarm_formula = (
             f"tag={expected_tag};"
-            f"formula=({tmc_dish_leaf_node3}/kValueValidationResult != 'OK');"
+            # f"formula=({tmc_dish_leaf_node3}/kValueValidationResult!= 'OK');"
+            f"formula=({tmc_dish_leaf_node3}/kvaluevalidationresult != 'OK');"
             "priority=log;"
             "group=none;"
             'message="Alarm raised when Dish Leaf Node detects '

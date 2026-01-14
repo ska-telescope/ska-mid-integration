@@ -1,2 +1,2 @@
-tag=DishLeafNode_kValue_mismatch;formula=(mid-tmc/leaf-node-dish/SKA063/kValueValidationResult != 'OK');priority=high;group=dish_validation;message="Alarm raised when Dish Leaf Node detects kValue mismatch with Dish Manager"
+tag=DishLeafNode_kValue_mismatch;formula=(mid-tmc/leaf-node-dish/SKA063/kvaluevalidationresult != 'OK');priority=high;group=dish_validation;message="Alarm raised when Dish Leaf Node detects kValue mismatch with Dish Manager"
 tag=DishLeafNode_GPM_mismatch;formula=(mid-tmc/leaf-node-dish/SKA063/gpmValidationResult CONTAINS 'FAILED');priority=medium;group=dish_validation;message="Alarm raised when Dish Leaf Node detects GPM validation failure for one or more bands"
