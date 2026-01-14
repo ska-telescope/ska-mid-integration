@@ -116,7 +116,7 @@ def prepare_validation_condition(
     dishes: DishesFacade,
     validation_type: str,
     event_tracer: TangoEventTracer,
-    preserve_dish_state,
+    # preserve_dish_state,
 ):
     """
     Prepare Dish Leaf Node validation condition and
