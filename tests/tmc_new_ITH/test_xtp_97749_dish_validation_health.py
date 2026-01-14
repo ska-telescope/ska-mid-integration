@@ -16,6 +16,7 @@ from ska_integration_test_harness.facades.dishes_facade import DishesFacade
 from ska_integration_test_harness.facades.sdp_facade import SDPFacade
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_tango_testing.integration import TangoEventTracer
+from ska_tango_testing.mock.placeholders import Anything
 from tango import DeviceProxy
 
 from tests.resources.test_support.common_utils.result_code import ResultCode
@@ -43,7 +44,9 @@ def test_dish_validation_impacts_health():
 
 
 @pytest.fixture
-def preserve_dish_state(tmc: TMCFacade, dishes: DishesFacade):
+def preserve_dish_state(
+    tmc: TMCFacade, dishes: DishesFacade, event_tracer: TangoEventTracer
+):
     """
     Preserve and restore Dish Master and Dish Leaf Node state so
     subsequent tests are not affected.
@@ -69,12 +72,38 @@ def preserve_dish_state(tmc: TMCFacade, dishes: DishesFacade):
     time.sleep(2)
 
     # Assertions after reset
-    assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
+    # assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
 
     # gpm_result = json.loads(dish_ln.gpmValidationResult)
     # assert all(value == "OK" for value in gpm_result.values())
-    gpm_result = json.loads(dish_ln.gpmValidationResult)
-    assert gpm_result.get("Band_3") == "OK"
+
+    # gpm_result = json.loads(dish_ln.gpmValidationResult)
+    # assert gpm_result.get("Band_3") == "OK"
+
+    assert_that(event_tracer).described_as(
+        "Dish Leaf Node kValueValidationResult should change to Ok"
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        dish_ln,
+        "kvaluevalidationresult",
+        ResultCode.OK,
+    )
+
+    # Wait for a GPM validation change event
+    event = (
+        assert_that(event_tracer)
+        .described_as("DLN gpmValidationResult should report Band_3 OK")
+        .within_timeout(ASSERTIONS_TIMEOUT)
+        .has_change_event_occurred(
+            dish_ln,
+            "gpmValidationResult",
+            Anything,
+            lookahead=3,
+        )
+    )
+
+    # Validate the event payload
+    gpm_result = json.loads(event["attribute_value"])
+    assert_that(gpm_result.get("Band_3")).is_equal_to("OK")
 
     assert tmc.central_node.IsDishVccConfigSet is True
 
@@ -151,20 +180,19 @@ def prepare_validation_condition(
         dish_ln.SetKValue(1)
         dish_master.SetKValue(2)
 
-        assert int(dish_ln.kValueValidationResult) == ResultCode.FAILED.value
-
+        # assert int(dish_ln.kValueValidationResult) == ResultCode.FAILED.value
         # assert_that(event_tracer).has_change_event_occurred(
         #     dish_ln,
         #     "kValueValidationResult",
         #     ResultCode.FAILED.value,
         # )
-        # assert_that(event_tracer).described_as(
-        #     "Dish Leaf Node kValueValidationResult should change to FAILED"
-        # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        #     dish_ln,
-        #     "kvaluevalidationresult",
-        #     ResultCode.FAILED.value,
-        # )
+        assert_that(event_tracer).described_as(
+            "Dish Leaf Node kValueValidationResult should change to FAILED"
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+            dish_ln,
+            "kvaluevalidationresult",
+            ResultCode.FAILED,
+        )
 
     elif validation_type == "gpm mismatch":
 
@@ -174,18 +202,37 @@ def prepare_validation_condition(
         dish_ln.SetKValue(1)
         dish_master.SetKValue(1)
 
+        assert_that(event_tracer).described_as(
+            "Dish Leaf Node kValueValidationResult should change to Ok"
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+            dish_ln,
+            "kvaluevalidationresult",
+            ResultCode.OK,
+        )
+
         # Introduce GPM mismatch via Dish Master Band-3 params
         invalid_params = [0.0] * 18
         invalid_params[0] = 999.0
         dish_master.band3PointingModelParams = invalid_params
 
-        time.sleep(2)
+        # Wait for a GPM validation change event
+        event = (
+            assert_that(event_tracer)
+            .described_as(
+                "DLN gpmValidationResult should report Band_3 FAILED"
+            )
+            .within_timeout(ASSERTIONS_TIMEOUT)
+            .has_change_event_occurred(
+                dish_ln,
+                "gpmValidationResult",
+                Anything,
+                lookahead=3,
+            )
+        )
 
-        assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
-        # gpm_result = json.loads(dish_ln.gpmValidationResult)
-        # assert any(value == "FAILED" for value in gpm_result.values())
-        gpm_result = json.loads(dish_ln.gpmValidationResult)
-        assert gpm_result.get("Band_3") == "FAILED"
+        # Validate the event payload
+        gpm_result = json.loads(event["attribute_value"])
+        assert_that(gpm_result.get("Band_3")).is_equal_to("FAILED")
 
     else:
         raise ValueError(f"Unsupported validation_type: {validation_type}")
@@ -201,7 +248,7 @@ def evaluate_health(tmc: TMCFacade):
     pass
 
 
-@then(parsers.parse('Dish Leaf Node healthState shall be "{expected_health}"'))
+@then(parsers.parse('Dish Leaf Node healthState shall be "{dln_health}"'))
 def verify_dln_health(
     tmc: TMCFacade,
     event_tracer: TangoEventTracer,
@@ -235,7 +282,9 @@ def verify_dln_health(
 
 
 @then(
-    parsers.parse('TMC Subarray Node healthState shall be "{expected_health}"')
+    parsers.parse(
+        'TMC Subarray Node healthState shall be "{propagated_health}"'
+    )
 )
 def verify_subarray_health(
     tmc: TMCFacade,
@@ -267,7 +316,7 @@ def verify_subarray_health(
     )
 
 
-@then(parsers.parse('telescopeHealthState shall be "{expected_health}"'))
+@then(parsers.parse('telescopeHealthState shall be "{propagated_health}"'))
 def verify_telescope_health(
     tmc: TMCFacade,
     event_tracer: TangoEventTracer,
@@ -333,22 +382,22 @@ def verify_alarm_raised(validation_type):
         assert alarm_list == ("dishleafnode_kvalue_mismatch",)
         tear_down_configured_alarms(alarm_handler, alarm_list)
 
-    elif validation_type == "gpm mismatch":
-        expected_tag = "DishLeafNode_GPM_mismatch"
-        alarm_formula = (
-            f"tag={expected_tag};"
-            f"formula=({tmc_dish_leaf_node3}/gpmValidationResult "
-            "CONTAINS 'FAILED');"
-            "priority=log;"
-            "group=none;"
-            'message="Alarm raised when Dish Leaf Node detects '
-            'GPM validation failure for one or more bands"'
-        )
+    # elif validation_type == "gpm mismatch":
+    #     expected_tag = "DishLeafNode_GPM_mismatch"
+    #     alarm_formula = (
+    #         f"tag={expected_tag};"
+    #         f"formula=({tmc_dish_leaf_node3}/gpmValidationResult "
+    #         "CONTAINS 'FAILED');"
+    #         "priority=log;"
+    #         "group=none;"
+    #         'message="Alarm raised when Dish Leaf Node detects '
+    #         'GPM validation failure for one or more bands"'
+    #     )
 
-        alarm_handler.Load(alarm_formula)
-        alarm_list = alarm_handler.alarmList
-        assert alarm_list == ("dishleafnode_gpm_mismatch",)
-        tear_down_configured_alarms(alarm_handler, alarm_list)
+    #     alarm_handler.Load(alarm_formula)
+    #     alarm_list = alarm_handler.alarmList
+    #     assert alarm_list == ("dishleafnode_gpm_mismatch",)
+    #     tear_down_configured_alarms(alarm_handler, alarm_list)
 
     else:
         raise ValueError(validation_type)

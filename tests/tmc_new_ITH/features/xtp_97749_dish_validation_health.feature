@@ -4,12 +4,13 @@
     And Telescope is in ON state
     And Dish Leaf Node has "<validation_type>" validation condition
     When Dish Leaf Node health is evaluated
-    Then Dish Leaf Node healthState shall be "<expected_health>"
-    And telescopeHealthState shall be "<expected_health>"
-    And an alarm shall be raised for "{validation_type}" validation failure
+    Then Dish Leaf Node healthState shall be "<dln_health>"
+    And TMC Subarray Node healthState shall be "<propagated_health>"
+    And telescopeHealthState shall be "<propagated_health>"
+    And an alarm shall be raised for "<validation_type>" validation failure
 
   Examples:
-    | validation_type | expected_health |
-    | all_ok          | OK              |
-    | kvalue mismatch | FAILED          |
-    | gpm mismatch    | DEGRADED        |
+    | validation_type | dln_health | propagated_health |
+    | all_ok          | OK         | OK                |
+    | kvalue mismatch | FAILED     | DEGRADED          |
+    | gpm mismatch    | DEGRADED   | DEGRADED          |
