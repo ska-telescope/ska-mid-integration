@@ -116,7 +116,7 @@ def prepare_validation_condition(
     dishes: DishesFacade,
     validation_type: str,
     event_tracer: TangoEventTracer,
-    # preserve_dish_state,
+    preserve_dish_state,
 ):
     """
     Prepare Dish Leaf Node validation condition and
@@ -168,9 +168,9 @@ def prepare_validation_condition(
 
     elif validation_type == "kvalue mismatch":
         LOGGER.info("In prepare_validation_condition kvalue mismatch")
-        dish_master.SetKValue(2)
-        dish_ln.SetKValue(1)
         # dish_master.SetKValue(2)
+        dish_ln.SetKValue(1)
+        dish_master.SetKValue(2)
 
         # assert int(dish_ln.kValueValidationResult) == ResultCode.FAILED.value
         # assert_that(event_tracer).described_as(
