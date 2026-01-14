@@ -252,7 +252,7 @@ def evaluate_health(tmc: TMCFacade):
 def verify_dln_health(
     tmc: TMCFacade,
     event_tracer: TangoEventTracer,
-    expected_health: str,
+    dln_health: str,
 ):
     """
     Verify the Dish Leaf Node health state.
@@ -273,11 +273,11 @@ def verify_dln_health(
     # assert dish_ln.healthState == HealthState[expected_health]
 
     assert_that(event_tracer).described_as(
-        "Dish Leaf Node healthState should change " f"to {expected_health}"
+        "Dish Leaf Node healthState should change " f"to {dln_health}"
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         dish_ln,
         "healthState",
-        HealthState[expected_health],
+        HealthState[dln_health],
     )
 
 
@@ -289,7 +289,7 @@ def verify_dln_health(
 def verify_subarray_health(
     tmc: TMCFacade,
     event_tracer: TangoEventTracer,
-    expected_health: str,
+    propagated_health: str,
 ):
     """
     Verify the TMC Subarray Node health state.
@@ -308,11 +308,12 @@ def verify_subarray_health(
     # assert tmc.subarray_node.healthState == HealthState[expected_health]
 
     assert_that(event_tracer).described_as(
-        "TMC Subarray Node healthState should change " f"to {expected_health}"
+        "TMC Subarray Node healthState should change "
+        f"to {propagated_health}"
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         tmc.subarray_node,
         "healthState",
-        HealthState[expected_health],
+        HealthState[propagated_health],
     )
 
 
@@ -320,7 +321,7 @@ def verify_subarray_health(
 def verify_telescope_health(
     tmc: TMCFacade,
     event_tracer: TangoEventTracer,
-    expected_health: str,
+    propagated_health: str,
 ):
     """
     Verify the overall telescope health state.
@@ -341,11 +342,11 @@ def verify_telescope_health(
     # )
 
     assert_that(event_tracer).described_as(
-        "Telescope healthState should change " f"to {expected_health}"
+        "Telescope healthState should change " f"to {propagated_health}"
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         tmc.central_node,
         "telescopeHealthState",
-        HealthState[expected_health],
+        HealthState[propagated_health],
     )
 
 
