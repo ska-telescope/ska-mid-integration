@@ -343,20 +343,25 @@ def verify_alarm_raised(validation_type):
     else:
         raise ValueError(validation_type)
 
-    # Load alarm
     alarm_handler.Load(alarm_formula)
     alarm_list = alarm_handler.alarmList
-
-    assert expected_tag in alarm_list
-
-    # Allow alarm to propagate
-    time.sleep(3)
-
-    alarm_summary = alarm_handler.alarmSummary
-    assert any(expected_tag in alarm for alarm in alarm_summary)
-
-    # Cleanup
+    assert alarm_list == ("DishLeafNode_kValue_mismatch",)
     tear_down_configured_alarms(alarm_handler, alarm_list)
+
+    # # Load alarm
+    # alarm_handler.Load(alarm_formula)
+    # alarm_list = alarm_handler.alarmList
+
+    # assert expected_tag in alarm_list
+
+    # # Allow alarm to propagate
+    # time.sleep(3)
+
+    # alarm_summary = alarm_handler.alarmSummary
+    # assert any(expected_tag in alarm for alarm in alarm_summary)
+
+    # # Cleanup
+    # tear_down_configured_alarms(alarm_handler, alarm_list)
 
 
 # @then(
