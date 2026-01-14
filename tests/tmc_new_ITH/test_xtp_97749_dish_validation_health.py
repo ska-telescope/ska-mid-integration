@@ -180,13 +180,19 @@ def prepare_validation_condition(
         #     "kValueValidationResult",
         #     ResultCode.FAILED.value,
         # )
-        assert_that(event_tracer).described_as(
-            "Dish Leaf Node kValueValidationResult should change to FAILED"
-        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+
+        assert_that(event_tracer).has_change_event_occurred(
             dish_ln,
             "kvaluevalidationresult",
             ResultCode.FAILED.value,
         )
+        # assert_that(event_tracer).described_as(
+        #     "Dish Leaf Node kValueValidationResult should change to FAILED"
+        # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        #     dish_ln,
+        #     "kvaluevalidationresult",
+        #     ResultCode.FAILED.value,
+        # )
 
     else:
         raise ValueError(f"Unsupported validation_type: {validation_type}")
