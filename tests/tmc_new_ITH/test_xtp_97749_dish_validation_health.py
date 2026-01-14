@@ -172,13 +172,13 @@ def prepare_validation_condition(
         dish_ln.SetKValue(1)
         dish_master.SetKValue(2)
 
-        # assert int(dish_ln.kValueValidationResult) == ResultCode.FAILED.value
+        assert int(dish_ln.kValueValidationResult) == ResultCode.FAILED.value
 
-        assert_that(event_tracer).has_change_event_occurred(
-            dish_ln,
-            "kValueValidationResult",
-            ResultCode.FAILED.value,
-        )
+        # assert_that(event_tracer).has_change_event_occurred(
+        #     dish_ln,
+        #     "kValueValidationResult",
+        #     ResultCode.FAILED.value,
+        # )
         # assert_that(event_tracer).described_as(
         #     "Dish Leaf Node kValueValidationResult should change to FAILED"
         # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
