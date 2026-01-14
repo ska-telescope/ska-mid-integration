@@ -172,7 +172,12 @@ def prepare_validation_condition(
         dish_ln.SetKValue(1)
         # dish_master.SetKValue(2)
 
-        assert int(dish_ln.kValueValidationResult) == ResultCode.FAILED.value
+        # assert int(dish_ln.kValueValidationResult) == ResultCode.FAILED.value
+        assert event_tracer.has_change_event_occurred(
+            dish_ln,
+            "kValueValidationResult",
+            ResultCode.FAILED.value,
+        )
 
     else:
         raise ValueError(f"Unsupported validation_type: {validation_type}")
