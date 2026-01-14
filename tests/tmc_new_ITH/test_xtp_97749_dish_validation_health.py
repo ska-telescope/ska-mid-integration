@@ -84,7 +84,7 @@ def preserve_dish_state(
         "Dish Leaf Node kValueValidationResult should change to Ok"
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         dish_ln,
-        "kvaluevalidationresult",
+        "kValueValidationResult",
         ResultCode.OK,
     )
 
@@ -190,7 +190,7 @@ def prepare_validation_condition(
             "Dish Leaf Node kValueValidationResult should change to FAILED"
         ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
             dish_ln,
-            "kvaluevalidationresult",
+            "kValueValidationResult",
             ResultCode.FAILED,
         )
 
@@ -206,7 +206,7 @@ def prepare_validation_condition(
             "Dish Leaf Node kValueValidationResult should change to Ok"
         ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
             dish_ln,
-            "kvaluevalidationresult",
+            "kValueValidationResult",
             ResultCode.OK,
         )
 
