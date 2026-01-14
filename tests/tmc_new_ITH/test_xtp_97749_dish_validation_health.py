@@ -173,17 +173,10 @@ def prepare_validation_condition(
         dish_master.SetKValue(2)
 
         # assert int(dish_ln.kValueValidationResult) == ResultCode.FAILED.value
-        # assert_that(event_tracer).described_as(
-        #     "Dish Leaf Node kValueValidationResult should change to FAILED"
-        # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        #     dish_ln,
-        #     "kValueValidationResult",
-        #     ResultCode.FAILED.value,
-        # )
 
         assert_that(event_tracer).has_change_event_occurred(
             dish_ln,
-            "kvaluevalidationresult",
+            "kValueValidationResult",
             ResultCode.FAILED.value,
         )
         # assert_that(event_tracer).described_as(
@@ -240,14 +233,6 @@ def verify_dln_health(
         HealthState[expected_health],
     )
 
-    # assert_that(event_tracer).within_timeout(
-    #     ASSERTIONS_TIMEOUT
-    # ).has_change_event_occurred(
-    #     dish_ln,
-    #     "healthState",
-    #     HealthState[expected_health],
-    # )
-
 
 @then(
     parsers.parse('TMC Subarray Node healthState shall be "{expected_health}"')
@@ -281,14 +266,6 @@ def verify_subarray_health(
         HealthState[expected_health],
     )
 
-    # assert_that(event_tracer).within_timeout(
-    #     ASSERTIONS_TIMEOUT
-    # ).has_change_event_occurred(
-    #     tmc.subarray_node,
-    #     "healthState",
-    #     HealthState[expected_health],
-    # )
-
 
 @then(parsers.parse('telescopeHealthState shall be "{expected_health}"'))
 def verify_telescope_health(
@@ -321,59 +298,6 @@ def verify_telescope_health(
         "telescopeHealthState",
         HealthState[expected_health],
     )
-
-    # assert_that(event_tracer).within_timeout(
-    #     ASSERTIONS_TIMEOUT
-    # ).has_change_event_occurred(
-    #     tmc.central_node,
-    #     "telescopeHealthState",
-    #     HealthState[expected_health],
-    # )
-
-
-# @then(
-#     parsers.parse(
-#         'an alarm shall be raised for "{validation_type}" validation failure'
-#     )
-# )
-# def verify_alarm_raised(validation_type):
-#     """
-#     Verify that the correct alarm is raised based on validation failure
-#     using rules loaded from alarm rules file.
-#     """
-#     alarm_handler = DeviceProxy(alarm_handler1)
-
-#     # Load alarm rules from file
-#     alarm_handler.Load(
-#         "tests/data/alarm_rules/dish_leaf_node_validation_alarms.txt"
-#     )
-
-#     if validation_type == "all_ok":
-#         # No alarm expected
-#         time.sleep(2)
-#         assert alarm_handler.alarmSummary == []
-#         return
-
-#     if validation_type == "kvalue mismatch":
-#         expected_tag = "DishLeafNode_kValue_mismatch"
-
-#     elif validation_type == "gpm mismatch":
-#         expected_tag = "DishLeafNode_GPM_mismatch"
-
-#     else:
-#         raise ValueError(f"Unsupported validation_type: {validation_type}")
-
-#     # Allow alarm engine to evaluate rules
-#     time.sleep(3)
-
-#     alarm_list = alarm_handler.alarmList
-#     assert expected_tag in alarm_list
-
-#     alarm_summary = alarm_handler.alarmSummary
-#     assert any(expected_tag in alarm for alarm in alarm_summary)
-
-#     # Cleanup alarms so other tests are not affected
-#     tear_down_configured_alarms(alarm_handler, alarm_list)
 
 
 @then(
@@ -433,3 +357,48 @@ def verify_alarm_raised(validation_type):
 
     # Cleanup
     tear_down_configured_alarms(alarm_handler, alarm_list)
+
+
+# @then(
+#     parsers.parse(
+#         'an alarm shall be raised for "{validation_type}" validation failure'
+#     )
+# )
+# def verify_alarm_raised(validation_type):
+#     """
+#     Verify that the correct alarm is raised based on validation failure
+#     using rules loaded from alarm rules file.
+#     """
+#     alarm_handler = DeviceProxy(alarm_handler1)
+
+#     # Load alarm rules from file
+#     alarm_handler.Load(
+#         "tests/data/alarm_rules/dish_leaf_node_validation_alarms.txt"
+#     )
+
+#     if validation_type == "all_ok":
+#         # No alarm expected
+#         time.sleep(2)
+#         assert alarm_handler.alarmSummary == []
+#         return
+
+#     if validation_type == "kvalue mismatch":
+#         expected_tag = "DishLeafNode_kValue_mismatch"
+
+#     elif validation_type == "gpm mismatch":
+#         expected_tag = "DishLeafNode_GPM_mismatch"
+
+#     else:
+#         raise ValueError(f"Unsupported validation_type: {validation_type}")
+
+#     # Allow alarm engine to evaluate rules
+#     time.sleep(3)
+
+#     alarm_list = alarm_handler.alarmList
+#     assert expected_tag in alarm_list
+
+#     alarm_summary = alarm_handler.alarmSummary
+#     assert any(expected_tag in alarm for alarm in alarm_summary)
+
+#     # Cleanup alarms so other tests are not affected
+#     tear_down_configured_alarms(alarm_handler, alarm_list)
