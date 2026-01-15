@@ -201,7 +201,7 @@ def telescope_in_on_state(tmc: TMCFacade):
 
     :param tmc: TMC facade used to control telescope state.
     """
-    tmc.move_to_on()
+    tmc.move_to_on(wait_termination=True, is_long_running_command=True)
 
 
 @given(
