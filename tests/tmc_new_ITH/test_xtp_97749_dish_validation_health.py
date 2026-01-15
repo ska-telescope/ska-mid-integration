@@ -309,40 +309,40 @@ def verify_dln_health(
     )
 
 
-# @then(
-#     parsers.parse(
-#         'TMC Subarray Node healthState shall be "{propagated_health}"'
-#     )
-# )
-# def verify_subarray_health(
-#     tmc: TMCFacade,
-#     event_tracer: TangoEventTracer,
-#     propagated_health: str,
-# ):
-#     """
-#     Verify the TMC Subarray Node health state.
+@then(
+    parsers.parse(
+        'TMC Subarray Node healthState shall be "{propagated_health}"'
+    )
+)
+def verify_subarray_health(
+    tmc: TMCFacade,
+    event_tracer: TangoEventTracer,
+    propagated_health: str,
+):
+    """
+    Verify the TMC Subarray Node health state.
 
-#     This step confirms that healthstate change
-#     propagates from the Dish Leaf Node to the Subarray Node.
+    This step confirms that healthstate change
+    propagates from the Dish Leaf Node to the Subarray Node.
 
-#     :param tmc: TMC facade providing access to the Subarray Node.
-#     :param event_tracer: Utility used to capture and assert change events.
-#     :param expected_health: Expected Subarray health state.
-#     """
+    :param tmc: TMC facade providing access to the Subarray Node.
+    :param event_tracer: Utility used to capture and assert change events.
+    :param expected_health: Expected Subarray health state.
+    """
 
-#     LOGGER.info("In verify_subarray_health")
+    LOGGER.info("In verify_subarray_health")
 
-#     # instead of waiting for an event
-#     # assert tmc.subarray_node.healthState == HealthState[expected_health]
+    # instead of waiting for an event
+    # assert tmc.subarray_node.healthState == HealthState[expected_health]
 
-#     assert_that(event_tracer).described_as(
-#         "TMC Subarray Node healthState should change "
-#         f"to {propagated_health}"
-#     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-#         tmc.subarray_node,
-#         "healthState",
-#         HealthState[propagated_health],
-#     )
+    assert_that(event_tracer).described_as(
+        "TMC Subarray Node healthState should change "
+        f"to {propagated_health}"
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        tmc.subarray_node,
+        "healthState",
+        HealthState[propagated_health],
+    )
 
 
 @then(parsers.parse('telescopeHealthState shall be "{propagated_health}"'))
@@ -363,11 +363,6 @@ def verify_telescope_health(
     :param expected_health: Expected telescope health state.
     """
     LOGGER.info("In verify_telescope_health")
-
-    # instead of waiting for an event
-    # assert (
-    #     tmc.central_node.telescopeHealthState == HealthState[expected_health]
-    # )
 
     assert_that(event_tracer).described_as(
         "Telescope healthState should change " f"to {propagated_health}"
@@ -451,48 +446,3 @@ def verify_alarm_raised(validation_type):
 
     # # Cleanup
     # tear_down_configured_alarms(alarm_handler, alarm_list)
-
-
-# @then(
-#     parsers.parse(
-#         'an alarm shall be raised for "{validation_type}" validation failure'
-#     )
-# )
-# def verify_alarm_raised(validation_type):
-#     """
-#     Verify that the correct alarm is raised based on validation failure
-#     using rules loaded from alarm rules file.
-#     """
-#     alarm_handler = DeviceProxy(alarm_handler1)
-
-#     # Load alarm rules from file
-#     alarm_handler.Load(
-#         "tests/data/alarm_rules/dish_leaf_node_validation_alarms.txt"
-#     )
-
-#     if validation_type == "all_ok":
-#         # No alarm expected
-#         time.sleep(2)
-#         assert alarm_handler.alarmSummary == []
-#         return
-
-#     if validation_type == "kvalue mismatch":
-#         expected_tag = "DishLeafNode_kValue_mismatch"
-
-#     elif validation_type == "gpm mismatch":
-#         expected_tag = "DishLeafNode_GPM_mismatch"
-
-#     else:
-#         raise ValueError(f"Unsupported validation_type: {validation_type}")
-
-#     # Allow alarm engine to evaluate rules
-#     time.sleep(3)
-
-#     alarm_list = alarm_handler.alarmList
-#     assert expected_tag in alarm_list
-
-#     alarm_summary = alarm_handler.alarmSummary
-#     assert any(expected_tag in alarm for alarm in alarm_summary)
-
-#     # Cleanup alarms so other tests are not affected
-#     tear_down_configured_alarms(alarm_handler, alarm_list)
