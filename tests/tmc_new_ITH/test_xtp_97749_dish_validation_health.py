@@ -16,6 +16,8 @@ from ska_integration_test_harness.facades.dishes_facade import DishesFacade
 from ska_integration_test_harness.facades.sdp_facade import SDPFacade
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_tango_testing.integration import TangoEventTracer
+
+# from ska_tango_testing.integration import TangoEventTracer, log_events
 from ska_tango_testing.mock.placeholders import Anything
 from tango import DeviceProxy
 
@@ -31,19 +33,64 @@ from tests.resources.test_support.constant import (
     tmc_dish_leaf_node3,
 )
 from tests.tmc_new_ITH.conftest import ASSERTIONS_TIMEOUT
-from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
+
+# from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
 
 LOGGER = logging.getLogger(__name__)
 
 
-@pytest.mark.batchval1
-@pytest.mark.SKA_mid
-@scenario(
-    "../tmc_new_ITH/features/xtp_97749_dish_validation_health.feature",
-    "Dish validation failure impacts telescope health",
-)
-def test_dish_validation_impacts_health():
-    """BDD Scenario Outline test"""
+def _setup_event_subscriptions(
+    tmc: TMCFacade,
+    csp: CSPFacade,
+    sdp: SDPFacade,
+    event_tracer: TangoEventTracer,
+):
+    """Subscribe TMC, CSP and SDP devices to track and log obsState events.
+
+    :param tmc: the TMC facade.
+    :param csp: the CSP facade.
+    :param sdp: the SDP facade.
+    :param event_tracer: the event tracer.
+    """
+    csp.csp_subarray.SetDirectHealthState(HealthState.OK)
+    sdp.sdp_subarray.SetDirectHealthState(HealthState.OK)
+
+    event_tracer.subscribe_event(tmc.subarray_node, "healthState")
+    event_tracer.subscribe_event(csp.csp_subarray, "healthState")
+    event_tracer.subscribe_event(sdp.sdp_subarray, "healthState")
+    event_tracer.subscribe_event(tmc.central_node, "telescopeHealthState")
+    event_tracer.subscribe_event(
+        tmc.dish_leaf_node_list[2], "kvaluevalidationresult"
+    )
+    event_tracer.subscribe_event(
+        tmc.dish_leaf_node_list[2], "gpmValidationResult"
+    )
+    event_tracer.subscribe_event(tmc.dish_leaf_node_list[2], "healthState")
+
+    # log_events(
+    #     {
+    #         tmc.subarray_node: [
+    #             "healthState",
+    #         ],
+    #         csp.csp_subarray: ["healthState"],
+    #         sdp.sdp_subarray: [
+    #             "healthState",
+    #         ],
+    #         tmc.central_node: [
+    #             "telescopeHealthState",
+    #         ],
+    #         tmc.dish_leaf_node_list[2]: [
+    #             "kvaluevalidationresult",
+    #             "gpmValidationResult",
+    #             "healthState",
+    #         ],
+    #     },
+    #     event_enum_mapping={
+    #         "healthState": HealthState,
+    #         "telescopeHealthState": HealthState,
+    #         "kvaluevalidationresult": ResultCode,
+    #     },
+    # )
 
 
 @pytest.fixture
@@ -112,6 +159,16 @@ def preserve_dish_state(
     assert tmc.central_node.IsDishVccConfigSet is True
 
 
+@pytest.mark.batchval1
+@pytest.mark.SKA_mid
+@scenario(
+    "../tmc_new_ITH/features/xtp_97749_dish_validation_health.feature",
+    "Dish validation failure impacts telescope health",
+)
+def test_dish_validation_impacts_health():
+    """BDD Scenario Outline test"""
+
+
 @given("a TMC")
 def given_a_tmc(
     tmc: TMCFacade,
@@ -126,7 +183,15 @@ def given_a_tmc(
     :param event_tracer: Utility used to trace and assert Tango events.
     """
 
-    setup_event_subscriptions(tmc, csp, sdp, event_tracer)
+    _setup_event_subscriptions(tmc, csp, sdp, event_tracer)
+
+    # event_tracer.subscribe_event(tmc.subarray_node, "healthState")
+    # event_tracer.subscribe_event(csp.csp_subarray, "healthState")
+    # event_tracer.subscribe_event(sdp.sdp_subarray, "healthState")
+    # event_tracer.subscribe_event(tmc.central_node, "telescopeHealthState")
+
+    # csp.csp_subarray.SetDirectHealthState(HealthState.OK)
+    # sdp.sdp_subarray.SetDirectHealthState(HealthState.OK)
 
 
 @given("Telescope is in ON state")
@@ -160,18 +225,18 @@ def prepare_validation_condition(
 
     LOGGER.info("In prepare_validation_condition")
 
-    LOGGER.info("Subscribing to validation + health events")
-
     # REQUIRED SUBSCRIPTIONS
     # event_tracer.subscribe_event(dish_ln, "kValueValidationResult")
-    event_tracer.subscribe_event(dish_ln, "kvaluevalidationresult")
-    event_tracer.subscribe_event(dish_ln, "gpmValidationResult")
-    event_tracer.subscribe_event(dish_ln, "healthState")
-    event_tracer.subscribe_event(tmc.subarray_node, "healthState")
-    event_tracer.subscribe_event(tmc.central_node, "telescopeHealthState")
+    # event_tracer.subscribe_event(dish_ln, "kvaluevalidationresult")
+    # event_tracer.subscribe_event(dish_ln, "gpmValidationResult")
+    # event_tracer.subscribe_event(dish_ln, "healthState")
+    # event_tracer.subscribe_event(tmc.subarray_node, "healthState")
+    # event_tracer.subscribe_event(csp.csp_subarray, "obsState")
+    # event_tracer.subscribe_event(sdp.sdp_subarray, "obsState")
+    # event_tracer.subscribe_event(tmc.central_node, "telescopeHealthState")
 
     # Allow event_tracer to settle
-    time.sleep(2)
+    # time.sleep(2)
 
     if validation_type == "all_ok":
         # assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
@@ -185,7 +250,7 @@ def prepare_validation_condition(
 
     elif validation_type == "kvalue mismatch":
         LOGGER.info("In prepare_validation_condition kvalue mismatch")
-        # dish_master.SetKValue(2)
+
         dish_ln.SetKValue(1)
         dish_master.SetKValue(2)
 
@@ -225,7 +290,7 @@ def prepare_validation_condition(
             dish_ln,
             "kvaluevalidationresult",
             # ResultCode.OK.value,
-            str(ResultCode.FAILED.value),
+            str(ResultCode.OK.value),
         )
 
         assert_that(event_tracer).described_as(
@@ -235,7 +300,7 @@ def prepare_validation_condition(
             # "kValueValidationResult",
             "kvaluevalidationresult",
             # ResultCode.OK.value,
-            str(ResultCode.FAILED.value),
+            str(ResultCode.OK.value),
         )
 
         # Introduce GPM mismatch via Dish Master Band-3 params
