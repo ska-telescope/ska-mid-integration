@@ -52,9 +52,6 @@ def _setup_event_subscriptions(
     :param sdp: the SDP facade.
     :param event_tracer: the event tracer.
     """
-    csp.csp_subarray.SetDirectHealthState(HealthState.OK)
-    sdp.sdp_subarray.SetDirectHealthState(HealthState.OK)
-
     event_tracer.subscribe_event(tmc.subarray_node, "healthState")
     event_tracer.subscribe_event(csp.csp_subarray, "healthState")
     event_tracer.subscribe_event(sdp.sdp_subarray, "healthState")
@@ -185,6 +182,9 @@ def given_a_tmc(
 
     _setup_event_subscriptions(tmc, csp, sdp, event_tracer)
 
+    csp.csp_subarray.SetDirectHealthState(HealthState.OK)
+    sdp.sdp_subarray.SetDirectHealthState(HealthState.OK)
+
     # event_tracer.subscribe_event(tmc.subarray_node, "healthState")
     # event_tracer.subscribe_event(csp.csp_subarray, "healthState")
     # event_tracer.subscribe_event(sdp.sdp_subarray, "healthState")
@@ -226,6 +226,7 @@ def prepare_validation_condition(
     LOGGER.info("In prepare_validation_condition")
 
     # REQUIRED SUBSCRIPTIONS
+
     # event_tracer.subscribe_event(dish_ln, "kValueValidationResult")
     # event_tracer.subscribe_event(dish_ln, "kvaluevalidationresult")
     # event_tracer.subscribe_event(dish_ln, "gpmValidationResult")
