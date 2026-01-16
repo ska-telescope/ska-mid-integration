@@ -685,7 +685,7 @@ def wait_and_validate_device_attribute_value(
     expected_value,
     is_json: bool = False,
     is_list: bool = False,
-    timeout: int = 350,
+    timeout: int = 300,
 ):
     """This method wait and validate if attribute value is equal to provided
     expected value
