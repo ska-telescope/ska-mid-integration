@@ -3,12 +3,10 @@ Test case to validate negative scenario for
    Dish Vcc map configuration feature
 """
 import json
-import time
 
 import pytest
 from pytest_bdd import given, scenario, then, when
 
-from tests.conftest import LOGGER
 from tests.resources.test_harness.helpers import (
     device_attribute_changed,
     prepare_json_args_for_centralnode_commands,
@@ -321,13 +319,4 @@ def tmc_report_dish_vcc_mismatch(tmc_mid):
         tmc_mid.csp_master_leaf_node,
         "versionId",
         pytest.version_csp_mln,
-    )
-    LOGGER.info(
-        "CentralNode Telescope availability: %s",
-        tmc_mid.central_node.central_node.telescopeAvailability,
-    )
-    time.sleep(8)
-    LOGGER.info(
-        "CentralNode Telescope availability: %s",
-        tmc_mid.central_node.central_node.telescopeAvailability,
     )
