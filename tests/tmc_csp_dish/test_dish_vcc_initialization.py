@@ -3,6 +3,7 @@ Test case to validate negative scenario for
    Dish Vcc map configuration feature
 """
 import json
+import time
 
 import pytest
 from pytest_bdd import given, scenario, then, when
@@ -320,3 +321,9 @@ def tmc_report_dish_vcc_mismatch(tmc_mid):
         "versionId",
         pytest.version_csp_mln,
     )
+    assert wait_and_validate_device_attribute_value(
+        tmc_mid.csp_master_leaf_node,
+        "issubsystemavailable",
+        True,
+    )
+    time.sleep(20)

@@ -334,6 +334,11 @@ def check_telescope_is_in_on_state(
     central_node_mid: CentralNodeWrapperMid, event_recorder: EventRecorder
 ) -> None:
     """Ensure telescope is in ON state."""
+    LOGGER.info(
+        "CentralNode Telescope availability: %s",
+        central_node_mid.central_node.telescopeAvailability,
+    )
+
     central_node_mid.move_to_on()
     event_recorder.subscribe_event(
         central_node_mid.central_node, "telescopeState"
