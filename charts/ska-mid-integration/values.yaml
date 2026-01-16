@@ -178,6 +178,8 @@ ska-tango-tangogql:
     enabled: false
 #=== EDA ===#
 ska-tango-archiver:
+  ska-taranta:
+    enabled: false
   #hostname: eda.ska-tango-archiver - Updating this from Makefile
   dbname: mid_sw_integration_eda
   dbuser: admin
