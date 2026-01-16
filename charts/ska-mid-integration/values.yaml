@@ -178,6 +178,8 @@ ska-tango-tangogql:
     enabled: false
 #=== EDA ===#
 ska-tango-archiver:
+  vault:
+    enabled: true
   ska-taranta:
     enabled: false
   #hostname: eda.ska-tango-archiver - Updating this from Makefile
