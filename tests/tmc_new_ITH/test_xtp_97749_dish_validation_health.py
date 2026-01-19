@@ -16,8 +16,6 @@ from ska_integration_test_harness.facades.dishes_facade import DishesFacade
 from ska_integration_test_harness.facades.sdp_facade import SDPFacade
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_tango_testing.integration import TangoEventTracer
-
-# from ska_tango_testing.integration import TangoEventTracer, log_events
 from ska_tango_testing.mock.placeholders import Anything
 from tango import DeviceProxy
 
@@ -32,6 +30,10 @@ from tests.resources.test_support.constant import (
     alarm_handler1,
     tmc_dish_leaf_node3,
 )
+
+# from ska_tango_testing.integration import TangoEventTracer, log_events
+from tests.tmc_csp_new_ITH.conftest import SubarrayTestContextData
+from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 from tests.tmc_new_ITH.conftest import ASSERTIONS_TIMEOUT
 
 # from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
@@ -202,6 +204,21 @@ def telescope_in_on_state(tmc: TMCFacade):
     :param tmc: TMC facade used to control telescope state.
     """
     tmc.move_to_on(wait_termination=True, is_long_running_command=True)
+
+
+@given("I assign resources to TMC Subarray")
+def invoke_assign_resources(
+    context_fixt: SubarrayTestContextData, tmc: TMCFacade
+):
+    """Invoke Assign Resources"""
+    json_input = MyFileJSONInput(
+        "centralnode", "assign_resources_mid"
+    ).with_attribute("subarray_id", 1)
+
+    context_fixt.when_action_result = tmc.assign_resources(
+        json_input,
+        wait_termination=True,
+    )
 
 
 @given(

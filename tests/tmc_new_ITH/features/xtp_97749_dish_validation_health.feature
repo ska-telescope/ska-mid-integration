@@ -2,6 +2,7 @@
   Scenario Outline: Dish validation failure impacts telescope health
     Given a TMC
     And Telescope is in ON state
+    And I assign resources to TMC Subarray
     And Dish Leaf Node has "<validation_type>" validation condition
     When Dish Leaf Node health is evaluated
     Then Dish Leaf Node healthState shall be "<dln_health>"
