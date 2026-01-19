@@ -361,11 +361,7 @@ def prepare_validation_condition(
 
         # Wait for a GPM validation change event
 
-        assert_that(event_tracer).described_as(
-            "DLN gpmValidationResult should report Band_3 FAILED"
-        ).within_timeout(
-            ASSERTIONS_TIMEOUT
-        ).has_change_event_occurred_for_dictdata(
+        assert event_tracer.has_change_event_occurred_for_dictdata(
             device=dish_ln,
             attribute_name="gpmValidationResult",
             attribute_to_check="Band_3",
