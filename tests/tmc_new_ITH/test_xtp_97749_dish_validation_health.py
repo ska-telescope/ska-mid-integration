@@ -16,8 +16,7 @@ from ska_integration_test_harness.facades.dishes_facade import DishesFacade
 from ska_integration_test_harness.facades.sdp_facade import SDPFacade
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_tango_testing.integration import TangoEventTracer
-
-# from ska_tango_testing.mock.placeholders import Anything
+from ska_tango_testing.mock.placeholders import Anything
 from tango import DeviceProxy
 
 from tests.resources.test_harness.helpers import (
@@ -95,6 +94,69 @@ def _setup_event_subscriptions(
     #         "kvaluevalidationresult": ResultCode,
     #     },
     # )
+
+
+def assert_gpm_validation_result_mid(
+    event_tracer,
+    dish_ln,
+    band_name: str,
+    expected_result: str,
+    timeout: float,
+    poll_interval: float = 1.0,
+):
+    """
+    MID integration safe assertion for GPM validation.
+
+    - Waits for gpmValidationResult CHANGE_EVENTs
+    - Repeatedly reads attribute value
+    - Logs every observed transition
+    - Passes only when target band reaches expected_result
+    """
+
+    end_time = time.time() + timeout
+    last_seen = None
+
+    LOGGER.info(
+        "Waiting for gpmValidationResult: %s -> %s (timeout=%ss)",
+        band_name,
+        expected_result,
+        timeout,
+    )
+
+    while time.time() < end_time:
+        # Ensure at least one change event has occurred
+        assert_that(event_tracer).within_timeout(
+            poll_interval
+        ).has_change_event_occurred(
+            dish_ln,
+            "gpmValidationResult",
+            Anything,
+        )
+
+        # Read latest attribute value
+        current_value = json.loads(dish_ln.gpmValidationResult)
+
+        if current_value != last_seen:
+            LOGGER.info(
+                "GPM validation transition observed: %s",
+                current_value,
+            )
+            last_seen = current_value
+
+        if current_value.get(band_name) == expected_result:
+            LOGGER.info(
+                "GPM validation reached expected state: %s=%s",
+                band_name,
+                expected_result,
+            )
+            return current_value
+
+        time.sleep(poll_interval)
+
+    raise AssertionError(
+        f"GPM validation did not reach {band_name}={expected_result}. "
+        f"Last seen value: {last_seen}"
+    )
 
 
 @pytest.fixture
@@ -360,15 +422,16 @@ def prepare_validation_condition(
         dish_master.band3PointingModelParams = invalid_params
 
         # Wait for a GPM validation change event
+        # MID-safe assertion with logging
+        gpm_result = assert_gpm_validation_result_mid(
+            event_tracer=event_tracer,
+            dish_ln=dish_ln,
+            band_name="Band_3",
+            expected_result="FAILED",
+            timeout=ASSERTIONS_TIMEOUT,
+        )
 
-        assert event_tracer.has_change_event_occurred_for_dictdata(
-            device=dish_ln,
-            attribute_name="gpmValidationResult",
-            attribute_to_check="Band_3",
-            attribute_values=["FAILED"],
-            lookahead=7,
-        ), "Band_3 GPM validation did not become FAILED"
-
+        LOGGER.info("Final GPM validation result: %s", gpm_result)
         # assert_that(event_tracer).described_as(
         #     "DLN gpmValidationResult should report Band_3 FAILED"
         # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
