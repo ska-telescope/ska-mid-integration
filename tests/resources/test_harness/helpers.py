@@ -682,7 +682,7 @@ def compare_case_insensitive_data(data1: Any, data2: Any):
 def wait_and_validate_device_attribute_value(
     device: DeviceProxy,
     attribute_name: str,
-    expected_value: str,
+    expected_value,
     is_json: bool = False,
     is_list: bool = False,
     timeout: int = 300,
