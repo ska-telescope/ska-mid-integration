@@ -136,6 +136,9 @@ ska-dish-lmc:
 
   ska-mid-dish-manager:
     enabled: true
+    dishmanager:
+      actions:
+        timeout_seconds: "300"
 
   ska-mid-dish-ds-manager:
     enabled: true
