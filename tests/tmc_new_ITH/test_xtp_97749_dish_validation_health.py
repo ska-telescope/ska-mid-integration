@@ -337,7 +337,6 @@ def prepare_validation_condition(
                 dish_ln,
                 "gpmValidationResult",
                 Anything,
-                lookahead=3,
             )
         )
 
