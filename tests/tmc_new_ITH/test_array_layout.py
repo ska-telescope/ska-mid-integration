@@ -81,9 +81,6 @@ def _setup_event_subscriptions(
     )
 
 
-# @pytest.mark.xfail(
-#     reason="CSP Master restarted from last test so not available sometimes."
-# )
 @pytest.mark.SKA_tmc_mid_device_restart
 @pytest.mark.SKA_mid
 @scenario(
@@ -99,9 +96,11 @@ def given_telescope_is_on():
     """
     Telescope is in ON state.
     """
-    # TODO: The availability of the CSP Master restarted from last test does
+    # TODO: TelescopeOn command invocation is not required for this command.
+    # However we need to look at the below issue from earlier test:
+    # The availability of the CSP Master restarted from last test does
     # not get updated on CentralNode sometimes. So the TelescopeState ON
-    # treansition fails here. TD item is added to check on why the
+    # transition fails in this test. TD item is added to check on why the
     # availability event is not pushed by the CSP
     # Master Leaf Node after restart.
 
