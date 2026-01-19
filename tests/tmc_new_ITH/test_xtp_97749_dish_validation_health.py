@@ -562,69 +562,129 @@ def verify_telescope_health(
 )
 def verify_alarm_raised(validation_type):
     """
-    Verify the corresponding alarm is raised
-    on the Alarm Handler.
+    Verify alarm is raised based on Dish Leaf Node healthState.
+    Alarm logic is driven by DEGRADED health, not raw validation attributes.
     """
-    LOGGER.info("In verify_alarm_raised")
+    LOGGER.info(
+        "Verifying alarm behavior for validation_type=%s",
+        validation_type,
+    )
 
     alarm_handler = DeviceProxy(alarm_handler1)
 
+    # No alarm expected when everything is OK
     if validation_type == "all_ok":
-        return  # No alarm expected
+        LOGGER.info("Validation type all_ok: no alarm expected")
+        return
 
+    # Alarm metadata differs, formula is Same
     if validation_type == "kvalue mismatch":
-        expected_tag = "DishLeafNode_kValue_mismatch"
-        alarm_formula = (
-            f"tag={expected_tag};"
-            # f"formula=({tmc_dish_leaf_node3}/kValueValidationResult!= 'OK');"
-            f"formula=({tmc_dish_leaf_node3}/kvaluevalidationresult != 'OK');"
-            "priority=log;"
-            "group=none;"
-            'message="Alarm raised when Dish Leaf Node detects '
-            'kValue mismatch with Dish Manager"'
+        expected_tag = "DishLeafNode_Degraded_kValue"
+        message = (
+            "Dish Leaf Node health degraded due to "
+            "kValue validation failure"
         )
 
-        alarm_handler.Load(alarm_formula)
-        alarm_list = alarm_handler.alarmList
-        assert alarm_list == ("dishleafnode_kvalue_mismatch",)
-        tear_down_configured_alarms(alarm_handler, alarm_list)
-
-    # elif validation_type == "gpm mismatch":
-    #     expected_tag = "DishLeafNode_GPM_mismatch"
-    #     alarm_formula = (
-    #         f"tag={expected_tag};"
-    #         f"formula=({tmc_dish_leaf_node3}/gpmValidationResult "
-    #         "CONTAINS 'FAILED');"
-    #         "priority=log;"
-    #         "group=none;"
-    #         'message="Alarm raised when Dish Leaf Node detects '
-    #         'GPM validation failure for one or more bands"'
-    #     )
-
-    #     alarm_handler.Load(alarm_formula)
-    #     alarm_list = alarm_handler.alarmList
-    #     assert alarm_list == ("dishleafnode_gpm_mismatch",)
-    #     tear_down_configured_alarms(alarm_handler, alarm_list)
+    elif validation_type == "gpm mismatch":
+        expected_tag = "DishLeafNode_Degraded_GPM"
+        message = (
+            "Dish Leaf Node health degraded due to " "GPM validation failure"
+        )
 
     else:
-        raise ValueError(validation_type)
+        raise ValueError(f"Unsupported validation_type: {validation_type}")
 
-    # alarm_handler.Load(alarm_formula)
-    # alarm_list = alarm_handler.alarmList
-    # assert alarm_list == ("dishleafnode_kvalue_mismatch",)
-    # tear_down_configured_alarms(alarm_handler, alarm_list)
+    alarm_formula = (
+        f"tag={expected_tag};"
+        f"formula=({tmc_dish_leaf_node3}/healthState == 'DEGRADED');"
+        "priority=log;"
+        "group=none;"
+        f'message="{message}"'
+    )
 
-    # # Load alarm
-    # alarm_handler.Load(alarm_formula)
-    # alarm_list = alarm_handler.alarmList
+    LOGGER.info("Loading alarm formula: %s", alarm_formula)
 
-    # assert expected_tag in alarm_list
+    alarm_handler.Load(alarm_formula)
 
-    # # Allow alarm to propagate
-    # time.sleep(3)
+    alarm_list = alarm_handler.alarmList
+    LOGGER.info("Current alarm list: %s", alarm_list)
 
-    # alarm_summary = alarm_handler.alarmSummary
-    # assert any(expected_tag in alarm for alarm in alarm_summary)
+    assert expected_tag.lower() in alarm_list
 
-    # # Cleanup
-    # tear_down_configured_alarms(alarm_handler, alarm_list)
+    # Cleanup
+    tear_down_configured_alarms(alarm_handler, alarm_list)
+
+
+# @then(
+#     parsers.parse(
+#         'an alarm shall be raised for "{validation_type}" validation failure'
+#     )
+# )
+# def verify_alarm_raised(validation_type):
+#     """
+#     Verify the corresponding alarm is raised
+#     on the Alarm Handler.
+#     """
+#     LOGGER.info("In verify_alarm_raised")
+
+#     alarm_handler = DeviceProxy(alarm_handler1)
+
+#     if validation_type == "all_ok":
+#         return  # No alarm expected
+
+#     if validation_type == "kvalue mismatch":
+#         expected_tag = "DishLeafNode_kValue_mismatch"
+#         alarm_formula = (
+#             f"tag={expected_tag};"
+#          # f"formula=({tmc_dish_leaf_node3}/kValueValidationResult!= 'OK');"
+#          f"formula=({tmc_dish_leaf_node3}/kvaluevalidationresult != 'OK');"
+#             "priority=log;"
+#             "group=none;"
+#             'message="Alarm raised when Dish Leaf Node detects '
+#             'kValue mismatch with Dish Manager"'
+#         )
+
+#         alarm_handler.Load(alarm_formula)
+#         alarm_list = alarm_handler.alarmList
+#         assert alarm_list == ("dishleafnode_kvalue_mismatch",)
+#         tear_down_configured_alarms(alarm_handler, alarm_list)
+
+#     # elif validation_type == "gpm mismatch":
+#     #     expected_tag = "DishLeafNode_GPM_mismatch"
+#     #     alarm_formula = (
+#     #         f"tag={expected_tag};"
+#     #         f"formula=({tmc_dish_leaf_node3}/gpmValidationResult "
+#     #         "CONTAINS 'FAILED');"
+#     #         "priority=log;"
+#     #         "group=none;"
+#     #         'message="Alarm raised when Dish Leaf Node detects '
+#     #         'GPM validation failure for one or more bands"'
+#     #     )
+
+#     #     alarm_handler.Load(alarm_formula)
+#     #     alarm_list = alarm_handler.alarmList
+#     #     assert alarm_list == ("dishleafnode_gpm_mismatch",)
+#     #     tear_down_configured_alarms(alarm_handler, alarm_list)
+
+#     else:
+#         raise ValueError(validation_type)
+
+#     # alarm_handler.Load(alarm_formula)
+#     # alarm_list = alarm_handler.alarmList
+#     # assert alarm_list == ("dishleafnode_kvalue_mismatch",)
+#     # tear_down_configured_alarms(alarm_handler, alarm_list)
+
+#     # # Load alarm
+#     # alarm_handler.Load(alarm_formula)
+#     # alarm_list = alarm_handler.alarmList
+
+#     # assert expected_tag in alarm_list
+
+#     # # Allow alarm to propagate
+#     # time.sleep(3)
+
+#     # alarm_summary = alarm_handler.alarmSummary
+#     # assert any(expected_tag in alarm for alarm in alarm_summary)
+
+#     # # Cleanup
+#     # tear_down_configured_alarms(alarm_handler, alarm_list)
