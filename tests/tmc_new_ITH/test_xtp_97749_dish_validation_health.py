@@ -327,21 +327,17 @@ def prepare_validation_condition(
         dish_master.band3PointingModelParams = invalid_params
 
         # Wait for a GPM validation change event
-        event = (
-            assert_that(event_tracer)
-            .described_as(
-                "DLN gpmValidationResult should report Band_3 FAILED"
-            )
-            .within_timeout(ASSERTIONS_TIMEOUT)
-            .has_change_event_occurred(
-                dish_ln,
-                "gpmValidationResult",
-                Anything,
-            )
+
+        assert_that(event_tracer).described_as(
+            "DLN gpmValidationResult should report Band_3 FAILED"
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+            dish_ln,
+            "gpmValidationResult",
+            Anything,
         )
 
         # Validate the event payload
-        gpm_result = json.loads(event["attribute_value"])
+        gpm_result = json.loads(dish_ln.gpmValidationResult)
         assert_that(gpm_result.get("Band_3")).is_equal_to("FAILED")
 
     else:
