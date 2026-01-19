@@ -30,13 +30,9 @@ from tests.resources.test_support.constant import (
     alarm_handler1,
     tmc_dish_leaf_node3,
 )
-
-# from ska_tango_testing.integration import TangoEventTracer, log_events
 from tests.tmc_csp_new_ITH.conftest import SubarrayTestContextData
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 from tests.tmc_new_ITH.conftest import ASSERTIONS_TIMEOUT
-
-# from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
 
 LOGGER = logging.getLogger(__name__)
 
@@ -69,31 +65,6 @@ def _setup_event_subscriptions(
     event_tracer.subscribe_event(
         tmc.dish_leaf_node_list[2], "globalPointingModelParams"
     )
-
-    # log_events(
-    #     {
-    #         tmc.subarray_node: [
-    #             "healthState",
-    #         ],
-    #         csp.csp_subarray: ["healthState"],
-    #         sdp.sdp_subarray: [
-    #             "healthState",
-    #         ],
-    #         tmc.central_node: [
-    #             "telescopeHealthState",
-    #         ],
-    #         tmc.dish_leaf_node_list[2]: [
-    #             "kvaluevalidationresult",
-    #             "gpmValidationResult",
-    #             "healthState",
-    #         ],
-    #     },
-    #     event_enum_mapping={
-    #         "healthState": HealthState,
-    #         "telescopeHealthState": HealthState,
-    #         "kvaluevalidationresult": ResultCode,
-    #     },
-    # )
 
 
 def assert_gpm_validation_result_mid(
@@ -181,46 +152,16 @@ def preserve_dish_state(
     dish_ln.SetKValue(original_kvalue_dln)
     dish_master.SetKValue(original_kvalue_master)
 
-    # Restore Band-2 pointing model params (GPM driver)
+    # Restore Band-2 pointing model params
     dish_master.band3PointingModelParams = original_band3_params
 
     # Allow validation to settle
     time.sleep(2)
 
-    # Assertions after reset
-    # assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
     assert int(dish_ln.kvaluevalidationresult) == ResultCode.OK.value
-
-    # gpm_result = json.loads(dish_ln.gpmValidationResult)
-    # assert all(value == "OK" for value in gpm_result.values())
 
     gpm_result = json.loads(dish_ln.gpmValidationResult)
     assert gpm_result.get("Band_3") == "OK"
-
-    # assert_that(event_tracer).described_as(
-    #     "Dish Leaf Node kValueValidationResult should change to Ok"
-    # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-    #     dish_ln,
-    #     "kValueValidationResult",
-    #     ResultCode.OK,
-    # )
-
-    # # Wait for a GPM validation change event
-    # event = (
-    #     assert_that(event_tracer)
-    #     .described_as("DLN gpmValidationResult should report Band_3 OK")
-    #     .within_timeout(ASSERTIONS_TIMEOUT)
-    #     .has_change_event_occurred(
-    #         dish_ln,
-    #         "gpmValidationResult",
-    #         Anything,
-    #         lookahead=3,
-    #     )
-    # )
-
-    # # Validate the event payload
-    # gpm_result = json.loads(event["attribute_value"])
-    # assert_that(gpm_result.get("Band_3")).is_equal_to("OK")
 
     assert tmc.central_node.IsDishVccConfigSet is True
 
@@ -253,14 +194,6 @@ def given_a_tmc(
 
     csp.csp_subarray.SetDirectHealthState(HealthState.OK)
     sdp.sdp_subarray.SetDirectHealthState(HealthState.OK)
-
-    # event_tracer.subscribe_event(tmc.subarray_node, "healthState")
-    # event_tracer.subscribe_event(csp.csp_subarray, "healthState")
-    # event_tracer.subscribe_event(sdp.sdp_subarray, "healthState")
-    # event_tracer.subscribe_event(tmc.central_node, "telescopeHealthState")
-
-    # csp.csp_subarray.SetDirectHealthState(HealthState.OK)
-    # sdp.sdp_subarray.SetDirectHealthState(HealthState.OK)
 
 
 @given("Telescope is in ON state")
@@ -303,33 +236,25 @@ def prepare_validation_condition(
     """
     Prepare Dish Leaf Node validation condition and
     assert validation results immediately after setting.
+        :param tmc: TMC facade providing access to Dish Leaf Nodes.
+        :param dishes: Dishes facade providing access to Dish Masters.
+        :param validation_type: Type of validation condition to apply.
+        Supported values:
+            - "all_ok": No validation failures present.
+            - "kvalue mismatch": Dish Leaf Node and Dish Master kValue differ.
+            - "gpm mismatch": Dish pointing model parameters are inconsistent.
+        :param event_tracer: Utility used to capture and assert Tango
+            change events emitted by the Dish Leaf Node.
+        :param preserve_dish_state: Fixture that saves and restores
+            Dish state to avoid side effects on subsequent tests.
     """
     dish_ln = tmc.dish_leaf_node_list[2]
     dish_master = dishes.dish_master_dict["dish_063"]
 
-    LOGGER.info("In prepare_validation_condition")
-
-    # REQUIRED SUBSCRIPTIONS
-
-    # event_tracer.subscribe_event(dish_ln, "kValueValidationResult")
-    # event_tracer.subscribe_event(dish_ln, "kvaluevalidationresult")
-    # event_tracer.subscribe_event(dish_ln, "gpmValidationResult")
-    # event_tracer.subscribe_event(dish_ln, "healthState")
-    # event_tracer.subscribe_event(tmc.subarray_node, "healthState")
-    # event_tracer.subscribe_event(csp.csp_subarray, "obsState")
-    # event_tracer.subscribe_event(sdp.sdp_subarray, "obsState")
-    # event_tracer.subscribe_event(tmc.central_node, "telescopeHealthState")
-
-    # Allow event_tracer to settle
-    # time.sleep(2)
-
     if validation_type == "all_ok":
-        # assert int(dish_ln.kValueValidationResult) == ResultCode.OK.value
         assert int(dish_ln.kvaluevalidationresult) == ResultCode.OK.value
         gpm_result = json.loads(dish_ln.gpmValidationResult)
-        # assert all(value == "OK" for value in gpm_result.values())
         assert any(value != "FAILED" for value in gpm_result.values())
-        LOGGER.info("prepare_validation_condition-DLN GPM validation result:")
         for band, value in gpm_result.items():
             LOGGER.info("  %s: %s", band, value)
 
@@ -339,28 +264,18 @@ def prepare_validation_condition(
         dish_ln.SetKValue(1)
         dish_master.SetKValue(2)
 
-        # assert int(dish_ln.kValueValidationResult) == ResultCode.FAILED.value
-        # assert_that(event_tracer).has_change_event_occurred(
-        #     dish_ln,
-        #     "kValueValidationResult",
-        #     ResultCode.FAILED.value,
-        # )
-
         assert wait_and_validate_device_attribute_value(
             dish_ln,
             "kvaluevalidationresult",
             str(ResultCode.FAILED.value),
-            # ResultCode.FAILED.value,
         )
 
         assert_that(event_tracer).described_as(
             "Dish Leaf Node kValueValidationResult should change to FAILED"
         ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
             dish_ln,
-            # "kValueValidationResult",
             "kvaluevalidationresult",
             str(ResultCode.FAILED.value),
-            # ResultCode.FAILED.value,
         )
 
     elif validation_type == "gpm mismatch":
@@ -374,7 +289,6 @@ def prepare_validation_condition(
         assert wait_and_validate_device_attribute_value(
             dish_ln,
             "kvaluevalidationresult",
-            # ResultCode.OK.value,
             str(ResultCode.OK.value),
         )
 
@@ -382,39 +296,9 @@ def prepare_validation_condition(
             "Dish Leaf Node kValueValidationResult should change to Ok"
         ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
             dish_ln,
-            # "kValueValidationResult",
             "kvaluevalidationresult",
-            # ResultCode.OK.value,
             str(ResultCode.OK.value),
         )
-
-        # dish_band1pointingmodelparams = dish_master.band1pointingmodelparams
-        # dish_band1pointingmodelparams = dish_band1pointingmodelparams.
-        # tolist()
-        # band1pointingmodelparams_index1 = dish_band1pointingmodelparams[1]
-        # band1pointingmodelparams_index1 += 1
-        # # Change the value on the given band
-        # dish_band1pointingmodelparams[1] = band1pointingmodelparams_index1
-        # dish_master.band1pointingmodelparams = dish_band1pointingmodelparams
-
-        # assert_that(event_tracer).described_as(
-        #     "DLN received and processed the new pointing model values"
-        # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        #     dish_ln,
-        #     "globalPointingModelParams",
-        #     Anything,
-        # )
-
-        # assert_that(event_tracer).described_as(
-        #     "DLN gpmValidationResult should report Band_3 FAILED"
-        # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        #     dish_ln,
-        #     "gpmValidationResult",
-        #     Anything,
-        # )
-
-        # gpm_result = json.loads(dish_ln.gpmValidationResult)
-        # assert gpm_result["Band_3"][0] == int(ResultCode.FAILED)
 
         # Introduce GPM mismatch via Dish Master Band-3 params
         invalid_params = [0.0] * 18
@@ -422,7 +306,6 @@ def prepare_validation_condition(
         dish_master.band3PointingModelParams = invalid_params
 
         # Wait for a GPM validation change event
-        # MID-safe assertion with logging
         gpm_result = assert_gpm_validation_result_mid(
             event_tracer=event_tracer,
             dish_ln=dish_ln,
@@ -432,17 +315,6 @@ def prepare_validation_condition(
         )
 
         LOGGER.info("Final GPM validation result: %s", gpm_result)
-        # assert_that(event_tracer).described_as(
-        #     "DLN gpmValidationResult should report Band_3 FAILED"
-        # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        #     dish_ln,
-        #     "gpmValidationResult",
-        #     Anything,
-        # )
-
-        # # Validate the event payload
-        # gpm_result = json.loads(dish_ln.gpmValidationResult)
-        # assert_that(gpm_result.get("Band_3")).is_equal_to("FAILED")
 
     else:
         raise ValueError(f"Unsupported validation_type: {validation_type}")
@@ -472,15 +344,9 @@ def verify_dln_health(
 
     :param tmc: TMC facade providing access to the Dish Leaf Node.
     :param event_tracer: Utility used to capture and assert change events.
-    :param expected_health: Expected Dish Leaf Node health state.
+    :param dln_health: Expected Dish Leaf Node health state.
     """
     dish_ln = tmc.dish_leaf_node_list[2]
-
-    LOGGER.info("In verify_dln_health")
-
-    # instead of waiting for an event
-    # assert dish_ln.healthState == HealthState.OK
-    # assert dish_ln.healthState == HealthState[expected_health]
 
     assert_that(event_tracer).described_as(
         "Dish Leaf Node healthState should change " f"to {dln_health}"
@@ -509,13 +375,8 @@ def verify_subarray_health(
 
     :param tmc: TMC facade providing access to the Subarray Node.
     :param event_tracer: Utility used to capture and assert change events.
-    :param expected_health: Expected Subarray health state.
+    :param propagated_health: Expected Subarray health state.
     """
-
-    LOGGER.info("In verify_subarray_health")
-
-    # instead of waiting for an event
-    # assert tmc.subarray_node.healthState == HealthState[expected_health]
 
     assert_that(event_tracer).described_as(
         "TMC Subarray Node healthState should change "
@@ -542,7 +403,7 @@ def verify_telescope_health(
 
     :param tmc: TMC facade providing access to the Central Node.
     :param event_tracer: Utility used to capture and assert change events.
-    :param expected_health: Expected telescope health state.
+    :param propagated_health: Expected telescope health state.
     """
     LOGGER.info("In verify_telescope_health")
 
@@ -613,78 +474,3 @@ def verify_alarm_raised(validation_type):
 
     # Cleanup
     tear_down_configured_alarms(alarm_handler, alarm_list)
-
-
-# @then(
-#     parsers.parse(
-#         'an alarm shall be raised for "{validation_type}" validation failure'
-#     )
-# )
-# def verify_alarm_raised(validation_type):
-#     """
-#     Verify the corresponding alarm is raised
-#     on the Alarm Handler.
-#     """
-#     LOGGER.info("In verify_alarm_raised")
-
-#     alarm_handler = DeviceProxy(alarm_handler1)
-
-#     if validation_type == "all_ok":
-#         return  # No alarm expected
-
-#     if validation_type == "kvalue mismatch":
-#         expected_tag = "DishLeafNode_kValue_mismatch"
-#         alarm_formula = (
-#             f"tag={expected_tag};"
-#          # f"formula=({tmc_dish_leaf_node3}/kValueValidationResult!= 'OK');"
-#          f"formula=({tmc_dish_leaf_node3}/kvaluevalidationresult != 'OK');"
-#             "priority=log;"
-#             "group=none;"
-#             'message="Alarm raised when Dish Leaf Node detects '
-#             'kValue mismatch with Dish Manager"'
-#         )
-
-#         alarm_handler.Load(alarm_formula)
-#         alarm_list = alarm_handler.alarmList
-#         assert alarm_list == ("dishleafnode_kvalue_mismatch",)
-#         tear_down_configured_alarms(alarm_handler, alarm_list)
-
-#     # elif validation_type == "gpm mismatch":
-#     #     expected_tag = "DishLeafNode_GPM_mismatch"
-#     #     alarm_formula = (
-#     #         f"tag={expected_tag};"
-#     #         f"formula=({tmc_dish_leaf_node3}/gpmValidationResult "
-#     #         "CONTAINS 'FAILED');"
-#     #         "priority=log;"
-#     #         "group=none;"
-#     #         'message="Alarm raised when Dish Leaf Node detects '
-#     #         'GPM validation failure for one or more bands"'
-#     #     )
-
-#     #     alarm_handler.Load(alarm_formula)
-#     #     alarm_list = alarm_handler.alarmList
-#     #     assert alarm_list == ("dishleafnode_gpm_mismatch",)
-#     #     tear_down_configured_alarms(alarm_handler, alarm_list)
-
-#     else:
-#         raise ValueError(validation_type)
-
-#     # alarm_handler.Load(alarm_formula)
-#     # alarm_list = alarm_handler.alarmList
-#     # assert alarm_list == ("dishleafnode_kvalue_mismatch",)
-#     # tear_down_configured_alarms(alarm_handler, alarm_list)
-
-#     # # Load alarm
-#     # alarm_handler.Load(alarm_formula)
-#     # alarm_list = alarm_handler.alarmList
-
-#     # assert expected_tag in alarm_list
-
-#     # # Allow alarm to propagate
-#     # time.sleep(3)
-
-#     # alarm_summary = alarm_handler.alarmSummary
-#     # assert any(expected_tag in alarm for alarm in alarm_summary)
-
-#     # # Cleanup
-#     # tear_down_configured_alarms(alarm_handler, alarm_list)
