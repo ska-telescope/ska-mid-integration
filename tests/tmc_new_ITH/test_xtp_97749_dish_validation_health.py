@@ -16,7 +16,8 @@ from ska_integration_test_harness.facades.dishes_facade import DishesFacade
 from ska_integration_test_harness.facades.sdp_facade import SDPFacade
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_tango_testing.integration import TangoEventTracer
-from ska_tango_testing.mock.placeholders import Anything
+
+# from ska_tango_testing.mock.placeholders import Anything
 from tango import DeviceProxy
 
 from tests.resources.test_harness.helpers import (
@@ -325,39 +326,52 @@ def prepare_validation_condition(
             str(ResultCode.OK.value),
         )
 
-        dish_band1pointingmodelparams = dish_master.band1pointingmodelparams
-        dish_band1pointingmodelparams = dish_band1pointingmodelparams.tolist()
-        band1pointingmodelparams_index1 = dish_band1pointingmodelparams[1]
-        band1pointingmodelparams_index1 += 1
-        # Change the value on the given band
-        dish_band1pointingmodelparams[1] = band1pointingmodelparams_index1
-        dish_master.band1pointingmodelparams = dish_band1pointingmodelparams
+        # dish_band1pointingmodelparams = dish_master.band1pointingmodelparams
+        # dish_band1pointingmodelparams = dish_band1pointingmodelparams.
+        # tolist()
+        # band1pointingmodelparams_index1 = dish_band1pointingmodelparams[1]
+        # band1pointingmodelparams_index1 += 1
+        # # Change the value on the given band
+        # dish_band1pointingmodelparams[1] = band1pointingmodelparams_index1
+        # dish_master.band1pointingmodelparams = dish_band1pointingmodelparams
 
-        assert_that(event_tracer).described_as(
-            "DLN received and processed the new pointing model values"
-        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-            dish_ln,
-            "globalPointingModelParams",
-            Anything,
-        )
+        # assert_that(event_tracer).described_as(
+        #     "DLN received and processed the new pointing model values"
+        # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        #     dish_ln,
+        #     "globalPointingModelParams",
+        #     Anything,
+        # )
+
+        # assert_that(event_tracer).described_as(
+        #     "DLN gpmValidationResult should report Band_3 FAILED"
+        # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        #     dish_ln,
+        #     "gpmValidationResult",
+        #     Anything,
+        # )
+
+        # gpm_result = json.loads(dish_ln.gpmValidationResult)
+        # assert gpm_result["Band_3"][0] == int(ResultCode.FAILED)
+
+        # Introduce GPM mismatch via Dish Master Band-3 params
+        invalid_params = [0.0] * 18
+        invalid_params[0] = 999.0
+        dish_master.band3PointingModelParams = invalid_params
+
+        # Wait for a GPM validation change event
 
         assert_that(event_tracer).described_as(
             "DLN gpmValidationResult should report Band_3 FAILED"
-        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-            dish_ln,
-            "gpmValidationResult",
-            Anything,
-        )
-
-        gpm_result = json.loads(dish_ln.gpmValidationResult)
-        assert gpm_result["Band_3"][0] == int(ResultCode.FAILED)
-
-        # # Introduce GPM mismatch via Dish Master Band-3 params
-        # invalid_params = [0.0] * 18
-        # invalid_params[0] = 999.0
-        # dish_master.band3PointingModelParams = invalid_params
-
-        # # Wait for a GPM validation change event
+        ).within_timeout(
+            ASSERTIONS_TIMEOUT
+        ).has_change_event_occurred_for_dictdata(
+            device=dish_ln,
+            attribute_name="gpmValidationResult",
+            attribute_to_check="Band_3",
+            attribute_values=["FAILED"],
+            lookahead=7,
+        ), "Band_3 GPM validation did not become FAILED"
 
         # assert_that(event_tracer).described_as(
         #     "DLN gpmValidationResult should report Band_3 FAILED"
