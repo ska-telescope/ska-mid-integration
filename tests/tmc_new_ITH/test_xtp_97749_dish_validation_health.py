@@ -41,6 +41,7 @@ def _setup_event_subscriptions(
     tmc: TMCFacade,
     csp: CSPFacade,
     sdp: SDPFacade,
+    dishes: DishesFacade,
     event_tracer: TangoEventTracer,
 ):
     """Subscribe TMC, CSP and SDP devices to track and log obsState events.
@@ -64,6 +65,19 @@ def _setup_event_subscriptions(
 
     event_tracer.subscribe_event(
         tmc.dish_leaf_node_list[2], "globalPointingModelParams"
+    )
+
+    event_tracer.subscribe_event(
+        dishes.dish_master_dict["dish_001"], "healthState"
+    )
+    event_tracer.subscribe_event(
+        dishes.dish_master_dict["dish_036"], "healthState"
+    )
+    event_tracer.subscribe_event(
+        dishes.dish_master_dict["dish_063"], "healthState"
+    )
+    event_tracer.subscribe_event(
+        dishes.dish_master_dict["dish_100"], "healthState"
     )
 
 
@@ -181,6 +195,7 @@ def given_a_tmc(
     tmc: TMCFacade,
     sdp: SDPFacade,
     csp: CSPFacade,
+    dishes: DishesFacade,
     event_tracer: TangoEventTracer,
 ):
     """
@@ -190,10 +205,14 @@ def given_a_tmc(
     :param event_tracer: Utility used to trace and assert Tango events.
     """
 
-    _setup_event_subscriptions(tmc, csp, sdp, event_tracer)
+    _setup_event_subscriptions(tmc, csp, sdp, dishes, event_tracer)
 
     csp.csp_subarray.SetDirectHealthState(HealthState.OK)
     sdp.sdp_subarray.SetDirectHealthState(HealthState.OK)
+    dishes.dish_master_dict["dish_001"].SetDirectHealthState(HealthState.OK)
+    dishes.dish_master_dict["dish_036"].SetDirectHealthState(HealthState.OK)
+    dishes.dish_master_dict["dish_063"].SetDirectHealthState(HealthState.OK)
+    dishes.dish_master_dict["dish_100"].SetDirectHealthState(HealthState.OK)
 
 
 @given("Telescope is in ON state")
