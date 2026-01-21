@@ -52,6 +52,8 @@ def _setup_event_subscriptions(
     :param event_tracer: the event tracer.
     """
     event_tracer.subscribe_event(tmc.subarray_node, "healthState")
+    event_tracer.subscribe_event(csp.csp_master, "healthState")
+    event_tracer.subscribe_event(sdp.sdp_master, "healthState")
     event_tracer.subscribe_event(csp.csp_subarray, "healthState")
     event_tracer.subscribe_event(sdp.sdp_subarray, "healthState")
     event_tracer.subscribe_event(tmc.central_node, "telescopeHealthState")
@@ -209,6 +211,8 @@ def given_a_tmc(
 
     csp.csp_subarray.SetDirectHealthState(HealthState.OK)
     sdp.sdp_subarray.SetDirectHealthState(HealthState.OK)
+    csp.csp_master.SetDirectHealthState(HealthState.OK)
+    sdp.sdp_master.SetDirectHealthState(HealthState.OK)
     dishes.dish_master_dict["dish_001"].SetDirectHealthState(HealthState.OK)
     dishes.dish_master_dict["dish_036"].SetDirectHealthState(HealthState.OK)
     dishes.dish_master_dict["dish_063"].SetDirectHealthState(HealthState.OK)
