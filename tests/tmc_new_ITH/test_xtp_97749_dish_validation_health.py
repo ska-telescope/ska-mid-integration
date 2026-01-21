@@ -8,6 +8,7 @@ import logging
 import time
 
 import pytest
+import tango
 from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import HealthState
@@ -51,6 +52,12 @@ def _setup_event_subscriptions(
     :param sdp: the SDP facade.
     :param event_tracer: the event tracer.
     """
+
+    mid_sdp_subarray_1 = tango.DeviceProxy("mid-sdp/subarray/01")
+    mid_sdp_subarray_2 = tango.DeviceProxy("mid-sdp/subarray/02")
+    mid_csp_subarray_1 = tango.DeviceProxy("mid-csp/subarray/01")
+    mid_csp_subarray_2 = tango.DeviceProxy("mid-csp/subarray/02")
+
     event_tracer.subscribe_event(tmc.subarray_node, "healthState")
     event_tracer.subscribe_event(csp.csp_master, "healthState")
     event_tracer.subscribe_event(sdp.sdp_master, "healthState")
@@ -81,6 +88,11 @@ def _setup_event_subscriptions(
     event_tracer.subscribe_event(
         dishes.dish_master_dict["dish_100"], "healthState"
     )
+
+    event_tracer.subscribe_event(mid_sdp_subarray_1, "healthState")
+    event_tracer.subscribe_event(mid_sdp_subarray_2, "healthState")
+    event_tracer.subscribe_event(mid_csp_subarray_1, "healthState")
+    event_tracer.subscribe_event(mid_csp_subarray_2, "healthState")
 
 
 def assert_gpm_validation_result_mid(
@@ -207,6 +219,11 @@ def given_a_tmc(
     :param event_tracer: Utility used to trace and assert Tango events.
     """
 
+    mid_sdp_subarray_1 = tango.DeviceProxy("mid-sdp/subarray/01")
+    mid_sdp_subarray_2 = tango.DeviceProxy("mid-sdp/subarray/02")
+    mid_csp_subarray_1 = tango.DeviceProxy("mid-csp/subarray/01")
+    mid_csp_subarray_2 = tango.DeviceProxy("mid-csp/subarray/02")
+
     _setup_event_subscriptions(tmc, csp, sdp, dishes, event_tracer)
 
     csp.csp_subarray.SetDirectHealthState(HealthState.OK)
@@ -217,6 +234,11 @@ def given_a_tmc(
     dishes.dish_master_dict["dish_036"].SetDirectHealthState(HealthState.OK)
     dishes.dish_master_dict["dish_063"].SetDirectHealthState(HealthState.OK)
     dishes.dish_master_dict["dish_100"].SetDirectHealthState(HealthState.OK)
+
+    mid_sdp_subarray_1.SetDirectHealthState(HealthState.OK)
+    mid_sdp_subarray_2.SetDirectHealthState(HealthState.OK)
+    mid_csp_subarray_1.SetDirectHealthState(HealthState.OK)
+    mid_csp_subarray_2.SetDirectHealthState(HealthState.OK)
 
 
 @given("Telescope is in ON state")
