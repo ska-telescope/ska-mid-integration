@@ -452,13 +452,26 @@ def verify_telescope_health(
     """
     LOGGER.info("In verify_telescope_health")
 
-    assert_that(event_tracer).described_as(
-        "Telescope healthState should change " f"to {propagated_health}"
-    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        tmc.central_node,
-        "telescopeHealthState",
-        HealthState[propagated_health],
-    )
+    if propagated_health == "all_ok":
+        # NO change event expected — state should already be OK
+        assert tmc.central_node.telescopeHealthState == HealthState.OK
+    else:
+        # Change event expected (BAD → OK)
+        assert_that(event_tracer).described_as(
+            "Telescope healthState should change " f"to {propagated_health}"
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+            tmc.central_node,
+            "telescopeHealthState",
+            HealthState[propagated_health],
+        )
+
+    # assert_that(event_tracer).described_as(
+    #     "Telescope healthState should change " f"to {propagated_health}"
+    # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+    #     tmc.central_node,
+    #     "telescopeHealthState",
+    #     HealthState[propagated_health],
+    # )
 
 
 @then(
