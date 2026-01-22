@@ -265,6 +265,15 @@ def invoke_assign_resources(
         wait_termination=True,
     )
 
+    json_input = MyFileJSONInput(
+        "centralnode", "assign_resources_mid"
+    ).with_attribute("subarray_id", 2)
+
+    context_fixt.when_action_result = tmc.assign_resources(
+        json_input,
+        wait_termination=True,
+    )
+
 
 @given(
     parsers.parse(
@@ -456,7 +465,6 @@ def verify_telescope_health(
         # NO change event expected — state should already be OK
         assert tmc.central_node.telescopeHealthState == HealthState.OK
     else:
-        # Change event expected (BAD → OK)
         assert_that(event_tracer).described_as(
             "Telescope healthState should change " f"to {propagated_health}"
         ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
