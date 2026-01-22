@@ -180,7 +180,7 @@ def preserve_dish_state(
     dish_ln.SetKValue(original_kvalue_dln)
     dish_master.SetKValue(original_kvalue_master)
 
-    # Restore Band-2 pointing model params
+    # Restore Band-3
     dish_master.band3PointingModelParams = original_band3_params
 
     # Allow validation to settle
