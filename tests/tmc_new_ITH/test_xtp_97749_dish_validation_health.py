@@ -452,7 +452,7 @@ def verify_telescope_health(
     """
     LOGGER.info("In verify_telescope_health")
 
-    if propagated_health == "all_ok":
+    if propagated_health == "OK":
         # NO change event expected — state should already be OK
         assert tmc.central_node.telescopeHealthState == HealthState.OK
     else:
