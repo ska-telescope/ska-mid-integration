@@ -237,7 +237,7 @@ deploy-mid-integration:
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   variables:
-    KUBE_NAMESPACE: "integration-ska-mid"
+    KUBE_NAMESPACE: "ci-integration-ska-mid-sah1861"
   environment:
     name: integration-ska-mid
     on_stop: stop-mid-integration
@@ -250,7 +250,7 @@ info-mid-integration:
   needs:
     - deploy-mid-integration
   variables:
-    KUBE_NAMESPACE: "integration-ska-mid"
+    KUBE_NAMESPACE: "ci-integration-ska-mid-sah1861"
   environment:
     name: integration-ska-mid
 
@@ -262,7 +262,7 @@ stop-mid-integration:
   needs:
     - deploy-mid-integration
   variables:
-    KUBE_NAMESPACE: "integration-ska-mid"
+    KUBE_NAMESPACE: "ci-integration-ska-mid-sah1861"
   environment:
     name: integration-ska-mid
     action: stop
@@ -273,7 +273,7 @@ redeploy-mid-integration:
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   variables:
-    KUBE_NAMESPACE: "integration-ska-mid"
+    KUBE_NAMESPACE: "ci-integration-ska-mid-sah1861"
   environment:
     name: integration-ska-mid
 
