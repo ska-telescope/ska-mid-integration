@@ -161,26 +161,26 @@ ska-tmc-mid:
   ska-tango-base:
     enabled: false
   
-  dishleafnode:
-    image:
-      registry: artefact.skao.int
-      image: ska-tmc-dishleafnode
-      tag: 0.27.2
-      pullPolicy: IfNotPresent
+  # dishleafnode:
+  #   image:
+  #     registry: artefact.skao.int
+  #     image: ska-tmc-dishleafnode
+  #     tag: 0.27.2
+  #     pullPolicy: IfNotPresent
 
-  skatmcsimulators:
-  image:
-    registry: artefact.skao.int
-    image: ska-tmc-simulators
-    tag: 1.5.1
-    pullPolicy: IfNotPresent
+  # skatmcsimulators:
+  # image:
+  #   registry: artefact.skao.int
+  #   image: ska-tmc-simulators
+  #   tag: 1.5.1
+  #   pullPolicy: IfNotPresent
 
   deviceServers:
     mocks:
-      enabled: false
-      dish: false
-      csp: false
-      sdp: false
+      enabled: true
+      dish: true
+      csp: true
+      sdp: true
     centralnode:
       DishVccConfig:
         DishVccUri: "car://gitlab.com/ska-telescope/ska-telmodel-data?0.2.0-mid-itf#tmdata"
