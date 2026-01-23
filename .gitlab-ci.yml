@@ -276,12 +276,3 @@ redeploy-mid-integration:
     KUBE_NAMESPACE: "ci-dev-ska-mid-integration"
   environment:
     name: integration-ska-mid
-
-stop-dev-environment:
-  variables:
-    KUBE_NAMESPACE: "ci-dev-ska-mid-integration"
-  script:
-    - make k8s-delete-namespace
-
-
-
