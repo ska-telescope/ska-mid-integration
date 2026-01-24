@@ -554,7 +554,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         self._reset_health_state_for_mock_devices()
         # self.set_subarray_id("1")
         # self.tear_down_subarray()
-        self.set_subarray_id("2")
+        # self.set_subarray_id("2")
         # self.tear_down_subarray()
 
         for subarray_id in (1, 2):

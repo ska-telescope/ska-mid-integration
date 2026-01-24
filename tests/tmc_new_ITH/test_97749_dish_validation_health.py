@@ -257,7 +257,7 @@ def invoke_assign_resources(
 ):
     """Invoke Assign Resources"""
     json_input = MyFileJSONInput(
-        "centralnode", "assign_resources_mid"
+        "centralnode", "assign_resources_sub_1"
     ).with_attribute("subarray_id", 1)
 
     context_fixt.when_action_result = tmc.assign_resources(
