@@ -164,15 +164,35 @@ def release_resources_after_test(tmc: TMCFacade):
     yield
     LOGGER.info("Releasing resources for Subarray 1 and 2")
 
-    for subarray_id in (1, 2):
-        json_input = MyFileJSONInput(
-            "centralnode", "release_resources_mid"
-        ).with_attribute("subarray_id", subarray_id)
+    # Release subarray 1 WITH state-change expectations
+    json_input = MyFileJSONInput(
+        "centralnode", "release_resources_mid"
+    ).with_attribute("subarray_id", 1)
 
-        tmc.release_resources(
-            json_input,
-            wait_termination=True,
-        )
+    tmc.release_resources(
+        json_input,
+        wait_termination=True,
+    )
+
+    # Release subarray 2 WITHOUT waiting for SubarrayNode state changes
+    json_input = MyFileJSONInput(
+        "centralnode", "release_resources_mid"
+    ).with_attribute("subarray_id", 2)
+
+    tmc.release_resources(
+        json_input,
+        wait_termination=False,
+    )
+
+    # for subarray_id in (1, 2):
+    #     json_input = MyFileJSONInput(
+    #         "centralnode", "release_resources_mid"
+    #     ).with_attribute("subarray_id", subarray_id)
+
+    #     tmc.release_resources(
+    #         json_input,
+    #         wait_termination=True,
+    #     )
 
 
 @pytest.fixture
