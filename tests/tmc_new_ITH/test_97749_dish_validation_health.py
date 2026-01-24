@@ -170,41 +170,41 @@ def assert_gpm_validation_result_mid(
     )
 
 
-@pytest.fixture
-def release_resources_after_test(tmc: TMCFacade):
-    """Invoke Release Resources"""
-    yield
-    LOGGER.info("Releasing resources for Subarray 1 and 2")
+# @pytest.fixture
+# def release_resources_after_test(tmc: TMCFacade):
+#     """Invoke Release Resources"""
+#     yield
+#     LOGGER.info("Releasing resources for Subarray 1 and 2")
 
-    # Release subarray 1 WITH state-change expectations
-    json_input = MyFileJSONInput(
-        "centralnode", "release_resources_mid"
-    ).with_attribute("subarray_id", 1)
+#     # Release subarray 1 WITH state-change expectations
+#     json_input = MyFileJSONInput(
+#         "centralnode", "release_resources_mid"
+#     ).with_attribute("subarray_id", 1)
 
-    tmc.release_resources(
-        json_input,
-        wait_termination=True,
-    )
+#     tmc.release_resources(
+#         json_input,
+#         wait_termination=True,
+#     )
 
-    # Release subarray 2 WITHOUT waiting for SubarrayNode state changes
-    json_input = MyFileJSONInput(
-        "centralnode", "release_resources_mid"
-    ).with_attribute("subarray_id", 2)
+#     # Release subarray 2 WITHOUT waiting for SubarrayNode state changes
+#     json_input = MyFileJSONInput(
+#         "centralnode", "release_resources_mid"
+#     ).with_attribute("subarray_id", 2)
 
-    tmc.release_resources(
-        json_input,
-        wait_termination=False,
-    )
+#     tmc.release_resources(
+#         json_input,
+#         wait_termination=False,
+#     )
 
-    # for subarray_id in (1, 2):
-    #     json_input = MyFileJSONInput(
-    #         "centralnode", "release_resources_mid"
-    #     ).with_attribute("subarray_id", subarray_id)
+# for subarray_id in (1, 2):
+#     json_input = MyFileJSONInput(
+#         "centralnode", "release_resources_mid"
+#     ).with_attribute("subarray_id", subarray_id)
 
-    #     tmc.release_resources(
-    #         json_input,
-    #         wait_termination=True,
-    #     )
+#     tmc.release_resources(
+#         json_input,
+#         wait_termination=True,
+#     )
 
 
 @pytest.fixture
@@ -340,7 +340,6 @@ def prepare_validation_condition(
     validation_type: str,
     event_tracer: TangoEventTracer,
     preserve_dish_state,
-    release_resources_after_test,
 ):
     """
     Prepare Dish Leaf Node validation condition and
@@ -615,3 +614,32 @@ def verify_alarm_raised(validation_type):
 
     # Cleanup
     tear_down_configured_alarms(alarm_handler, alarm_list)
+
+
+@then(parsers.parse("I release resources for all subarrays"))
+def release_resources_after_test(tmc: TMCFacade):
+    """Invoke Release Resources"""
+
+    LOGGER.info("Releasing resources for Subarray 1")
+
+    # Release subarray 1 WITH state-change expectations
+    json_input = MyFileJSONInput(
+        "centralnode", "release_resources_mid"
+    ).with_attribute("subarray_id", 1)
+
+    tmc.release_resources(
+        json_input,
+        wait_termination=True,
+    )
+
+    LOGGER.info("Releasing resources for Subarray 2")
+
+    # Release subarray 2 WITHOUT waiting for SubarrayNode state changes
+    json_input = MyFileJSONInput(
+        "centralnode", "release_resources_mid"
+    ).with_attribute("subarray_id", 2)
+
+    tmc.release_resources(
+        json_input,
+        wait_termination=False,
+    )

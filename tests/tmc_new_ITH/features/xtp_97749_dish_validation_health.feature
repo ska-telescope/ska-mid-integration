@@ -9,6 +9,7 @@
     And TMC Subarray Node healthState shall be "<propagated_health>"
     And telescopeHealthState shall be "<propagated_health>"
     And an alarm shall be raised for "<validation_type>" validation failure
+    And I release resources for all subarrays
 
   Examples:
     | validation_type | dln_health | propagated_health |
