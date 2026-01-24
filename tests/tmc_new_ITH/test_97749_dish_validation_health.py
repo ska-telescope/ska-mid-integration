@@ -159,6 +159,23 @@ def assert_gpm_validation_result_mid(
 
 
 @pytest.fixture
+def release_resources_after_test(tmc: TMCFacade):
+    """Invoke Release Resources"""
+    yield
+    LOGGER.info("Releasing resources for Subarray 1 and 2")
+
+    for subarray_id in (1, 2):
+        json_input = MyFileJSONInput(
+            "centralnode", "release_resources_mid"
+        ).with_attribute("subarray_id", subarray_id)
+
+        tmc.release_resources(
+            json_input,
+            wait_termination=True,
+        )
+
+
+@pytest.fixture
 def preserve_dish_state(
     tmc: TMCFacade, dishes: DishesFacade, event_tracer: TangoEventTracer
 ):
@@ -286,6 +303,7 @@ def prepare_validation_condition(
     validation_type: str,
     event_tracer: TangoEventTracer,
     preserve_dish_state,
+    release_resources_after_test,
 ):
     """
     Prepare Dish Leaf Node validation condition and
