@@ -552,11 +552,16 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         """Handle Tear down of central Node"""
         # reset HealthState.UNKNOWN for mock devices
         self._reset_health_state_for_mock_devices()
-        self.set_subarray_id("1")
-        self.tear_down_subarray()
+        # self.set_subarray_id("1")
+        # self.tear_down_subarray()
         self.set_subarray_id("2")
-        self.tear_down_subarray()
-        LOGGER.info("telescope_state - %s", self.telescope_state)
+        # self.tear_down_subarray()
+
+        for subarray_id in (1, 2):
+            self.set_subarray_id(str(subarray_id))
+            self.tear_down_subarray(subarray_id)
+
+        LOGGER.info("PATCHFIX telescope_state - %s", self.telescope_state)
         if self.telescope_state != "OFF":
             if (SIMULATED_DEVICES_DICT["sdp"]) and not SIMULATED_DEVICES_DICT[
                 "all_mocks"
@@ -595,7 +600,8 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             LOGGER.info("longRunningCommandResult for Dish VCC verified")
         LOGGER.info("Tear Down complete")
 
-    def tear_down_subarray(self) -> None:
+    # def tear_down_subarray(self) -> None:
+    def tear_down_subarray(self, subarray_id: int) -> None:
         """Handle Tear down of central Node"""
         try:
             Subarray_node_obsstate = self.subarray_node.obsState
@@ -606,9 +612,10 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
             if self.subarray_node.obsState == ObsState.IDLE:
                 LOGGER.info("Calling Release Resource on centralnode")
                 release_data = json.loads(self.release_input)
-                release_data["subarray_id"] = int(
-                    self.subarray_node.dev_name().split("/")[-1]
-                )
+                # release_data["subarray_id"] = int(
+                #     self.subarray_node.dev_name().split("/")[-1]
+                # )
+                release_data["subarray_id"] = subarray_id
                 _, unique_id = self.invoke_release_resources(
                     json.dumps(release_data)
                 )
