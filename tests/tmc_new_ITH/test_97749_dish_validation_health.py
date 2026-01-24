@@ -76,7 +76,6 @@ def _setup_event_subscriptions(
     #     tmc.dish_leaf_node_list[2], "globalPointingModelParams"
     # )
 
-
     event_tracer.subscribe_event(
         tmc.dish_leaf_node_list[0], "kvaluevalidationresult"
     )
