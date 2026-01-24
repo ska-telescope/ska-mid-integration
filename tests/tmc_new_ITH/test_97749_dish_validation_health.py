@@ -27,9 +27,9 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.common_utils.tmc_helpers import (
     tear_down_configured_alarms,
 )
-from tests.resources.test_support.constant import (
+from tests.resources.test_support.constant import (  # tmc_dish_leaf_node3,
     alarm_handler1,
-    tmc_dish_leaf_node3,
+    tmc_dish_leaf_node1,
 )
 from tests.tmc_csp_new_ITH.conftest import SubarrayTestContextData
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
@@ -64,16 +64,28 @@ def _setup_event_subscriptions(
     event_tracer.subscribe_event(csp.csp_subarray, "healthState")
     event_tracer.subscribe_event(sdp.sdp_subarray, "healthState")
     event_tracer.subscribe_event(tmc.central_node, "telescopeHealthState")
-    event_tracer.subscribe_event(
-        tmc.dish_leaf_node_list[2], "kvaluevalidationresult"
-    )
-    event_tracer.subscribe_event(
-        tmc.dish_leaf_node_list[2], "gpmValidationResult"
-    )
-    event_tracer.subscribe_event(tmc.dish_leaf_node_list[2], "healthState")
+    # event_tracer.subscribe_event(
+    #     tmc.dish_leaf_node_list[2], "kvaluevalidationresult"
+    # )
+    # event_tracer.subscribe_event(
+    #     tmc.dish_leaf_node_list[2], "gpmValidationResult"
+    # )
+    # event_tracer.subscribe_event(tmc.dish_leaf_node_list[2], "healthState")
+
+    # event_tracer.subscribe_event(
+    #     tmc.dish_leaf_node_list[2], "globalPointingModelParams"
+    # )
 
     event_tracer.subscribe_event(
-        tmc.dish_leaf_node_list[2], "globalPointingModelParams"
+        tmc.dish_leaf_node_list[0], "kvaluevalidationresult"
+    )
+    event_tracer.subscribe_event(
+        tmc.dish_leaf_node_list[0], "gpmValidationResult"
+    )
+    event_tracer.subscribe_event(tmc.dish_leaf_node_list[0], "healthState")
+
+    event_tracer.subscribe_event(
+        tmc.dish_leaf_node_list[0], "globalPointingModelParams"
     )
 
     event_tracer.subscribe_event(
@@ -203,13 +215,16 @@ def preserve_dish_state(
     Preserve and restore Dish Master and Dish Leaf Node state so
     subsequent tests are not affected.
     """
-    dish_ln = tmc.dish_leaf_node_list[2]
-    dish_master = dishes.dish_master_dict["dish_063"]
+    # dish_ln = tmc.dish_leaf_node_list[2]
+    # dish_master = dishes.dish_master_dict["dish_063"]
+    dish_ln = tmc.dish_leaf_node_list[0]
+    dish_master = dishes.dish_master_dict["dish_001"]
 
     # Preserve original values
     original_kvalue_dln = dish_ln.kValue
     original_kvalue_master = dish_master.kValue
-    original_band3_params = list(dish_master.band3PointingModelParams)
+    # original_band3_params = list(dish_master.band3PointingModelParams)
+    original_band1_params = list(dish_master.band1PointingModelParams)
 
     yield
 
@@ -218,7 +233,8 @@ def preserve_dish_state(
     dish_master.SetKValue(original_kvalue_master)
 
     # Restore Band-3
-    dish_master.band3PointingModelParams = original_band3_params
+    # dish_master.band3PointingModelParams = original_band3_params
+    dish_master.band1PointingModelParams = original_band1_params
 
     # Allow validation to settle
     time.sleep(2)
@@ -226,7 +242,8 @@ def preserve_dish_state(
     assert int(dish_ln.kvaluevalidationresult) == ResultCode.OK.value
 
     gpm_result = json.loads(dish_ln.gpmValidationResult)
-    assert gpm_result.get("Band_3") == "OK"
+    # assert gpm_result.get("Band_3") == "OK"
+    assert gpm_result.get("Band_1") == "OK"
 
     assert tmc.central_node.IsDishVccConfigSet is True
 
@@ -340,8 +357,10 @@ def prepare_validation_condition(
         :param preserve_dish_state: Fixture that saves and restores
             Dish state to avoid side effects on subsequent tests.
     """
-    dish_ln = tmc.dish_leaf_node_list[2]
-    dish_master = dishes.dish_master_dict["dish_063"]
+    # dish_ln = tmc.dish_leaf_node_list[2]
+    # dish_master = dishes.dish_master_dict["dish_063"]
+    dish_ln = tmc.dish_leaf_node_list[0]
+    dish_master = dishes.dish_master_dict["dish_001"]
 
     if validation_type == "all_ok":
         assert int(dish_ln.kvaluevalidationresult) == ResultCode.OK.value
@@ -395,13 +414,22 @@ def prepare_validation_condition(
         # Introduce GPM mismatch via Dish Master Band-3 params
         invalid_params = [0.0] * 18
         invalid_params[0] = 999.0
-        dish_master.band3PointingModelParams = invalid_params
+        # dish_master.band3PointingModelParams = invalid_params
+        dish_master.band1PointingModelParams = invalid_params
 
         # Wait for a GPM validation change event
+        # gpm_result = assert_gpm_validation_result_mid(
+        #     event_tracer=event_tracer,
+        #     dish_ln=dish_ln,
+        #     band_name="Band_3",
+        #     expected_result="FAILED",
+        #     timeout=ASSERTIONS_TIMEOUT,
+        # )
+
         gpm_result = assert_gpm_validation_result_mid(
             event_tracer=event_tracer,
             dish_ln=dish_ln,
-            band_name="Band_3",
+            band_name="Band_1",
             expected_result="FAILED",
             timeout=ASSERTIONS_TIMEOUT,
         )
@@ -438,7 +466,8 @@ def verify_dln_health(
     :param event_tracer: Utility used to capture and assert change events.
     :param dln_health: Expected Dish Leaf Node health state.
     """
-    dish_ln = tmc.dish_leaf_node_list[2]
+    # dish_ln = tmc.dish_leaf_node_list[2]
+    dish_ln = tmc.dish_leaf_node_list[0]
 
     assert_that(event_tracer).described_as(
         "Dish Leaf Node healthState should change " f"to {dln_health}"
@@ -561,11 +590,19 @@ def verify_alarm_raised(validation_type):
 
     alarm_formula = (
         f"tag={expected_tag};"
-        f"formula=({tmc_dish_leaf_node3}/healthState == 'DEGRADED');"
+        f"formula=({tmc_dish_leaf_node1}/healthState == 'DEGRADED');"
         "priority=log;"
         "group=none;"
         f'message="{message}"'
     )
+
+    # alarm_formula = (
+    #     f"tag={expected_tag};"
+    #     f"formula=({tmc_dish_leaf_node3}/healthState == 'DEGRADED');"
+    #     "priority=log;"
+    #     "group=none;"
+    #     f'message="{message}"'
+    # )
 
     LOGGER.info("Loading alarm formula: %s", alarm_formula)
 
