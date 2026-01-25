@@ -11,7 +11,9 @@ import pytest
 import tango
 from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
-from ska_control_model import HealthState
+
+# from tests.resources.test_support.constant import csp_subarray2,csp_subarray1
+from ska_control_model import AdminMode, HealthState
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
 from ska_integration_test_harness.facades.dishes_facade import DishesFacade
 from ska_integration_test_harness.facades.sdp_facade import SDPFacade
@@ -34,6 +36,10 @@ from tests.resources.test_support.constant import (  # tmc_dish_leaf_node3,
 from tests.tmc_csp_new_ITH.conftest import SubarrayTestContextData
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 from tests.tmc_new_ITH.conftest import ASSERTIONS_TIMEOUT
+
+# SUBSYSTEM_DEVICES = {
+#     "cspcontroller": csp_master,
+# }
 
 LOGGER = logging.getLogger(__name__)
 
@@ -294,6 +300,25 @@ def given_a_tmc(
     mid_csp_subarray_1.SetDirectHealthState(HealthState.OK)
     mid_csp_subarray_2.SetDirectHealthState(HealthState.OK)
 
+    mid_csp_subarray_1.adminMode = AdminMode.OFFLINE
+    mid_csp_subarray_2.adminMode = AdminMode.OFFLINE
+
+    time.sleep(0.2)
+
+    mid_csp_subarray_1.adminMode = AdminMode.ONLINE
+    mid_csp_subarray_2.adminMode = AdminMode.ONLINE
+
+    # event_tracer.wait_event(
+    #     "mid-tmc/subarray/01",
+    #     "healthState",
+    #     HealthState.OK,
+    # )
+    # event_tracer.wait_event(
+    #     "mid-tmc/subarray/02",
+    #     "healthState",
+    #     HealthState.OK,
+    # )
+
 
 @given("Telescope is in ON state")
 def telescope_in_on_state(tmc: TMCFacade):
@@ -310,23 +335,32 @@ def invoke_assign_resources(
     context_fixt: SubarrayTestContextData, tmc: TMCFacade
 ):
     """Invoke Assign Resources"""
+
     json_input = MyFileJSONInput(
-        "centralnode", "assign_resources_sub_1"
+        "centralnode", "assign_resources_mid"
     ).with_attribute("subarray_id", 1)
 
     context_fixt.when_action_result = tmc.assign_resources(
         json_input,
         wait_termination=True,
     )
+    # json_input = MyFileJSONInput(
+    #     "centralnode", "assign_resources_sub_1"
+    # ).with_attribute("subarray_id", 1)
 
-    json_input = MyFileJSONInput(
-        "centralnode", "assign_resources_sub_2"
-    ).with_attribute("subarray_id", 2)
+    # context_fixt.when_action_result = tmc.assign_resources(
+    #     json_input,
+    #     wait_termination=True,
+    # )
 
-    context_fixt.when_action_result = tmc.assign_resources(
-        json_input,
-        wait_termination=True,
-    )
+    # json_input = MyFileJSONInput(
+    #     "centralnode", "assign_resources_sub_2"
+    # ).with_attribute("subarray_id", 2)
+
+    # context_fixt.when_action_result = tmc.assign_resources(
+    #     json_input,
+    #     wait_termination=True,
+    # )
 
 
 @given(
@@ -616,30 +650,30 @@ def verify_alarm_raised(validation_type):
     tear_down_configured_alarms(alarm_handler, alarm_list)
 
 
-@then(parsers.parse("I release resources for all subarrays"))
-def release_resources_after_test(tmc: TMCFacade):
-    """Invoke Release Resources"""
+# @then(parsers.parse("I release resources for all subarrays"))
+# def release_resources_after_test(tmc: TMCFacade):
+#     """Invoke Release Resources"""
 
-    LOGGER.info("Releasing resources for Subarray 1")
+#     LOGGER.info("Releasing resources for Subarray 1")
 
-    # Release subarray 1 WITH state-change expectations
-    json_input = MyFileJSONInput(
-        "centralnode", "release_resources_mid"
-    ).with_attribute("subarray_id", 1)
+#     # Release subarray 1 WITH state-change expectations
+#     json_input = MyFileJSONInput(
+#         "centralnode", "release_resources_mid"
+#     ).with_attribute("subarray_id", 1)
 
-    tmc.release_resources(
-        json_input,
-        wait_termination=True,
-    )
+#     tmc.release_resources(
+#         json_input,
+#         wait_termination=True,
+#     )
 
-    LOGGER.info("Releasing resources for Subarray 2")
+#     LOGGER.info("Releasing resources for Subarray 2")
 
-    # Release subarray 2 WITHOUT waiting for SubarrayNode state changes
-    json_input = MyFileJSONInput(
-        "centralnode", "release_resources_mid"
-    ).with_attribute("subarray_id", 2)
+#     # Release subarray 2 WITHOUT waiting for SubarrayNode state changes
+#     json_input = MyFileJSONInput(
+#         "centralnode", "release_resources_mid"
+#     ).with_attribute("subarray_id", 2)
 
-    tmc.release_resources(
-        json_input,
-        wait_termination=False,
-    )
+#     tmc.release_resources(
+#         json_input,
+#         wait_termination=False,
+#     )
