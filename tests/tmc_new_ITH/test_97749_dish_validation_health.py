@@ -8,11 +8,8 @@ import logging
 import time
 
 import pytest
-import tango
 from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
-
-# from tests.resources.test_support.constant import csp_subarray2,csp_subarray1
 from ska_control_model import AdminMode, HealthState
 from ska_integration_test_harness.facades.csp_facade import CSPFacade
 from ska_integration_test_harness.facades.dishes_facade import DishesFacade
@@ -29,17 +26,14 @@ from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.common_utils.tmc_helpers import (
     tear_down_configured_alarms,
 )
-from tests.resources.test_support.constant import (  # tmc_dish_leaf_node3,
+from tests.resources.test_support.constant import (
     alarm_handler1,
     tmc_dish_leaf_node1,
 )
 from tests.tmc_csp_new_ITH.conftest import SubarrayTestContextData
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 from tests.tmc_new_ITH.conftest import ASSERTIONS_TIMEOUT
-
-# SUBSYSTEM_DEVICES = {
-#     "cspcontroller": csp_master,
-# }
+from tests.tmc_new_ITH.utils.utils import get_mid_csp_sdp_subarrays_proxies
 
 LOGGER = logging.getLogger(__name__)
 
@@ -59,28 +53,12 @@ def _setup_event_subscriptions(
     :param event_tracer: the event tracer.
     """
 
-    mid_sdp_subarray_1 = tango.DeviceProxy("mid-sdp/subarray/01")
-    mid_sdp_subarray_2 = tango.DeviceProxy("mid-sdp/subarray/02")
-    mid_csp_subarray_1 = tango.DeviceProxy("mid-csp/subarray/01")
-    mid_csp_subarray_2 = tango.DeviceProxy("mid-csp/subarray/02")
-
     event_tracer.subscribe_event(tmc.subarray_node, "healthState")
     event_tracer.subscribe_event(csp.csp_master, "healthState")
     event_tracer.subscribe_event(sdp.sdp_master, "healthState")
     event_tracer.subscribe_event(csp.csp_subarray, "healthState")
     event_tracer.subscribe_event(sdp.sdp_subarray, "healthState")
     event_tracer.subscribe_event(tmc.central_node, "telescopeHealthState")
-    # event_tracer.subscribe_event(
-    #     tmc.dish_leaf_node_list[2], "kvaluevalidationresult"
-    # )
-    # event_tracer.subscribe_event(
-    #     tmc.dish_leaf_node_list[2], "gpmValidationResult"
-    # )
-    # event_tracer.subscribe_event(tmc.dish_leaf_node_list[2], "healthState")
-
-    # event_tracer.subscribe_event(
-    #     tmc.dish_leaf_node_list[2], "globalPointingModelParams"
-    # )
 
     event_tracer.subscribe_event(
         tmc.dish_leaf_node_list[0], "kvaluevalidationresult"
@@ -107,10 +85,10 @@ def _setup_event_subscriptions(
         dishes.dish_master_dict["dish_100"], "healthState"
     )
 
-    event_tracer.subscribe_event(mid_sdp_subarray_1, "healthState")
-    event_tracer.subscribe_event(mid_sdp_subarray_2, "healthState")
-    event_tracer.subscribe_event(mid_csp_subarray_1, "healthState")
-    event_tracer.subscribe_event(mid_csp_subarray_2, "healthState")
+    mid_subarrays = get_mid_csp_sdp_subarrays_proxies()
+
+    for subarray in mid_subarrays.values():
+        event_tracer.subscribe_event(subarray, "healthState")
 
 
 def assert_gpm_validation_result_mid(
@@ -176,43 +154,6 @@ def assert_gpm_validation_result_mid(
     )
 
 
-# @pytest.fixture
-# def release_resources_after_test(tmc: TMCFacade):
-#     """Invoke Release Resources"""
-#     yield
-#     LOGGER.info("Releasing resources for Subarray 1 and 2")
-
-#     # Release subarray 1 WITH state-change expectations
-#     json_input = MyFileJSONInput(
-#         "centralnode", "release_resources_mid"
-#     ).with_attribute("subarray_id", 1)
-
-#     tmc.release_resources(
-#         json_input,
-#         wait_termination=True,
-#     )
-
-#     # Release subarray 2 WITHOUT waiting for SubarrayNode state changes
-#     json_input = MyFileJSONInput(
-#         "centralnode", "release_resources_mid"
-#     ).with_attribute("subarray_id", 2)
-
-#     tmc.release_resources(
-#         json_input,
-#         wait_termination=False,
-#     )
-
-# for subarray_id in (1, 2):
-#     json_input = MyFileJSONInput(
-#         "centralnode", "release_resources_mid"
-#     ).with_attribute("subarray_id", subarray_id)
-
-#     tmc.release_resources(
-#         json_input,
-#         wait_termination=True,
-#     )
-
-
 @pytest.fixture
 def preserve_dish_state(
     tmc: TMCFacade, dishes: DishesFacade, event_tracer: TangoEventTracer
@@ -221,15 +162,13 @@ def preserve_dish_state(
     Preserve and restore Dish Master and Dish Leaf Node state so
     subsequent tests are not affected.
     """
-    # dish_ln = tmc.dish_leaf_node_list[2]
-    # dish_master = dishes.dish_master_dict["dish_063"]
+
     dish_ln = tmc.dish_leaf_node_list[0]
     dish_master = dishes.dish_master_dict["dish_001"]
 
     # Preserve original values
     original_kvalue_dln = dish_ln.kValue
     original_kvalue_master = dish_master.kValue
-    # original_band3_params = list(dish_master.band3PointingModelParams)
     original_band1_params = list(dish_master.band1PointingModelParams)
 
     yield
@@ -238,8 +177,7 @@ def preserve_dish_state(
     dish_ln.SetKValue(original_kvalue_dln)
     dish_master.SetKValue(original_kvalue_master)
 
-    # Restore Band-3
-    # dish_master.band3PointingModelParams = original_band3_params
+    # Restore Band-1
     dish_master.band1PointingModelParams = original_band1_params
 
     # Allow validation to settle
@@ -248,7 +186,6 @@ def preserve_dish_state(
     assert int(dish_ln.kvaluevalidationresult) == ResultCode.OK.value
 
     gpm_result = json.loads(dish_ln.gpmValidationResult)
-    # assert gpm_result.get("Band_3") == "OK"
     assert gpm_result.get("Band_1") == "OK"
 
     assert tmc.central_node.IsDishVccConfigSet is True
@@ -279,11 +216,6 @@ def given_a_tmc(
     :param event_tracer: Utility used to trace and assert Tango events.
     """
 
-    mid_sdp_subarray_1 = tango.DeviceProxy("mid-sdp/subarray/01")
-    mid_sdp_subarray_2 = tango.DeviceProxy("mid-sdp/subarray/02")
-    mid_csp_subarray_1 = tango.DeviceProxy("mid-csp/subarray/01")
-    mid_csp_subarray_2 = tango.DeviceProxy("mid-csp/subarray/02")
-
     _setup_event_subscriptions(tmc, csp, sdp, dishes, event_tracer)
 
     csp.csp_subarray.SetDirectHealthState(HealthState.OK)
@@ -295,29 +227,20 @@ def given_a_tmc(
     dishes.dish_master_dict["dish_063"].SetDirectHealthState(HealthState.OK)
     dishes.dish_master_dict["dish_100"].SetDirectHealthState(HealthState.OK)
 
-    mid_sdp_subarray_1.SetDirectHealthState(HealthState.OK)
-    mid_sdp_subarray_2.SetDirectHealthState(HealthState.OK)
-    mid_csp_subarray_1.SetDirectHealthState(HealthState.OK)
-    mid_csp_subarray_2.SetDirectHealthState(HealthState.OK)
+    mid_subarrays = get_mid_csp_sdp_subarrays_proxies()
 
-    mid_csp_subarray_1.adminMode = AdminMode.OFFLINE
-    mid_csp_subarray_2.adminMode = AdminMode.OFFLINE
+    # Set all MID subarrays health to OK
+    for subarray in mid_subarrays.values():
+        subarray.SetDirectHealthState(HealthState.OK)
+
+    # Toggle CSP subarrays adminMode
+    for key in ("csp_1", "csp_2"):
+        mid_subarrays[key].adminMode = AdminMode.OFFLINE
 
     time.sleep(0.2)
 
-    mid_csp_subarray_1.adminMode = AdminMode.ONLINE
-    mid_csp_subarray_2.adminMode = AdminMode.ONLINE
-
-    # event_tracer.wait_event(
-    #     "mid-tmc/subarray/01",
-    #     "healthState",
-    #     HealthState.OK,
-    # )
-    # event_tracer.wait_event(
-    #     "mid-tmc/subarray/02",
-    #     "healthState",
-    #     HealthState.OK,
-    # )
+    for key in ("csp_1", "csp_2"):
+        mid_subarrays[key].adminMode = AdminMode.ONLINE
 
 
 @given("Telescope is in ON state")
@@ -344,23 +267,6 @@ def invoke_assign_resources(
         json_input,
         wait_termination=True,
     )
-    # json_input = MyFileJSONInput(
-    #     "centralnode", "assign_resources_sub_1"
-    # ).with_attribute("subarray_id", 1)
-
-    # context_fixt.when_action_result = tmc.assign_resources(
-    #     json_input,
-    #     wait_termination=True,
-    # )
-
-    # json_input = MyFileJSONInput(
-    #     "centralnode", "assign_resources_sub_2"
-    # ).with_attribute("subarray_id", 2)
-
-    # context_fixt.when_action_result = tmc.assign_resources(
-    #     json_input,
-    #     wait_termination=True,
-    # )
 
 
 @given(
@@ -390,8 +296,7 @@ def prepare_validation_condition(
         :param preserve_dish_state: Fixture that saves and restores
             Dish state to avoid side effects on subsequent tests.
     """
-    # dish_ln = tmc.dish_leaf_node_list[2]
-    # dish_master = dishes.dish_master_dict["dish_063"]
+
     dish_ln = tmc.dish_leaf_node_list[0]
     dish_master = dishes.dish_master_dict["dish_001"]
 
@@ -403,8 +308,7 @@ def prepare_validation_condition(
             LOGGER.info("  %s: %s", band, value)
 
     elif validation_type == "kvalue mismatch":
-        LOGGER.info("In prepare_validation_condition kvalue mismatch")
-
+        # kValue mismatch
         dish_ln.SetKValue(1)
         dish_master.SetKValue(2)
 
@@ -423,9 +327,6 @@ def prepare_validation_condition(
         )
 
     elif validation_type == "gpm mismatch":
-
-        LOGGER.info("In prepare_validation_condition gpm mismatch")
-
         # Keep kValue consistent
         dish_ln.SetKValue(1)
         dish_master.SetKValue(1)
@@ -447,17 +348,8 @@ def prepare_validation_condition(
         # Introduce GPM mismatch via Dish Master Band-3 params
         invalid_params = [0.0] * 18
         invalid_params[0] = 999.0
-        # dish_master.band3PointingModelParams = invalid_params
-        dish_master.band1PointingModelParams = invalid_params
 
-        # Wait for a GPM validation change event
-        # gpm_result = assert_gpm_validation_result_mid(
-        #     event_tracer=event_tracer,
-        #     dish_ln=dish_ln,
-        #     band_name="Band_3",
-        #     expected_result="FAILED",
-        #     timeout=ASSERTIONS_TIMEOUT,
-        # )
+        dish_master.band1PointingModelParams = invalid_params
 
         gpm_result = assert_gpm_validation_result_mid(
             event_tracer=event_tracer,
@@ -479,7 +371,6 @@ def evaluate_health(tmc: TMCFacade):
     Health evaluation is triggered implicitly by validation callbacks.
     :param tmc: TMC facade
     """
-    LOGGER.info("In evaluate_health")
     pass
 
 
@@ -499,7 +390,7 @@ def verify_dln_health(
     :param event_tracer: Utility used to capture and assert change events.
     :param dln_health: Expected Dish Leaf Node health state.
     """
-    # dish_ln = tmc.dish_leaf_node_list[2]
+
     dish_ln = tmc.dish_leaf_node_list[0]
 
     assert_that(event_tracer).described_as(
@@ -559,7 +450,6 @@ def verify_telescope_health(
     :param event_tracer: Utility used to capture and assert change events.
     :param propagated_health: Expected telescope health state.
     """
-    LOGGER.info("In verify_telescope_health")
 
     if propagated_health == "OK":
         # NO change event expected — state should already be OK
@@ -572,14 +462,6 @@ def verify_telescope_health(
             "telescopeHealthState",
             HealthState[propagated_health],
         )
-
-    # assert_that(event_tracer).described_as(
-    #     "Telescope healthState should change " f"to {propagated_health}"
-    # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-    #     tmc.central_node,
-    #     "telescopeHealthState",
-    #     HealthState[propagated_health],
-    # )
 
 
 @then(
@@ -629,14 +511,6 @@ def verify_alarm_raised(validation_type):
         f'message="{message}"'
     )
 
-    # alarm_formula = (
-    #     f"tag={expected_tag};"
-    #     f"formula=({tmc_dish_leaf_node3}/healthState == 'DEGRADED');"
-    #     "priority=log;"
-    #     "group=none;"
-    #     f'message="{message}"'
-    # )
-
     LOGGER.info("Loading alarm formula: %s", alarm_formula)
 
     alarm_handler.Load(alarm_formula)
@@ -648,32 +522,3 @@ def verify_alarm_raised(validation_type):
 
     # Cleanup
     tear_down_configured_alarms(alarm_handler, alarm_list)
-
-
-# @then(parsers.parse("I release resources for all subarrays"))
-# def release_resources_after_test(tmc: TMCFacade):
-#     """Invoke Release Resources"""
-
-#     LOGGER.info("Releasing resources for Subarray 1")
-
-#     # Release subarray 1 WITH state-change expectations
-#     json_input = MyFileJSONInput(
-#         "centralnode", "release_resources_mid"
-#     ).with_attribute("subarray_id", 1)
-
-#     tmc.release_resources(
-#         json_input,
-#         wait_termination=True,
-#     )
-
-#     LOGGER.info("Releasing resources for Subarray 2")
-
-#     # Release subarray 2 WITHOUT waiting for SubarrayNode state changes
-#     json_input = MyFileJSONInput(
-#         "centralnode", "release_resources_mid"
-#     ).with_attribute("subarray_id", 2)
-
-#     tmc.release_resources(
-#         json_input,
-#         wait_termination=False,
-#     )
