@@ -2821,14 +2821,14 @@ reference = "ska-nexus"
 
 [[package]]
 name = "ska-telmodel"
-version = "1.25.0"
+version = "1.31.0"
 description = "SKA telescope model library"
 optional = false
 python-versions = ">=3.10.0,<4.0.0"
 groups = ["main"]
 files = [
-    {file = "ska_telmodel-1.25.0-py3-none-any.whl", hash = "sha256:6d213014003863dd6b4714277ec0b7b7e72dca9413dc0e9931b98f430bfeb7fb"},
-    {file = "ska_telmodel-1.25.0.tar.gz", hash = "sha256:43970a59f7fc26553793b85e09e52b7624dbb491d2e2b253642c4d8632a3a06a"},
+    {file = "ska_telmodel-1.31.0-py3-none-any.whl", hash = "sha256:d034ff09031dee5c0f6cc17686fc377655926b33e4cd0002e4973163e0a16cd2"},
+    {file = "ska_telmodel-1.31.0.tar.gz", hash = "sha256:e175a577e3476730048016c77a8d4a6839f1c934e5b11e27b58266b22b50300b"},
 ]
 
 [package.dependencies]
@@ -3396,14 +3396,14 @@ reference = "PyPI-public"
 
 [[package]]
 name = "wcwidth"
-version = "0.3.0"
+version = "0.4.0"
 description = "Measures the displayed width of unicode strings in a terminal"
 optional = false
 python-versions = ">=3.8"
 groups = ["main"]
 files = [
-    {file = "wcwidth-0.3.0-py3-none-any.whl", hash = "sha256:073a1acb250e4add96cfd5ef84e0036605cd6e0d0782c8c15c80e42202348458"},
-    {file = "wcwidth-0.3.0.tar.gz", hash = "sha256:af1a2fb0b83ef4a7fc0682a4c95ca2576e14d0280bca2a9e67b7dc9f2733e123"},
+    {file = "wcwidth-0.4.0-py3-none-any.whl", hash = "sha256:8af2c81174b3aa17adf05058c543c267e4e5b6767a28e31a673a658c1d766783"},
+    {file = "wcwidth-0.4.0.tar.gz", hash = "sha256:46478e02cf7149ba150fb93c39880623ee7e5181c64eda167b6a1de51b7a7ba1"},
 ]
 
 [package.source]
@@ -3542,4 +3542,4 @@ reference = "PyPI-public"
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.10"
-content-hash = "c874b12dd40d72ce465ddd97fb4dcafaf30a7d9cec767806ab3a0eea02fa166c"
+content-hash = "57f8858b02febb5b4cad1eea26f4cb56fdf9d153bf60eaf06785d6b7b8e7054f"
