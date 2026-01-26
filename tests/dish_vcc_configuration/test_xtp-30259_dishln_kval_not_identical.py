@@ -50,26 +50,14 @@ def given_tmc_with_already_loaded_dish_vcc_config_version(tmc_mid):
 
 
 @when("the Dish Leaf Node is restarted")
-# def restart_the_dish_leaf_nodes(tmc_mid):
-def restart_the_dish_leaf_nodes(tmc_mid, event_recorder):
+def restart_the_dish_leaf_nodes(tmc_mid):
     """Restart the dish leaf nodes"""
     # Set DLN k-values which are not equal to its respective dish manager
-
-    event_recorder.subscribe_event(
-        tmc_mid.central_node.dish_leaf_node_list[1], "kValueValidationResult"
-    )
-    event_recorder.subscribe_event(
-        tmc_mid.central_node.dish_leaf_node_list[2], "kValueValidationResult"
-    )
-
     try:
-        # Create k-value mismatch (original intent)
-        tmc_mid.central_node.dish_leaf_node_list[1].SetKValue(9)
+        tmc_mid.central_node.dish_leaf_node_list[1].kValue = 9
+        # Set dish manager k-value which are not equal to its respective
+        # dish leaf node
         tmc_mid.central_node.dish_master_list[2].SetKValue(10)
-        # tmc_mid.central_node.dish_leaf_node_list[1].kValue = 9
-        # # Set dish manager k-value which are not equal to its respective
-        # # dish leaf node
-        # tmc_mid.central_node.dish_master_list[2].SetKValue(10)
     except Exception as ex:
         LOGGER.error(
             "Exception %s occurred at with error: %s",
@@ -110,12 +98,12 @@ def check_dishln_is_on_and_kvalue_validation_accomplished(tmc_mid):
 def check_kvalue_validation_result_event_received(tmc_mid, event_recorder):
     """Method to check Central Node received the kValueValidation
     attribute event from respective dish leaf nodes."""
-    # event_recorder.subscribe_event(
-    #     tmc_mid.central_node.dish_leaf_node_list[1], "kValueValidationResult"
-    # )
-    # event_recorder.subscribe_event(
-    #     tmc_mid.central_node.dish_leaf_node_list[2], "kValueValidationResult"
-    # )
+    event_recorder.subscribe_event(
+        tmc_mid.central_node.dish_leaf_node_list[1], "kValueValidationResult"
+    )
+    event_recorder.subscribe_event(
+        tmc_mid.central_node.dish_leaf_node_list[2], "kValueValidationResult"
+    )
     assert event_recorder.has_change_event_occurred(
         tmc_mid.central_node.dish_leaf_node_list[1],
         "kValueValidationResult",
