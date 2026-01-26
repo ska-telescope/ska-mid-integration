@@ -557,10 +557,6 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         self.set_subarray_id("2")
         self.tear_down_subarray()
 
-        # for subarray_id in (1, 2):
-        #     self.set_subarray_id(str(subarray_id))
-        #     self.tear_down_subarray(subarray_id)
-
         LOGGER.info("telescope_state - %s", self.telescope_state)
         if self.telescope_state != "OFF":
             if (SIMULATED_DEVICES_DICT["sdp"]) and not SIMULATED_DEVICES_DICT[
@@ -601,7 +597,6 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         LOGGER.info("Tear Down complete")
 
     def tear_down_subarray(self) -> None:
-        # def tear_down_subarray(self, subarray_id: int) -> None:
         """Handle Tear down of central Node"""
         try:
             Subarray_node_obsstate = self.subarray_node.obsState
@@ -615,7 +610,6 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
                 release_data["subarray_id"] = int(
                     self.subarray_node.dev_name().split("/")[-1]
                 )
-                # release_data["subarray_id"] = subarray_id
                 _, unique_id = self.invoke_release_resources(
                     json.dumps(release_data)
                 )
