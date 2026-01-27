@@ -1,7 +1,6 @@
 """Implement negative scenario test cases for subarray
 """
 import json
-import logging
 
 import pytest
 from ska_tango_base.control_model import ObsState
@@ -19,8 +18,6 @@ from tests.resources.test_support.constant import (
     tmc_csp_subarray_leaf_node,
 )
 
-logging.basicConfig(level=logging.INFO)
-Logger = logging.getLogger(__name__)
 
 
 class TestSubarrayNodeNegative(object):
@@ -159,7 +156,6 @@ class TestSubarrayNodeNegative(object):
         )
         assert len(get_recorded_commands(sdp_sim)) == 1
 
-    @pytest.mark.skip(reason="execute tests")
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_subarray_configure_when_dish_stuck_in_slew(
@@ -201,9 +197,5 @@ class TestSubarrayNodeNegative(object):
             assert event_recorder.has_change_event_occurred(
                 subarray_node.subarray_node, "obsState", ObsState.READY
             )
-        Logger.info(
-            "Dish commandCallInfo after Configure: %s",
-            dish_sim.read_attribute("commandCallInfo").value,
-        )
 
         assert device_received_this_command(dish_sim, "ConfigureBand2", "True")
