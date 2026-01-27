@@ -17,8 +17,20 @@ from tests.resources.test_support.constant import COMMAND_COMPLETED
 TIMEOUT = 80
 
 
-@pytest.mark.batch1
+@pytest.mark.batch1test
 @pytest.mark.SKA_mid
+@pytest.mark.parametrize(
+    "assign_json_name, configure_json_name",
+    [
+        # Band-5 DC flow (keep as-is)
+        ("AssignResources_band5_dc", "Configure_band5_dc"),
+        # Other Configure JSONs reuse assign_resources_mid
+        ("assign_resources_mid", "Configure_mid_v6_detected_filterbank"),
+        ("assign_resources_mid", "Configure_mid_v6_pulsar_timing"),
+        ("assign_resources_mid", "Configure_mid_v6_voltage_recorder"),
+        ("assign_resources_mid", "Configure_mid_v6_flow_through"),
+    ],
+)
 @scenario(
     "../features/band5_down_conversion_observation.feature",
     "TMC executes band 5 down conversion observation",
@@ -88,7 +100,7 @@ def given_subarray_in_idle(
     """
 
     assign_input_json = prepare_json_args_for_centralnode_commands(
-        "AssignResources_band5_dc", command_input_factory
+        "assign_json_name", command_input_factory
     )
 
     _, unique_id = central_node_mid.store_resources(assign_input_json)
@@ -144,7 +156,7 @@ def invoke_band5_dc_configure(
     )
     log_events({subarray_node.subarray_node: ["longRunningCommandResult"]})
     configure_input_json = prepare_json_args_for_commands(
-        "Configure_band5_dc", command_input_factory
+        "configure_json_name", command_input_factory
     )
 
     _, unique_id = subarray_node.execute_transition(
