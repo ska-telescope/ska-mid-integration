@@ -172,6 +172,9 @@ ska-tmc-mid:
         DishVccFilePath: "instrument/ska1_mid_itf/ska-mid-cbf-system-parameters.json"
     subarraynode:
       CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.2"
+      AbortCommandTimeOut: 350
+    dishleafnode:
+      CommandTimeOutDefault: 320
 
 
 ##tangoGQL
