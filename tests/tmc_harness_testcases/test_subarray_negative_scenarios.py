@@ -19,7 +19,6 @@ from tests.resources.test_support.constant import (
 )
 
 
-
 class TestSubarrayNodeNegative(object):
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
