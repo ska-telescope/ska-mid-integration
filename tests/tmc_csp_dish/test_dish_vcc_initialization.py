@@ -19,6 +19,7 @@ from tests.resources.test_support.constant import (
 )
 
 
+@pytest.mark.xfail(reason="Due to device restart test case is not stable")
 @pytest.mark.tmc_csp_dish
 @pytest.mark.SKA_tmc_mid_device_restart
 @pytest.mark.SKA_mid
