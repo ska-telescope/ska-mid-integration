@@ -91,7 +91,7 @@ def validate_central_node_dish_vcc_config(tmc_mid):
     )
 
 
-@pytest.mark.xfail(reason="Due to device restart test case is not stable")
+@pytest.mark.xfail(reason="Due to device restart test case is unstable")
 @pytest.mark.tmc_csp_dish
 @pytest.mark.SKA_tmc_mid_device_restart
 @pytest.mark.SKA_mid
