@@ -1,4 +1,4 @@
-  @XTP-97748 @XTP-XTP-97749 @Team_HIMALAYA
+  @XTP-97748 @XTP-97749 @Team_HIMALAYA
   Scenario Outline: Dish validation failure impacts telescope health
     Given a TMC
     And Telescope is in ON state
