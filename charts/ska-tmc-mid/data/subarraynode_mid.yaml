@@ -35,6 +35,12 @@ server:
         devices:
         - name: "{{ $Domain }}/{{ $Family }}/{{ printf "%02s" . }}"
           properties:
+          - name: "TelmodelSource"
+            values:
+              - "{{ $TelmodelSource }}"
+          - name: "TelmodelPath"
+            values:
+              - "{{ $TelmodelPath }}"
           - name: "DishLeafNodePrefix"
             values:
             - "{{ $DishLeafNodePrefix }}"
