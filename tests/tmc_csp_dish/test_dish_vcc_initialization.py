@@ -283,6 +283,8 @@ def set_dish_vcc_empty_and_restart(tmc_mid):
     """Restart Csp Master Leaf Node"""
     # set memorized attribute of dish vcc config to empty
     tmc_mid.csp_master_leaf_node.memorizedDishVccMap = ""
+
+    pytest.version_csp_mln = tmc_mid.csp_master_leaf_node.versionId
     # Restart CSP Master Leaf Node
     tmc_mid.RestartServer(server_type="CSP_MLN")
 
@@ -313,4 +315,9 @@ def tmc_report_dish_vcc_mismatch(tmc_mid):
         tmc_mid.central_node.central_node,
         "DishVccValidationStatus",
         expected_dish_vcc_mismatch_message,
+    )
+    assert wait_and_validate_device_attribute_value(
+        tmc_mid.csp_master_leaf_node,
+        "versionId",
+        pytest.version_csp_mln,
     )

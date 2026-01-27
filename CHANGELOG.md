@@ -7,6 +7,10 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 [Unreleased]
 *************
+Updated
+-------
+* TMC Scan command supports optional field start_time to comply with ADR-111.
+
 Fixed
 -----
 * Improved Abort Retry mechanism to resolve SKB-1158
