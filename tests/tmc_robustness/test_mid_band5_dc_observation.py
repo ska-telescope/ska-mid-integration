@@ -17,7 +17,7 @@ from tests.resources.test_support.constant import COMMAND_COMPLETED
 TIMEOUT = 80
 
 
-@pytest.mark.batch1test
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 # @pytest.mark.parametrize(
 #     "assign_json_name, configure_json_name", assign_config_pairs
