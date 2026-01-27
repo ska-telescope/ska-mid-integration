@@ -20,7 +20,7 @@
         "interface": "https://schema.skao.int/ska-csp-configurescan/8.3",
         "common": {
             "config_id": "sbi-mvp01-20200325-00001-science_A",
-            "frequency_band": "2",
+            "frequency_band": "1",
             "eb_id": "eb-m001-20230712-56789"
         },
         "pst": {
