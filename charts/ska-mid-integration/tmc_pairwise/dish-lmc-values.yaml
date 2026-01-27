@@ -49,6 +49,9 @@ ska-dish-lmc:
     labels:
       app: ska-mid-integration
     enabled: true
+    dishmanager:
+      actions:
+        timeout_seconds: "300"
 
 
   ska-mid-dish-simulators:
