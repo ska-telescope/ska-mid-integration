@@ -163,10 +163,10 @@ ska-tmc-mid:
      
   deviceServers:
     mocks:
-      enabled: true
-      dish: true
-      csp: true
-      sdp: true
+      enabled: false
+      dish: false
+      csp: false
+      sdp: false
     centralnode:
       DishVccConfig:
         DishVccUri: "car://gitlab.com/ska-telescope/ska-telmodel-data?0.2.0-mid-itf#tmdata"
