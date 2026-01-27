@@ -17,19 +17,6 @@ from tests.resources.test_support.constant import COMMAND_COMPLETED
 TIMEOUT = 80
 
 
-@pytest.fixture(
-    params=[
-        ("AssignResources_band5_dc", "Configure_band5_dc"),
-        ("assign_resources_mid", "Configure_mid_v6_detected_filterbank"),
-        ("assign_resources_mid", "Configure_mid_v6_pulsar_timing"),
-        ("assign_resources_mid", "Configure_mid_v6_voltage_recorder"),
-        ("assign_resources_mid", "Configure_mid_v6_flow_through"),
-    ]
-)
-def assign_config_pair(request):
-    return request.param  # tuple: (assign_json_name, configure_json_name)
-
-
 @pytest.mark.batch1test
 @pytest.mark.SKA_mid
 # @pytest.mark.parametrize(
@@ -87,12 +74,12 @@ def given_tmc(
     event_tracer.clear_events()
 
 
-@given("the subarray is in IDLE obsState")
+@given(parsers.parse("the subarray is in IDLE obsState using {assign_json}"))
 def given_subarray_in_idle(
     command_input_factory: JsonFactory,
     event_tracer: TangoEventTracer,
     central_node_mid: CentralNodeWrapperMid,
-    assign_config_pair,
+    assign_json,
 ):
     """
     Method to check subarray is in IDLE obsState
@@ -103,9 +90,8 @@ def given_subarray_in_idle(
         event_tracer: Fixture for EventRecorder class
         central_node_mid: Fixture for a TMC CentralNode wrapper class
     """
-    assign_json_name, _ = assign_config_pair
     assign_input_json = prepare_json_args_for_centralnode_commands(
-        assign_json_name, command_input_factory
+        assign_json, command_input_factory
     )
 
     _, unique_id = central_node_mid.store_resources(assign_input_json)
@@ -140,12 +126,12 @@ def given_subarray_in_idle(
     )
 
 
-@when("the command configure is issued with band 5 dc configuration")
+@when(parsers.parse("the command configure is issued with {configure_json}"))
 def invoke_band5_dc_configure(
     subarray_node: SubarrayNodeWrapper,
     command_input_factory: JsonFactory,
     event_tracer: TangoEventTracer,
-    assign_config_pair,
+    configure_json,
 ):
     """
     Method to execute band 5 observation and check if the subarray is in
@@ -161,9 +147,8 @@ def invoke_band5_dc_configure(
         subarray_node.subarray_node, "longRunningCommandResult"
     )
     log_events({subarray_node.subarray_node: ["longRunningCommandResult"]})
-    _, configure_json_name = assign_config_pair
     configure_input_json = prepare_json_args_for_commands(
-        configure_json_name, command_input_factory
+        configure_json, command_input_factory
     )
 
     _, unique_id = subarray_node.execute_transition(
