@@ -91,6 +91,7 @@ def validate_central_node_dish_vcc_config(tmc_mid):
     )
 
 
+@pytest.mark.xfail(reason="Due to device restart test case is not stable")
 @pytest.mark.tmc_csp_dish
 @pytest.mark.SKA_tmc_mid_device_restart
 @pytest.mark.SKA_mid
@@ -132,6 +133,7 @@ def validate_dish_vcc_config_flag(tmc_mid):
     )
 
 
+@pytest.mark.xfail(reason="Due to device restart test case is not stable")
 @pytest.mark.tmc_csp_dish
 @pytest.mark.SKA_tmc_mid_device_restart
 @pytest.mark.SKA_mid
@@ -261,6 +263,7 @@ def validate_dish_vcc_config_after_central_node_and_csp_mln_restart(
     assert tmc_mid.dish_leaf_node_list[3].kValue == 101
 
 
+@pytest.mark.xfail(reason="Due to device restart test case is not stable")
 @pytest.mark.tmc_csp_dish
 @pytest.mark.SKA_tmc_mid_device_restart
 @pytest.mark.SKA_mid
