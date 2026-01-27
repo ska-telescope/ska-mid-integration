@@ -8,6 +8,9 @@ global:
 labels: 
   app: ska-mid-integration
 
+dishmanager:
+  actions:
+  timeout_seconds: "300"
 
 ska-tmc-mid:
   enabled: false
