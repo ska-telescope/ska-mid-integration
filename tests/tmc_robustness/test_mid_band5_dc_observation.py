@@ -19,9 +19,6 @@ TIMEOUT = 80
 
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
-# @pytest.mark.parametrize(
-#     "assign_json_name, configure_json_name", assign_config_pairs
-# )
 @scenario(
     "../features/band5_down_conversion_observation.feature",
     "TMC executes band 5 down conversion observation",
