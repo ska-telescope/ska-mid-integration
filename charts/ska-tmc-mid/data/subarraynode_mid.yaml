@@ -26,8 +26,8 @@ server:
   {{- $DishLeafNodePrefix := .Values.global.dish_ln_prefix}}
   {{- $Domain := .Values.global.domain }}
   {{- $Family := .Values.deviceServers.subarraynode.family }}
-  {{- $TelmodelSource := .Values.deviceServers.subarraynode.mid.TelmodelSource }}
-  {{- $TelmodelPath := .Values.deviceServers.subarraynode.mid.TelmodelPath }}
+  {{- $TelmodelSource := .Values.deviceServers.subarraynode.TelmodelSource }}
+  {{- $TelmodelPath := .Values.deviceServers.subarraynode.TelmodelPath }}
   {{- range  ( regexSplit " " ((.Values.subarray_count | int) | seq ) -1 ) }}
     - name: "{{ printf "%02s" . }}"
       classes:

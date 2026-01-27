@@ -177,6 +177,8 @@ deviceServers:
     CspAssignResourcesInterfaceURL: "https://schema.skao.int/ska-csp-assignresources/2.0"
     CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.2"
     SdpScanInterfaceURL: "https://schema.skao.int/ska-sdp-scan/1.1"
+    TelmodelSource: "car://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata"
+    TelmodelPath: "instrument/ska1_mid/layout/mid-layout.json"
     CommandTimeOutDefault: 110
     AbortCommandTimeOut: 130
     LivelinessCheckPeriod: 1.5
@@ -225,7 +227,7 @@ deviceServers:
   cspsubarrayleafnode:
     enabled: true
     file: "data/cspsubarrayleafnode.yaml"
-    TelmodelSource: car://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata
+    TelmodelSource: gitlab://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata
     TelmodelPath: instrument/ska1_mid/layout/mid-layout.json
     DelayCadence: 10.0
     DelayValidityPeriod: 20.0
