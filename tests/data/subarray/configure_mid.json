@@ -75,8 +75,7 @@
         }
     },
     "tmc": {
-      "scan_duration": 10.0,
-      "partial_configuration": false
+      "scan_duration": 10.0
     },
     "dish": {
       "receiver_band": "1"
