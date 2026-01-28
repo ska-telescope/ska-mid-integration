@@ -174,7 +174,7 @@ deviceServers:
     enabled: true
     file: "data/subarraynode_mid.yaml"
     DishIDs: *dish_ids
-    CspAssignResourcesInterfaceURL: "https://schema.skao.int/ska-csp-assignresources/2.0"
+    CspAssignResourcesInterfaceURL: "https://schema.skao.int/ska-csp-assignresources/3.1"
     CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.2"
     SdpScanInterfaceURL: "https://schema.skao.int/ska-sdp-scan/1.1"
     TelmodelSource: "car://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata"
