@@ -173,13 +173,14 @@ ska-tmc-mid:
     subarraynode:
       CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.2"
       AbortCommandTimeOut: 350
-    dishleafnode:
-      CommandTimeOutDefault: 320
-      image:
-        registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-dishleafnode
-        image: ska-tmc-dishleafnode
-        tag: 0.29.3-dev.c48b3b31f
-        pullPolicy: IfNotPresent
+      dishleafnode:
+        CommandTimeOutDefault: 320
+  dishleafnode:  
+    image:
+      registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-dishleafnode
+      image: ska-tmc-dishleafnode
+      tag: 0.29.3-dev.c48b3b31f
+      pullPolicy: IfNotPresent
 
 ##tangoGQL
 ska-tango-tangogql:
