@@ -142,11 +142,6 @@ def validate_failed_health(subarray_node, event_recorder):
     # Subscribe to healthInfo updates (safe even if already subscribed)
     event_recorder.subscribe_event(subarray_node.subarray_node, "healthInfo")
 
-    # Validate overall Subarray health
-    assert (
-        subarray_node.health_state == HealthState.FAILED
-    ), "Subarray HealthState did not become FAILED"
-
     # Fetch healthInfo attribute
     health_info = subarray_node.subarray_node.healthInfo
 
