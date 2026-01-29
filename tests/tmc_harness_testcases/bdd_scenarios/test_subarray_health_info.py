@@ -12,7 +12,7 @@ from tests.resources.test_harness.utils.enums import CapabilityStates
 @pytest.mark.batch2test
 @pytest.mark.SKA_mid
 @scenario(
-    "../features/subarray_healthinfo.feature",
+    "../features/test_harness/subarray_healthinfo.feature",
     "Dish health failure is reflected in Subarray HealthInfo",
 )
 def test_subarray_healthinfo():
@@ -21,7 +21,7 @@ def test_subarray_healthinfo():
 
 @pytest.mark.SKA_mid
 @scenario(
-    "../features/subarray_healthinfo.feature",
+    "../features/test_harness/subarray_healthinfo.feature",
     "Dish health recovers and Subarray HealthInfo is updated",
 )
 def test_subarray_healthinfo_recovery():
