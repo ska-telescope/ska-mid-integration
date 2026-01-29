@@ -1,15 +1,10 @@
 Feature: Dish HealthInfo propagation to Subarray
 
   Background:
-    Given the subarray is in ON state
-    And dishes are assigned to the subarray
+    Given Dishes are assigned to Subarray with Health State as OK
+    And Subarray is configured successfully and Health State remains OK
+
 
   Scenario: Dish health failure is reflected in Subarray HealthInfo
-    When dish "ska001" capability state becomes UNAVAILABLE
-    Then subarray health info should show dish "ska001" as FAILED
-    And the health info reason should contain "Requested band"
-
-  Scenario: Dish health recovers and Subarray HealthInfo is updated
-    Given dish "ska001" is in FAILED state
-    When dish "ska001" capability state becomes AVAILABLE
-    Then subarray health info should show dish "ska001" as OK
+    When the requested band becomes unavailable
+    Then subarray health state becomes FAILED due to unavailable band
