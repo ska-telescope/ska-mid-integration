@@ -3,10 +3,10 @@ import json
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import HealthState, ObsState
-from ska_tmc_dishleafnode.enums import CapabilityStates
 
 from tests.resources.test_harness.helpers import prepare_json_args_for_commands
 from tests.resources.test_harness.subarray_node import SubarrayNodeWrapper
+from tests.resources.test_harness.utils.enums import CapabilityStates
 
 
 @pytest.mark.batch2test
