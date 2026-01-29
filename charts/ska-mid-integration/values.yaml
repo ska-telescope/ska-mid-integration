@@ -173,7 +173,7 @@ ska-tmc-mid:
     subarraynode:
       CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.2"
       AbortCommandTimeOut: 350
-      dishleafnode:
+    dishleafnode:
         CommandTimeOutDefault: 320
   dishleafnode:  
     image:
