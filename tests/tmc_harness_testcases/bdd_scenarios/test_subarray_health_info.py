@@ -143,22 +143,27 @@ def validate_failed_health(subarray_node, event_recorder):
     event_recorder.subscribe_event(subarray_node.subarray_node, "healthInfo")
 
     # Fetch healthInfo attribute
-    health_info = subarray_node.subarray_node.healthInfo
-
+    raw_health_info = subarray_node.subarray_node.healthInfo
+    logger.info("Raw Subarray healthInfo: %s", raw_health_info)
     # Log full healthInfo clearly
+    health_info = json.loads(raw_health_info)
+
     logger.info(
-        "Subarray healthInfo:\n%s",
-        json.dumps(health_info, indent=4, default=str),
+        "Parsed Subarray healthInfo:\n%s",
+        json.dumps(health_info, indent=4),
     )
 
     # Validate at least one dish is FAILED
     failed_dishes = [
         dish
         for dish, info in health_info.items()
-        if info.get("healthState") == HealthState.FAILED
+        if info.get("healthState") == "FAILED"
     ]
 
-    assert failed_dishes, "No dish is marked FAILED in Subarray healthInfo"
+    assert failed_dishes, (
+        "No dish is marked FAILED in Subarray healthInfo "
+        "even though band was UNAVAILABLE"
+    )
 
     # Validate failure reason
     for dish in failed_dishes:
