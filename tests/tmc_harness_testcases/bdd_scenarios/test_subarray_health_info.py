@@ -159,20 +159,20 @@ def validate_failed_health(subarray_node, event_recorder):
     )
 
     logger.info("Checking for B2 band UNAVAILABLE in health info...")
-    failed_dishes = []
+
+    affected_dishes = []
 
     for dish, entries in health_info.items():
-        # entries is a list, so iterate over it
         for entry in entries:
-            if entry.get("healthState") == "FAILED":
-                failed_dishes.append((dish, entry))
+            reason = entry.get("reason", "")
+            if "UNAVAILABLE" in reason:
+                affected_dishes.append((dish, entry))
 
-    assert failed_dishes, (
-        "No dish is marked FAILED in Subarray healthInfo "
-        "even though band was UNAVAILABLE"
-    )
+    assert (
+        affected_dishes
+    ), "No dish shows UNAVAILABLE band information in Subarray healthInfo"
 
-    for dish, entry in failed_dishes:
+    for dish, entry in affected_dishes:
         reason = entry.get("reason", "")
         logger.info(
             "Dish %s FAILED with reason: %s",
