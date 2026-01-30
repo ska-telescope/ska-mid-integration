@@ -142,10 +142,8 @@ def make_band_unavailable(simulator_factory):
                 dish_sim,
                 "healthState",
                 HealthState.FAILED,
-            ), f"Dish {dish_sim.device_name} did not become FAILED in time"
-            logger.info(
-                "Dish %s healthState is now FAILED", dish_sim.device_name
-            )
+            ), f"Dish {dish_sim.dev_name} did not become FAILED in time"
+            logger.info("Dish %s healthState is now FAILED", dish_sim.dev_name)
 
 
 @then("subarray health state becomes FAILED due to unavailable band")
