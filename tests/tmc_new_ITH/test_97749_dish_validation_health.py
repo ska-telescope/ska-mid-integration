@@ -191,7 +191,7 @@ def preserve_dish_state(
     assert tmc.central_node.IsDishVccConfigSet is True
 
 
-@pytest.mark.batch1
+@pytest.mark.batch1_test
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/xtp_97749_dish_validation_health.feature",
@@ -423,6 +423,11 @@ def verify_subarray_health(
     :param propagated_health: Expected Subarray health state.
     """
 
+    LOGGER.info(
+        "Checking TMC Subarray Node healthState expected=%s",
+        propagated_health,
+    )
+
     assert_that(event_tracer).described_as(
         "TMC Subarray Node healthState should change "
         f"to {propagated_health}"
@@ -430,6 +435,15 @@ def verify_subarray_health(
         tmc.subarray_node,
         "healthState",
         HealthState[propagated_health],
+    )
+
+    raw_health_info = tmc.subarray_node.healthInfo
+    LOGGER.info("Raw Subarray healthInfo: %s", raw_health_info)
+    health_info = json.loads(raw_health_info)
+
+    LOGGER.info(
+        "Parsed Subarray healthInfo:\n%s",
+        json.dumps(health_info, indent=4),
     )
 
 
