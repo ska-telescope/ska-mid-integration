@@ -528,7 +528,7 @@ def verify_health_info_update(
         )
 
     elif validation_type == "gpm mismatch":
-        expected_substring = "GPM validation failed."
+        expected_substring = "GPM validation failed"
 
         assert any(expected_substring in msg for msg in messages), (
             f"Expected '{expected_substring}' in healthInfo messages, "
