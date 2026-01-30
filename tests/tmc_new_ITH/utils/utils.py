@@ -10,6 +10,7 @@ from ska_integration_test_harness.inputs.test_harness_inputs import (
     TestHarnessInputs,
 )
 from ska_tango_testing.integration import TangoEventTracer, log_events
+from tango import DeviceProxy
 
 from tests.resources.test_harness.utils.enums import DishMode, PointingState
 from tests.resources.test_support.constant import (
@@ -24,6 +25,10 @@ from tests.resources.test_support.constant import (
     READY_STATE_DEFECT,
     RESET_DEFECT,
     SDP_BACK_TO_INITIAL_STATE,
+    csp_subarray1,
+    csp_subarray2,
+    sdp_subarray1,
+    sdp_subarray2,
 )
 
 
@@ -292,3 +297,13 @@ def reset_defects(csp: CSPFacade, sdp: SDPFacade, dish_master_list: list = []):
     sdp.sdp_subarray.SetDefective(RESET_DEFECT)
     for dish in dish_master_list:
         dish.SetDefective(RESET_DEFECT)
+
+
+def get_mid_csp_sdp_subarrays_proxies():
+    """Return MID CSP and SDP subarray device proxies."""
+    return {
+        "sdp_1": DeviceProxy(sdp_subarray1),
+        "sdp_2": DeviceProxy(sdp_subarray2),
+        "csp_1": DeviceProxy(csp_subarray1),
+        "csp_2": DeviceProxy(csp_subarray2),
+    }

@@ -84,7 +84,7 @@ centralnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-centralnode
-    tag: 0.26.0
+    tag: 0.28.1
     pullPolicy: IfNotPresent
 
 subarraynode:
@@ -119,14 +119,14 @@ dishleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-dishleafnode
-    tag: 0.28.0
+    tag: 0.29.1
     pullPolicy: IfNotPresent
 
 skatmcsimulators:
   image:
     registry: artefact.skao.int
     image: ska-tmc-simulators
-    tag: 1.7.2
+    tag: 1.7.5
     pullPolicy: IfNotPresent
 
 resource_monitor:

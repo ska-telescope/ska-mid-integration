@@ -1,0 +1,2 @@
+tag=DishLeafNode_Degraded_kValue;formula=(mid-tmc/leaf-node-dish/SKA063/healthState == 'DEGRADED');priority=log;group=none;message="Dish Leaf Node health degraded due to kValue validation mismatch"
+tag=DishLeafNode_Degraded_GPM;formula=(mid-tmc/leaf-node-dish/SKA063/healthState == 'DEGRADED');priority=log;group=none;message="Dish Leaf Node health degraded due to GPM validation failure"
