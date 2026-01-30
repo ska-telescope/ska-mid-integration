@@ -136,10 +136,6 @@ def make_band_unavailable(simulator_factory):
 
     for dish_sim in dishes:
         dish_sim.SetDirectCapabilityState(capability_argin)
-        logger.info(
-            "Set dish simulator %s B2 band to UNAVAILABLE",
-            dish_sim.device_name,
-        )
         # Wait for each dish to report FAILED health using helper
         for dish_sim in dishes:
             assert wait_and_validate_device_attribute_value(
