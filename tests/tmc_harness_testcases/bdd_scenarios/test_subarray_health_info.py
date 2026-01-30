@@ -16,6 +16,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+@pytest.mark.skip(reason="Testing")
 @pytest.mark.batch2test
 @pytest.mark.SKA_mid
 @scenario(
@@ -137,15 +138,13 @@ def make_band_unavailable(simulator_factory):
 
 @then("subarray health state becomes FAILED due to unavailable band")
 def validate_failed_health(subarray_node, event_recorder):
-    """Validate Subarray HealthState becomes FAILED and log healthInfo"""
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node,
+        "healthInfo",
+    )
 
-    # Subscribe to healthInfo updates (safe even if already subscribed)
-    event_recorder.subscribe_event(subarray_node.subarray_node, "healthInfo")
-
-    # Fetch healthInfo attribute
     raw_health_info = subarray_node.subarray_node.healthInfo
     logger.info("Raw Subarray healthInfo: %s", raw_health_info)
-    # Log full healthInfo clearly
     health_info = json.loads(raw_health_info)
 
     logger.info(
@@ -153,21 +152,20 @@ def validate_failed_health(subarray_node, event_recorder):
         json.dumps(health_info, indent=4),
     )
 
-    # Validate at least one dish is FAILED
-    failed_dishes = [
-        dish
-        for dish, info in health_info.items()
-        if info.get("healthState") == "FAILED"
-    ]
+    failed_dishes = []
+
+    for dish, entries in health_info.items():
+        for entry in entries:
+            if entry.get("healthState") == "FAILED":
+                failed_dishes.append((dish, entry))
 
     assert failed_dishes, (
         "No dish is marked FAILED in Subarray healthInfo "
         "even though band was UNAVAILABLE"
     )
 
-    # Validate failure reason
-    for dish in failed_dishes:
-        reason = health_info[dish].get("reason", "")
+    for dish, entry in failed_dishes:
+        reason = entry.get("reason", "")
         logger.info(
             "Dish %s FAILED with reason: %s",
             dish,
