@@ -502,7 +502,7 @@ def verify_health_info_update(
         # target_device = tmc.dish_leaf_node_list[0]
 
     elif validation_type == "gpm mismatch":
-        expected_substring = "GPM validation failed."
+        expected_substring = "GPM validation failed"
 
         # target_device = tmc.dish_leaf_node_list[0]
 
