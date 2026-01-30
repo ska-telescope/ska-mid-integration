@@ -147,7 +147,6 @@ def validate_failed_health(subarray_node, event_recorder):
         subarray_node.subarray_node,
         "healthState",
         HealthState.FAILED,
-        timeout=30,
     ), "Subarray HealthState did not become FAILED"
 
     raw_health_info = subarray_node.subarray_node.healthInfo
