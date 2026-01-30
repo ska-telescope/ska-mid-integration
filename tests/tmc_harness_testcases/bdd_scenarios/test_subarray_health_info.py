@@ -164,13 +164,12 @@ def validate_failed_health(subarray_node, event_recorder):
 
     for dish, entries in health_info.items():
         for entry in entries:
-            reason = entry.get("reason", "")
-            if "UNAVAILABLE" in reason:
+            if entry.get("healthState") in ("FAILED", "DEGRADED"):
                 affected_dishes.append((dish, entry))
 
     assert (
         affected_dishes
-    ), "No dish shows UNAVAILABLE band information in Subarray healthInfo"
+    ), "No dish shows FAILED or DEGRADED health in Subarray healthInfo"
 
     for dish, entry in affected_dishes:
         reason = entry.get("reason", "")
