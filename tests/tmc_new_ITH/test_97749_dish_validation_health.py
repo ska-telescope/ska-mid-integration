@@ -499,11 +499,12 @@ def verify_health_info_update(
 
     if validation_type == "kvalue mismatch":
         expected_substring = "KValue validation failed."
-        target_device = tmc.dish_leaf_node_list[0]
+        # target_device = tmc.dish_leaf_node_list[0]
 
     elif validation_type == "gpm mismatch":
         expected_substring = "GPM validation failed."
-        target_device = tmc.dish_leaf_node_list[0]
+
+        # target_device = tmc.dish_leaf_node_list[0]
 
     else:
         raise ValueError(f"Unsupported validation_type: {validation_type}")
@@ -511,12 +512,12 @@ def verify_health_info_update(
     assert_that(event_tracer).described_as(
         f"HealthInfo should be updated for {validation_type}"
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        target_device,
+        tmc.subarray_node,
         "healthInfo",
         Anything,
     )
 
-    raw_health_info = target_device.healthInfo
+    raw_health_info = tmc.subarray_node.healthInfo
     LOGGER.info("Raw HealthInfo: %s", raw_health_info)
     health_info = json.loads(raw_health_info)
 
