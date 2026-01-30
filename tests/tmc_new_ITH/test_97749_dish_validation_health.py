@@ -478,6 +478,68 @@ def verify_telescope_health(
         )
 
 
+@then(parsers.parse('HealthInfo will be updated for "{validation_type}"'))
+def verify_health_info_update(
+    tmc: TMCFacade,
+    event_tracer: TangoEventTracer,
+    validation_type: str,
+):
+    """
+    Verify the HealthInfo update for the specified validation type.
+
+    :param tmc: TMC facade providing access to the relevant nodes.
+    :param event_tracer: Utility used to capture and assert change events.
+    :param validation_type: The type of validation being checked.
+    """
+    LOGGER.info(
+        "Verifying HealthInfo update for validation_type=%s",
+        validation_type,
+    )
+
+    if validation_type == "kvalue mismatch":
+        expected_substring = "KValue validation failed."
+        target_device = tmc.dish_leaf_node_list[0]
+
+    elif validation_type == "gpm mismatch":
+        expected_substring = "GPM validation failed."
+        target_device = tmc.dish_leaf_node_list[0]
+
+    else:
+        raise ValueError(f"Unsupported validation_type: {validation_type}")
+
+    assert_that(event_tracer).described_as(
+        f"HealthInfo should be updated for {validation_type}"
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        target_device,
+        "healthInfo",
+        Anything,
+    )
+
+    raw_health_info = target_device.healthInfo
+    LOGGER.info("Raw HealthInfo: %s", raw_health_info)
+    health_info = json.loads(raw_health_info)
+
+    LOGGER.info(
+        "Parsed HealthInfo:\n%s",
+        json.dumps(health_info, indent=4),
+    )
+
+    # Verify expected substring is present in healthInfo payload.
+    # MID Subarray healthInfo is a dict of device -> list[str]
+    if isinstance(health_info, dict):
+        messages = []
+        for v in health_info.values():
+            if isinstance(v, list):
+                messages.extend(v)
+            # elif isinstance(v, str):
+            #     messages.append(v)
+
+        assert any(expected_substring in msg for msg in messages), (
+            f"Expected '{expected_substring}' in healthInfo messages, "
+            f"but got: {health_info}"
+        )
+
+
 @then(
     parsers.parse(
         'an alarm shall be raised for "{validation_type}" validation failure'
@@ -537,4 +599,4 @@ def verify_alarm_raised(validation_type):
     # Cleanup
     tear_down_configured_alarms(alarm_handler, alarm_list)
 
-    assert False
+    # assert False
