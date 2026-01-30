@@ -16,7 +16,6 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-@pytest.mark.skip(reason="Testing")
 @pytest.mark.batch2test
 @pytest.mark.SKA_mid
 @scenario(
@@ -152,9 +151,11 @@ def validate_failed_health(subarray_node, event_recorder):
         json.dumps(health_info, indent=4),
     )
 
+    logger.info("Checking for B2 band UNAVAILABLE in health info...")
     failed_dishes = []
 
     for dish, entries in health_info.items():
+        # entries is a list, so iterate over it
         for entry in entries:
             if entry.get("healthState") == "FAILED":
                 failed_dishes.append((dish, entry))
