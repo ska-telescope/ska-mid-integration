@@ -9,6 +9,7 @@ from tests.resources.test_harness.helpers import (
     get_device_simulators,
     prepare_json_args_for_commands,
     set_desired_health_state,
+    wait_and_validate_device_attribute_value,
 )
 from tests.resources.test_harness.utils.enums import CapabilityStates
 
@@ -115,6 +116,13 @@ def make_band_unavailable(simulator_factory):
         dish_master_sim_4,
     ) = get_device_simulators(simulator_factory)
 
+    dishes = [
+        dish_master_sim_1,
+        dish_master_sim_2,
+        dish_master_sim_3,
+        dish_master_sim_4,
+    ]
+
     capability_argin = json.dumps(
         {
             "B1": CapabilityStates.OPERATE_FULL,
@@ -126,13 +134,22 @@ def make_band_unavailable(simulator_factory):
         }
     )
 
-    for dish_sim in [
-        dish_master_sim_1,
-        dish_master_sim_2,
-        dish_master_sim_3,
-        dish_master_sim_4,
-    ]:
+    for dish_sim in dishes:
         dish_sim.SetDirectCapabilityState(capability_argin)
+        logger.info(
+            "Set dish simulator %s B2 band to UNAVAILABLE",
+            dish_sim.device_name,
+        )
+        # Wait for each dish to report FAILED health using helper
+        for dish_sim in dishes:
+            assert wait_and_validate_device_attribute_value(
+                dish_sim,
+                "healthState",
+                HealthState.FAILED,
+            ), f"Dish {dish_sim.device_name} did not become FAILED in time"
+            logger.info(
+                "Dish %s healthState is now FAILED", dish_sim.device_name
+            )
 
 
 @then("subarray health state becomes FAILED due to unavailable band")
