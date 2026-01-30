@@ -54,6 +54,7 @@ def _setup_event_subscriptions(
     """
 
     event_tracer.subscribe_event(tmc.subarray_node, "healthState")
+    event_tracer.subscribe_event(tmc.subarray_node, "healthInfo")
     event_tracer.subscribe_event(csp.csp_master, "healthState")
     event_tracer.subscribe_event(sdp.sdp_master, "healthState")
     event_tracer.subscribe_event(csp.csp_subarray, "healthState")
