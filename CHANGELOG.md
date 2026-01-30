@@ -5,8 +5,14 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
-[Unreleased]
+[1.14.0-rc.1]
 *************
+Added
+-------
+* TMC Mid Detects and reports mismatch in Dish Parameters.
+* Utilised CentralNode tag to 0.28.1, SubarrayNode tag to 0.49.1, DishLeafNode - 0.29.1 and Simulator - 1.7.5
+* Marked ska-tmc-mid restart device job test as xfail due to instability caused by device restart
+
 Updated
 -------
 * TMC Scan command supports optional field start_time to comply with ADR-111.
