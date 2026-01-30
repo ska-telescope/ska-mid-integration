@@ -9,7 +9,6 @@ from tests.resources.test_harness.helpers import (
     get_device_simulators,
     prepare_json_args_for_commands,
     set_desired_health_state,
-    wait_and_validate_device_attribute_value,
 )
 from tests.resources.test_harness.utils.enums import CapabilityStates
 
@@ -144,12 +143,12 @@ def validate_failed_health(subarray_node, event_recorder):
     )
 
     # Wait for healthState to become FAILED before checking healthInfo
-    assert wait_and_validate_device_attribute_value(
+    assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "healthState",
         HealthState.FAILED,
-    ), "SubarrayNode healthState did not become FAILED in time after band "
-    "became unavailable"
+        timeout=30,
+    ), "Subarray HealthState did not become FAILED"
 
     raw_health_info = subarray_node.subarray_node.healthInfo
     logger.info("Raw Subarray healthInfo: %s", raw_health_info)
