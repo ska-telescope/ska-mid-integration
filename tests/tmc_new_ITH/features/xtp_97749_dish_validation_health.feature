@@ -12,6 +12,5 @@
 
   Examples:
     | validation_type | dln_health | propagated_health |
-    | all_ok          | OK         | OK                |
     | kvalue mismatch | FAILED     | DEGRADED          |
     | gpm mismatch    | DEGRADED   | DEGRADED          |
