@@ -116,13 +116,6 @@ def make_band_unavailable(subarray_node, simulator_factory):
         dish_master_sim_4,
     ) = get_device_simulators(simulator_factory)
 
-    dishes = [
-        dish_master_sim_1,
-        dish_master_sim_2,
-        dish_master_sim_3,
-        dish_master_sim_4,
-    ]
-
     capability_argin = json.dumps(
         {
             "B1": CapabilityStates.UNAVAILABLE,
@@ -134,19 +127,19 @@ def make_band_unavailable(subarray_node, simulator_factory):
         }
     )
 
-    # for dish_sim in dishes:
     dish_master_sim_1.SetDirectCapabilityState(capability_argin)
     logger.info(
         "CapabilityStates.UNAVAILABLE command sent successfully to %s",
         dish_master_sim_1.dev_name,
     )
-    for dish_sim in dishes:  # remove for loop
-        assert wait_and_validate_device_attribute_value(
-            subarray_node.dish_leaf_node_list[1],
-            "healthState",
-            HealthState.FAILED,
-        ), f"Dish {dish_sim.dev_name} did not become FAILED in time"
-        logger.info("Dish %s healthState is now FAILED", dish_sim.dev_name)
+    assert wait_and_validate_device_attribute_value(
+        subarray_node.dish_leaf_node_list[1],
+        "healthState",
+        HealthState.FAILED,
+    ), f"Dish {dish_master_sim_1.dev_name} did not become FAILED in time"
+    logger.info(
+        "Dish %s healthState is now FAILED", dish_master_sim_1.dev_name
+    )
 
 
 @then("subarray health state becomes FAILED due to unavailable band")
