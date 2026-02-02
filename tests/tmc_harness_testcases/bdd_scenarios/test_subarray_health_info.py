@@ -116,12 +116,12 @@ def make_band_unavailable(simulator_factory):
         dish_master_sim_4,
     ) = get_device_simulators(simulator_factory)
 
-    # dishes = [
-    #     dish_master_sim_1,
-    #     dish_master_sim_2,
-    #     dish_master_sim_3,
-    #     dish_master_sim_4,
-    # ]
+    dishes = [
+        dish_master_sim_1,
+        dish_master_sim_2,
+        dish_master_sim_3,
+        dish_master_sim_4,
+    ]
 
     capability_argin = json.dumps(
         {
@@ -152,19 +152,20 @@ def make_band_unavailable(simulator_factory):
         "CapabilityStates.UNAVAILABLE command sent successfully to %s",
         dish_master_sim_1.dev_name,
     )
-    assert wait_and_validate_device_attribute_value(
-        dish_sim_dishleafnode_1,
-        "healthState",
-        HealthState.FAILED,
-    ), f"Dish {dish_sim_dishleafnode_1.dev_name} did not become FAILED in time"
-    # Wait for each dish to report FAILED health using helper
-    # for dish_sim in dishes:
-    #     assert wait_and_validate_device_attribute_value(
-    #         dish_sim,
-    #         "healthState",
-    #         HealthState.FAILED,
-    #     ), f"Dish {dish_sim.dev_name} did not become FAILED in time"
-    #     logger.info("Dish %s healthState is now FAILED", dish_sim.dev_name)
+    # assert wait_and_validate_device_attribute_value(
+    #     dish_sim_dishleafnode_1,
+    #     "healthState",
+    #     HealthState.FAILED,
+    # ), f"Dish {dish_sim_dishleafnode_1.dev_name} did not become FAILED
+    # in time"
+    # assert Wait for each dish to report FAILED health using helper
+    for dish_sim in dishes:
+        assert wait_and_validate_device_attribute_value(
+            dish_sim_dishleafnode_1,
+            "healthState",
+            HealthState.FAILED,
+        ), f"Dish {dish_sim.dev_name} did not become FAILED in time"
+        logger.info("Dish %s healthState is now FAILED", dish_sim.dev_name)
 
 
 @then("subarray health state becomes FAILED due to unavailable band")
@@ -173,13 +174,6 @@ def validate_failed_health(subarray_node, event_recorder):
         subarray_node.subarray_node,
         "healthInfo",
     )
-
-    # Wait for healthState to become FAILED before checking healthInfo
-    # assert event_recorder.has_change_event_occurred(
-    #     subarray_node.subarray_node,
-    #     "healthInfo",
-    #     None,
-    # ), "Subarray healthInfo was not updated after band became UNAVAILABLE"
 
     raw_health_info = subarray_node.subarray_node.healthInfo
     logger.info("Raw Subarray healthInfo: %s", raw_health_info)
