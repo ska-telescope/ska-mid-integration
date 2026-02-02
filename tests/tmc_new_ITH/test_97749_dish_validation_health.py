@@ -54,6 +54,7 @@ def _setup_event_subscriptions(
     """
 
     event_tracer.subscribe_event(tmc.subarray_node, "healthState")
+    event_tracer.subscribe_event(tmc.subarray_node, "healthInfo")
     event_tracer.subscribe_event(csp.csp_master, "healthState")
     event_tracer.subscribe_event(sdp.sdp_master, "healthState")
     event_tracer.subscribe_event(csp.csp_subarray, "healthState")
@@ -423,6 +424,11 @@ def verify_subarray_health(
     :param propagated_health: Expected Subarray health state.
     """
 
+    LOGGER.info(
+        "Checking TMC Subarray Node healthState expected=%s",
+        propagated_health,
+    )
+
     assert_that(event_tracer).described_as(
         "TMC Subarray Node healthState should change "
         f"to {propagated_health}"
@@ -430,6 +436,15 @@ def verify_subarray_health(
         tmc.subarray_node,
         "healthState",
         HealthState[propagated_health],
+    )
+
+    raw_health_info = tmc.subarray_node.healthInfo
+    LOGGER.info("Raw Subarray healthInfo: %s", raw_health_info)
+    health_info = json.loads(raw_health_info)
+
+    LOGGER.info(
+        "Parsed Subarray healthInfo:\n%s",
+        json.dumps(health_info, indent=4),
     )
 
 
@@ -462,6 +477,70 @@ def verify_telescope_health(
             "telescopeHealthState",
             HealthState[propagated_health],
         )
+
+
+@then(parsers.parse('HealthInfo will be updated for "{validation_type}"'))
+def verify_health_info_update(
+    tmc: TMCFacade,
+    event_tracer: TangoEventTracer,
+    validation_type: str,
+):
+    """
+    Verify the HealthInfo update for the specified validation type.
+
+    :param tmc: TMC facade providing access to the relevant nodes.
+    :param event_tracer: Utility used to capture and assert change events.
+    :param validation_type: The type of validation being checked.
+    """
+    LOGGER.info(
+        "Verifying HealthInfo update for validation_type=%s",
+        validation_type,
+    )
+
+    assert_that(event_tracer).described_as(
+        f"HealthInfo should be updated for {validation_type}"
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        tmc.subarray_node,
+        "healthInfo",
+        Anything,
+    )
+
+    raw_health_info = tmc.subarray_node.healthInfo
+    LOGGER.info("Raw HealthInfo: %s", raw_health_info)
+    health_info = json.loads(raw_health_info)
+
+    LOGGER.info(
+        "Parsed HealthInfo:\n%s",
+        json.dumps(health_info, indent=4),
+    )
+    if isinstance(health_info, dict):
+        messages = []
+        for v in health_info.values():
+            if isinstance(v, list):
+                messages.extend(v)
+
+    if validation_type == "kvalue mismatch":
+        expected_substring = "KValue validation failed."
+
+        assert any(expected_substring in msg for msg in messages), (
+            f"Expected '{expected_substring}' in healthInfo messages, "
+            f"but got: {health_info}"
+        )
+
+    elif validation_type == "gpm mismatch":
+        expected_substring = "GPM validation failed"
+
+        assert any(expected_substring in msg for msg in messages), (
+            f"Expected '{expected_substring}' in healthInfo messages, "
+            f"but got: {health_info}"
+        )
+
+        # target_device = tmc.dish_leaf_node_list[0]
+    elif validation_type == "all_ok":
+        assert not messages, "Expected messages to be blank"
+
+    else:
+        raise ValueError(f"Unsupported validation_type: {validation_type}")
 
 
 @then(
@@ -522,3 +601,5 @@ def verify_alarm_raised(validation_type):
 
     # Cleanup
     tear_down_configured_alarms(alarm_handler, alarm_list)
+
+    # assert False
