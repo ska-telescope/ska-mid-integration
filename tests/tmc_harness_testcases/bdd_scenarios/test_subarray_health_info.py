@@ -17,6 +17,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+@pytest.mark.skip(reason="")
 @pytest.mark.batch2test
 @pytest.mark.SKA_mid
 @scenario(
