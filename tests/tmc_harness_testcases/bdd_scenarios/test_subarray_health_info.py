@@ -4,6 +4,7 @@ import logging
 import pytest
 from pytest_bdd import given, scenario, then, when
 from ska_control_model import HealthState, ObsState
+from tango import DeviceProxy
 
 from tests.resources.test_harness.helpers import (
     get_device_simulators,
@@ -134,8 +135,6 @@ def make_band_unavailable(simulator_factory):
         }
     )
 
-    from tango import DeviceProxy
-
     dish_sim_dishleafnode_1 = DeviceProxy("mid-tmc/leaf-node-dish/ska001")
     logger.info(
         "Using DishLeafNode device: %s",
@@ -152,13 +151,6 @@ def make_band_unavailable(simulator_factory):
         "CapabilityStates.UNAVAILABLE command sent successfully to %s",
         dish_master_sim_1.dev_name,
     )
-    # assert wait_and_validate_device_attribute_value(
-    #     dish_sim_dishleafnode_1,
-    #     "healthState",
-    #     HealthState.FAILED,
-    # ), f"Dish {dish_sim_dishleafnode_1.dev_name} did not become FAILED
-    # in time"
-    # assert Wait for each dish to report FAILED health using helper
     for dish_sim in dishes:
         assert wait_and_validate_device_attribute_value(
             dish_sim_dishleafnode_1,
