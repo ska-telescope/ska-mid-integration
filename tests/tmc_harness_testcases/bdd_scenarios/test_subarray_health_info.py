@@ -189,9 +189,21 @@ def validate_failed_health(subarray_node, event_recorder):
     affected_dishes = []
 
     for dish, entries in health_info.items():
+        logger.info("Checking dish %s entries: %s", dish, entries)
+
         for entry in entries:
-            if entry.get("healthState") in ("FAILED", "DEGRADED"):
-                affected_dishes.append((dish, entry))
+            if isinstance(entry, dict):
+                health_state = entry.get("healthState")
+                reason = entry.get("reason", "")
+            else:
+                health_state = None
+                reason = str(entry)
+
+            if (
+                health_state in ("FAILED", "DEGRADED")
+                or "UNAVAILABLE" in reason
+            ):
+                affected_dishes.append((dish, health_state, reason))
 
     assert (
         affected_dishes
