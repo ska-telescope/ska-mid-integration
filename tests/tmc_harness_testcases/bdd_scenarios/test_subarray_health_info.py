@@ -4,7 +4,6 @@ import logging
 import pytest
 from pytest_bdd import given, scenario, then, when
 from ska_control_model import HealthState, ObsState
-from tango import DeviceProxy
 
 from tests.resources.test_harness.helpers import (
     get_device_simulators,
@@ -13,6 +12,9 @@ from tests.resources.test_harness.helpers import (
     wait_and_validate_device_attribute_value,
 )
 from tests.resources.test_harness.utils.enums import CapabilityStates
+
+# from tango import DeviceProxy
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -107,7 +109,7 @@ def configure_subarray_and_validate_health_ok(
 
 
 @when("the requested band becomes unavailable")
-def make_band_unavailable(simulator_factory):
+def make_band_unavailable(subarray_node, simulator_factory):
     (
         _,
         _,
@@ -135,16 +137,6 @@ def make_band_unavailable(simulator_factory):
         }
     )
 
-    dish_sim_dishleafnode_1 = DeviceProxy("mid-tmc/leaf-node-dish/ska001")
-    logger.info(
-        "Using DishLeafNode device: %s",
-        dish_sim_dishleafnode_1.dev_name(),
-    )
-
-    logger.info(
-        "Setting B2 band to UNAVAILABLE via Dish Master simulator: %s",
-        dish_master_sim_1.dev_name,
-    )
     # for dish_sim in dishes:
     dish_master_sim_1.SetDirectCapabilityState(capability_argin)
     logger.info(
@@ -153,7 +145,7 @@ def make_band_unavailable(simulator_factory):
     )
     for dish_sim in dishes:
         assert wait_and_validate_device_attribute_value(
-            dish_sim_dishleafnode_1,
+            subarray_node.dish_leaf_node_list[1],
             "healthState",
             HealthState.FAILED,
         ), f"Dish {dish_sim.dev_name} did not become FAILED in time"
