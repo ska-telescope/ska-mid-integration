@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-@pytest.mark.batch2test
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/subarray_healthinfo.feature",
@@ -140,7 +140,7 @@ def make_band_unavailable(subarray_node, simulator_factory):
         "CapabilityStates.UNAVAILABLE command sent successfully to %s",
         dish_master_sim_1.dev_name,
     )
-    for dish_sim in dishes:
+    for dish_sim in dishes:  # remove for loop
         assert wait_and_validate_device_attribute_value(
             subarray_node.dish_leaf_node_list[1],
             "healthState",
@@ -165,7 +165,7 @@ def validate_failed_health(subarray_node, event_recorder):
         json.dumps(health_info, indent=4),
     )
 
-    logger.info("Checking for B2 band UNAVAILABLE in health info...")
+    logger.info("Checking for B1 band UNAVAILABLE in health info...")
 
     affected_dishes = []
 
