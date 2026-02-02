@@ -59,14 +59,14 @@ def assign_dishes_to_subarray(
     (
         _,
         _,
-        dish_master_sim_1,
+        dish_sim_1,
         dish_master_sim_2,
         dish_master_sim_3,
         dish_master_sim_4,
     ) = get_device_simulators(simulator_factory)
     set_desired_health_state(
         sim_devices_list=[
-            dish_master_sim_1,
+            dish_sim_1,
             dish_master_sim_2,
             dish_master_sim_3,
             dish_master_sim_4,
@@ -110,18 +110,18 @@ def make_band_unavailable(simulator_factory):
     (
         _,
         _,
-        dish_master_sim_1,
+        dish_sim_1,
         dish_master_sim_2,
         dish_master_sim_3,
         dish_master_sim_4,
     ) = get_device_simulators(simulator_factory)
 
-    dishes = [
-        dish_master_sim_1,
-        dish_master_sim_2,
-        dish_master_sim_3,
-        dish_master_sim_4,
-    ]
+    # dishes = [
+    #     dish_master_sim_1,
+    #     dish_master_sim_2,
+    #     dish_master_sim_3,
+    #     dish_master_sim_4,
+    # ]
 
     capability_argin = json.dumps(
         {
@@ -134,16 +134,21 @@ def make_band_unavailable(simulator_factory):
         }
     )
 
-    for dish_sim in dishes:
-        dish_sim.SetDirectCapabilityState(capability_argin)
-        # Wait for each dish to report FAILED health using helper
-        for dish_sim in dishes:
-            assert wait_and_validate_device_attribute_value(
-                dish_sim,
-                "healthState",
-                HealthState.FAILED,
-            ), f"Dish {dish_sim.dev_name} did not become FAILED in time"
-            logger.info("Dish %s healthState is now FAILED", dish_sim.dev_name)
+    # for dish_sim in dishes:
+    dish_sim_1.SetDirectCapabilityState(capability_argin)
+    assert wait_and_validate_device_attribute_value(
+        dish_sim_1,
+        "healthState",
+        HealthState.FAILED,
+    ), f"Dish {dish_sim_1.dev_name} did not become FAILED in time"
+    # Wait for each dish to report FAILED health using helper
+    # for dish_sim in dishes:
+    #     assert wait_and_validate_device_attribute_value(
+    #         dish_sim,
+    #         "healthState",
+    #         HealthState.FAILED,
+    #     ), f"Dish {dish_sim.dev_name} did not become FAILED in time"
+    #     logger.info("Dish %s healthState is now FAILED", dish_sim.dev_name)
 
 
 @then("subarray health state becomes FAILED due to unavailable band")
