@@ -13,9 +13,6 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_harness.utils.enums import CapabilityStates
 
-# from tango import DeviceProxy
-
-
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
