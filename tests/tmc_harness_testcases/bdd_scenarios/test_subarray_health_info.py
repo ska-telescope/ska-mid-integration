@@ -209,11 +209,11 @@ def validate_failed_health(subarray_node, event_recorder):
         affected_dishes
     ), "No dish shows FAILED or DEGRADED health in Subarray healthInfo"
 
-    for dish, entry in affected_dishes:
-        reason = entry.get("reason", "")
+    for dish, health_state, reason in affected_dishes:
         logger.info(
-            "Dish %s FAILED with reason: %s",
+            "Dish %s affected | healthState=%s | reason=%s",
             dish,
+            health_state,
             reason,
         )
         assert (
