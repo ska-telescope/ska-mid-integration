@@ -17,7 +17,6 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-@pytest.mark.skip(reason="")
 @pytest.mark.batch2test
 @pytest.mark.SKA_mid
 @scenario(
@@ -126,8 +125,8 @@ def make_band_unavailable(simulator_factory):
 
     capability_argin = json.dumps(
         {
-            "B1": CapabilityStates.OPERATE_FULL,
-            "B2": CapabilityStates.UNAVAILABLE,
+            "B1": CapabilityStates.UNAVAILABLE,
+            "B2": CapabilityStates.OPERATE_FULL,
             "B3": CapabilityStates.OPERATE_FULL,
             "B4": CapabilityStates.OPERATE_FULL,
             "B5a": CapabilityStates.OPERATE_FULL,
