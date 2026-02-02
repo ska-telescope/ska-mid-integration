@@ -59,14 +59,14 @@ def assign_dishes_to_subarray(
     (
         _,
         _,
-        dish_sim_1,
+        dish_master_sim_1,
         dish_master_sim_2,
         dish_master_sim_3,
         dish_master_sim_4,
     ) = get_device_simulators(simulator_factory)
     set_desired_health_state(
         sim_devices_list=[
-            dish_sim_1,
+            dish_master_sim_1,
             dish_master_sim_2,
             dish_master_sim_3,
             dish_master_sim_4,
@@ -110,7 +110,7 @@ def make_band_unavailable(simulator_factory):
     (
         _,
         _,
-        dish_sim_1,
+        dish_master_sim_1,
         dish_master_sim_2,
         dish_master_sim_3,
         dish_master_sim_4,
@@ -134,13 +134,29 @@ def make_band_unavailable(simulator_factory):
         }
     )
 
+    from tango import DeviceProxy
+
+    dish_sim_dishleafnode_1 = DeviceProxy("mid-tmc/leaf-node-dish/ska001")
+    logger.info(
+        "Using DishLeafNode device: %s",
+        dish_sim_dishleafnode_1.dev_name(),
+    )
+
+    logger.info(
+        "Setting B2 band to UNAVAILABLE via Dish Master simulator: %s",
+        dish_master_sim_1.dev_name,
+    )
     # for dish_sim in dishes:
-    dish_sim_1.SetDirectCapabilityState(capability_argin)
+    dish_master_sim_1.SetDirectCapabilityState(capability_argin)
+    logger.info(
+        "CapabilityStates.UNAVAILABLE command sent successfully to %s",
+        dish_master_sim_1.dev_name,
+    )
     assert wait_and_validate_device_attribute_value(
-        dish_sim_1,
+        dish_sim_dishleafnode_1,
         "healthState",
         HealthState.FAILED,
-    ), f"Dish {dish_sim_1.dev_name} did not become FAILED in time"
+    ), f"Dish {dish_sim_dishleafnode_1.dev_name} did not become FAILED in time"
     # Wait for each dish to report FAILED health using helper
     # for dish_sim in dishes:
     #     assert wait_and_validate_device_attribute_value(
