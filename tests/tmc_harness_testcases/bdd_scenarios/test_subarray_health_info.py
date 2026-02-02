@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-@pytest.mark.batch2
+@pytest.mark.batch2test
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/subarray_healthinfo.feature",
