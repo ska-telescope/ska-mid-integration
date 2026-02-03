@@ -1,13 +1,13 @@
-release=1.13.0-rc.3
-tag=1.13.0-rc.3
+release=1.13.0
+tag=1.13.0
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.13.0-rc.2 to v1.13.0-rc.3**
+**1. Updated ska-tmc-mid from v1.13.0-rc.3 to v1.13.0**
 
-        * TMC Mid to align with the changes introduced in Dish 9.0.0 namely; Fixed Abort timeout error.
+        * TMC Mid chart final release aligning with dish lmc version 9.0.0
 
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.13.0-rc.2 to v1.13.0-rc.3**
-        * TMC Mid to align with the changes introduced in Dish 9.0.0 namely; Fixed Abort timeout error.
+**1. Updated ska-tmc-mid from v1.13.0-rc.3 to v1.13.0**
+        * TMC Mid chart final release aligning with dish lmc version 9.0.0
 ​
