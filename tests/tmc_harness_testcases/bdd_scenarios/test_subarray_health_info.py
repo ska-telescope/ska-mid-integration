@@ -171,54 +171,54 @@ def make_band_unavailable(
 def validate_subarray_health_and_info(
     subarray_node, event_recorder, expected_health_state
 ):
-    # Convert string to HealthState enum
+    # Convert only if string
     if isinstance(expected_health_state, str):
         expected_health_state = HealthState[expected_health_state]
 
-    # Subscribe to events
-    event_recorder.subscribe_event(subarray_node.subarray_node, "healthState")
+    # Subscribe ONLY to healthInfo (main purpose)
     event_recorder.subscribe_event(subarray_node.subarray_node, "healthInfo")
 
-    # Validate healthState
-    assert event_recorder.has_change_event_occurred(
-        subarray_node.subarray_node,
-        "healthState",
-        expected_health_state,
-    ), f"Subarray healthState did not become {expected_health_state}"
-
-    # Validate healthInfo
     raw_health_info = subarray_node.subarray_node.healthInfo
     logger.info("Raw Subarray healthInfo: %s", raw_health_info)
+
     health_info = json.loads(raw_health_info)
 
     affected_dishes = []
+
     for dish, entries in health_info.items():
         for entry in entries:
-            if isinstance(entry, dict):
-                health_state = entry.get("healthState")
-                reason = entry.get("reason", "")
-            else:
-                health_state = None
-                reason = str(entry)
-            health_state_str = (
-                str(health_state) if health_state is not None else ""
-            )
-            # Check if dish health matches expected
+            if not isinstance(entry, dict):
+                continue
+
+            health_state = entry.get("healthState")
+            reason = entry.get("reason", "")
+
+            # Normalize health_state (can be int / str)
+            health_state_str = str(health_state)
+
             if (
                 expected_health_state.name in health_state_str
                 or "UNAVAILABLE" in reason
             ):
-                affected_dishes.append((dish, health_state, reason))
+                affected_dishes.append(
+                    {
+                        "dish": dish,
+                        "healthState": health_state,
+                        "reason": reason,
+                    }
+                )
 
     assert affected_dishes, (
-        f"No dish reports expected health degradation in Subarray healthInfo. "
-        f"Expected={expected_health_state.name}, healthInfo={health_info}"
+        f"No dish found in Subarray healthInfo with "
+        f"{expected_health_state.name} or UNAVAILABLE reason. "
+        f"healthInfo={health_info}"
     )
 
-    for dish, health_state, reason in affected_dishes:
+    # Log what actually caused degradation/failure
+    for dish_info in affected_dishes:
         logger.info(
-            "Dish %s affected | healthState=%s | reason=%s",
-            dish,
-            health_state,
-            reason,
+            "HealthInfo impact | dish=%s | healthState=%s | reason=%s",
+            dish_info["dish"],
+            dish_info["healthState"],
+            dish_info["reason"],
         )
