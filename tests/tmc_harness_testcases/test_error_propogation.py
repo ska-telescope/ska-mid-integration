@@ -40,6 +40,7 @@ from tests.tmc_harness_testcases.conftest import (
     verify_scanning_transition_with_endscan,
 )
 
+
 @pytest.mark.intm
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
