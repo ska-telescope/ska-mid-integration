@@ -162,7 +162,12 @@ def make_band_unavailable(
     )
 
 
-@then(parsers.parse("subarray health state becomes {expected_health_state}"))
+@then(
+    parsers.parse(
+        "subarray health state becomes {expected_health_state} "
+        "due to unavailable band"
+    )
+)
 def validate_subarray_health_and_info(
     subarray_node, event_recorder, expected_health_state
 ):
