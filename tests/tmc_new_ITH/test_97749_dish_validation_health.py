@@ -227,8 +227,6 @@ def given_a_tmc(
     dishes.dish_master_dict["dish_036"].SetDirectHealthState(HealthState.OK)
     dishes.dish_master_dict["dish_063"].SetDirectHealthState(HealthState.OK)
     dishes.dish_master_dict["dish_100"].SetDirectHealthState(HealthState.OK)
-    
-
     mid_subarrays = get_mid_csp_sdp_subarrays_proxies()
 
     # Set all MID subarrays health to OK
