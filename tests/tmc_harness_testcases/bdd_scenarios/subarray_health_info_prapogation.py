@@ -21,9 +21,10 @@ logger = logging.getLogger(__name__)
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/subarray_healthinfo_propagation.feature",
-    "Dish health failure is reflected in Subarray HealthInfo",
+    "Subarray health becomes DEGRADED when Band 5 is unavailable while "
+    "Band 1 is in use",
 )
-def test_subarray_healthinfo():
+def test_subarray_healthinfo_propagation():
     """Dish failure propagates to Subarray HealthInfo"""
 
 
