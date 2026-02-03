@@ -12,3 +12,4 @@ Knowledge Base
    fqdns
    admin_mode
    tmc_recovery
+   dish_validation_health_propagation
