@@ -184,7 +184,7 @@ def validate_subarray_health_and_info(
         expected_health_state,
     ), f"Subarray healthState did not become {expected_health_state}"
 
-    # 2️⃣ Now healthInfo is guaranteed to be updated
+    #  Now healthInfo is guaranteed to be updated
     raw_health_info = subarray_node.subarray_node.healthInfo
     logger.info("Raw Subarray healthInfo: %s", raw_health_info)
 
@@ -194,7 +194,7 @@ def validate_subarray_health_and_info(
         json.dumps(health_info, indent=4),
     )
 
-    # 3️⃣ Validate content of healthInfo
+    # Validate content of healthInfo
     affected_dishes = []
 
     for dish, entries in health_info.items():
