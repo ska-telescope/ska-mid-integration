@@ -2,7 +2,7 @@ import json
 import logging
 
 import pytest
-from pytest_bdd import given, scenario, then, when
+from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import HealthState, ObsState
 
 from tests.resources.test_harness.helpers import (
@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-@pytest.mark.batch2
+@pytest.mark.batch2test
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/subarray_healthinfo.feature",
@@ -105,8 +105,15 @@ def configure_subarray_and_validate_health_ok(
     ), "Subarray HealthState is not OK after Configure"
 
 
-@when("the requested band becomes unavailable")
-def make_band_unavailable(subarray_node, simulator_factory):
+@when(
+    parsers.parse(
+        "band {active_band} is active and band {unavailable_band} "
+        "becomes unavailable"
+    )
+)
+def make_band_unavailable(
+    subarray_node, simulator_factory, active_band, unavailable_band
+):
     (
         _,
         _,
@@ -116,29 +123,42 @@ def make_band_unavailable(subarray_node, simulator_factory):
         dish_master_sim_4,
     ) = get_device_simulators(simulator_factory)
 
-    capability_argin = json.dumps(
-        {
-            "B1": CapabilityStates.UNAVAILABLE,
-            "B2": CapabilityStates.OPERATE_FULL,
-            "B3": CapabilityStates.OPERATE_FULL,
-            "B4": CapabilityStates.OPERATE_FULL,
-            "B5a": CapabilityStates.OPERATE_FULL,
-            "B5b": CapabilityStates.OPERATE_FULL,
-        }
+    # 1. Start with all bands available
+    capability_dict = {
+        "B1": CapabilityStates.OPERATE_FULL,
+        "B2": CapabilityStates.OPERATE_FULL,
+        "B3": CapabilityStates.OPERATE_FULL,
+        "B4": CapabilityStates.OPERATE_FULL,
+        "B5a": CapabilityStates.OPERATE_FULL,
+        "B5b": CapabilityStates.OPERATE_FULL,
+    }
+
+    # 2. Make the requested band unavailable
+    capability_dict[unavailable_band] = CapabilityStates.UNAVAILABLE
+
+    # 3. Send JSON string to simulator
+    dish_master_sim_1.SetDirectCapabilityState(json.dumps(capability_dict))
+
+    logger.info(
+        "Band %s set to UNAVAILABLE while active band is %s",
+        unavailable_band,
+        active_band,
     )
 
-    dish_master_sim_1.SetDirectCapabilityState(capability_argin)
-    logger.info(
-        "CapabilityStates.UNAVAILABLE command sent successfully to %s",
-        dish_master_sim_1.dev_name,
+    # 4. Dish health expectation
+    expected_dish_health = (
+        HealthState.FAILED
+        if active_band == unavailable_band
+        else HealthState.DEGRADED
     )
+
     assert wait_and_validate_device_attribute_value(
         subarray_node.dish_leaf_node_list[1],
         "healthState",
-        HealthState.FAILED,
-    ), f"Dish {dish_master_sim_1.dev_name} did not become FAILED in time"
-    logger.info(
-        "Dish %s healthState is now FAILED", dish_master_sim_1.dev_name
+        expected_dish_health,
+    ), (
+        f"Dish did not reach {expected_dish_health} "
+        f"when {unavailable_band} became unavailable"
     )
 
 
