@@ -2,7 +2,7 @@ import json
 import logging
 
 import pytest
-from pytest_bdd import given, scenario, then, when
+from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import HealthState, ObsState
 
 from tests.resources.test_harness.helpers import (
@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-@pytest.mark.batch2
+@pytest.mark.batch2test
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/subarray_healthinfo.feature",
@@ -79,9 +79,33 @@ def assign_dishes_to_subarray(
 def configure_subarray_and_validate_health_ok(
     subarray_node,
     event_recorder,
+    simulator_factory,
     command_input_factory,
 ):
     """Configure Subarray and verify Health State remains OK"""
+
+    (
+        _,
+        _,
+        dish_master_sim_1,
+        dish_master_sim_2,
+        dish_master_sim_3,
+        dish_master_sim_4,
+    ) = get_device_simulators(simulator_factory)
+
+    # 1. Start with all bands available
+    pytest.capability_dict = {
+        "B1": CapabilityStates.OPERATE_FULL,
+        "B2": CapabilityStates.OPERATE_FULL,
+        "B3": CapabilityStates.OPERATE_FULL,
+        "B4": CapabilityStates.OPERATE_FULL,
+        "B5a": CapabilityStates.OPERATE_FULL,
+        "B5b": CapabilityStates.OPERATE_FULL,
+    }
+
+    dish_master_sim_1.SetDirectCapabilityState(
+        json.dumps(pytest.capability_dict)
+    )
 
     input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
@@ -105,8 +129,15 @@ def configure_subarray_and_validate_health_ok(
     ), "Subarray HealthState is not OK after Configure"
 
 
-@when("the requested band becomes unavailable")
-def make_band_unavailable(subarray_node, simulator_factory):
+@when(
+    parsers.parse(
+        "band {active_band} is active and band {unavailable_band} "
+        "becomes unavailable"
+    )
+)
+def make_band_unavailable(
+    subarray_node, active_band, unavailable_band, simulator_factory
+):
     (
         _,
         _,
@@ -116,80 +147,72 @@ def make_band_unavailable(subarray_node, simulator_factory):
         dish_master_sim_4,
     ) = get_device_simulators(simulator_factory)
 
-    capability_argin = json.dumps(
-        {
-            "B1": CapabilityStates.UNAVAILABLE,
-            "B2": CapabilityStates.OPERATE_FULL,
-            "B3": CapabilityStates.OPERATE_FULL,
-            "B4": CapabilityStates.OPERATE_FULL,
-            "B5a": CapabilityStates.OPERATE_FULL,
-            "B5b": CapabilityStates.OPERATE_FULL,
-        }
+    # 2. Make the requested band unavailable
+    pytest.capability_dict[unavailable_band] = CapabilityStates.UNAVAILABLE
+
+    # 3. Send JSON string to simulator
+    dish_master_sim_1.SetDirectCapabilityState(
+        json.dumps(pytest.capability_dict)
     )
 
-    dish_master_sim_1.SetDirectCapabilityState(capability_argin)
     logger.info(
-        "CapabilityStates.UNAVAILABLE command sent successfully to %s",
-        dish_master_sim_1.dev_name,
+        "Band %s set to UNAVAILABLE while active band is %s",
+        unavailable_band,
+        active_band,
     )
+
+    # 4. Dish health expectation
+    expected_dish_health = (
+        HealthState.FAILED
+        if active_band == unavailable_band
+        else HealthState.DEGRADED
+    )
+
     assert wait_and_validate_device_attribute_value(
-        subarray_node.dish_leaf_node_list[1],
+        subarray_node.dish_leaf_node_list[0],
         "healthState",
-        HealthState.FAILED,
-    ), f"Dish {dish_master_sim_1.dev_name} did not become FAILED in time"
-    logger.info(
-        "Dish %s healthState is now FAILED", dish_master_sim_1.dev_name
+        expected_dish_health,
+    ), (
+        f"Dish did not reach {expected_dish_health} "
+        f"when {unavailable_band} became unavailable"
     )
 
 
-@then("subarray health state becomes FAILED due to unavailable band")
-def validate_failed_health(subarray_node, event_recorder):
-    event_recorder.subscribe_event(
+@then(
+    parsers.parse(
+        "subarray health state becomes {expected_health_state} "
+        "due to unavailable band"
+    )
+)
+def validate_subarray_health_and_info(
+    subarray_node, event_recorder, expected_health_state
+):
+    # Convert string to HealthState enum
+    if isinstance(expected_health_state, str):
+        expected_health_state = HealthState[expected_health_state]
+
+    # Subscribe to events
+    event_recorder.subscribe_event(subarray_node.subarray_node, "healthState")
+    event_recorder.subscribe_event(subarray_node.subarray_node, "healthInfo")
+
+    # Validate healthState
+    assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
-        "healthInfo",
-    )
+        "healthState",
+        expected_health_state,
+    ), f"Subarray healthState did not become {expected_health_state}"
 
+    # Validate healthInfo
     raw_health_info = subarray_node.subarray_node.healthInfo
     logger.info("Raw Subarray healthInfo: %s", raw_health_info)
     health_info = json.loads(raw_health_info)
 
-    logger.info(
-        "Parsed Subarray healthInfo:\n%s",
-        json.dumps(health_info, indent=4),
+    expected_health_info_for_ska001 = (
+        "Requested band B1 is in state UNAVAILABLE (not fully available)"
     )
 
-    logger.info("Checking for B1 band UNAVAILABLE in health info...")
-
-    affected_dishes = []
-
-    for dish, entries in health_info.items():
-        logger.info("Checking dish %s entries: %s", dish, entries)
-
-        for entry in entries:
-            if isinstance(entry, dict):
-                health_state = entry.get("healthState")
-                reason = entry.get("reason", "")
-            else:
-                health_state = None
-                reason = str(entry)
-
-            if (
-                health_state in ("FAILED", "DEGRADED")
-                or "UNAVAILABLE" in reason
-            ):
-                affected_dishes.append((dish, health_state, reason))
-
-    assert (
-        affected_dishes
-    ), "No dish shows FAILED or DEGRADED health in Subarray healthInfo"
-
-    for dish, health_state, reason in affected_dishes:
-        logger.info(
-            "Dish %s affected | healthState=%s | reason=%s",
-            dish,
-            health_state,
-            reason,
-        )
-        assert (
-            "UNAVAILABLE" in reason
-        ), f"Dish {dish} FAILED but reason is incorrect: {reason}"
+    for device, items in health_info.items():
+        if "ska001" in device:
+            assert (
+                expected_health_info_for_ska001 in items
+            ), f"Expected healthInfo message not found for {device}"
