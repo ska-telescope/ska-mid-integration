@@ -5,6 +5,19 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[1.13.0-rc.3]
+*************
+Updated
+-------
+* TMC Mid to align with the changes introduced in Dish 9.0.0 namely; Fixed Abort timeout error. 
+
+[1.13.0-rc.2]
+*************
+Updated
+-------
+* TMC Mid to align with the changes introduced in Dish 9.0.0 namely; Fixed Abort timeout error. 
+However the tag has wrong code base. It is not usable.
+
 [1.13.0-rc.1]
 *************
 Updated

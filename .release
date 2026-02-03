@@ -1,13 +1,13 @@
-release=1.13.0-rc.1
-tag=1.13.0-rc.1
+release=1.13.0-rc.3
+tag=1.13.0-rc.3
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.12.0 to v1.13.0-rc.1**
+**1. Updated ska-tmc-mid from v1.13.0-rc.2 to v1.13.0-rc.3**
 
-        * TMC Mid to align with the changes introduced in Dish 9.0.0 namely; Deprecated SetOperateMode() command which is orchestrated in the TMC Configure workflow.
+        * TMC Mid to align with the changes introduced in Dish 9.0.0 namely; Fixed Abort timeout error.
 
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.12.0 to v1.13.0-rc.1**
-        * TMC Mid to align with the changes introduced in Dish 9.0.0 namely; Deprecated SetOperateMode() command which is orchestrated in the TMC Configure workflow.
+**1. Updated ska-tmc-mid from v1.13.0-rc.2 to v1.13.0-rc.3**
+        * TMC Mid to align with the changes introduced in Dish 9.0.0 namely; Fixed Abort timeout error.
 ​
