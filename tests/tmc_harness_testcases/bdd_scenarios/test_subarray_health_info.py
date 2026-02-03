@@ -153,7 +153,7 @@ def make_band_unavailable(
     )
 
     assert wait_and_validate_device_attribute_value(
-        subarray_node.dish_leaf_node_list[1],
+        subarray_node.dish_leaf_node_list[0],
         "healthState",
         expected_dish_health,
     ), (
