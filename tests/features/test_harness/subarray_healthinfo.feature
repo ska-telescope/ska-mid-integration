@@ -10,5 +10,5 @@ Feature: Dish HealthInfo propagation to Subarray
     Then subarray health state becomes FAILED due to unavailable band
 
     Examples:
-        | active_band | unavailable_band |
-        | B1          | B1               |
+        | active_band | unavailable_band | expected_health_state |
+        | B1          | B1               | FAILED                |

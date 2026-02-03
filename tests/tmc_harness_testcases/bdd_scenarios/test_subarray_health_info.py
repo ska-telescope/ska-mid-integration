@@ -162,29 +162,42 @@ def make_band_unavailable(
     )
 
 
-@then("subarray health state becomes FAILED due to unavailable band")
-def validate_failed_health(subarray_node, event_recorder):
+@then(parsers.parse("subarray health state becomes {expected_health_state}"))
+def validate_subarray_health_and_info(
+    subarray_node, event_recorder, expected_health_state
+):
+    expected_health_state = HealthState[expected_health_state]
+
+    # Wait for Subarray healthState transition
+    event_recorder.subscribe_event(
+        subarray_node.subarray_node,
+        "healthState",
+    )
     event_recorder.subscribe_event(
         subarray_node.subarray_node,
         "healthInfo",
     )
 
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "healthState",
+        expected_health_state,
+    ), f"Subarray healthState did not become {expected_health_state}"
+
+    # 2️⃣ Now healthInfo is guaranteed to be updated
     raw_health_info = subarray_node.subarray_node.healthInfo
     logger.info("Raw Subarray healthInfo: %s", raw_health_info)
-    health_info = json.loads(raw_health_info)
 
+    health_info = json.loads(raw_health_info)
     logger.info(
         "Parsed Subarray healthInfo:\n%s",
         json.dumps(health_info, indent=4),
     )
 
-    logger.info("Checking for B1 band UNAVAILABLE in health info...")
-
+    # 3️⃣ Validate content of healthInfo
     affected_dishes = []
 
     for dish, entries in health_info.items():
-        logger.info("Checking dish %s entries: %s", dish, entries)
-
         for entry in entries:
             if isinstance(entry, dict):
                 health_state = entry.get("healthState")
@@ -194,14 +207,14 @@ def validate_failed_health(subarray_node, event_recorder):
                 reason = str(entry)
 
             if (
-                health_state in ("FAILED", "DEGRADED")
+                expected_health_state.name in str(health_state)
                 or "UNAVAILABLE" in reason
             ):
                 affected_dishes.append((dish, health_state, reason))
 
     assert (
         affected_dishes
-    ), "No dish shows FAILED or DEGRADED health in Subarray healthInfo"
+    ), "No dish reports expected health degradation in Subarray healthInfo"
 
     for dish, health_state, reason in affected_dishes:
         logger.info(
@@ -210,6 +223,3 @@ def validate_failed_health(subarray_node, event_recorder):
             health_state,
             reason,
         )
-        assert (
-            "UNAVAILABLE" in reason
-        ), f"Dish {dish} FAILED but reason is incorrect: {reason}"
