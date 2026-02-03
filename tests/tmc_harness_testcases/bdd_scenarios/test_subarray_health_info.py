@@ -166,37 +166,25 @@ def make_band_unavailable(
 def validate_subarray_health_and_info(
     subarray_node, event_recorder, expected_health_state
 ):
+    # Convert string to HealthState enum
     expected_health_state = HealthState[expected_health_state]
 
-    # Wait for Subarray healthState transition
-    event_recorder.subscribe_event(
-        subarray_node.subarray_node,
-        "healthState",
-    )
-    event_recorder.subscribe_event(
-        subarray_node.subarray_node,
-        "healthInfo",
-    )
+    # Subscribe to events
+    event_recorder.subscribe_event(subarray_node.subarray_node, "healthState")
+    event_recorder.subscribe_event(subarray_node.subarray_node, "healthInfo")
 
+    # Validate healthState
     assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "healthState",
         expected_health_state,
     ), f"Subarray healthState did not become {expected_health_state}"
 
-    #  Now healthInfo is guaranteed to be updated
+    # Validate healthInfo
     raw_health_info = subarray_node.subarray_node.healthInfo
-    logger.info("Raw Subarray healthInfo: %s", raw_health_info)
-
     health_info = json.loads(raw_health_info)
-    logger.info(
-        "Parsed Subarray healthInfo:\n%s",
-        json.dumps(health_info, indent=4),
-    )
 
-    # Validate content of healthInfo
     affected_dishes = []
-
     for dish, entries in health_info.items():
         for entry in entries:
             if isinstance(entry, dict):
@@ -206,6 +194,7 @@ def validate_subarray_health_and_info(
                 health_state = None
                 reason = str(entry)
 
+            # Check if dish health matches expected
             if (
                 expected_health_state.name in str(health_state)
                 or "UNAVAILABLE" in reason
