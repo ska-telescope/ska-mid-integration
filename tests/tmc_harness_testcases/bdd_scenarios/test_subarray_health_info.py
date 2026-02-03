@@ -172,7 +172,8 @@ def validate_subarray_health_and_info(
     subarray_node, event_recorder, expected_health_state
 ):
     # Convert string to HealthState enum
-    expected_health_state = HealthState[expected_health_state]
+    if isinstance(expected_health_state, str):
+        expected_health_state = HealthState[expected_health_state]
 
     # Subscribe to events
     event_recorder.subscribe_event(subarray_node.subarray_node, "healthState")
@@ -187,6 +188,7 @@ def validate_subarray_health_and_info(
 
     # Validate healthInfo
     raw_health_info = subarray_node.subarray_node.healthInfo
+    logger.info("Raw Subarray healthInfo: %s", raw_health_info)
     health_info = json.loads(raw_health_info)
 
     affected_dishes = []
@@ -198,17 +200,20 @@ def validate_subarray_health_and_info(
             else:
                 health_state = None
                 reason = str(entry)
-
+            health_state_str = (
+                str(health_state) if health_state is not None else ""
+            )
             # Check if dish health matches expected
             if (
-                expected_health_state.name in str(health_state)
+                expected_health_state.name in health_state_str
                 or "UNAVAILABLE" in reason
             ):
                 affected_dishes.append((dish, health_state, reason))
 
-    assert (
-        affected_dishes
-    ), "No dish reports expected health degradation in Subarray healthInfo"
+    assert affected_dishes, (
+        f"No dish reports expected health degradation in Subarray healthInfo. "
+        f"Expected={expected_health_state.name}, healthInfo={health_info}"
+    )
 
     for dish, health_state, reason in affected_dishes:
         logger.info(
