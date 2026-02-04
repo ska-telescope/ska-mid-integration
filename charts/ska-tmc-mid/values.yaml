@@ -182,6 +182,8 @@ deviceServers:
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
     family: "subarray"
+    ScanStartTimeOffset: 10
+    StartTimeEnabled: false
     resources:
       limits:
         cpu: 600m
