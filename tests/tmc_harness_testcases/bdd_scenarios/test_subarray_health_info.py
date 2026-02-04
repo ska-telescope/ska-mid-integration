@@ -177,6 +177,7 @@ def make_band_unavailable(
         subarray_node.dish_leaf_node_list[0],
         "healthState",
         expected_dish_health,
+        timeout=30,
     ), (
         f"Dish did not reach {expected_dish_health} "
         f"when {unavailable_band} became unavailable"
