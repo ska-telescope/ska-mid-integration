@@ -92,6 +92,15 @@ def configure_subarray_and_validate_health_ok(
         dish_master_sim_3,
         dish_master_sim_4,
     ) = get_device_simulators(simulator_factory)
+    set_desired_health_state(
+        sim_devices_list=[
+            dish_master_sim_1,
+            dish_master_sim_2,
+            dish_master_sim_3,
+            dish_master_sim_4,
+        ],
+        health_state_value=HealthState.OK,
+    )
 
     # 1. Start with all bands available
     pytest.capability_dict = {
