@@ -91,7 +91,7 @@ subarraynode:
   image:
     registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-subarraynode
     image: ska-tmc-subarraynode
-    tag: 0.51.0-dev.c11c35677
+    tag: 0.52.0-dev.caf785f1c
     pullPolicy: IfNotPresent
 
 sdpleafnodes:
@@ -182,6 +182,8 @@ deviceServers:
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
     family: "subarray"
+    TelmodelSource: "car://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata"
+    TelmodelPath: "instrument/ska1_mid/layout/mid-layout.json"
     ScanStartTimeOffset: 10
     StartTimeEnabled: false
     resources:
