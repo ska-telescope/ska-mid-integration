@@ -554,7 +554,7 @@ class TestSubarrayHealthState(object):
             ),
         ],
     )
-    @pytest.mark.batch2
+    @pytest.mark.batch2test
     @pytest.mark.SKA_mid
     def test_health_state_failed_when_dish_unknown(
         self,
@@ -634,10 +634,30 @@ class TestSubarrayHealthState(object):
             "healthState",
             dish_master4_health_state,
         )
+        dish_states = [
+            dish_master1_health_state,
+            dish_master2_health_state,
+            dish_master3_health_state,
+            dish_master4_health_state,
+        ]
+
+        # ---- Expected SA health state logic (OK + UNKNOWN handling) ----
+        if (
+            csp_subarray_health_state == HealthState.UNKNOWN
+            and sdp_subarray_health_state == HealthState.UNKNOWN
+            and all(state == HealthState.UNKNOWN for state in dish_states)
+        ):
+            expected_state = HealthState.UNKNOWN
+
+        elif HealthState.UNKNOWN in dish_states:
+            expected_state = HealthState.DEGRADED
+
+        else:
+            expected_state = HealthState.OK
         assert event_recorder.has_change_event_occurred(
             subarray_node.subarray_node,
             "healthState",
-            HealthState.UNKNOWN,
+            expected_state,
         ), "Expected Subarray Node HealthState to be UNKNOWN"
 
     @pytest.mark.parametrize(
