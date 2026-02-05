@@ -554,7 +554,7 @@ class TestSubarrayHealthState(object):
             ),
         ],
     )
-    @pytest.mark.batch2test
+    @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_health_state_failed_when_dish_unknown(
         self,
@@ -715,7 +715,7 @@ class TestSubarrayHealthState(object):
             ),
         ],
     )
-    @pytest.mark.batch2
+    @pytest.mark.batch2test
     @pytest.mark.SKA_mid
     def test_health_state_degraded_when_one_or_more_dish_degraded_or_failed(
         self,
