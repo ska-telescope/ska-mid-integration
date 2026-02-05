@@ -170,7 +170,7 @@ def make_band_unavailable(
     expected_dish_health = (
         HealthState.FAILED
         if active_band == unavailable_band
-        else HealthState.DEGRADED
+        else HealthState.OK
     )
 
     assert wait_and_validate_device_attribute_value(
