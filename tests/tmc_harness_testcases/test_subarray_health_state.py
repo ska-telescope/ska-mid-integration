@@ -7,6 +7,7 @@ from tests.resources.test_harness.helpers import (
     get_device_simulators,
     prepare_json_args_for_centralnode_commands,
 )
+from tests.resources.test_harness.utils.enums import CapabilityStates
 from tests.resources.test_support.constant import COMMAND_COMPLETED
 
 
@@ -586,6 +587,14 @@ class TestSubarrayHealthState(object):
             command_input_factory,
             event_recorder,
         )
+        pytest.capability_dict = {
+            "B1": CapabilityStates.STANDBY,
+            "B2": CapabilityStates.STANDBY,
+            "B3": CapabilityStates.STANDBY,
+            "B4": CapabilityStates.STANDBY,
+            "B5a": CapabilityStates.STANDBY,
+            "B5b": CapabilityStates.STANDBY,
+        }
         csp_sa_sim.SetDirectHealthState(csp_subarray_health_state)
         sdp_sa_sim.SetDirectHealthState(sdp_subarray_health_state)
         dish_master_sim_1.SetDirectHealthState(dish_master1_health_state)
