@@ -84,35 +84,35 @@ centralnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-centralnode
-    tag: 0.25.1
+    tag: 0.28.1
     pullPolicy: IfNotPresent
 
 subarraynode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-subarraynode
-    tag: 0.47.3
+    tag: 0.49.1
     pullPolicy: IfNotPresent
 
 sdpleafnodes:
   image:
     registry: artefact.skao.int
     image: ska-tmc-sdpleafnodes
-    tag: 0.24.5
+    tag: 0.25.0
     pullPolicy: IfNotPresent
 
 cspmasterleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.33.4
+    tag: 0.38.0
     pullPolicy: IfNotPresent
 
 cspsubarrayleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.33.4
+    tag: 0.38.0
     pullPolicy: IfNotPresent
 
 dishleafnode:
@@ -126,7 +126,7 @@ skatmcsimulators:
   image:
     registry: artefact.skao.int
     image: ska-tmc-simulators
-    tag: 1.7.2
+    tag: 1.7.5
     pullPolicy: IfNotPresent
 
 resource_monitor:
@@ -176,7 +176,7 @@ deviceServers:
     DishIDs: *dish_ids
     CspAssignResourcesInterfaceURL: "https://schema.skao.int/ska-csp-assignresources/2.0"
     CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.2"
-    SdpScanInterfaceURL: "https://schema.skao.int/ska-sdp-scan/0.4"
+    SdpScanInterfaceURL: "https://schema.skao.int/ska-sdp-scan/1.1"
     CommandTimeOutDefault: 110
     AbortCommandTimeOut: 130
     LivelinessCheckPeriod: 1.5

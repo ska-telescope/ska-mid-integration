@@ -24,6 +24,22 @@ Updated
 * TMC Mid to align with the changes introduced in Dish 9.0.0 namely; Fixed Abort timeout error. 
 However the tag has wrong code base. It is not usable.
 
+[1.14.0-rc.1]
+*************
+Added
+-------
+* TMC Mid Detects and reports mismatch in Dish Parameters.
+* Utilised CentralNode tag to 0.28.1, SubarrayNode tag to 0.49.1, DishLeafNode - 0.29.1 and Simulator - 1.7.5
+* Marked ska-tmc-mid restart device job test as xfail due to instability caused by device restart
+
+Updated
+-------
+* TMC Scan command supports optional field start_time to comply with ADR-111.
+
+Fixed
+-----
+* Improved Abort Retry mechanism to resolve SKB-1158
+
 [1.13.0-rc.1]
 *************
 Updated

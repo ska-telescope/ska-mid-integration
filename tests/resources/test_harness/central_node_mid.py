@@ -556,6 +556,7 @@ class CentralNodeWrapperMid(CentralNodeWrapper):
         self.tear_down_subarray()
         self.set_subarray_id("2")
         self.tear_down_subarray()
+
         LOGGER.info("telescope_state - %s", self.telescope_state)
         if self.telescope_state != "OFF":
             if (SIMULATED_DEVICES_DICT["sdp"]) and not SIMULATED_DEVICES_DICT[

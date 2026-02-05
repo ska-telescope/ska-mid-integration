@@ -1,13 +1,14 @@
-release=1.13.0
-tag=1.13.0
+release=1.14.0-rc.1
+tag=1.14.0-rc.1
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.13.0-rc.3 to v1.13.0**
+**1. Updated ska-tmc-mid from v1.13.0 to v1.14.0-rc.1**
 
-        * TMC Mid chart final release aligning with dish lmc version 9.0.0
+        * TMC Mid is able to update the health states based on detected Dish parameter mismatches.
 
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.13.0-rc.3 to v1.13.0**
-        * TMC Mid chart final release aligning with dish lmc version 9.0.0
+**1. Updated ska-tmc-mid from v1.13.0 to v1.14.0-rc.1**
+        * TMC Mid is able to update the health states based on detected Dish parameter mismatches.
+​
 ​

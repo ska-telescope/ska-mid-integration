@@ -9,8 +9,8 @@ Scenario Outline: Test Restart Command during failure of AssignResources and Sca
     Examples:
         | command         | csp_obsstate | sdp_obsstate     |
         | AssignResources | FAULT        | IDLE             |
-        | AssignResources | FAULT        | RESOURCING       |
         | AssignResources | IDLE         | FAULT            |
+        | AssignResources | FAULT        | RESOURCING       |
         | AssignResources | RESOURCING   | FAULT            |
         | AssignResources | RESOURCING   | IDLE             |
         | AssignResources | RESOURCING   | RESOURCING       |
