@@ -6,7 +6,7 @@ PST Scan Configuration Through TMC
 
 Overview
 --------
-This page provides the guidance for PST scan configuration using TMC
+This page provides the steps to execute PST observations.
 
 1. AssignResources
 ------------------
@@ -34,7 +34,7 @@ Example:
 2. Configure
 ------------
 
-TMC supports 4 PST processing modes. The JSON example are as follows:
+TMC supports 4 PST processing modes. TMC support only one mode at a time. The JSON example are as follows:
 
 A. **Voltage Recorder mode**
 
@@ -440,3 +440,6 @@ Example:
             "partial_configuration": false
         }
     }
+
+
+There is no change for other commands and their JSON examples.
