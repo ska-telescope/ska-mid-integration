@@ -213,12 +213,23 @@ def validate_subarray_health_and_info(
     logger.info("Raw Subarray healthInfo: %s", raw_health_info)
     health_info = json.loads(raw_health_info)
 
-    expected_health_info_for_ska001 = (
-        "Requested band B1 is in state UNAVAILABLE (not fully available)"
-    )
+    # -------- HealthInfo expectation based on scenario --------
+    if expected_health_state == HealthState.FAILED:
+        expected_health_info_for_ska001 = [
+            "Requested band B1 is in state UNAVAILABLE (not fully available)"
+        ]
+    else:
+        expected_health_info_for_ska001 = []
 
     for device, items in health_info.items():
         if "ska001" in device:
-            assert (
-                expected_health_info_for_ska001 in items
-            ), f"Expected healthInfo message not found for {device}"
+            logger.info(
+                "Validating healthInfo for %s | Expected=%s | Actual=%s",
+                device,
+                expected_health_info_for_ska001,
+                items,
+            )
+            assert items == expected_health_info_for_ska001, (
+                f"Unexpected healthInfo for {device}. "
+                f"Expected={expected_health_info_for_ska001}, Got={items}"
+            )

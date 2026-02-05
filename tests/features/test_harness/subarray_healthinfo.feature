@@ -11,4 +11,5 @@ Feature: Dish HealthInfo propagation to Subarray
 
     Examples:
         | active_band | unavailable_band | expected_health_state |
+        | B1          | B1               | FAILED                |
         | B1          | B2               | OK                    |
