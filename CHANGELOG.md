@@ -21,8 +21,7 @@ Updated
 *************
 Updated
 -------
-* TMC Mid to align with the changes introduced in Dish 9.0.0 namely; Fixed Abort timeout error. 
-However the tag has wrong code base. It is not usable.
+* TMC Mid to align with the changes introduced in Dish 9.0.0 namely; Fixed Abort timeout error. However the tag has wrong code base. It is not usable.
 
 [1.14.0-rc.1]
 *************
