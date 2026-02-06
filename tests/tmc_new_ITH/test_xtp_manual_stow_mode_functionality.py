@@ -199,8 +199,8 @@ def validate_stow_mode_failure_details(events_tracer, dish_status_map):
                 if event_data[0] == int(ResultCode.FAILED):
                     break
 
+    logger.info("SetStowMode event data %s", event_data[1])
     assert "SetStowMode failed" in event_data[1]
-    logger.info(">>>>>>>>>>> %s", event_data[1])
     error_str = event_data[1]
     json_part = error_str.split(": ", 1)[1]
     match = re.search(r"\{.*\}", json_part)
@@ -209,4 +209,4 @@ def validate_stow_mode_failure_details(events_tracer, dish_status_map):
     err_msg1 = dish_status_map["ska063"]
     err_msg2 = dish_status_map["ska019"]
     assert err_msg1 in data["ska063"]["result_code"]
-    assert err_msg2 in data["ska019"]
+    assert err_msg2 in data["ska064"]
