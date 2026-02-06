@@ -93,7 +93,7 @@ def test_verify_abort_error_propagation():
 
 
 @given("the TMC subarray is in the READY observation state")
-def subarray_in_idle_obsstate(
+def subarray_in_ready_obsstate(
     context_fixt: SubarrayTestContextData,
     tmc: TMCFacade,
     sdp: SDPFacade,
