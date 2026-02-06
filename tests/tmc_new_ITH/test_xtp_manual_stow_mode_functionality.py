@@ -108,11 +108,10 @@ def get_dish_ids(table_data):
 def apply_set_stow_mode_to_dishes(tmc: TMCFacade):
     """TMC innvokes SetStowMode on given list of dishes"""
 
-    message, pytest.unique_id = tmc.central_node.SetGlobalPointingModel(
+    message, pytest.unique_id = tmc.central_node.SetStowMode(
         json.dumps(pytest.dish_ids)
     )
     logger.info("Command ID: %s Message: %s", message, pytest.unique_id)
-
 
 @then(
     parsers.parse(
