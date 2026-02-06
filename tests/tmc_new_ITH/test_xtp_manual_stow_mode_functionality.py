@@ -74,7 +74,7 @@ def given_a_tmc(
     )
 
     # Set Stow mode on dish SKA036 dish
-    dish_36 = dishes.dish_master_dict["dish_063"]
+    dish_36 = dishes.dish_master_dict["dish_036"]
     dish_36.SetDirectDishMode(DishMode.STOW)
 
     # Set SKA063 defective
@@ -112,6 +112,7 @@ def apply_set_stow_mode_to_dishes(tmc: TMCFacade):
         json.dumps(pytest.dish_ids)
     )
     logger.info("Command ID: %s Message: %s", message, pytest.unique_id)
+
 
 @then(
     parsers.parse(
@@ -201,7 +202,7 @@ def validate_stow_mode_failure_details(events_tracer, dish_status_map):
     event_data = None
     for event in events_tracer.events:
         if isinstance(event.attribute_value, tuple):
-            if "SetGlobalPointingModel" in event.attribute_value[0]:
+            if "SetStowMode" in event.attribute_value[0]:
                 event_data = json.loads(event.attribute_value[1])
                 if event_data[0] == int(ResultCode.FAILED):
                     break
