@@ -244,6 +244,8 @@ Subarray Node
     #. **EventSubscriptionCheckPeriod** : This refers to the Period (in seconds) for the event subscriber to check the device subscriptions in a loop. Currently defaults to 1.5 seconds.
     #. **CommandTimeOutDefault** : This refers to the timeout (in seconds) for the command execution. Currently defaults to 110 seconds.
     #. **AbortCommandTimeOut** : This refers to the timeout for the Subarray ABORTED obsState transition. Once the AbortCommandTimeOut exceeds, SubarrayNode transitions to obsState FAULT. Currently defaults to 130 seconds.
+    #. **TelmodelSource** : This refers to the source of the telmodel model for the subarray. Currently defaults to "car://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata".
+    #. **TelmodelPath** : This refers to the path of the telmodel model for the subarray. Currently defaults to "instrument/ska1_mid/layout/mid-layout.json".
 
 SDP Subarray Leaf Node
 ^^^^^^^^^^^^^^^^^^^^^^^^
