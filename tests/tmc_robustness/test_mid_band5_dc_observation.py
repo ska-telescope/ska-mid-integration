@@ -17,7 +17,7 @@ from tests.resources.test_support.constant import COMMAND_COMPLETED
 TIMEOUT = 80
 
 
-@pytest.mark.batch1
+@pytest.mark.batch1test
 @pytest.mark.SKA_mid
 @scenario(
     "../features/band5_down_conversion_observation.feature",
