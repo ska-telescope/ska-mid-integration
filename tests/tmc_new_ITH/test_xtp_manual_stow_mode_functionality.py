@@ -208,5 +208,5 @@ def validate_stow_mode_failure_details(events_tracer, dish_status_map):
     data = json.loads(dict_str)
     err_msg1 = dish_status_map["ska063"]
     err_msg2 = dish_status_map["ska064"]
-    assert err_msg1 in data["ska063"]["result_code"]
+    assert err_msg1 in data["ska063"]["result_code"][1]
     assert err_msg2 in data["ska064"]
