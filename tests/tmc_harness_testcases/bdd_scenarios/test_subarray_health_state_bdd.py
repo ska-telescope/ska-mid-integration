@@ -26,7 +26,7 @@ def test_subarray_health_state_with_csp_and_sdp():
     """
 
 
-@pytest.mark.batch2
+@pytest.mark.batch2test
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/subarray_health_state.feature",
@@ -159,7 +159,7 @@ def set_devices_health_state(simulator_factory, Devices, Device_Health_State):
 
 @then(parsers.parse("subarray health state is {Subarray_Health_State}"))
 def validate_expected_subarray_health_state(
-    subarray_node, event_recorder, Subarray_Health_State
+    subarray_node, event_recorder, Subarray_Health_State, event_tracer
 ):
     """Validate Expected Health state for Subarray Node
     Args:
@@ -174,3 +174,4 @@ def validate_expected_subarray_health_state(
         "healthState",
         HealthState[Subarray_Health_State],
     ), f"Expected Subarray Node HealthState to be {Subarray_Health_State}"
+    event_tracer.clear_events()
