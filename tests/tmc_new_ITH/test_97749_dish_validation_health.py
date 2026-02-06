@@ -22,6 +22,7 @@ from tango import DeviceProxy
 from tests.resources.test_harness.helpers import (
     wait_and_validate_device_attribute_value,
 )
+from tests.resources.test_harness.utils.enums import CapabilityStates
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.common_utils.tmc_helpers import (
     tear_down_configured_alarms,
@@ -218,6 +219,29 @@ def given_a_tmc(
     """
 
     _setup_event_subscriptions(tmc, csp, sdp, dishes, event_tracer)
+
+    pytest.capability_dict = json.dumps(
+        {
+            "B1": CapabilityStates.STANDBY,
+            "B2": CapabilityStates.STANDBY,
+            "B3": CapabilityStates.STANDBY,
+            "B4": CapabilityStates.STANDBY,
+            "B5a": CapabilityStates.STANDBY,
+            "B5b": CapabilityStates.STANDBY,
+        }
+    )
+    dishes.dish_master_dict["dish_001"].SetDirectCapabilityState(
+        pytest.capability_dict
+    )
+    dishes.dish_master_dict["dish_036"].SetDirectCapabilityState(
+        pytest.capability_dict
+    )
+    dishes.dish_master_dict["dish_063"].SetDirectCapabilityState(
+        pytest.capability_dict
+    )
+    dishes.dish_master_dict["dish_100"].SetDirectCapabilityState(
+        pytest.capability_dict
+    )
 
     csp.csp_subarray.SetDirectHealthState(HealthState.OK)
     sdp.sdp_subarray.SetDirectHealthState(HealthState.OK)
