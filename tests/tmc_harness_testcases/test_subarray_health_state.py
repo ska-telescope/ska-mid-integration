@@ -545,14 +545,14 @@ class TestSubarrayHealthState(object):
                 HealthState.OK,
                 HealthState.OK,
             ),
-            # (
-            #     HealthState.UNKNOWN,
-            #     HealthState.UNKNOWN,
-            #     HealthState.UNKNOWN,
-            #     HealthState.UNKNOWN,
-            #     HealthState.UNKNOWN,
-            #     HealthState.UNKNOWN,
-            # ),
+            (
+                HealthState.UNKNOWN,
+                HealthState.UNKNOWN,
+                HealthState.UNKNOWN,
+                HealthState.UNKNOWN,
+                HealthState.UNKNOWN,
+                HealthState.UNKNOWN,
+            ),
         ],
     )
     @pytest.mark.batch2test
