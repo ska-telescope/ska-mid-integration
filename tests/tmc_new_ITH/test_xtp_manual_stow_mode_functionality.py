@@ -111,7 +111,7 @@ def apply_set_stow_mode_to_dishes(tmc: TMCFacade):
     message, pytest.unique_id = tmc.central_node.SetStowMode(
         json.dumps(pytest.dish_ids)
     )
-    logger.info("Command ID: %s Message: %s", message, pytest.unique_id)
+    logger.info("Command ID: %s Message: %s", pytest.unique_id, message)
 
 
 @then(
@@ -146,7 +146,7 @@ def check_tmc_status(
             "is expected have longRunningCommandResult as "
             "(unique_id, COMMAND_RESULT)",
         )
-        .within_timeout(ASSERTIONS_TIMEOUT)
+        .within_timeout(100)
         .has_change_event_occurred(
             tmc.central_node,
             "longRunningCommandResult",
@@ -163,7 +163,7 @@ def check_tmc_status(
     # Restore the data for next test case execution
     dishes.dish_master_dict["dish_063"].SetDefective(RESET_DEFECT)
     tmc.force_change_of_obs_state(
-        ObsState.READY,
+        ObsState.EMPTY,
         default_commands_inputs,
         wait_termination=True,
     )
