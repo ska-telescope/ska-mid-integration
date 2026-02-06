@@ -1487,14 +1487,14 @@ reference = "PyPI-public"
 
 [[package]]
 name = "parse"
-version = "1.20.2"
+version = "1.21.0"
 description = "parse() is the opposite of format()"
 optional = false
 python-versions = "*"
 groups = ["main", "dev"]
 files = [
-    {file = "parse-1.20.2-py2.py3-none-any.whl", hash = "sha256:967095588cb802add9177d0c0b6133b5ba33b1ea9007ca800e526f42a85af558"},
-    {file = "parse-1.20.2.tar.gz", hash = "sha256:b41d604d16503c79d81af5165155c0b20f6c8d6c559efa66b4b695c3e5a0a0ce"},
+    {file = "parse-1.21.0-py2.py3-none-any.whl", hash = "sha256:6d81f7bae0ab25fd72818375c4a9c71c8705256bfc42e8725be609cf8b904aed"},
+    {file = "parse-1.21.0.tar.gz", hash = "sha256:937725d51330ffec9c7a26fdb5623baa135d8ba8ed78817ea9523538844e3ce4"},
 ]
 
 [package.source]
@@ -2821,14 +2821,14 @@ reference = "ska-nexus"
 
 [[package]]
 name = "ska-telmodel"
-version = "1.25.0"
+version = "1.31.0"
 description = "SKA telescope model library"
 optional = false
 python-versions = ">=3.10.0,<4.0.0"
 groups = ["main"]
 files = [
-    {file = "ska_telmodel-1.25.0-py3-none-any.whl", hash = "sha256:6d213014003863dd6b4714277ec0b7b7e72dca9413dc0e9931b98f430bfeb7fb"},
-    {file = "ska_telmodel-1.25.0.tar.gz", hash = "sha256:43970a59f7fc26553793b85e09e52b7624dbb491d2e2b253642c4d8632a3a06a"},
+    {file = "ska_telmodel-1.31.0-py3-none-any.whl", hash = "sha256:d034ff09031dee5c0f6cc17686fc377655926b33e4cd0002e4973163e0a16cd2"},
+    {file = "ska_telmodel-1.31.0.tar.gz", hash = "sha256:e175a577e3476730048016c77a8d4a6839f1c934e5b11e27b58266b22b50300b"},
 ]
 
 [package.dependencies]
@@ -3542,4 +3542,4 @@ reference = "PyPI-public"
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.10"
-content-hash = "c874b12dd40d72ce465ddd97fb4dcafaf30a7d9cec767806ab3a0eea02fa166c"
+content-hash = "57f8858b02febb5b4cad1eea26f4cb56fdf9d153bf60eaf06785d6b7b8e7054f"
