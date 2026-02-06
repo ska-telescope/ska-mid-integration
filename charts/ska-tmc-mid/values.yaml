@@ -310,7 +310,7 @@ deviceServers:
 
 ska-mid-wms:
   legacy_compatibility: true
-  dev-name: "mid/wms/0"
+  dev-name: "ska-mid/weather-monitoring/s1"
   ska-tango-base:
     enabled: false
     itango:
