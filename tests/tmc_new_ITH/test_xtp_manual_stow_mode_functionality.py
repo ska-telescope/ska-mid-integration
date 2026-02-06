@@ -22,7 +22,7 @@ from tests.resources.test_support.constant import (
     RESET_DEFECT,
 )
 from tests.resources.test_support.enum import DishMode
-from tests.tmc_csp_new_ITH.conftest import ASSERTIONS_TIMEOUT
+from tests.tmc_csp_new_ITH.conftest import CN_ASSERTIONS_TIMEOUT
 
 logger = logging.getLogger(__name__)
 
@@ -72,7 +72,6 @@ def given_a_tmc(
     # Set SKA063 defective
     dish_63 = dishes.dish_master_dict["dish_063"]
     dish_63.SetDefective(ERROR_PROPAGATION_DEFECT)
-    tmc.dish_leaf_node_list[2].commandtimeout = 30
 
 
 # Parse table rows by splitting on '|' to extract Dish_ID
@@ -139,7 +138,7 @@ def check_tmc_status(
             "is expected have longRunningCommandResult as "
             "(unique_id, COMMAND_RESULT)",
         )
-        .within_timeout(125)
+        .within_timeout(CN_ASSERTIONS_TIMEOUT + 1)
         .has_change_event_occurred(
             tmc.central_node,
             "longRunningCommandResult",
@@ -161,7 +160,6 @@ def check_tmc_status(
         wait_termination=True,
     )
     event_tracer.clear_events()
-    tmc.dish_leaf_node_list[2].commandtimeout = 90
 
 
 def validate_dish_mode_set_to_stow(
@@ -202,12 +200,13 @@ def validate_stow_mode_failure_details(events_tracer, dish_status_map):
                     break
 
     assert "SetStowMode failed" in event_data[1]
+    logger.info(">>>>>>>>>>> %s", event_data[1])
     error_str = event_data[1]
     json_part = error_str.split(": ", 1)[1]
     match = re.search(r"\{.*\}", json_part)
     dict_str = match.group(0)
     data = json.loads(dict_str)
-    err_msg1 = dish_status_map["SKA063"]
-    err_msg2 = dish_status_map["SKA019"]
+    err_msg1 = dish_status_map["ska063"]
+    err_msg2 = dish_status_map["ska019"]
     assert err_msg1 in data["ska063"]["result_code"]
     assert err_msg2 in data["ska019"]
