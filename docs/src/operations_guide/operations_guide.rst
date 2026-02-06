@@ -12,3 +12,4 @@ Operations Guide
    gpm_how_to
    array_layout
    spfrx_parameters_support
+   pst_scan_configuration
