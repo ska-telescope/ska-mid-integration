@@ -159,7 +159,9 @@ def set_devices_health_state(simulator_factory, Devices, Device_Health_State):
 
 @then(parsers.parse("subarray health state is {Subarray_Health_State}"))
 def validate_expected_subarray_health_state(
-    subarray_node, event_recorder, Subarray_Health_State, event_tracer
+    subarray_node,
+    event_recorder,
+    Subarray_Health_State,
 ):
     """Validate Expected Health state for Subarray Node
     Args:
@@ -174,4 +176,4 @@ def validate_expected_subarray_health_state(
         "healthState",
         HealthState[Subarray_Health_State],
     ), f"Expected Subarray Node HealthState to be {Subarray_Health_State}"
-    event_tracer.clear_events()
+    event_recorder.clear_events()
