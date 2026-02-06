@@ -555,7 +555,7 @@ class TestSubarrayHealthState(object):
             # ),
         ],
     )
-    @pytest.mark.batch2
+    @pytest.mark.batch2test
     @pytest.mark.SKA_mid
     def test_health_state_failed_when_dish_unknown(
         self,
@@ -587,14 +587,20 @@ class TestSubarrayHealthState(object):
             command_input_factory,
             event_recorder,
         )
-        pytest.capability_dict = {
-            "B1": CapabilityStates.STANDBY,
-            "B2": CapabilityStates.STANDBY,
-            "B3": CapabilityStates.STANDBY,
-            "B4": CapabilityStates.STANDBY,
-            "B5a": CapabilityStates.STANDBY,
-            "B5b": CapabilityStates.STANDBY,
-        }
+        pytest.capability_dict = json.dumps(
+            {
+                "B1": CapabilityStates.STANDBY,
+                "B2": CapabilityStates.STANDBY,
+                "B3": CapabilityStates.STANDBY,
+                "B4": CapabilityStates.STANDBY,
+                "B5a": CapabilityStates.STANDBY,
+                "B5b": CapabilityStates.STANDBY,
+            }
+        )
+        dish_master_sim_1.SetDirectCapabilityState(pytest.capability_dict)
+        dish_master_sim_2.SetDirectCapabilityState(pytest.capability_dict)
+        dish_master_sim_3.SetDirectCapabilityState(pytest.capability_dict)
+        dish_master_sim_4.SetDirectCapabilityState(pytest.capability_dict)
         csp_sa_sim.SetDirectHealthState(csp_subarray_health_state)
         sdp_sa_sim.SetDirectHealthState(sdp_subarray_health_state)
         dish_master_sim_1.SetDirectHealthState(dish_master1_health_state)
