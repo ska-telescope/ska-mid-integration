@@ -10,12 +10,12 @@ Feature: Apply STOW mode to dishes via TMC Mid Telescope
       | ska036  |
       | ska063  |
       | ska100  |
-      | ska019  |
+      | ska064  |
     When the SetStowMode command is invoked via TMC
     Then TMC reports the status as below for the respective dish id:
       | Dish_ID | Status                       | Reason                            |
       | ska001  | DishMode set to Stow         | SetStowMode successfully executed |
       | ska100  | DishMode set to Stow         | SetStowMode successfully executed |
       | ska036  | DishMode set to Stow         | Dish is already in stow mode      |
-      | ska019  | Dish is unreachable          | Dish is not allocated to TMC      |
+      | ska064  | Dish is unreachable          | Dish is not allocated to TMC      |
       | ska063  | Exception occurred           | Issue in the respective dish      |
