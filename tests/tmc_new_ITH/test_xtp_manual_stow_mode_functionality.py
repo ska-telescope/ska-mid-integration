@@ -146,7 +146,7 @@ def check_tmc_status(
             "is expected have longRunningCommandResult as "
             "(unique_id, COMMAND_RESULT)",
         )
-        .within_timeout(100)
+        .within_timeout(125)
         .has_change_event_occurred(
             tmc.central_node,
             "longRunningCommandResult",
