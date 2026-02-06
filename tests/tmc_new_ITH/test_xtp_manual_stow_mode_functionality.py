@@ -162,6 +162,59 @@ def check_tmc_status(
     event_tracer.clear_events()
 
 
+@when('the SetStowMode command is invoked with "ALL" as an input')
+def apply_set_stow_mode_to_all_dishes(
+    tmc: TMCFacade, event_tracer: TangoEventTracer
+):
+    """TMC innvokes SetStowMode on all dishes"""
+    event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
+    message, pytest.unique_id = tmc.central_node.SetStowMode(
+        json.dumps(["ALL"])
+    )
+    logger.info("Command ID: %s Message: %s", pytest.unique_id, message)
+
+
+@then("TMC invokes SetStowMode on all the dishes")
+def check_tmc_stow_mode_on_all_dishes(
+    tmc: TMCFacade,
+    event_tracer: TangoEventTracer,
+    dishes: DishesFacade,
+):
+    """Validate the SetStowMode command output"""
+    (
+        assert_that(event_tracer)
+        .described_as(
+            'FAILED ASSUMPTION IN "THEN" STEP: '
+            "TMC Central Node device "
+            f"({tmc.central_node.dev_name()}) "
+            "is expected have longRunningCommandResult as "
+            "(unique_id, COMMAND_RESULT)",
+        )
+        .within_timeout(CN_ASSERTIONS_TIMEOUT + 1)
+        .has_change_event_occurred(
+            tmc.central_node,
+            "longRunningCommandResult",
+            (pytest.unique_id[0], Anything),
+        )
+    )
+    validate_stow_mode_success_details(event_tracer)
+
+    # Restore dish modes for next test cases
+    dish_36 = dishes.dish_master_dict["dish_036"]
+    dish_36.SetDirectDishMode(DishMode.STANDBY_LP)
+    dish_63 = dishes.dish_master_dict["dish_063"]
+    dish_63.SetDirectDishMode(DishMode.STANDBY_LP)
+    dish_100 = dishes.dish_master_dict["dish_100"]
+    dish_100.SetDirectDishMode(DishMode.STANDBY_LP)
+    dish_001 = dishes.dish_master_dict["dish_001"]
+    dish_001.SetDirectDishMode(DishMode.STANDBY_LP)
+    assert dish_001.dishmode == DishMode.STANDBY_LP
+    assert dish_100.dishmode == DishMode.STANDBY_LP
+    assert dish_36.dishmode == DishMode.STANDBY_LP
+    assert dish_63.dishmode == DishMode.STANDBY_LP
+    event_tracer.clear_events()
+
+
 def validate_dish_mode_set_to_stow(
     tmc: TMCFacade,
     event_tracer: TangoEventTracer,
@@ -174,7 +227,6 @@ def validate_dish_mode_set_to_stow(
         for dish_id, status in dish_status_map.items()
         if status == "DishMode set to Stow"
     ]
-    logger.info(">>>>> Dish Proxy list: %s", tmc.dish_leaf_node_list)
     for dish_id in stowed_dishes:
         dln_proxy = next(
             proxy
@@ -210,3 +262,23 @@ def validate_stow_mode_failure_details(events_tracer, dish_status_map):
     err_msg2 = dish_status_map["ska064"]
     assert err_msg1 in data["ska063"]["result_code"][1]
     assert err_msg2 in data["ska064"]
+
+
+def validate_stow_mode_success_details(events_tracer):
+    """Extracts parsed failure details from first failed SetStowMode
+    command."""
+
+    event_data = None
+    for event in events_tracer.events:
+        if isinstance(event.attribute_value, tuple):
+            if "SetStowMode" in event.attribute_value[0]:
+                event_data = json.loads(event.attribute_value[1])
+                if event_data[0] == int(ResultCode.FAILED):
+                    break
+
+    assert "SetStowMode succeeded" in event_data[1]
+    assert int(ResultCode.OK) == event_data[0]
+    assert "ska001" in event_data[1]
+    assert "ska036" in event_data[1]
+    assert "ska063" in event_data[1]
+    assert "ska100" in event_data[1]
