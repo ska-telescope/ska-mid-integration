@@ -49,19 +49,11 @@ def given_a_tmc(
     logger.info("Given a TMC")
     event_tracer.clear_events()
     event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
-    event_tracer.subscribe_event(tmc.dish_leaf_node_list[0], "DishMode")
-    event_tracer.subscribe_event(tmc.dish_leaf_node_list[1], "DishMode")
-    event_tracer.subscribe_event(tmc.dish_leaf_node_list[2], "DishMode")
-    event_tracer.subscribe_event(tmc.dish_leaf_node_list[3], "DishMode")
     log_events(
         {
             tmc.central_node: [
                 "longRunningCommandResult",
             ],
-            tmc.dish_leaf_node_list[0]: ["DishMode"],
-            tmc.dish_leaf_node_list[1]: ["DishMode"],
-            tmc.dish_leaf_node_list[2]: ["DishMode"],
-            tmc.dish_leaf_node_list[3]: ["DishMode"],
         }
     )
     tmc.move_to_on(wait_termination=True, is_long_running_command=True)
@@ -80,6 +72,7 @@ def given_a_tmc(
     # Set SKA063 defective
     dish_63 = dishes.dish_master_dict["dish_063"]
     dish_63.SetDefective(ERROR_PROPAGATION_DEFECT)
+    tmc.dish_leaf_node_list[2].commandtimeout = 30
 
 
 # Parse table rows by splitting on '|' to extract Dish_ID
@@ -168,6 +161,7 @@ def check_tmc_status(
         wait_termination=True,
     )
     event_tracer.clear_events()
+    tmc.dish_leaf_node_list[2].commandtimeout = 90
 
 
 def validate_dish_mode_set_to_stow(
