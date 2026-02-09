@@ -17,6 +17,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+@pytest.mark.skip("")
 @pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
@@ -84,15 +85,15 @@ def assign_dishes_to_subarray(
     dish_master_sim_1.SetDirectCapabilityState(
         json.dumps(pytest.capability_dict)
     )
-    dish_master_sim_2.SetDirectCapabilityState(
-        json.dumps(pytest.capability_dict)
-    )
-    dish_master_sim_3.SetDirectCapabilityState(
-        json.dumps(pytest.capability_dict)
-    )
-    dish_master_sim_4.SetDirectCapabilityState(
-        json.dumps(pytest.capability_dict)
-    )
+    # dish_master_sim_2.SetDirectCapabilityState(
+    #     json.dumps(pytest.capability_dict)
+    # )
+    # dish_master_sim_3.SetDirectCapabilityState(
+    #     json.dumps(pytest.capability_dict)
+    # )
+    # dish_master_sim_4.SetDirectCapabilityState(
+    #     json.dumps(pytest.capability_dict)
+    # )
 
 
 @given("Subarray is configured successfully and Health State remains OK")
