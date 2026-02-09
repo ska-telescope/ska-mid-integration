@@ -158,6 +158,7 @@ def csp_subarray_configure_complete(event_recorder, simulator_factory):
         csp_sim,
         "obsState",
         ObsState.READY,
+        lookahead=15,
     )
 
 
