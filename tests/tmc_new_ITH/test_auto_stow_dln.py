@@ -99,7 +99,7 @@ def stow_while_configuring(
             "dishleafnode_configure.json",
         )
     )
-    dish_json = json.dumps(dish_json_str)
+    dish_json = json.loads(dish_json_str)
 
     dish_master.SetDirectDishMode(DishMode.STANDBY_LP)
     event_tracer.subscribe_event(dish_leaf_node, "dishMode")
@@ -159,7 +159,7 @@ def stow_while_configuring(
     )
 
 
-@pytest.mark.aki
+# @pytest.mark.aki
 @pytest.mark.SKA_mid
 def test_stow_while_configuring(
     tmc: TMCFacade, dishes: DishesFacade, event_tracer
