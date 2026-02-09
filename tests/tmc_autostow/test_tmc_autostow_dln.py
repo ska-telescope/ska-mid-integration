@@ -1,0 +1,329 @@
+import pytest
+import tango
+from assertpy import assert_that
+from ska_integration_test_harness.facades import DishesFacade
+from ska_integration_test_harness.facades.tmc_facade import TMCFacade
+from ska_tango_testing.integration import TangoEventTracer
+from weather_sim import simulate_temperature, simulate_windspeed
+
+from tests.conftest import LOGGER
+from tests.resources.test_harness.utils.enums import StowStatus
+from tests.resources.test_support.common_utils.result_code import ResultCode
+from tests.resources.test_support.constant import COMMAND_COMPLETED
+from tests.resources.test_support.enum import DishMode
+
+ASSERTIONS_TIMEOUT = 60
+
+
+def setstowmode_command(
+    tmc: TMCFacade, dishes: DishesFacade, event_tracer: TangoEventTracer
+):
+    LOGGER.info("Testing SetStowMode command on DishLeafNode")
+    dish_leaf_node = tmc.dish_leaf_node[0]
+    dishes.dish_master_dict["dish_001"].SetDirectDishMode(DishMode.STANDBY_FP)
+    event_tracer.subscribe_event(dish_leaf_node, "dishMode")
+    event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
+
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        dish_leaf_node, "dishMode", DishMode.STANDBY_FP
+    )
+
+    result, unique_id = dish_leaf_node.SetStandbyLPMode()
+    assert result[0] == ResultCode.QUEUED
+
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        dish_leaf_node, "dishMode", DishMode.STANDBY_LP
+    )
+    result_stow, unique_id_stow = dish_leaf_node.SetStowMode()
+
+    LOGGER.info(f"Command ID: {unique_id_stow} Returned result: {result_stow}")
+
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        dish_leaf_node,
+        "longRunningCommandResult",
+        (unique_id[0], COMMAND_COMPLETED),
+    )
+
+
+def stow_while_configuring(
+    tmc: TMCFacade,
+    dishes: DishesFacade,
+    event_tracer: TangoEventTracer,
+    configure_input_str,
+):
+    dish_leaf_node = tmc.dish_leaf_node[0]
+    dish_master = dishes.dish_master_dict["dish_001"]
+    dish_master.SetDirectDishMode(DishMode.STANDBY_LP)
+    event_tracer.subscribe_event(dish_leaf_node, "dishMode")
+    event_tracer.subscribe_event(dish_leaf_node, "pointingState")
+    event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
+
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        dish_leaf_node, "dishMode", DishMode.STANDBY_LP
+    )
+
+    result_fp, unique_id_fp = dish_leaf_node.SetStandbyFPMode()
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        dish_leaf_node, "dishMode", DishMode.STANDBY_FP
+    )
+
+    assert result_fp[0] == ResultCode.QUEUED
+
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        dish_leaf_node,
+        "longRunningCommandResult",
+        (unique_id_fp[0], COMMAND_COMPLETED),
+    )
+
+    result_config, unique_id_config = dish_leaf_node.Configure(
+        configure_input_str
+    )
+    assert result_config[0] == ResultCode.QUEUED
+    LOGGER.info(
+        f"Command ID: {unique_id_config} Returned result: {result_config}"
+    )
+
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(dish_leaf_node, "dishMode", DishMode.OPERATE)
+
+    result_stow, unique_id_stow = dish_leaf_node.SetStowMode()
+    LOGGER.info(f"Command ID: {unique_id_stow} Returned result: {result_stow}")
+
+    assert result_stow == ResultCode.STARTED
+
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(dish_leaf_node, "dishMode", DishMode.STOW)
+
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        dish_leaf_node,
+        "longRunningCommandResult",
+        (unique_id_stow[0], COMMAND_COMPLETED),
+    )
+
+@pytest.mark.aki
+@pytest.mark.SKA_mid
+def test_stow_while_configuring(
+    tmc: TMCFacade, dishes: DishesFacade, event_tracer, json_factory
+):
+    stow_while_configuring(
+        tmc,
+        dishes,
+        event_tracer,
+        json_factory("dishleafnode_configure"),
+    )
+
+
+@pytest.mark.aki
+@pytest.mark.SKA_mid
+def test_setstowmode_command(
+    tmc: TMCFacade, dishes: DishesFacade, event_tracer
+):
+    setstowmode_command(tmc, dishes, event_tracer)
+
+
+@pytest.mark.aki
+@pytest.mark.SKA_mid
+def test_auto_stow_gust_speed(tmc: TMCFacade, event_tracer):
+    dish_leaf_node = tango.DeviceProxy(tmc.dish_leaf_node[0])
+    event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
+    event_tracer.subscribe_event(dish_leaf_node, "dishMode")
+    event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
+    _reset_stow_mode(dish_leaf_node, event_tracer)
+
+    dish_leaf_node.maxAllowedGustWindpeed = 22.0
+    dish_leaf_node.gustWindspeedMeasurementTimeWindow = 4
+    simulate_windspeed(22, 24, 4)
+
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        dish_leaf_node, "stowStatus", StowStatus.STOW_STARTED
+    )
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        dish_leaf_node, "stowStatus", StowStatus.STOW_COMPLETED
+    )
+
+
+@pytest.mark.aki
+@pytest.mark.SKA_mid
+def test_auto_stow_wind_speed(tmc: TMCFacade, event_tracer):
+
+    dish_leaf_node = tmc.dish_leaf_node[0]
+    event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
+    event_tracer.subscribe_event(dish_leaf_node, "dishMode")
+    event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
+    _reset_stow_mode(dish_leaf_node, event_tracer)
+
+    dish_leaf_node.maxAllowedWindspeed = 16.0
+    dish_leaf_node.meanWindspeedMeasurementTimeWindow = 10.0
+    simulate_windspeed(16, 18, 10)
+
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        dish_leaf_node, "stowStatus", StowStatus.STOW_STARTED
+    )
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        dish_leaf_node, "stowStatus", StowStatus.STOW_COMPLETED
+    )
+
+
+@pytest.mark.aki
+@pytest.mark.SKA_mid
+def test_auto_stow_ops_speed(tmc: TMCFacade, event_tracer):
+    dish_leaf_node = tmc.dish_leaf_node[0]
+    event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
+    event_tracer.subscribe_event(dish_leaf_node, "dishMode")
+    event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
+    _reset_stow_mode(dish_leaf_node, event_tracer)
+
+    dish_leaf_node.maxAllowedOpsWindspeed = 5.0
+    dish_leaf_node.WindspeedMeasurementTimeWindow = 10.0
+    simulate_windspeed(6, 7, 10)
+
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        dish_leaf_node, "stowStatus", StowStatus.STOW_STARTED
+    )
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        dish_leaf_node, "stowStatus", StowStatus.STOW_COMPLETED
+    )
+
+
+@pytest.mark.aki
+@pytest.mark.SKA_mid
+def test_auto_stow_ops_perc_speed(tmc: TMCFacade, event_tracer):
+    dish_leaf_node = tmc.dish_leaf_node[0]
+    event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
+    event_tracer.subscribe_event(dish_leaf_node, "dishMode")
+    event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
+    _reset_stow_mode(dish_leaf_node, event_tracer)
+
+    dish_leaf_node.maxAllowedWindspeedDifference = 5.0
+    dish_leaf_node.maxAllowedOpsMeanWindspeedMeasurementTimeWindow = 10.0
+
+    simulate_windspeed(10, 11, 3)
+    simulate_windspeed(12, 13, 1)
+    simulate_windspeed(20, 25, 1)
+
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        dish_leaf_node, "stowStatus", StowStatus.STOW_STARTED
+    )
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        dish_leaf_node, "stowStatus", StowStatus.STOW_COMPLETED
+    )
+
+
+@pytest.mark.aki
+@pytest.mark.SKA_mid
+def test_auto_stow_max_temp(tmc: TMCFacade, event_tracer):
+    dish_leaf_node = tmc.dish_leaf_node[0]
+    event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
+    event_tracer.subscribe_event(dish_leaf_node, "dishMode")
+    event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
+    _reset_stow_mode(dish_leaf_node, event_tracer)
+
+    dish_leaf_node.maxTemperatureThreshold = 35
+    simulate_temperature(35, 36, 2)
+
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        dish_leaf_node, "stowStatus", StowStatus.STOW_STARTED
+    )
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        dish_leaf_node, "stowStatus", StowStatus.STOW_COMPLETED
+    )
+
+
+@pytest.mark.aki
+@pytest.mark.SKA_mid
+def test_auto_stow_temp_delta(tmc: TMCFacade, event_tracer):
+    dish_leaf_node = tmc.dish_leaf_node[0]
+    event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
+    event_tracer.subscribe_event(dish_leaf_node, "dishMode")
+    event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
+    _reset_stow_mode(dish_leaf_node, event_tracer)
+    # sometimes in pipeline it takes more time.
+    dish_leaf_node.timeDelta = 10.0
+    dish_leaf_node.temperatureDelta = 20.0
+
+    simulate_temperature(10, 11, 2)
+    simulate_temperature(15, 20, 2)
+    simulate_temperature(31, 35, 6)
+
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        dish_leaf_node, "stowStatus", StowStatus.STOW_STARTED
+    )
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        dish_leaf_node, "stowStatus", StowStatus.STOW_COMPLETED
+    )
+    dish_leaf_node.set_timeout_millis(5000)
+
+    dish_leaf_node.timeDelta = 1000.0
+
+
+def _reset_stow_mode(
+    dish_leaf_node: tango.DeviceProxy, event_tracer: TangoEventTracer
+):
+    """
+    Resets the DishMode to StandbyFP.
+    """
+    if dish_leaf_node.stowStatus == StowStatus.STOW_STARTED:
+        assert_that(event_tracer).within_timeout(
+            ASSERTIONS_TIMEOUT
+        ).has_change_event_occurred(
+            dish_leaf_node, "stowStatus", StowStatus.STOW_COMPLETED
+        )
+    if dish_leaf_node.stowStatus == StowStatus.STOW_COMPLETED:
+        result, unique_id = dish_leaf_node.SetStandbyFPMode()
+
+        LOGGER.debug("Command id: %s | Returned result: %s", unique_id, result)
+        assert result[0] == ResultCode.QUEUED
+
+        assert_that(event_tracer).within_timeout(
+            ASSERTIONS_TIMEOUT
+        ).has_change_event_occurred(
+            dish_leaf_node,
+            "longRunningCommandResult",
+            (unique_id[0], COMMAND_COMPLETED),
+        )
+
+        assert_that(event_tracer).within_timeout(
+            ASSERTIONS_TIMEOUT
+        ).has_change_event_occurred(
+            dish_leaf_node, "dishMode", DishMode.STANDBY_FP
+        )
