@@ -18,7 +18,10 @@ from ska_integration_test_harness.inputs.test_harness_inputs import (
 from ska_ser_logging import configure_logging
 from ska_tango_testing.integration import TangoEventTracer, log_events
 
-from tests.resources.test_support.constant import ERROR_PROPAGATION_DEFECT
+from tests.resources.test_support.constant import (
+    ERROR_PROPAGATION_DEFECT,
+    FAILED_RESULT_DEFECT,
+)
 from tests.tmc_csp_new_ITH.conftest import (
     ASSERTIONS_TIMEOUT,
     SubarrayTestContextData,
@@ -132,7 +135,7 @@ def send_abort_command(
     if defective_subsystem == "CSP":
         csp.csp_subarray.SetDefective(ERROR_PROPAGATION_DEFECT)
     if defective_subsystem == "SDP":
-        sdp.sdp_subarray.SetDefective(ERROR_PROPAGATION_DEFECT)
+        sdp.sdp_subarray.SetDefective(FAILED_RESULT_DEFECT)
     if defective_subsystem == "Dish":
         dish1 = dishes.dish_master_dict["dish_001"]
         dish1.SetDefective(ERROR_PROPAGATION_DEFECT)

@@ -17,7 +17,7 @@ from tests.resources.test_support.constant import (
 )
 
 
-@pytest.mark.batch2
+@pytest.mark.batch2test
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-29012.feature",
@@ -248,6 +248,7 @@ def subarray_transitions_to_empty(
         central_node_mid.subarray_node,
         "obsState",
         ObsState.EMPTY,
+        lookahead=10,
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_node,

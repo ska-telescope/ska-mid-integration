@@ -15,7 +15,7 @@ from tests.resources.test_harness.utils.enums import ResultCode
 from tests.resources.test_support.constant import INTERMEDIATE_STATE_DEFECT
 
 
-@pytest.mark.batch2
+@pytest.mark.batch2test
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-29013.feature",
