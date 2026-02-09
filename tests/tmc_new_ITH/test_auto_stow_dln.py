@@ -35,7 +35,7 @@ def setstowmode_command(
         event_tracer: Event tracer for subscribing and verifying events
     """
     LOGGER.info("Testing SetStowMode command on DishLeafNode")
-    dish_leaf_node = tmc.dish_leaf_node[0]
+    dish_leaf_node = tmc.dish_leaf_node_list[0]
     dishes.dish_master_dict["dish_001"].SetDirectDishMode(DishMode.STANDBY_FP)
     event_tracer.subscribe_event(dish_leaf_node, "dishMode")
     event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
@@ -84,7 +84,7 @@ def stow_while_configuring(
         event_tracer: Event tracer for subscribing and verifying events
         configure_input_str: JSON configuration string for dish configuration
     """
-    dish_leaf_node = tmc.dish_leaf_node[0]
+    dish_leaf_node = tmc.dish_leaf_node_list[0]
     dish_master = dishes.dish_master_dict["dish_001"]
     dishleafnode_input = MyFileJSONInput(
         "dish_leaf_node", "dishleafnode_configure"
