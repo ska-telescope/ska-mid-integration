@@ -38,7 +38,7 @@ from tests.resources.test_support.constant import centralnode, csp_master
 configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 MID_DELAYMODEL_VERSION = "https://schema.skao.int/ska-mid-csp-delaymodel/3.0"
-WEATHER_STATION = "ska-mid/weather-monitoring/s1"
+WEATHER_STATION = "mid/wms/0"
 
 
 def pytest_sessionstart(session):
