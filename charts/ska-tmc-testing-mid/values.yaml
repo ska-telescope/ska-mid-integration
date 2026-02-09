@@ -128,13 +128,6 @@ ska-mid-cbf-tmleafnode:
   labels: 
     app: ska-tmc-integration
 
-ska-mid-wms:
-  legacy_compatibility: true
-  dev-name: "mid/wms/0"
-  ska-tango-base:
-    enabled: false
-    itango:
-      enabled: false
 
 ska-tango-tangogql-ariadne:
   enabled: true
@@ -154,7 +147,7 @@ simulator:
     tag: 966329b7
     pullPolicy: IfNotPresent
     
-mid_wms:
+ska-mid-wms:
   deviceServers:
     wms:
       station_ids: ["s1", "s2"]
