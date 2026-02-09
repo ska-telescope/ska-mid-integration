@@ -11,6 +11,7 @@ from tests.resources.test_harness.utils.enums import StowStatus
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.constant import COMMAND_COMPLETED
 from tests.resources.test_support.enum import DishMode
+from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 from tests.tmc_new_ITH.weather_sim import (
     simulate_temperature,
     simulate_windspeed,
@@ -70,7 +71,6 @@ def stow_while_configuring(
     tmc: TMCFacade,
     dishes: DishesFacade,
     event_tracer: TangoEventTracer,
-    configure_input_str,
 ):
     """
     Test stowing a dish while it is in the process of configuring.
@@ -86,6 +86,9 @@ def stow_while_configuring(
     """
     dish_leaf_node = tmc.dish_leaf_node[0]
     dish_master = dishes.dish_master_dict["dish_001"]
+    dishleafnode_input = MyFileJSONInput(
+        "dish_leaf_node", "dishleafnode_configure"
+    )
     dish_master.SetDirectDishMode(DishMode.STANDBY_LP)
     event_tracer.subscribe_event(dish_leaf_node, "dishMode")
     event_tracer.subscribe_event(dish_leaf_node, "pointingState")
@@ -115,7 +118,7 @@ def stow_while_configuring(
     )
 
     result_config, unique_id_config = dish_leaf_node.Configure(
-        configure_input_str
+        dishleafnode_input
     )
     assert result_config[0] == ResultCode.QUEUED
     LOGGER.info(
@@ -147,7 +150,7 @@ def stow_while_configuring(
 @pytest.mark.aki
 @pytest.mark.SKA_mid
 def test_stow_while_configuring(
-    tmc: TMCFacade, dishes: DishesFacade, event_tracer, json_factory
+    tmc: TMCFacade, dishes: DishesFacade, event_tracer
 ):
     """
     Test case for stowing a dish while it is configuring.
@@ -158,12 +161,7 @@ def test_stow_while_configuring(
         event_tracer: Event tracer fixture
         json_factory: Factory fixture for creating JSON configuration strings
     """
-    stow_while_configuring(
-        tmc,
-        dishes,
-        event_tracer,
-        json_factory("dishleafnode_configure"),
-    )
+    stow_while_configuring(tmc, dishes, event_tracer)
 
 
 @pytest.mark.aki
