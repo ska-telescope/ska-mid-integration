@@ -18,7 +18,7 @@ from tests.resources.test_support.constant import (
 )
 
 
-@pytest.mark.batch1
+@pytest.mark.batch1test
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-28837.feature",
