@@ -128,9 +128,9 @@ def configure_subarray_and_validate_health_ok(
     dish_master_sim_1.SetDirectCapabilityState(
         json.dumps(pytest.capability_dict)
     )
-    dish_master_sim_2.SetDirectCapabilityState(
-        json.dumps(pytest.capability_dict)
-    )
+    # dish_master_sim_2.SetDirectCapabilityState(
+    #     json.dumps(pytest.capability_dict)
+    # )
 
     input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
