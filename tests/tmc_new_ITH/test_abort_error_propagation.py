@@ -81,8 +81,7 @@ def _setup_event_subscriptions(
     )
 
 
-@pytest.mark.skip("")
-@pytest.mark.batch1
+@pytest.mark.batch1test
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/error_propagation.feature",
