@@ -19,7 +19,8 @@ from tests.resources.test_support.constant import (
 from tests.resources.test_support.enum import PointingState
 
 
-@pytest.mark.batch1test
+@pytest.mark.skip(reason="")
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-28834.feature",

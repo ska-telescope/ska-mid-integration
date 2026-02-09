@@ -86,7 +86,7 @@ k8s-test:
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA"
     CI_KEEP_NAMESPACE: true
   script:
-    - make k8s-test MARK="batch1test"
+    - make k8s-test MARK="batch1"
   before_script:
     - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
@@ -158,7 +158,7 @@ k8s-test-batch2:
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch2"
     CI_KEEP_NAMESPACE: true
   script:
-    - make k8s-test MARK="batch2test"
+    - make k8s-test MARK="batch2"
   environment:
     name: test/$CI_COMMIT_REF_SLUG-batch2
     on_stop: stop-k8s-test-batch2
