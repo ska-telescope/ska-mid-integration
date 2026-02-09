@@ -1,4 +1,6 @@
 """Tests for automatic stowing functionality on DishLeafNode devices."""
+import json
+
 import pytest
 import tango
 from assertpy import assert_that
@@ -18,6 +20,61 @@ from tests.tmc_new_ITH.weather_sim import (
 )
 
 ASSERTIONS_TIMEOUT = 60
+dish_json = {
+    "interface": "https://schema.skao.int/ska-tmc-configure/2.1",
+    "transaction_id": "txn-....-00002",
+    "layout_data": {
+        "interface": "https://schema.skao.int/ska-telmodel-layout-receptor/1.1",
+        "diameter": 15.0,
+        "location": {
+            "interface": "https://schema.skao.int/ska-telmodel-layout-location/1.0",
+            "geocentric": {
+                "interface": "https://schema.skao.int/ska-telmodel-layout-geocentric/1.0",
+                "coordinate_frame": "ITRF",
+                "x": 5109058.062517257,
+                "y": 2007302.435599506,
+                "z": -3239167.000445203,
+            },
+            "geodetic": {
+                "interface": "https://schema.skao.int/ska-telmodel-layout-geodetic/1.0",
+                "coordinate_frame": "WGS84",
+                "lat": -30.71329,
+                "lon": 21.449412,
+                "h": 1098.074,
+            },
+        },
+        "fixed_delays": [
+            {
+                "interface": "https://schema.skao.int/ska-telmodel-layout-receptor-fixed-delay/0.0",
+                "fixed_delay_id": "FIX_H",
+                "polarisation": 0,
+                "units": "m",
+                "delay": 0.0,
+            },
+            {
+                "interface": "https://schema.skao.int/ska-telmodel-layout-receptor-fixed-delay/0.0",
+                "fixed_delay_id": "FIX_V",
+                "polarisation": 0,
+                "units": "m",
+                "delay": 0.0,
+            },
+        ],
+        "niao": 0.0,
+        "station_label": "SKA001",
+        "station_id": 65,
+    },
+    "pointing": {
+        "target": {
+            "reference_frame": "ICRS",
+            "target_name": "Polaris Australis",
+            "ra": "21:08:47.92",
+            "dec": "-88:57:22.9",
+        },
+        "correction": "UPDATE",
+    },
+    "dish": {"receiver_band": "2"},
+    "tmc": {"scan_duration": 5},
+}
 
 
 def setstowmode_command(
@@ -118,7 +175,7 @@ def stow_while_configuring(
     )
 
     result_config, unique_id_config = dish_leaf_node.Configure(
-        dishleafnode_input
+        json.dumps(dish_json)
     )
     assert result_config[0] == ResultCode.QUEUED
     LOGGER.info(
