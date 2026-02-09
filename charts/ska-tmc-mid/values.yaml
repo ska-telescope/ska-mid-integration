@@ -84,7 +84,7 @@ centralnode:
   image:
     registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-centralnode
     image: ska-tmc-centralnode
-    tag: 0.29.2-dev.c312fafd8
+    tag: 0.29.2-dev.c13981d02
     pullPolicy: IfNotPresent
 
 subarraynode:
@@ -298,7 +298,7 @@ deviceServers:
     DishLeafNodePrefix: "mid-tmc/leaf-node-dish/"
     SubarrayPrefix: "mid-tmc/subarray/"
     DishType: "SKA"
-    DishIDs: ["SKA001", "SKA036", "SKA063", "SKA100"]
+    DishIDs: *dish_ids
     MidSubarrayNodeFQDNs: ["mid-tmc/subarray/01", "mid-tmc/subarray/02"]
 
   mocks:
@@ -308,13 +308,8 @@ deviceServers:
     csp: false
     sdp: false
 
-ska-mid-wms:
-  legacy_compatibility: true
+mid-wms:
   dev-name: "ska-mid/weather-monitoring/s1"
-  ska-tango-base:
-    enabled: false
-    itango:
-      enabled: false
 
 nodeSelector: {}
 
