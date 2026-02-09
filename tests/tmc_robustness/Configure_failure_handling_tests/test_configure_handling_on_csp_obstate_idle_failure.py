@@ -19,7 +19,7 @@ from tests.resources.test_support.constant import (
 from tests.resources.test_support.enum import PointingState
 
 
-@pytest.mark.batch1
+@pytest.mark.batch1test
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-28436.feature",
@@ -145,9 +145,7 @@ def sdp_subarray_configure_complete(event_recorder, simulator_factory):
         SimulatorDeviceType.MID_SDP_DEVICE
     )
     assert event_recorder.has_change_event_occurred(
-        sdp_sim,
-        "obsState",
-        ObsState.READY,
+        sdp_sim, "obsState", ObsState.READY, lookahead=15
     )
 
 
