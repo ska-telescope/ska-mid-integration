@@ -74,12 +74,12 @@ def assign_dishes_to_subarray(
         health_state_value=HealthState.OK,
     )
     pytest.capability_dict = {
-        "B1": CapabilityStates.OPERATE_FULL,
-        "B2": CapabilityStates.OPERATE_FULL,
-        "B3": CapabilityStates.OPERATE_FULL,
-        "B4": CapabilityStates.OPERATE_FULL,
-        "B5a": CapabilityStates.OPERATE_FULL,
-        "B5b": CapabilityStates.OPERATE_FULL,
+        "B1": CapabilityStates.STANDBY,
+        "B2": CapabilityStates.STANDBY,
+        "B3": CapabilityStates.STANDBY,
+        "B4": CapabilityStates.STANDBY,
+        "B5a": CapabilityStates.STANDBY,
+        "B5b": CapabilityStates.STANDBY,
     }
     dish_master_sim_1.SetDirectCapabilityState(
         json.dumps(pytest.capability_dict)
