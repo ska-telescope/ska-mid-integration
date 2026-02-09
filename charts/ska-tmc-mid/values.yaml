@@ -311,7 +311,7 @@ deviceServers:
     csp: false
     sdp: false
 
-ska-mid-wms:
+mid_wms:
   legacy_compatibility: true
   dev-name: "mid/wms/0"
   ska-tango-base:

@@ -147,7 +147,7 @@ simulator:
     tag: 966329b7
     pullPolicy: IfNotPresent
     
-ska-mid-wms:
+mid_wms:
   deviceServers:
     wms:
       station_ids: ["s1", "s2"]
