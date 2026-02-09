@@ -112,14 +112,14 @@ cspsubarrayleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.38.0
+    tag: 0.39.0
     pullPolicy: IfNotPresent
 
 dishleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-dishleafnode
-    tag: 0.29.1
+    tag: 0.29.5
     pullPolicy: IfNotPresent
 
 skatmcsimulators:
@@ -174,16 +174,16 @@ deviceServers:
     enabled: true
     file: "data/subarraynode_mid.yaml"
     DishIDs: *dish_ids
-    CspAssignResourcesInterfaceURL: "https://schema.skao.int/ska-csp-assignresources/2.0"
+    CspAssignResourcesInterfaceURL: "https://schema.skao.int/ska-csp-assignresources/3.1"
     CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.2"
     SdpScanInterfaceURL: "https://schema.skao.int/ska-sdp-scan/1.1"
+    TelmodelSource: "car://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata"
+    TelmodelPath: "instrument/ska1_mid/layout/mid-layout.json"
     CommandTimeOutDefault: 110
     AbortCommandTimeOut: 130
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
     family: "subarray"
-    TelmodelSource: "car://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata"
-    TelmodelPath: "instrument/ska1_mid/layout/mid-layout.json"
     ScanStartTimeOffset: 10
     StartTimeEnabled: false
     resources:
