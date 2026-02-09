@@ -216,7 +216,7 @@ def subarray_transitions_to_empty(
         sdp_sim,
         "obsState",
         ObsState.EMPTY,
-        lookahead=5,
+        lookahead=10,
     )
     event_recorder.subscribe_event(central_node_mid.subarray_node, "obsState")
     assert event_recorder.has_change_event_occurred(
