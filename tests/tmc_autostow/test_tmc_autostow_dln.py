@@ -116,6 +116,7 @@ def stow_while_configuring(
         (unique_id_stow[0], COMMAND_COMPLETED),
     )
 
+
 @pytest.mark.aki
 @pytest.mark.SKA_mid
 def test_stow_while_configuring(
