@@ -1,3 +1,5 @@
+"""Simulates weather data by sending HTTP requests to the
+ weather station simulator."""
 import os
 import random
 import time
@@ -15,6 +17,8 @@ def simulate_temperature(
     duration: float,
     station_name: str = "wms-sim-s1",
 ):
+    """Simulates temperature data by sending HTTP requests to the weather
+    station simulator."""
     start_time = time.time()
     data = np.arange(-51, 51)
     start_value = list(data).index(start_range)
@@ -33,6 +37,7 @@ def simulate_windspeed(
     duration: float,
     station_name: str = "wms-sim-s1",
 ):
+    """Simulates wind speed data by sending HTTP requests to the weather"""
     start_time = time.time()
     while (time.time() - start_time) <= duration:
         value = random.randrange(start_range * 308, end_range * 308)

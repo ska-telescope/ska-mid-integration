@@ -1,16 +1,20 @@
+"""Tests for automatic stowing functionality on DishLeafNode devices."""
 import pytest
 import tango
 from assertpy import assert_that
 from ska_integration_test_harness.facades import DishesFacade
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_tango_testing.integration import TangoEventTracer
-from weather_sim import simulate_temperature, simulate_windspeed
 
 from tests.conftest import LOGGER
 from tests.resources.test_harness.utils.enums import StowStatus
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.constant import COMMAND_COMPLETED
 from tests.resources.test_support.enum import DishMode
+from tests.tmc_new_ITH.weather_sim import (
+    simulate_temperature,
+    simulate_windspeed,
+)
 
 ASSERTIONS_TIMEOUT = 60
 
@@ -18,6 +22,17 @@ ASSERTIONS_TIMEOUT = 60
 def setstowmode_command(
     tmc: TMCFacade, dishes: DishesFacade, event_tracer: TangoEventTracer
 ):
+    """
+    Test the SetStowMode command on DishLeafNode.
+
+    This function tests the transition from STANDBY_FP to STANDBY_LP and then
+    to STOW mode on a DishLeafNode device.
+
+    Args:
+        tmc: TMC facade for accessing TMC devices
+        dishes: Dishes facade for accessing dish devices
+        event_tracer: Event tracer for subscribing and verifying events
+    """
     LOGGER.info("Testing SetStowMode command on DishLeafNode")
     dish_leaf_node = tmc.dish_leaf_node[0]
     dishes.dish_master_dict["dish_001"].SetDirectDishMode(DishMode.STANDBY_FP)
@@ -57,6 +72,18 @@ def stow_while_configuring(
     event_tracer: TangoEventTracer,
     configure_input_str,
 ):
+    """
+    Test stowing a dish while it is in the process of configuring.
+
+    This function tests the ability to issue a SetStowMode command while a dish
+    is transitioning to OPERATE mode during configuration.
+
+    Args:
+        tmc: TMC facade for accessing TMC devices
+        dishes: Dishes facade for accessing dish devices
+        event_tracer: Event tracer for subscribing and verifying events
+        configure_input_str: JSON configuration string for dish configuration
+    """
     dish_leaf_node = tmc.dish_leaf_node[0]
     dish_master = dishes.dish_master_dict["dish_001"]
     dish_master.SetDirectDishMode(DishMode.STANDBY_LP)
@@ -122,6 +149,15 @@ def stow_while_configuring(
 def test_stow_while_configuring(
     tmc: TMCFacade, dishes: DishesFacade, event_tracer, json_factory
 ):
+    """
+    Test case for stowing a dish while it is configuring.
+
+    Args:
+        tmc: TMC facade fixture
+        dishes: Dishes facade fixture
+        event_tracer: Event tracer fixture
+        json_factory: Factory fixture for creating JSON configuration strings
+    """
     stow_while_configuring(
         tmc,
         dishes,
@@ -135,12 +171,30 @@ def test_stow_while_configuring(
 def test_setstowmode_command(
     tmc: TMCFacade, dishes: DishesFacade, event_tracer
 ):
+    """
+    Test case for the SetStowMode command functionality.
+
+    Args:
+        tmc: TMC facade fixture
+        dishes: Dishes facade fixture
+        event_tracer: Event tracer fixture
+    """
     setstowmode_command(tmc, dishes, event_tracer)
 
 
 @pytest.mark.aki
 @pytest.mark.SKA_mid
 def test_auto_stow_gust_speed(tmc: TMCFacade, event_tracer):
+    """
+    Test automatic stowing triggered by gust wind speed exceeding threshold.
+
+    Verifies that the dish automatically stows when gust wind speed exceeds
+    the configured maximum allowed gust wind speed threshold.
+
+    Args:
+        tmc: TMC facade fixture
+        event_tracer: Event tracer fixture for verifying status changes
+    """
     dish_leaf_node = tango.DeviceProxy(tmc.dish_leaf_node[0])
     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
     event_tracer.subscribe_event(dish_leaf_node, "dishMode")
@@ -166,6 +220,16 @@ def test_auto_stow_gust_speed(tmc: TMCFacade, event_tracer):
 @pytest.mark.aki
 @pytest.mark.SKA_mid
 def test_auto_stow_wind_speed(tmc: TMCFacade, event_tracer):
+    """
+    Test automatic stowing triggered by mean wind speed exceeding threshold.
+
+    Verifies that the dish automatically stows when the mean wind speed over
+    a measurement time window exceeds the configured maximum threshold.
+
+    Args:
+        tmc: TMC facade fixture
+        event_tracer: Event tracer fixture for verifying status changes
+    """
 
     dish_leaf_node = tmc.dish_leaf_node[0]
     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
@@ -192,6 +256,17 @@ def test_auto_stow_wind_speed(tmc: TMCFacade, event_tracer):
 @pytest.mark.aki
 @pytest.mark.SKA_mid
 def test_auto_stow_ops_speed(tmc: TMCFacade, event_tracer):
+    """
+    Test automatic stowing triggered by operational wind speed
+    exceeding threshold.
+
+    Verifies that the dish automatically stows when operational wind speed
+    exceeds the maximum allowed operational wind speed threshold.
+
+    Args:
+        tmc: TMC facade fixture
+        event_tracer: Event tracer fixture for verifying status changes
+    """
     dish_leaf_node = tmc.dish_leaf_node[0]
     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
     event_tracer.subscribe_event(dish_leaf_node, "dishMode")
@@ -217,6 +292,16 @@ def test_auto_stow_ops_speed(tmc: TMCFacade, event_tracer):
 @pytest.mark.aki
 @pytest.mark.SKA_mid
 def test_auto_stow_ops_perc_speed(tmc: TMCFacade, event_tracer):
+    """
+    Test automatic stowing triggered by wind speed percentage difference.
+
+    Verifies that the dish automatically stows when the difference between
+    operational wind speeds exceeds the configured percentage threshold.
+
+    Args:
+        tmc: TMC facade fixture
+        event_tracer: Event tracer fixture for verifying status changes
+    """
     dish_leaf_node = tmc.dish_leaf_node[0]
     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
     event_tracer.subscribe_event(dish_leaf_node, "dishMode")
@@ -245,6 +330,16 @@ def test_auto_stow_ops_perc_speed(tmc: TMCFacade, event_tracer):
 @pytest.mark.aki
 @pytest.mark.SKA_mid
 def test_auto_stow_max_temp(tmc: TMCFacade, event_tracer):
+    """
+    Test automatic stowing triggered by maximum temperature threshold.
+
+    Verifies that the dish automatically stows when the temperature exceeds
+    the configured maximum temperature threshold.
+
+    Args:
+        tmc: TMC facade fixture
+        event_tracer: Event tracer fixture for verifying status changes
+    """
     dish_leaf_node = tmc.dish_leaf_node[0]
     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
     event_tracer.subscribe_event(dish_leaf_node, "dishMode")
@@ -269,6 +364,16 @@ def test_auto_stow_max_temp(tmc: TMCFacade, event_tracer):
 @pytest.mark.aki
 @pytest.mark.SKA_mid
 def test_auto_stow_temp_delta(tmc: TMCFacade, event_tracer):
+    """
+    Test automatic stowing triggered by temperature delta over time.
+
+    Verifies that the dish automatically stows when the temperature change
+    over a specified time window exceeds the configured threshold.
+
+    Args:
+        tmc: TMC facade fixture
+        event_tracer: Event tracer fixture for verifying status changes
+    """
     dish_leaf_node = tmc.dish_leaf_node[0]
     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
     event_tracer.subscribe_event(dish_leaf_node, "dishMode")
