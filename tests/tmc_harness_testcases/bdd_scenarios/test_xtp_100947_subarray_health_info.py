@@ -222,7 +222,7 @@ def validate_subarray_health_and_info(
     event_recorder.subscribe_event(subarray_node.subarray_node, "healthInfo")
 
     # Validate healthState
-    assert event_recorder.has_change_event_occurred(
+    assert wait_and_validate_device_attribute_value(
         subarray_node.subarray_node,
         "healthState",
         expected_health_state,

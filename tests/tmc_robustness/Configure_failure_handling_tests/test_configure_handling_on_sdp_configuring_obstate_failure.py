@@ -24,7 +24,7 @@ configure_logging(logging.DEBUG)
 LOGGER = logging.getLogger(__name__)
 
 
-@pytest.mark.batch1test
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-28836.feature",
