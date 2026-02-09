@@ -213,7 +213,7 @@ def test_auto_stow_gust_speed(tmc: TMCFacade, event_tracer):
 
     dish_leaf_node.maxAllowedGustWindpeed = 22.0
     dish_leaf_node.gustWindspeedMeasurementTimeWindow = 4
-    simulate_windspeed(22, 24, 4)
+    simulate_windspeed(22, 24, 15)
 
     assert_that(event_tracer).within_timeout(
         ASSERTIONS_TIMEOUT
