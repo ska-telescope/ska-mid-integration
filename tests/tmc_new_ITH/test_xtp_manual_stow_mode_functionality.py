@@ -1,4 +1,4 @@
-"""Test module to test the GPM functionality"""
+"""Test module to test the SetStowMode command functionality"""
 
 import json
 import logging
@@ -57,8 +57,8 @@ def given_a_tmc(
         }
     )
     tmc.move_to_on(wait_termination=True, is_long_running_command=True)
-    # Setup TMC for testing negative scenarios
-    # before invoking SetGlobalPointingModel command on TMC
+    # Setup TMC for testing different scenarios
+    # before invoking SetStowMode command on TMC
     tmc.force_change_of_obs_state(
         ObsState.READY,
         default_commands_inputs,
@@ -75,9 +75,6 @@ def given_a_tmc(
 
 
 # Parse table rows by splitting on '|' to extract Dish_ID
-# (converted to lowercase)
-# and Bands (split by commas into list). Headers are derived
-# from first row.
 @given(
     parsers.parse(
         "the following dish ids are provided as input to the"
@@ -273,7 +270,7 @@ def validate_stow_mode_success_details(events_tracer):
         if isinstance(event.attribute_value, tuple):
             if "SetStowMode" in event.attribute_value[0]:
                 event_data = json.loads(event.attribute_value[1])
-                if event_data[0] == int(ResultCode.FAILED):
+                if event_data[0] == int(ResultCode.OK):
                     break
 
     assert "SetStowMode succeeded" in event_data[1]
