@@ -256,7 +256,7 @@ deviceServers:
     family: "leaf-node-dish"
     prefix_member: "SKA"
     weather_station_device_names: 
-      - "ska-mid/weather-monitoring/s1"
+      - ""
     max_allowed_wind_speed: 13.5
     max_allowed_ops_wind_speed: 10
     max_allowed_gust_wind_speed: 20  
@@ -308,8 +308,13 @@ deviceServers:
     csp: false
     sdp: false
 
-mid-wms:
-  dev-name: "ska-mid/weather-monitoring/s1"
+ska-mid-wms:
+  legacy_compatibility: true
+  dev-name: "mid/wms/0"
+  ska-tango-base:
+    enabled: false
+    itango:
+      enabled: false
 
 nodeSelector: {}
 
