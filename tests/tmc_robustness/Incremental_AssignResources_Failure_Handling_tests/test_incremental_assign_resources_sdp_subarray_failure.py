@@ -15,7 +15,7 @@ from tests.resources.test_harness.utils.enums import ResultCode
 from tests.resources.test_support.constant import RESET_DEFECT, SDP_IN_FAULT
 
 
-@pytest.mark.batch2test
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../features/xtp-29014.feature",
