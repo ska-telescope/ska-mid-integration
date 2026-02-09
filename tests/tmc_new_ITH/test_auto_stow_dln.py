@@ -193,7 +193,7 @@ def test_auto_stow_gust_speed(tmc: TMCFacade, event_tracer):
         tmc: TMC facade fixture
         event_tracer: Event tracer fixture for verifying status changes
     """
-    dish_leaf_node = tango.DeviceProxy(tmc.dish_leaf_node[0])
+    dish_leaf_node = tmc.dish_leaf_node_list[0]
     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
     event_tracer.subscribe_event(dish_leaf_node, "dishMode")
     event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
@@ -229,7 +229,7 @@ def test_auto_stow_wind_speed(tmc: TMCFacade, event_tracer):
         event_tracer: Event tracer fixture for verifying status changes
     """
 
-    dish_leaf_node = tmc.dish_leaf_node[0]
+    dish_leaf_node = tmc.dish_leaf_node_list[0]
     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
     event_tracer.subscribe_event(dish_leaf_node, "dishMode")
     event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
@@ -265,7 +265,7 @@ def test_auto_stow_ops_speed(tmc: TMCFacade, event_tracer):
         tmc: TMC facade fixture
         event_tracer: Event tracer fixture for verifying status changes
     """
-    dish_leaf_node = tmc.dish_leaf_node[0]
+    dish_leaf_node = tmc.dish_leaf_node_list[0]
     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
     event_tracer.subscribe_event(dish_leaf_node, "dishMode")
     event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
@@ -300,7 +300,7 @@ def test_auto_stow_ops_perc_speed(tmc: TMCFacade, event_tracer):
         tmc: TMC facade fixture
         event_tracer: Event tracer fixture for verifying status changes
     """
-    dish_leaf_node = tmc.dish_leaf_node[0]
+    dish_leaf_node = tmc.dish_leaf_node_list[0]
     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
     event_tracer.subscribe_event(dish_leaf_node, "dishMode")
     event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
@@ -338,7 +338,7 @@ def test_auto_stow_max_temp(tmc: TMCFacade, event_tracer):
         tmc: TMC facade fixture
         event_tracer: Event tracer fixture for verifying status changes
     """
-    dish_leaf_node = tmc.dish_leaf_node[0]
+    dish_leaf_node = tmc.dish_leaf_node_list[0]
     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
     event_tracer.subscribe_event(dish_leaf_node, "dishMode")
     event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
@@ -372,7 +372,7 @@ def test_auto_stow_temp_delta(tmc: TMCFacade, event_tracer):
         tmc: TMC facade fixture
         event_tracer: Event tracer fixture for verifying status changes
     """
-    dish_leaf_node = tmc.dish_leaf_node[0]
+    dish_leaf_node = tmc.dish_leaf_node_list[0]
     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
     event_tracer.subscribe_event(dish_leaf_node, "dishMode")
     event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
