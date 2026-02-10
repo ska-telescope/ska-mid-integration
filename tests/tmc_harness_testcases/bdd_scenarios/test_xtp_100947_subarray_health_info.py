@@ -235,7 +235,7 @@ def validate_subarray_health_and_info(
     health_info = json.loads(raw_health_info)
 
     # -------- HealthInfo expectation based on scenario --------
-    if expected_health_state == HealthState.FAILED:
+    if expected_health_state == HealthState.DEGRADED:
         expected_health_info_for_ska001 = [
             "Requested band B1 is in state UNAVAILABLE (not fully available)"
         ]
