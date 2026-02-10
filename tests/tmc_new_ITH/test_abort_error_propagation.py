@@ -110,6 +110,7 @@ def subarray_in_idle_obsstate(
         ObsState.READY,
         default_commands_inputs,
         wait_termination=True,
+        timeout=30,
     )
 
 
