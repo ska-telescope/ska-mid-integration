@@ -321,16 +321,15 @@ def then_dish_automatically_stows(
     tmc: TMCFacade, event_tracer: TangoEventTracer
 ):
     """Then the dish automatically stows."""
-    dish_leaf_node = tmc.dish_leaf_node_list[0]
     assert_that(event_tracer).within_timeout(
         ASSERTIONS_TIMEOUT
     ).has_change_event_occurred(
-        dish_leaf_node, "stowStatus", StowStatus.STOW_STARTED
+        tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_STARTED
     )
     assert_that(event_tracer).within_timeout(
         ASSERTIONS_TIMEOUT
     ).has_change_event_occurred(
-        dish_leaf_node, "stowStatus", StowStatus.STOW_COMPLETED
+        tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_COMPLETED
     )
 
 
@@ -339,17 +338,16 @@ def then_dish_automatically_stow_position(
     tmc: TMCFacade, event_tracer: TangoEventTracer
 ):
     """Then the dish automatically stows."""
-    dish_leaf_node = tmc.dish_leaf_node_list[0]
     assert_that(event_tracer).within_timeout(
         ASSERTIONS_TIMEOUT
     ).has_change_event_occurred(
-        dish_leaf_node, "stowStatus", StowStatus.STOW_STARTED
+        tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_STARTED
     )
     assert_that(event_tracer).within_timeout(
         ASSERTIONS_TIMEOUT
     ).has_change_event_occurred(
-        dish_leaf_node, "stowStatus", StowStatus.STOW_COMPLETED
+        tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_COMPLETED
     )
-    dish_leaf_node.set_timeout_millis(5000)
+    tmc.dish_leaf_node_list[0].set_timeout_millis(5000)
 
-    dish_leaf_node.timeDelta = 1000.0
+    tmc.dish_leaf_node_list[0].timeDelta = 1000.0

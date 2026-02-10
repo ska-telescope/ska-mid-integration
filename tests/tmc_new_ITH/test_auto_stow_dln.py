@@ -196,7 +196,7 @@ def test_stow_while_configuring(
 #     event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
 #     _reset_stow_mode(dish_leaf_node, event_tracer)
 
-#     dish_leaf_node.maxAllowedGustWindspeed = 22.0
+#     dish_leaf_node.maxAllowedGustWindpeed = 22.0
 #     dish_leaf_node.gustWindspeedMeasurementTimeWindow = 4
 #     simulate_windspeed(22, 24, 15)
 
