@@ -176,7 +176,7 @@ def test_stow_while_configuring(
     stow_while_configuring(tmc, dishes, event_tracer)
 
 
-# @pytest.mark.aki
+@pytest.mark.aki
 @pytest.mark.SKA_mid
 def test_setstowmode_command(
     tmc: TMCFacade, dishes: DishesFacade, event_tracer
@@ -192,7 +192,7 @@ def test_setstowmode_command(
     setstowmode_command(tmc, dishes, event_tracer)
 
 
-# @pytest.mark.aki
+@pytest.mark.aki
 @pytest.mark.SKA_mid
 def test_auto_stow_gust_speed(tmc: TMCFacade, event_tracer):
     """
@@ -227,7 +227,7 @@ def test_auto_stow_gust_speed(tmc: TMCFacade, event_tracer):
     )
 
 
-# @pytest.mark.aki
+@pytest.mark.aki
 @pytest.mark.SKA_mid
 def test_auto_stow_wind_speed(tmc: TMCFacade, event_tracer):
     """
@@ -263,7 +263,7 @@ def test_auto_stow_wind_speed(tmc: TMCFacade, event_tracer):
     )
 
 
-# @pytest.mark.aki
+@pytest.mark.aki
 @pytest.mark.SKA_mid
 def test_auto_stow_ops_speed(tmc: TMCFacade, event_tracer):
     """
@@ -299,7 +299,7 @@ def test_auto_stow_ops_speed(tmc: TMCFacade, event_tracer):
     )
 
 
-# @pytest.mark.aki
+@pytest.mark.aki
 @pytest.mark.SKA_mid
 def test_auto_stow_ops_perc_speed(tmc: TMCFacade, event_tracer):
     """
@@ -375,7 +375,7 @@ def test_auto_stow_max_temp(tmc: TMCFacade, event_tracer):
     )
 
 
-# @pytest.mark.aki
+@pytest.mark.aki
 @pytest.mark.SKA_mid
 def test_auto_stow_temp_delta(tmc: TMCFacade, event_tracer):
     """
