@@ -175,7 +175,7 @@ def test_stow_while_configuring(
     stow_while_configuring(tmc, dishes, event_tracer)
 
 
-@pytest.mark.aki
+# @pytest.mark.aki
 @pytest.mark.SKA_mid
 def test_setstowmode_command(
     tmc: TMCFacade, dishes: DishesFacade, event_tracer
@@ -411,11 +411,10 @@ def test_auto_stow_temp_delta(tmc: TMCFacade, event_tracer):
     dish_leaf_node.timeDelta = 1000.0
 
 
-def _reset_stow_mode(tmc: TMCFacade, event_tracer: TangoEventTracer):
+def _reset_stow_mode(dish_leaf_node, event_tracer: TangoEventTracer):
     """
     Resets the DishMode to StandbyFP.
     """
-    dish_leaf_node = tmc.dish_leaf_node_list[0]
     if dish_leaf_node.stowStatus == StowStatus.STOW_STARTED:
         assert_that(event_tracer).within_timeout(
             ASSERTIONS_TIMEOUT
