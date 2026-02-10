@@ -188,7 +188,7 @@ def make_band_unavailable(
 
     # 4. Dish health expectation
     expected_dish_health = (
-        HealthState.DEGRADED
+        HealthState.FAILED
         if active_band == unavailable_band
         else HealthState.OK
     )
