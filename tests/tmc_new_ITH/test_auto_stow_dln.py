@@ -3,21 +3,24 @@ import json
 from os.path import dirname, join
 
 import pytest
-import tango
+
+# import tango
 from assertpy import assert_that
 from ska_integration_test_harness.facades import DishesFacade
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_tango_testing.integration import TangoEventTracer
 
 from tests.conftest import LOGGER, get_input_str
-from tests.resources.test_harness.utils.enums import StowStatus
+
+# from tests.resources.test_harness.utils.enums import StowStatus
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.constant import COMMAND_COMPLETED
 from tests.resources.test_support.enum import DishMode
-from tests.tmc_new_ITH.weather_sim import (
-    simulate_temperature,
-    simulate_windspeed,
-)
+
+# from tests.tmc_new_ITH.weather_sim import (
+#     simulate_temperature,
+#     simulate_windspeed,
+# )
 
 ASSERTIONS_TIMEOUT = 60
 
@@ -209,221 +212,222 @@ def test_stow_while_configuring(
 #     )
 
 
-@pytest.mark.aki
-@pytest.mark.SKA_mid
-def test_auto_stow_wind_speed(tmc: TMCFacade, event_tracer):
-    """
-    Test automatic stowing triggered by mean wind speed exceeding threshold.
+# @pytest.mark.aki
+# @pytest.mark.SKA_mid
+# def test_auto_stow_wind_speed(tmc: TMCFacade, event_tracer):
+#     """
+#     Test automatic stowing triggered by mean wind speed exceeding threshold.
 
-    Verifies that the dish automatically stows when the mean wind speed over
-    a measurement time window exceeds the configured maximum threshold.
+#     Verifies that the dish automatically stows when the mean wind speed over
+#     a measurement time window exceeds the configured maximum threshold.
 
-    Args:
-        tmc: TMC facade fixture
-        event_tracer: Event tracer fixture for verifying status changes
-    """
+#     Args:
+#         tmc: TMC facade fixture
+#         event_tracer: Event tracer fixture for verifying status changes
+#     """
 
-    dish_leaf_node = tmc.dish_leaf_node_list[0]
-    event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
-    event_tracer.subscribe_event(dish_leaf_node, "dishMode")
-    event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
-    _reset_stow_mode(dish_leaf_node, event_tracer)
+#     dish_leaf_node = tmc.dish_leaf_node_list[0]
+#     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
+#     event_tracer.subscribe_event(dish_leaf_node, "dishMode")
+#     event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
+#     _reset_stow_mode(dish_leaf_node, event_tracer)
 
-    dish_leaf_node.maxAllowedWindspeed = 16.0
-    dish_leaf_node.meanWindspeedMeasurementTimeWindow = 10.0
-    simulate_windspeed(16, 18, 10)
+#     dish_leaf_node.maxAllowedWindspeed = 16.0
+#     dish_leaf_node.meanWindspeedMeasurementTimeWindow = 10.0
+#     simulate_windspeed(16, 18, 10)
 
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        dish_leaf_node, "stowStatus", StowStatus.STOW_STARTED
-    )
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        dish_leaf_node, "stowStatus", StowStatus.STOW_COMPLETED
-    )
-
-
-@pytest.mark.aki
-@pytest.mark.SKA_mid
-def test_auto_stow_ops_speed(tmc: TMCFacade, event_tracer):
-    """
-    Test automatic stowing triggered by operational wind speed
-    exceeding threshold.
-
-    Verifies that the dish automatically stows when operational wind speed
-    exceeds the maximum allowed operational wind speed threshold.
-
-    Args:
-        tmc: TMC facade fixture
-        event_tracer: Event tracer fixture for verifying status changes
-    """
-    dish_leaf_node = tmc.dish_leaf_node_list[0]
-    event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
-    event_tracer.subscribe_event(dish_leaf_node, "dishMode")
-    event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
-    _reset_stow_mode(dish_leaf_node, event_tracer)
-
-    dish_leaf_node.maxAllowedOpsWindspeed = 5.0
-    dish_leaf_node.WindspeedMeasurementTimeWindow = 10.0
-    simulate_windspeed(6, 7, 10)
-
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        dish_leaf_node, "stowStatus", StowStatus.STOW_STARTED
-    )
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        dish_leaf_node, "stowStatus", StowStatus.STOW_COMPLETED
-    )
+#     assert_that(event_tracer).within_timeout(
+#         ASSERTIONS_TIMEOUT
+#     ).has_change_event_occurred(
+#         dish_leaf_node, "stowStatus", StowStatus.STOW_STARTED
+#     )
+#     assert_that(event_tracer).within_timeout(
+#         ASSERTIONS_TIMEOUT
+#     ).has_change_event_occurred(
+#         dish_leaf_node, "stowStatus", StowStatus.STOW_COMPLETED
+#     )
 
 
-@pytest.mark.aki
-@pytest.mark.SKA_mid
-def test_auto_stow_ops_perc_speed(tmc: TMCFacade, event_tracer):
-    """
-    Test automatic stowing triggered by wind speed percentage difference.
+# @pytest.mark.aki
+# @pytest.mark.SKA_mid
+# def test_auto_stow_ops_speed(tmc: TMCFacade, event_tracer):
+#     """
+#     Test automatic stowing triggered by operational wind speed
+#     exceeding threshold.
 
-    Verifies that the dish automatically stows when the difference between
-    operational wind speeds exceeds the configured percentage threshold.
+#     Verifies that the dish automatically stows when operational wind speed
+#     exceeds the maximum allowed operational wind speed threshold.
 
-    Args:
-        tmc: TMC facade fixture
-        event_tracer: Event tracer fixture for verifying status changes
-    """
-    dish_leaf_node = tmc.dish_leaf_node_list[0]
-    event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
-    event_tracer.subscribe_event(dish_leaf_node, "dishMode")
-    event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
-    _reset_stow_mode(dish_leaf_node, event_tracer)
+#     Args:
+#         tmc: TMC facade fixture
+#         event_tracer: Event tracer fixture for verifying status changes
+#     """
+#     dish_leaf_node = tmc.dish_leaf_node_list[0]
+#     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
+#     event_tracer.subscribe_event(dish_leaf_node, "dishMode")
+#     event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
+#     _reset_stow_mode(dish_leaf_node, event_tracer)
 
-    dish_leaf_node.maxAllowedWindspeedDifference = 5.0
-    dish_leaf_node.maxAllowedOpsMeanWindspeedMeasurementTimeWindow = 10.0
+#     dish_leaf_node.maxAllowedOpsWindspeed = 5.0
+#     dish_leaf_node.WindspeedMeasurementTimeWindow = 10.0
+#     simulate_windspeed(6, 7, 10)
 
-    simulate_windspeed(10, 11, 3)
-    simulate_windspeed(12, 13, 1)
-    simulate_windspeed(20, 25, 1)
-
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        dish_leaf_node, "stowStatus", StowStatus.STOW_STARTED
-    )
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        dish_leaf_node, "stowStatus", StowStatus.STOW_COMPLETED
-    )
+#     assert_that(event_tracer).within_timeout(
+#         ASSERTIONS_TIMEOUT
+#     ).has_change_event_occurred(
+#         dish_leaf_node, "stowStatus", StowStatus.STOW_STARTED
+#     )
+#     assert_that(event_tracer).within_timeout(
+#         ASSERTIONS_TIMEOUT
+#     ).has_change_event_occurred(
+#         dish_leaf_node, "stowStatus", StowStatus.STOW_COMPLETED
+#     )
 
 
-@pytest.mark.aki
-@pytest.mark.SKA_mid
-def test_auto_stow_max_temp(tmc: TMCFacade, event_tracer):
-    """
-    Test automatic stowing triggered by maximum temperature threshold.
+# @pytest.mark.aki
+# @pytest.mark.SKA_mid
+# def test_auto_stow_ops_perc_speed(tmc: TMCFacade, event_tracer):
+#     """
+#     Test automatic stowing triggered by wind speed percentage difference.
 
-    Verifies that the dish automatically stows when the temperature exceeds
-    the configured maximum temperature threshold.
+#     Verifies that the dish automatically stows when the difference between
+#     operational wind speeds exceeds the configured percentage threshold.
 
-    Args:
-        tmc: TMC facade fixture
-        event_tracer: Event tracer fixture for verifying status changes
-    """
-    dish_leaf_node = tmc.dish_leaf_node_list[0]
-    ws = tango.DeviceProxy("ska-mid/weather-monitoring/s1")
-    event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
-    event_tracer.subscribe_event(dish_leaf_node, "dishMode")
-    event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
-    event_tracer.subscribe_event(ws, "temperature")
-    LOGGER.info("my temperature is 1 %s", ws.temperature)
-    _reset_stow_mode(dish_leaf_node, event_tracer)
+#     Args:
+#         tmc: TMC facade fixture
+#         event_tracer: Event tracer fixture for verifying status changes
+#     """
+#     dish_leaf_node = tmc.dish_leaf_node_list[0]
+#     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
+#     event_tracer.subscribe_event(dish_leaf_node, "dishMode")
+#     event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
+#     _reset_stow_mode(dish_leaf_node, event_tracer)
 
-    dish_leaf_node.maxTemperatureThreshold = 35
-    simulate_temperature(35, 36, 2)
-    LOGGER.info("my temperature is 2 %s", ws.temperature)
+#     dish_leaf_node.maxAllowedWindspeedDifference = 5.0
+#     dish_leaf_node.maxAllowedOpsMeanWindspeedMeasurementTimeWindow = 10.0
 
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        dish_leaf_node, "stowStatus", StowStatus.STOW_STARTED
-    )
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        dish_leaf_node, "stowStatus", StowStatus.STOW_COMPLETED
-    )
+#     simulate_windspeed(10, 11, 3)
+#     simulate_windspeed(12, 13, 1)
+#     simulate_windspeed(20, 25, 1)
 
-
-@pytest.mark.aki
-@pytest.mark.SKA_mid
-def test_auto_stow_temp_delta(tmc: TMCFacade, event_tracer):
-    """
-    Test automatic stowing triggered by temperature delta over time.
-
-    Verifies that the dish automatically stows when the temperature change
-    over a specified time window exceeds the configured threshold.
-
-    Args:
-        tmc: TMC facade fixture
-        event_tracer: Event tracer fixture for verifying status changes
-    """
-    dish_leaf_node = tmc.dish_leaf_node_list[0]
-    event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
-    event_tracer.subscribe_event(dish_leaf_node, "dishMode")
-    event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
-    _reset_stow_mode(dish_leaf_node, event_tracer)
-    # sometimes in pipeline it takes more time.
-    dish_leaf_node.timeDelta = 10.0
-    dish_leaf_node.temperatureDelta = 20.0
-
-    simulate_temperature(10, 11, 2)
-    simulate_temperature(15, 20, 2)
-    simulate_temperature(31, 35, 6)
-
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        dish_leaf_node, "stowStatus", StowStatus.STOW_STARTED
-    )
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        dish_leaf_node, "stowStatus", StowStatus.STOW_COMPLETED
-    )
-    dish_leaf_node.set_timeout_millis(5000)
-
-    dish_leaf_node.timeDelta = 1000.0
+#     assert_that(event_tracer).within_timeout(
+#         ASSERTIONS_TIMEOUT
+#     ).has_change_event_occurred(
+#         dish_leaf_node, "stowStatus", StowStatus.STOW_STARTED
+#     )
+#     assert_that(event_tracer).within_timeout(
+#         ASSERTIONS_TIMEOUT
+#     ).has_change_event_occurred(
+#         dish_leaf_node, "stowStatus", StowStatus.STOW_COMPLETED
+#     )
 
 
-def _reset_stow_mode(dish_leaf_node, event_tracer: TangoEventTracer):
-    """
-    Resets the DishMode to StandbyFP.
-    """
-    if dish_leaf_node.stowStatus == StowStatus.STOW_STARTED:
-        assert_that(event_tracer).within_timeout(
-            ASSERTIONS_TIMEOUT
-        ).has_change_event_occurred(
-            dish_leaf_node, "stowstatus", StowStatus.STOW_COMPLETED
-        )
-    if dish_leaf_node.stowStatus == StowStatus.STOW_COMPLETED:
-        result, unique_id = dish_leaf_node.SetStandbyFPMode()
+# @pytest.mark.aki
+# @pytest.mark.SKA_mid
+# def test_auto_stow_max_temp(tmc: TMCFacade, event_tracer):
+#     """
+#     Test automatic stowing triggered by maximum temperature threshold.
 
-        LOGGER.debug("Command id: %s | Returned result: %s", unique_id, result)
-        assert result[0] == ResultCode.QUEUED
+#     Verifies that the dish automatically stows when the temperature exceeds
+#     the configured maximum temperature threshold.
 
-        assert_that(event_tracer).within_timeout(
-            ASSERTIONS_TIMEOUT
-        ).has_change_event_occurred(
-            dish_leaf_node,
-            "longRunningCommandResult",
-            (unique_id[0], COMMAND_COMPLETED),
-        )
+#     Args:
+#         tmc: TMC facade fixture
+#         event_tracer: Event tracer fixture for verifying status changes
+#     """
+#     dish_leaf_node = tmc.dish_leaf_node_list[0]
+#     ws = tango.DeviceProxy("ska-mid/weather-monitoring/s1")
+#     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
+#     event_tracer.subscribe_event(dish_leaf_node, "dishMode")
+#     event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
+#     event_tracer.subscribe_event(ws, "temperature")
+#     LOGGER.info("my temperature is 1 %s", ws.temperature)
+#     _reset_stow_mode(dish_leaf_node, event_tracer)
 
-        assert_that(event_tracer).within_timeout(
-            ASSERTIONS_TIMEOUT
-        ).has_change_event_occurred(
-            dish_leaf_node, "dishMode", DishMode.STANDBY_FP
-        )
+#     dish_leaf_node.maxTemperatureThreshold = 35
+#     simulate_temperature(35, 36, 2)
+#     LOGGER.info("my temperature is 2 %s", ws.temperature)
+
+#     assert_that(event_tracer).within_timeout(
+#         ASSERTIONS_TIMEOUT
+#     ).has_change_event_occurred(
+#         dish_leaf_node, "stowStatus", StowStatus.STOW_STARTED
+#     )
+#     assert_that(event_tracer).within_timeout(
+#         ASSERTIONS_TIMEOUT
+#     ).has_change_event_occurred(
+#         dish_leaf_node, "stowStatus", StowStatus.STOW_COMPLETED
+#     )
+
+
+# @pytest.mark.aki
+# @pytest.mark.SKA_mid
+# def test_auto_stow_temp_delta(tmc: TMCFacade, event_tracer):
+#     """
+#     Test automatic stowing triggered by temperature delta over time.
+
+#     Verifies that the dish automatically stows when the temperature change
+#     over a specified time window exceeds the configured threshold.
+
+#     Args:
+#         tmc: TMC facade fixture
+#         event_tracer: Event tracer fixture for verifying status changes
+#     """
+#     dish_leaf_node = tmc.dish_leaf_node_list[0]
+#     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
+#     event_tracer.subscribe_event(dish_leaf_node, "dishMode")
+#     event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
+#     _reset_stow_mode(dish_leaf_node, event_tracer)
+#     # sometimes in pipeline it takes more time.
+#     dish_leaf_node.timeDelta = 10.0
+#     dish_leaf_node.temperatureDelta = 20.0
+
+#     simulate_temperature(10, 11, 2)
+#     simulate_temperature(15, 20, 2)
+#     simulate_temperature(31, 35, 6)
+
+#     assert_that(event_tracer).within_timeout(
+#         ASSERTIONS_TIMEOUT
+#     ).has_change_event_occurred(
+#         dish_leaf_node, "stowStatus", StowStatus.STOW_STARTED
+#     )
+#     assert_that(event_tracer).within_timeout(
+#         ASSERTIONS_TIMEOUT
+#     ).has_change_event_occurred(
+#         dish_leaf_node, "stowStatus", StowStatus.STOW_COMPLETED
+#     )
+#     dish_leaf_node.set_timeout_millis(5000)
+
+#     dish_leaf_node.timeDelta = 1000.0
+
+
+# def _reset_stow_mode(dish_leaf_node, event_tracer: TangoEventTracer):
+#     """
+#     Resets the DishMode to StandbyFP.
+#     """
+#     if dish_leaf_node.stowStatus == StowStatus.STOW_STARTED:
+#         assert_that(event_tracer).within_timeout(
+#             ASSERTIONS_TIMEOUT
+#         ).has_change_event_occurred(
+#             dish_leaf_node, "stowstatus", StowStatus.STOW_COMPLETED
+#         )
+#     if dish_leaf_node.stowStatus == StowStatus.STOW_COMPLETED:
+#         result, unique_id = dish_leaf_node.SetStandbyFPMode()
+
+#         LOGGER.debug("Command id: %s | Returned result: %s", unique_id,
+# result)
+#         assert result[0] == ResultCode.QUEUED
+
+#         assert_that(event_tracer).within_timeout(
+#             ASSERTIONS_TIMEOUT
+#         ).has_change_event_occurred(
+#             dish_leaf_node,
+#             "longRunningCommandResult",
+#             (unique_id[0], COMMAND_COMPLETED),
+#         )
+
+#         assert_that(event_tracer).within_timeout(
+#             ASSERTIONS_TIMEOUT
+#         ).has_change_event_occurred(
+#             dish_leaf_node, "dishMode", DishMode.STANDBY_FP
+#         )

@@ -16,7 +16,8 @@ from tests.resources.test_harness.utils.enums import StowStatus
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.constant import COMMAND_COMPLETED
 from tests.resources.test_support.enum import DishMode
-from tests.tmc_new_ITH.weather_sim import (  # simulate_temperature,
+from tests.tmc_new_ITH.weather_sim import (
+    simulate_temperature,
     simulate_windspeed,
 )
 
@@ -107,6 +108,60 @@ def test_autostow_mean_wind_speed(
     _setup_event_subscriptions(tmc, event_tracer)
 
 
+@pytest.mark.aki2
+@pytest.mark.SKA_mid
+@scenario(
+    "../tmc_new_ITH/features/auto_stow.feature",
+    "Validate auto stow on operational wind speed exceed",
+)
+def test_autostow_ops_wind_speed(
+    tmc: TMCFacade, event_tracer: TangoEventTracer
+):
+    """Test that the dish automatically stows
+    when operational wind speed exceeds threshold."""
+    _setup_event_subscriptions(tmc, event_tracer)
+
+
+@pytest.mark.aki2
+@pytest.mark.SKA_mid
+@scenario(
+    "../tmc_new_ITH/features/auto_stow.feature",
+    "Validate auto stow on operational wind speed exceed threshold percentage",
+)
+def test_autostow_ops_percentage_wind_speed(
+    tmc: TMCFacade, event_tracer: TangoEventTracer
+):
+    """Test that the dish automatically stows
+    when operational wind speed exceeds threshold percentage."""
+    _setup_event_subscriptions(tmc, event_tracer)
+
+
+@pytest.mark.aki2
+@pytest.mark.SKA_mid
+@scenario(
+    "../tmc_new_ITH/features/auto_stow.feature",
+    "Validate auto stow on max temp",
+)
+def test_autostow_max_temp(tmc: TMCFacade, event_tracer: TangoEventTracer):
+    """Test that the dish automatically stows
+    when max temp reached"""
+    _setup_event_subscriptions(tmc, event_tracer)
+
+
+@pytest.mark.aki2
+@pytest.mark.SKA_mid
+@scenario(
+    "../tmc_new_ITH/features/auto_stow.feature",
+    "Validate auto stow on max temp exceeds threshold for specific time",
+)
+def test_autostow_max_temp_threshold(
+    tmc: TMCFacade, event_tracer: TangoEventTracer
+):
+    """Test that the dish automatically stows
+    when max temp exceeds threshold for specific time"""
+    _setup_event_subscriptions(tmc, event_tracer)
+
+
 @given("a DishLeafNode device in STANDBY_FP mode")
 def given_dishleafnode_in_standby_fp(
     tmc: TMCFacade, event_tracer: TangoEventTracer
@@ -180,6 +235,60 @@ def when_mean_wind_speed_exceeds_threshold(tmc: TMCFacade):
     simulate_windspeed(16, 18, 10)
 
 
+@when(
+    "the operational wind speed over a measurement time window exceeds "
+    "the maximum allowed operational windspeed"
+)
+def when_operational_wind_speed_exceeds_threshold(tmc: TMCFacade):
+    """When the operational wind speed is greater than the max
+    allowed operational wind speed."""
+    dish_leaf_node = tmc.dish_leaf_node_list[0]
+    dish_leaf_node.maxAllowedOpsWindspeed = 5.0
+    dish_leaf_node.WindspeedMeasurementTimeWindow = 10.0
+    simulate_windspeed(6, 7, 10)
+
+
+@when(
+    "the difference between operational wind speeds "
+    "exceeds the configured percentage threshold"
+)
+def when_operational_wind_speed_exceeds_percentage_threshold(tmc: TMCFacade):
+    """When the difference between operational wind speeds
+    exceeds the configured percentage threshold."""
+    dish_leaf_node = tmc.dish_leaf_node_list[0]
+    dish_leaf_node.maxAllowedWindspeedDifference = 5.0
+    dish_leaf_node.maxAllowedOpsMeanWindspeedMeasurementTimeWindow = 10.0
+
+    simulate_windspeed(10, 11, 3)
+    simulate_windspeed(12, 13, 1)
+    simulate_windspeed(20, 25, 1)
+
+
+@when("the temperature exceeds the configured maximum temperature threshold")
+def when_temperature_exceeds_max_threshold(tmc: TMCFacade):
+    """When the temperature exceeds the configured
+    maximum temperature threshold."""
+    dish_leaf_node = tmc.dish_leaf_node_list[0]
+    dish_leaf_node.maxTemperatureThreshold = 35
+    simulate_temperature(35, 36, 2)
+
+
+@when(
+    "the temperature change over a specified time window "
+    "exceeds the configured threshold"
+)
+def when_temperature_exceeds_max_threshold_for_duration(tmc: TMCFacade):
+    """When the temperature exceeds the configured maximum
+    temperature threshold for a specific duration."""
+    dish_leaf_node = tmc.dish_leaf_node_list[0]
+    dish_leaf_node.timeDelta = 10.0
+    dish_leaf_node.temperatureDelta = 20.0
+
+    simulate_temperature(10, 11, 2)
+    simulate_temperature(15, 20, 2)
+    simulate_temperature(31, 35, 6)
+
+
 @then("the dish transitions to STOW mode")
 def then_dish_transitions_to_stow_mode(
     tmc: TMCFacade, event_tracer: TangoEventTracer
@@ -223,3 +332,24 @@ def then_dish_automatically_stows(
     ).has_change_event_occurred(
         dish_leaf_node, "stowStatus", StowStatus.STOW_COMPLETED
     )
+
+
+@then("the dish automatically goes in stow position")
+def then_dish_automatically_stow_position(
+    tmc: TMCFacade, event_tracer: TangoEventTracer
+):
+    """Then the dish automatically stows."""
+    dish_leaf_node = tmc.dish_leaf_node_list[0]
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        dish_leaf_node, "stowStatus", StowStatus.STOW_STARTED
+    )
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        dish_leaf_node, "stowStatus", StowStatus.STOW_COMPLETED
+    )
+    dish_leaf_node.set_timeout_millis(5000)
+
+    dish_leaf_node.timeDelta = 1000.0
