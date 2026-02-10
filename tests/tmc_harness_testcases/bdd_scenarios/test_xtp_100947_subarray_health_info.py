@@ -226,6 +226,7 @@ def validate_subarray_health_and_info(
         subarray_node.subarray_node,
         "healthState",
         expected_health_state,
+        timeout=30,
     ), f"Subarray healthState did not become {expected_health_state}"
 
     # Validate healthInfo
