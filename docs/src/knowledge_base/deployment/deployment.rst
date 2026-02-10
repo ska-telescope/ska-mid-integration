@@ -244,6 +244,8 @@ Subarray Node
     #. **EventSubscriptionCheckPeriod** : This refers to the Period (in seconds) for the event subscriber to check the device subscriptions in a loop. Currently defaults to 1.5 seconds.
     #. **CommandTimeOutDefault** : This refers to the timeout (in seconds) for the command execution. Currently defaults to 110 seconds.
     #. **AbortCommandTimeOut** : This refers to the timeout for the Subarray ABORTED obsState transition. Once the AbortCommandTimeOut exceeds, SubarrayNode transitions to obsState FAULT. Currently defaults to 130 seconds.
+    #. **ScanStartTimeOffset** : Offset for start_time for scan command in nanoseconds.
+    #. **StartTimeEnabled** : Flag to enable/disable use of ScanStartTimeOffset.
 
 SDP Subarray Leaf Node
 ^^^^^^^^^^^^^^^^^^^^^^^^
