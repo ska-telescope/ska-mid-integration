@@ -220,10 +220,12 @@ def when_gust_speed_exceeds_threshold(
     """When the gust speed is greater than the max allowed gust speed."""
 
     dish_leaf_node = tmc.dish_leaf_node_list[0]
+    LOGGER.info("my stowstatus %s", dish_leaf_node.stowStatus)
     _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
     dish_leaf_node.maxAllowedGustWindpeed = 22.0
     dish_leaf_node.gustWindspeedMeasurementTimeWindow = 4
     simulate_windspeed(22, 24, 15)
+    LOGGER.info("my stowstatus %s", dish_leaf_node.stowStatus)
 
 
 @when(
@@ -284,6 +286,7 @@ def when_temperature_exceeds_max_threshold(
     """When the temperature exceeds the configured
     maximum temperature threshold."""
     dish_leaf_node = tmc.dish_leaf_node_list[0]
+
     _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
     dish_leaf_node.maxTemperatureThreshold = 35
     simulate_temperature(35, 36, 2)
