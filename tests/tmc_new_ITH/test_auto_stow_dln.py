@@ -191,7 +191,7 @@ def test_setstowmode_command(
     setstowmode_command(tmc, dishes, event_tracer)
 
 
-@pytest.mark.aki
+# @pytest.mark.aki
 @pytest.mark.SKA_mid
 def test_auto_stow_gust_speed(tmc: TMCFacade, event_tracer):
     """
@@ -336,7 +336,7 @@ def test_auto_stow_ops_perc_speed(tmc: TMCFacade, event_tracer):
     )
 
 
-# @pytest.mark.aki
+@pytest.mark.aki
 @pytest.mark.SKA_mid
 def test_auto_stow_max_temp(tmc: TMCFacade, event_tracer):
     """
@@ -419,7 +419,7 @@ def _reset_stow_mode(dish_leaf_node, event_tracer: TangoEventTracer):
         assert_that(event_tracer).within_timeout(
             ASSERTIONS_TIMEOUT
         ).has_change_event_occurred(
-            dish_leaf_node, "stowStatus", StowStatus.STOW_COMPLETED
+            dish_leaf_node, "stowstatus", StowStatus.STOW_COMPLETED
         )
     if dish_leaf_node.stowStatus == StowStatus.STOW_COMPLETED:
         result, unique_id = dish_leaf_node.SetStandbyFPMode()
