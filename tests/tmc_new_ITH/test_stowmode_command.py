@@ -162,8 +162,8 @@ def when_invoke_setstowmode(tmc: TMCFacade):
 def when_gust_speed_exceeds_threshold(tmc: TMCFacade):
     """When the gust speed is greater than the max allowed gust speed."""
     dish_leaf_node = tmc.dish_leaf_node_list[0]
-    dish_leaf_node.write_attribute("maxAllowedGustWindspeed", 22.0)
-    dish_leaf_node.write_attribute("gustWindspeedMeasurementTimeWindow", 4)
+    dish_leaf_node.maxAllowedGustWindpeed = 22.0
+    dish_leaf_node.gustWindspeedMeasurementTimeWindow = 4
     simulate_windspeed(22, 24, 15)
 
 
@@ -175,8 +175,8 @@ def when_mean_wind_speed_exceeds_threshold(tmc: TMCFacade):
     """When the mean wind speed is greater than the max
     allowed mean wind speed."""
     dish_leaf_node = tmc.dish_leaf_node_list[0]
-    dish_leaf_node.write_attribute("maxAllowedWindspeed", 16.0)
-    dish_leaf_node.write_attribute("meanWindspeedMeasurementTimeWindow", 10.0)
+    dish_leaf_node.maxAllowedWindspeed = 16.0
+    dish_leaf_node.meanWindspeedMeasurementTimeWindow = 10.0
     simulate_windspeed(16, 18, 10)
 
 
