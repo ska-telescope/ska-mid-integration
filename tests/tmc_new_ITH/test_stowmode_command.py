@@ -2,6 +2,8 @@
 # import json
 # from os.path import dirname, join
 
+import time
+
 import pytest
 
 # import tango
@@ -225,6 +227,7 @@ def when_gust_speed_exceeds_threshold(
     dish_leaf_node.maxAllowedGustWindpeed = 22.0
     dish_leaf_node.gustWindspeedMeasurementTimeWindow = 4
     simulate_windspeed(22, 24, 15)
+    time.sleep(2)  # Allow time for event tracer to capture stowStatus change
     LOGGER.info("my stowstatus %s", dish_leaf_node.stowStatus)
 
 
