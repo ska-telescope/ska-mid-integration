@@ -11,5 +11,11 @@ Feature: Automatic Stowing Functionality on DishLeafNode Devices
         Given a DishLeafNode device in STANDBY_FP mode
         When the gust speed is greater than the max allowed gust speed
         Then the dish automatically stows
+    
+    Scenario: Validate auto stow on mean wind speed exceed
+        Given a DishLeafNode device in STANDBY_FP mode
+        When the mean wind speed over a measurement time window exceeds the configured maximum threshold
+        then the dish automatically stows
+
 
 

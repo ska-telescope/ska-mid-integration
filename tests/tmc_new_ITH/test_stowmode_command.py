@@ -93,6 +93,20 @@ def test_autostow_gust_speed(tmc: TMCFacade, event_tracer: TangoEventTracer):
     _setup_event_subscriptions(tmc, event_tracer)
 
 
+@pytest.mark.aki2
+@pytest.mark.SKA_mid
+@scenario(
+    "../tmc_new_ITH/features/auto_stow.feature",
+    "Validate auto stow on mean wind speed exceed",
+)
+def test_autostow_mean_wind_speed(
+    tmc: TMCFacade, event_tracer: TangoEventTracer
+):
+    """Test that the dish automatically stows
+    when mean wind speed exceeds threshold."""
+    _setup_event_subscriptions(tmc, event_tracer)
+
+
 @given("a DishLeafNode device in STANDBY_FP mode")
 def given_dishleafnode_in_standby_fp(
     tmc: TMCFacade, event_tracer: TangoEventTracer
@@ -148,9 +162,22 @@ def when_invoke_setstowmode(tmc: TMCFacade):
 def when_gust_speed_exceeds_threshold(tmc: TMCFacade):
     """When the gust speed is greater than the max allowed gust speed."""
     dish_leaf_node = tmc.dish_leaf_node_list[0]
-    dish_leaf_node.maxAllowedGustWindspeed = 22.0
-    dish_leaf_node.gustWindspeedMeasurementTimeWindow = 4
+    dish_leaf_node.write_attribute("maxAllowedGustWindspeed", 22.0)
+    dish_leaf_node.write_attribute("gustWindspeedMeasurementTimeWindow", 4)
     simulate_windspeed(22, 24, 15)
+
+
+@when(
+    "the mean wind speed over a measurement time window "
+    "exceeds the configured maximum threshold"
+)
+def when_mean_wind_speed_exceeds_threshold(tmc: TMCFacade):
+    """When the mean wind speed is greater than the max
+    allowed mean wind speed."""
+    dish_leaf_node = tmc.dish_leaf_node_list[0]
+    dish_leaf_node.write_attribute("maxAllowedWindspeed", 16.0)
+    dish_leaf_node.write_attribute("meanWindspeedMeasurementTimeWindow", 10.0)
+    simulate_windspeed(16, 18, 10)
 
 
 @then("the dish transitions to STOW mode")

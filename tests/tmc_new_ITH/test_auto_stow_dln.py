@@ -175,38 +175,38 @@ def test_stow_while_configuring(
     stow_while_configuring(tmc, dishes, event_tracer)
 
 
-@pytest.mark.SKA_mid
-def test_auto_stow_gust_speed(tmc: TMCFacade, event_tracer):
-    """
-    Test automatic stowing triggered by gust wind speed exceeding threshold.
+# @pytest.mark.SKA_mid
+# def test_auto_stow_gust_speed(tmc: TMCFacade, event_tracer):
+#     """
+#     Test automatic stowing triggered by gust wind speed exceeding threshold.
 
-    Verifies that the dish automatically stows when gust wind speed exceeds
-    the configured maximum allowed gust wind speed threshold.
+#     Verifies that the dish automatically stows when gust wind speed exceeds
+#     the configured maximum allowed gust wind speed threshold.
 
-    Args:
-        tmc: TMC facade fixture
-        event_tracer: Event tracer fixture for verifying status changes
-    """
-    dish_leaf_node = tmc.dish_leaf_node_list[0]
-    event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
-    event_tracer.subscribe_event(dish_leaf_node, "dishMode")
-    event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
-    _reset_stow_mode(dish_leaf_node, event_tracer)
+#     Args:
+#         tmc: TMC facade fixture
+#         event_tracer: Event tracer fixture for verifying status changes
+#     """
+#     dish_leaf_node = tmc.dish_leaf_node_list[0]
+#     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
+#     event_tracer.subscribe_event(dish_leaf_node, "dishMode")
+#     event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
+#     _reset_stow_mode(dish_leaf_node, event_tracer)
 
-    dish_leaf_node.maxAllowedGustWindspeed = 22.0
-    dish_leaf_node.gustWindspeedMeasurementTimeWindow = 4
-    simulate_windspeed(22, 24, 15)
+#     dish_leaf_node.maxAllowedGustWindspeed = 22.0
+#     dish_leaf_node.gustWindspeedMeasurementTimeWindow = 4
+#     simulate_windspeed(22, 24, 15)
 
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        dish_leaf_node, "stowStatus", StowStatus.STOW_STARTED
-    )
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        dish_leaf_node, "stowStatus", StowStatus.STOW_COMPLETED
-    )
+#     assert_that(event_tracer).within_timeout(
+#         ASSERTIONS_TIMEOUT
+#     ).has_change_event_occurred(
+#         dish_leaf_node, "stowStatus", StowStatus.STOW_STARTED
+#     )
+#     assert_that(event_tracer).within_timeout(
+#         ASSERTIONS_TIMEOUT
+#     ).has_change_event_occurred(
+#         dish_leaf_node, "stowStatus", StowStatus.STOW_COMPLETED
+#     )
 
 
 @pytest.mark.aki
