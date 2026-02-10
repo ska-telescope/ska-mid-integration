@@ -109,7 +109,7 @@ def subarray_in_ready_obsstate(
     tmc.force_change_of_obs_state(
         ObsState.READY,
         default_commands_inputs,
-        wait_termination=False,
+        wait_termination=True,
     )
 
 
