@@ -214,9 +214,13 @@ def when_invoke_setstowmode(tmc: TMCFacade):
 
 
 @when("the gust speed is greater than the max allowed gust speed")
-def when_gust_speed_exceeds_threshold(tmc: TMCFacade):
+def when_gust_speed_exceeds_threshold(
+    tmc: TMCFacade, event_tracer: TangoEventTracer
+):
     """When the gust speed is greater than the max allowed gust speed."""
+
     dish_leaf_node = tmc.dish_leaf_node_list[0]
+    _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
     dish_leaf_node.maxAllowedGustWindpeed = 22.0
     dish_leaf_node.gustWindspeedMeasurementTimeWindow = 4
     simulate_windspeed(22, 24, 15)
@@ -226,10 +230,13 @@ def when_gust_speed_exceeds_threshold(tmc: TMCFacade):
     "the mean wind speed over a measurement time window "
     "exceeds the configured maximum threshold"
 )
-def when_mean_wind_speed_exceeds_threshold(tmc: TMCFacade):
+def when_mean_wind_speed_exceeds_threshold(
+    tmc: TMCFacade, event_tracer: TangoEventTracer
+):
     """When the mean wind speed is greater than the max
     allowed mean wind speed."""
     dish_leaf_node = tmc.dish_leaf_node_list[0]
+    _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
     dish_leaf_node.maxAllowedWindspeed = 16.0
     dish_leaf_node.meanWindspeedMeasurementTimeWindow = 10.0
     simulate_windspeed(16, 18, 10)
@@ -239,10 +246,13 @@ def when_mean_wind_speed_exceeds_threshold(tmc: TMCFacade):
     "the operational wind speed over a measurement time window exceeds "
     "the maximum allowed operational windspeed"
 )
-def when_operational_wind_speed_exceeds_threshold(tmc: TMCFacade):
+def when_operational_wind_speed_exceeds_threshold(
+    tmc: TMCFacade, event_tracer: TangoEventTracer
+):
     """When the operational wind speed is greater than the max
     allowed operational wind speed."""
     dish_leaf_node = tmc.dish_leaf_node_list[0]
+    _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
     dish_leaf_node.maxAllowedOpsWindspeed = 5.0
     dish_leaf_node.WindspeedMeasurementTimeWindow = 10.0
     simulate_windspeed(6, 7, 10)
@@ -252,10 +262,13 @@ def when_operational_wind_speed_exceeds_threshold(tmc: TMCFacade):
     "the difference between operational wind speeds "
     "exceeds the configured percentage threshold"
 )
-def when_operational_wind_speed_exceeds_percentage_threshold(tmc: TMCFacade):
+def when_operational_wind_speed_exceeds_percentage_threshold(
+    tmc: TMCFacade, event_tracer: TangoEventTracer
+):
     """When the difference between operational wind speeds
     exceeds the configured percentage threshold."""
     dish_leaf_node = tmc.dish_leaf_node_list[0]
+    _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
     dish_leaf_node.maxAllowedWindspeedDifference = 5.0
     dish_leaf_node.maxAllowedOpsMeanWindspeedMeasurementTimeWindow = 10.0
 
@@ -265,10 +278,13 @@ def when_operational_wind_speed_exceeds_percentage_threshold(tmc: TMCFacade):
 
 
 @when("the temperature exceeds the configured maximum temperature threshold")
-def when_temperature_exceeds_max_threshold(tmc: TMCFacade):
+def when_temperature_exceeds_max_threshold(
+    tmc: TMCFacade, event_tracer: TangoEventTracer
+):
     """When the temperature exceeds the configured
     maximum temperature threshold."""
     dish_leaf_node = tmc.dish_leaf_node_list[0]
+    _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
     dish_leaf_node.maxTemperatureThreshold = 35
     simulate_temperature(35, 36, 2)
 
@@ -277,10 +293,13 @@ def when_temperature_exceeds_max_threshold(tmc: TMCFacade):
     "the temperature change over a specified time window "
     "exceeds the configured threshold"
 )
-def when_temperature_exceeds_max_threshold_for_duration(tmc: TMCFacade):
+def when_temperature_exceeds_max_threshold_for_duration(
+    tmc: TMCFacade, event_tracer: TangoEventTracer
+):
     """When the temperature exceeds the configured maximum
     temperature threshold for a specific duration."""
     dish_leaf_node = tmc.dish_leaf_node_list[0]
+    _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
     dish_leaf_node.timeDelta = 10.0
     dish_leaf_node.temperatureDelta = 20.0
 
