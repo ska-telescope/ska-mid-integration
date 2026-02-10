@@ -3,6 +3,7 @@ Feature: Apply STOW mode to dishes via TMC Mid Telescope
   Background:
     Given a TMC Mid telescope is operational
 
+  @XTP-101450
   Scenario: TMC processes SetStowMode command and reports status per dish
     Given the following dish ids are provided as input to the SetStowMode command:
       | Dish_ID |

@@ -3,6 +3,7 @@ Test for Abort() error propagation verification
 """
 import json
 import logging
+from time import sleep
 
 import pytest
 from assertpy import assert_that
@@ -222,7 +223,7 @@ def verify_error_message(
             "longRunningCommandResult",
             (pytest.unique_id[0], COMMAND_RESULT_SDP),
         )
-
+        sleep(3)
         sdp.sdp_subarray.SetDefective(json.dumps({"enabled": False}))
 
     if defective_subsystem == "Dish":

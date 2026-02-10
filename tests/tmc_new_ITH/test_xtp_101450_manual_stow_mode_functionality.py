@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 @pytest.mark.stowmode
 @pytest.mark.SKA_mid
 @scenario(
-    "../tmc_new_ITH/features/xtp_test_manual_stow_functionality.feature",
+    "../tmc_new_ITH/features/xtp_101450_manual_stow_functionality.feature",
     "TMC processes SetStowMode command and reports status per dish",
 )
 def test_verify_tmc_stow_mode_command_functionality():
