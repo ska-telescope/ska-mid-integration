@@ -3,6 +3,7 @@ import json
 from os.path import dirname, join
 
 import pytest
+import tango
 from assertpy import assert_that
 from ska_integration_test_harness.facades import DishesFacade
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
@@ -350,13 +351,17 @@ def test_auto_stow_max_temp(tmc: TMCFacade, event_tracer):
         event_tracer: Event tracer fixture for verifying status changes
     """
     dish_leaf_node = tmc.dish_leaf_node_list[0]
+    ws = tango.DeviceProxy("ska-mid/weather-monitoring/s1")
     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
     event_tracer.subscribe_event(dish_leaf_node, "dishMode")
     event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
+    event_tracer.subscribe_event(ws, "temperature")
+    LOGGER.info("my temperature is 1 %s", ws.temperature)
     _reset_stow_mode(dish_leaf_node, event_tracer)
 
     dish_leaf_node.maxTemperatureThreshold = 35
     simulate_temperature(35, 36, 2)
+    LOGGER.info("my temperature is 2 %s", ws.temperature)
 
     assert_that(event_tracer).within_timeout(
         ASSERTIONS_TIMEOUT

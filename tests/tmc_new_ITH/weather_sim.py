@@ -7,6 +7,8 @@ import time
 import httpx
 import numpy as np
 
+# from tests.conftest import LOGGER
+
 NAMESPACE = os.getenv("KUBE_NAMESPACE")
 CLUSTER_DOMAIN = os.getenv("CLUSTER_DOMAIN")
 
