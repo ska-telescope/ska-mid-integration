@@ -2,8 +2,6 @@
 # import json
 # from os.path import dirname, join
 
-import time
-
 import pytest
 
 # import tango
@@ -222,23 +220,14 @@ def when_gust_speed_exceeds_threshold(
     """When the gust speed is greater than the max allowed gust speed."""
 
     dish_leaf_node = tmc.dish_leaf_node_list[0]
-    LOGGER.info("my stowstatus %s", dish_leaf_node.stowStatus)
+    LOGGER.info("my stowstatus %s", dish_leaf_node.stowstatus)
+    event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
+
     _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
     dish_leaf_node.maxAllowedGustWindpeed = 22.0
     dish_leaf_node.gustWindspeedMeasurementTimeWindow = 4
     simulate_windspeed(22, 24, 15)
-    time.sleep(2)  # Allow time for event tracer to capture stowStatus change
-    LOGGER.info("my stowstatus %s", dish_leaf_node.stowStatus)
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_STARTED
-    )
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_COMPLETED
-    )
+    LOGGER.info("my stowstatus %s", dish_leaf_node.stowstatus)
 
 
 @when(
@@ -251,20 +240,12 @@ def when_mean_wind_speed_exceeds_threshold(
     """When the mean wind speed is greater than the max
     allowed mean wind speed."""
     dish_leaf_node = tmc.dish_leaf_node_list[0]
+    event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
+
     _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
     dish_leaf_node.maxAllowedWindspeed = 16.0
     dish_leaf_node.meanWindspeedMeasurementTimeWindow = 10.0
     simulate_windspeed(16, 18, 10)
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_STARTED
-    )
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_COMPLETED
-    )
 
 
 @when(
@@ -276,21 +257,14 @@ def when_operational_wind_speed_exceeds_threshold(
 ):
     """When the operational wind speed is greater than the max
     allowed operational wind speed."""
+
     dish_leaf_node = tmc.dish_leaf_node_list[0]
+    event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
+
     _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
     dish_leaf_node.maxAllowedOpsWindspeed = 5.0
     dish_leaf_node.WindspeedMeasurementTimeWindow = 10.0
     simulate_windspeed(6, 7, 10)
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_STARTED
-    )
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_COMPLETED
-    )
 
 
 @when(
@@ -303,6 +277,8 @@ def when_operational_wind_speed_exceeds_percentage_threshold(
     """When the difference between operational wind speeds
     exceeds the configured percentage threshold."""
     dish_leaf_node = tmc.dish_leaf_node_list[0]
+    event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
+
     _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
     dish_leaf_node.maxAllowedWindspeedDifference = 5.0
     dish_leaf_node.maxAllowedOpsMeanWindspeedMeasurementTimeWindow = 10.0
@@ -310,16 +286,6 @@ def when_operational_wind_speed_exceeds_percentage_threshold(
     simulate_windspeed(10, 11, 3)
     simulate_windspeed(12, 13, 1)
     simulate_windspeed(20, 25, 1)
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_STARTED
-    )
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_COMPLETED
-    )
 
 
 @when("the temperature exceeds the configured maximum temperature threshold")
@@ -329,20 +295,11 @@ def when_temperature_exceeds_max_threshold(
     """When the temperature exceeds the configured
     maximum temperature threshold."""
     dish_leaf_node = tmc.dish_leaf_node_list[0]
+    event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
 
     _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
     dish_leaf_node.maxTemperatureThreshold = 35
     simulate_temperature(35, 36, 2)
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_STARTED
-    )
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_COMPLETED
-    )
 
 
 @when(
@@ -355,6 +312,8 @@ def when_temperature_exceeds_max_threshold_for_duration(
     """When the temperature exceeds the configured maximum
     temperature threshold for a specific duration."""
     dish_leaf_node = tmc.dish_leaf_node_list[0]
+    event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
+
     _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
     dish_leaf_node.timeDelta = 10.0
     dish_leaf_node.temperatureDelta = 20.0
@@ -362,19 +321,6 @@ def when_temperature_exceeds_max_threshold_for_duration(
     simulate_temperature(10, 11, 2)
     simulate_temperature(15, 20, 2)
     simulate_temperature(31, 35, 6)
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_STARTED
-    )
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_COMPLETED
-    )
-    tmc.dish_leaf_node_list[0].set_timeout_millis(5000)
-
-    tmc.dish_leaf_node_list[0].timeDelta = 1000.0
 
 
 @then("the dish transitions to STOW mode")
@@ -409,17 +355,16 @@ def then_dish_automatically_stows(
     tmc: TMCFacade, event_tracer: TangoEventTracer
 ):
     """Then the dish automatically stows."""
-    # assert_that(event_tracer).within_timeout(
-    #     ASSERTIONS_TIMEOUT
-    # ).has_change_event_occurred(
-    #     tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_STARTED
-    # )
-    # assert_that(event_tracer).within_timeout(
-    #     ASSERTIONS_TIMEOUT
-    # ).has_change_event_occurred(
-    #     tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_COMPLETED
-    # )
-    assert True
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_STARTED
+    )
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_COMPLETED
+    )
 
 
 @then("the dish automatically goes in stow position")
@@ -427,17 +372,16 @@ def then_dish_automatically_stow_position(
     tmc: TMCFacade, event_tracer: TangoEventTracer
 ):
     """Then the dish automatically stows."""
-    # assert_that(event_tracer).within_timeout(
-    #     ASSERTIONS_TIMEOUT
-    # ).has_change_event_occurred(
-    #     tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_STARTED
-    # )
-    # assert_that(event_tracer).within_timeout(
-    #     ASSERTIONS_TIMEOUT
-    # ).has_change_event_occurred(
-    #     tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_COMPLETED
-    # )
-    # tmc.dish_leaf_node_list[0].set_timeout_millis(5000)
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_STARTED
+    )
+    assert_that(event_tracer).within_timeout(
+        ASSERTIONS_TIMEOUT
+    ).has_change_event_occurred(
+        tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_COMPLETED
+    )
+    tmc.dish_leaf_node_list[0].set_timeout_millis(5000)
 
-    # tmc.dish_leaf_node_list[0].timeDelta = 1000.0
-    assert True
+    tmc.dish_leaf_node_list[0].timeDelta = 1000.0
