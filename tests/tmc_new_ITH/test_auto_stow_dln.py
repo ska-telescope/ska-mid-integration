@@ -3,7 +3,6 @@ import json
 from os.path import dirname, join
 
 import pytest
-import tango
 from assertpy import assert_that
 from ska_integration_test_harness.facades import DishesFacade
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
@@ -412,12 +411,11 @@ def test_auto_stow_temp_delta(tmc: TMCFacade, event_tracer):
     dish_leaf_node.timeDelta = 1000.0
 
 
-def _reset_stow_mode(
-    dish_leaf_node: tango.DeviceProxy, event_tracer: TangoEventTracer
-):
+def _reset_stow_mode(tmc: TMCFacade, event_tracer: TangoEventTracer):
     """
     Resets the DishMode to StandbyFP.
     """
+    dish_leaf_node = tmc.dish_leaf_node_list[0]
     if dish_leaf_node.stowStatus == StowStatus.STOW_STARTED:
         assert_that(event_tracer).within_timeout(
             ASSERTIONS_TIMEOUT
