@@ -28,22 +28,22 @@ server:
   {{- $isSimulatedDish := .Values.deviceServers.mocks.dish }}
   {{- $isDishAbortEnabled := .Values.deviceServers.dishleafnode.IsDishAbortEnabled }}
   {{- $real_dish_name := .Values.global.namespace_dish.dish_names }}
-  {{- $WeatherStationDeviceNames := .Values.deviceServers.dishln.weather_station_device_names}}
-  {{- $MaxAllowedWindspeed := .Values.deviceServers.dishln.max_allowed_wind_speed }}
-  {{- $MaxAllowedGustWindspeed := .Values.deviceServers.dishln.max_allowed_gust_wind_speed }}
-  {{- $MaxAllowedOpsWindspeed := .Values.deviceServers.dishln.max_allowed_ops_wind_speed }}
-  {{- $MaxAllowedWindspeedDifference := .Values.deviceServers.dishln.max_allowed_wind_speed_difference }}
+  {{- $WeatherStationDeviceNames := .Values.deviceServers.dishleafnode.weather_station_device_names}}
+  {{- $MaxAllowedWindspeed := .Values.deviceServers.dishleafnode.max_allowed_wind_speed }}
+  {{- $MaxAllowedGustWindspeed := .Values.deviceServers.dishleafnode.max_allowed_gust_wind_speed }}
+  {{- $MaxAllowedOpsWindspeed := .Values.deviceServers.dishleafnode.max_allowed_ops_wind_speed }}
+  {{- $MaxAllowedWindspeedDifference := .Values.deviceServers.dishleafnode.max_allowed_wind_speed_difference }}
 
-  {{- $WindspeedMeasurementTimeWindow := .Values.deviceServers.dishln.wind_speed_measurement_time_window }}
-  {{- $GustWindspeedMeasurementTimeWindow := .Values.deviceServers.dishln.gust_wind_speed_measurement_time_window }}
-  {{- $MeanWindspeedTimeWindow := .Values.deviceServers.dishln.mean_wind_speed_measurement_time_window }}
-  {{- $MaxAllowedOpsMeanWindspeedMeasurementTimeWindow := .Values.deviceServers.dishln.max_allowed_ops_mean_wind_speed_measurement_time_window }}
+  {{- $WindspeedMeasurementTimeWindow := .Values.deviceServers.dishleafnode.wind_speed_measurement_time_window }}
+  {{- $GustWindspeedMeasurementTimeWindow := .Values.deviceServers.dishleafnode.gust_wind_speed_measurement_time_window }}
+  {{- $MeanWindspeedTimeWindow := .Values.deviceServers.dishleafnode.mean_wind_speed_measurement_time_window }}
+  {{- $MaxAllowedOpsMeanWindspeedMeasurementTimeWindow := .Values.deviceServers.dishleafnode.max_allowed_ops_mean_wind_speed_measurement_time_window }}
 
-  {{- $MaxTemperatureThreshold := .Values.deviceServers.dishln.max_temp_threshold }}
-  {{- $MinTemperatureThreshold := .Values.deviceServers.dishln.min_temp_threshold }}
-  {{- $TimeDelta := .Values.deviceServers.dishln.time_delta }}
-  {{- $TemperatureDelta := .Values.deviceServers.dishln.temp_delta }}
-  {{- $EnableAutoStow := .Values.deviceServers.dishln.enable_auto_stow }}
+  {{- $MaxTemperatureThreshold := .Values.deviceServers.dishleafnode.max_temp_threshold }}
+  {{- $MinTemperatureThreshold := .Values.deviceServers.dishleafnode.min_temp_threshold }}
+  {{- $TimeDelta := .Values.deviceServers.dishleafnode.time_delta }}
+  {{- $TemperatureDelta := .Values.deviceServers.dishleafnode.temp_delta }}
+  {{- $EnableAutoStow := .Values.deviceServers.dishleafnode.enable_auto_stow }}
 
   {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
     {{- range $instance := .Values.global.dishids }}
