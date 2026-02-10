@@ -149,6 +149,8 @@ def csp_subarray_stuck_in_configuring(event_recorder, simulator_factory):
     )
     # Disable CSP Subarray fault
     csp_sim.SetDefective(json.dumps({"enabled": False}))
+    # Update the ObsState as the device is stuck in Configuring
+    csp_sim.SetDirectObsState(ObsState.FAULT)
 
 
 @given(
