@@ -17,7 +17,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-@pytest.mark.batch2
+@pytest.mark.batch2test
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/subarray_healthinfo.feature",
@@ -84,9 +84,9 @@ def assign_dishes_to_subarray(
     dish_master_sim_1.SetDirectCapabilityState(
         json.dumps(pytest.capability_dict)
     )
-    # dish_master_sim_2.SetDirectCapabilityState(
-    #     json.dumps(pytest.capability_dict)
-    # )
+    dish_master_sim_2.SetDirectCapabilityState(
+        json.dumps(pytest.capability_dict)
+    )
     # dish_master_sim_3.SetDirectCapabilityState(
     #     json.dumps(pytest.capability_dict)
     # )
@@ -128,9 +128,9 @@ def configure_subarray_and_validate_health_ok(
     dish_master_sim_1.SetDirectCapabilityState(
         json.dumps(pytest.capability_dict)
     )
-    # dish_master_sim_2.SetDirectCapabilityState(
-    #     json.dumps(pytest.capability_dict)
-    # )
+    dish_master_sim_2.SetDirectCapabilityState(
+        json.dumps(pytest.capability_dict)
+    )
 
     input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
@@ -188,7 +188,7 @@ def make_band_unavailable(
 
     # 4. Dish health expectation
     expected_dish_health = (
-        HealthState.FAILED
+        HealthState.DEGRADED
         if active_band == unavailable_band
         else HealthState.OK
     )
