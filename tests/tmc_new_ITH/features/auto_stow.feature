@@ -5,4 +5,11 @@ Feature: Automatic Stowing Functionality on DishLeafNode Devices
         When I invoke the SetStowMode command on the DishLeafNode
         Then the dish transitions to STOW mode
         And the longRunningCommandResult event confirms command completion
+    
+    
+    Scenario: Validate auto stow on gust speed
+        Given a DishLeafNode device in STANDBY_FP mode
+        When the gust speed is greater than the max allowed gust speed
+        Then the dish automatically stows
+
 
