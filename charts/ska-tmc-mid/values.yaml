@@ -91,7 +91,7 @@ subarraynode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-subarraynode
-    tag: 0.51.0
+    tag: 0.51.1
     pullPolicy: IfNotPresent
 
 sdpleafnodes:
@@ -184,6 +184,8 @@ deviceServers:
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
     family: "subarray"
+    ScanStartTimeOffset: 10
+    StartTimeEnabled: false
     resources:
       limits:
         cpu: 600m

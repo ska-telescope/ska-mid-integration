@@ -6,10 +6,12 @@ All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 [Unreleased]
-************
+**************
 Added
 -----
-* TMC supports PST Scan Configuration
+* TMC supports PST Scan Configuration.
+* Introduced property `StartTimeEnabled` to enable/disable parameter from Scan JSON.
+* Add `ScanStartTimeOffset` property in chart configuration.
 
 [1.13.0]
 *************
