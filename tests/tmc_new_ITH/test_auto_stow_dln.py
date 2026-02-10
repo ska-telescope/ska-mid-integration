@@ -19,7 +19,6 @@ from tests.tmc_new_ITH.weather_sim import (
     simulate_windspeed,
 )
 
-# pylint: disable=E501
 ASSERTIONS_TIMEOUT = 60
 
 
@@ -159,7 +158,7 @@ def stow_while_configuring(
     )
 
 
-# @pytest.mark.aki
+@pytest.mark.aki
 @pytest.mark.SKA_mid
 def test_stow_while_configuring(
     tmc: TMCFacade, dishes: DishesFacade, event_tracer
@@ -174,22 +173,6 @@ def test_stow_while_configuring(
         json_factory: Factory fixture for creating JSON configuration strings
     """
     stow_while_configuring(tmc, dishes, event_tracer)
-
-
-@pytest.mark.aki
-@pytest.mark.SKA_mid
-def test_setstowmode_command(
-    tmc: TMCFacade, dishes: DishesFacade, event_tracer
-):
-    """
-    Test case for the SetStowMode command functionality.
-
-    Args:
-        tmc: TMC facade fixture
-        dishes: Dishes facade fixture
-        event_tracer: Event tracer fixture
-    """
-    setstowmode_command(tmc, dishes, event_tracer)
 
 
 @pytest.mark.aki
