@@ -73,17 +73,17 @@ def assign_dishes_to_subarray(
         ],
         health_state_value=HealthState.OK,
     )
-    # pytest.capability_dict = {
-    #     "B1": CapabilityStates.STANDBY,
-    #     "B2": CapabilityStates.STANDBY,
-    #     "B3": CapabilityStates.STANDBY,
-    #     "B4": CapabilityStates.STANDBY,
-    #     "B5a": CapabilityStates.STANDBY,
-    #     "B5b": CapabilityStates.STANDBY,
-    # }
-    # dish_master_sim_1.SetDirectCapabilityState(
-    #     json.dumps(pytest.capability_dict)
-    # )
+    pytest.capability_dict = {
+        "B1": CapabilityStates.STANDBY,
+        "B2": CapabilityStates.STANDBY,
+        "B3": CapabilityStates.STANDBY,
+        "B4": CapabilityStates.STANDBY,
+        "B5a": CapabilityStates.STANDBY,
+        "B5b": CapabilityStates.STANDBY,
+    }
+    dish_master_sim_1.SetDirectCapabilityState(
+        json.dumps(pytest.capability_dict)
+    )
     # dish_master_sim_2.SetDirectCapabilityState(
     #     json.dumps(pytest.capability_dict)
     # )
@@ -128,9 +128,9 @@ def configure_subarray_and_validate_health_ok(
     dish_master_sim_1.SetDirectCapabilityState(
         json.dumps(pytest.capability_dict)
     )
-    dish_master_sim_2.SetDirectCapabilityState(
-        json.dumps(pytest.capability_dict)
-    )
+    # dish_master_sim_2.SetDirectCapabilityState(
+    #     json.dumps(pytest.capability_dict)
+    # )
 
     input_json = prepare_json_args_for_commands(
         "configure_mid", command_input_factory
