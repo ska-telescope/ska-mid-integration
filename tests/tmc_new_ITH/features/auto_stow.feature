@@ -40,4 +40,4 @@ Feature: Automatic Stowing Functionality on DishLeafNode Devices
     Scenario: Validate auto stow on max temp exceeds threshold for specific time
         Given a DishLeafNode device in STANDBY_LP mode
         When the temperature change over a specified time window exceeds the configured threshold
-        Then the dish automatically goes in stow position
+        Then the dish automatically stows
