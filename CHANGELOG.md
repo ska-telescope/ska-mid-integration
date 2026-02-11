@@ -9,7 +9,7 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 *************
 Added
 -----
-* TMC is now able to stow the dish manually using SetStowMode command
+* TMC is now able to stow the dish manually using SetStowMode command.
 * Automatically using weather station data.
 
 [1.15.0-rc.1]
