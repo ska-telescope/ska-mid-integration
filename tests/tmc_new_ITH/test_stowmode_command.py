@@ -158,7 +158,7 @@ def stow_while_configuring(
     )
 
 
-@pytest.mark.batch3
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/auto_stow.feature",
@@ -169,7 +169,7 @@ def test_verify_setstowmode(tmc: TMCFacade, event_tracer: TangoEventTracer):
     _setup_event_subscriptions(tmc, event_tracer)
 
 
-@pytest.mark.batch3
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/auto_stow.feature",
@@ -181,7 +181,7 @@ def test_autostow_gust_speed(tmc: TMCFacade, event_tracer: TangoEventTracer):
     _setup_event_subscriptions(tmc, event_tracer)
 
 
-@pytest.mark.batch3
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/auto_stow.feature",
@@ -195,7 +195,7 @@ def test_autostow_mean_wind_speed(
     _setup_event_subscriptions(tmc, event_tracer)
 
 
-@pytest.mark.batch3
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/auto_stow.feature",
@@ -209,7 +209,7 @@ def test_autostow_ops_wind_speed(
     _setup_event_subscriptions(tmc, event_tracer)
 
 
-@pytest.mark.batch3
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/auto_stow.feature",
@@ -223,7 +223,7 @@ def test_autostow_ops_percentage_wind_speed(
     _setup_event_subscriptions(tmc, event_tracer)
 
 
-@pytest.mark.batch3
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/auto_stow.feature",
@@ -235,7 +235,7 @@ def test_autostow_max_temp(tmc: TMCFacade, event_tracer: TangoEventTracer):
     _setup_event_subscriptions(tmc, event_tracer)
 
 
-@pytest.mark.batch3
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/auto_stow.feature",
@@ -249,7 +249,7 @@ def test_autostow_max_temp_threshold(
     _setup_event_subscriptions(tmc, event_tracer)
 
 
-@pytest.mark.batch3
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/auto_stow.feature",
@@ -530,23 +530,3 @@ def then_dish_automatically_stows(
     ).has_change_event_occurred(
         tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_COMPLETED
     )
-
-
-@then("the dish automatically goes in stow position")
-def then_dish_automatically_stow_position(
-    tmc: TMCFacade, event_tracer: TangoEventTracer
-):
-    """Then the dish automatically stows."""
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_STARTED
-    )
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_COMPLETED
-    )
-    tmc.dish_leaf_node_list[0].set_timeout_millis(5000)
-
-    tmc.dish_leaf_node_list[0].timeDelta = 1000.0
