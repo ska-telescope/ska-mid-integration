@@ -162,7 +162,7 @@ def stow_while_configuring(
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/auto_stow.feature",
-    "TMC validates SetStowMode command on DishLeafNode",
+    "Validate SetStowMode command on DishLeafNode",
 )
 def test_verify_setstowmode(tmc: TMCFacade, event_tracer: TangoEventTracer):
     """Test AssignResources with SDP v1.0."""
@@ -253,7 +253,7 @@ def test_autostow_max_temp_threshold(
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/auto_stow.feature",
-    "TMC validates SetStowMode command in configuring on DishLeafNode",
+    "Validate SetStowMode command in configuring on DishLeafNode",
 )
 def test_setstowmode_configuring(
     tmc: TMCFacade, event_tracer: TangoEventTracer
