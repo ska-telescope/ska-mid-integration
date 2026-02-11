@@ -71,7 +71,7 @@ def _reset_stow_mode(dish_leaf_node, event_tracer: TangoEventTracer):
         )
 
 
-@pytest.mark.aki2
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/auto_stow.feature",
@@ -82,7 +82,7 @@ def test_verify_setstowmode(tmc: TMCFacade, event_tracer: TangoEventTracer):
     _setup_event_subscriptions(tmc, event_tracer)
 
 
-@pytest.mark.aki2
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/auto_stow.feature",
@@ -94,7 +94,7 @@ def test_autostow_gust_speed(tmc: TMCFacade, event_tracer: TangoEventTracer):
     _setup_event_subscriptions(tmc, event_tracer)
 
 
-@pytest.mark.aki2
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/auto_stow.feature",
@@ -108,7 +108,7 @@ def test_autostow_mean_wind_speed(
     _setup_event_subscriptions(tmc, event_tracer)
 
 
-@pytest.mark.aki2
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/auto_stow.feature",
@@ -122,7 +122,7 @@ def test_autostow_ops_wind_speed(
     _setup_event_subscriptions(tmc, event_tracer)
 
 
-@pytest.mark.aki2
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/auto_stow.feature",
@@ -136,7 +136,7 @@ def test_autostow_ops_percentage_wind_speed(
     _setup_event_subscriptions(tmc, event_tracer)
 
 
-@pytest.mark.aki2
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/auto_stow.feature",
@@ -148,7 +148,7 @@ def test_autostow_max_temp(tmc: TMCFacade, event_tracer: TangoEventTracer):
     _setup_event_subscriptions(tmc, event_tracer)
 
 
-@pytest.mark.aki2
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/auto_stow.feature",

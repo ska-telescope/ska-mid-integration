@@ -161,7 +161,7 @@ def stow_while_configuring(
     )
 
 
-@pytest.mark.aki
+# @pytest.mark.aki
 @pytest.mark.SKA_mid
 def test_stow_while_configuring(
     tmc: TMCFacade, dishes: DishesFacade, event_tracer
