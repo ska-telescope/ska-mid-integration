@@ -8,7 +8,6 @@ Feature: Automatic Stowing Functionality on DishLeafNode Devices
     
     Scenario: TMC validates SetStowMode command in configuring on DishLeafNode
         Given a DishLeafNode device in STANDBY_LP mode
-        And configure command is invoked on dishleafnode
         When I invoke the SetStowMode command on the DishLeafNode in configuring state
         Then the dish transitions to STOW mode
        
