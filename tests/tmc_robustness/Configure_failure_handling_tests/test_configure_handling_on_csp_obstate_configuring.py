@@ -1,4 +1,5 @@
 import json
+import logging
 
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
@@ -17,6 +18,8 @@ from tests.resources.test_support.constant import (
     OBS_STATE_CONFIGURING_STUCK_DEFECT,
 )
 from tests.resources.test_support.enum import PointingState
+
+logger = logging.getLogger(__name__)
 
 
 @pytest.mark.batch1
@@ -148,9 +151,9 @@ def csp_subarray_stuck_in_configuring(event_recorder, simulator_factory):
         ObsState.CONFIGURING,
     )
     # Disable CSP Subarray fault
-    csp_sim.SetDefective(json.dumps({"enabled": False}))
-    # Update the ObsState as the device is stuck in Configuring
-    csp_sim.SetDirectObsState(ObsState.FAULT)
+    RESET_DEFECT = json.dumps({"enabled": False, "fault_type": 0})
+    csp_sim.SetDefective(RESET_DEFECT)
+    logger.info("Resetted CSP Subarray fault: %s", RESET_DEFECT)
 
 
 @given(
