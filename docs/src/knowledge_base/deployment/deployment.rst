@@ -289,20 +289,20 @@ Dish Leaf Node
     #. **TrackTableRetryDuration** : This refers to the retry duration (in seconds) for programTrackTable write operation in seconds. Currently defaults to 0.2 seconds.
     #. **DishAvailabilityCheckTimeout** : This refers to the timeout for the dish availability check during intialisation. This property is for internal use. Currently defaults to 3 seconds.
     #. **AdapterTimeOut** : This refers to the timeout (in seconds) for the adapter creation. This property is for internal use. Currently defaults to 2 seconds.
-    #. **weather_station_device_names** : TRL's of the weather stations.
-    #. **max_allowed_wind_speed** : Maximum permissible wind speed in m/s before triggering dish stow. Default value is 13.5 m/s.
-    #. **max_allowed_ops_wind_speed** : Maximum permissible ops wind speed in m/s before triggering dish stow. Default value is 10 m/s.
-    #. **max_allowed_gust_wind_speed** : Maximum permissible gust wind speed in m/s before triggering dish stow. Default value is 20 m/s.
-    #. **max_allowed_wind_speed_difference** : Maximum permissible wind speed difference in m/s before triggering dish stow. Default value is 4.5 m/s.
-    #. **wind_speed_measurement_time_window** : Time window (in seconds) over which wind speed measurements are evaluated. Default is 1000.
-    #. **gust_wind_speed_measurement_time_window** : Time window (in seconds) used to assess gust wind speed. Default is 3.
-    #. **mean_wind_speed_measurement_time_window** : Time window (in seconds) for calculating the mean wind speed. Default is 600.
-    #. **max_allowed_ops_mean_wind_speed_measurement_time_window** : Time window (in seconds) for evaluating the maximum allowed operational mean wind speed. Default is 600.
-    #. **max_temp_threshold** : Maximum allowable temperature (°C) before protective action is triggered. Default is 40.
-    #. **min_temp_threshold** :  Minimum allowable temperature (°C) before protective action is triggered. Default is -5.
-    #. **time_delta** : Maximum allowed time difference (in seconds) between successive measurements. Default is 1000.
-    #. **temp_delta** : Maximum permitted temperature variation (°C) within the defined time window. Default is 10.
-    #. **enable_auto_stow**: Flag to enable or disable automatic stow based on environmental conditions. Default is true.
+    #. **WeatherStationDeviceNames** : TRL's of the weather stations.
+    #. **MaxAllowedWindspeed** : Maximum permissible wind speed in m/s before triggering dish stow. Default value is 13.5 m/s.
+    #. **MaxAllowedOpsWindspeed** : Maximum permissible ops wind speed in m/s before triggering dish stow. Default value is 10 m/s.
+    #. **MaxAllowedGustWindspeed** : Maximum permissible gust wind speed in m/s before triggering dish stow. Default value is 20 m/s.
+    #. **MaxAllowedWindspeedDifference** : Maximum permissible wind speed difference in m/s before triggering dish stow. Default value is 4.5 m/s.
+    #. **WindspeedMeasurementTimeWindow** : Time window (in seconds) over which wind speed measurements are evaluated. Default is 1000.
+    #. **GustWindspeedMeasurementTimeWindow** : Time window (in seconds) used to assess gust wind speed. Default is 3.
+    #. **MeanWindspeedTimeWindow** : Time window (in seconds) for calculating the mean wind speed. Default is 600.
+    #. **MaxAllowedOpsMeanWindspeedMeasurementTimeWindow** : Time window (in seconds) for evaluating the maximum allowed operational mean wind speed. Default is 600.
+    #. **MaxTemperatureThreshold** : Maximum allowable temperature (°C) before protective action is triggered. Default is 40.
+    #. **MinTemperatureThreshold** :  Minimum allowable temperature (°C) before protective action is triggered. Default is -5.
+    #. **TimeDelta** : Maximum allowed time difference (in seconds) between successive measurements. Default is 1000.
+    #. **TemperatureDelta** : Maximum permitted temperature variation (°C) within the defined time window. Default is 10.
+    #. **EnableAutoStow**: Flag to enable or disable automatic stow. Default is true.
 
 Dish Pointing Device
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -314,6 +314,8 @@ Dish Pointing Device
     #. **AzimuthMaxLimit** : This refers to the Maximum value of Azimuth where dish can point. Currently defaults to 270.0.
     #. **AzimuthMinLimit** : This refers to the Minimum value of Azimuth where dish can point. Currently defaults to -270.0.
     #. **SchedularQueuePreEntries** : ProgramTrackTable entries queued ahead in the track thread scheduler, primarily for developer-side debugging.
+    #. **WeatherStationDeviceNames** : TRL's of the weather stations.
+    #. **EventSubscriptionCheckPeriod** : Event subscription interval in seconds.
 
 Resource Monitor
 ^^^^^^^^^^^^^^^^^^^^^

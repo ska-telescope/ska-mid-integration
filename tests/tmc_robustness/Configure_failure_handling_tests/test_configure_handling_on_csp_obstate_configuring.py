@@ -25,7 +25,6 @@ logger = logging.getLogger(__name__)
 
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
-@pytest.mark.test_f
 @scenario(
     "../features/xtp-28834.feature",
     "TMC behavior when Csp Subarray is stuck in obsState CONFIGURING",

@@ -22,7 +22,6 @@ from tests.resources.test_support.enum import PointingState
 
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
-@pytest.mark.test_f
 @scenario(
     "../features/xtp-28436.feature",
     "TMC behavior when Csp Subarray Configure raises exception",
