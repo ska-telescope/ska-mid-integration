@@ -289,6 +289,22 @@ Dish Leaf Node
     #. **TrackTableRetryDuration** : This refers to the retry duration (in seconds) for programTrackTable write operation in seconds. Currently defaults to 0.2 seconds.
     #. **DishAvailabilityCheckTimeout** : This refers to the timeout for the dish availability check during intialisation. This property is for internal use. Currently defaults to 3 seconds.
     #. **AdapterTimeOut** : This refers to the timeout (in seconds) for the adapter creation. This property is for internal use. Currently defaults to 2 seconds.
+    #. **WeatherStationDeviceNames** : This refers to the names of the weather station devices. Currently defaults to:
+      - "ska-mid/weather-monitoring/s1"
+      - "ska-mid/weather-monitoring/s2"
+    #. **MaxAllowedWindspeed** : This refers to the maximum allowed wind speed. Currently defaults to 13.5.
+    #. **MaxAllowedOpsWindspeed** : This refers to the maximum allowed operational wind speed. Currently defaults to 10.
+    #. **MaxAllowedGustWindspeed** : This refers to the maximum allowed gust wind speed. Currently defaults to 20.
+    #. **MaxAllowedWindspeedDifference** : This refers to the maximum allowed difference in wind speed. Currently defaults to 4.5.
+    #. **WindspeedMeasurementTimeWindow** : This refers to the time window (in seconds) for measuring wind speed. Currently defaults to 1000.
+    #. **GustWindspeedMeasurementTimeWindow** : This refers to the time window (in seconds) for measuring gust wind speed. Currently defaults to 3.
+    #. **MeanWindspeedTimeWindow** : This refers to the time window (in seconds) for measuring mean wind speed. Currently defaults to 600.
+    #. **MaxAllowedOpsMeanWindspeedMeasurementTimeWindow** : This refers to the maximum allowed operational mean wind speed measurement time window. Currently defaults to 600.
+    #. **MaxTemperatureThreshold** : This refers to the maximum temperature threshold. Currently defaults to 40.0.
+    #. **MinTemperatureThreshold** : This refers to the minimum temperature threshold. Currently defaults to -5.
+    #. **TimeDelta** : This refers to the time delta. Currently defaults to 1000.0.
+    #. **TemperatureDelta** : This refers to the temperature delta. Currently defaults to 10.0.
+    #. **EnableAutoStow** : This refers to whether the auto stow feature is enabled. Currently defaults to true.
 
 Dish Pointing Device
 ^^^^^^^^^^^^^^^^^^^^^^^^
