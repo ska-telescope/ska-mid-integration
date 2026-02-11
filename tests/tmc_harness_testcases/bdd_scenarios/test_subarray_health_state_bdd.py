@@ -176,4 +176,3 @@ def validate_expected_subarray_health_state(
         "healthState",
         HealthState[Subarray_Health_State],
     ), f"Expected Subarray Node HealthState to be {Subarray_Health_State}"
-    event_recorder.clear_events()
