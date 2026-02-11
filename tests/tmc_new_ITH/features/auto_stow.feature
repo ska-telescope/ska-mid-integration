@@ -6,7 +6,12 @@ Feature: Automatic Stowing Functionality on DishLeafNode Devices
         Then the dish transitions to STOW mode
         And the longRunningCommandResult event confirms command completion
     
-    
+    Scenario: TMC validates SetStowMode command in configuring on DishLeafNode
+        Given a DishLeafNode device in STANDBY_LP mode
+        And configure command is invoked on dishleafnode
+        When I invoke the SetStowMode command on the DishLeafNode in configuring state
+        Then the dish transitions to STOW mode
+       
     Scenario: Validate auto stow on gust speed
         Given a DishLeafNode device in STANDBY_LP mode
         When the gust speed is greater than the max allowed gust speed
