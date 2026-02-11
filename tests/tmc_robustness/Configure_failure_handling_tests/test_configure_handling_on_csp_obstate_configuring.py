@@ -151,6 +151,7 @@ def csp_subarray_stuck_in_configuring(event_recorder, simulator_factory):
         "obsState",
         ObsState.CONFIGURING,
     )
+
     # Disable CSP Subarray fault
     RESET_DEFECT = json.dumps({"enabled": False, "fault_type": 0})
     csp_sim.SetDefective(RESET_DEFECT)
@@ -163,7 +164,13 @@ def csp_subarray_stuck_in_configuring(event_recorder, simulator_factory):
 def given_tmc_subarray_stuck_configuring(
     central_node_mid, subarray_node, event_recorder
 ):
-    assert subarray_node.subarray_node.obsState == ObsState.FAULT
+    assert event_recorder.has_change_event_occurred(
+        subarray_node.subarray_node,
+        "obsState",
+        ObsState.FAULT,
+        lookahead=4,
+    )
+
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
