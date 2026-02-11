@@ -249,7 +249,7 @@ def test_autostow_max_temp_threshold(
     _setup_event_subscriptions(tmc, event_tracer)
 
 
-@pytest.mark.batch341
+@pytest.mark.batch3
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/auto_stow.feature",
