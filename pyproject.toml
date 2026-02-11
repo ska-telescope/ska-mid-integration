@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ska-tmc-mid-integration"
-version = "1.14.0-rc.1"
+version = "1.15.0-rc.1"
 description = "Repository for integration of TMC components"
 authors = ["Team Himalaya", "Team Sahyadri"]
 license = "BSD-3-Clause"
@@ -29,7 +29,7 @@ httpx = "^0.19.0"
 msgpack = "1.0.7"
 msgpack_numpy = "0.4.8"
 astropy = "^5.0.4"
-ska-telmodel = "1.25.0"
+ska-telmodel = "1.31.0"
 ska-ser-xray = "^0.6.0"
 ska-integration-test-harness = "^0.2.4"
 assertpy = "^1.1"

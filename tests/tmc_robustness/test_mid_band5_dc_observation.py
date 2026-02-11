@@ -71,11 +71,12 @@ def given_tmc(
     event_tracer.clear_events()
 
 
-@given("the subarray is in IDLE obsState")
+@given(parsers.parse("the subarray is in IDLE obsState using {assign_json}"))
 def given_subarray_in_idle(
     command_input_factory: JsonFactory,
     event_tracer: TangoEventTracer,
     central_node_mid: CentralNodeWrapperMid,
+    assign_json,
 ):
     """
     Method to check subarray is in IDLE obsState
@@ -86,9 +87,8 @@ def given_subarray_in_idle(
         event_tracer: Fixture for EventRecorder class
         central_node_mid: Fixture for a TMC CentralNode wrapper class
     """
-
     assign_input_json = prepare_json_args_for_centralnode_commands(
-        "AssignResources_band5_dc", command_input_factory
+        assign_json, command_input_factory
     )
 
     _, unique_id = central_node_mid.store_resources(assign_input_json)
@@ -123,11 +123,12 @@ def given_subarray_in_idle(
     )
 
 
-@when("the command configure is issued with band 5 dc configuration")
+@when(parsers.parse("the command configure is issued with {configure_json}"))
 def invoke_band5_dc_configure(
     subarray_node: SubarrayNodeWrapper,
     command_input_factory: JsonFactory,
     event_tracer: TangoEventTracer,
+    configure_json,
 ):
     """
     Method to execute band 5 observation and check if the subarray is in
@@ -144,7 +145,7 @@ def invoke_band5_dc_configure(
     )
     log_events({subarray_node.subarray_node: ["longRunningCommandResult"]})
     configure_input_json = prepare_json_args_for_commands(
-        "Configure_band5_dc", command_input_factory
+        configure_json, command_input_factory
     )
 
     _, unique_id = subarray_node.execute_transition(
