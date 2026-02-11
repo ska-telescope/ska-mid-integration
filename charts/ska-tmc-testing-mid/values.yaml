@@ -101,19 +101,6 @@ ska-tango-alarmhandler:
   enabled: true
   legacy_compatibility: true
 
-ska-tmc-simulators:
-  labels: 
-    app: ska-tmc-integration
-  enabled: true
-  deviceServers:
-    cspmastersimulator:
-      enabled: false
-    
-    weatherstation:
-      enabled: false
-    
-    powersupplysimulator:
-      enabled: false
 
 ska-csp-lmc-mid:
   labels: 
