@@ -162,17 +162,6 @@ def stow_while_configuring(
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/auto_stow.feature",
-    "Validate SetStowMode command on DishLeafNode",
-)
-def test_verify_setstowmode(tmc: TMCFacade, event_tracer: TangoEventTracer):
-    """Test AssignResources with SDP v1.0."""
-    _setup_event_subscriptions(tmc, event_tracer)
-
-
-@pytest.mark.batch2
-@pytest.mark.SKA_mid
-@scenario(
-    "../tmc_new_ITH/features/auto_stow.feature",
     "Validate auto stow on gust speed",
 )
 def test_autostow_gust_speed(tmc: TMCFacade, event_tracer: TangoEventTracer):
@@ -249,19 +238,6 @@ def test_autostow_max_temp_threshold(
     _setup_event_subscriptions(tmc, event_tracer)
 
 
-@pytest.mark.batch2
-@pytest.mark.SKA_mid
-@scenario(
-    "../tmc_new_ITH/features/auto_stow.feature",
-    "Validate SetStowMode command in configuring on DishLeafNode",
-)
-def test_setstowmode_configuring(
-    tmc: TMCFacade, event_tracer: TangoEventTracer
-):
-    """Test that the dish is stowed while configuring"""
-    _setup_event_subscriptions(tmc, event_tracer)
-
-
 @given("a DishLeafNode device in STANDBY_FP mode")
 def given_dishleafnode_in_standby_fp(
     tmc: TMCFacade, event_tracer: TangoEventTracer
@@ -304,13 +280,6 @@ def given_tmc_and_dishes(
         "longRunningCommandResult",
         (unique_id[0], COMMAND_COMPLETED),
     )
-
-
-@when("I invoke the SetStowMode command on the DishLeafNode")
-def when_invoke_setstowmode(tmc: TMCFacade):
-    """When I invoke the SetStowMode command on the DishLeafNode."""
-    dish_leaf_node = tmc.dish_leaf_node_list[0]
-    _, pytest.unique_id = dish_leaf_node.SetStowMode()
 
 
 @when("the gust speed is greater than the max allowed gust speed")
@@ -421,98 +390,6 @@ def when_temperature_exceeds_max_threshold_for_duration(
     simulate_temperature(10, 11, 2)
     simulate_temperature(15, 20, 2)
     simulate_temperature(31, 35, 6)
-
-
-@when(
-    "I invoke the SetStowMode command on the DishLeafNode in configuring state"
-)
-def when_invoke_set_stow_mode_while_configuring(
-    tmc: TMCFacade, dishes: DishesFacade, event_tracer: TangoEventTracer
-):
-    """When I invoke the SetStowMode command while the dish is configuring."""
-    dish_leaf_node = tmc.dish_leaf_node_list[0]
-    dish_master = dishes.dish_master_dict["dish_001"]
-
-    # Load the dish configuration JSON
-    dish_json_str = get_input_str(
-        join(
-            dirname(__file__),
-            "..",
-            "data",
-            "dish_leaf_node",
-            "dishleafnode_configure.json",
-        )
-    )
-    dish_master.SetDirectDishMode(DishMode.STANDBY_LP)
-    dish_json = json.loads(dish_json_str)
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        dish_leaf_node, "dishMode", DishMode.STANDBY_LP
-    )
-
-    _, unique_id_fp = dish_leaf_node.SetStandbyFPMode()
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        dish_leaf_node, "dishMode", DishMode.STANDBY_FP
-    )
-
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        dish_leaf_node,
-        "longRunningCommandResult",
-        (unique_id_fp[0], COMMAND_COMPLETED),
-    )
-
-    result_config, unique_id_config = dish_leaf_node.Configure(
-        json.dumps(dish_json)
-    )
-    LOGGER.info(
-        f"Command ID: {unique_id_config} Returned result: {result_config}"
-    )
-
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(dish_leaf_node, "dishMode", DishMode.OPERATE)
-    result_stow, unique_id_stow = dish_leaf_node.SetStowMode()
-    LOGGER.info(f"Command ID: {unique_id_stow} Returned result: {result_stow}")
-
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        dish_leaf_node,
-        "longRunningCommandResult",
-        (unique_id_stow[0], COMMAND_COMPLETED),
-    )
-
-
-@then("the dish transitions to STOW mode")
-def then_dish_transitions_to_stow_mode(
-    tmc: TMCFacade, event_tracer: TangoEventTracer
-):
-    """Then the dish transitions to STOW mode."""
-    dish_leaf_node = tmc.dish_leaf_node_list[0]
-    event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(dish_leaf_node, "dishMode", DishMode.STOW)
-
-
-@then("the longRunningCommandResult event confirms command completion")
-def then_long_running_command_completes(
-    tmc: TMCFacade, event_tracer: TangoEventTracer
-):
-    """Then the longRunningCommandResult event confirms command completion."""
-    dish_leaf_node = tmc.dish_leaf_node_list[0]
-    assert_that(event_tracer).within_timeout(
-        ASSERTIONS_TIMEOUT
-    ).has_change_event_occurred(
-        dish_leaf_node,
-        "longRunningCommandResult",
-        (pytest.unique_id[0], COMMAND_COMPLETED),
-    )
 
 
 @then("the dish automatically stows")

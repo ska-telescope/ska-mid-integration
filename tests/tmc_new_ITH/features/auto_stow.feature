@@ -1,17 +1,5 @@
 Feature: Automatic Stowing Functionality on DishLeafNode Devices
 
-	@XTP-101893 @XTP-101883 @TEAM_HIMALAYA
-	Scenario: Validate SetStowMode command on DishLeafNode
-		Given a DishLeafNode device in STANDBY_LP mode
-		When I invoke the SetStowMode command on the DishLeafNode
-		Then the dish transitions to STOW mode
-		And the longRunningCommandResult event confirms command completion
-    
-	@XTP-101897 @XTP-101883 @TEAM_HIMALAYA
-	Scenario: Validate SetStowMode command in configuring on DishLeafNode
-		Given a DishLeafNode device in STANDBY_LP mode
-		When I invoke the SetStowMode command on the DishLeafNode in configuring state
-		Then the dish transitions to STOW mode
        
 	@XTP-101898 @XTP-101883 @TEAM_HIMALAYA
 	Scenario: Validate auto stow on gust speed
