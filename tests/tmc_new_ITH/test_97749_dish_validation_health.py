@@ -624,5 +624,3 @@ def verify_alarm_raised(validation_type):
 
     # Cleanup
     tear_down_configured_alarms(alarm_handler, alarm_list)
-
-    # assert False
