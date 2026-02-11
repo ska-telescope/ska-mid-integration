@@ -154,6 +154,8 @@ def given_tmc_and_dishes(
     """Given TMC and Dishes facades."""
     LOGGER.info("Testing SetStowMode command on DishLeafNode")
     dish_leaf_node = tmc.dish_leaf_node_list[0]
+    LOGGER.info("my dln %s", dish_leaf_node)
+
     event_tracer.subscribe_event(dish_leaf_node, "dishMode")
     event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
 
@@ -256,6 +258,7 @@ def when_temperature_exceeds_max_threshold(
     """When the temperature exceeds the configured
     maximum temperature threshold."""
     dish_leaf_node = tmc.dish_leaf_node_list[0]
+    LOGGER.info("my dln %s", dish_leaf_node)
     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
 
     _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
