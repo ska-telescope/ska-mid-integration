@@ -129,6 +129,7 @@ def sdp_subarray_configure_complete(event_recorder, simulator_factory):
     sdp_sim = simulator_factory.get_or_create_simulator_device(
         SimulatorDeviceType.MID_SDP_DEVICE
     )
+    sdp_sim.setdirectobsstate(ObsState.READY)
     assert event_recorder.has_change_event_occurred(
         sdp_sim,
         "obsState",
