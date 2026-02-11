@@ -246,6 +246,8 @@ Subarray Node
     #. **AbortCommandTimeOut** : This refers to the timeout for the Subarray ABORTED obsState transition. Once the AbortCommandTimeOut exceeds, SubarrayNode transitions to obsState FAULT. Currently defaults to 130 seconds.
     #. **TelmodelSource** : This refers to the source of the telmodel model for the subarray. Currently defaults to "car://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata".
     #. **TelmodelPath** : This refers to the path of the telmodel model for the subarray. Currently defaults to "instrument/ska1_mid/layout/mid-layout.json".
+    #. **ScanStartTimeOffset** : Offset for start_time for scan command in nanoseconds.
+    #. **StartTimeEnabled** : Flag to enable/disable use of ScanStartTimeOffset.
 
 SDP Subarray Leaf Node
 ^^^^^^^^^^^^^^^^^^^^^^^^

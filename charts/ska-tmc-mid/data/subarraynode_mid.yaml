@@ -28,6 +28,8 @@ server:
   {{- $Family := .Values.deviceServers.subarraynode.family }}
   {{- $TelmodelSource := .Values.deviceServers.subarraynode.TelmodelSource }}
   {{- $TelmodelPath := .Values.deviceServers.subarraynode.TelmodelPath }}
+  {{- $ScanStartTimeOffset := .Values.deviceServers.subarraynode.ScanStartTimeOffset }}
+  {{- $StartTimeEnabled := .Values.deviceServers.subarraynode.StartTimeEnabled }}
   {{- range  ( regexSplit " " ((.Values.subarray_count | int) | seq ) -1 ) }}
     - name: "{{ printf "%02s" . }}"
       classes:
@@ -35,6 +37,12 @@ server:
         devices:
         - name: "{{ $Domain }}/{{ $Family }}/{{ printf "%02s" . }}"
           properties:
+          - name: "ScanStartTimeOffset"
+            values:
+                - "{{ $ScanStartTimeOffset }}"
+          - name: "StartTimeEnabled"
+            values:
+              - "{{ $StartTimeEnabled }}"
           - name: "TelmodelSource"
             values:
               - "{{ $TelmodelSource }}"

@@ -5,10 +5,14 @@ tag_description=
 **1. Updated ska-tmc-mid from v1.14.0-rc.1 to v1.15.0-rc.1**
 
         * TMC Mid supports PST Scan Configuration.
+        * Introduced property `StartTimeEnabled` to enable/disable parameter from Scan JSON.
+        * Added `ScanStartTimeOffset` property in chart configuration.
 
 release_notes=
 **Charts:**
 **1. Updated ska-tmc-mid from v1.14.0-rc.1 to v1.15.0-rc.1**
         * TMC Mid supports PST Scan Configuration.
+        * Introduced property `StartTimeEnabled` to enable/disable parameter from Scan JSON.
+        * Added `ScanStartTimeOffset` property in chart configuration.
 ​
 ​
