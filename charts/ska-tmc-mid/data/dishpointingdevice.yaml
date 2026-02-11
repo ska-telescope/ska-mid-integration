@@ -64,7 +64,7 @@ server:
                 - "tango::logger"
             - name: "LoggingLevelDefault"
               values:
-                - "5"
+                - "{{coalesce $.Values.deviceServers.dishpointingdevice.LoggingLevel $.Values.global.TMCLoggingLevel }}"
             - name: "SkaLevel"
               values:
                 - "4"

@@ -29,6 +29,7 @@ global:
   # deviceServers.dishmaster, deviceServers.dishleafnode
   dish_devices: ["dishmaster", "dishleafnode"]
   dishes: ["001", "036", "063", "100"]
+  TMCLoggingLevel: "4"
 
   domain: "mid-tmc"
 
@@ -169,6 +170,7 @@ deviceServers:
       interface: "https://schema.skao.int/ska-mid-dish-gpm/1.2"
       data_sources_prefix: "gitlab://gitlab.com/ska-telescope/ska-tmc/ska-tmc-simulators"
       file_path_prefix: "instrument/ska_mid1/global_pointing_model_data"
+    LoggingLevel: "4"
 
   subarraynode:
     enabled: true
@@ -193,6 +195,7 @@ deviceServers:
       requests:
         cpu: 400m
         memory: 300Mi
+    LoggingLevel: "4"
 
   sdpsubarrayleafnode:
     enabled: true
@@ -203,6 +206,7 @@ deviceServers:
     EventSubscriptionCheckPeriod: 1.5
     SDPSubarrayAdminModeEnabled: true
     family: "subarray-leaf-node-sdp"
+    LoggingLevel: "4"
 
   sdpmasterleafnode:
     enabled: true
@@ -214,6 +218,7 @@ deviceServers:
     SDPMasterAdminModeEnabled: true
     family: "leaf-node-sdp"
     member: "0"
+    LoggingLevel: "4"
 
   cspmasterleafnode:
     enabled: true
@@ -225,6 +230,7 @@ deviceServers:
     CommandTimeOutDefault: 30
     family: "leaf-node-csp"
     member: "0"
+    LoggingLevel: "4"
 
   cspsubarrayleafnode:
     enabled: true
@@ -239,6 +245,7 @@ deviceServers:
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
     family: "subarray-leaf-node-csp"
+    LoggingLevel: "4"
 
   dishleafnode:
     enabled: true
@@ -259,6 +266,7 @@ deviceServers:
     DishAvailabilityCheckTimeout: 30
     family: "leaf-node-dish"
     prefix_member: "SKA"
+    LoggingLevel: "4"
 
   dishpointingdevice:
     enabled: true
@@ -276,6 +284,7 @@ deviceServers:
       requests:
         cpu: 500m
         memory: 500Mi
+    LoggingLevel: "4"
 
   resourcemonitor:
     enabled: true
@@ -289,6 +298,7 @@ deviceServers:
     DishType: "SKA"
     DishIDs: ["SKA001", "SKA036", "SKA063", "SKA100"]
     MidSubarrayNodeFQDNs: ["mid-tmc/subarray/01", "mid-tmc/subarray/02"]
+    LoggingLevel: "4"
 
   mocks:
     enabled: false
