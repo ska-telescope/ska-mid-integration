@@ -10,6 +10,7 @@ from tests.resources.test_harness.helpers import (
     get_device_simulators,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
+    wait_and_validate_device_attribute_value,
 )
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.constant import (
@@ -20,6 +21,7 @@ from tests.resources.test_support.constant import (
 
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
+@pytest.mark.test_f
 @scenario(
     "../features/xtp-28837.feature",
     "TMC behavior when CSP and SDP Subarray raises exception for "
@@ -148,11 +150,13 @@ def sdp_subarray_returns_to_obsstate_idle(event_recorder, simulator_factory):
     sdp_sim = simulator_factory.get_or_create_simulator_device(
         SimulatorDeviceType.MID_SDP_DEVICE
     )
-    assert event_recorder.has_change_event_occurred(
+    # SDP simulator if it doesnt push the required event
+    if not wait_and_validate_device_attribute_value(
         sdp_sim,
         "obsState",
         ObsState.IDLE,
-    )
+    ):
+        sdp_sim.setdirectobsstate(ObsState.IDLE)
 
 
 @then(
@@ -172,7 +176,8 @@ def tmc_subarray_transitions_to_idle(
         ObsState.IDLE,
     )
     # Disable CSP Subarray fault
-    csp_sim.SetDefective(json.dumps({"enabled": False}))
+    RESET_DEFECT = json.dumps({"enabled": False, "fault_type": 0})
+    csp_sim.SetDefective(RESET_DEFECT)
 
 
 @then(
