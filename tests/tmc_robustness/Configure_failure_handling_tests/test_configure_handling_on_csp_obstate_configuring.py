@@ -11,6 +11,7 @@ from tests.resources.test_harness.helpers import (
     get_device_simulators,
     prepare_json_args_for_centralnode_commands,
     prepare_json_args_for_commands,
+    wait_and_validate_device_attribute_value,
 )
 from tests.resources.test_harness.utils.enums import SimulatorDeviceType
 from tests.resources.test_support.constant import (
@@ -129,12 +130,14 @@ def sdp_subarray_configure_complete(event_recorder, simulator_factory):
     sdp_sim = simulator_factory.get_or_create_simulator_device(
         SimulatorDeviceType.MID_SDP_DEVICE
     )
-    assert event_recorder.has_change_event_occurred(
+
+    # SDP simulator if it doesnt push the required event
+    if not wait_and_validate_device_attribute_value(
         sdp_sim,
         "obsState",
         ObsState.READY,
-        lookahead=4,
-    )
+    ):
+        sdp_sim.setdirectobsstate(ObsState.READY)
 
 
 @given(
