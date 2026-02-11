@@ -129,11 +129,11 @@ def sdp_subarray_configure_complete(event_recorder, simulator_factory):
     sdp_sim = simulator_factory.get_or_create_simulator_device(
         SimulatorDeviceType.MID_SDP_DEVICE
     )
-    sdp_sim.setdirectobsstate(ObsState.READY)
     assert event_recorder.has_change_event_occurred(
         sdp_sim,
         "obsState",
         ObsState.READY,
+        lookahead=4,
     )
 
 
@@ -170,7 +170,6 @@ def given_tmc_subarray_stuck_configuring(
         ObsState.FAULT,
         lookahead=4,
     )
-
     for dish_id in ["SKA001", "SKA036", "SKA063", "SKA100"]:
         event_recorder.subscribe_event(
             central_node_mid.dish_leaf_node_dict[dish_id], "pointingState"
