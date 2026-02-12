@@ -249,7 +249,6 @@ def subarray_transitions_to_empty(
         central_node_mid.subarray_node,
         "obsState",
         ObsState.EMPTY,
-        lookahead=5,
     )
     assert event_recorder.has_change_event_occurred(
         central_node_mid.subarray_node,
