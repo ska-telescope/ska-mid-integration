@@ -116,9 +116,6 @@ server:
               {{- range $wms := $WeatherStationDeviceNames }}
                   - "{{ $wms }}"
               {{- end }}
-            - name: "EventSubscriptionCheckPeriod"
-              values:
-                - "{{ $EventSubscriptionCheckPeriod }}"
             - name: "MaxAllowedWindspeed"
               values:
                 - "{{$MaxAllowedWindspeed}}"
