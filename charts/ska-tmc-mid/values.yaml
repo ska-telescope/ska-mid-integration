@@ -314,14 +314,6 @@ deviceServers:
     csp: false
     sdp: false
 
-ska-mid-wms:
-  legacy_compatibility: true
-  dev-name: "mid/wms/0"
-  ska-tango-base:
-    enabled: false
-    itango:
-      enabled: false
-
 nodeSelector: {}
 
 affinity: {}
