@@ -124,7 +124,7 @@ ska-tango-tangogql:
   ska-tango-base:
     enabled: false
 
-mid_wms:
+ska-mid-wms:
   deviceServers:
     wms:
       station_ids: ["s1", "s2"]
@@ -136,7 +136,7 @@ mid_wms:
   ska-tango-base:
     enabled: false
   simulator:
-    enabled: false
+    enabled: true
     name: wms-sim
     containers:
       registry: registry.gitlab.com
