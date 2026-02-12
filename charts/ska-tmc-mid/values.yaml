@@ -239,7 +239,8 @@ deviceServers:
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
     family: "subarray-leaf-node-csp"
-
+    weather_station_device_name: "ska-mid/weather-monitoring/s1"
+  
   dishleafnode:
     enabled: true
     file: "data/dishleafnode.yaml"
