@@ -6,38 +6,38 @@ tag_description=
 
         * TMC Mid supports Auto stow and manual stow of dishes
         * Follwing are the properties introduced in dishleafnode
-                WeatherStationDeviceNames
-                MaxAllowedWindspeed
-                MaxAllowedGustWindspeed
-                MaxAllowedOpsWindspeed
-                MaxAllowedWindspeedDifference
-                WindspeedMeasurementTimeWindow
-                GustWindspeedMeasurementTimeWindow
-                MeanWindspeedTimeWindow
-                MaxAllowedOpsMeanWindspeedMeasurementTimeWindow
-                MaxTemperatureThreshold
-                MinTemperatureThreshold
-                TimeDelta
-                TemperatureDelta 
-                EnableAutoStow
+                weather_station_device_names: 
+                max_allowed_wind_speed
+                max_allowed_ops_wind_speed
+                max_allowed_gust_wind_speed
+                max_allowed_wind_speed_difference
+                wind_speed_measurement_time_window
+                gust_wind_speed_measurement_time_window
+                mean_wind_speed_measurement_time_window
+                max_allowed_ops_mean_wind_speed_measurement_time_window
+                max_temp_threshold
+                min_temp_threshold
+                time_delta
+                temp_delta 
+                enable_auto_stow
 
 release_notes=
 **Charts:**
 **1. Updated ska-tmc-mid from v1.15.0-rc.1 to v1.16.0-rc.1**
         * TMC Mid supports Auto stow and manual stow of dishes
         * Follwing are the properties introduced in dishleafnode
-                WeatherStationDeviceNames
-                MaxAllowedWindspeed
-                MaxAllowedGustWindspeed
-                MaxAllowedOpsWindspeed
-                MaxAllowedWindspeedDifference
-                WindspeedMeasurementTimeWindow
-                GustWindspeedMeasurementTimeWindow
-                MeanWindspeedTimeWindow
-                MaxAllowedOpsMeanWindspeedMeasurementTimeWindow
-                MaxTemperatureThreshold
-                MinTemperatureThreshold
-                TimeDelta
-                TemperatureDelta 
-                EnableAutoStow
+                weather_station_device_names: 
+                max_allowed_wind_speed
+                max_allowed_ops_wind_speed
+                max_allowed_gust_wind_speed
+                max_allowed_wind_speed_difference
+                wind_speed_measurement_time_window
+                gust_wind_speed_measurement_time_window
+                mean_wind_speed_measurement_time_window
+                max_allowed_ops_mean_wind_speed_measurement_time_window
+                max_temp_threshold
+                min_temp_threshold
+                time_delta
+                temp_delta 
+                enable_auto_stow
 ​

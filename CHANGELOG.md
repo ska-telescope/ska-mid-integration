@@ -12,21 +12,20 @@ Added
 * TMC is now able to stow the dish manually using SetStowMode command.
 * Automatically using weather station data.
 * Follwing are the properties introduced in dishleafnode
-        WeatherStationDeviceNames
-        MaxAllowedWindspeed
-        MaxAllowedGustWindspeed
-        MaxAllowedOpsWindspeed
-        MaxAllowedWindspeedDifference
-        WindspeedMeasurementTimeWindow
-        GustWindspeedMeasurementTimeWindow
-        MeanWindspeedTimeWindow
-        MaxAllowedOpsMeanWindspeedMeasurementTimeWindow
-        MaxTemperatureThreshold
-        MinTemperatureThreshold
-        TimeDelta
-        TemperatureDelta 
-        EnableAutoStow
-
+          weather_station_device_names: 
+          max_allowed_wind_speed
+          max_allowed_ops_wind_speed
+          max_allowed_gust_wind_speed
+          max_allowed_wind_speed_difference
+          wind_speed_measurement_time_window
+          gust_wind_speed_measurement_time_window
+          mean_wind_speed_measurement_time_window
+          max_allowed_ops_mean_wind_speed_measurement_time_window
+          max_temp_threshold
+          min_temp_threshold
+          time_delta
+          temp_delta 
+          enable_auto_stow
 [1.15.0-rc.1]
 *************
 Added
