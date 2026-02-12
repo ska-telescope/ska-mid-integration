@@ -28,6 +28,22 @@ server:
   {{- $isSimulatedDish := .Values.deviceServers.mocks.dish }}
   {{- $isDishAbortEnabled := .Values.deviceServers.dishleafnode.IsDishAbortEnabled }}
   {{- $real_dish_name := .Values.global.namespace_dish.dish_names }}
+  {{- $WeatherStationDeviceNames := .Values.deviceServers.dishleafnode.weather_station_device_names}}
+  {{- $MaxAllowedWindspeed := .Values.deviceServers.dishleafnode.max_allowed_wind_speed }}
+  {{- $MaxAllowedGustWindspeed := .Values.deviceServers.dishleafnode.max_allowed_gust_wind_speed }}
+  {{- $MaxAllowedOpsWindspeed := .Values.deviceServers.dishleafnode.max_allowed_ops_wind_speed }}
+  {{- $MaxAllowedWindspeedDifference := .Values.deviceServers.dishleafnode.max_allowed_wind_speed_difference }}
+
+  {{- $WindspeedMeasurementTimeWindow := .Values.deviceServers.dishleafnode.wind_speed_measurement_time_window }}
+  {{- $GustWindspeedMeasurementTimeWindow := .Values.deviceServers.dishleafnode.gust_wind_speed_measurement_time_window }}
+  {{- $MeanWindspeedTimeWindow := .Values.deviceServers.dishleafnode.mean_wind_speed_measurement_time_window }}
+  {{- $MaxAllowedOpsMeanWindspeedMeasurementTimeWindow := .Values.deviceServers.dishleafnode.max_allowed_ops_mean_wind_speed_measurement_time_window }}
+
+  {{- $MaxTemperatureThreshold := .Values.deviceServers.dishleafnode.max_temp_threshold }}
+  {{- $MinTemperatureThreshold := .Values.deviceServers.dishleafnode.min_temp_threshold }}
+  {{- $TimeDelta := .Values.deviceServers.dishleafnode.time_delta }}
+  {{- $TemperatureDelta := .Values.deviceServers.dishleafnode.temp_delta }}
+  {{- $EnableAutoStow := .Values.deviceServers.dishleafnode.enable_auto_stow }}
 
   {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true) }}
     {{- range $instance := .Values.global.dishids }}
@@ -95,6 +111,51 @@ server:
             - name: "DishAvailabilityCheckTimeout"
               values:
                 - "{{ $DishAvailabilityCheckTimeout }}"
+            - name: "WeatherStationDeviceNames"
+              values:
+              {{- range $wms := $WeatherStationDeviceNames }}
+                  - "{{ $wms }}"
+              {{- end }}
+            - name: "MaxAllowedWindspeed"
+              values:
+                - "{{$MaxAllowedWindspeed}}"
+            - name: "MaxAllowedGustWindspeed"
+              values:
+                - "{{$MaxAllowedGustWindspeed}}"
+            - name: "MaxAllowedOpsWindspeed"
+              values:
+                - "{{$MaxAllowedOpsWindspeed}}"
+            - name: "MaxAllowedWindspeedDifference"
+              values:
+                - "{{$MaxAllowedWindspeedDifference}}"
+            - name: "WindspeedMeasurementTimeWindow"
+              values:
+                - "{{$WindspeedMeasurementTimeWindow}}"
+            - name: "GustWindspeedMeasurementTimeWindow"
+              values:
+                - "{{$GustWindspeedMeasurementTimeWindow}}"              
+            - name: "MeanWindspeedTimeWindow"
+              values:
+                - "{{$MeanWindspeedTimeWindow}}"
+            - name: "MaxAllowedOpsMeanWindspeedMeasurementTimeWindow"
+              values:
+                - "{{$MaxAllowedOpsMeanWindspeedMeasurementTimeWindow}}"
+            - name: "MaxTemperatureThreshold"
+              values:
+                - "{{$MaxTemperatureThreshold}}"
+            - name: "MinTemperatureThreshold"
+              values:
+                - "{{$MinTemperatureThreshold}}"
+            - name: "TimeDelta"
+              values:
+                - "{{$TimeDelta}}"
+            - name: "TemperatureDelta"
+              values:
+                - "{{$TemperatureDelta}}"
+            - name: "EnableAutoStow"
+              values:
+                - "{{$EnableAutoStow}}"
+
   {{- end }}
 depends_on:
   - device: sys/database/2

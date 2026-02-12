@@ -52,6 +52,6 @@ dependencies:
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-k8s-config-exporter.enabled
   - name: ska-mid-wms
-    version: 0.4.0
+    version: 1.0.1
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-mid-wms.enabled
