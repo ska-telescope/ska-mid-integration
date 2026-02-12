@@ -186,7 +186,7 @@ def when_gust_speed_exceeds_threshold(
     LOGGER.info("my stowstatus %s", dish_leaf_node.stowstatus)
     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
 
-    _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
+    # _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
     dish_leaf_node.maxAllowedGustWindpeed = 22.0
     dish_leaf_node.gustWindspeedMeasurementTimeWindow = 4
     simulate_windspeed(22, 24, 15)
@@ -205,7 +205,7 @@ def when_mean_wind_speed_exceeds_threshold(
     dish_leaf_node = tmc.dish_leaf_node_list[0]
     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
 
-    _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
+    # _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
     dish_leaf_node.maxAllowedWindspeed = 16.0
     dish_leaf_node.meanWindspeedMeasurementTimeWindow = 10.0
     simulate_windspeed(16, 18, 10)
@@ -224,7 +224,7 @@ def when_operational_wind_speed_exceeds_threshold(
     dish_leaf_node = tmc.dish_leaf_node_list[0]
     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
 
-    _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
+    # _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
     dish_leaf_node.maxAllowedOpsWindspeed = 5.0
     dish_leaf_node.WindspeedMeasurementTimeWindow = 10.0
     simulate_windspeed(6, 7, 10)
@@ -242,7 +242,7 @@ def when_operational_wind_speed_exceeds_percentage_threshold(
     dish_leaf_node = tmc.dish_leaf_node_list[0]
     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
 
-    _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
+    # _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
     dish_leaf_node.maxAllowedWindspeedDifference = 5.0
     dish_leaf_node.maxAllowedOpsMeanWindspeedMeasurementTimeWindow = 10.0
 
@@ -261,7 +261,7 @@ def when_temperature_exceeds_max_threshold(
     LOGGER.info("my dln %s", dish_leaf_node)
     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
 
-    _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
+    # _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
     dish_leaf_node.maxTemperatureThreshold = 35
     simulate_temperature(35, 36, 2)
 
@@ -278,7 +278,7 @@ def when_temperature_exceeds_max_threshold_for_duration(
     dish_leaf_node = tmc.dish_leaf_node_list[0]
     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
 
-    _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
+    # _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
     dish_leaf_node.timeDelta = 10.0
     dish_leaf_node.temperatureDelta = 20.0
 
@@ -302,3 +302,4 @@ def then_dish_automatically_stows(
     ).has_change_event_occurred(
         tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_COMPLETED
     )
+    _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
