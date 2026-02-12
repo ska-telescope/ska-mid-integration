@@ -215,6 +215,7 @@ class TestSubarrayHealthState(object):
             )
         except Exception as e:
             LOGGER.error("Failed to parse healthInfo: %s", e)
+        assert 0
 
     @pytest.mark.parametrize(
         "csp_subarray_health_state, sdp_subarray_health_state, \
