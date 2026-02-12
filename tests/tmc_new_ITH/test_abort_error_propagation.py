@@ -93,7 +93,7 @@ def test_verify_abort_error_propagation():
 
 
 @given("the TMC subarray is in the READY observation state")
-def subarray_in_idle_obsstate(
+def subarray_in_ready_obsstate(
     context_fixt: SubarrayTestContextData,
     tmc: TMCFacade,
     sdp: SDPFacade,
@@ -222,7 +222,7 @@ def verify_error_message(
             "longRunningCommandResult",
             (pytest.unique_id[0], COMMAND_RESULT_SDP),
         )
-
+        sdp.sdp_subarray.SetDirectObsState(ObsState.FAULT)
         sdp.sdp_subarray.SetDefective(json.dumps({"enabled": False}))
 
     if defective_subsystem == "Dish":

@@ -84,7 +84,7 @@ centralnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-centralnode
-    tag: 0.28.1
+    tag: 0.29.2
     pullPolicy: IfNotPresent
 
 subarraynode:
@@ -126,7 +126,7 @@ skatmcsimulators:
   image:
     registry: artefact.skao.int
     image: ska-tmc-simulators
-    tag: 1.7.5
+    tag: 1.9.5
     pullPolicy: IfNotPresent
 
 resource_monitor:
@@ -262,6 +262,7 @@ deviceServers:
     weather_station_device_names: 
       - "ska-mid/weather-monitoring/s1"
       - "ska-mid/weather-monitoring/s2"
+      - ""
     max_allowed_wind_speed: 13.5
     max_allowed_ops_wind_speed: 10
     max_allowed_gust_wind_speed: 20  
@@ -303,7 +304,7 @@ deviceServers:
     DishLeafNodePrefix: "mid-tmc/leaf-node-dish/"
     SubarrayPrefix: "mid-tmc/subarray/"
     DishType: "SKA"
-    DishIDs: ["SKA001", "SKA036", "SKA063", "SKA100"]
+    DishIDs: *dish_ids
     MidSubarrayNodeFQDNs: ["mid-tmc/subarray/01", "mid-tmc/subarray/02"]
 
   mocks:
