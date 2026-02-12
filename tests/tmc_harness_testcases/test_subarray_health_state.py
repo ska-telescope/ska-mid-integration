@@ -114,7 +114,7 @@ class TestSubarrayHealthState(object):
             ),
         ],
     )
-    @pytest.mark.batch2test
+    @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_health_state_failed_when_csp_or_sdp_failed(
         self,
@@ -206,7 +206,6 @@ class TestSubarrayHealthState(object):
         ), "Expected Subarray Node HealthState to be FAILED"
         raw_health_info = subarray_node.subarray_node.healthInfo
         LOGGER.info("Raw healthInfo: %s", raw_health_info)
-
         try:
             parsed = json.loads(raw_health_info)
             LOGGER.info(
@@ -215,7 +214,6 @@ class TestSubarrayHealthState(object):
             )
         except Exception as e:
             LOGGER.error("Failed to parse healthInfo: %s", e)
-        assert 0
 
     @pytest.mark.parametrize(
         "csp_subarray_health_state, sdp_subarray_health_state, \
