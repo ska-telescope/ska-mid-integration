@@ -28,6 +28,7 @@ from tests.resources.test_harness.subarray_node import TIMEOUT
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 
 ASSERTIONS_TIMEOUT = 60
+CN_ASSERTIONS_TIMEOUT = 120
 
 # ------------------------------------------------------------
 # Test Harness fixtures

@@ -10,6 +10,7 @@ Operations Guide
    five_point_scan_calibration
    band5dc_support
    gpm_how_to
+   set_stow_mode_how_to
    array_layout
    spfrx_parameters_support
    pst_scan_configuration
