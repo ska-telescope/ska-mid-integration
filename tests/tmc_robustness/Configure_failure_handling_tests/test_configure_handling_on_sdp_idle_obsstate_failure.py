@@ -177,6 +177,7 @@ def sdp_subarray_returns_to_obsstate_idle(event_recorder, simulator_factory):
         sdp_sim,
         "obsState",
         ObsState.IDLE,
+        lookahead=10,
     )
 
 
@@ -201,7 +202,8 @@ def given_tmc_subarray_stuck_configuring(
             lookahead=15,
         )
     # Disable SDP Subarray fault
-    sdp_sim.SetDefective(json.dumps({"enabled": False}))
+    RESET_DEFECT = json.dumps({"enabled": False, "fault_type": 0})
+    sdp_sim.SetDefective(RESET_DEFECT)
 
 
 @when(

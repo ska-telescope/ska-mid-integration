@@ -135,7 +135,7 @@ def csp_subarray_configure_complete(event_recorder, simulator_factory):
         csp_sim,
         "obsState",
         ObsState.READY,
-        lookahead=15,
+        lookahead=10,
     )
 
 
@@ -153,7 +153,8 @@ def sdp_subarray_stuck_in_configuring(event_recorder, simulator_factory):
         "obsState",
         ObsState.CONFIGURING,
     )
-    sdp_sim.SetDefective(json.dumps({"enabled": False}))
+    RESET_DEFECT = json.dumps({"enabled": False, "fault_type": 0})
+    sdp_sim.SetDefective(RESET_DEFECT)
 
 
 @given(

@@ -18,6 +18,8 @@ server:
   {{- $ElevationMinLimit := .Values.deviceServers.dishpointingdevice.ElevationMinLimit }}
   {{- $AzimuthMaxLimit := .Values.deviceServers.dishpointingdevice.AzimuthMaxLimit }}
   {{- $AzimuthMinLimit := .Values.deviceServers.dishpointingdevice.AzimuthMinLimit }}
+  {{- $WeatherStationDeviceNames := .Values.deviceServers.dishleafnode.weather_station_device_names}}
+  {{- $EventSubscriptionCheckPeriod := .Values.deviceServers.dishleafnode.EventSubscriptionCheckPeriod }}
   {{- $instance_list := list -}}
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
   {{- $isSimulatedDish := .Values.deviceServers.mocks.dish }}
@@ -68,6 +70,14 @@ server:
             - name: "SkaLevel"
               values:
                 - "4"
+            - name: "WeatherStationDeviceNames"
+              values:
+              {{- range $wms := $WeatherStationDeviceNames }}
+                - "{{ $wms }}"
+              {{- end }}
+            - name: "EventSubscriptionCheckPeriod"
+              values:
+                - "{{ $EventSubscriptionCheckPeriod }}"
   {{- end }}
 
 depends_on:
