@@ -20,6 +20,12 @@ from tests.tmc_new_ITH.weather_sim import (
 ASSERTIONS_TIMEOUT = 60
 
 
+@pytest.fixture
+def test_state():
+    """Fixture to store state between test steps."""
+    return {"reset_temp": False}
+
+
 def _setup_event_subscriptions(
     tmc: TMCFacade,
     event_tracer: TangoEventTracer,
@@ -249,7 +255,7 @@ def when_operational_wind_speed_exceeds_percentage_threshold(
 
 @when("the temperature exceeds the configured maximum temperature threshold")
 def when_temperature_exceeds_max_threshold(
-    tmc: TMCFacade, event_tracer: TangoEventTracer
+    tmc: TMCFacade, event_tracer: TangoEventTracer, test_state: dict
 ):
     """When the temperature exceeds the configured
     maximum temperature threshold."""
@@ -259,7 +265,7 @@ def when_temperature_exceeds_max_threshold(
 
     dish_leaf_node.maxTemperatureThreshold = 35
     simulate_temperature(35, 36, 2)
-    pytest.reset_temp = True
+    test_state["reset_temp"] = True
 
 
 @when(
@@ -267,7 +273,7 @@ def when_temperature_exceeds_max_threshold(
     "exceeds the configured threshold"
 )
 def when_temperature_exceeds_max_threshold_for_duration(
-    tmc: TMCFacade, event_tracer: TangoEventTracer
+    tmc: TMCFacade, event_tracer: TangoEventTracer, test_state: dict
 ):
     """When the temperature exceeds the configured maximum
     temperature threshold for a specific duration."""
@@ -280,12 +286,12 @@ def when_temperature_exceeds_max_threshold_for_duration(
     simulate_temperature(10, 11, 2)
     simulate_temperature(15, 20, 2)
     simulate_temperature(31, 35, 6)
-    pytest.reset_temp = True
+    test_state["reset_temp"] = True
 
 
 @then("the dish automatically stows")
 def then_dish_automatically_stows(
-    tmc: TMCFacade, event_tracer: TangoEventTracer
+    tmc: TMCFacade, event_tracer: TangoEventTracer, test_state: dict
 ):
     """Then the dish automatically stows."""
     assert_that(event_tracer).within_timeout(
@@ -298,11 +304,11 @@ def then_dish_automatically_stows(
     ).has_change_event_occurred(
         tmc.dish_leaf_node_list[0], "stowStatus", StowStatus.STOW_COMPLETED
     )
-    if pytest.reset_temp:
+    if test_state.get("reset_temp", True):
         tmc.dish_leaf_node_list[0].set_timeout_millis(5000)
         tmc.dish_leaf_node_list[0].temperatureDelta = 100.0
         tmc.dish_leaf_node_list[0].maxTemperatureThreshold = 100.0
         tmc.dish_leaf_node_list[0].minTemperatureThreshold = -100.0
         tmc.dish_leaf_node_list[0].timeDelta = 1000.0
-        pytest.reset_temp = False
+        test_state["reset_temp"] = False
     _reset_stow_mode(tmc.dish_leaf_node_list[0], event_tracer)
