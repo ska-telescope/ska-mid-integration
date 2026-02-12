@@ -1,7 +1,9 @@
 import json
+import logging
 
 import pytest
 from ska_tango_base.control_model import HealthState, ObsState
+from ska_tango_testing.mock.placeholders import Anything
 
 from tests.resources.test_harness.helpers import (
     get_device_simulators,
@@ -9,6 +11,9 @@ from tests.resources.test_harness.helpers import (
 )
 from tests.resources.test_harness.utils.enums import CapabilityStates
 from tests.resources.test_support.constant import COMMAND_COMPLETED
+
+logging.basicConfig(level=logging.INFO)
+LOGGER = logging.getLogger(__name__)
 
 
 class TestSubarrayHealthState(object):
@@ -197,7 +202,19 @@ class TestSubarrayHealthState(object):
         assert event_recorder.has_change_event_occurred(
             subarray_node.subarray_node,
             "healthinfo",
+            Anything,
         ), "Expected Subarray Node HealthState to be FAILED"
+        raw_health_info = subarray_node.subarray_node.healthInfo
+        LOGGER.info("Raw healthInfo: %s", raw_health_info)
+
+        try:
+            parsed = json.loads(raw_health_info)
+            LOGGER.info(
+                "Formatted healthInfo:\n%s",
+                json.dumps(parsed, indent=4),
+            )
+        except Exception as e:
+            LOGGER.error("Failed to parse healthInfo: %s", e)
 
     @pytest.mark.parametrize(
         "csp_subarray_health_state, sdp_subarray_health_state, \
