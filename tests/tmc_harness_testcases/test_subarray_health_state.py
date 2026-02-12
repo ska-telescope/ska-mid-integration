@@ -140,13 +140,19 @@ class TestSubarrayHealthState(object):
         dish_master_sim_3.SetDirectHealthState(dish_master3_health_state)
         dish_master_sim_4.SetDirectHealthState(dish_master4_health_state)
         event_recorder.subscribe_event(csp_sa_sim, "healthState")
+        event_recorder.subscribe_event(csp_sa_sim, "healthinfo")
         event_recorder.subscribe_event(sdp_sa_sim, "healthState")
+        event_recorder.subscribe_event(sdp_sa_sim, "healthinfo")
         event_recorder.subscribe_event(dish_master_sim_1, "healthState")
         event_recorder.subscribe_event(dish_master_sim_2, "healthState")
         event_recorder.subscribe_event(dish_master_sim_3, "healthState")
         event_recorder.subscribe_event(dish_master_sim_4, "healthState")
         event_recorder.subscribe_event(
             subarray_node.subarray_node, "healthState"
+        )
+        event_recorder.subscribe_event(
+            subarray_node.subarray_node,
+            "healthinfo",
         )
         assert event_recorder.has_change_event_occurred(
             csp_sa_sim,
@@ -187,6 +193,10 @@ class TestSubarrayHealthState(object):
             subarray_node.subarray_node,
             "healthState",
             HealthState.FAILED,
+        ), "Expected Subarray Node HealthState to be FAILED"
+        assert event_recorder.has_change_event_occurred(
+            subarray_node.subarray_node,
+            "healthinfo",
         ), "Expected Subarray Node HealthState to be FAILED"
 
     @pytest.mark.parametrize(
