@@ -28,24 +28,24 @@ Dish Leaf Node
 
 To work auto stow mode correctly, please update below properties under dish leaf node section of values.yaml file in TMC.
 
-#. **WeatherStationDeviceNames** : TRL's of the weather stations.
-#. **MaxAllowedWindspeed** : Maximum permissible wind speed in m/s before triggering dish stow. Default value is 13.5 m/s.
-#. **MaxAllowedOpsWindspeed** : Maximum permissible ops wind speed in m/s before triggering dish stow. Default value is 10 m/s.
-#. **MaxAllowedGustWindspeed** : Maximum permissible gust wind speed in m/s before triggering dish stow. Default value is 20 m/s.
-#. **MaxAllowedWindspeedDifference** : Maximum permissible wind speed difference in m/s before triggering dish stow. Default value is 4.5 m/s.
-#. **WindspeedMeasurementTimeWindow** : Time window (in seconds) over which wind speed measurements are evaluated. Default is 1000.
-#. **GustWindspeedMeasurementTimeWindow** : Time window (in seconds) used to assess gust wind speed. Default is 3.
-#. **MeanWindspeedTimeWindow** : Time window (in seconds) for calculating the mean wind speed. Default is 600.
-#. **MaxAllowedOpsMeanWindspeedMeasurementTimeWindow** : Time window (in seconds) for evaluating the maximum allowed operational mean wind speed. Default is 600.
-#. **MaxTemperatureThreshold** : Maximum allowable temperature (°C) before protective action is triggered. Default is 40.
-#. **MinTemperatureThreshold** :  Minimum allowable temperature (°C) before protective action is triggered. Default is -5.
-#. **TimeDelta** : Maximum allowed time difference (in seconds) between successive measurements. Default is 1000.
-#. **TemperatureDelta** : Maximum permitted temperature variation (°C) within the defined time window. Default is 10.
-#. **EnableAutoStow**: Flag to enable or disable automatic stow. Default is true.
+#. **weather_station_device_names** : TRL's of the weather stations.
+#. **max_allowed_wind_speed** : Maximum permissible wind speed in m/s before triggering dish stow. Default value is 13.5 m/s.
+#. **max_allowed_ops_wind_speed** : Maximum permissible ops wind speed in m/s before triggering dish stow. Default value is 10 m/s.
+#. **max_allowed_gust_wind_speed** : Maximum permissible gust wind speed in m/s before triggering dish stow. Default value is 20 m/s.
+#. **max_allowed_wind_speed_difference** : Maximum permissible wind speed difference in m/s before triggering dish stow. Default value is 4.5 m/s.
+#. **wind_speed_measurement_time_window** : Time window (in seconds) over which wind speed measurements are evaluated. Default is 1000.
+#. **gust_wind_speed_measurement_time_window** : Time window (in seconds) used to assess gust wind speed. Default is 3.
+#. **mean_wind_speed_measurement_time_window** : Time window (in seconds) for calculating the mean wind speed. Default is 600.
+#. **max_allowed_ops_mean_wind_speed_measurement_time_window** : Time window (in seconds) for evaluating the maximum allowed operational mean wind speed. Default is 600.
+#. **max_temp_threshold** : Maximum allowable temperature (°C) before protective action is triggered. Default is 40.
+#. **min_temp_threshold** :  Minimum allowable temperature (°C) before protective action is triggered. Default is -5.
+#. **time_delta** : Maximum allowed time difference (in seconds) between successive measurements. Default is 1000.
+#. **temp_delta** : Maximum permitted temperature variation (°C) within the defined time window. Default is 10.
+#. **enable_auto_stow**: Flag to enable or disable automatic stow. Default is true.
 
 **Note:** While configuring above values for dish leaf node, please also update below property for **Dish pointing** device of dish leaf node:
 
-#. **WeatherStationDeviceNames** : TRL's of the weather stations.
+#. **weather_station_device_names** : TRL's of the weather stations.
 
 Example: SetStowMode command(manual execution)
 
