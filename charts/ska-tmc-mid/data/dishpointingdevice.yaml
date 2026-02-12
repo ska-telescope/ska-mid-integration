@@ -21,6 +21,7 @@ server:
   {{- $instance_list := list -}}
   {{- $mocks_enabled := .Values.deviceServers.mocks.enabled}}
   {{- $isSimulatedDish := .Values.deviceServers.mocks.dish }}
+  {{- $WeatherStationDeviceNames := .Values.deviceServers.dishleafnode.weather_station_device_names}}
   {{- $real_dish_name := .Values.global.namespace_dish.dish_names }}
   {{- if and (eq $mocks_enabled true) (eq $isSimulatedDish true)  }}
     {{- range $instance := .Values.global.dishids }}
@@ -59,6 +60,11 @@ server:
             - name: "AzimuthMinLimit"
               values:
                 - "{{ $AzimuthMinLimit }}"
+            - name: "WeatherStationDeviceNames"
+              values:
+              {{- range $wms := $WeatherStationDeviceNames }}
+                  - "{{ $wms }}"
+              {{- end }}
             - name: "LoggingTargetsDefault"
               values:
                 - "tango::logger"
