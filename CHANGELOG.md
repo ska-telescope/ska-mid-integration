@@ -26,6 +26,8 @@ Added
           time_delta
           temp_delta 
           enable_auto_stow
+
+
 [1.15.0-rc.1]
 *************
 Added
