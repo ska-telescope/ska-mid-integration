@@ -10,8 +10,6 @@ from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
 from ska_integration_test_harness.facades import DishesFacade
-from ska_integration_test_harness.facades.csp_facade import CSPFacade
-from ska_integration_test_harness.facades.sdp_facade import SDPFacade
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_integration_test_harness.inputs.json_input import DictJSONInput
 from ska_integration_test_harness.inputs.test_harness_inputs import (
@@ -27,7 +25,6 @@ from tests.resources.test_support.constant import (
 )
 from tests.tmc_csp_new_ITH.conftest import ASSERTIONS_TIMEOUT
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
-from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
 
 logger = logging.getLogger(__name__)
 
@@ -80,16 +77,23 @@ def test_verify_gpm_functionality():
 @given("a TMC Mid telescope is operational")
 def given_a_tmc(
     tmc: TMCFacade,
-    csp: CSPFacade,
-    sdp: SDPFacade,
     dishes: DishesFacade,
     event_tracer: TangoEventTracer,
 ):
     """Given a TMC"""
     event_tracer.clear_events()
-    setup_event_subscriptions(tmc, csp, sdp, event_tracer)
+    event_tracer.subscribe_event(tmc.subarray_node, "obsState")
+    event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
     event_tracer.subscribe_event(tmc.central_node, "GlobalPointingModelStatus")
-    log_events({tmc.central_node: ["GlobalPointingModelStatus"]})
+    log_events(
+        {
+            tmc.central_node: [
+                "longRunningCommandResult",
+                "GlobalPointingModelStatus",
+            ],
+            tmc.subarray_node: ["obsState"],
+        }
+    )
     tmc.move_to_on(wait_termination=True, is_long_running_command=True)
     # Setup TMC for testing negative scenarios
     # before invoking SetGlobalPointingModel command on TMC
@@ -230,4 +234,13 @@ def tmc_reports_gpm_status_on_dish(
 
     dishes.dish_master_dict["dish_063"].SetDefective(RESET_DEFECT)
 
+    release_input = MyFileJSONInput("centralnode", "release_resources_mid")
+    tmc.release_resources(release_input, wait_termination=False)
+    assert_that(event_tracer).described_as(
+        f"TMC Subarray Node device ({tmc.subarray_node})"
+        "ObsState attribute values should move "
+        f"from IDLE to EMPTY."
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        tmc.subarray_node, "obsState", ObsState.EMPTY
+    )
     event_tracer.clear_events()
