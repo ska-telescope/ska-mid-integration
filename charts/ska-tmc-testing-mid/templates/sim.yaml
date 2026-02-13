@@ -1,4 +1,4 @@
-{{- if .Values.ska-mid-wms.simulator.enabled }}
+{{- if .Values.simulator.enabled }}
 {{- range $i, $station_id := .Values.mid_wms.deviceServers.wms.station_ids }}
 apiVersion: v1
 kind: Service

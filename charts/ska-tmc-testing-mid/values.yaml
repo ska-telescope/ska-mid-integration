@@ -124,6 +124,15 @@ ska-tango-tangogql:
   ska-tango-base:
     enabled: false
 
+simulator:
+  enabled: true
+  name: wms-sim
+  containers:
+    registry: registry.gitlab.com
+    image: ska-telescope/ska-mid-wms-interface/ska-mid-wms-interface
+    tag: 966329b7
+    pullPolicy: IfNotPresent
+
 ska-mid-wms:
   deviceServers:
     wms:
@@ -136,10 +145,5 @@ ska-mid-wms:
   ska-tango-base:
     enabled: false
   simulator:
-    enabled: true
-    name: wms-sim
-    containers:
-      registry: registry.gitlab.com
-      image: ska-telescope/ska-mid-wms-interface/ska-mid-wms-interface
-      tag: 966329b7
-      pullPolicy: IfNotPresent
+    enabled: false
+
