@@ -235,6 +235,8 @@ def tmc_reports_gpm_status_on_dish(
     dishes.dish_master_dict["dish_063"].SetDefective(RESET_DEFECT)
 
     release_input = MyFileJSONInput("centralnode", "release_resources_mid")
+    event_tracer.clear_events()
+
     tmc.release_resources(release_input, wait_termination=False)
     assert_that(event_tracer).described_as(
         f"TMC Subarray Node device ({tmc.subarray_node})"
@@ -243,4 +245,3 @@ def tmc_reports_gpm_status_on_dish(
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         tmc.subarray_node, "obsState", ObsState.EMPTY
     )
-    event_tracer.clear_events()
