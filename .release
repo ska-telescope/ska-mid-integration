@@ -1,18 +1,73 @@
-release=1.15.0-rc.1
-tag=1.15.0-rc.1
+release=1.16.0-rc.1
+tag=1.16.0-rc.1
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.14.0-rc.1 to v1.15.0-rc.1**
+**1. Updated ska-tmc-mid from v1.15.0-rc.1 to v1.16.0-rc.1**
 
-        * TMC Mid supports PST Scan Configuration.
-        * Introduced property `StartTimeEnabled` to enable/disable parameter from Scan JSON.
-        * Added `ScanStartTimeOffset` property in chart configuration.
+        * TMC Mid supports Auto stow and manual stow of dishes
+        * Follwing are the properties introduced in dishleafnode
+                weather_station_device_names: 
+                max_allowed_wind_speed
+                max_allowed_ops_wind_speed
+                max_allowed_gust_wind_speed
+                max_allowed_wind_speed_difference
+                wind_speed_measurement_time_window
+                gust_wind_speed_measurement_time_window
+                mean_wind_speed_measurement_time_window
+                max_allowed_ops_mean_wind_speed_measurement_time_window
+                max_temp_threshold
+                min_temp_threshold
+                time_delta
+                temp_delta 
+                enable_auto_stow
+        * If the enable_auto_stow flag is set to true, the dish will automatically transition to stow position  once the configured weather station criteria are met.
+
+        * Additionally, if the weather station becomes unavailable, the dishes will also automatically stow as a safety measure.
+
+        * This behavior can be disabled by setting:
+
+                enable_auto_stow = false
+
+
+        * The enable_auto_stow parameter (and related values) can be configured: During deployment, or At runtime, using:
+
+                <device-proxy>.<parameter> = "value to be set"
+
+
+        * Please ensure the flag is configured appropriately to avoid unintended automatic stow operations.
 
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.14.0-rc.1 to v1.15.0-rc.1**
-        * TMC Mid supports PST Scan Configuration.
-        * Introduced property `StartTimeEnabled` to enable/disable parameter from Scan JSON.
-        * Added `ScanStartTimeOffset` property in chart configuration.
+**1. Updated ska-tmc-mid from v1.15.0-rc.1 to v1.16.0-rc.1**
+        * TMC Mid supports Auto stow and manual stow of dishes
+        * Follwing are the properties introduced in dishleafnode
+                weather_station_device_names: 
+                max_allowed_wind_speed
+                max_allowed_ops_wind_speed
+                max_allowed_gust_wind_speed
+                max_allowed_wind_speed_difference
+                wind_speed_measurement_time_window
+                gust_wind_speed_measurement_time_window
+                mean_wind_speed_measurement_time_window
+                max_allowed_ops_mean_wind_speed_measurement_time_window
+                max_temp_threshold
+                min_temp_threshold
+                time_delta
+                temp_delta 
+                enable_auto_stow
 ​
-​
+        * If the enable_auto_stow flag is set to true, the dish will automatically transition to stow position  once the configured weather station criteria are met.
+
+        * Additionally, if the weather station becomes unavailable, the dishes will also automatically stow as a safety measure.
+
+        * This behavior can be disabled by setting:
+
+                enable_auto_stow = false
+
+
+        * The enable_auto_stow parameter (and related values) can be configured: During deployment, or At runtime, using:
+
+                <device-proxy>.<parameter> = "value to be set"
+
+
+        * Please ensure the flag is configured appropriately to avoid unintended automatic stow operations.

@@ -15,7 +15,7 @@ entrypoints:
 {{- $EventSubscriptionCheckPeriod := .Values.deviceServers.cspsubarrayleafnode.EventSubscriptionCheckPeriod}}
 {{- $domain := .Values.global.domain }}
 {{- $family := .Values.deviceServers.cspsubarrayleafnode.family }}
-{{- $WeatherStationDevName := index .Values "mid_wms" "dev-name" }}
+{{- $WeatherStationDevName := .Values.deviceServers.cspsubarrayleafnode.weather_station_device_name}}
 server:
   name: "csp_subarray_leaf_node_mid"
   instances:
@@ -69,6 +69,7 @@ server:
               - name: "WeatherStationDevName"
                 values:
                 - "{{ $WeatherStationDevName }}"
+
   {{- end}}
 depends_on:
   - device: sys/database/2
