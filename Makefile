@@ -42,7 +42,7 @@ EXIT_AT_FAIL ?= false ## Flag for determining exit at failure.
 # Actually, any value other than 'false' will be treated as 'true'.
 
 ifneq ($(EXIT_AT_FAIL), false)
-ADD_ARGS += 
+ADD_ARGS += -x
 endif
 
 # ----------------------------------------------------------------------------
