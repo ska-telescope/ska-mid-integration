@@ -162,6 +162,7 @@ def validate_expected_subarray_health_state(
     subarray_node,
     event_recorder,
     Subarray_Health_State,
+    wait_and_validate_device_attribute_value,
 ):
     """Validate Expected Health state for Subarray Node
     Args:
@@ -171,7 +172,7 @@ def validate_expected_subarray_health_state(
     """
     event_recorder.subscribe_event(subarray_node.subarray_node, "healthState")
 
-    assert event_recorder.has_change_event_occurred(
+    assert wait_and_validate_device_attribute_value(
         subarray_node.subarray_node,
         "healthState",
         HealthState[Subarray_Health_State],
