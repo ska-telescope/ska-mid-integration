@@ -36,7 +36,7 @@ def test_subarray_healthinfo():
 def assign_dishes_to_subarray(
     subarray_node, event_recorder, command_input_factory, simulator_factory
 ):
-    """Assign Dishes to TMC Subarray Device
+    """Assign Dishes to TMC Subarray Device.
     Args:
         subarray_node: Subarray Node Fixture object
         event_recorder: Event Recorder class object
