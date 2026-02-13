@@ -62,6 +62,7 @@ def extract_gpm_failure_details(events_tracer):
     return ast.literal_eval(event_data[1].split("SetGPM failed on: ", 1)[1])
 
 
+@pytest.mark.test
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
@@ -80,8 +81,8 @@ def given_a_tmc(
     event_tracer: TangoEventTracer,
 ):
     """Given a TMC"""
-
     event_tracer.clear_events()
+    event_tracer.subscribe_event(tmc.subarray_node, "obsState")
     event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
     event_tracer.subscribe_event(tmc.central_node, "GlobalPointingModelStatus")
     log_events(
@@ -90,6 +91,7 @@ def given_a_tmc(
                 "longRunningCommandResult",
                 "GlobalPointingModelStatus",
             ],
+            tmc.subarray_node: ["obsState"],
         }
     )
     tmc.move_to_on(wait_termination=True, is_long_running_command=True)
