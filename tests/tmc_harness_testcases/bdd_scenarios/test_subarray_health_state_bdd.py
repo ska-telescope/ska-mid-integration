@@ -1,5 +1,7 @@
 """Test Subarray Health State
 """
+import json
+
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import HealthState, ObsState
@@ -10,6 +12,7 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_commands,
     set_desired_health_state,
 )
+from tests.resources.test_harness.utils.enums import CapabilityStates
 
 
 @pytest.mark.batch2
@@ -129,6 +132,18 @@ def assign_dishes_to_subarray(
         ],
         health_state_value=HealthState.OK,
     )
+    pytest.capability_dict = json.dumps(
+        {
+            "B1": CapabilityStates.STANDBY,
+            "B2": CapabilityStates.STANDBY,
+            "B3": CapabilityStates.STANDBY,
+            "B4": CapabilityStates.STANDBY,
+            "B5a": CapabilityStates.STANDBY,
+            "B5b": CapabilityStates.STANDBY,
+        }
+    )
+    dish_master_sim_1.SetDirectCapabilityState((pytest.capability_dict))
+    dish_master_sim_2.SetDirectCapabilityState((pytest.capability_dict))
 
 
 @when(
@@ -162,7 +177,6 @@ def validate_expected_subarray_health_state(
     subarray_node,
     event_recorder,
     Subarray_Health_State,
-    wait_and_validate_device_attribute_value,
 ):
     """Validate Expected Health state for Subarray Node
     Args:
@@ -172,7 +186,7 @@ def validate_expected_subarray_health_state(
     """
     event_recorder.subscribe_event(subarray_node.subarray_node, "healthState")
 
-    assert wait_and_validate_device_attribute_value(
+    assert event_recorder.has_change_event_occurred(
         subarray_node.subarray_node,
         "healthState",
         HealthState[Subarray_Health_State],
