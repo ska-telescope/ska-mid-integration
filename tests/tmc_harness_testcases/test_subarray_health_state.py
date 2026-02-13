@@ -114,7 +114,7 @@ class TestSubarrayHealthState(object):
             ),
         ],
     )
-    @pytest.mark.batch2test
+    @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_health_state_failed_when_csp_or_sdp_failed(
         self,
