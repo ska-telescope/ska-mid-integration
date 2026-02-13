@@ -160,7 +160,6 @@ def given_tmc_and_dishes(
     """Given TMC and Dishes facades."""
     LOGGER.info("Testing SetStowMode command on DishLeafNode")
     dish_leaf_node = tmc.dish_leaf_node_list[0]
-    LOGGER.info("my dln %s", dish_leaf_node)
 
     event_tracer.subscribe_event(dish_leaf_node, "dishMode")
     event_tracer.subscribe_event(dish_leaf_node, "longRunningCommandResult")
@@ -189,13 +188,11 @@ def when_gust_speed_exceeds_threshold(
     """When the gust speed is greater than the max allowed gust speed."""
 
     dish_leaf_node = tmc.dish_leaf_node_list[0]
-    LOGGER.info("my stowstatus %s", dish_leaf_node.stowstatus)
     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
 
     dish_leaf_node.maxAllowedGustWindpeed = 22.0
     dish_leaf_node.gustWindspeedMeasurementTimeWindow = 4
     simulate_windspeed(22, 24, 15)
-    LOGGER.info("my stowstatus %s", dish_leaf_node.stowstatus)
 
 
 @when(
@@ -260,7 +257,6 @@ def when_temperature_exceeds_max_threshold(
     """When the temperature exceeds the configured
     maximum temperature threshold."""
     dish_leaf_node = tmc.dish_leaf_node_list[0]
-    LOGGER.info("my dln %s", dish_leaf_node)
     event_tracer.subscribe_event(dish_leaf_node, "stowStatus")
 
     dish_leaf_node.maxTemperatureThreshold = 35
