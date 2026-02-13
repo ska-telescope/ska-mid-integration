@@ -239,7 +239,6 @@ class TestSubarrayHealthState(object):
                     "SDP Subarray Health State: FAILED" in msg
                     for msg in messages
                 ), f"SDP failure message missing in healthInfo: {parsed}"
-        assert 0
 
     @pytest.mark.parametrize(
         "csp_subarray_health_state, sdp_subarray_health_state, \
