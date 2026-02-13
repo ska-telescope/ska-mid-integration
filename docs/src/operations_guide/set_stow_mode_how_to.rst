@@ -47,6 +47,29 @@ To work auto stow mode correctly, please update below properties under dish leaf
 
 #. **weather_station_device_names** : TRL's of the weather stations.
 
+**Caution:**
+If the enable_auto_stow flag is set to true, the dish will automatically transition to stow position once the configured weather station criteria are met.
+
+Additionally, if the weather station becomes unavailable, the dishes will also automatically stow as a safety measure.
+
+This behavior can be disabled by setting:
+
+.. code-block:: python
+    enable_auto_stow = false
+
+
+The enable_auto_stow parameter (and related values) can be configured:
+
+During deployment, or
+
+At runtime, using:
+
+.. code-block:: python
+    <device-proxy>.<parameter> = "value to be set"
+
+
+Please ensure the flag is configured appropriately by setting the above mentioned values to avoid unintended automatic stow operations.
+
 Example: SetStowMode command(manual execution)
 
 .. code-block:: python

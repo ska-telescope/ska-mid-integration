@@ -20,6 +20,21 @@ tag_description=
                 time_delta
                 temp_delta 
                 enable_auto_stow
+        * If the enable_auto_stow flag is set to true, the dish will automatically transition to stow position  once the configured weather station criteria are met.
+
+        * Additionally, if the weather station becomes unavailable, the dishes will also automatically stow as a safety measure.
+
+        * This behavior can be disabled by setting:
+
+                enable_auto_stow = false
+
+
+        * The enable_auto_stow parameter (and related values) can be configured: During deployment, or At runtime, using:
+
+                <device-proxy>.<parameter> = "value to be set"
+
+
+        * Please ensure the flag is configured appropriately to avoid unintended automatic stow operations.
 
 release_notes=
 **Charts:**
@@ -41,3 +56,18 @@ release_notes=
                 temp_delta 
                 enable_auto_stow
 ​
+        * If the enable_auto_stow flag is set to true, the dish will automatically transition to stow position  once the configured weather station criteria are met.
+
+        * Additionally, if the weather station becomes unavailable, the dishes will also automatically stow as a safety measure.
+
+        * This behavior can be disabled by setting:
+
+                enable_auto_stow = false
+
+
+        * The enable_auto_stow parameter (and related values) can be configured: During deployment, or At runtime, using:
+
+                <device-proxy>.<parameter> = "value to be set"
+
+
+        * Please ensure the flag is configured appropriately to avoid unintended automatic stow operations.
