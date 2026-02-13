@@ -231,6 +231,4 @@ def tmc_reports_gpm_status_on_dish(
             )
 
     dishes.dish_master_dict["dish_063"].SetDefective(RESET_DEFECT)
-    release_input = MyFileJSONInput("centralnode", "release_resources_mid")
-    tmc.release_resources(release_input)
     event_tracer.clear_events()
