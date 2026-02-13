@@ -3555,14 +3555,14 @@ reference = "ska-nexus"
 
 [[package]]
 name = "ska-integration-test-harness"
-version = "0.4.4"
+version = "0.4.2"
 description = "Currently, a test harness for TMC-CSP integration tests. In future, a generic test harness integration testing an arbitrary combination of production or emulated SKA subsystems."
 optional = false
 python-versions = ">=3.10,<4.0"
 groups = ["main"]
 files = [
-    {file = "ska_integration_test_harness-0.4.4-py3-none-any.whl", hash = "sha256:0e328bab579e5349b9d3df4342e0630d45188ea229d462aba80dab36cf357f98"},
-    {file = "ska_integration_test_harness-0.4.4.tar.gz", hash = "sha256:4ade45436bef903bc52adeb9b026626939a469d7107b6009946e8b48a6a7bd15"},
+    {file = "ska_integration_test_harness-0.4.2-py3-none-any.whl", hash = "sha256:d84217cb3da7e694b59b8d1af47a3029ba18cc446fcbfc124b2887a4362b99aa"},
+    {file = "ska_integration_test_harness-0.4.2.tar.gz", hash = "sha256:08e93e753c1d354e7fcd0275b096117e5f1c857cbb8a7b0e33e8c6b8cf2debcb"},
 ]
 
 [package.dependencies]
@@ -4445,4 +4445,4 @@ reference = "PyPI-public"
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.10"
-content-hash = "939ea87fde49e50693b62052f0a1f9e7d0b2ab6de168d903c482ee8e13f61aaa"
+content-hash = "02d91684ccd447e77b58124d25f4f3c1700b1bb4dd0d83f8d4f80cba43e127d1"
