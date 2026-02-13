@@ -238,10 +238,7 @@ deviceServers:
     AdapterTimeOut: 2.0
     LivelinessCheckPeriod: 1.5
     EventSubscriptionCheckPeriod: 1.5
-    weather_station_device_names: 
-      - "ska-mid/weather-monitoring/s1"
-      - "ska-mid/weather-monitoring/s2"
-      - ""
+    weather_station_device_name: "ska-mid/weather-monitoring/s1"
     family: "subarray-leaf-node-csp"
 
   dishleafnode:
