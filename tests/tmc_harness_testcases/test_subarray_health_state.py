@@ -221,24 +221,25 @@ class TestSubarrayHealthState(object):
             assert isinstance(
                 parsed, dict
             ), f"Expected dict healthInfo when FAILED but got: {parsed}"
-            messages = []
-            for value in parsed.values():
-                if isinstance(value, list):
-                    messages.extend(value)
+            messages = [
+                msg
+                for value in parsed.values()
+                if isinstance(value, list)
+                for msg in value
+            ]
             assert (
                 messages
             ), f"Expected failure messages in healthInfo but got: {parsed}"
+            expected_failures = []
             if csp_subarray_health_state == HealthState.FAILED:
-                assert any(
-                    "CSP Subarray Health State: FAILED" in msg
-                    for msg in messages
-                ), f"CSP failure message missing in healthInfo: {parsed}"
-
+                expected_failures.append("CSP Subarray Health State: FAILED")
             if sdp_subarray_health_state == HealthState.FAILED:
-                assert any(
-                    "SDP Subarray Health State: FAILED" in msg
-                    for msg in messages
-                ), f"SDP failure message missing in healthInfo: {parsed}"
+                expected_failures.append("SDP Subarray Health State: FAILED")
+            for expected_msg in expected_failures:
+                assert any(expected_msg in msg for msg in messages), (
+                    f"Expected '{expected_msg}' in healthInfo "
+                    f"but got: {messages}"
+                )
 
     @pytest.mark.parametrize(
         "csp_subarray_health_state, sdp_subarray_health_state, \
