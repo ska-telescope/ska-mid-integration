@@ -262,7 +262,6 @@ deviceServers:
     weather_station_device_names: 
       - "ska-mid/weather-monitoring/s1"
       - "ska-mid/weather-monitoring/s2"
-      - ""
     max_allowed_wind_speed: 20
     max_allowed_ops_wind_speed: 20
     max_allowed_gust_wind_speed: 40  
