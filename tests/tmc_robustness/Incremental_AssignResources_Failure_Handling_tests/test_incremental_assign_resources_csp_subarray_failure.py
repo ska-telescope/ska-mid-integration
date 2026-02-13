@@ -242,6 +242,7 @@ def subarray_transitions_to_empty(
         sdp_sim,
         "obsState",
         ObsState.EMPTY,
+        lookahead=10,
     )
 
     assert event_recorder.has_change_event_occurred(

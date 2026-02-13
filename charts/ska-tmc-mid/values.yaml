@@ -84,7 +84,7 @@ centralnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-centralnode
-    tag: 0.28.1
+    tag: 0.29.2
     pullPolicy: IfNotPresent
 
 subarraynode:
@@ -117,9 +117,9 @@ cspsubarrayleafnode:
 
 dishleafnode:
   image:
-    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-dishleafnode
+    registry: artefact.skao.int
     image: ska-tmc-dishleafnode
-    tag: 0.30.1-dev.c6335514b
+    tag: 0.30.0
     pullPolicy: IfNotPresent
 
 skatmcsimulators:
@@ -263,20 +263,35 @@ deviceServers:
     weather_station_device_names: 
       - "ska-mid/weather-monitoring/s1"
       - "ska-mid/weather-monitoring/s2"
+<<<<<<< HEAD
     max_allowed_wind_speed: 13.5
     max_allowed_ops_wind_speed: 10
     max_allowed_gust_wind_speed: 20  
+=======
+      - ""
+    max_allowed_wind_speed: 20
+    max_allowed_ops_wind_speed: 20
+    max_allowed_gust_wind_speed: 40  
+>>>>>>> c147abe09581771448cf98de3a50662b900d181d
     max_allowed_wind_speed_difference: 4.5
     wind_speed_measurement_time_window: 1000
     gust_wind_speed_measurement_time_window: 3
     mean_wind_speed_measurement_time_window: 600
     max_allowed_ops_mean_wind_speed_measurement_time_window: 600
+<<<<<<< HEAD
     max_temp_threshold: 40.0
     min_temp_threshold: -5
     time_delta: 1000.0
     temp_delta: 10.0 #inflated 
     enable_auto_stow: false
 
+=======
+    max_temp_threshold: 60.0
+    min_temp_threshold: -10
+    time_delta: 1000.0
+    temp_delta: 40.0 #inflated 
+    enable_auto_stow: true
+>>>>>>> c147abe09581771448cf98de3a50662b900d181d
 
   dishpointingdevice:
     enabled: true
@@ -305,7 +320,7 @@ deviceServers:
     DishLeafNodePrefix: "mid-tmc/leaf-node-dish/"
     SubarrayPrefix: "mid-tmc/subarray/"
     DishType: "SKA"
-    DishIDs: ["SKA001", "SKA036", "SKA063", "SKA100"]
+    DishIDs: *dish_ids
     MidSubarrayNodeFQDNs: ["mid-tmc/subarray/01", "mid-tmc/subarray/02"]
 
   mocks:
@@ -315,6 +330,17 @@ deviceServers:
     csp: false
     sdp: false
 
+<<<<<<< HEAD
+=======
+mid_wms:
+  legacy_compatibility: true
+  dev-name: "ska-mid/weather-monitoring/s1"
+  ska-tango-base:
+    enabled: false
+    itango:
+      enabled: false
+
+>>>>>>> c147abe09581771448cf98de3a50662b900d181d
 nodeSelector: {}
 
 affinity: {}

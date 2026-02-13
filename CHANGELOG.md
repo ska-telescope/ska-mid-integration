@@ -5,6 +5,13 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[Unreleased]
+*************
+Added
+-----
+* TMC is now able to stow the dish manually using SetStowMode command.
+* Automatically using weather station data.
+
 [1.15.0-rc.1]
 *************
 Added

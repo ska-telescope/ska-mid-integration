@@ -155,7 +155,6 @@ server:
             - name: "EnableAutoStow"
               values:
                 - "{{$EnableAutoStow}}"
-
   {{- end }}
 depends_on:
   - device: sys/database/2
