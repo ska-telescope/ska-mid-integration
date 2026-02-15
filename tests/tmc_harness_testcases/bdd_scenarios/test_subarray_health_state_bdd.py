@@ -1,7 +1,5 @@
 """Test Subarray Health State
 """
-import json
-
 import pytest
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_tango_base.control_model import HealthState, ObsState
@@ -12,7 +10,6 @@ from tests.resources.test_harness.helpers import (
     prepare_json_args_for_commands,
     set_desired_health_state,
 )
-from tests.resources.test_harness.utils.enums import CapabilityStates
 
 
 @pytest.mark.batch2
@@ -132,18 +129,6 @@ def assign_dishes_to_subarray(
         ],
         health_state_value=HealthState.OK,
     )
-    pytest.capability_dict = json.dumps(
-        {
-            "B1": CapabilityStates.STANDBY,
-            "B2": CapabilityStates.STANDBY,
-            "B3": CapabilityStates.STANDBY,
-            "B4": CapabilityStates.STANDBY,
-            "B5a": CapabilityStates.STANDBY,
-            "B5b": CapabilityStates.STANDBY,
-        }
-    )
-    dish_master_sim_1.SetDirectCapabilityState((pytest.capability_dict))
-    dish_master_sim_2.SetDirectCapabilityState((pytest.capability_dict))
 
 
 @when(
