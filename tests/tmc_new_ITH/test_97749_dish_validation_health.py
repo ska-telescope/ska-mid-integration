@@ -417,14 +417,13 @@ def verify_dln_health(
 
     dish_ln = tmc.dish_leaf_node_list[0]
 
-    assert dish_ln.healthState == HealthState[dln_health]
-    # assert_that(event_tracer).described_as(
-    #     "Dish Leaf Node healthState should change " f"to {dln_health}"
-    # ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-    #     dish_ln,
-    #     "healthState",
-    #     HealthState[dln_health],
-    # )
+    assert_that(event_tracer).described_as(
+        "Dish Leaf Node healthState should change " f"to {dln_health}"
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        dish_ln,
+        "healthState",
+        HealthState[dln_health],
+    )
 
 
 @then(
