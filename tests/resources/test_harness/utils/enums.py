@@ -114,6 +114,19 @@ class ResultCode(enum.IntEnum):
     """The command in progress has been aborted."""
 
 
+class CapabilityStates(IntEnum):
+    """
+    This is an enumerator class that contains CapabilityStates values.
+    """
+
+    UNAVAILABLE = 0
+    STANDBY = 1
+    CONFIGURING = 2
+    OPERATE_DEGRADED = 3
+    OPERATE_FULL = 4
+    UNKNOWN = 5
+
+
 """This module defines an enumerated type for StowStatus."""
 
 

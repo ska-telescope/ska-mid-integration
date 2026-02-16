@@ -29,6 +29,7 @@ global:
   # deviceServers.dishmaster, deviceServers.dishleafnode
   dish_devices: ["dishmaster", "dishleafnode"]
   dishes: ["001", "036", "063", "100"]
+  TMCLoggingLevel: "4"
 
   domain: "mid-tmc"
 
@@ -91,35 +92,35 @@ subarraynode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-subarraynode
-    tag: 0.51.1
+    tag: 0.51.2
     pullPolicy: IfNotPresent
 
 sdpleafnodes:
   image:
     registry: artefact.skao.int
     image: ska-tmc-sdpleafnodes
-    tag: 0.25.0
+    tag: 0.27.0
     pullPolicy: IfNotPresent
 
 cspmasterleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.38.0
+    tag: 0.40.0
     pullPolicy: IfNotPresent
 
 cspsubarrayleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-cspleafnodes
-    tag: 0.39.0
+    tag: 0.40.0
     pullPolicy: IfNotPresent
 
 dishleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-dishleafnode
-    tag: 0.30.0
+    tag: 0.30.1
     pullPolicy: IfNotPresent
 
 skatmcsimulators:
@@ -169,6 +170,7 @@ deviceServers:
       interface: "https://schema.skao.int/ska-mid-dish-gpm/1.2"
       data_sources_prefix: "gitlab://gitlab.com/ska-telescope/ska-tmc/ska-tmc-simulators"
       file_path_prefix: "instrument/ska_mid1/global_pointing_model_data"
+    LoggingLevel: "4"
 
   subarraynode:
     enabled: true
@@ -193,6 +195,7 @@ deviceServers:
       requests:
         cpu: 400m
         memory: 300Mi
+    LoggingLevel: "4"
 
   sdpsubarrayleafnode:
     enabled: true
@@ -203,6 +206,7 @@ deviceServers:
     EventSubscriptionCheckPeriod: 1.5
     SDPSubarrayAdminModeEnabled: true
     family: "subarray-leaf-node-sdp"
+    LoggingLevel: "4"
 
   sdpmasterleafnode:
     enabled: true
@@ -214,6 +218,7 @@ deviceServers:
     SDPMasterAdminModeEnabled: true
     family: "leaf-node-sdp"
     member: "0"
+    LoggingLevel: "4"
 
   cspmasterleafnode:
     enabled: true
@@ -225,6 +230,7 @@ deviceServers:
     CommandTimeOutDefault: 30
     family: "leaf-node-csp"
     member: "0"
+    LoggingLevel: "4"
 
   cspsubarrayleafnode:
     enabled: true
@@ -240,6 +246,7 @@ deviceServers:
     EventSubscriptionCheckPeriod: 1.5
     weather_station_device_name: "ska-mid/weather-monitoring/s1"
     family: "subarray-leaf-node-csp"
+    LoggingLevel: "4"
 
   dishleafnode:
     enabled: true
@@ -276,6 +283,7 @@ deviceServers:
     time_delta: 1000.0
     temp_delta: 4.5 
     enable_auto_stow: true
+    LoggingLevel: "4"
 
   dishpointingdevice:
     enabled: true
@@ -293,6 +301,7 @@ deviceServers:
       requests:
         cpu: 500m
         memory: 500Mi
+    LoggingLevel: "4"
 
   resourcemonitor:
     enabled: true
@@ -306,6 +315,7 @@ deviceServers:
     DishType: "SKA"
     DishIDs: *dish_ids
     MidSubarrayNodeFQDNs: ["mid-tmc/subarray/01", "mid-tmc/subarray/02"]
+    LoggingLevel: "4"
 
   mocks:
     enabled: false
