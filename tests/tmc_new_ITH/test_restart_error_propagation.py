@@ -57,9 +57,12 @@ def _setup_event_subscriptions(
     event_tracer.subscribe_event(sdp.sdp_subarray, "obsState")
     event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
     event_tracer.subscribe_event(tmc.subarray_node, "longRunningCommandResult")
-    event_tracer.subscribe_event("mid-tmc/subarray-leaf-node-csp/01", "cspSubarrayObsState")
-    event_tracer.subscribe_event("mid-tmc/subarray-leaf-node-sdp/01", "sdpSubarrayObsState")
-
+    event_tracer.subscribe_event(
+        "mid-tmc/subarray-leaf-node-csp/01", "cspSubarrayObsState"
+    )
+    event_tracer.subscribe_event(
+        "mid-tmc/subarray-leaf-node-sdp/01", "sdpSubarrayObsState"
+    )
 
     log_events(
         {
@@ -77,7 +80,6 @@ def _setup_event_subscriptions(
 
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
-@pytest.mark.test_f
 @scenario(
     "../tmc_new_ITH/features/error_propagation.feature",
     "Error Propagation Reported by TMC Mid Restart command for"
@@ -203,7 +205,6 @@ def verify_error_message(
         )
         csp.csp_subarray.SetDirectObsState(ObsState.EMPTY)
 
-
     if defective_subsystem == "SDP":
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
@@ -235,14 +236,13 @@ def verify_error_message(
             ObsState.EMPTY,
         )
         sdp.sdp_subarray.SetDirectObsState(ObsState.EMPTY)
-        
-    
+
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "THEN" STEP: '
         "'the tmc subarray must be in the RESTARTING obsState' "
         "TMC Subarray device"
         f"({tmc.subarray_node.dev_name()}) "
-        "is expected to be in RESTARTING obstate",
+        "is expected to be in FAULT obstate",
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         tmc.subarray_node,
         "obsState",
