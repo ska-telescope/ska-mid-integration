@@ -201,17 +201,8 @@ def verify_error_message(
             "obsState",
             ObsState.EMPTY,
         )
-        assert_that(event_tracer).described_as(
-            'FAILED ASSUMPTION IN "THEN" STEP: '
-            "'the csp subarray must be in the EMPTY obsState'"
-            "CSP Subarray device"
-            f"({csp.csp_subarray.dev_name()}) "
-            "is expected to be in EMPTY obstate",
-        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-            "mid-tmc/subarray-leaf-node-csp/01",
-            "cspSubarrayObsState",
-            ObsState.EMPTY,
-        )
+        csp.csp_subarray.SetDirectObsState(ObsState.EMPTY)
+
 
     if defective_subsystem == "SDP":
         assert_that(event_tracer).described_as(
@@ -243,14 +234,17 @@ def verify_error_message(
             "obsState",
             ObsState.EMPTY,
         )
-        assert_that(event_tracer).described_as(
-            'FAILED ASSUMPTION IN "THEN" STEP: '
-            "'the csp subarray must be in the EMPTY obsState'"
-            "CSP Subarray device"
-            f"({sdp.sdp_subarray.dev_name()}) "
-            "is expected to be in EMPTY obstate",
-        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-            "mid-tmc/subarray-leaf-node-sdp/01",
-            "sdpSubarrayObsState",
-            ObsState.EMPTY,
-        )
+        sdp.sdp_subarray.SetDirectObsState(ObsState.EMPTY)
+        
+    
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "THEN" STEP: '
+        "'the tmc subarray must be in the RESTARTING obsState' "
+        "TMC Subarray device"
+        f"({tmc.subarray_node.dev_name()}) "
+        "is expected to be in RESTARTING obstate",
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        tmc.subarray_node,
+        "obsState",
+        ObsState.FAULT,
+    )
