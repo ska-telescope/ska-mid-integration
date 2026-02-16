@@ -74,6 +74,7 @@ def _setup_event_subscriptions(
 
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
+@pytest.mark_test_f
 @scenario(
     "../tmc_new_ITH/features/error_propagation.feature",
     "Error Propagation Reported by TMC Mid Restart command for"
@@ -147,7 +148,6 @@ def verify_restarting_obsstate(
         tmc.subarray_node,
         "obsState",
         ObsState.RESTARTING,
-        lookahead=10,
     )
 
 
@@ -195,7 +195,6 @@ def verify_error_message(
             csp.csp_subarray,
             "obsState",
             ObsState.EMPTY,
-            lookahead=10,
         )
 
     if defective_subsystem == "SDP":
@@ -226,5 +225,4 @@ def verify_error_message(
             sdp.sdp_subarray,
             "obsState",
             ObsState.EMPTY,
-            lookahead=10,
         )
