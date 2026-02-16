@@ -74,7 +74,7 @@ def _setup_event_subscriptions(
 
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
-@pytest.mark_test_f
+@pytest.mark.test_f
 @scenario(
     "../tmc_new_ITH/features/error_propagation.feature",
     "Error Propagation Reported by TMC Mid Restart command for"
