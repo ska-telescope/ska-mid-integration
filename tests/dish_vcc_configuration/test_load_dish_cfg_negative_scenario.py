@@ -373,11 +373,13 @@ def invoke_command_load_cfg_on_defective_csp(
     csp_master_leaf_node_name = (
         central_node_mid.csp_master_leaf_node.dev_name()
     )
+
     exception_msg = (
-        '[3, "Exception occurred on device: Command failed on device '
-        + f"{csp_master_leaf_node_name}: Exception occurred, "
-        + 'command failed."]'
+        f'[3, "Exception occurred on the following devices: '
+        f"{csp_master_leaf_node_name}: Exception occurred, "
+        f'command failed."]'
     )
+
     pytest.command_result = event_recorder.has_change_event_occurred(
         central_node_mid.central_node,
         "longRunningCommandResult",
