@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
     "Dish health failure is reflected in Subarray HealthInfo",
 )
 def test_subarray_healthinfo():
-    """Dish failure propagates to Subarray HealthInfo."""
+    """Dish failure propagates to Subarray HealthInfo"""
 
 
 # -------------------------
