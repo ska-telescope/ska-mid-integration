@@ -37,7 +37,7 @@ Examples:
 		    | csp subarray                                            | UNKNOWN                                  |  UNKNOWN              | #Row 10
 		    | sdp subarray                                            | UNKNOWN                                  |  UNKNOWN              | #Row 9
 		    | csp subarray,sdp subarray                               | UNKNOWN,UNKNOWN                          |  UNKNOWN              | #Row 8 
-		    | dish master 1                                           | UNKNOWN                                  |  UNKNOWN              | #Row 12
+		    | dish master 1                                           | UNKNOWN                                  |  DEGRADED             | #Row 12
 		    | csp subarray,sdp subarray,dish master 1,dish master 2   | UNKNOWN,UNKNOWN,UNKNOWN,UNKNOWN          |  UNKNOWN              | #Row 11
 		    | csp subarray,dish master 2                              | UNKNOWN,UNKNOWN                          |  UNKNOWN              | #Row 13
 

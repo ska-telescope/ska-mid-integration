@@ -37,6 +37,15 @@ server:
               {{- range  ( $.Values.deviceServers.resourcemonitor.DishIDs) }}
               - "{{ . }}"
               {{- end }}
+            - name: "SkaLevel"
+              values:
+                - "3"
+            - name: "LoggingTargetsDefault"
+              values:
+                - "tango::logger"
+            - name: "LoggingLevelDefault"
+              values:
+                - "{{coalesce $.Values.deviceServers.resourcemonitor.LoggingLevel $.Values.global.TMCLoggingLevel }}"
   {{- end}}
 
 

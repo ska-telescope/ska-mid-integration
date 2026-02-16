@@ -1,13 +1,19 @@
 import json
+import logging
 
 import pytest
 from ska_tango_base.control_model import HealthState, ObsState
+from ska_tango_testing.mock.placeholders import Anything
 
 from tests.resources.test_harness.helpers import (
     get_device_simulators,
     prepare_json_args_for_centralnode_commands,
 )
+from tests.resources.test_harness.utils.enums import CapabilityStates
 from tests.resources.test_support.constant import COMMAND_COMPLETED
+
+logging.basicConfig(level=logging.INFO)
+LOGGER = logging.getLogger(__name__)
 
 
 class TestSubarrayHealthState(object):
@@ -139,13 +145,19 @@ class TestSubarrayHealthState(object):
         dish_master_sim_3.SetDirectHealthState(dish_master3_health_state)
         dish_master_sim_4.SetDirectHealthState(dish_master4_health_state)
         event_recorder.subscribe_event(csp_sa_sim, "healthState")
+        event_recorder.subscribe_event(csp_sa_sim, "healthinfo")
         event_recorder.subscribe_event(sdp_sa_sim, "healthState")
+        event_recorder.subscribe_event(sdp_sa_sim, "healthinfo")
         event_recorder.subscribe_event(dish_master_sim_1, "healthState")
         event_recorder.subscribe_event(dish_master_sim_2, "healthState")
         event_recorder.subscribe_event(dish_master_sim_3, "healthState")
         event_recorder.subscribe_event(dish_master_sim_4, "healthState")
         event_recorder.subscribe_event(
             subarray_node.subarray_node, "healthState"
+        )
+        event_recorder.subscribe_event(
+            subarray_node.subarray_node,
+            "healthinfo",
         )
         assert event_recorder.has_change_event_occurred(
             csp_sa_sim,
@@ -187,6 +199,47 @@ class TestSubarrayHealthState(object):
             "healthState",
             HealthState.FAILED,
         ), "Expected Subarray Node HealthState to be FAILED"
+        assert event_recorder.has_change_event_occurred(
+            subarray_node.subarray_node,
+            "healthinfo",
+            Anything,
+        ), "Expected Subarray Node HealthState to be FAILED"
+        raw_health_info = subarray_node.subarray_node.healthInfo
+        LOGGER.info("Raw healthInfo: %s", raw_health_info)
+        assert raw_health_info is not None, "healthInfo should not be None"
+        parsed = json.loads(raw_health_info)
+        LOGGER.info(
+            "Formatted healthInfo:\n%s",
+            json.dumps(parsed, indent=4),
+        )
+        if (
+            csp_subarray_health_state != HealthState.FAILED
+            and sdp_subarray_health_state != HealthState.FAILED
+        ):
+            assert parsed == [], f"Expected empty healthInfo but got: {parsed}"
+        else:
+            assert isinstance(
+                parsed, dict
+            ), f"Expected dict healthInfo when FAILED but got: {parsed}"
+            messages = [
+                msg
+                for value in parsed.values()
+                if isinstance(value, list)
+                for msg in value
+            ]
+            assert (
+                messages
+            ), f"Expected failure messages in healthInfo but got: {parsed}"
+            expected_failures = []
+            if csp_subarray_health_state == HealthState.FAILED:
+                expected_failures.append("CSP Subarray Health State: FAILED")
+            if sdp_subarray_health_state == HealthState.FAILED:
+                expected_failures.append("SDP Subarray Health State: FAILED")
+            for expected_msg in expected_failures:
+                assert any(expected_msg in msg for msg in messages), (
+                    f"Expected '{expected_msg}' in healthInfo "
+                    f"but got: {messages}"
+                )
 
     @pytest.mark.parametrize(
         "csp_subarray_health_state, sdp_subarray_health_state, \
@@ -586,6 +639,20 @@ class TestSubarrayHealthState(object):
             command_input_factory,
             event_recorder,
         )
+        pytest.capability_dict = json.dumps(
+            {
+                "B1": CapabilityStates.STANDBY,
+                "B2": CapabilityStates.STANDBY,
+                "B3": CapabilityStates.STANDBY,
+                "B4": CapabilityStates.STANDBY,
+                "B5a": CapabilityStates.STANDBY,
+                "B5b": CapabilityStates.STANDBY,
+            }
+        )
+        dish_master_sim_1.SetDirectCapabilityState(pytest.capability_dict)
+        dish_master_sim_2.SetDirectCapabilityState(pytest.capability_dict)
+        dish_master_sim_3.SetDirectCapabilityState(pytest.capability_dict)
+        dish_master_sim_4.SetDirectCapabilityState(pytest.capability_dict)
         csp_sa_sim.SetDirectHealthState(csp_subarray_health_state)
         sdp_sa_sim.SetDirectHealthState(sdp_subarray_health_state)
         dish_master_sim_1.SetDirectHealthState(dish_master1_health_state)
@@ -634,10 +701,30 @@ class TestSubarrayHealthState(object):
             "healthState",
             dish_master4_health_state,
         )
+        dish_states = [
+            dish_master1_health_state,
+            dish_master2_health_state,
+            dish_master3_health_state,
+            dish_master4_health_state,
+        ]
+
+        # ---- Expected SA health state logic (OK + UNKNOWN handling) ----
+        if (
+            csp_subarray_health_state == HealthState.UNKNOWN
+            and sdp_subarray_health_state == HealthState.UNKNOWN
+            and all(state == HealthState.UNKNOWN for state in dish_states)
+        ):
+            expected_state = HealthState.UNKNOWN
+
+        elif HealthState.UNKNOWN in dish_states:
+            expected_state = HealthState.DEGRADED
+
+        else:
+            expected_state = HealthState.OK
         assert event_recorder.has_change_event_occurred(
             subarray_node.subarray_node,
             "healthState",
-            HealthState.UNKNOWN,
+            expected_state,
         ), "Expected Subarray Node HealthState to be UNKNOWN"
 
     @pytest.mark.parametrize(

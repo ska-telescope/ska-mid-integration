@@ -52,6 +52,20 @@ tmc-mid:
   enabled: true
 
   deviceServers:
+    dishleafnode:
+      max_allowed_wind_speed: 20
+      max_allowed_ops_wind_speed: 20
+      max_allowed_gust_wind_speed: 40
+      max_allowed_wind_speed_difference: 4.5
+      wind_speed_measurement_time_window: 1000
+      gust_wind_speed_measurement_time_window: 3
+      mean_wind_speed_measurement_time_window: 600
+      max_allowed_ops_mean_wind_speed_measurement_time_window: 600
+      max_temp_threshold: 60.0
+      min_temp_threshold: -10
+      time_delta: 1000.0
+      temp_delta: 40.0
+      enable_auto_stow: true
     mocks:
       enabled: true
       dish: true
