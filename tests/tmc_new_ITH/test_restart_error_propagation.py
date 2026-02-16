@@ -183,7 +183,9 @@ def verify_error_message(
 
         # tear_down as TMC is inconsistent state. Also
         # no command is allowed in RESTARTING obsState
-        csp.csp_subarray.SetDefective(json.dumps({"enabled": False}))
+        csp.csp_subarray.SetDefective(
+            json.dumps({"enabled": False, "fault_type": 0})
+        )
         csp.csp_subarray.Restart()
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
@@ -213,7 +215,9 @@ def verify_error_message(
         )
         # tear_down as TMC is inconsistent state. Also
         # no command is allowed in RESTARTING obsState
-        sdp.sdp_subarray.SetDefective(json.dumps({"enabled": False}))
+        sdp.sdp_subarray.SetDefective(
+            json.dumps({"enabled": False, "fault_type": 0})
+        )
         sdp.sdp_subarray.Restart()
         assert_that(event_tracer).described_as(
             'FAILED ASSUMPTION IN "THEN" STEP: '
