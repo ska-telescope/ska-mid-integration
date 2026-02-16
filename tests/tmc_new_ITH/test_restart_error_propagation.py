@@ -198,6 +198,17 @@ def verify_error_message(
             "obsState",
             ObsState.EMPTY,
         )
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "THEN" STEP: '
+            "'the csp subarray must be in the EMPTY obsState'"
+            "CSP Subarray device"
+            f"({csp.csp_subarray.dev_name()}) "
+            "is expected to be in EMPTY obstate",
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+            tmc.csp_subarray_leaf_node.cspSubarrayObsState,
+            "obsState",
+            ObsState.EMPTY,
+        )
 
     if defective_subsystem == "SDP":
         assert_that(event_tracer).described_as(
@@ -211,7 +222,6 @@ def verify_error_message(
             tmc.subarray_node,
             "longRunningCommandResult",
             (pytest.unique_id[0], COMMAND_RESULT_SDP),
-            lookahead=10,
         )
         # tear_down as TMC is inconsistent state. Also
         # no command is allowed in RESTARTING obsState
@@ -227,6 +237,17 @@ def verify_error_message(
             "is expected to be in EMPTY obstate",
         ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
             sdp.sdp_subarray,
+            "obsState",
+            ObsState.EMPTY,
+        )
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "THEN" STEP: '
+            "'the csp subarray must be in the EMPTY obsState'"
+            "CSP Subarray device"
+            f"({sdp.sdp_subarray.dev_name()}) "
+            "is expected to be in EMPTY obstate",
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+            tmc.sdp_subarray_leaf_node.sdpSubarrayObsState,
             "obsState",
             ObsState.EMPTY,
         )
