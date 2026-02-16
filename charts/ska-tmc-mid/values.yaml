@@ -82,9 +82,9 @@ itango:
 
 centralnode:
   image:
-    registry: artefact.skao.int
+    registry: registry.gitlab.com/ska-telescope/ska-tmc/ska-tmc-centralnode
     image: ska-tmc-centralnode
-    tag: 0.29.2
+    tag: 0.29.2-dev.cee8a8279
     pullPolicy: IfNotPresent
 
 subarraynode:
@@ -160,12 +160,12 @@ deviceServers:
     DishVccInitTimeout: 180
     LivelinessCheckPeriod: 2.0
     EventSubscriptionCheckPeriod: 2.0
-    DefaultArrayLayoutSourceURIs: "gitlab://gitlab.com/ska-telescope/ska-telmodel-data?hm-845#tmdata"
+    DefaultArrayLayoutSourceURIs: "gitlab://gitlab.com/ska-telescope/ska-telmodel-data?main#tmdata"
     DefaultArrayLayoutPath: "instrument/ska1_mid/layout/mid-layout.json"
     family: "central-node"
     member: "0"
     global_pointing_model:
-      version: "1.0.0"
+      version: "hm-845"
       interface: "https://schema.skao.int/ska-mid-dish-gpm/1.2"
       data_sources_prefix: "gitlab://gitlab.com/ska-telescope/ska-tmc/ska-tmc-simulators"
       file_path_prefix: "instrument/ska_mid1/global_pointing_model_data"
