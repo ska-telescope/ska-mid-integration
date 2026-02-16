@@ -57,6 +57,9 @@ def _setup_event_subscriptions(
     event_tracer.subscribe_event(sdp.sdp_subarray, "obsState")
     event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
     event_tracer.subscribe_event(tmc.subarray_node, "longRunningCommandResult")
+    event_tracer.subscribe_event(tmc.csp_subarray_leaf_node, "cspSubarrayObsState")
+    event_tracer.subscribe_event(tmc.sdp_subarray_leaf_node, "sdpSubarrayObsState")
+
 
     log_events(
         {
@@ -205,8 +208,8 @@ def verify_error_message(
             f"({csp.csp_subarray.dev_name()}) "
             "is expected to be in EMPTY obstate",
         ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-            tmc.csp_subarray_leaf_node.cspSubarrayObsState,
-            "obsState",
+            tmc.csp_subarray_leaf_node,
+            "cspSubarrayObsState",
             ObsState.EMPTY,
         )
 
@@ -247,7 +250,7 @@ def verify_error_message(
             f"({sdp.sdp_subarray.dev_name()}) "
             "is expected to be in EMPTY obstate",
         ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-            tmc.sdp_subarray_leaf_node.sdpSubarrayObsState,
-            "obsState",
+            tmc.sdp_subarray_leaf_node,
+            "sdpSubarrayObsState",
             ObsState.EMPTY,
         )
