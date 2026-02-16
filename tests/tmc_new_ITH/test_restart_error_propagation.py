@@ -147,6 +147,7 @@ def verify_restarting_obsstate(
         tmc.subarray_node,
         "obsState",
         ObsState.RESTARTING,
+        lookahead=10,
     )
 
 
@@ -194,6 +195,7 @@ def verify_error_message(
             csp.csp_subarray,
             "obsState",
             ObsState.EMPTY,
+            lookahead=10,
         )
 
     if defective_subsystem == "SDP":
@@ -208,6 +210,7 @@ def verify_error_message(
             tmc.subarray_node,
             "longRunningCommandResult",
             (pytest.unique_id[0], COMMAND_RESULT_SDP),
+            lookahead=10,
         )
         # tear_down as TMC is inconsistent state. Also
         # no command is allowed in RESTARTING obsState
@@ -223,4 +226,5 @@ def verify_error_message(
             sdp.sdp_subarray,
             "obsState",
             ObsState.EMPTY,
+            lookahead=10,
         )
