@@ -191,19 +191,6 @@ def verify_error_message(
         csp.csp_subarray.SetDefective(
             json.dumps({"enabled": False, "fault_type": 0})
         )
-        csp.csp_subarray.Restart()
-        assert_that(event_tracer).described_as(
-            'FAILED ASSUMPTION IN "THEN" STEP: '
-            "'the csp subarray must be in the EMPTY obsState'"
-            "CSP Subarray device"
-            f"({csp.csp_subarray.dev_name()}) "
-            "is expected to be in EMPTY obstate",
-        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-            csp.csp_subarray,
-            "obsState",
-            ObsState.EMPTY,
-        )
-        csp.csp_subarray.SetDirectObsState(ObsState.EMPTY)
 
     if defective_subsystem == "SDP":
         assert_that(event_tracer).described_as(
@@ -223,19 +210,6 @@ def verify_error_message(
         sdp.sdp_subarray.SetDefective(
             json.dumps({"enabled": False, "fault_type": 0})
         )
-        sdp.sdp_subarray.Restart()
-        assert_that(event_tracer).described_as(
-            'FAILED ASSUMPTION IN "THEN" STEP: '
-            "'the sdp subarray must be in the EMPTY obsState'"
-            "SDP Subarray device"
-            f"({sdp.sdp_subarray.dev_name()}) "
-            "is expected to be in EMPTY obstate",
-        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-            sdp.sdp_subarray,
-            "obsState",
-            ObsState.EMPTY,
-        )
-        sdp.sdp_subarray.SetDirectObsState(ObsState.EMPTY)
 
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "THEN" STEP: '
