@@ -607,6 +607,7 @@ class TestSubarrayHealthState(object):
             ),
         ],
     )
+    @pytest.mark.test
     @pytest.mark.batch2
     @pytest.mark.SKA_mid
     def test_health_state_failed_when_dish_unknown(
@@ -730,7 +731,7 @@ class TestSubarrayHealthState(object):
         assert event_recorder.has_change_event_occurred(
             subarray_node.subarray_node,
             "healthState",
-            HealthState.UNKNOWN,
+            expected_state,
             lookahead=10,
         ), "Expected Subarray Node HealthState to be UNKNOWN"
 
