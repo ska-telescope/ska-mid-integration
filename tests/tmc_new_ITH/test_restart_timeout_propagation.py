@@ -61,6 +61,9 @@ def _setup_event_subscriptions(
     event_tracer.subscribe_event(
         tmc.csp_subarray_leaf_node, "cspSubarrayObsState"
     )
+    event_tracer.subscribe_event(
+        tmc.sdp_subarray_leaf_node, "sdpSubarrayObsState"
+    )
     event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
     event_tracer.subscribe_event(tmc.subarray_node, "longRunningCommandResult")
 
@@ -73,6 +76,7 @@ def _setup_event_subscriptions(
             csp.csp_subarray: ["obsState"],
             sdp.sdp_subarray: ["obsState"],
             tmc.csp_subarray_leaf_node: ["cspSubarrayObsState"],
+            tmc.sdp_subarray_leaf_node: ["sdpSubarrayObsState"],
             tmc.central_node: ["longRunningCommandResult"],
         },
         event_enum_mapping={"obsState": ObsState},
@@ -169,9 +173,10 @@ def verify_error_message(
         "longRunningCommandResult",
         (pytest.unique_id[0], expected_msg),
     )
-
-    csp.csp_subarray.SetDelayInfo(json.dumps({"Restart": 2}))
-    sdp.sdp_subarray.SetDelayInfo(json.dumps({"Restart": 2}))
+    if subsystem == "CSP":
+        csp.csp_subarray.ResetDelayInfo()
+    elif subsystem == "SDP":
+        sdp.sdp_subarray.ResetDelayInfo()
 
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "THEN" STEP: '
@@ -185,13 +190,23 @@ def verify_error_message(
         ObsState.FAULT,
     )
     event_tracer.clear_events()
-
-    assert_that(event_tracer).described_as(
-        'FAILED ASSUMPTION IN "THEN" STEP: '
-        f"({tmc.csp_subarray_leaf_node.dev_name()}) "
-        "is expected to be in EMPTY obstate",
-    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        tmc.csp_subarray_leaf_node,
-        "cspSubarrayObsState",
-        ObsState.EMPTY,
-    )
+    if subsystem == "CSP":
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "THEN" STEP: '
+            f"({tmc.csp_subarray_leaf_node.dev_name()}) "
+            "is expected to be in EMPTY obstate",
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+            tmc.csp_subarray_leaf_node,
+            "cspSubarrayObsState",
+            ObsState.EMPTY,
+        )
+    elif subsystem == "SDP":
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "THEN" STEP: '
+            f"({tmc.sdp_subarray_leaf_node.dev_name()}) "
+            "is expected to be in EMPTY obstate",
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+            tmc.sdp_subarray_leaf_node,
+            "sdpSubarrayObsState",
+            ObsState.EMPTY,
+        )
