@@ -180,5 +180,13 @@ def verify_error_message(
         "obsState",
         ObsState.FAULT,
     )
-
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "THEN" STEP: '
+        f"({csp.csp_subarray.dev_name()}) "
+        "is expected to be in EMPTY obstate",
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        csp.csp_subarray,
+        "obsState",
+        ObsState.EMPTY,
+    )
     event_tracer.clear_events()
