@@ -166,10 +166,8 @@ def verify_error_message(
         (pytest.unique_id[0], expected_msg),
     )
 
-    if subsystem == "CSP":
-        csp.csp_subarray.ResetDelayInfo()
-    if subsystem == "SDP":
-        sdp.sdp_subarray.ResetDelayInfo()
+    csp.csp_subarray.ResetDelayInfo()
+    sdp.sdp_subarray.ResetDelayInfo()
 
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "THEN" STEP: '
