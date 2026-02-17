@@ -125,7 +125,7 @@ def send_restart_command(
     """
     # Delay is set more than Restart command timeout to
     # generate restart command timeout on the subarray node
-    delay = ABORT_COMMAND_TIMEOUT + 5
+    delay = ABORT_COMMAND_TIMEOUT + 1
     if subsystem == "CSP":
         csp.csp_subarray.SetDelayInfo(json.dumps({"Restart": delay}))
     if subsystem == "SDP":
@@ -166,8 +166,8 @@ def verify_error_message(
         (pytest.unique_id[0], expected_msg),
     )
 
-    csp.csp_subarray.ResetDelayInfo()
-    sdp.sdp_subarray.ResetDelayInfo()
+    csp.csp_subarray.SetDelayInfo(json.dumps({"Restart": 2}))
+    sdp.sdp_subarray.SetDelayInfo(json.dumps({"Restart": 2}))
 
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "THEN" STEP: '
