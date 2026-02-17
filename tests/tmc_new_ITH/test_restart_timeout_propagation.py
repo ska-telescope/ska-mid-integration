@@ -184,6 +184,8 @@ def verify_error_message(
         "obsState",
         ObsState.FAULT,
     )
+    event_tracer.clear_events()
+
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "THEN" STEP: '
         f"({tmc.csp_subarray_leaf_node.dev_name()}) "
@@ -193,4 +195,3 @@ def verify_error_message(
         "cspSubarrayObsState",
         ObsState.EMPTY,
     )
-    event_tracer.clear_events()
