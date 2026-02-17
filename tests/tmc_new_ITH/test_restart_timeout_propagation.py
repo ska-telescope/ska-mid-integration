@@ -75,7 +75,7 @@ def _setup_event_subscriptions(
     )
 
 
-@pytest.mark.batch1
+@pytest.mark.test_f
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/timeout_handling.feature",
@@ -165,9 +165,22 @@ def verify_error_message(
         "longRunningCommandResult",
         (pytest.unique_id[0], expected_msg),
     )
+
     if subsystem == "CSP":
         csp.csp_subarray.ResetDelayInfo()
     if subsystem == "SDP":
         sdp.sdp_subarray.ResetDelayInfo()
+
+    assert_that(event_tracer).described_as(
+        'FAILED ASSUMPTION IN "THEN" STEP: '
+        "'the tmc subarray must be in the RESTARTING obsState' "
+        "TMC Subarray device"
+        f"({tmc.subarray_node.dev_name()}) "
+        "is expected to be in FAULT obstate",
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        tmc.subarray_node,
+        "obsState",
+        ObsState.FAULT,
+    )
 
     event_tracer.clear_events()
