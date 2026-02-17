@@ -78,7 +78,7 @@ def _setup_event_subscriptions(
     )
 
 
-@pytest.mark.batch1
+@pytest.mark.test_f
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/error_propagation.feature",
@@ -209,6 +209,18 @@ def verify_error_message(
         # no command is allowed in RESTARTING obsState
         sdp.sdp_subarray.SetDefective(
             json.dumps({"enabled": False, "fault_type": 0})
+        )
+        sdp.sdp_subarray.Restart()
+        assert_that(event_tracer).described_as(
+            'FAILED ASSUMPTION IN "THEN" STEP: '
+            "'the sdp subarray must be in the EMPTY obsState'"
+            "SDP Subarray device"
+            f"({sdp.sdp_subarray.dev_name()}) "
+            "is expected to be in EMPTY obstate",
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+            sdp.sdp_subarray,
+            "obsState",
+            ObsState.EMPTY,
         )
 
     assert_that(event_tracer).described_as(
