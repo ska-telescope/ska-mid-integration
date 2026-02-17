@@ -58,6 +58,9 @@ def _setup_event_subscriptions(
     event_tracer.subscribe_event(tmc.subarray_node, "obsState")
     event_tracer.subscribe_event(csp.csp_subarray, "obsState")
     event_tracer.subscribe_event(sdp.sdp_subarray, "obsState")
+    event_tracer.subscribe_event(
+        tmc.csp_subarray_leaf_node, "cspSubarrayObsState"
+    )
     event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
     event_tracer.subscribe_event(tmc.subarray_node, "longRunningCommandResult")
 
@@ -69,6 +72,7 @@ def _setup_event_subscriptions(
             ],
             csp.csp_subarray: ["obsState"],
             sdp.sdp_subarray: ["obsState"],
+            tmc.csp_subarray_leaf_node: ["cspSubarrayObsState"],
             tmc.central_node: ["longRunningCommandResult"],
         },
         event_enum_mapping={"obsState": ObsState},
@@ -182,11 +186,11 @@ def verify_error_message(
     )
     assert_that(event_tracer).described_as(
         'FAILED ASSUMPTION IN "THEN" STEP: '
-        f"({csp.csp_subarray.dev_name()}) "
+        f"({tmc.csp_subarray_leaf_node.dev_name()}) "
         "is expected to be in EMPTY obstate",
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        csp.csp_subarray,
-        "obsState",
+        tmc.csp_subarray_leaf_node,
+        "cspSubarrayObsState",
         ObsState.EMPTY,
     )
     event_tracer.clear_events()
