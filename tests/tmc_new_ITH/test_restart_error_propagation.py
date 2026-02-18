@@ -58,10 +58,10 @@ def _setup_event_subscriptions(
     event_tracer.subscribe_event(tmc.central_node, "longRunningCommandResult")
     event_tracer.subscribe_event(tmc.subarray_node, "longRunningCommandResult")
     event_tracer.subscribe_event(
-        "mid-tmc/subarray-leaf-node-csp/01", "cspSubarrayObsState"
+        tmc.csp_subarray_leaf_node, "cspSubarrayObsState"
     )
     event_tracer.subscribe_event(
-        "mid-tmc/subarray-leaf-node-sdp/01", "sdpSubarrayObsState"
+        tmc.sdp_subarray_leaf_node, "sdpSubarrayObsState"
     )
 
     log_events(
