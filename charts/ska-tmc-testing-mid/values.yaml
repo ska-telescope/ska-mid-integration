@@ -92,12 +92,11 @@ tmc-mid:
 
     resourcemonitor:
       LoggingLevel: "5"
-
-      mocks:
-        enabled: true
-        dish: true
-        csp: true
-        sdp: true
+    mocks:
+      enabled: true
+      dish: true
+      csp: true
+      sdp: true
 
 ska-sdp:
   resources:
