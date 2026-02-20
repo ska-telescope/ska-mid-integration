@@ -5,13 +5,17 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[Unreleased]
+*************
+Updated
+--------
+* Upgraded TMC components to base class v1.4.0 and pytango to 10.1.2.
+
 [1.16.0-rc.2]
 *************
 Fixed
 -----
-
 * Fixed documentation
-
 
 [1.16.0-rc.1]
 *************
