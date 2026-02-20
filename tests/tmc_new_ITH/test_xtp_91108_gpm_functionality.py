@@ -65,7 +65,6 @@ def extract_gpm_failure_details(events_tracer):
     return ast.literal_eval(event_data[1].split("SetGPM failed on: ", 1)[1])
 
 
-@pytest.mark.test
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
