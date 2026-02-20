@@ -9,6 +9,9 @@ import pytest
 from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
 from ska_control_model import ObsState
+from ska_integration_test_harness.actions.utils.generate_eb_pb_ids import (
+    generate_eb_pb_ids,
+)
 from ska_integration_test_harness.facades import DishesFacade
 from ska_integration_test_harness.facades.tmc_facade import TMCFacade
 from ska_integration_test_harness.inputs.json_input import DictJSONInput
@@ -62,7 +65,6 @@ def extract_gpm_failure_details(events_tracer):
     return ast.literal_eval(event_data[1].split("SetGPM failed on: ", 1)[1])
 
 
-@pytest.mark.test
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
@@ -98,6 +100,7 @@ def given_a_tmc(
     # Setup TMC for testing negative scenarios
     # before invoking SetGlobalPointingModel command on TMC
     assign_input = MyFileJSONInput("centralnode", "assign_resources_mid")
+    assign_input = generate_eb_pb_ids(assign_input)
     assign_input = json.loads(assign_input.as_str())
     assign_input["dish"]["receptor_ids"] = ["SKA036"]
     assign_input["sdp"]["resources"]["receptors"] = ["SKA036"]
