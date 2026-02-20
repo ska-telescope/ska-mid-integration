@@ -5,6 +5,12 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[Unreleased]
+************
+Updated
+--------
+* Integrate CSP Subarray Leaf Node with static delays improvements:
+  * CSP Leaf Nodes: 0.41.0
 
 [1.17.0-rc.1]
 *************

@@ -7,7 +7,22 @@ Scenario Outline: Error Propagation Reported by TMC Mid AssignResources/ReleaseA
 		Then the TMC SubarrayNode transitions to FAULT obsState
 		Examples:
 		            |initialObsState  | command          | defectiveSubsystem   |
+		            |READY            | END              | CSP                  |
+		            |SCANNING         | ENDSCAN          | CSP                  |
+		            |READY            | SCAN             | CSP                  |
 		            |READY            | END              | SDP                  |
+		            |SCANNING         | ENDSCAN          | SDP                  |
+		            |READY            | SCAN             | SDP                  |
+		            |READY            | END              | DISH                 |
+		            |SCANNING         | ENDSCAN          | DISH                 |
+		            |READY            | SCAN             | DISH                 |
+					|IDLE             | CONFIGURE        | CSP                  |
+					|IDLE             | CONFIGURE        | SDP                  |
+					|IDLE             | CONFIGURE        | DISH                 |
+					|IDLE             | RELEASERESOURCES | CSP                  |
+					|IDLE             | RELEASERESOURCES | SDP                  |
+					|EMPTY            | ASSIGNRESOURCES  | CSP                  |
+					|EMPTY            | ASSIGNRESOURCES  | SDP                  |
 
 
 

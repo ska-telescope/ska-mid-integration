@@ -59,7 +59,6 @@ def _setup_event_subscriptions(
     )
 
 
-@pytest.mark.intm
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
