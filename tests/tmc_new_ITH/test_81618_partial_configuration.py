@@ -36,6 +36,7 @@ def update_configuration_json(config_json: dict, config_data: str):
         config_json["pointing"].pop("wrap_sector", None)
     elif config_data == "configuration_with_only_band":
         config_json.pop("pointing", None)
+        config_json["tmc"]["partial_configuration"] = False
         config_json["dish"] = {"receiver_band": "2"}
     elif config_data == "configuration_with_only_collimation_offsets":
         config_json["pointing"] = {
@@ -58,7 +59,7 @@ def update_configuration_json(config_json: dict, config_data: str):
         config_json["pointing"]["wrap_sector"] = 0
 
 
-@pytest.mark.test_f
+@pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/xtp_81618_partial_configuration.feature",
