@@ -19,6 +19,9 @@ from ska_tango_testing.integration import TangoEventTracer
 from ska_tango_testing.mock.placeholders import Anything
 from tango import DeviceProxy
 
+from tests.resources.test_harness.helpers import (
+    wait_and_validate_device_attribute_value,
+)
 from tests.resources.test_harness.utils.enums import CapabilityStates
 from tests.resources.test_support.common_utils.result_code import ResultCode
 from tests.resources.test_support.common_utils.tmc_helpers import (
@@ -34,15 +37,6 @@ from tests.tmc_new_ITH.conftest import ASSERTIONS_TIMEOUT
 from tests.tmc_new_ITH.utils.utils import get_mid_csp_sdp_subarrays_proxies
 
 LOGGER = logging.getLogger(__name__)
-
-capability_dict = {
-    "B1": CapabilityStates.STANDBY,
-    "B2": CapabilityStates.STANDBY,
-    "B3": CapabilityStates.STANDBY,
-    "B4": CapabilityStates.STANDBY,
-    "B5a": CapabilityStates.STANDBY,
-    "B5b": CapabilityStates.STANDBY,
-}
 
 
 def _setup_event_subscriptions(
@@ -61,6 +55,7 @@ def _setup_event_subscriptions(
     """
 
     event_tracer.subscribe_event(tmc.subarray_node, "healthState")
+    event_tracer.subscribe_event(tmc.subarray_node, "healthInfo")
     event_tracer.subscribe_event(csp.csp_master, "healthState")
     event_tracer.subscribe_event(sdp.sdp_master, "healthState")
     event_tracer.subscribe_event(csp.csp_subarray, "healthState")
@@ -172,21 +167,18 @@ def preserve_dish_state(
 
     dish_ln = tmc.dish_leaf_node_list[0]
     dish_master = dishes.dish_master_dict["dish_001"]
-    # Avoid CN and SN healthState to be FAILED
-    for _, dish_master_proxy in dishes.dish_master_dict.items():
-        dish_master_proxy.SetDirectHealthState(HealthState.OK)
-        time.sleep(1)
-        dish_master_proxy.SetDirectCapabilityState(json.dumps(capability_dict))
-        time.sleep(1)
 
     # Preserve original values
     original_kvalue_dln = dish_ln.kValue
+    original_kvalue_master = dish_master.kValue
     original_band1_params = list(dish_master.band1PointingModelParams)
 
     yield
 
     # Restore kValue
     dish_ln.SetKValue(original_kvalue_dln)
+    dish_master.SetKValue(original_kvalue_master)
+
     # Restore Band-1
     dish_master.band1PointingModelParams = original_band1_params
 
@@ -198,16 +190,7 @@ def preserve_dish_state(
     gpm_result = json.loads(dish_ln.gpmValidationResult)
     assert gpm_result.get("Band_1") == "OK"
 
-    # Avoid CN and SN healthState to be FAILED
-    for _, dish_master_proxy in dishes.dish_master_dict.items():
-        dish_master_proxy.SetDirectHealthState(HealthState.OK)
-        time.sleep(1)
-        dish_master_proxy.SetDirectCapabilityState(json.dumps(capability_dict))
-        time.sleep(1)
-    assert dish_ln.healthstate == HealthState.OK
     assert tmc.central_node.IsDishVccConfigSet is True
-    release_input = MyFileJSONInput("centralnode", "release_resources_mid")
-    tmc.release_resources(release_input, wait_termination=True)
 
 
 @pytest.mark.batch1
@@ -237,6 +220,29 @@ def given_a_tmc(
 
     _setup_event_subscriptions(tmc, csp, sdp, dishes, event_tracer)
 
+    pytest.capability_dict = json.dumps(
+        {
+            "B1": CapabilityStates.STANDBY,
+            "B2": CapabilityStates.STANDBY,
+            "B3": CapabilityStates.STANDBY,
+            "B4": CapabilityStates.STANDBY,
+            "B5a": CapabilityStates.STANDBY,
+            "B5b": CapabilityStates.STANDBY,
+        }
+    )
+    dishes.dish_master_dict["dish_001"].SetDirectCapabilityState(
+        pytest.capability_dict
+    )
+    dishes.dish_master_dict["dish_036"].SetDirectCapabilityState(
+        pytest.capability_dict
+    )
+    dishes.dish_master_dict["dish_063"].SetDirectCapabilityState(
+        pytest.capability_dict
+    )
+    dishes.dish_master_dict["dish_100"].SetDirectCapabilityState(
+        pytest.capability_dict
+    )
+
     csp.csp_subarray.SetDirectHealthState(HealthState.OK)
     sdp.sdp_subarray.SetDirectHealthState(HealthState.OK)
     csp.csp_master.SetDirectHealthState(HealthState.OK)
@@ -245,7 +251,6 @@ def given_a_tmc(
     dishes.dish_master_dict["dish_036"].SetDirectHealthState(HealthState.OK)
     dishes.dish_master_dict["dish_063"].SetDirectHealthState(HealthState.OK)
     dishes.dish_master_dict["dish_100"].SetDirectHealthState(HealthState.OK)
-
     mid_subarrays = get_mid_csp_sdp_subarrays_proxies()
 
     # Set all MID subarrays health to OK
@@ -288,7 +293,7 @@ def invoke_assign_resources(
     )
 
 
-@when(
+@given(
     parsers.parse(
         'Dish Leaf Node has "{validation_type}" validation condition'
     )
@@ -328,7 +333,15 @@ def prepare_validation_condition(
 
     elif validation_type == "kvalue mismatch":
         # kValue mismatch
-        dish_master.SetKValue(1001)
+        dish_ln.SetKValue(1)
+        dish_master.SetKValue(2)
+
+        assert wait_and_validate_device_attribute_value(
+            dish_ln,
+            "kvaluevalidationresult",
+            str(ResultCode.FAILED.value),
+        )
+
         assert_that(event_tracer).described_as(
             "Dish Leaf Node kValueValidationResult should change to FAILED"
         ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
@@ -338,11 +351,30 @@ def prepare_validation_condition(
         )
 
     elif validation_type == "gpm mismatch":
-        # Introduce GPM mismatch via Dish Master Band-3 params
-        band1PointingModelParams = dish_master.band1PointingModelParams
-        band1PointingModelParams[1] = 0.2345
+        # Keep kValue consistent
+        dish_ln.SetKValue(1)
+        dish_master.SetKValue(1)
 
-        dish_master.band1PointingModelParams = band1PointingModelParams
+        assert wait_and_validate_device_attribute_value(
+            dish_ln,
+            "kvaluevalidationresult",
+            str(ResultCode.OK.value),
+        )
+
+        assert_that(event_tracer).described_as(
+            "Dish Leaf Node kValueValidationResult should change to Ok"
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+            dish_ln,
+            "kvaluevalidationresult",
+            str(ResultCode.OK.value),
+        )
+
+        # Introduce GPM mismatch via Dish Master Band-3 params
+        invalid_params = [0.0] * 18
+        invalid_params[0] = 999.0
+
+        dish_master.band1PointingModelParams = invalid_params
+
         gpm_result = assert_gpm_validation_result_mid(
             event_tracer=event_tracer,
             dish_ln=dish_ln,
@@ -350,10 +382,20 @@ def prepare_validation_condition(
             expected_result="FAILED",
             timeout=ASSERTIONS_TIMEOUT,
         )
+
         LOGGER.info("Final GPM validation result: %s", gpm_result)
 
     else:
         raise ValueError(f"Unsupported validation_type: {validation_type}")
+
+
+@when("Dish Leaf Node health is evaluated")
+def evaluate_health(tmc: TMCFacade):
+    """
+    Health evaluation is triggered implicitly by validation callbacks.
+    :param tmc: TMC facade
+    """
+    pass
 
 
 @then(parsers.parse('Dish Leaf Node healthState shall be "{dln_health}"'))
@@ -405,12 +447,27 @@ def verify_subarray_health(
     :param propagated_health: Expected Subarray health state.
     """
 
+    LOGGER.info(
+        "Checking TMC Subarray Node healthState expected=%s",
+        propagated_health,
+    )
+
     assert_that(event_tracer).described_as(
-        "Subarray healthState should change " f"to {propagated_health}"
+        "TMC Subarray Node healthState should change "
+        f"to {propagated_health}"
     ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
         tmc.subarray_node,
         "healthState",
         HealthState[propagated_health],
+    )
+
+    raw_health_info = tmc.subarray_node.healthInfo
+    LOGGER.info("Raw Subarray healthInfo: %s", raw_health_info)
+    health_info = json.loads(raw_health_info)
+
+    LOGGER.info(
+        "Parsed Subarray healthInfo:\n%s",
+        json.dumps(health_info, indent=4),
     )
 
 
@@ -432,13 +489,81 @@ def verify_telescope_health(
     :param propagated_health: Expected telescope health state.
     """
 
-    assert_that(event_tracer).described_as(
-        "Central Node healthState should change " f"to {propagated_health}"
-    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
-        tmc.central_node,
-        "telescopeHealthState",
-        HealthState[propagated_health],
+    if propagated_health == "OK":
+        # NO change event expected — state should already be OK
+        assert tmc.central_node.telescopeHealthState == HealthState.OK
+    else:
+        assert_that(event_tracer).described_as(
+            "Telescope healthState should change " f"to {propagated_health}"
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+            tmc.central_node,
+            "telescopeHealthState",
+            HealthState[propagated_health],
+        )
+
+
+@then(parsers.parse('HealthInfo will be updated for "{validation_type}"'))
+def verify_health_info_update(
+    tmc: TMCFacade,
+    event_tracer: TangoEventTracer,
+    validation_type: str,
+):
+    """
+    Verify the HealthInfo update for the specified validation type.
+
+    :param tmc: TMC facade providing access to the relevant nodes.
+    :param event_tracer: Utility used to capture and assert change events.
+    :param validation_type: The type of validation being checked.
+    """
+    LOGGER.info(
+        "Verifying HealthInfo update for validation_type=%s",
+        validation_type,
     )
+
+    assert_that(event_tracer).described_as(
+        f"HealthInfo should be updated for {validation_type}"
+    ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        tmc.subarray_node,
+        "healthInfo",
+        Anything,
+    )
+
+    raw_health_info = tmc.subarray_node.healthInfo
+    LOGGER.info("Raw HealthInfo: %s", raw_health_info)
+    health_info = json.loads(raw_health_info)
+
+    LOGGER.info(
+        "Parsed HealthInfo:\n%s",
+        json.dumps(health_info, indent=4),
+    )
+    if isinstance(health_info, dict):
+        messages = []
+        for v in health_info.values():
+            if isinstance(v, list):
+                messages.extend(v)
+
+    if validation_type == "kvalue mismatch":
+        expected_substring = "KValue validation failed."
+
+        assert any(expected_substring in msg for msg in messages), (
+            f"Expected '{expected_substring}' in healthInfo messages, "
+            f"but got: {health_info}"
+        )
+
+    elif validation_type == "gpm mismatch":
+        expected_substring = "GPM validation failed"
+
+        assert any(expected_substring in msg for msg in messages), (
+            f"Expected '{expected_substring}' in healthInfo messages, "
+            f"but got: {health_info}"
+        )
+
+        # target_device = tmc.dish_leaf_node_list[0]
+    elif validation_type == "all_ok":
+        assert not messages, "Expected messages to be blank"
+
+    else:
+        raise ValueError(f"Unsupported validation_type: {validation_type}")
 
 
 @then(
@@ -474,7 +599,7 @@ def verify_alarm_raised(validation_type):
     elif validation_type == "gpm mismatch":
         expected_tag = "DishLeafNode_Degraded_GPM"
         message = (
-            "Dish Leaf Node health degraded due to GPM validation failure"
+            "Dish Leaf Node health degraded due to " "GPM validation failure"
         )
 
     else:

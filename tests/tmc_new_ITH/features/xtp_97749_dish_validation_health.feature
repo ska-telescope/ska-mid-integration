@@ -3,7 +3,8 @@
     Given a TMC
     And Telescope is in ON state
     And I assign resources to TMC Subarray
-    When Dish Leaf Node has "<validation_type>" validation condition
+    And Dish Leaf Node has "<validation_type>" validation condition
+    When Dish Leaf Node health is evaluated
     Then Dish Leaf Node healthState shall be "<dln_health>"
     And TMC Subarray Node healthState shall be "<propagated_health>"
     And telescopeHealthState shall be "<propagated_health>"
@@ -12,6 +13,6 @@
 
   Examples:
     | validation_type | dln_health | propagated_health |
+    | all_ok          | OK         | OK                |
     | kvalue mismatch | FAILED     | DEGRADED          |
     | gpm mismatch    | DEGRADED   | DEGRADED          |
-    | all_ok          | OK         | OK                |
