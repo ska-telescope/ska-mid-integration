@@ -37,7 +37,6 @@ def update_configuration_json(config_json: dict, config_data: str):
     elif config_data == "configuration_with_only_band":
         config_json["pointing"].clear()
         config_json["pointing"]["wrap_sector"] = 0
-        config_json["tmc"]["partial_configuration"] = False
         config_json["dish"] = {"receiver_band": "2"}
     elif config_data == "configuration_with_only_collimation_offsets":
         config_json["pointing"] = {
