@@ -127,7 +127,7 @@ skatmcsimulators:
   image:
     registry: artefact.skao.int
     image: ska-tmc-simulators
-    tag: 1.9.5
+    tag: 1.9.7
     pullPolicy: IfNotPresent
 
 resource_monitor:
