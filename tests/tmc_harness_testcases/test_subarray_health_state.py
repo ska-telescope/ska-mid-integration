@@ -903,12 +903,13 @@ class TestSubarrayHealthState(object):
         command_input_factory,
         event_recorder,
     ):
-        central_node_mid.move_to_on()
-        event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
-        subarray_id = 1
         event_recorder.subscribe_event(
             central_node_mid.central_node, "longRunningCommandResult"
         )
+        event_recorder.subscribe_event(subarray_node.subarray_node, "obsState")
+        central_node_mid.move_to_on()
+        subarray_id = 1
+
         assign_input_json = prepare_json_args_for_centralnode_commands(
             "assign_resources_mid", command_input_factory
         )

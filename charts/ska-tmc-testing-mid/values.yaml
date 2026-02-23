@@ -53,23 +53,22 @@ tmc-mid:
 
   deviceServers:
     centralnode:
-      LoggingLevel: "4"
+      LoggingLevel: "5"
 
     subarraynode:
-
-      LoggingLevel: "4"
+      LoggingLevel: "5"
 
     sdpsubarrayleafnode:
-      LoggingLevel: "4"
+      LoggingLevel: "5"
 
     sdpmasterleafnode:
-      LoggingLevel: "4"
+      LoggingLevel: "5"
 
     cspmasterleafnode:
-      LoggingLevel: "4"
+      LoggingLevel: "5"
 
     cspsubarrayleafnode:
-      LoggingLevel: "4"
+      LoggingLevel: "5"
 
     dishleafnode:
       max_allowed_wind_speed: 20
@@ -85,13 +84,13 @@ tmc-mid:
       time_delta: 1000.0
       temp_delta: 40.0
       enable_auto_stow: true
-      LoggingLevel: "4"
+      LoggingLevel: "5"
 
     dishpointingdevice:
-      LoggingLevel: "4"
+      LoggingLevel: "5"
 
     resourcemonitor:
-      LoggingLevel: "4"
+      LoggingLevel: "5"
     mocks:
       enabled: true
       dish: true
