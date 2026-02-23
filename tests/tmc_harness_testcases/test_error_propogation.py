@@ -55,7 +55,7 @@ def test_tmc_command_error_propagation():
     """
 
 
-@pytest.mark.test_f
+@pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
     "../features/check_error_propagation.feature",
