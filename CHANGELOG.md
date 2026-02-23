@@ -12,6 +12,7 @@ Updated
 * Upgraded TMC components to base class v1.4.0 and pytango to 10.1.2.
 * Integrate CSP Subarray Leaf Node (v0.41.0) with static delays improvements.
 
+
 [1.17.0-rc.1]
 *************
 Added
