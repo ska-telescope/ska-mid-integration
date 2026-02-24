@@ -181,6 +181,7 @@ ska-tango-tangogql:
   enabled: true
   ska-tango-base:
     enabled: false
+
 #=== EDA ===#
 ska-tango-archiver:
   ska-taranta:
@@ -215,7 +216,7 @@ kafka:
 # ska-mid-wms
 ska-mid-wms:
  legacy_compatibility: true
- dev-name: "mid/wms/0"
+ dev-name: "ska-mid/weather-monitoring/s1" 
  ska-tango-base:
   enabled: false
   itango:
