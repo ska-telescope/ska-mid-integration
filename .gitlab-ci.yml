@@ -35,20 +35,20 @@ stages:
 
 include:
   # Docs Pages
-  # - project: "ska-telescope/templates-repository"
-  #   file: "gitlab-ci/includes/docs.gitlab-ci.yml"
+  - project: "ska-telescope/templates-repository"
+    file: "gitlab-ci/includes/docs.gitlab-ci.yml"
 
   # # Release Automation
-  # - project: "ska-telescope/templates-repository"
-  #   file: "gitlab-ci/includes/release.gitlab-ci.yml"
+  - project: "ska-telescope/templates-repository"
+    file: "gitlab-ci/includes/release.gitlab-ci.yml"
 
   # # Python packages build,lint, test and publish
-  # - project: "ska-telescope/templates-repository"
-  #   file: "gitlab-ci/includes/python-lint.gitlab-ci.yml"
+  - project: "ska-telescope/templates-repository"
+    file: "gitlab-ci/includes/python-lint.gitlab-ci.yml"
 
   # # # Helm Chart linting and Publish
-  # - project: "ska-telescope/templates-repository"
-  #   file: "gitlab-ci/includes/helm-chart.gitlab-ci.yml"
+  - project: "ska-telescope/templates-repository"
+    file: "gitlab-ci/includes/helm-chart.gitlab-ci.yml"
 
   # k8s steps
   - project: "ska-telescope/templates-repository"
