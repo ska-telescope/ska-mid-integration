@@ -684,9 +684,7 @@ class SubarrayNodeWrapper(object):
             # assert sourceOffset gets populated as expected
             if correction_key == CorrectionKey.UPDATE:
                 ca_offset, ie_offset = (
-                    json.loads(partial_configure_json)["pointing"]["target"][
-                        key
-                    ]
+                    json.loads(partial_configure_json)["pointing"][key]
                     for key in ("ca_offset_arcsec", "ie_offset_arcsec")
                 )
             elif correction_key == CorrectionKey.RESET:

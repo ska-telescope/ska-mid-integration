@@ -35,7 +35,8 @@ def update_configuration_json(config_json: dict, config_data: str):
     if config_data == "configuration_with_only_trajectory":
         config_json["pointing"].pop("wrap_sector", None)
     elif config_data == "configuration_with_only_band":
-        config_json.pop("pointing", None)
+        config_json["pointing"].clear()
+        config_json["pointing"]["wrap_sector"] = 0
         config_json["dish"] = {"receiver_band": "2"}
     elif config_data == "configuration_with_only_collimation_offsets":
         config_json["pointing"] = {

@@ -85,14 +85,14 @@ centralnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-centralnode
-    tag: 0.29.2
+    tag: 1.0.1
     pullPolicy: IfNotPresent
 
 subarraynode:
   image:
-    registry: artefact.skao.int
+    registry:  artefact.skao.int
     image: ska-tmc-subarraynode
-    tag: 0.51.2
+    tag: 1.1.0
     pullPolicy: IfNotPresent
 
 sdpleafnodes:
@@ -120,14 +120,14 @@ dishleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-dishleafnode
-    tag: 0.30.1
+    tag: 0.40.1
     pullPolicy: IfNotPresent
 
 skatmcsimulators:
   image:
     registry: artefact.skao.int
     image: ska-tmc-simulators
-    tag: 1.9.5
+    tag: 1.9.7
     pullPolicy: IfNotPresent
 
 resource_monitor:
@@ -140,7 +140,7 @@ resource_monitor:
 resources:
   requests:
     cpu: 200m
-    memory:
+    memory: 500Mi
 
 deviceServers:
   centralnode:
@@ -166,7 +166,7 @@ deviceServers:
     family: "central-node"
     member: "0"
     global_pointing_model:
-      version: "1.0.0"
+      version: "1.9.7"
       interface: "https://schema.skao.int/ska-mid-dish-gpm/1.2"
       data_sources_prefix: "gitlab://gitlab.com/ska-telescope/ska-tmc/ska-tmc-simulators"
       file_path_prefix: "instrument/ska_mid1/global_pointing_model_data"
@@ -323,14 +323,6 @@ deviceServers:
     dish: false
     csp: false
     sdp: false
-
-mid_wms:
-  legacy_compatibility: true
-  dev-name: "ska-mid/weather-monitoring/s1"
-  ska-tango-base:
-    enabled: false
-    itango:
-      enabled: false
 
 nodeSelector: {}
 
