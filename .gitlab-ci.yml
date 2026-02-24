@@ -95,14 +95,6 @@ k8s-test:
   after_script:
     - pip3 install -q -U git+https://gitlab.com/ska-telescope/ska-ser-xray.git
     - XRAY_TEST_RESULT_FILE="build/cucumber.json" make xray-publish
-  rules: #not to run in release pipeline
-    - if: '$CI_COMMIT_TAG == null'
-    - exists:
-      - tests/**/*
-
-stop-k8s-test:
-  rules: #not to run in release pipeline
-    - if: '$CI_COMMIT_TAG == null'
     
 k8s-test-mid-restart:
   extends:
