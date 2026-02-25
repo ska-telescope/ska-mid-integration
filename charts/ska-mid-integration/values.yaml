@@ -173,8 +173,11 @@ ska-tmc-mid:
     subarraynode:
       CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.2"
       AbortCommandTimeOut: 350
+    cspsubarrayleafnode:
+      weather_station_device_name: "mid/wms/0"
     dishleafnode:
-        CommandTimeOutDefault: 320
+      CommandTimeOutDefault: 320
+      weather_station_device_names: "mid/wms/0"
 
 ##tangoGQL
 ska-tango-tangogql:
@@ -216,7 +219,7 @@ kafka:
 # ska-mid-wms
 ska-mid-wms:
  legacy_compatibility: true
- dev-name: "ska-mid/weather-monitoring/s1" 
+ dev-name: "mid/wms/0" 
  ska-tango-base:
   enabled: false
   itango:
