@@ -130,11 +130,11 @@ ska-mid-cbf-tdc-mcs:
     app: ska-sw-integration-testing
   num_subarrays: 2
 
-# ska-mid-cbf-tmleafnode:
-#   enabled : true
+ska-mid-cbf-tmleafnode:
+  enabled : true
 
-ska-mid-cbf-tdc-tmleafnode:
-  enabled: true
+# ska-mid-cbf-tdc-tmleafnode:
+#   enabled: true
 
 ska-pst-lmc:
   enabled: false
