@@ -106,7 +106,7 @@ ska-sdp:
   enabled: true
   lmc:
     prefix: mid
-    nsubarray: 3
+    nsubarray: 2
   data-pvc:
     create:
       enabled: true
@@ -118,15 +118,27 @@ ska-csp-lmc-mid:
   labels:
     app: ska-tmc-mid-integration
   enabled: true
+  numSubarrays: 2
 
-ska-mid-cbf-mcs:
+# ska-mid-cbf-mcs:
+#   enabled: true
+
+ska-mid-cbf-tdc-mcs:
+  enabled: true
+  legacy_compatibility: true 
+  labels:
+    app: ska-sw-integration-testing
+  num_subarrays: 2
+
+# ska-mid-cbf-tmleafnode:
+#   enabled : true
+
+ska-mid-cbf-tdc-tmleafnode:
   enabled: true
 
 ska-pst-lmc:
   enabled: false
 
-ska-mid-cbf-tmleafnode:
-  enabled : true
 
 #=== DISH ===#
 ska-dish-lmc:
