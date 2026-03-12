@@ -66,6 +66,9 @@ def _check_abort_flow(
         )
 
 
+@pytest.mark.xfail(
+    reason="SN Aggregation delay issue to be resolved in HM-859"
+)
 @pytest.mark.SKA_tmc_mid_restart
 @pytest.mark.SKA_mid
 @scenario(
