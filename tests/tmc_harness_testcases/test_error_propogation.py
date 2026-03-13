@@ -41,6 +41,9 @@ from tests.tmc_harness_testcases.conftest import (
 )
 
 
+@pytest.mark.xfail(
+    reason="SN Aggregation delay issue to be resolved in HM-859"
+)
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
@@ -55,6 +58,9 @@ def test_tmc_command_error_propagation():
     """
 
 
+@pytest.mark.xfail(
+    reason="SN Aggregation delay issue to be resolved in HM-859"
+)
 @pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
