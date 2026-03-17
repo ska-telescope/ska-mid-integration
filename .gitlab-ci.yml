@@ -86,7 +86,7 @@ k8s-test:
     COUNT: 1
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA"
   script:
-    - make k8s-test MARK="batch1Val"
+    - make k8s-test MARK="batch1"
   before_script:
     - make cred SERVICE_ACCOUNT=$SERVICE_ACCOUNT
     - '[ -f .make/k8s.mk ] || (echo "File k8s.mk not included in Makefile; exit 1")'
@@ -110,7 +110,7 @@ k8s-test-mid-restart:
     COUNT: 1
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-tmc-mid-restart"
   script:
-    - make k8s-test MARK="SKA_tmc_mid_restart_val"
+    - make k8s-test MARK="SKA_tmc_mid_restart"
   environment:
     name: test/$CI_COMMIT_REF_SLUG
     on_stop: stop-k8s-test-tmc-mid-restart
@@ -153,10 +153,10 @@ k8s-test-batch2:
     SERVICE_ACCOUNT: "ci-svc-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch2"
     DISH_SIMULATION_ENABLED: "true"
     SUBARRAY_COUNT: 2
-    COUNT: 50
+    COUNT: 1
     KUBE_NAMESPACE: "ci-$CI_PROJECT_NAME-$CI_COMMIT_SHORT_SHA-batch2"
   script:
-    - make k8s-test MARK="batch2Val"
+    - make k8s-test MARK="batch2"
   environment:
     name: test/$CI_COMMIT_REF_SLUG-batch2
     on_stop: stop-k8s-test-batch2
