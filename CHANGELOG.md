@@ -5,8 +5,8 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
-[Unreleased]
-************
+[1.18.0-rc.2]
+*************
 Fixed
 ------
 * SKB-1230: TMC allows correlation information under CBF to be optional for PST scan configuration.
