@@ -41,7 +41,6 @@ from tests.tmc_harness_testcases.conftest import (
 )
 
 
-
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
@@ -54,7 +53,6 @@ def test_tmc_command_error_propagation():
     """
     Test case to verify TMC Error Propagation functionality.
     """
-
 
 
 @pytest.mark.batch2
