@@ -1,14 +1,12 @@
-release=1.18.0-rc.1
-tag=1.18.0-rc.1
+release=1.18.0-rc.2
+tag=1.18.0-rc.2
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.17.0-rc.1 to v1.18.0-rc.1**
-        * Upgraded TMC components to base class v1.4.0 and pytango to v10.1.2.
-        * Integrate CSP Subarray Leaf Node (v0.41.0) with static delays improvements.
+**1. Updated ska-tmc-mid from v1.18.0-rc.1 to v1.18.0-rc.2**
+        * Fixed SKB-1230: TMC allows correlation information under CBF to be optional for PST scan configuration.
 
   
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.17.0-rc.1 to v1.18.0-rc.1**
-        * Upgraded TMC components to base class v1.4.0 and pytango to v10.1.2.
-        * Integrate CSP Subarray Leaf Node (v0.41.0) with static delays improvements.
+**1. Updated ska-tmc-mid from v1.18.0-rc.1 to v1.18.0-rc.2**
+        * Fixed SKB-1230: TMC allows correlation information under CBF to be optional for PST scan configuration.

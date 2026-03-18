@@ -5,6 +5,18 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[1.18.0-rc.2]
+*************
+Fixed
+------
+* SKB-1230: TMC allows correlation information under CBF to be optional for PST scan configuration.
+
+Updated
+--------
+* SubarrayNode: Updated to use ska-schemas v1.35.0 where correlation information under CBF is optional in Configure command input.
+* Utilized SubarrayNode v1.1.1
+
+
 [1.18.0-rc.1]
 *************
 Updated
