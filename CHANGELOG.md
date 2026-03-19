@@ -5,6 +5,14 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[Unreleased]
+************
+Fixed
+-----
+* Fixed an issue where SubarrayNode could aggregate incorrect ObsState or get stuck when a subsystem command returned FAILED.
+* Added a FAULT rule in SubarrayNode to ensure any FAILED result triggers proper FAULT aggregation.
+* Utilized SubarrayNode v1.2.1
+
 [1.18.0-rc.2]
 *************
 Fixed
