@@ -9,8 +9,19 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 ************
 Fixed
 -----
-* Fixed an issue where SubarrayNode could aggregate incorrect ObsState or get stuck when a subsystem command returned FAILED.
-* Added a FAULT rule in SubarrayNode to ensure any FAILED result triggers proper FAULT aggregation.
+* Fixed an issue where SubarrayNode could remain stuck in CONFIGURING
+  when a Configure command failed and command_in_progress was cleared
+  before aggregation was triggered.
+
+* Fixed incorrect ObsState aggregation in scenarios where a subsystem
+  command returned FAILED but no subsequent event triggered aggregation,
+  preventing transition out of CONFIGURING (e.g. to FAULT).
+
+* Added a FAULT rule so FAILED results correctly propagate to a FAULT
+  ObsState when applicable.
+
+Updated
+--------
 * Utilized SubarrayNode v1.2.1
 
 [1.18.0-rc.2]
