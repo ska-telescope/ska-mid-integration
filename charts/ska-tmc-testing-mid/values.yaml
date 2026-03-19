@@ -53,22 +53,22 @@ tmc-mid:
 
   deviceServers:
     centralnode:
-      LoggingLevel: "5"
+      LoggingLevel: "4"
 
     subarraynode:
-      LoggingLevel: "5"
+      LoggingLevel: "4"
 
     sdpsubarrayleafnode:
-      LoggingLevel: "5"
+      LoggingLevel: "4"
 
     sdpmasterleafnode:
-      LoggingLevel: "5"
+      LoggingLevel: "4"
 
     cspmasterleafnode:
-      LoggingLevel: "5"
+      LoggingLevel: "4"
 
     cspsubarrayleafnode:
-      LoggingLevel: "5"
+      LoggingLevel: "4"
 
     dishleafnode:
       max_allowed_wind_speed: 20
