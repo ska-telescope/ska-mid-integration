@@ -250,7 +250,7 @@ def verify_traj_and_coff(
     ):
         for _ in range(10):
             time.sleep(10)
-            attr_val = list(dish.read_attribute("sourceOffset"))
+            attr_val = list(dish.sourceOffset)
             LOGGER.info(f"For dish {dish} sourceOffset attr is {attr_val}")
         # assert list(dish.sourceOffset) == [0.0, 5.0]
         dpd = dish_pointng_devices.dish_pointing_device_dict[dpd_name]
