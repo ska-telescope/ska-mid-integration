@@ -269,6 +269,7 @@ def verify_traj_and_coff(
         #     json.loads(dpd.targetData)["pointing"]["trajectory"]["attrs"]
         #     == expected
         # )
+    assert False
 
 
 def verify_wrap_sector(
