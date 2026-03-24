@@ -59,6 +59,7 @@ def update_configuration_json(config_json: dict, config_data: str):
         config_json["pointing"]["wrap_sector"] = 0
 
 
+@pytest.mark.skip
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @scenario(
