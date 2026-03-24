@@ -24,6 +24,13 @@ Updated
 --------
 * Utilized SubarrayNode v1.2.1
 
+* Utilised following leaf node tags with log improvements,
+  * ska-tmc-centralnode  - 1.1.0
+  * ska-tmc-sdpleafnode  - 0.29.0
+  * ska-tmc-cspleafnode  - 0.43.0
+  * ska-tmc-dishleafnode - 0.41.2
+
+
 [1.18.0-rc.2]
 *************
 Fixed
