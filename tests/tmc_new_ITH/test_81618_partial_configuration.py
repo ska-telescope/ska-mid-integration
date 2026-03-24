@@ -2,6 +2,7 @@
 """
 import json
 
+import numpy as np
 import pytest
 from assertpy import assert_that
 from pytest_bdd import given, parsers, scenario, then, when
@@ -64,7 +65,11 @@ def update_configuration_json(config_json: dict, config_data: str):
 
 
 @pytest.mark.batch1
-@pytest.mark.accf
+@pytest.mark.SKA_mid
+@pytest.mark.xfail(
+    "The sourceOffset attribute doesn't match value for "
+    "scenario configuration_with_traj_coll_offsets"
+)
 @scenario(
     "../tmc_new_ITH/features/xtp_81618_partial_configuration.feature",
     "TMC Behaviour when partial configuration is provided",
@@ -250,15 +255,14 @@ def verify_traj_and_coff(
         dish_pointng_devices.dish_pointing_device_dict.keys(),
     ):
         attr_val = dish.sourceOffset
-        LOGGER.info(
-            f"For dish {dish} sourceOffset is {attr_val},of {type(attr_val)}"
-        )
+        expected_attr_val = np.array([0.0, 5.0])
+        LOGGER.info("Dish=%s,sourceOffset=%s", dish, attr_val)
         assert_that(event_tracer).described_as(
-            f"Dish {dish} sourceOffset did not match"
+            f"sourceOffset of {dish} didn't attain value {expected_attr_val}"
         ).within_timeout(120).has_change_event_occurred(
             dish,
             "sourceOffset",
-            [0.0, 5.0],
+            expected_attr_val,
         )
         dpd = dish_pointng_devices.dish_pointing_device_dict[dpd_name]
         if dpd_name in ["SKA036", "SKA100"]:

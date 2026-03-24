@@ -7,4 +7,8 @@ Scenario Outline: TMC Behaviour when partial configuration is provided
   And provided configuration data applied on dish leaf node
   Examples:
    | configuration_data                                   |
+   | configuration_with_only_trajectory                   |
+   | configuration_with_only_band                         |
+   | configuration_with_only_collimation_offsets          |
    | configuration_with_traj_coll_offsets                 |
+   | configuration_with_only_wrap_sector                  |
