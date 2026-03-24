@@ -67,7 +67,7 @@ def update_configuration_json(config_json: dict, config_data: str):
 @pytest.mark.batch1
 @pytest.mark.SKA_mid
 @pytest.mark.xfail(
-    reason="The sourceOffset attribute doesn't match for scenario "
+    reason="The sourceOffset attribute does not match for scenario "
     "configuration_with_traj_coll_offsets"
 )
 @scenario(
