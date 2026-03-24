@@ -255,7 +255,7 @@ def verify_traj_and_coff(
         )
         assert_that(event_tracer).described_as(
             f"Dish {dish} sourceOffset did not match"
-        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+        ).within_timeout(120).has_change_event_occurred(
             dish,
             "sourceOffset",
             [0.0, 5.0],
@@ -268,7 +268,7 @@ def verify_traj_and_coff(
         json_data = json.loads(dpd.targetData)["pointing"]["trajectory"][
             "attrs"
         ]
-        assert json_data== expected
+        assert json_data == expected
 
 
 def verify_wrap_sector(
@@ -279,7 +279,6 @@ def verify_wrap_sector(
     Args:
         dish_pointng_devices (DishPointingDevicesFacade): Facade for
         dish pointing devices.
-        event_tracer (TangoEventTracer): tango event tracer.
     """
     for dish_pointing_device in dish_pointng_devices.dish_pointing_device_list:
         dpd_target_data = json.loads(dish_pointing_device.targetdata)
