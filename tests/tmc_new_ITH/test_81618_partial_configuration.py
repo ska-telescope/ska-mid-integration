@@ -1,6 +1,7 @@
 """Test case to verify fixed trajectory works as expected
 """
 import json
+import time
 
 import pytest
 from assertpy import assert_that
@@ -16,6 +17,7 @@ from ska_integration_test_harness.inputs.test_harness_inputs import (
 )
 from ska_tango_testing.integration import TangoEventTracer
 
+from tests.conftest import LOGGER
 from tests.tmc_csp_new_ITH.conftest import (
     ASSERTIONS_TIMEOUT,
     SubarrayTestContextData,
@@ -23,7 +25,10 @@ from tests.tmc_csp_new_ITH.conftest import (
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
 from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDevicesFacade
 from tests.tmc_new_ITH.utils.enums import Band
-from tests.tmc_new_ITH.utils.utils import setup_event_subscriptions
+from tests.tmc_new_ITH.utils.utils import (
+    setup_event_dish_subscription,
+    setup_event_subscriptions,
+)
 
 
 def update_configuration_json(config_json: dict, config_data: str):
@@ -78,9 +83,11 @@ def given_a_tmc(
     sdp: SDPFacade,
     csp: CSPFacade,
     event_tracer: TangoEventTracer,
+    dishes: DishesFacade,
 ):
     """Given a TMC"""
     setup_event_subscriptions(tmc, csp, sdp, event_tracer)
+    setup_event_dish_subscription(event_tracer, dishes.dish_master_list)
 
 
 @given("TMC SubarrayNode is in Ready ObsState")
@@ -241,6 +248,10 @@ def verify_traj_and_coff(
         tmc.dish_leaf_node_list,
         dish_pointng_devices.dish_pointing_device_dict.keys(),
     ):
+        LOGGER.info("Waiting for value change")
+        time.sleep(10)
+        attr_val = list(dish.sourceOffset)
+        LOGGER.info(f"For {dish} attr val is {attr_val}")
         assert list(dish.sourceOffset) == [0.0, 5.0]
         dpd = dish_pointng_devices.dish_pointing_device_dict[dpd_name]
         if dpd_name in ["SKA036", "SKA100"]:
