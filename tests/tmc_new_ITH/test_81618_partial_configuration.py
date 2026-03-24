@@ -248,10 +248,10 @@ def verify_traj_and_coff(
         tmc.dish_leaf_node_list,
         dish_pointng_devices.dish_pointing_device_dict.keys(),
     ):
-        LOGGER.info("Waiting for value change")
-        time.sleep(10)
-        attr_val = list(dish.sourceOffset)
-        LOGGER.info(f"For dish {dish} attr val is {attr_val}")
+        for _ in range(10):
+            time.sleep(10)
+            attr_val = list(dish.read_attribute("sourceOffset"))
+            LOGGER.info(f"For dish {dish} sourceOffset attr is {attr_val}")
         # assert list(dish.sourceOffset) == [0.0, 5.0]
         dpd = dish_pointng_devices.dish_pointing_device_dict[dpd_name]
         if dpd_name in ["SKA036", "SKA100"]:
@@ -262,8 +262,7 @@ def verify_traj_and_coff(
             "attrs"
         ]
         LOGGER.info(
-            f"For dish {dish}, attrs is {json_data}, expected is "
-            f"{expected}"
+            f"For dish {dish}, json {json_data} vs expected {expected}"
         )
         # assert (
         #     json.loads(dpd.targetData)["pointing"]["trajectory"]["attrs"]
