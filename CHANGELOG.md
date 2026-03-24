@@ -31,6 +31,7 @@ Updated
   * ska-tmc-sdpleafnode  - 0.29.0
   * ska-tmc-cspleafnode  - 0.43.0
   * ska-tmc-dishleafnode - 0.41.2
+  * ska-tmc-subarraynode - 1.2.2
 
 
 [1.18.0-rc.2]
