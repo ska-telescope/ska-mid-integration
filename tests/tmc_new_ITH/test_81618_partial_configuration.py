@@ -1,7 +1,6 @@
 """Test case to verify fixed trajectory works as expected
 """
 import json
-import time
 
 import pytest
 from assertpy import assert_that
@@ -57,7 +56,7 @@ def update_configuration_json(config_json: dict, config_data: str):
         config_json["pointing"].update(
             {
                 "ca_offset_arcsec": 0.0,
-                "ie_offset_arcsec": 0.0,
+                "ie_offset_arcsec": 5.0,
             }
         )
     elif config_data == "configuration_with_only_wrap_sector":
@@ -233,13 +232,16 @@ def verify_only_trajectory(dish_pointng_devices: DishPointingDevicesFacade):
 
 
 def verify_traj_and_coff(
-    tmc: TMCFacade, dish_pointng_devices: DishPointingDevicesFacade
+    tmc: TMCFacade,
+    dish_pointng_devices: DishPointingDevicesFacade,
+    event_tracer,
 ):
     """
     Verify that both trajectory attributes and collimation offsets
     are correctly applied on dishes.
 
     Args:
+        event_tracer:
         tmc (TMCFacade): Facade providing access to TMC dish leaf nodes.
         dish_pointng_devices (DishPointingDevicesFacade): Facade for
         dish pointing devices.
@@ -248,11 +250,17 @@ def verify_traj_and_coff(
         tmc.dish_leaf_node_list,
         dish_pointng_devices.dish_pointing_device_dict.keys(),
     ):
-        for _ in range(10):
-            time.sleep(10)
-            attr_val = list(dish.sourceOffset)
-            LOGGER.info(f"For dish {dish} sourceOffset attr is {attr_val}")
-        # assert list(dish.sourceOffset) == [0.0, 5.0]
+        attr_val = dish.sourceOffset
+        LOGGER.info(
+            f"For dish {dish} sourceOffset is {attr_val}, type{attr_val}"
+        )
+        assert_that(event_tracer).described_as(
+            f"Dish {dish} sourceOffset did not match"
+        ).within_timeout(ASSERTIONS_TIMEOUT).has_change_event_occurred(
+            dish,
+            "sourceOffset",
+            [0.0, 5.0],
+        )
         dpd = dish_pointng_devices.dish_pointing_device_dict[dpd_name]
         if dpd_name in ["SKA036", "SKA100"]:
             expected = {"x": 5, "y": 1}
@@ -292,6 +300,7 @@ def verify_configuration_data(
     tmc: TMCFacade,
     dishes: DishesFacade,
     dish_pointng_devices: DishPointingDevicesFacade,
+    event_tracer,
 ):
     """Verify that configuration data is applied correctly on dishes"""
     dispatch = {
@@ -303,7 +312,7 @@ def verify_configuration_data(
             dish_pointng_devices
         ),
         "configuration_with_traj_coll_offsets": lambda: verify_traj_and_coff(
-            tmc, dish_pointng_devices
+            tmc, dish_pointng_devices, event_tracer
         ),
         "configuration_with_only_wrap_sector": lambda: verify_wrap_sector(
             dish_pointng_devices
