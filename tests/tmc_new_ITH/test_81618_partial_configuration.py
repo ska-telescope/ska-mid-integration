@@ -57,7 +57,7 @@ def update_configuration_json(config_json: dict, config_data: str):
         config_json["pointing"].update(
             {
                 "ca_offset_arcsec": 0.0,
-                "ie_offset_arcsec": 5.0,
+                "ie_offset_arcsec": 0.0,
             }
         )
     elif config_data == "configuration_with_only_wrap_sector":
