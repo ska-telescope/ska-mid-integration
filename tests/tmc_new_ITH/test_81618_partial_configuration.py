@@ -64,7 +64,6 @@ def update_configuration_json(config_json: dict, config_data: str):
 
 
 @pytest.mark.batch1
-@pytest.mark.repeat(5)
 @pytest.mark.accf
 @scenario(
     "../tmc_new_ITH/features/xtp_81618_partial_configuration.feature",
@@ -252,7 +251,7 @@ def verify_traj_and_coff(
     ):
         attr_val = dish.sourceOffset
         LOGGER.info(
-            f"For dish {dish} sourceOffset is {attr_val}, type{attr_val}"
+            f"For dish {dish} sourceOffset is {attr_val},of {type(attr_val)}"
         )
         assert_that(event_tracer).described_as(
             f"Dish {dish} sourceOffset did not match"
@@ -269,14 +268,7 @@ def verify_traj_and_coff(
         json_data = json.loads(dpd.targetData)["pointing"]["trajectory"][
             "attrs"
         ]
-        LOGGER.info(
-            f"For dish {dish}, json {json_data} vs expected {expected}"
-        )
-        # assert (
-        #     json.loads(dpd.targetData)["pointing"]["trajectory"]["attrs"]
-        #     == expected
-        # )
-    assert False
+        assert json_data== expected
 
 
 def verify_wrap_sector(
