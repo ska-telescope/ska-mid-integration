@@ -59,9 +59,9 @@ def update_configuration_json(config_json: dict, config_data: str):
         config_json["pointing"]["wrap_sector"] = 0
 
 
-@pytest.mark.skip
 @pytest.mark.batch1
-@pytest.mark.SKA_mid
+@pytest.mark.repeat(5)
+@pytest.mark.accf
 @scenario(
     "../tmc_new_ITH/features/xtp_81618_partial_configuration.feature",
     "TMC Behaviour when partial configuration is provided",
