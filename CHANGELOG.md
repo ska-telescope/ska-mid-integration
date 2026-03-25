@@ -7,26 +7,27 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 
 
-[Unreleased]
-************
+[1.19.0-rc.1]
+*************
 Fixed
 -----
-* Fixed an issue where SubarrayNode could remain stuck in CONFIGURING
-  when a Configure command failed and command_in_progress was cleared
-  before aggregation was triggered.
 
-* Fixed incorrect ObsState aggregation in scenarios where a subsystem
-  command returned FAILED but no subsequent event triggered aggregation,
-  preventing transition out of CONFIGURING (e.g. to FAULT).
+* HM-859:
+  * Fixed an issue where SubarrayNode could remain stuck in CONFIGURING
+    when a Configure command failed and command_in_progress was cleared
+    before aggregation was triggered.
 
-* Added a FAULT rule so FAILED results correctly propagate to a FAULT
-  ObsState when applicable.
+  * Fixed incorrect ObsState aggregation in scenarios where a subsystem
+    command returned FAILED but no subsequent event triggered aggregation,
+    preventing transition out of CONFIGURING (e.g. to FAULT).
+
+  * Added a FAULT rule so FAILED results correctly propagate to a FAULT
+    ObsState when applicable.
 
 Updated
 --------
-* Utilized SubarrayNode v1.2.1
 
-* Utilised following leaf node tags with log improvements,
+* SAH-1882: Utilised following leaf node tags with log improvements,
   * ska-tmc-centralnode  - 1.1.0
   * ska-tmc-sdpleafnode  - 0.29.0
   * ska-tmc-cspleafnode  - 0.43.0
