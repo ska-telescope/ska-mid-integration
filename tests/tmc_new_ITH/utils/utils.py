@@ -76,6 +76,7 @@ def setup_event_dish_subscription(event_tracer, dishes_list):
     for dish in dishes_list:
         event_tracer.subscribe_event(dish, "pointingState")
         event_tracer.subscribe_event(dish, "dishMode")
+        event_tracer.subscribe_event(dish, "sourceOffset")
         log_events(
             {dish: ["pointingState", "dishMode"]},
             event_enum_mapping={

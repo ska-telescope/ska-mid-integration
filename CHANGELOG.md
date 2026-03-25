@@ -5,6 +5,8 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+
+
 [Unreleased]
 ************
 Fixed
@@ -23,6 +25,14 @@ Fixed
 Updated
 --------
 * Utilized SubarrayNode v1.2.1
+
+* Utilised following leaf node tags with log improvements,
+  * ska-tmc-centralnode  - 1.1.0
+  * ska-tmc-sdpleafnode  - 0.29.0
+  * ska-tmc-cspleafnode  - 0.43.0
+  * ska-tmc-dishleafnode - 0.41.2
+  * ska-tmc-subarraynode - 1.2.2
+
 
 [1.18.0-rc.2]
 *************
