@@ -3,10 +3,12 @@ tag=1.19.0-rc.1
 tag_description=
 **Charts:**
 **1. Updated ska-tmc-mid from v1.18.0-rc.2 to v1.19.0-rc.1**
-        * Fixed SKB-1230: TMC allows correlation information under CBF to be optional for PST scan configuration.
+        * Fixed HM-859: Fix delay aggregation logic
+        * Updated SAH-1882: Log improvement across TMC leafnodes
 
   
 release_notes=
 **Charts:**
 **1. Updated ska-tmc-mid from v1.18.0-rc.2 to v1.19.0-rc.1**
-        * Fixed SKB-1230: TMC allows correlation information under CBF to be optional for PST scan configuration.
+        * Fixed HM-859: Fix delay aggregation logic
+        * Updated SAH-1882: Log improvement across TMC leafnodes
