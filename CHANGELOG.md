@@ -11,7 +11,7 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Fixed
 -----
 
-* Fixed RTD docs build
+* Fix indentation issue in Changelog.md file causing error in docs job.
 
 
 [1.19.0-rc.1]
