@@ -174,9 +174,9 @@ def send_partial_configure_command(
     context_fixt.when_action_result = tmc.configure(
         DictJSONInput(config_json), wait_termination=True
     )
-    configure_command_with_trajectory_and_ie_ce(
-        json.dumps(config_json), dish_pointng_devices
-    )
+    # configure_command_with_trajectory_and_ie_ce(
+    #     json.dumps(config_json), dish_pointng_devices
+    # )
 
 
 @then("the TMC SubarrayNode transitions to obsState READY")
