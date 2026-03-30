@@ -64,15 +64,15 @@ def update_configuration_json(config_json: dict, config_data: str):
         config_json["pointing"]["wrap_sector"] = 0
 
 
-@pytest.mark.batch1
+@pytest.mark.aki1
 @pytest.mark.SKA_mid
 @pytest.mark.xfail(
     reason="The sourceOffset attribute does not match for scenario "
     "configuration_with_traj_coll_offsets"
 )
 @scenario(
-    "../tmc_new_ITH/features/xtp_81618_partial_configuration.feature",
-    "TMC Behaviour when partial configuration is provided",
+    "../tmc_new_ITH/features/xtp_xxxxxx_five_point_scan.feature",
+    "TMC is able to execute 5 point scan",
 )
 def test_verify_partial_configuration():
     """Test TMC handle partial configuration when only partial configuration
