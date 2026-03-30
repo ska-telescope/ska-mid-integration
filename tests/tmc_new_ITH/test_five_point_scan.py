@@ -66,10 +66,6 @@ def update_configuration_json(config_json: dict, config_data: str):
 
 @pytest.mark.aki1
 @pytest.mark.SKA_mid
-@pytest.mark.xfail(
-    reason="The sourceOffset attribute does not match for scenario "
-    "configuration_with_traj_coll_offsets"
-)
 @scenario(
     "../tmc_new_ITH/features/xtp_xxxxxx_five_point_scan.feature",
     "TMC is able to execute 5 point scan",
