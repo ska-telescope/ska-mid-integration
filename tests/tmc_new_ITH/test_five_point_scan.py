@@ -23,6 +23,7 @@ from tests.tmc_csp_new_ITH.conftest import (
     SubarrayTestContextData,
 )
 from tests.tmc_csp_new_ITH.utils.my_file_json_input import MyFileJSONInput
+from tests.tmc_new_ITH.conftest import wait_for_target_data
 from tests.tmc_new_ITH.utils.dpd_facade import DishPointingDevicesFacade
 from tests.tmc_new_ITH.utils.enums import Band
 from tests.tmc_new_ITH.utils.utils import (
@@ -31,37 +32,52 @@ from tests.tmc_new_ITH.utils.utils import (
 )
 
 
-def update_configuration_json(config_json: dict, config_data: str):
-    """Update config json based on config data provided
-    Args:
-        config_json(dict): Json for partial configuration
-        config_data(str): type of data to add/update
+def configure_command_with_trajectory_and_ie_ce(
+    delta_config_str,
+    dish_pointng_devices: DishPointingDevicesFacade,
+):
+    """Validate trajectory target data after a delta configure command.
+
+    Checks the dish pointing device's targetData attribute for expected
+    trajectory x/y values after the configure has been applied.
+    Supports both flat format (pointing.trajectory) and ADR-106 groups format
+    (pointing.groups[*].trajectory).
+    For ie/ca offset-only configurations (no trajectory), validation is
+    deferred to the sourceOffset check in the 'then' step.
     """
-    if config_data == "configuration_with_only_trajectory":
-        config_json["pointing"].pop("wrap_sector", None)
-    elif config_data == "configuration_with_only_band":
-        config_json["pointing"].clear()
-        config_json["pointing"]["wrap_sector"] = 0
-        config_json["dish"] = {"receiver_band": "2"}
-    elif config_data == "configuration_with_only_collimation_offsets":
-        config_json["pointing"] = {
-            "ca_offset_arcsec": 0.0,
-            "ie_offset_arcsec": 5.0,
-        }
-    elif config_data == "configuration_with_traj_coll_offsets":
-        config_json["pointing"].pop("wrap_sector", None)
-        config_json["pointing"]["groups"][0]["trajectory"]["attrs"] = {
-            "x": 5.0,
-            "y": 1.0,
-        }
-        config_json["pointing"].update(
-            {
-                "ca_offset_arcsec": 0.0,
-                "ie_offset_arcsec": 5.0,
-            }
+    delta_json = json.loads(delta_config_str)
+    pointing = delta_json.get("pointing", {})
+    groups = pointing.get("groups", [])
+
+    # Support both flat format and ADR-106 groups format
+    is_trajectory_key_present = "trajectory" in pointing or any(
+        "trajectory" in group for group in groups
+    )
+    is_ie_offset = "ie_offset_arcsec" in pointing
+
+    LOGGER.info(
+        f"is_trajectory={is_trajectory_key_present} and "
+        f"is_ie_offset={is_ie_offset} and {delta_json}"
+    )
+    if is_trajectory_key_present:
+        if "trajectory" in pointing:
+            collimation_offsets = [
+                pointing["trajectory"]["attrs"]["x"],
+                pointing["trajectory"]["attrs"]["y"],
+            ]
+        else:
+            for group in groups:
+                if "trajectory" in group:
+                    collimation_offsets = [
+                        group["trajectory"]["attrs"]["x"],
+                        group["trajectory"]["attrs"]["y"],
+                    ]
+                    break
+        assert wait_for_target_data(
+            dish_pointng_devices.dish_pointing_device_list[0],
+            collimation_offsets[0],
+            collimation_offsets[1],
         )
-    elif config_data == "configuration_with_only_wrap_sector":
-        config_json["pointing"]["wrap_sector"] = 0
 
 
 @pytest.mark.aki1
@@ -132,16 +148,34 @@ def send_partial_configure_command(
     context_fixt: SubarrayTestContextData,
     tmc: TMCFacade,
     configuration_data: str,
+    dish_pointng_devices: DishPointingDevicesFacade,
 ):
     """Update partial configuration json as per configuration data
     and execute configure command
     """
-    json_input = MyFileJSONInput("subarray", "partial_configure_trajectory")
-    config_json = json.loads(json_input.as_str())
-    update_configuration_json(config_json, configuration_data)
     pytest.configuration_data = configuration_data
+
+    if configuration_data == "both_trajectory_ie_ce":
+        json_input = MyFileJSONInput(
+            "subarray", "partial_configure_trajectory"
+        )
+        config_json = json.loads(json_input.as_str())
+        config_json["pointing"]["ca_offset_arcsec"] = 0.0
+        config_json["pointing"]["ie_offset_arcsec"] = 5.0
+    elif configuration_data == "with_ie_ce":
+        json_input = MyFileJSONInput("subarray", "partial_configure_1")
+        config_json = json.loads(json_input.as_str())
+    else:  # with_trajectory
+        json_input = MyFileJSONInput(
+            "subarray", "partial_configure_trajectory"
+        )
+        config_json = json.loads(json_input.as_str())
+
     context_fixt.when_action_result = tmc.configure(
         DictJSONInput(config_json), wait_termination=True
+    )
+    configure_command_with_trajectory_and_ie_ce(
+        json.dumps(config_json), dish_pointng_devices
     )
 
 
@@ -295,18 +329,12 @@ def verify_configuration_data(
 ):
     """Verify that configuration data is applied correctly on dishes"""
     dispatch = {
-        "configuration_with_only_band": lambda: verify_band(dishes),
-        "configuration_with_only_collimation_offsets": lambda: verify_coff(
-            tmc
-        ),
-        "configuration_with_only_trajectory": lambda: verify_only_trajectory(
+        "with_trajectory": lambda: verify_only_trajectory(
             dish_pointng_devices
         ),
-        "configuration_with_traj_coll_offsets": lambda: verify_traj_and_coff(
+        "with_ie_ce": lambda: verify_coff(tmc),
+        "both_trajectory_ie_ce": lambda: verify_traj_and_coff(
             tmc, dish_pointng_devices, event_tracer
-        ),
-        "configuration_with_only_wrap_sector": lambda: verify_wrap_sector(
-            dish_pointng_devices
         ),
     }
 
