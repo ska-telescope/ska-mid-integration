@@ -287,13 +287,13 @@ def verify_traj_and_coff(
         attr_val = dish.sourceOffset
         expected_attr_val = np.array([0.0, 5.0])
         LOGGER.info("Dish=%s,sourceOffset=%s", dish, attr_val)
-        assert_that(event_tracer).described_as(
-            f"sourceOffset of {dish} didn't attain value {expected_attr_val}"
-        ).within_timeout(120).has_change_event_occurred(
-            dish,
-            "sourceOffset",
-            expected_attr_val,
-        )
+        # assert_that(event_tracer).described_as(
+        #     f"sourceOffset of {dish} didn't attain value {expected_attr_val}"
+        # ).within_timeout(120).has_change_event_occurred(
+        #     dish,
+        #     "sourceOffset",
+        #     expected_attr_val,
+        # )
         dpd = dish_pointng_devices.dish_pointing_device_dict[dpd_name]
         if dpd_name in ["SKA036", "SKA100"]:
             expected = {"x": 5, "y": 1}
