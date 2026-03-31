@@ -22,6 +22,8 @@ global:
   tango_host: databaseds:10000
   device_server_port: 45450
   cluster_domain: techops.internal.skao.int # check with Ugur what it should be? it should be just cloud- cluster.local is what dev teams use
+  namespace_dish:
+    dish_names: []
   data-product-pvc-name: shared
   dsconfig:
     timeout: 300s
