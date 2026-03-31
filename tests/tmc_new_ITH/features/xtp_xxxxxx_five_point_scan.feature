@@ -7,3 +7,5 @@ Scenario Outline: TMC is able to execute 5 point scan
   Examples:
    | configuration_data    |
    | both_trajectory_ie_ce |
+   | with_ie_ce            |
+   | with_trajectory       |
