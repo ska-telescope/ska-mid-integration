@@ -625,12 +625,14 @@ class SubarrayNodeWrapper(object):
             "scan_mid", command_input_factory
         )
 
-        for partial_configure_json in [
+        partial_configure_list = [
             partial_configure_1,
             partial_configure_2,
             partial_configure_3,
             partial_configure_4,
-        ]:
+        ]
+
+        for idx, partial_configure_json in enumerate(partial_configure_list):
             if correction_key == CorrectionKey.UPDATE:
                 input_json = json.loads(partial_configure_json)
                 input_json["pointing"]["correction"] = "UPDATE"
@@ -683,10 +685,23 @@ class SubarrayNodeWrapper(object):
 
             # assert sourceOffset gets populated as expected
             if correction_key == CorrectionKey.UPDATE:
-                ca_offset, ie_offset = (
-                    json.loads(partial_configure_json)["pointing"][key]
-                    for key in ("ca_offset_arcsec", "ie_offset_arcsec")
-                )
+                # For partial_configure_1 and partial_configure_3 ,
+                # extract x,y from trajectory attrs
+                if idx in (0, 2):
+                    pointing_data = json.loads(partial_configure_json)[
+                        "pointing"
+                    ]
+                    ca_offset = pointing_data["groups"][0]["trajectory"][
+                        "attrs"
+                    ]["x"]
+                    ie_offset = pointing_data["groups"][0]["trajectory"][
+                        "attrs"
+                    ]["y"]
+                else:
+                    ca_offset, ie_offset = (
+                        json.loads(partial_configure_json)["pointing"][key]
+                        for key in ("ca_offset_arcsec", "ie_offset_arcsec")
+                    )
             elif correction_key == CorrectionKey.RESET:
                 ca_offset, ie_offset = 0.0, 0.0
             for dish_leaf_node in self.dish_leaf_node_list:
