@@ -152,9 +152,6 @@ ska-dish-lmc:
       actions:
         timeout_seconds: "300"
 
-  ska-mid-dish-ds-manager:
-    enabled: true
-
   ska-mid-dish-simulators:
     enabled: true # dish simulator for other interfaces
     deviceServers:
