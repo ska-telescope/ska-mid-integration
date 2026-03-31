@@ -154,7 +154,7 @@ def a_subarray_after_five_point_calibration(
 
     # Configure command
     configure_input_json = prepare_json_args_for_commands(
-        "configure_mid", command_input_factory
+        "configure_holography_adr106", command_input_factory
     )
     _, unique_id = subarray_node.execute_transition(
         "Configure", configure_input_json
