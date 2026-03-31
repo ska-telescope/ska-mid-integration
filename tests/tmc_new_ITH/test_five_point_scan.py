@@ -224,7 +224,7 @@ def verify_ready_state(
 
 def verify_band(dishes: DishesFacade):
     """
-    Verify that all dishes have the configured band set.
+    Verify that all dishes have the configured band set for them.
     Args:
         dishes (DishesFacade): Facade providing access to dish objects.
     """
