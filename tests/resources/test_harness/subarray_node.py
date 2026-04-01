@@ -789,16 +789,8 @@ class SubarrayNodeWrapper(object):
                 program_track_table = json.loads(
                     dish_pointing_device.pointingprogramtracktable
                 )
-                LOGGER.info(
-                    "Validating pointingProgramTrackTable on "
-                    f"{dish_pointing_device.name()}: {program_track_table}"
-                )
-                LOGGER.info(
-                    "length of pointingProgramTrackTable on "
-                    f"{len(program_track_table)}"
-                )
-                # assert program_track_table[1] > 0
-                assert 0
+
+                assert len(program_track_table) == 150
 
             # Scan
             self.execute_transition("Scan", scan_json)
