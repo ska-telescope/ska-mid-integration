@@ -704,6 +704,13 @@ class SubarrayNodeWrapper(object):
                     )
             elif correction_key == CorrectionKey.RESET:
                 ca_offset, ie_offset = 0.0, 0.0
+            LOGGER.info(
+                "Asserting sourceOffset attribute value on dish leaf nodes %s",
+                [
+                    dish_leaf_node.sourceOffset
+                    for dish_leaf_node in self.dish_leaf_node_list
+                ],
+            )
             for dish_leaf_node in self.dish_leaf_node_list:
                 assert wait_and_validate_device_attribute_value(
                     dish_leaf_node,
