@@ -684,6 +684,7 @@ class SubarrayNodeWrapper(object):
             event_tracer.clear_events()
 
             # assert sourceOffset gets populated as expected
+            ca_offset, ie_offset = 0.0, 0.0
             if correction_key == CorrectionKey.UPDATE:
                 # For partial_configure_1 and partial_configure_3 ,
                 # extract x,y from trajectory attrs
@@ -711,14 +712,28 @@ class SubarrayNodeWrapper(object):
                     for dish_leaf_node in self.dish_leaf_node_list
                 ],
             )
-            for dish_leaf_node in self.dish_leaf_node_list:
-                assert list(dish_leaf_node.sourceOffset) == [
-                    ca_offset,
-                    ie_offset,
-                ], (
-                    f"{dish_leaf_node.name()} sourceOffset "
-                    f"{dish_leaf_node.sourceOffset} does not match "
-                    f"expected {[ca_offset, ie_offset]}"
+            expected_offset = [float(ca_offset), float(ie_offset)]
+            assigned_dish_leaf_nodes = self.get_assigned_dish_leaf_nodes_list()
+            LOGGER.info(
+                "Validating sourceOffset on assigned dish leaf nodes %s",
+                [
+                    dish_leaf_node.name()
+                    for dish_leaf_node in assigned_dish_leaf_nodes
+                ],
+            )
+            for dish_leaf_node in assigned_dish_leaf_nodes:
+                retries = 0
+                current_offset = list(dish_leaf_node.sourceOffset)
+                while retries < 6:
+                    current_offset = list(dish_leaf_node.sourceOffset)
+                    if current_offset == expected_offset:
+                        break
+                    time.sleep(2)
+                    retries += 1
+
+                assert current_offset == expected_offset, (
+                    f"{dish_leaf_node.name()} sourceOffset {current_offset} "
+                    f"does not match expected {expected_offset}"
                 )
 
             # Scan
