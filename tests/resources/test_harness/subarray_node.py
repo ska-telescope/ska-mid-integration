@@ -712,11 +712,13 @@ class SubarrayNodeWrapper(object):
                 ],
             )
             for dish_leaf_node in self.dish_leaf_node_list:
-                assert wait_and_validate_device_attribute_value(
-                    dish_leaf_node,
-                    "sourceOffset",
-                    f"{[ca_offset, ie_offset]}",
-                    is_list=True,
+                assert list(dish_leaf_node.sourceOffset) == [
+                    ca_offset,
+                    ie_offset,
+                ], (
+                    f"{dish_leaf_node.name()} sourceOffset "
+                    f"{dish_leaf_node.sourceOffset} does not match "
+                    f"expected {[ca_offset, ie_offset]}"
                 )
 
             # Scan
