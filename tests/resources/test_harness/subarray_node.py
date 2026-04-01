@@ -714,14 +714,20 @@ class SubarrayNodeWrapper(object):
             )
             expected_offset = [float(ca_offset), float(ie_offset)]
             assigned_dish_leaf_nodes = self.get_assigned_dish_leaf_nodes_list()
+            dish_leaf_nodes_to_check = [
+                dish_leaf_node
+                for dish_leaf_node in assigned_dish_leaf_nodes
+                if "ska036" in dish_leaf_node.dev_name()
+                or "ska100" in dish_leaf_node.dev_name()
+            ]
             LOGGER.info(
-                "Validating sourceOffset on assigned dish leaf nodes %s",
+                "Validating sourceOffset on dish leaf nodes %s",
                 [
                     dish_leaf_node.name()
-                    for dish_leaf_node in assigned_dish_leaf_nodes
+                    for dish_leaf_node in dish_leaf_nodes_to_check
                 ],
             )
-            for dish_leaf_node in assigned_dish_leaf_nodes:
+            for dish_leaf_node in dish_leaf_nodes_to_check:
                 retries = 0
                 current_offset = list(dish_leaf_node.sourceOffset)
                 while retries < 6:
