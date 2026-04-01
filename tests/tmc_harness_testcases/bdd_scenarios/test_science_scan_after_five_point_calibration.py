@@ -28,7 +28,7 @@ from tests.resources.test_support.constant import (
 TIMEOUT = 110
 
 
-@pytest.mark.batch1
+@pytest.mark.aki1
 @pytest.mark.SKA_mid
 @scenario(
     "../features/test_harness/science_scan_after_calibration_scan.feature",
