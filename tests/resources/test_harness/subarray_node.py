@@ -61,6 +61,10 @@ from tests.resources.test_support.constant import (
     tmc_dish_leaf_node2,
     tmc_dish_leaf_node3,
     tmc_dish_leaf_node4,
+    tmc_dish_pointing_device1,
+    tmc_dish_pointing_device2,
+    tmc_dish_pointing_device3,
+    tmc_dish_pointing_device4,
     tmc_sdp_subarray_leaf_node,
     tmc_sdp_subarrayln_prefix,
     tmc_subarraynode1,
@@ -147,7 +151,12 @@ class SubarrayNodeWrapper(object):
             DeviceProxy(tmc_dish_leaf_node3),
             DeviceProxy(tmc_dish_leaf_node4),
         ]
-
+        self.dish_pointing_device = [
+            DeviceProxy(tmc_dish_pointing_device1),
+            DeviceProxy(tmc_dish_pointing_device2),
+            DeviceProxy(tmc_dish_pointing_device3),
+            DeviceProxy(tmc_dish_pointing_device4),
+        ]
         for dish_leaf_node in self.dish_leaf_node_list:
             dish_leaf_node.set_timeout_millis(5000)
 
@@ -720,6 +729,12 @@ class SubarrayNodeWrapper(object):
                 if "ska036" in dish_leaf_node.dev_name()
                 or "ska100" in dish_leaf_node.dev_name()
             ]
+            dish_pointing_devices_to_check = [
+                dish_pointing_device
+                for dish_pointing_device in self.dish_pointing_device
+                if "ska036" in dish_pointing_device.dev_name()
+                or "ska100" in dish_pointing_device.dev_name()
+            ]
             LOGGER.info(
                 "Validating sourceOffset on dish leaf nodes %s",
                 [
@@ -740,6 +755,36 @@ class SubarrayNodeWrapper(object):
                 assert current_offset == expected_offset, (
                     f"{dish_leaf_node.name()} sourceOffset {current_offset} "
                     f"does not match expected {expected_offset}"
+                )
+
+            LOGGER.info(
+                "Validating targetData trajectory offsets on "
+                "dish pointing devices %s",
+                [
+                    dish_pointing_device.name()
+                    for dish_pointing_device in dish_pointing_devices_to_check
+                ],
+            )
+            expected_target_data = {
+                "x": float(ca_offset),
+                "y": float(ie_offset),
+            }
+            for dish_pointing_device in dish_pointing_devices_to_check:
+                retries = 0
+                current_target_data = {}
+                while retries < 6:
+                    current_target_data = json.loads(
+                        dish_pointing_device.targetData
+                    )["pointing"]["trajectory"]["attrs"]
+                    if current_target_data == expected_target_data:
+                        break
+                    time.sleep(2)
+                    retries += 1
+
+                assert current_target_data == expected_target_data, (
+                    f"{dish_pointing_device.name()} targetData trajectory "
+                    f"{current_target_data} does not match expected "
+                    f"{expected_target_data}"
                 )
 
             # Scan
