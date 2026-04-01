@@ -16,7 +16,7 @@
                 },
                 "trajectory": {
                     "name": "fixed",
-                    "attrs": {"x": 0.0, "y": 5.0}
+                    "attrs": {"x": 0.0, "y": 0.0}
                 },
                 "projection": {"name": "SIN", "alignment": "AltAz"}
             },
