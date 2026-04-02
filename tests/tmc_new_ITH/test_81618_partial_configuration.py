@@ -258,7 +258,8 @@ def verify_traj_and_coff(
             expected_attr_val = np.array([0.0, 5.0])
             LOGGER.info("Dish=%s,sourceOffset=%s", dish, attr_val)
             assert_that(event_tracer).described_as(
-                f"sourceOffset of {dish} didn't attain value {expected_attr_val}"
+                f"sourceOffset of {dish} "
+                f"didn't attain value {expected_attr_val}"
             ).within_timeout(120).has_change_event_occurred(
                 dish,
                 "sourceOffset",
