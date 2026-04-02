@@ -255,7 +255,7 @@ def verify_traj_and_coff(
         dpd = dish_pointng_devices.dish_pointing_device_dict[dpd_name]
         if dpd_name in ["SKA036", "SKA100"]:
             attr_val = dish.sourceOffset
-            expected_attr_val = np.array([0.0, 5.0])
+            expected_attr_val = np.array([5.0, 1.0])
             LOGGER.info("Dish=%s,sourceOffset=%s", dish, attr_val)
             assert_that(event_tracer).described_as(
                 f"sourceOffset of {dish} "
