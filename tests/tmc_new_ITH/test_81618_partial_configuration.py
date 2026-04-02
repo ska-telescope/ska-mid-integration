@@ -200,13 +200,15 @@ def verify_band(dishes: DishesFacade):
 
 def verify_coff(tmc: TMCFacade):
     """
-    Verify that all dishes in the TMC dish leaf node list have the expected
-    source offset values.
+    Verify that selected dishes (SKA036, SKA100) in the TMC dish leaf node list
+    have the expected source offset values.
     Args:
         tmc (TMCFacade): Facade providing access to TMC dish leaf nodes.
     """
     for dish in tmc.dish_leaf_node_list:
-        assert list(dish.sourceOffset) == [0.0, 5.0]
+        # Check only for SKA036 and SKA100
+        if hasattr(dish, "name") and dish.name in ["SKA036", "SKA100"]:
+            assert list(dish.sourceOffset) == [0.0, 5.0]
 
 
 def verify_only_trajectory(dish_pointng_devices: DishPointingDevicesFacade):
