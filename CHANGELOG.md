@@ -6,6 +6,13 @@ All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
 
+[1.19.0-rc.2]
+*************
+Fixed
+-----
+
+* Fix indentation issue in Changelog.md file causing error in docs job.
+
 
 [1.19.0-rc.1]
 *************
@@ -13,16 +20,16 @@ Fixed
 -----
 
 * HM-859:
-  * Fixed an issue where SubarrayNode could remain stuck in CONFIGURING
-    when a Configure command failed and command_in_progress was cleared
-    before aggregation was triggered.
+    * Fixed an issue where SubarrayNode could remain stuck in CONFIGURING when
+      a Configure command failed and command_in_progress was cleared before
+      aggregation was triggered.
 
-  * Fixed incorrect ObsState aggregation in scenarios where a subsystem
-    command returned FAILED but no subsequent event triggered aggregation,
-    preventing transition out of CONFIGURING (e.g. to FAULT).
+    * Fixed incorrect ObsState aggregation in scenarios where a subsystem
+      command returned FAILED but no subsequent event triggered aggregation,
+      preventing transition out of CONFIGURING (e.g. to FAULT).
 
-  * Added a FAULT rule so FAILED results correctly propagate to a FAULT
-    ObsState when applicable.
+    * Added a FAULT rule so FAILED results correctly propagate to a FAULT
+      ObsState when applicable.
 
 Updated
 --------
