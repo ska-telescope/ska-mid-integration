@@ -1,6 +1,7 @@
 """Test case to verify fixed trajectory works as expected
 """
 import json
+import time
 
 import numpy as np
 import pytest
@@ -254,16 +255,20 @@ def verify_traj_and_coff(
     ):
         dpd = dish_pointng_devices.dish_pointing_device_dict[dpd_name]
         if dpd_name in ["SKA036", "SKA100"]:
-            attr_val = dish.sourceOffset
             expected_attr_val = np.array([5.0, 1.0])
+            retries = 0
+            attr_val = np.array(dish.sourceOffset)
             LOGGER.info("Dish=%s,sourceOffset=%s", dish, attr_val)
-            assert_that(event_tracer).described_as(
-                f"sourceOffset of {dish} "
-                f"didn't attain value {expected_attr_val}"
-            ).within_timeout(120).has_change_event_occurred(
-                dish,
-                "sourceOffset",
-                expected_attr_val,
+            while retries < 6:
+                attr_val = np.array(dish.sourceOffset)
+                if np.array_equal(attr_val, expected_attr_val):
+                    break
+                time.sleep(2)
+                retries += 1
+
+            assert np.array_equal(attr_val, expected_attr_val), (
+                f"sourceOffset of {dish} didn't attain value "
+                f"{expected_attr_val}; current value is {attr_val}"
             )
             expected = {"x": 5, "y": 1}
         else:
