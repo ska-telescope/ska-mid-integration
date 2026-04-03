@@ -193,3 +193,16 @@ def check_for_ready(
         ObsState.READY,
     )
     event_tracer.clear_events()
+
+
+@then("TMC able to generate track table entries")
+def check_for_track_table_entries(
+    central_node_mid: CentralNodeWrapperMid,
+):
+    """
+    Method to check subarray is in READY obsState
+    """
+    programTrackTable = central_node_mid.get_track_table_for_dish_id("SKA001")
+    assert len(programTrackTable) == 15, (
+        "Expected 15 track " "table entries for SKA001 dish"
+    )
