@@ -107,10 +107,23 @@ DISH_SIMULATION_ENABLED ?= true
 SDP_PROCCONTROL_REPLICAS ?= 1
 
 # Set Default Time Out for Leaf nodes
-SUBARRAY_COMMAND_TIMEOUT ?= 110
-CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT ?= 50
-SDP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT ?= 50
-DISH_LEAF_NODE_COMMAND_TIMEOUT ?= 90
+# Use shorter timeouts in CI for faster test execution (actual products use full timeouts)
+ifeq ($(CI_JOB_ID),)
+    # Local/nightly builds: Use full production-like timeouts
+    SUBARRAY_COMMAND_TIMEOUT ?= 110
+    ABORT_COMMAND_TIMEOUT ?= 130
+    CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT ?= 50
+    SDP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT ?= 50
+    DISH_LEAF_NODE_COMMAND_TIMEOUT ?= 90
+else
+    # CI builds: Use shorter timeouts for faster test execution
+    # Tests still verify timeout behavior, just with faster timeouts
+    SUBARRAY_COMMAND_TIMEOUT ?= 50
+    ABORT_COMMAND_TIMEOUT ?= 60
+    CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT ?= 30
+    SDP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT ?= 30
+    DISH_LEAF_NODE_COMMAND_TIMEOUT ?= 40
+endif
 
 ifeq ($(MAKECMDGOALS),k8s-test)
 ADD_ARGS +=  --true-context
@@ -156,6 +169,7 @@ K8S_CHART_PARAMS = --set global.minikube=$(MINIKUBE) \
 	--set tmc-mid.deviceServers.mocks.dish=$(DISH_SIMULATION_ENABLED)\
 	--set tmc-mid.subarray_count=$(SUBARRAY_COUNT)\
 	--set tmc-mid.deviceServers.subarraynode.CommandTimeOutDefault=$(SUBARRAY_COMMAND_TIMEOUT)\
+	--set tmc-mid.deviceServers.subarraynode.AbortCommandTimeOut=$(ABORT_COMMAND_TIMEOUT)\
 	--set tmc-mid.deviceServers.sdpsubarrayleafnode.CommandTimeOutDefault=$(SDP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT)\
 	--set tmc-mid.deviceServers.cspsubarrayleafnode.CommandTimeOutDefault=$(CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT)\
 	--set tmc-mid.deviceServers.dishleafnode.CommandTimeOutDefault=$(DISH_LEAF_NODE_COMMAND_TIMEOUT)\
