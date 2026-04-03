@@ -1,9 +1,9 @@
-@SKA_mid
-    Scenario: TMC validates Mattieu Pattern Configure functionality
-        Given the TMC is On
-        And the subarray is in IDLE obsState
-        When the command configure is issued with position velocity <input_json1>
-        Then the subarray transitions to obsState READY
-        Examples:
-        | input_json1                     |
-        | mattieu_pattern_configure       |
+@SKA_mid @XTP-106734 @XTP-106735 @TEAM_HIMALAYA
+Scenario Outline: Test Configure command to verify Mattieu Pattern
+    Given the TMC is On
+    And the subarray is in IDLE obsState
+    When the command configure is issued with position velocity <input_json1>
+    Then the subarray transitions to obsState READY
+    Examples:
+    | input_json1                     |
+    | mattieu_pattern_configure       |

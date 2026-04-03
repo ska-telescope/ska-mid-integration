@@ -22,7 +22,7 @@ from tests.resources.test_support.constant import COMMAND_COMPLETED
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/mattieu_pattern_configure.feature",
-    "TMC validates Mattieu Pattern Configure functionality",
+    "Test Configure command to verify Mattieu Pattern",
 )
 def test_mattieu_configure_functionality():
     """
