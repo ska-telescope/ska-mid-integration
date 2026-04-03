@@ -4,7 +4,7 @@
         And the subarray is in IDLE obsState
         When the command configure is issued with position velocity <input_json1>
         Then the subarray transitions to obsState READY
-        Then Length of the track table is as per offsets length provided in configure JSON
+        And Dish Leaf Node Track Table Entries
         Examples:
         | input_json1 |
         | "mattieu_pattern_json"       |
