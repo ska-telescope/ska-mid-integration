@@ -42,7 +42,7 @@ ABORT_COMMAND_TIMEOUT = get_abort_command_timeout()
 ASSERTIONS_TIMEOUT = ABORT_COMMAND_TIMEOUT + 10
 
 # Delay multiplier: In CI (60s timeout), use 1.2x;
-# In nightly (130s timeout), use 1.05x to avoid unnecessary waiting
+# In local builds (130s timeout), use 1.05x to avoid unnecessary waiting
 DELAY_MULTIPLIER = 1.2 if ABORT_COMMAND_TIMEOUT < 100 else 1.05
 
 

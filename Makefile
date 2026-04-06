@@ -108,7 +108,7 @@ SDP_PROCCONTROL_REPLICAS ?= 1
 
 # Set Default Time Out for Leaf nodes
 ifeq ($(CI_JOB_ID),)
-    # Local/nightly builds: Use full production-like timeouts
+    # Local builds: Use full production-like timeouts
     SUBARRAY_COMMAND_TIMEOUT ?= 110
     ABORT_COMMAND_TIMEOUT ?= 130
     CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT ?= 50
