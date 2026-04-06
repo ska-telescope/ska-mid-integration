@@ -32,7 +32,7 @@ TIMEOUT = 110
 @pytest.mark.aki1
 @pytest.mark.SKA_mid
 @scenario(
-    "../features/test_harness/xtp-60480_configure_with_reset_key.feature",
+    "../features/test_har/nessxtp-60480_configure_with_reset_key.feature",
     "Configure the telescope having TMC and Dish Subsystems with RESET "
     + "correction key",
 )
@@ -233,7 +233,7 @@ def a_subarray_after_five_point_calibration(
         partial_configuration_jsons,
         event_tracer,
         command_input_factory,
-        correction_key=CorrectionKey.RESET,
+        correction_key=CorrectionKey.UPDATE,
     )
 
     # Set pointing calibration data

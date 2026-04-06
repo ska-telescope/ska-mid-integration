@@ -7,4 +7,4 @@
 		
 		Examples:
 		    | correction_key |
-		    |    RESET       |
+		    |    UPDATE      |
