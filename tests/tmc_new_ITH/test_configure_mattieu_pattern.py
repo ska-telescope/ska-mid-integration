@@ -18,7 +18,7 @@ from tests.resources.test_harness.utils.common_utils import JsonFactory
 from tests.resources.test_support.constant import COMMAND_COMPLETED
 
 
-@pytest.mark.batch2
+@pytest.mark.dish
 @pytest.mark.SKA_mid
 @scenario(
     "../tmc_new_ITH/features/mattieu_pattern_configure.feature",
