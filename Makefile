@@ -107,7 +107,6 @@ DISH_SIMULATION_ENABLED ?= true
 SDP_PROCCONTROL_REPLICAS ?= 1
 
 # Set Default Time Out for Leaf nodes
-# Use shorter timeouts in CI for faster test execution (actual products use full timeouts)
 ifeq ($(CI_JOB_ID),)
     # Local/nightly builds: Use full production-like timeouts
     SUBARRAY_COMMAND_TIMEOUT ?= 110
