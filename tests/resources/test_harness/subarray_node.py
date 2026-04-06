@@ -786,10 +786,15 @@ class SubarrayNodeWrapper(object):
                     f"{current_target_data} does not match expected "
                     f"{expected_target_data}"
                 )
+
                 program_track_table = json.loads(
                     dish_pointing_device.pointingprogramtracktable
                 )
-
+                LOGGER.info(
+                    "Validating pointingProgramTrackTable on "
+                    f"{dish_pointing_device.name()}, "
+                    f"pointingProgramTrackTable: {program_track_table}",
+                )
                 assert len(program_track_table) == 150
 
             # Scan
