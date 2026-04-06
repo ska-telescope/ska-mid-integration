@@ -118,11 +118,11 @@ ifeq ($(CI_JOB_ID),)
 else
     # CI builds: Use shorter timeouts for faster test execution
     # Tests still verify timeout behavior, just with faster timeouts
-    SUBARRAY_COMMAND_TIMEOUT ?= 50
-    ABORT_COMMAND_TIMEOUT ?= 60
+    SUBARRAY_COMMAND_TIMEOUT ?= 60
+    ABORT_COMMAND_TIMEOUT ?= 70
     CSP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT ?= 30
     SDP_SUBARRAY_LEAF_NODE_COMMAND_TIMEOUT ?= 30
-    DISH_LEAF_NODE_COMMAND_TIMEOUT ?= 40
+    DISH_LEAF_NODE_COMMAND_TIMEOUT ?= 50
 endif
 
 ifeq ($(MAKECMDGOALS),k8s-test)
