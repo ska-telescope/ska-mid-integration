@@ -793,7 +793,9 @@ class SubarrayNodeWrapper(object):
                 LOGGER.info(
                     "Validating pointingProgramTrackTable on "
                     f"{dish_pointing_device.name()}, "
-                    f"pointingProgramTrackTable: {program_track_table}",
+                    f"pointingProgramTrackTable: {program_track_table}"
+                    f" and length of "
+                    f"pointingProgramTrackTable: {len(program_track_table)}",
                 )
                 assert len(program_track_table) == 150
 
