@@ -21,12 +21,12 @@ from tests.resources.test_support.constant import COMMAND_COMPLETED
 @pytest.mark.batch2
 @pytest.mark.SKA_mid
 @scenario(
-    "../tmc_new_ITH/features/mattieu_pattern_configure.feature",
+    "../tmc_new_ITH/features/xtp_106734_pvt_pattern.feature",
     "Test Configure command to verify Mattieu Pattern",
 )
-def test_mattieu_configure_functionality():
+def test_pvt_pattern_configure_functionality():
     """
-    Test TMC perform mattieu pattern configure functionality
+    Test TMC perform pvt pattern configure functionality
     """
 
 
@@ -202,7 +202,10 @@ def check_for_track_table_entries(
     """
     Method to check subarray is in READY obsState
     """
-    programTrackTable = central_node_mid.get_track_table_for_dish_id("SKA001")
-    assert len(programTrackTable) == 15, (
-        "Expected 15 track " "table entries for SKA001 dish"
-    )
+    for dish_id in ["SKA001", "SKA063", "SKA100", "SKA036"]:
+        programTrackTable = central_node_mid.get_track_table_for_dish_id(
+            dish_id
+        )
+        assert len(programTrackTable) == 15, (
+            "Expected 15 track " "table entries for SKA001 dish"
+        )

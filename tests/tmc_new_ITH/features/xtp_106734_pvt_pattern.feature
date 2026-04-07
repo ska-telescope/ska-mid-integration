@@ -7,4 +7,4 @@ Scenario Outline: Test Configure command to verify Mattieu Pattern
     And TMC able to generate track table entries
     Examples:
     | input_json1                     |
-    | mattieu_pattern_configure       |
+    | pvt_pattern_configure           |
