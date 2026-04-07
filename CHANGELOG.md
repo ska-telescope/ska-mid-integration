@@ -10,8 +10,8 @@ This project adheres to `Semantic Versioning <http://semver.org/>`_.
 Added
 -----
 
-* Full support for pointing.field key in the Configure command .
-* TMC-DLN to support all reference frame with old and ADR-63 json
+* Full support for pointing.field key in the Configure command.
+* TMC DishLeafNode to support all reference frame with old and ADR-63 json
 * AzElConverter_v2 class implemented for plane_to_sphere conversion and fixed x/y offset support for mapping scans.
 * Integrated refactored BaseScanMapping (added build_data_for_observation, get_projection, get_trajectory_name, and get_radec_from_plane_to_sphere).
 
