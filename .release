@@ -1,8 +1,8 @@
-release=1.19.1-rc.1
-tag=1.19.1-rc.1
+release=1.20.0-rc.1
+tag=1.20.0-rc.1
 tag_description=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.19.0-rc.2 to v1.19.1-rc.1**
+**1. Updated ska-tmc-mid from v1.19.0-rc.2 to v1.20.0-rc.1**
         * Full support for pointing.field key in the Configure command .
         * TMC-DLN to support all reference frame with old and ADR-63 json
         * AzElConverter_v2 class implemented for plane_to_sphere conversion and fixed x/y offset support for mapping scans.
@@ -12,7 +12,7 @@ tag_description=
   
 release_notes=
 **Charts:**
-**1. Updated ska-tmc-mid from v1.19.0-rc.2 to v1.19.1-rc.1**
+**1. Updated ska-tmc-mid from v1.19.0-rc.2 to v1.20.0-rc.1**
         * Full support for pointing.field key in the Configure command .
         * TMC-DLN to support all reference frame with old and ADR-63 json
         * AzElConverter_v2 class implemented for plane_to_sphere conversion and fixed x/y offset support for mapping scans.
