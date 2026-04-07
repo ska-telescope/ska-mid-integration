@@ -5,6 +5,15 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[1.20.0-rc.1]
+*************
+Added
+-----
+
+* Full support for pointing.field key in the Configure command.
+* TMC DishLeafNode to support reference frame (TLE, AltAz) with old and ADR-63 json
+* Enabled plane_to_sphere conversion and fixed x/y offset support for mapping scans.
+* Integrated refactored BaseScanMapping (added build_data_for_observation, get_projection, get_trajectory_name, and get_radec_from_plane_to_sphere).
 
 [1.19.0-rc.2]
 *************
