@@ -5,6 +5,25 @@ Change Log
 All notable changes to this project will be documented in this file.
 This project adheres to `Semantic Versioning <http://semver.org/>`_.
 
+[Unreleased]
+*************
+Updated
+-------
+
+* Updated command timeouts to reduce the waits in timeout tests.
+* Updated ska-tango-util and ska-tango-base charts to v1.0.7
+* Reduced scan durations from 10 seconds to 5 seconds.
+* Updated pytest markers for some tests on SKA_tmc_mid_restart to SKA_tmc_mid_device_restart for destributing the test execution load
+
+[1.20.0-rc.1]
+*************
+Added
+-----
+
+* Full support for pointing.field key in the Configure command.
+* TMC DishLeafNode to support reference frame (TLE, AltAz) with old and ADR-63 json
+* Enabled plane_to_sphere conversion and fixed x/y offset support for mapping scans.
+* Integrated refactored BaseScanMapping (added build_data_for_observation, get_projection, get_trajectory_name, and get_radec_from_plane_to_sphere).
 
 [1.19.0-rc.2]
 *************
