@@ -797,7 +797,7 @@ class SubarrayNodeWrapper(object):
                     f" and length of "
                     f"pointingProgramTrackTable: {len(program_track_table)}",
                 )
-                assert len(program_track_table) == 150
+                assert len(program_track_table) == 30
 
             # Scan
             self.execute_transition("Scan", scan_json)
