@@ -6,11 +6,11 @@
             {
                 "receptors": ["SKA036","SKA100"],
                 "field": {
-                    "reference_frame": "altaz",
-                    "target_name": "Test",
+                    "target_name": "Polaris Australis",
+                    "reference_frame": "ICRS",
                     "attrs": {
-                        "c2": 45.42808336,
-                        "c1": -41.71493321
+                        "c1": 317.199,
+                        "c2": -88.95636
                     }
                 },
                 "trajectory": {
@@ -28,13 +28,14 @@
             {
                 "receptors": ["SKA001", "SKA063"],
                 "field": {
-                    "target_name": "Cen-A",
+                    "target_name": "Polaris Australis",
                     "reference_frame": "ICRS",
                     "attrs": {
-                        "c2": 45.42808336,
-                        "c1": -41.71493321
+                        "c1": 317.199,
+                        "c2": -88.95636
                     }
-                }
+                },
+                "projection": {"name": "SSN", "alignment": "AltAz"}
             }
         ]
     },
