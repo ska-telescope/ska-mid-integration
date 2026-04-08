@@ -11,7 +11,7 @@ Updated
 -------
 
 * Support for Position Velocity Time pattern added.
-* programTrackTable size is now configurable via `ProgramTrackTableSize` property in dish leaf node.
+* programTrackTable size is now configurable via `ProgramTrackTableSize` property in dish pointing device.
 * Updated command timeouts to reduce the waits in timeout tests.
 * Updated ska-tango-util and ska-tango-base charts to v1.0.7
 * Reduced scan durations from 10 seconds to 5 seconds.

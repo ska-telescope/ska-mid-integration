@@ -321,7 +321,6 @@ Dish Leaf Node
     #. **TimeDelta** : Maximum allowed time difference (in seconds) between successive measurements. Default is 1000.
     #. **TemperatureDelta** : Maximum permitted temperature variation (°C) within the defined time window. Default is 10.
     #. **EnableAutoStow**: Flag to enable or disable automatic stow. Default is true.
-    #. **ProgramTrackTableSize**: This refers to the size of the programTrackTable. Currently defaults to 10 entries.
 
 Dish Pointing Device
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -335,6 +334,7 @@ Dish Pointing Device
     #. **SchedularQueuePreEntries** : ProgramTrackTable entries queued ahead in the track thread scheduler, primarily for developer-side debugging.
     #. **WeatherStationDeviceNames** : TRL's of the weather stations.
     #. **EventSubscriptionCheckPeriod** : Event subscription interval in seconds.
+    #. **ProgramTrackTableSize**: This refers to the size of the programTrackTable. Currently defaults to 50 entries.
 
 Resource Monitor
 ^^^^^^^^^^^^^^^^^^^^^
