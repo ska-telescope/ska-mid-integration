@@ -81,7 +81,7 @@ def given_subarray_in_idle(
     central_node_mid: CentralNodeWrapperMid,
 ):
     """
-    Method to check subarray is in READY obsState
+    Method to check subarray is in IDLE obsState
 
     Args:
         command_input_factory: fixture for creating input required
@@ -138,7 +138,7 @@ def invoke_configure(
     input_json1: str,
 ):
     """
-    Method to check subarray is in READY obsState
+    Invoke Configure command with position velocity input json
 
     Args:
         subarray_node: Fixture for a Subarray Node wrapper class
@@ -200,12 +200,12 @@ def check_for_track_table_entries(
     central_node_mid: CentralNodeWrapperMid,
 ):
     """
-    Method to check subarray is in READY obsState
+    Method to check dish leaf node is able to generate track table entries
     """
     for dish_id in ["SKA001", "SKA063", "SKA100", "SKA036"]:
         programTrackTable = central_node_mid.get_track_table_for_dish_id(
             dish_id
         )
-        assert len(programTrackTable) == 15, (
-            "Expected 15 track " "table entries for SKA001 dish"
-        )
+        assert (
+            len(programTrackTable) == 15
+        ), f"Expected 15 track table entries for {dish_id} dish"
