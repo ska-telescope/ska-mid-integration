@@ -195,7 +195,7 @@ def check_for_ready(
     event_tracer.clear_events()
 
 
-@then("TMC able to generate track table entries")
+@then("TMC is able to generate track table entries")
 def check_for_track_table_entries(
     central_node_mid: CentralNodeWrapperMid,
 ):

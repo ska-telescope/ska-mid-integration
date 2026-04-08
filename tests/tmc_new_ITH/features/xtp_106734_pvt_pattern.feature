@@ -4,7 +4,7 @@ Scenario Outline: Test Configure command to verify Mattieu Pattern
     And the subarray is in IDLE obsState
     When the command configure is issued with position velocity <input_json1>
     Then the subarray transitions to obsState READY
-    And TMC able to generate track table entries
+    And TMC is able to generate track table entries
     Examples:
     | input_json1                     |
     | pvt_pattern_configure           |
