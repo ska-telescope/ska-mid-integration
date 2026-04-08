@@ -302,6 +302,7 @@ deviceServers:
         cpu: 500m
         memory: 500Mi
     LoggingLevel: "4"
+    ProgramTrackTableSize: 50
 
   resourcemonitor:
     enabled: true
