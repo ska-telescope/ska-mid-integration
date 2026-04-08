@@ -334,6 +334,7 @@ Dish Pointing Device
     #. **SchedularQueuePreEntries** : ProgramTrackTable entries queued ahead in the track thread scheduler, primarily for developer-side debugging.
     #. **WeatherStationDeviceNames** : TRL's of the weather stations.
     #. **EventSubscriptionCheckPeriod** : Event subscription interval in seconds.
+    #. **ProgramTrackTableSize**: This refers to the size of the programTrackTable. Defaults to 50 entries.
 
 Resource Monitor
 ^^^^^^^^^^^^^^^^^^^^^

@@ -92,7 +92,7 @@ subarraynode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-subarraynode
-    tag: 1.2.2
+    tag: 1.4.0
     pullPolicy: IfNotPresent
 
 sdpleafnodes:
@@ -120,7 +120,7 @@ dishleafnode:
   image:
     registry: artefact.skao.int
     image: ska-tmc-dishleafnode
-    tag: 0.43.1
+    tag: 0.44.0
     pullPolicy: IfNotPresent
 
 skatmcsimulators:
@@ -302,6 +302,7 @@ deviceServers:
         cpu: 500m
         memory: 500Mi
     LoggingLevel: "4"
+    ProgramTrackTableSize: 50
 
   resourcemonitor:
     enabled: true
