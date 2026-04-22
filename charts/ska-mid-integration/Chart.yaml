@@ -74,7 +74,7 @@ dependencies:
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-ser-skuid.enabled
   - name: ska-tango-archiver
-    version: 5.0.1-rc.2
+    version: 5.0.3-rc.1
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-tango-archiver.enabled
   - name: ska-mid-wms
