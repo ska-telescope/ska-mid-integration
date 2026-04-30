@@ -149,11 +149,6 @@ ska-dish-lmc:
   ska-mid-dish-manager:
     enabled: true
     dishmanager:
-      image:
-        registry: registry.gitlab.com/ska-telescope/mid-dish/ska-mid-dish-manager
-        image: ska-mid-dish-manager
-        tag: 9.4.0-rc.3-dev.cb4df640d
-        pullPolicy: IfNotPresent
       actions:
         timeout_seconds: "300"
 
