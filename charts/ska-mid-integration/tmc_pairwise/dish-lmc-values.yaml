@@ -1,7 +1,7 @@
 global:
   minikube: false
   operator: true
-  exposeALLDS: false
+  exposeAllDS: false
   taranta_dashboard_enabled: false
   taranta_auth_enabled: false
 
@@ -35,10 +35,10 @@ ska-ser-skuid:
 ska-tango-tangogql:
   enabled: false
 
-ska-mid-cbf-mcs:
+ska-mid-cbf-tdc-mcs:
   enabled : false
 
-ska-mid-cbf-tmleafnode:
+ska-mid-cbf-tdc-tmleafnode:
   enabled : false
 
 ska-dish-lmc:
@@ -50,7 +50,7 @@ ska-dish-lmc:
     enabled: true
     dishmanager:
       actions:
-      timeout_seconds: "300"
+        timeout_seconds: "300"
 
 
   ska-mid-dish-simulators:

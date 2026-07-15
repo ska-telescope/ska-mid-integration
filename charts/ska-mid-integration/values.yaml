@@ -6,9 +6,10 @@ global:
     app: ska-mid-integration
   minikube: false
   operator: true
-  exposeAllDS: false
+  exposeAllDS: true
   taranta_auth_enabled: false
   taranta_dashboard_enabled: false
+
   sub-system:
     tango-base:
       enabled: false
@@ -16,15 +17,24 @@ global:
       enabled: false
     ska-taranta:
       enabled: false
+
   retry:
     - "--sleep=3"
     - "--tries=100"
+
   tango_host: databaseds:10000
   device_server_port: 45450
-  cluster_domain: techops.internal.skao.int # check with Ugur what it should be? it should be just cloud- cluster.local is what dev teams use
-  dishes: ["001", "036","063", "100"]
-  namespace_dish: # these are used when TMC is deployed with Dish Leaf Nodes . To override the variable defined in TMC repo, this is useful from configurability
-    dish_names: ['mid-dish/dish-manager/SKA001','mid-dish/dish-manager/SKA036','mid-dish/dish-manager/SKA063','mid-dish/dish-manager/SKA100']
+  cluster_domain: cluster.local
+  clusterDomain: cluster.local
+
+  dishes: ["001", "036", "063", "100"]
+  namespace_dish:
+    dish_names:
+      - mid-dish/dish-manager/SKA001
+      - mid-dish/dish-manager/SKA036
+      - mid-dish/dish-manager/SKA063
+      - mid-dish/dish-manager/SKA100
+
   data-product-pvc-name: shared
   dsconfig:
     timeout: 300s
@@ -46,6 +56,11 @@ global:
       tag: 0.4.32
       pullPolicy: IfNotPresent
 
+  # Required by ska-sdp.
+  kafka_host: ska-mid-integration-kafka
+  sdp:
+    processingNamespace: ska-mid-integration-sdp
+
 ska-tango-base:
   enabled: true
   vnc:
@@ -56,12 +71,12 @@ ska-tango-base:
     enabled: true
     resources:
       requests:
-        cpu: 100m # 100m = 0.1 CPU
-        memory: 128Mi # 256Mi = 0.25 GB mem
+        cpu: 100m
+        memory: 128Mi
         ephemeral-storage: 256Mi
       limits:
-        cpu: 200m # 100m = 0.1 CPU
-        memory: 768Mi # 256Mi = 0.25 GB mem
+        cpu: 200m
+        memory: 768Mi
         ephemeral-storage: 256Mi
   tangotest:
     enabled: true
@@ -71,151 +86,36 @@ ska-tango-base:
   tangodb:
     use_pv: false
 
-#=== TMC Mid ===#
-#ska-tmc-mid:
-#  dishleafnode:
-#    image:
-#      tag: 0.19.6
-#=== OSO ===#
-# ska-oso-oet:
-#   labels:
-#     app: ska-mid-integration
-#   system: TM-mid
-#   telescope: SKA-mid
-#   central_node: ska_mid/tm_central/central_node
-#   subarray: ska_mid/tm_subarray_node
-#   rest:
-#     ingress:
-#       enabled: false
-#     oda:
-#       backendType: rest
-#       url: http://ska-db-oda-rest-test.button-dev-ska-db-oda:5000/button-dev-ska-db-oda/api/v1
-#   resources:
-#     requests:
-#       cpu: 200m
-#       memory: 256Mi
-#     limits:
-#       cpu: 2000m
-#       memory: 1024Mi
-
-
 #=== SDP ===#
 ska-sdp:
+  enabled: true
   labels:
     app: ska-mid-integration
-  enabled: true
+  ska-tango-base:
+    enabled: false
   lmc:
     prefix: mid
-    nsubarray: 2
+    nsubarray: 3
+    strictValidation: true
   data-pvc:
+    pod:
+      enabled: true
     create:
       enabled: true
       size: 20Gi
       storageClassName: nfss1
+  qa:
+    display:
+      vault:
+        useVault: false
+  scripts:
+    url: tmdata::car:sdp/ska-sdp-script?3.0.0
 
-#=== CSP ===#
-ska-csp-lmc-mid:
-  labels:
-    app: ska-tmc-mid-integration
+# Required by recent SDP versions.
+ska-tango-alarmhandler:
   enabled: true
-  numSubarrays: 2
 
-# ska-mid-cbf-mcs:
-#   enabled: true
-
-ska-mid-cbf-tdc-mcs:
-  enabled: true
-  legacy_compatibility: true 
-  labels:
-    app: ska-sw-integration-testing
-  num_subarrays: 2
-
-ska-mid-cbf-tmleafnode:
-  enabled : true
-
-# ska-mid-cbf-tdc-tmleafnode:
-#   enabled: true
-
-ska-pst-lmc:
-  enabled: false
-
-
-#=== DISH ===#
-ska-dish-lmc:
-  enabled: true
-  ska-tango-base:
-    enabled: false
-
-  ska-mid-dish-manager:
-    enabled: true
-    dishmanager:
-      actions:
-        timeout_seconds: "300"
-
-  ska-mid-dish-ds-manager:
-    enabled: true
-
-  ska-mid-dish-simulators:
-    enabled: true # dish simulator for other interfaces
-    deviceServers:
-      spfdevice:
-        enabled: true
-      spfrxdevice:
-        enabled: true
-    dsOpcuaSimulator:
-      enabled: true
-
-##tmc-mid
-ska-tmc-mid:
-  enabled: true
-  legacy_compatibility: true
-  telescope: SKA-mid
-  ska-tango-base:
-    enabled: false
-  deviceServers:
-    mocks:
-      enabled: false
-      dish: false
-      csp: false
-      sdp: false
-    centralnode:
-      DishVccConfig:
-        DishVccUri: "car://gitlab.com/ska-telescope/ska-telmodel-data?0.2.0-mid-itf#tmdata"
-        DishVccFilePath: "instrument/ska1_mid_itf/ska-mid-cbf-system-parameters.json"
-    subarraynode:
-      CspScanInterfaceURL: "https://schema.skao.int/ska-csp-scan/2.2"
-      AbortCommandTimeOut: 350
-    cspsubarrayleafnode:
-      weather_station_device_name: "mid/wms/0"
-    dishleafnode:
-      CommandTimeOutDefault: 320
-      weather_station_device_names: 
-        - "mid/wms/0"
-
-##tangoGQL
-ska-tango-tangogql:
-  enabled: true
-  ska-tango-base:
-    enabled: false
-
-#=== EDA ===#
-ska-tango-archiver:
-  ska-taranta:
-    enabled: false
-  #hostname: eda.ska-tango-archiver - Updating this from Makefile
-  dbname: mid_sw_integration_eda
-  dbuser: admin
-  # dbpassword - this is set from the pipeline
-  port: 5432
-  vault:
-    enabled: true
-    secretPath: "kv/data/users/kvsudhirreddy/archiver"
-    secretMount: kv
-  telescope: SKA-mid
-  telescope-environment: MID-STFC
-  # archwizard_config: MyHDB=tango://tango-databaseds.test-environment.svc.lowitf.internal.skao.int:10000/low-eda/cm/01 - Updating this from Makefile
-
-# Kafka
+# Kafka configuration used by SDP.
 kafka:
   enabled: true
   image: apache/kafka
@@ -229,11 +129,138 @@ kafka:
       cpu: 2000m
       memory: 4096Mi
 
-# ska-mid-wms
-ska-mid-wms:
- legacy_compatibility: true
- dev-name: "mid/wms/0" 
- ska-tango-base:
+#=== CSP ===#
+ska-csp-lmc-mid:
+  labels:
+    app: ska-mid-integration
+  enabled: true
+  enablePss: false
+
+ska-mid-cbf-tdc-mcs:
+  enabled: true
+  legacy_compatibility: true
+  labels:
+    app: ska-mid-integration
+  num_subarrays: 1
+
+ska-pst-lmc:
   enabled: false
-  itango:
-   enabled: false
+
+ska-mid-cbf-tdc-tmleafnode:
+  enabled: true
+  labels:
+    app: ska-mid-integration
+
+#=== DISH ===#
+ska-dish-lmc:
+  enabled: true
+  ska-tango-base:
+    enabled: false
+  ska-mid-dish-manager:
+    enabled: true
+    dishmanager:
+      actions:
+        timeout_seconds: "300"
+  ska-mid-dish-ds-manager:
+    enabled: true
+  ska-mid-dish-simulators:
+    enabled: true
+    deviceServers:
+      spfdevice:
+        enabled: true
+      spfrxdevice:
+        enabled: true
+    dsOpcuaSimulator:
+      enabled: true
+
+#=== TMC MID ===#
+ska-tmc-mid:
+  enabled: true
+  legacy_compatibility: true
+  telescope: SKA-mid
+  ska-tango-base:
+    enabled: false
+  deviceServers:
+    centralnode:
+      CommandTimeOutDefault: 150
+      global_pointing_model:
+        version: "1.13.2"
+        interface: "https://schema.skao.int/ska-mid-dish-gpm/1.2"
+        data_sources_prefix: "gitlab://gitlab.com/ska-telescope/ska-tmc/ska-tmc-simulators"
+        file_path_prefix: "instrument/ska_mid1/global_pointing_model_data"
+      DishVccConfig:
+        DishVccUri: "car://gitlab.com/ska-telescope/ska-tmc/ska-tmc-simulators?1.13.2#tmdata"
+        DishVccFilePath: "instrument/dishid_vcc_map_configuration/ska-mid-cbf-system-parameters.json"
+        Enabled: "true"
+        DishKvalueAggregationAllowedPercent: "100.0"
+      DishVccInitTimeout: 180
+    subarraynode:
+      CommandTimeOutDefault: 150
+      AbortCommandTimeOut: 180
+    sdpsubarrayleafnode:
+      CommandTimeOutDefault: 50
+      AdapterTimeOut: 2
+    sdpmasterleafnode:
+      AdapterTimeOut: 2
+    cspmasterleafnode:
+      CommandTimeOutDefault: 30
+      AdapterTimeOut: 2.0
+    cspsubarrayleafnode:
+      CommandTimeOutDefault: 50
+      AdapterTimeOut: 2.0
+    dishleafnode:
+      CommandTimeOutDefault: 140
+      AdapterTimeOut: 2.0
+      DishAvailabilityCheckTimeout: 30
+    mocks:
+      enabled: false
+      dish: false
+      csp: false
+      sdp: false
+
+#=== TangoGQL ===#
+ska-tango-tangogql:
+  enabled: true
+  ska-tango-base:
+    enabled: false
+
+#=== EDA ===#
+ska-tango-archiver:
+  enabled: false
+  dbname: mid_sw_integration_eda
+  dbuser: admin
+  port: 5432
+  vault:
+    secretPath: "kv/data/users/kvsudhirreddy/archiver"
+    secretMount: kv
+  telescope: SKA-mid
+  telescope-environment: MID-STFC
+
+#=== Supporting components ===#
+ska-ser-skuid:
+  enabled: true
+
+ska-tango-util:
+  enabled: true
+
+ska-taranta:
+  enabled: true
+
+#=== WMS (Weather Monitoring System) ===#
+ska-mid-wms:
+  deviceServers:
+    wms:
+      station_ids: ["s1", "s2"]
+      modbus_server_hostnames: ["wms-sim-s1", "wms-sim-s2"]
+      modbus_server_ports: ["1502", "1502"]
+  labels:
+    app: ska-mid-integration
+  enabled: true
+  ska-tango-base:
+    enabled: false
+  simulator:
+    enabled: false
+
+#=== Pod deletion chart ===#
+ska-integration-test-utils:
+  enabled: true
