@@ -37,10 +37,10 @@ ska-ser-skuid:
 ska-tango-tangogql:
   enabled: false
 
-ska-mid-cbf-mcs:
+ska-mid-cbf-tdc-mcs:
   enabled : false
 
-ska-mid-cbf-tmleafnode:
+ska-mid-cbf-tdc-tmleafnode:
   enabled : false
 
 
