@@ -22,7 +22,7 @@ dependencies:
 
   # MID components
   - name: ska-sdp
-    version: 2.4.1
+    version: 2.7.0
     repository: https://artefact.skao.int/repository/helm-internal
     condition: ska-sdp.enabled
   - name: ska-tmc-mid

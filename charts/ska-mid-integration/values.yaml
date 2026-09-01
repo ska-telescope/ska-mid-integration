@@ -93,6 +93,8 @@ ska-sdp:
     app: ska-mid-integration
   ska-tango-base:
     enabled: false
+  jobs:
+    ttl: 300
   lmc:
     prefix: mid
     nsubarray: 3
